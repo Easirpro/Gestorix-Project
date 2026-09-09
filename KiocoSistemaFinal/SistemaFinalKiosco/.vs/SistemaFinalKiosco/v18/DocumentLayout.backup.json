@@ -1,0 +1,816 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmpreguntassegu.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpreguntassegu.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmpreguntassegu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpreguntassegu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clscorreodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clscorreodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clslogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clslogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clslocalidad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clslocalidad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clsgenero.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clsgenero.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clsgenerarusername.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clsgenerarusername.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clsaltaempleado.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clsaltaempleado.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clsaleatorios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clsaleatorios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clspersonacorreodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clspersonacorreodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clslocalidaddatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clslocalidaddatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clsgenerodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clsgenerodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clsdomiciliodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clsdomiciliodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\usuariodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\usuariodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmventas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmventas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\conexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\conexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clspersonadatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clspersonadatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmcargaempleados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaempleados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmcargaempleados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaempleados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clspartidodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clspartidodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmpresentacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpresentacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clspartido.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clspartido.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clsprovincia.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clsprovincia.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmcargaempleados.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaempleados.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clsprovinciadatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clsprovinciadatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clspersonadomiciliodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clspersonadomiciliodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clspersonatelefonodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clspersonatelefonodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clstelefonodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clstelefonodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27C87D39-FA01-44AC-A7F1-F8971CE1F01D}|CapaEntidades\\CapaEntidades.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capaentidades\\capaentidades.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{27C87D39-FA01-44AC-A7F1-F8971CE1F01D}|CapaEntidades\\CapaEntidades.csproj|solutionrelative:capaentidades\\capaentidades.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clsseguridad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clsseguridad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmpresentacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpresentacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmcargaarticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaarticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmcompras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcompras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmcobrosecundario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcobrosecundario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmactualizacionmasiva.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmactualizacionmasiva.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmrecuperarpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmrecuperarpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\resources\\lupa.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\resources\\lupa.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmcargaarticulo.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaarticulo.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmcobrosecundario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcobrosecundario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmcobrosecundario.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcobrosecundario.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|e:\\cris proyecto25-5\\proyecto 2-9\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmlogin.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmlogin.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\janza\\Desktop\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\cobro secundario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Persona.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Domicilio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Telefono.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Correo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "frmPreguntasSegu.Designer.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPreguntasSegu.Designer.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmPreguntasSegu.Designer.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPreguntasSegu.Designer.cs",
+              "RelativeToolTip": "CapaVista\\frmPreguntasSegu.Designer.cs",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAowGsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-02T22:45:57.802Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "frmPreguntasSegu.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPreguntasSegu.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmPreguntasSegu.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPreguntasSegu.cs",
+              "RelativeToolTip": "CapaVista\\frmPreguntasSegu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-02T22:45:15.489Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ClsAltaEmpleado.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsAltaEmpleado.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\ClsAltaEmpleado.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsAltaEmpleado.cs",
+              "RelativeToolTip": "CapaLogica\\ClsAltaEmpleado.cs",
+              "ViewState": "AgIAAJEAAAAAAAAAAAAwwHAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T18:07:46.4Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ClsPersonaCorreoDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPersonaCorreoDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsPersonaCorreoDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPersonaCorreoDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsPersonaCorreoDatos.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAwwCIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:54:25.258Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ClsAleatorios.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsAleatorios.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\ClsAleatorios.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsAleatorios.cs",
+              "RelativeToolTip": "CapaLogica\\ClsAleatorios.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAD0AAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.626Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ClsGenerarUsername.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsGenerarUsername.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\ClsGenerarUsername.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsGenerarUsername.cs",
+              "RelativeToolTip": "CapaLogica\\ClsGenerarUsername.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAIwAkAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.626Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ClsGenero.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsGenero.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\ClsGenero.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsGenero.cs",
+              "RelativeToolTip": "CapaLogica\\ClsGenero.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T18:29:51.253Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FrmLogin.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmLogin.cs",
+              "RelativeDocumentMoniker": "CapaVista\\FrmLogin.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmLogin.cs*",
+              "RelativeToolTip": "CapaVista\\FrmLogin.cs*",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAIwG0AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.564Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ClsLocalidadDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsLocalidadDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsLocalidadDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsLocalidadDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsLocalidadDatos.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAYwBYAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T18:39:16.876Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ClsLocalidad.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsLocalidad.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\ClsLocalidad.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsLocalidad.cs",
+              "RelativeToolTip": "CapaLogica\\ClsLocalidad.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAoAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T18:50:13.354Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ClsLogin.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsLogin.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\ClsLogin.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsLogin.cs",
+              "RelativeToolTip": "CapaLogica\\ClsLogin.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.642Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ClsCorreoDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsCorreoDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsCorreoDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsCorreoDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsCorreoDatos.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwCYAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:19:18.535Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ClsGeneroDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsGeneroDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsGeneroDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsGeneroDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsGeneroDatos.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAgwB4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T18:29:24.144Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ClsDomicilioDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsDomicilioDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsDomicilioDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsDomicilioDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsDomicilioDatos.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAwwCwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:50:47.543Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UsuarioDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\UsuarioDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\UsuarioDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\UsuarioDatos.cs",
+              "RelativeToolTip": "CapaDatos\\UsuarioDatos.cs",
+              "ViewState": "AgIAANkBAAAAAAAAAAAQwN0BAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.642Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "frmVentas.cs [Dise\u00F1o]",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmVentas.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmVentas.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmVentas.cs [Dise\u00F1o]",
+              "RelativeToolTip": "CapaVista\\frmVentas.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-02T22:26:27.713Z",
+              "EditorCaption": " [Dise\u00F1o]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "frmCargaEmpleados.cs [Dise\u00F1o]",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCargaEmpleados.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.423Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "frmCargaEmpleados.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCargaEmpleados.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.cs",
+              "RelativeToolTip": "CapaVista\\frmCargaEmpleados.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAIwEUAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:19:58.505Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Usuario.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Usuario.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:37:02.751Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Conexion.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\Conexion.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\Conexion.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\Conexion.cs",
+              "RelativeToolTip": "CapaDatos\\Conexion.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.642Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ClsPersonaDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPersonaDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsPersonaDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPersonaDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsPersonaDatos.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAmwBoAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T19:08:24.465Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "ClsPartidoDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPartidoDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsPartidoDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPartidoDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsPartidoDatos.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAIwCQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T18:37:38.611Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "ClsProvincia.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsProvincia.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\ClsProvincia.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsProvincia.cs",
+              "RelativeToolTip": "CapaLogica\\ClsProvincia.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T18:41:59.62Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "FrmPresentacion.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs",
+              "RelativeDocumentMoniker": "CapaVista\\FrmPresentacion.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs",
+              "RelativeToolTip": "CapaVista\\FrmPresentacion.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAkwB0AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "ClsPartido.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsPartido.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\ClsPartido.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsPartido.cs",
+              "RelativeToolTip": "CapaLogica\\ClsPartido.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAoAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T18:49:58.819Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "frmCargaEmpleados.Designer.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.Designer.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCargaEmpleados.Designer.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.Designer.cs",
+              "RelativeToolTip": "CapaVista\\frmCargaEmpleados.Designer.cs",
+              "ViewState": "AgIAADkBAAAAAAAAAAAswEMBAABTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.564Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "ClsProvinciaDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsProvinciaDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsProvinciaDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsProvinciaDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsProvinciaDatos.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAcwB4AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T18:35:36.585Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "Persona.cs",
+              "DocumentMoniker": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Persona.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Persona.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAmwBAAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:37:30.636Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "ClsPersonaDomicilioDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPersonaDomicilioDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsPersonaDomicilioDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPersonaDomicilioDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsPersonaDomicilioDatos.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA4wCIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:55:48.862Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "ClsPersonaTelefonoDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPersonaTelefonoDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsPersonaTelefonoDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsPersonaTelefonoDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsPersonaTelefonoDatos.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAIwCIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:55:16.447Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "ClsTelefonoDatos.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsTelefonoDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsTelefonoDatos.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsTelefonoDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsTelefonoDatos.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAmwCkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:43:25.645Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "Domicilio.cs",
+              "DocumentMoniker": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Domicilio.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Domicilio.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAcwBUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:38:06.43Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "Telefono.cs",
+              "DocumentMoniker": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Telefono.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Telefono.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:37:57.046Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "Rol.cs",
+              "DocumentMoniker": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Rol.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Rol.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:37:36.013Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "CapaEntidades.csproj",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj",
+              "RelativeDocumentMoniker": "CapaEntidades\\CapaEntidades.csproj",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj",
+              "RelativeToolTip": "CapaEntidades\\CapaEntidades.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-06-10T17:35:36.738Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "Correo.cs",
+              "DocumentMoniker": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Correo.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Correo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:35:15.232Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Class1.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\Class1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T17:34:08.961Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "clsSeguridad.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\clsSeguridad.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\clsSeguridad.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\clsSeguridad.cs",
+              "RelativeToolTip": "CapaLogica\\clsSeguridad.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAtwCcAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.626Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "FrmPresentacion.cs [Dise\u00F1o]",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs",
+              "RelativeDocumentMoniker": "CapaVista\\FrmPresentacion.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.47Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "frmCargaarticulo.cs [Dise\u00F1o]",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCargaarticulo.cs",
+              "ToolTip": "E:\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.cs [Dise\u00F1o]",
+              "RelativeToolTip": "..\\..\\..\\..\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003525|",
+              "WhenOpened": "2026-06-10T16:15:07.564Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "frmCompras.cs [Dise\u00F1o]",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCompras.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCompras.cs",
+              "ToolTip": "E:\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCompras.cs [Dise\u00F1o]",
+              "RelativeToolTip": "..\\..\\..\\..\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCompras.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003525|",
+              "WhenOpened": "2026-06-10T16:15:07.564Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "frmCobrosecundario.cs [Dise\u00F1o]",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCobrosecundario.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCobrosecundario.cs",
+              "ToolTip": "E:\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCobrosecundario.cs [Dise\u00F1o]",
+              "RelativeToolTip": "..\\..\\..\\..\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCobrosecundario.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003525|",
+              "WhenOpened": "2026-06-10T16:15:07.564Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "FrmLogin.cs [Dise\u00F1o]",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmLogin.cs",
+              "RelativeDocumentMoniker": "CapaVista\\FrmLogin.cs",
+              "ToolTip": "C:\\Users\\tobic\\OneDrive\\Escritorio\\Escritorio\\Sistema Kiosco versiones\\proyecto 4-6\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmLogin.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.626Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "frmActualizacionmasiva.cs [Dise\u00F1o]",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmActualizacionmasiva.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmActualizacionmasiva.cs",
+              "ToolTip": "E:\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmActualizacionmasiva.cs [Dise\u00F1o]",
+              "RelativeToolTip": "..\\..\\..\\..\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmActualizacionmasiva.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.626Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "FrmRecuperarPass.cs [Dise\u00F1o]",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmRecuperarPass.cs",
+              "RelativeDocumentMoniker": "CapaVista\\FrmRecuperarPass.cs",
+              "ToolTip": "E:\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmRecuperarPass.cs [Dise\u00F1o]",
+              "RelativeToolTip": "..\\..\\..\\..\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmRecuperarPass.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.626Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "frmCargaarticulo.Designer.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.Designer.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCargaarticulo.Designer.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.Designer.cs",
+              "RelativeToolTip": "CapaVista\\frmCargaarticulo.Designer.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAWwFwAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.626Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "lupa.png",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\Resources\\lupa.png",
+              "RelativeDocumentMoniker": "CapaVista\\Resources\\lupa.png",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\Resources\\lupa.png",
+              "RelativeToolTip": "CapaVista\\Resources\\lupa.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-06-10T16:15:07.626Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "Cobro Secundario.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 27-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\Cobro Secundario.cs",
+              "ToolTip": "C:\\Users\\Ematp\\Desktop\\cris proyecto25-5\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\Cobro Secundario.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.642Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "frmCobrosecundario.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCobrosecundario.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCobrosecundario.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCobrosecundario.cs",
+              "RelativeToolTip": "CapaVista\\frmCobrosecundario.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAApwBsAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.658Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "frmCobrosecundario.Designer.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCobrosecundario.Designer.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCobrosecundario.Designer.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCobrosecundario.Designer.cs",
+              "RelativeToolTip": "CapaVista\\frmCobrosecundario.Designer.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAIBJwJUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.658Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "FrmLogin.Designer.cs",
+              "DocumentMoniker": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmLogin.Designer.cs",
+              "RelativeDocumentMoniker": "CapaVista\\FrmLogin.Designer.cs",
+              "ToolTip": "E:\\cris proyecto25-5\\proyecto 2-9\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmLogin.Designer.cs",
+              "RelativeToolTip": "CapaVista\\FrmLogin.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-10T16:15:07.658Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

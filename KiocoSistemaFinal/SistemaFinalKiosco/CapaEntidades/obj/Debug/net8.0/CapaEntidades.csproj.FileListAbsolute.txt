@@ -1,0 +1,132 @@
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\tobic\OneDrive\Escritorio\Escritorio\Sistema Kiosco versiones\proyecto 4-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 10-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\Ematp\Desktop\proyecto cris 15-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\Ematp\Desktop\proyecto cris 24-6\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\Ematp\Desktop\proyecto cris 1-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 8-7\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+E:\cris proyecto25-5\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 2-9\KioscoSistemaFinal2\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\emanu\OneDrive\Desktop\proyecto 2-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Users\janza\Desktop\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.deps.json
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.dll
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.GeneratedMSBuildEditorConfig.editorconfig
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfoInputs.cache
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.AssemblyInfo.cs
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.csproj.CoreCompileInputs.cache
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
+C:\Tecnicatura superior Analista de sistemas\3er Año\Algoritmos y Estructura de Datos III\proyecto 8-9\proyecto 8-9\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
