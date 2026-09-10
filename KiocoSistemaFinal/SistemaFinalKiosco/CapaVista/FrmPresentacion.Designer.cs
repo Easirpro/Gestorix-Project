@@ -34,6 +34,7 @@
             menuitemAdmistradorarticulos = new ToolStripMenuItem();
             menuitemAdministradoarticulos = new ToolStripMenuItem();
             meniitemReporapida = new ToolStripMenuItem();
+            cargarDeLasMarcasToolStripMenuItem = new ToolStripMenuItem();
             menuitemImporexcel = new ToolStripMenuItem();
             menuitemExporexcel = new ToolStripMenuItem();
             btnVentas = new ToolStripMenuItem();
@@ -101,7 +102,6 @@
             label6 = new Label();
             btnPromocion = new Button();
             toolTip1 = new ToolTip(components);
-            cargarDeLasMarcasToolStripMenuItem = new ToolStripMenuItem();
             btnConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
             panel1.SuspendLayout();
@@ -137,6 +137,13 @@
             meniitemReporapida.Size = new Size(232, 22);
             meniitemReporapida.Text = "Reposición rápida de stock";
             meniitemReporapida.Click += meniitemReporapida_Click;
+            // 
+            // cargarDeLasMarcasToolStripMenuItem
+            // 
+            cargarDeLasMarcasToolStripMenuItem.Name = "cargarDeLasMarcasToolStripMenuItem";
+            cargarDeLasMarcasToolStripMenuItem.Size = new Size(232, 22);
+            cargarDeLasMarcasToolStripMenuItem.Text = "Cargar de las marcas";
+            cargarDeLasMarcasToolStripMenuItem.Click += cargarDeLasMarcasToolStripMenuItem_Click;
             // 
             // menuitemImporexcel
             // 
@@ -265,7 +272,7 @@
             // 
             idiomaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { inglesToolStripMenuItem });
             idiomaToolStripMenuItem.Name = "idiomaToolStripMenuItem";
-            idiomaToolStripMenuItem.Size = new Size(180, 22);
+            idiomaToolStripMenuItem.Size = new Size(111, 22);
             idiomaToolStripMenuItem.Text = "Idioma";
             // 
             // inglesToolStripMenuItem
@@ -285,28 +292,28 @@
             // nuevoIngresoToolStripMenuItem
             // 
             nuevoIngresoToolStripMenuItem.Name = "nuevoIngresoToolStripMenuItem";
-            nuevoIngresoToolStripMenuItem.Size = new Size(180, 22);
+            nuevoIngresoToolStripMenuItem.Size = new Size(151, 22);
             nuevoIngresoToolStripMenuItem.Text = "Nuevo Ingreso";
             nuevoIngresoToolStripMenuItem.Click += nuevoIngresoToolStripMenuItem_Click;
             // 
             // nuevoEgresoToolStripMenuItem
             // 
             nuevoEgresoToolStripMenuItem.Name = "nuevoEgresoToolStripMenuItem";
-            nuevoEgresoToolStripMenuItem.Size = new Size(180, 22);
+            nuevoEgresoToolStripMenuItem.Size = new Size(151, 22);
             nuevoEgresoToolStripMenuItem.Text = "Nuevo Egreso";
             nuevoEgresoToolStripMenuItem.Click += nuevoEgresoToolStripMenuItem_Click;
             // 
             // cerrarSeToolStripMenuItem
             // 
             cerrarSeToolStripMenuItem.Name = "cerrarSeToolStripMenuItem";
-            cerrarSeToolStripMenuItem.Size = new Size(180, 22);
+            cerrarSeToolStripMenuItem.Size = new Size(151, 22);
             cerrarSeToolStripMenuItem.Text = "Cerrar caja";
             cerrarSeToolStripMenuItem.Click += cerrarSeToolStripMenuItem_Click;
             // 
             // abrirCajaToolStripMenuItem
             // 
             abrirCajaToolStripMenuItem.Name = "abrirCajaToolStripMenuItem";
-            abrirCajaToolStripMenuItem.Size = new Size(180, 22);
+            abrirCajaToolStripMenuItem.Size = new Size(151, 22);
             abrirCajaToolStripMenuItem.Text = "Abrir Caja";
             abrirCajaToolStripMenuItem.Click += abrirCajaToolStripMenuItem_Click;
             // 
@@ -334,10 +341,12 @@
             // 
             // btnConfig
             // 
+            btnConfig.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnConfig.Dock = DockStyle.None;
             btnConfig.Items.AddRange(new ToolStripItem[] { btnArt, btnVentas, btnCompras, btnProve, toolStripMenuItem1, btnInformes, btnCaja, btnHerra, btnAyuda, btnAjustes, tollClosed });
             btnConfig.Location = new Point(0, 0);
             btnConfig.Name = "btnConfig";
-            btnConfig.Size = new Size(877, 24);
+            btnConfig.Size = new Size(658, 24);
             btnConfig.TabIndex = 0;
             btnConfig.Text = "menuStrip1";
             btnConfig.ItemClicked += btnConfig_ItemClicked;
@@ -417,6 +426,7 @@
             // 
             // pcbLogo
             // 
+            pcbLogo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             pcbLogo.Image = (Image)resources.GetObject("pcbLogo.Image");
             pcbLogo.Location = new Point(589, 320);
             pcbLogo.Name = "pcbLogo";
@@ -427,6 +437,7 @@
             // 
             // btnCobrar
             // 
+            btnCobrar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCobrar.BackColor = Color.ForestGreen;
             btnCobrar.FlatStyle = FlatStyle.Flat;
             btnCobrar.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -441,6 +452,7 @@
             // 
             // btnNuevaCompra
             // 
+            btnNuevaCompra.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnNuevaCompra.BackColor = Color.ForestGreen;
             btnNuevaCompra.FlatStyle = FlatStyle.Flat;
             btnNuevaCompra.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -455,6 +467,7 @@
             // 
             // btnVerPrecio
             // 
+            btnVerPrecio.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnVerPrecio.BackColor = Color.ForestGreen;
             btnVerPrecio.FlatStyle = FlatStyle.Flat;
             btnVerPrecio.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -468,7 +481,7 @@
             // 
             // panel1
             // 
-            panel1.Anchor = AnchorStyles.Right;
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             panel1.BackColor = SystemColors.ActiveCaptionText;
             panel1.Controls.Add(lblTotalMonto);
             panel1.Controls.Add(label5);
@@ -600,8 +613,11 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ClnNum, ClnCodigo, ClnDescripcion, ClnCantidad, ClnPrecioUnitario, ClnImporte });
+            //dataGridView1.Columns["ClnCodigo"].FillWeight = 80;
             dataGridView1.Location = new Point(12, 83);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(557, 213);
@@ -639,6 +655,7 @@
             // 
             // pnlUsuario
             // 
+            pnlUsuario.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnlUsuario.BackColor = Color.Navy;
             pnlUsuario.BorderStyle = BorderStyle.Fixed3D;
             pnlUsuario.Controls.Add(label7);
@@ -700,13 +717,6 @@
             btnPromocion.Text = "Promociónes";
             btnPromocion.UseVisualStyleBackColor = true;
             btnPromocion.Click += btnPromocion_Click;
-            // 
-            // cargarDeLasMarcasToolStripMenuItem
-            // 
-            cargarDeLasMarcasToolStripMenuItem.Name = "cargarDeLasMarcasToolStripMenuItem";
-            cargarDeLasMarcasToolStripMenuItem.Size = new Size(232, 22);
-            cargarDeLasMarcasToolStripMenuItem.Text = "Cargar de las marcas";
-            cargarDeLasMarcasToolStripMenuItem.Click += cargarDeLasMarcasToolStripMenuItem_Click;
             // 
             // frmmenuPres
             // 
