@@ -318,6 +318,16 @@ namespace CapaVista
             frmInformeCobro cobro = new frmInformeCobro();
             cobro.ShowDialog();
         }
+        //rellena las filas de DGView
+        private void RellenarFilas()
+        {
+            int filasVisibles = dataGridView1.Height / dataGridView1.RowTemplate.Height;
+            while (dataGridView1.Rows.Count < filasVisibles)
+            {
+                dataGridView1.Rows.Add();
+            }
+        }
+
 
         #endregion
 
@@ -346,6 +356,16 @@ namespace CapaVista
         {
             frmBuscarMarca marca = new frmBuscarMarca();
             marca.ShowDialog();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frmmenuPres_Load_1(object sender, EventArgs e)
+        {
+            RellenarFilas();
         }
     }
 
