@@ -1,9 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\KiocoSistemaFinal",
-    "\\KiocoSistemaFinal\\SistemaFinalKiosco"
+    "\\Gestorix-Project",
+    "\\Gestorix-Project\\KiocoSistemaFinal",
+    "\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco",
+    "\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos",
+    "\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista",
+    "\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\Resources"
   ],
-  "SelectedNode": "\\KiocoSistemaFinal\\SistemaFinalKiosco\\SistemaFinalKiosco.sln",
+  "SelectedNode": "\\AdministracionVentas.txt",
   "PreviewInSolutionExplorer": false
 }
