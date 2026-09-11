@@ -9,4 +9,4 @@ Practicas Profesionalizantes
 
 0.0.0.4- 10/09 Se centraron los formularios y dise;o de varios formularios [Ema]
 
-0.0.0.5- 10/09 Mejoras en la Pantalla Principal (datagridview) y TableLayoutPanel
+0.0.0.5- 10/09 Mejoras en la Pantalla Principal (datagridview) y TableLayoutPanel- Marce-
