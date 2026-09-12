@@ -22,9 +22,9 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ObtenerProximoSKU();
         }
-        public bool ExisteCodigoBarra(string codigoBarra)
+        public bool ExisteCodigoBarra(string codigoBarra, int idProductoExcluir = 0)
         {
-            return datos.ExisteCodigoBarra(codigoBarra);
+            return datos.ExisteCodigoBarra(codigoBarra, idProductoExcluir);
         }
         public DataTable CargarIVAsActivos()
         {
@@ -73,6 +73,18 @@ namespace CapaLogica.NegocioLogica
         public bool RegistrarStock(ClsStock stock)
         {
             return datos.RegistrarStock(stock);
+        }
+        public DataTable ObtenerProveedoresPorProducto(int idProducto)
+        {
+            return datos.ObtenerProveedoresPorProducto(idProducto);
+        }
+        public DataTable ObtenerProductoPorId(int idProducto)
+        {
+            return datos.ObtenerProductoPorId(idProducto);
+        }
+        public bool ModificarProducto(ClsProducto producto)
+        {
+            return datos.ModificarProducto(producto);
         }
     }
 }

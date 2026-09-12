@@ -93,6 +93,15 @@ namespace CapaEntidades.NegocioEntidad
             public string CondicionIVA { get; set; }
             public string Observacion { get; set; }
         }
+        public class ClsProductoSucursalProveedor
+        {
+            public int IdProducto { get; set; }
+            public int IdSucursal { get; set; }
+            public decimal? PrecioCompra { get; set; }
+            public DateTime? FechaPrecioCompra { get; set; }
+            public string CodigoProveedor { get; set; }
+            public bool Activo { get; set; }
+        }
         public class ClsDireccion 
         { 
             public int IdDireccion { get; set; } 
@@ -127,6 +136,7 @@ namespace CapaEntidades.NegocioEntidad
             public string TipoCorreo { get; set; } 
             public string DescripcionCorreo { get; set; } 
         }
+       
 
 
 

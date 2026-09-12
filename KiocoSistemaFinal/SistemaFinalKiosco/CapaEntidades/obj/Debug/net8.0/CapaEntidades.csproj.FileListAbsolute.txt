@@ -10,3 +10,6 @@ C:\Proyectos\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0
 C:\Proyectos\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
 C:\Proyectos\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb
 C:\Proyectos\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\ref\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\refint\CapaEntidades.dll
+C:\Users\janza\Desktop\proyecto 8-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaEntidades\obj\Debug\net8.0\CapaEntidades.pdb

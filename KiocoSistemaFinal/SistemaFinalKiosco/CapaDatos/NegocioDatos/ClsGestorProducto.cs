@@ -110,18 +110,20 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-        public bool ExisteCodigoBarra(string codigoBarra)
+        public bool ExisteCodigoBarra(string codigoBarra, int idProductoExcluir = 0)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
             {
                 string consulta = @"
                     SELECT COUNT(*)
                     FROM Producto
-                    WHERE CodigoBarra = @CodigoBarra";
+                    WHERE CodigoBarra = @CodigoBarra
+                      AND IdProducto <> @IdProductoExcluir;";
 
                 using (SqlCommand cmd = new SqlCommand(consulta, conexion))
                 {
                     cmd.Parameters.AddWithValue("@CodigoBarra", codigoBarra);
+                    cmd.Parameters.AddWithValue("@IdProductoExcluir", idProductoExcluir);
 
                     conexion.Open();
 
@@ -426,6 +428,116 @@ namespace CapaDatos.NegocioDatos
                     conexion.Open();
 
                     return cmd.ExecuteNonQuery() > 0; 
+                }
+            }
+        }
+        public DataTable ObtenerProveedoresPorProducto(int idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT
+                        psp.IdProducto,
+                        psp.IdSucursal,
+                        sp.IdProveedor,
+                        p.Nombre AS Proveedor,
+                        sp.Nombre AS Sucursal,
+                        psp.PrecioCompra,
+                        psp.FechaPrecioCompra,
+                        psp.CodigoProveedor,
+                        psp.Activo
+                    FROM ProductoSucursalProveedor psp
+                    INNER JOIN SucursalProveedor sp
+                        ON psp.IdSucursal = sp.IdSucursal
+                    INNER JOIN Proveedor p
+                        ON sp.IdProveedor = p.IdProveedor
+                    WHERE psp.IdProducto = @IdProducto
+                    ORDER BY p.Nombre, sp.Nombre;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+
+                        adaptador.Fill(tabla);
+
+                        return tabla;
+                    }
+                }
+            }
+        }
+        public DataTable ObtenerProductoPorId(int idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT
+                        p.IdProducto,
+                        p.CodigoBarra,
+                        p.SKU,
+                        p.Nombre,
+                        p.Descripcion,
+                        p.IdMarca,
+                        p.IdCategoria,
+                        p.IdUnidad,
+                        p.PrecioVenta,
+                        p.Activo,
+                        p.IdIVA
+                    FROM Producto p
+                    WHERE p.IdProducto = @IdProducto;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+
+                        adaptador.Fill(tabla);
+
+                        return tabla;
+                    }
+                }
+            }
+        }
+        public bool ModificarProducto(ClsGestorEntidadProducto.ClsProducto producto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE Producto
+                    SET
+                        CodigoBarra = @CodigoBarra,
+                        SKU = @SKU,
+                        Nombre = @Nombre,
+                        Descripcion = @Descripcion,
+                        IdMarca = @IdMarca,
+                        IdIVA = @IdIVA,
+                        IdCategoria = @IdCategoria,
+                        IdUnidad = @IdUnidad,
+                        PrecioVenta = @PrecioVenta
+                    WHERE IdProducto = @IdProducto;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", producto.IdProducto);
+                    cmd.Parameters.AddWithValue("@CodigoBarra", producto.CodigoBarra);
+                    cmd.Parameters.AddWithValue("@SKU", producto.SKU);
+                    cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                    cmd.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                    cmd.Parameters.AddWithValue("@IdMarca", producto.IdMarca);
+                    cmd.Parameters.AddWithValue("@IdIVA", producto.IdIVA);
+                    cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
+                    cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
+                    cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
                 }
             }
         }
