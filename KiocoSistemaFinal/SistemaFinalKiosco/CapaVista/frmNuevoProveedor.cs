@@ -19,6 +19,12 @@ namespace CapaVista
     {
         ClsGestorLogicaProveedor logica = new ClsGestorLogicaProveedor();
 
+        private int idProveedorModificar = 0;
+        private int idDireccionModificar = 0;
+        private int idSucursalModificar = 0;
+        private int idTelefonoModificar = 0;
+        private int idCorreoModificar = 0;
+
         public frmNuevoProveedor()
         {
             InitializeComponent();
@@ -28,6 +34,19 @@ namespace CapaVista
             CargarTiposTelefono();
 
             CargarIVA();
+        }
+        public frmNuevoProveedor(int idProveedor)
+        {
+            InitializeComponent();
+
+            idProveedorModificar = idProveedor;
+
+            CargarLocalidades();
+            CargarTiposTelefono();
+            CargarIVA();
+
+            CargarProveedorModificar();
+
         }
 
         #region Metodo
@@ -103,14 +122,15 @@ namespace CapaVista
                 }
             }
 
-            if (cmbLocalidad.SelectedIndex == -1)
+            if (cmbLocalidad.SelectedIndex == 0)
             {
                 MessageBox.Show("Seleccione una localidad.");
                 cmbLocalidad.Focus();
                 return false;
+
             }
 
-            if (cmbIva.SelectedIndex == -1)
+            if (cmbIva.SelectedIndex == -0)
             {
                 MessageBox.Show("Seleccione la condición de IVA.");
                 cmbIva.Focus();
@@ -164,6 +184,58 @@ namespace CapaVista
 
             cmbIva.SelectedIndex = 0;
         }
+        private void CargarProveedorModificar()
+        {
+            DataTable tabla = logica.ObtenerProveedorPorId(idProveedorModificar);
+
+            if (tabla.Rows.Count == 0)
+            {
+                MessageBox.Show("No se encontro el proveedor. ");
+
+                return;
+            }
+
+            DataRow fila = tabla.Rows[0];
+
+            txtRazonSocial.Text = fila["RazonSocial"]?.ToString() ?? "";
+            txtCuit.Text = fila["CUIT"]?.ToString() ?? "";
+
+            txtNombreComercial.Text = fila["NombreComercial"]?.ToString() ?? "";
+            txtObservaciones.Text = fila["Observacion"]?.ToString() ?? "";
+
+            idDireccionModificar = Convert.ToInt32(fila["IdDireccion"]);
+            idSucursalModificar = Convert.ToInt32(fila["IdSucursal"]);
+            txtCalle.Text = fila["Calle"]?.ToString() ?? "";
+            txtNumero.Text = fila["Altura"]?.ToString() ?? "";
+            txtPiso.Text = fila["Piso"]?.ToString() ?? "";
+            txtDepartamento.Text = fila["Departamento"]?.ToString() ?? "";
+
+            txtCelular.Text = fila["NumTelefono"]?.ToString() ?? "";
+            txtEmail.Text = fila["Correo"]?.ToString() ?? "";
+
+            if (fila["IdLocalidad"] != DBNull.Value)
+            {
+                cmbLocalidad.SelectedValue = Convert.ToInt32(fila["IdLocalidad"]);
+            }
+
+            if (fila["IdTelefono"] != DBNull.Value)
+            {
+                idTelefonoModificar = Convert.ToInt32(fila["IdTelefono"]);
+            }
+
+            if (fila["IdCorreo"] != DBNull.Value)
+            {
+                idCorreoModificar = Convert.ToInt32(fila["IdCorreo"]);
+            }
+
+            if (fila["IdTipo"] != DBNull.Value)
+            {
+                cmbTipoTelefono.SelectedValue = Convert.ToInt32(fila["IdTipo"]);
+            }
+
+            cmbIva.Text = fila["CondiciónIVA"]?.ToString() ?? "";
+
+        }
 
         #endregion
 
@@ -177,12 +249,23 @@ namespace CapaVista
 
             ClsProveedor proveedor = new ClsProveedor
             {
+                IdProveedor = idProveedorModificar,
                 Nombre = txtRazonSocial.Text.Trim(),
                 CUIT = txtCuit.Text.Trim(),
                 Activo = true
             };
 
-            int idProveedor = logica.RegistrarProveedor(proveedor);
+            int idProveedor;
+
+            if (idProveedorModificar == 0)
+            {
+                idProveedor = logica.RegistrarProveedor(proveedor);
+            }
+            else
+            {
+                logica.ModificarProveedor(proveedor);
+                idProveedor = idProveedorModificar;
+            }
 
             ClsDireccion direccion = new ClsDireccion
             {
@@ -193,7 +276,20 @@ namespace CapaVista
                 IdLocalidad = Convert.ToInt32(cmbLocalidad.SelectedValue)
             };
 
-            int idDireccion = logica.RegistrarDireccion(direccion);
+            int idDireccion;
+
+            if (idProveedorModificar == 0)
+            {
+                idDireccion = logica.RegistrarDireccion(direccion);
+            }
+            else
+            {
+                direccion.IdDireccion = idDireccionModificar;
+
+                logica.ModificarDireccion(direccion);
+
+                idDireccion = idDireccionModificar;
+            }
 
             ClsSucursalProveedor sucursal = new ClsSucursalProveedor
             {
@@ -205,8 +301,20 @@ namespace CapaVista
                 Observacion = txtObservaciones.Text.Trim()
             };
 
+            int idSucursal;
 
-            int idSucursal = logica.RegistrarSucursalProveedor(sucursal);
+            if (idProveedorModificar == 0)
+            {
+                idSucursal = logica.RegistrarSucursalProveedor(sucursal);
+            }
+            else
+            {
+                sucursal.IdSucursal = idSucursalModificar;
+
+                logica.ModificarSucursalProveedor(sucursal);
+
+                idSucursal = idSucursalModificar;
+            }
 
             ClsTelefono telefono = new ClsTelefono
             {
@@ -214,34 +322,69 @@ namespace CapaVista
                 IdTipo = Convert.ToInt32(cmbTipoTelefono.SelectedValue)
             };
 
-            int idTelefono = logica.RegistrarTelefono(telefono);
+            int idTelefono;
 
-            ClsSucursalProveedorTelefono telefonoSucursal = new ClsSucursalProveedorTelefono
+            if (idProveedorModificar == 0)
             {
-                IdSucursal = idSucursal,
-                IdTelefono = idTelefono,
-                Activo = true
-            };
+                idTelefono = logica.RegistrarTelefono(telefono); 
 
-            logica.RegistrarSucursalProveedorTelefono(telefonoSucursal);
+                ClsSucursalProveedorTelefono telefonoSucursal = new ClsSucursalProveedorTelefono 
+                { 
+                    IdSucursal = idSucursal, 
+                    IdTelefono = idTelefono, Activo = true 
+                }; 
+                
+                logica.RegistrarSucursalProveedorTelefono(telefonoSucursal);
+            }
+            else
+            {
+                telefono.IdTelefono = idTelefonoModificar; 
+                logica.ModificarTelefono(telefono);
+                idTelefono = idTelefonoModificar; ;
+            }
 
             ClsCorreo correo = new ClsCorreo
             {
                 Correo = txtEmail.Text.Trim()
             };
 
-            int idCorreo = logica.RegistrarCorreo(correo);
-
-            ClsSucursalProveedorCorreo correoSucursal = new ClsSucursalProveedorCorreo
+            if (idProveedorModificar == 0)
             {
-                IdCorreo = idCorreo,
-                IdSucursal = idSucursal,
-                Activo = true
-            };
+                int idCorreo = logica.RegistrarCorreo(correo);
 
-            logica.RegistrarSucursalProveedorCorreo(correoSucursal);
-            MessageBox.Show("Proveedor registrado correctamente.");
-            VaciarFormularios.LimpiarControles(this);
+                ClsSucursalProveedorCorreo correoSucursal = new ClsSucursalProveedorCorreo
+                    {
+                        IdCorreo = idCorreo,
+                        IdSucursal = idSucursal,
+                        Activo = true
+                    };
+
+                logica.RegistrarSucursalProveedorCorreo(correoSucursal);
+            }
+            else
+            {
+                correo.IdCorreo = idCorreoModificar;
+
+                logica.ModificarCorreo(correo);
+            }
+
+            if (idProveedorModificar == 0)
+            {
+                MessageBox.Show("Proveedor registrado correctamente.");
+            }
+            else
+            {
+                MessageBox.Show("Proveedor modificado correctamente.");
+            }
+
+            if (idProveedorModificar == 0)
+            {
+                VaciarFormularios.LimpiarControles(this);
+            }
+            else
+            {
+                this.Close();
+            }
         }
         private void btnCancelar_Click(object sender, EventArgs e)
         {

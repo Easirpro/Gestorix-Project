@@ -102,6 +102,40 @@ namespace CapaDatos.NegocioDatos
                 } 
             }
         }
+        public void ModificarSucursalProveedor(ClsSucursalProveedor sucursal)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE SucursalProveedor
+                    SET Nombre = @Nombre,
+                        IdDireccion = @IdDireccion,
+                        [CondiciónIVA] = @CondicionIVA,
+                        Observacion = @Observacion
+                    WHERE IdSucursal = @IdSucursal;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdSucursal", sucursal.IdSucursal);
+                    cmd.Parameters.AddWithValue("@Nombre", sucursal.Nombre);
+                    cmd.Parameters.AddWithValue("@IdDireccion", sucursal.IdDireccion);
+                    cmd.Parameters.AddWithValue("@CondicionIVA", sucursal.CondicionIVA);
+
+                    if (string.IsNullOrWhiteSpace(sucursal.Observacion))
+                    {
+                        cmd.Parameters.AddWithValue("@Observacion", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@Observacion", sucursal.Observacion);
+                    }
+
+                    conexion.Open();
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
         public int RegistrarDireccion(ClsDireccion direccion)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -165,6 +199,59 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public void ModificarDireccion(ClsDireccion direccion)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+
+                string consulta = @"
+                    UPDATE Direccion
+                    SET Calle = @Calle,
+                        Altura = @Altura,
+                        Piso = @Piso,
+                        Departamento = @Departamento,
+                        IdLocalidad = @IdLocalidad
+                    WHERE IdDireccion = @IdDireccion;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdDireccion", direccion.IdDireccion);
+                    cmd.Parameters.AddWithValue("@Calle", direccion.Calle);
+
+                    if (direccion.Altura.HasValue)
+                    {
+                        cmd.Parameters.AddWithValue("@Altura", direccion.Altura.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@Altura", DBNull.Value);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(direccion.Piso))
+                    {
+                        cmd.Parameters.AddWithValue("@Piso", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@Piso", direccion.Piso);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(direccion.Departamento))
+                    {
+                        cmd.Parameters.AddWithValue("@Departamento", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@Departamento", direccion.Departamento);
+                    }
+
+                    cmd.Parameters.AddWithValue("@IdLocalidad", direccion.IdLocalidad);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
         public int RegistrarTelefono(ClsTelefono telefono)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -191,6 +278,28 @@ namespace CapaDatos.NegocioDatos
                     conexion.Open();
 
                     return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+        public void ModificarTelefono(ClsTelefono telefono)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE Telefono
+                    SET NumTelefono = @NumTelefono,
+                        IdTipo = @IdTipo
+                    WHERE IdTelefono = @IdTelefono;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdTelefono", telefono.IdTelefono);
+                    cmd.Parameters.AddWithValue("@NumTelefono", telefono.NumTelefono);
+                    cmd.Parameters.AddWithValue("@IdTipo", telefono.IdTipo);
+
+                    conexion.Open();
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
@@ -269,6 +378,26 @@ namespace CapaDatos.NegocioDatos
                     conexion.Open();
 
                     return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+        public void ModificarCorreo(ClsCorreo correo)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE Correo
+                    SET Correo = @Correo
+                    WHERE IdCorreo = @IdCorreo;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdCorreo", correo.IdCorreo);
+                    cmd.Parameters.AddWithValue("@Correo", correo.Correo);
+
+                    conexion.Open();
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
@@ -382,19 +511,10 @@ namespace CapaDatos.NegocioDatos
                         sp.[CondiciónIVA],
                         t.NumTelefono,
                         c.Correo,
-                        CONCAT(
-                        d.Calle, ' ',
-                        ISNULL(CAST(d.Altura AS VARCHAR(10)), ''),
-                        CASE 
-                            WHEN d.Piso IS NOT NULL AND d.Piso <> '' 
-                            THEN ' Piso ' + d.Piso 
-                            ELSE '' 
-                            END,
-                        CASE 
-                            WHEN d.Departamento IS NOT NULL AND d.Departamento <> '' 
-                            THEN ' Depto. ' + d.Departamento 
-                            ELSE '' 
-                            END
+                        CONCAT
+                        (
+                            d.Calle, ' ',
+                            ISNULL(CAST(d.Altura AS VARCHAR(10)), '')
                         ) 
                         AS Direccion,
                         CASE 
@@ -430,7 +550,142 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public DataTable ObtenerProveedorPorId(int idProveedor)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT
+                        p.IdProveedor,
+                        p.Nombre AS RazonSocial,
+                        p.CUIT,
 
+                        sp.IdSucursal,
+                        sp.Nombre AS NombreComercial,
+                        sp.[CondiciónIVA],
+                        sp.Observacion,
+
+                        d.IdDireccion,
+                        d.Calle,
+                        d.Altura,
+                        d.Piso,
+                        d.Departamento,
+
+                        l.IdLocalidad,
+
+                        t.IdTelefono,
+                        t.NumTelefono,
+                        t.IdTipo,
+
+                        c.IdCorreo,
+                        c.Correo
+
+                    FROM Proveedor p
+
+                    INNER JOIN SucursalProveedor sp
+                        ON p.IdProveedor = sp.IdProveedor
+
+                    INNER JOIN Direccion d
+                        ON sp.IdDireccion = d.IdDireccion
+
+                    INNER JOIN Localidad l
+                        ON d.IdLocalidad = l.IdLocalidad
+
+                    LEFT JOIN SucursalProveedorTelefono spt
+                        ON sp.IdSucursal = spt.IdSucursal
+                        AND spt.Activo = 1
+
+                    LEFT JOIN Telefono t
+                        ON spt.IdTelefono = t.IdTelefono
+
+                    LEFT JOIN SucursalProveedorCorreo spc
+                        ON sp.IdSucursal = spc.IdSucursal
+                        AND spc.Activo = 1
+
+                    LEFT JOIN Correo c
+                        ON spc.IdCorreo = c.IdCorreo
+
+                    WHERE p.IdProveedor = @IdProveedor;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProveedor", idProveedor);
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+                        adaptador.Fill(tabla);
+
+                        return tabla;
+                    }
+                }
+            }
+        }
+        public void DescontinuarProveedor(int idProveedor)
+        {
+
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+
+                string consulta = @"
+                    UPDATE Proveedor
+                    SET Activo = 0
+                    WHERE IdProveedor = @IdProveedor;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProveedor", idProveedor);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public void ActivarProveedor(int idProveedor)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+
+                string consulta = @"
+                    UPDATE Proveedor
+                    SET Activo = 1
+                    WHERE IdProveedor = @IdProveedor;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProveedor", idProveedor);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public void ModificarProveedor (ClsProveedor proveedor)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            { 
+                conexion.Open();
+
+                string consulta = @"
+                    UPDATE Proveedor
+                    SET Nombre = @Nombre,
+                        CUIT = @CUIT
+                    WHERE IdProveedor = @IdProveedor;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@Nombre", proveedor.Nombre);
+                    cmd.Parameters.AddWithValue("@IdProveedor", proveedor.IdProveedor);
+                    cmd.Parameters.AddWithValue("@CUIT", proveedor.CUIT);
+
+                    cmd.ExecuteNonQuery();
+
+                }
+            
+            }        
+                
+            
+        }
 
 
 

@@ -31,8 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProveedores));
             btnNuevoProveedor = new Button();
             btnModificar = new Button();
-            btnDiscontinuar = new Button();
-            btnBuscar = new Button();
+            btnDescontinuar = new Button();
+            btnActualizar = new Button();
             txtBuscar = new TextBox();
             chkOcultarProveedores = new CheckBox();
             dtgProveedores = new DataGridView();
@@ -73,29 +73,30 @@
             btnModificar.Text = "Modificar";
             btnModificar.TextAlign = ContentAlignment.MiddleRight;
             btnModificar.UseVisualStyleBackColor = true;
-            btnModificar.Click += btnModificar_Click;
+            btnModificar.Click += BtnModificar_Click;
             // 
-            // btnDiscontinuar
+            // btnDescontinuar
             // 
-            btnDiscontinuar.Location = new Point(278, 6);
-            btnDiscontinuar.Name = "btnDiscontinuar";
-            btnDiscontinuar.Size = new Size(84, 36);
-            btnDiscontinuar.TabIndex = 2;
-            btnDiscontinuar.Text = "Discontinuar";
-            btnDiscontinuar.UseVisualStyleBackColor = true;
+            btnDescontinuar.Location = new Point(278, 6);
+            btnDescontinuar.Name = "btnDescontinuar";
+            btnDescontinuar.Size = new Size(95, 36);
+            btnDescontinuar.TabIndex = 2;
+            btnDescontinuar.Text = "Descontinuar";
+            btnDescontinuar.UseVisualStyleBackColor = true;
+            btnDescontinuar.Click += btnDescontinuar_Click;
             // 
-            // btnBuscar
+            // btnActualizar
             // 
-            btnBuscar.Image = (Image)resources.GetObject("btnBuscar.Image");
-            btnBuscar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnBuscar.Location = new Point(495, 6);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(82, 36);
-            btnBuscar.TabIndex = 3;
-            btnBuscar.Text = "Buscar";
-            btnBuscar.TextAlign = ContentAlignment.MiddleRight;
-            btnBuscar.UseVisualStyleBackColor = true;
-            btnBuscar.Click += btnBuscar_Click_1;
+            btnActualizar.Image = (Image)resources.GetObject("btnActualizar.Image");
+            btnActualizar.ImageAlign = ContentAlignment.MiddleLeft;
+            btnActualizar.Location = new Point(495, 6);
+            btnActualizar.Name = "btnActualizar";
+            btnActualizar.Size = new Size(82, 36);
+            btnActualizar.TabIndex = 3;
+            btnActualizar.Text = "Actualizar";
+            btnActualizar.TextAlign = ContentAlignment.MiddleRight;
+            btnActualizar.UseVisualStyleBackColor = true;
+            btnActualizar.Click += btnActualizar_Click;
             // 
             // txtBuscar
             // 
@@ -109,10 +110,11 @@
             chkOcultarProveedores.AutoSize = true;
             chkOcultarProveedores.Location = new Point(590, 17);
             chkOcultarProveedores.Name = "chkOcultarProveedores";
-            chkOcultarProveedores.Size = new Size(194, 19);
+            chkOcultarProveedores.Size = new Size(183, 19);
             chkOcultarProveedores.TabIndex = 6;
-            chkOcultarProveedores.Text = "Ocultar Proveedores Eliminados";
+            chkOcultarProveedores.Text = "Ocultar Proveedores Inactivos";
             chkOcultarProveedores.UseVisualStyleBackColor = true;
+            chkOcultarProveedores.CheckedChanged += chkOcultarProveedores_CheckedChanged;
             // 
             // dtgProveedores
             // 
@@ -205,8 +207,8 @@
             Controls.Add(dtgProveedores);
             Controls.Add(chkOcultarProveedores);
             Controls.Add(txtBuscar);
-            Controls.Add(btnBuscar);
-            Controls.Add(btnDiscontinuar);
+            Controls.Add(btnActualizar);
+            Controls.Add(btnDescontinuar);
             Controls.Add(btnModificar);
             Controls.Add(btnNuevoProveedor);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -221,8 +223,8 @@
 
         private Button btnNuevoProveedor;
         private Button btnModificar;
-        private Button btnDiscontinuar;
-        private Button btnBuscar;
+        private Button btnDescontinuar;
+        private Button btnActualizar;
         private TextBox txtBuscar;
         private CheckBox chkOcultarProveedores;
         private DataGridView dtgProveedores;

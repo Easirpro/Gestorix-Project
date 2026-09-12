@@ -15,6 +15,7 @@ namespace CapaVista
 {
     public partial class frmNuevoArticulo : Form
     {
+        private int idProductoModificar = 0;
         public frmNuevoArticulo()
         {
             InitializeComponent();
@@ -24,7 +25,17 @@ namespace CapaVista
             chkActivarIva.CheckedChanged += chkActivarIva_CheckedChanged;
             chkControlLote.CheckedChanged += chkControlLote_CheckedChanged;
         }
+        public frmNuevoArticulo(int idProducto)
+        {
+            InitializeComponent();
 
+            idProductoModificar = idProducto;
+
+            this.Load += frmNuevoArticulo_Load;
+
+            chkActivarIva.CheckedChanged += chkActivarIva_CheckedChanged;
+            chkControlLote.CheckedChanged += chkControlLote_CheckedChanged;
+        }
 
         #region Metodos
 
@@ -39,15 +50,77 @@ namespace CapaVista
         }
         private void frmNuevoArticulo_Load(object sender, EventArgs e)
         {
-            CargarProximoSKU();
+
             CargarMarcas();
             CargarCategorias();
             CargarUnidades();
             CargarIVAs();
 
+            if (idProductoModificar == 0)
+            {
+                CargarProximoSKU();
+            }
+            else
+            {
+                CargarProductoModificar();
+            }
+
             chkControlStock_CheckedChanged(null, null);
             chkAlertaVencimiento_CheckedChanged(null, null);
             chkControlLote_CheckedChanged(null, null);
+        }
+        private void CargarProductoModificar()
+        {
+            ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+
+            DataTable tabla = logica.ObtenerProductoPorId(idProductoModificar);
+
+            if (tabla.Rows.Count == 0)
+            {
+                MessageBox.Show("No se encontró el artículo.","Modificar artículo",
+                    MessageBoxButtons.OK,MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            DataRow fila = tabla.Rows[0];
+
+            txtCodigo.Text = fila["CodigoBarra"]?.ToString() ?? "";
+            txtSKU.Text = fila["SKU"]?.ToString() ?? "";
+            txtNombreProducto.Text = fila["Nombre"]?.ToString() ?? "";
+            txtDescripcion.Text = fila["Descripcion"]?.ToString() ?? "";
+
+            if (fila["IdMarca"] != DBNull.Value)
+            {
+                cmbMarca.SelectedValue = Convert.ToInt32(fila["IdMarca"]);
+            }
+
+            if (fila["IdCategoria"] != DBNull.Value)
+            {
+                cmbRubro.SelectedValue = Convert.ToInt32(fila["IdCategoria"]);
+            }
+
+            if (fila["IdUnidad"] != DBNull.Value)
+            {
+                cmbUnidadVenta.SelectedValue = Convert.ToInt32(fila["IdUnidad"]);
+            }
+
+            if (fila["IdIVA"] != DBNull.Value)
+            {
+                int idIVA = Convert.ToInt32(fila["IdIVA"]);
+
+                if (idIVA == 1)
+                {
+                    chkActivarIva.Checked = false;
+                }
+                else
+                {
+                    chkActivarIva.Checked = true;
+                    cmbIva.SelectedValue = idIVA;
+                }
+            }
+
+            txtPrecioVenta.Text = fila["PrecioVenta"]?.ToString() ?? "";
         }
         private void CargarMarcas()
         {
@@ -103,7 +176,7 @@ namespace CapaVista
 
             ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
 
-            if (logica.ExisteCodigoBarra(codigoBarra))
+            if (logica.ExisteCodigoBarra(codigoBarra, idProductoModificar))
             {
                 txtCodigo.Focus();
                 return false;
@@ -341,8 +414,9 @@ namespace CapaVista
                     return;
                 }
 
-                ClsGestorEntidadProducto.ClsProducto producto = new ClsGestorEntidadProducto.ClsProducto();
+                ClsProducto producto = new ClsProducto();
 
+                producto.IdProducto = idProductoModificar;
                 producto.CodigoBarra = txtCodigo.Text.Trim();
                 producto.SKU = txtSKU.Text.Trim();
                 producto.Nombre = txtNombreProducto.Text.Trim();
@@ -355,60 +429,80 @@ namespace CapaVista
                 {
                     producto.IdIVA = Convert.ToInt32(cmbIva.SelectedValue);
                 }
+
                 else
                 {
                     producto.IdIVA = 1;
                 }
+
                 producto.PrecioVenta = Convert.ToDecimal(txtPrecioVenta.Text);
-                producto.Activo = true;
 
                 ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
 
-                int idProducto = logica.RegistrarProducto(producto);
-
-                if (idProducto > 0)
+                if (idProductoModificar == 0)
                 {
+                    producto.Activo = true;
 
-                    ClsStock stock = new ClsStock();
+                    int idProducto = logica.RegistrarProducto(producto);
 
-                    stock.IdProducto = idProducto;
-                    stock.CantidadActual = 0;
-
-                    if (chkControlStock.Checked)
+                    if (idProducto > 0)
                     {
-                        stock.StockMinimo = Convert.ToDecimal(txtStockMinimo.Text);
-                        stock.StockIdeal = Convert.ToDecimal(txtStockMaximo.Text);
+
+                        ClsStock stock = new ClsStock();
+
+                        stock.IdProducto = idProducto;
+                        stock.CantidadActual = 0;
+
+                        if (chkControlStock.Checked)
+                        {
+                            stock.StockMinimo = Convert.ToDecimal(txtStockMinimo.Text);
+                            stock.StockIdeal = Convert.ToDecimal(txtStockMaximo.Text);
+                        }
+                        else
+                        {
+                            stock.StockMinimo = 0;
+                            stock.StockIdeal = 0;
+                        }
+
+                        bool stockRegistrado = logica.RegistrarStock(stock);
+
+                        if (!stockRegistrado)
+                        {
+                            MessageBox.Show("El artículo fue registrado, pero no se pudo registrar su Stock.",
+                                "Advertencia",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+
+                            return;
+                        }
+
+                        MessageBox.Show("Artículo registrado correctamente.","Registro",
+                            MessageBoxButtons.OK,MessageBoxIcon.Information);
+
+                        this.Close();
                     }
-                    else
-                    {
-                        stock.StockMinimo = 0;
-                        stock.StockIdeal = 0;
-                    }
+                }
 
-                    bool stockRegistrado = logica.RegistrarStock(stock);
+                else
+                {
+                    bool modificado = logica.ModificarProducto(producto);
 
-                    if (!stockRegistrado)
+                    if (!modificado)
                     {
-                        MessageBox.Show("El artículo fue registrado, pero no se pudo registrar su Stock.",
-                            "Advertencia",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+                        MessageBox.Show("No se pudo modificar el artículo.","Modificar artículo",
+                            MessageBoxButtons.OK,MessageBoxIcon.Warning);
 
                         return;
                     }
 
-                    MessageBox.Show("Artículo registrado correctamente.", "Registro",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    MessageBox.Show("Artículo modificado correctamente.","Modificar artículo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.Close();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ocurrió un error al registrar el artículo.\n\n" + ex.Message, "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show("Ocurrió un error al guardar el artículo.\n\n" + ex.Message,
+                    "Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
         private void chkActivarIva_CheckedChanged(object sender, EventArgs e)

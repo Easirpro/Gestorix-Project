@@ -33,10 +33,30 @@ namespace CapaVista
         {
             tablaProveedores = logica.ObtenerProveedores();
 
+            FiltrarProveedores();
+        }
+        private void FiltrarProveedores()
+        {
+            string texto = txtBuscar.Text.Trim().ToLower();
+
             dtgProveedores.Rows.Clear();
 
             foreach (DataRow fila in tablaProveedores.Rows)
             {
+                string razonSocial = fila["RazonSocial"]?.ToString().ToLower() ?? "";
+                string cuit = fila["CUIT"]?.ToString().ToLower() ?? "";
+                string estado = fila["Estado"]?.ToString() ?? "";
+
+                if (chkOcultarProveedores.Checked && estado == "Inactivo")
+                {
+                    continue;
+                }
+
+                if (!razonSocial.Contains(texto) && !cuit.Contains(texto))
+                {
+                    continue;
+                }
+
                 int indice = dtgProveedores.Rows.Add(
                     fila["IdProveedor"],
                     fila["RazonSocial"],
@@ -56,10 +76,22 @@ namespace CapaVista
             if (dtgProveedores.CurrentRow == null)
             {
                 txtObsevaciones.Clear();
+                btnDescontinuar.Text = "Descontinuar";
                 return;
             }
 
             txtObsevaciones.Text = dtgProveedores.CurrentRow.Tag?.ToString() ?? "";
+
+            string estado = dtgProveedores.CurrentRow.Cells[7].Value?.ToString() ?? "";
+
+            if (estado == "Inactivo")
+            {
+                btnDescontinuar.Text = "Activar";
+            }
+            else
+            {
+                btnDescontinuar.Text = "Descontinuar";
+            }
         }
         private void txtBuscar_TextChanged(object sender, EventArgs e)
         {
@@ -85,12 +117,11 @@ namespace CapaVista
                         fila["Estado"]
                     );
 
-                    dtgProveedores.Rows[indice].Tag =
-                        fila["Observacion"]?.ToString() ?? "";
+                    dtgProveedores.Rows[indice].Tag = fila["Observacion"]?.ToString() ?? "";
                 }
             }
         }
-   
+
 
         #endregion
 
@@ -101,21 +132,73 @@ namespace CapaVista
         {
             frmNuevoProveedor nuevoProveedor = new frmNuevoProveedor();
             nuevoProveedor.ShowDialog();
-        }
 
-        private void btnModificar_Click(object sender, EventArgs e)
+            CargarProveedores();
+        }
+        private void BtnModificar_Click(object sender, EventArgs e)
         {
-            frmNuevoProveedor modproveedor = new frmNuevoProveedor();
+            if (dtgProveedores.CurrentRow == null)
+            {
+                MessageBox.Show("Seleccione un proveedor para modificar.");
+                return;
+            }
+
+            int idProveedor = Convert.ToInt32(dtgProveedores.CurrentRow.Cells[0].Value);
+
+            frmNuevoProveedor modproveedor = new frmNuevoProveedor(idProveedor);
+
             modproveedor.Text = "Modificar";
             modproveedor.ShowDialog();
+
+            CargarProveedores();
         }
-        private void btnBuscar_Click_1(object sender, EventArgs e)
+        private void btnActualizar_Click(object sender, EventArgs e)
         {
-            txtBuscar_TextChanged(txtBuscar, EventArgs.Empty);
-            //ver si lo dejamos ya que el txtbuscar funciona filtrando
+            CargarProveedores();
         }
+        private void chkOcultarProveedores_CheckedChanged(object sender, EventArgs e)
+        {
+            FiltrarProveedores();
+        }
+        private void btnDescontinuar_Click(object sender, EventArgs e)
+        {
+            if (dtgProveedores.CurrentRow == null)
+            {
+                MessageBox.Show("Seleccione un proveedor.");
+                return;
+            }
+
+            int idProveedor = Convert.ToInt32(dtgProveedores.CurrentRow.Cells[0].Value);
+            string razonSocial = dtgProveedores.CurrentRow.Cells[1].Value?.ToString() ?? "";
+            string estado = dtgProveedores.CurrentRow.Cells[7].Value?.ToString() ?? "";
+
+            if (estado == "Inactivo")
+            {
+                logica.ActivarProveedor(idProveedor);
+            }
+            else
+            {
+                DialogResult resultado = MessageBox.Show("¿Está seguro de descontinuar al proveedor " + razonSocial + "?",
+                    "Descontinuar proveedor", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (resultado != DialogResult.Yes)
+                {
+                    return;
+                }
+
+                logica.DescontinuarProveedor(idProveedor);
+            }
+
+            CargarProveedores();
+        }
+
         #endregion
 
 
+
+
+
+
+     
     }
 }
