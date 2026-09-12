@@ -67,6 +67,7 @@
             listaDePreciosToolStripMenuItem = new ToolStripMenuItem();
             listadoDeReposiciónToolStripMenuItem = new ToolStripMenuItem();
             tollClosed = new ToolStripMenuItem();
+            toolStripMenuItem2 = new ToolStripMenuItem();
             btnCambiarcantidad = new Button();
             btnCambiarprecio = new Button();
             btnRecargo = new Button();
@@ -76,7 +77,6 @@
             btnCobrar = new Button();
             btnNuevaCompra = new Button();
             btnVerPrecio = new Button();
-            panel1 = new Panel();
             lblTotalMonto = new Label();
             label5 = new Label();
             lblDescuentoMonto = new Label();
@@ -102,11 +102,12 @@
             label6 = new Label();
             btnPromocion = new Button();
             toolTip1 = new ToolTip(components);
+            tableLayoutPanel1 = new TableLayoutPanel();
             btnConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
-            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             pnlUsuario.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // btnArt
@@ -341,12 +342,10 @@
             // 
             // btnConfig
             // 
-            btnConfig.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            btnConfig.Dock = DockStyle.None;
-            btnConfig.Items.AddRange(new ToolStripItem[] { btnArt, btnVentas, btnCompras, btnProve, toolStripMenuItem1, btnInformes, btnCaja, btnHerra, btnAyuda, btnAjustes, tollClosed });
+            btnConfig.Items.AddRange(new ToolStripItem[] { btnArt, btnVentas, btnCompras, btnProve, toolStripMenuItem1, btnInformes, btnCaja, btnHerra, btnAyuda, btnAjustes, tollClosed, toolStripMenuItem2 });
             btnConfig.Location = new Point(0, 0);
             btnConfig.Name = "btnConfig";
-            btnConfig.Size = new Size(658, 24);
+            btnConfig.Size = new Size(877, 24);
             btnConfig.TabIndex = 0;
             btnConfig.Text = "menuStrip1";
             btnConfig.ItemClicked += btnConfig_ItemClicked;
@@ -379,8 +378,14 @@
             tollClosed.Size = new Size(28, 20);
             tollClosed.Click += tollClosed_Click;
             // 
+            // toolStripMenuItem2
+            // 
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new Size(12, 20);
+            // 
             // btnCambiarcantidad
             // 
+            btnCambiarcantidad.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnCambiarcantidad.Location = new Point(333, 315);
             btnCambiarcantidad.Name = "btnCambiarcantidad";
             btnCambiarcantidad.Size = new Size(115, 23);
@@ -390,6 +395,7 @@
             // 
             // btnCambiarprecio
             // 
+            btnCambiarprecio.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnCambiarprecio.Location = new Point(454, 315);
             btnCambiarprecio.Name = "btnCambiarprecio";
             btnCambiarprecio.Size = new Size(115, 23);
@@ -399,6 +405,7 @@
             // 
             // btnRecargo
             // 
+            btnRecargo.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnRecargo.Location = new Point(174, 315);
             btnRecargo.Name = "btnRecargo";
             btnRecargo.Size = new Size(75, 23);
@@ -408,6 +415,7 @@
             // 
             // btnDescuento
             // 
+            btnDescuento.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnDescuento.Location = new Point(93, 315);
             btnDescuento.Name = "btnDescuento";
             btnDescuento.Size = new Size(75, 23);
@@ -417,6 +425,7 @@
             // 
             // btnQuitar
             // 
+            btnQuitar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnQuitar.Location = new Point(12, 315);
             btnQuitar.Name = "btnQuitar";
             btnQuitar.Size = new Size(75, 23);
@@ -437,7 +446,7 @@
             // 
             // btnCobrar
             // 
-            btnCobrar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnCobrar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnCobrar.BackColor = Color.ForestGreen;
             btnCobrar.FlatStyle = FlatStyle.Flat;
             btnCobrar.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -452,7 +461,7 @@
             // 
             // btnNuevaCompra
             // 
-            btnNuevaCompra.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnNuevaCompra.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnNuevaCompra.BackColor = Color.ForestGreen;
             btnNuevaCompra.FlatStyle = FlatStyle.Flat;
             btnNuevaCompra.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -467,7 +476,7 @@
             // 
             // btnVerPrecio
             // 
-            btnVerPrecio.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnVerPrecio.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnVerPrecio.BackColor = Color.ForestGreen;
             btnVerPrecio.FlatStyle = FlatStyle.Flat;
             btnVerPrecio.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -479,51 +488,44 @@
             btnVerPrecio.Text = "F5-Ver Precio";
             btnVerPrecio.UseVisualStyleBackColor = false;
             // 
-            // panel1
-            // 
-            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            panel1.BackColor = SystemColors.ActiveCaptionText;
-            panel1.Controls.Add(lblTotalMonto);
-            panel1.Controls.Add(label5);
-            panel1.Controls.Add(lblDescuentoMonto);
-            panel1.Controls.Add(lblSubtotalMonto);
-            panel1.Controls.Add(label2);
-            panel1.Controls.Add(label1);
-            panel1.Location = new Point(587, 59);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(273, 140);
-            panel1.TabIndex = 1;
-            // 
             // lblTotalMonto
             // 
             lblTotalMonto.AutoSize = true;
+            lblTotalMonto.Dock = DockStyle.Fill;
             lblTotalMonto.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblTotalMonto.ForeColor = Color.LawnGreen;
-            lblTotalMonto.Location = new Point(146, 88);
+            lblTotalMonto.Location = new Point(139, 103);
+            lblTotalMonto.Margin = new Padding(3, 5, 3, 5);
             lblTotalMonto.Name = "lblTotalMonto";
-            lblTotalMonto.Size = new Size(105, 45);
+            lblTotalMonto.Size = new Size(131, 37);
             lblTotalMonto.TabIndex = 5;
             lblTotalMonto.Text = "label6";
-            lblTotalMonto.TextAlign = ContentAlignment.BottomRight;
+            lblTotalMonto.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label5.Dock = DockStyle.Fill;
+            label5.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label5.ForeColor = Color.LawnGreen;
-            label5.Location = new Point(3, 96);
+            label5.Location = new Point(3, 103);
+            label5.Margin = new Padding(3, 5, 3, 5);
             label5.Name = "label5";
-            label5.Size = new Size(42, 21);
+            label5.Size = new Size(130, 37);
             label5.TabIndex = 4;
             label5.Text = "Total";
+            label5.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblDescuentoMonto
             // 
             lblDescuentoMonto.AutoSize = true;
+            lblDescuentoMonto.Dock = DockStyle.Fill;
+            lblDescuentoMonto.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblDescuentoMonto.ForeColor = SystemColors.ScrollBar;
-            lblDescuentoMonto.Location = new Point(213, 40);
+            lblDescuentoMonto.Location = new Point(139, 54);
+            lblDescuentoMonto.Margin = new Padding(3, 5, 3, 5);
             lblDescuentoMonto.Name = "lblDescuentoMonto";
-            lblDescuentoMonto.Size = new Size(38, 15);
+            lblDescuentoMonto.Size = new Size(131, 39);
             lblDescuentoMonto.TabIndex = 3;
             lblDescuentoMonto.Text = "label4";
             lblDescuentoMonto.TextAlign = ContentAlignment.MiddleRight;
@@ -531,35 +533,46 @@
             // lblSubtotalMonto
             // 
             lblSubtotalMonto.AutoSize = true;
+            lblSubtotalMonto.Dock = DockStyle.Fill;
+            lblSubtotalMonto.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSubtotalMonto.ForeColor = Color.LawnGreen;
-            lblSubtotalMonto.Location = new Point(213, 18);
+            lblSubtotalMonto.Location = new Point(139, 5);
+            lblSubtotalMonto.Margin = new Padding(3, 5, 3, 5);
             lblSubtotalMonto.Name = "lblSubtotalMonto";
-            lblSubtotalMonto.Size = new Size(38, 15);
+            lblSubtotalMonto.Size = new Size(131, 39);
             lblSubtotalMonto.TabIndex = 2;
             lblSubtotalMonto.Text = "label3";
-            lblSubtotalMonto.TextAlign = ContentAlignment.TopRight;
+            lblSubtotalMonto.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label2
             // 
             label2.AutoSize = true;
+            label2.Dock = DockStyle.Fill;
+            label2.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label2.ForeColor = SystemColors.ScrollBar;
-            label2.Location = new Point(0, 40);
+            label2.Location = new Point(3, 54);
+            label2.Margin = new Padding(3, 5, 3, 5);
             label2.Name = "label2";
-            label2.Size = new Size(111, 15);
+            label2.Size = new Size(130, 39);
             label2.TabIndex = 1;
             label2.Text = "Descuento/Recargo";
+            label2.TextAlign = ContentAlignment.MiddleLeft;
+            label2.Click += label2_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.BackColor = SystemColors.ActiveCaptionText;
-            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Dock = DockStyle.Fill;
+            label1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.LawnGreen;
-            label1.Location = new Point(0, 12);
+            label1.Location = new Point(3, 5);
+            label1.Margin = new Padding(3, 5, 3, 5);
             label1.Name = "label1";
-            label1.Size = new Size(68, 21);
+            label1.Size = new Size(130, 39);
             label1.TabIndex = 0;
             label1.Text = "Subtotal";
+            label1.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label3
             // 
@@ -613,11 +626,10 @@
             // 
             // dataGridView1
             // 
-            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ClnNum, ClnCodigo, ClnDescripcion, ClnCantidad, ClnPrecioUnitario, ClnImporte });
-            //dataGridView1.Columns["ClnCodigo"].FillWeight = 80;
             dataGridView1.Location = new Point(12, 83);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(557, 213);
@@ -710,6 +722,7 @@
             // 
             // btnPromocion
             // 
+            btnPromocion.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnPromocion.Location = new Point(12, 365);
             btnPromocion.Name = "btnPromocion";
             btnPromocion.Size = new Size(170, 61);
@@ -718,11 +731,35 @@
             btnPromocion.UseVisualStyleBackColor = true;
             btnPromocion.Click += btnPromocion_Click;
             // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            tableLayoutPanel1.BackColor = SystemColors.ActiveCaptionText;
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Controls.Add(label1, 0, 0);
+            tableLayoutPanel1.Controls.Add(lblSubtotalMonto, 1, 0);
+            tableLayoutPanel1.Controls.Add(lblDescuentoMonto, 1, 1);
+            tableLayoutPanel1.Controls.Add(lblTotalMonto, 1, 2);
+            tableLayoutPanel1.Controls.Add(label5, 0, 2);
+            tableLayoutPanel1.Controls.Add(label2, 0, 1);
+            tableLayoutPanel1.Location = new Point(586, 54);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel1.Size = new Size(273, 145);
+            tableLayoutPanel1.TabIndex = 19;
+            // 
             // frmmenuPres
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(877, 532);
+            Controls.Add(tableLayoutPanel1);
             Controls.Add(btnPromocion);
             Controls.Add(pnlUsuario);
             Controls.Add(dataGridView1);
@@ -735,7 +772,6 @@
             Controls.Add(btnVerPrecio);
             Controls.Add(btnNuevaCompra);
             Controls.Add(btnCobrar);
-            Controls.Add(panel1);
             Controls.Add(btnCambiarcantidad);
             Controls.Add(btnCambiarprecio);
             Controls.Add(btnRecargo);
@@ -747,14 +783,15 @@
             Name = "frmmenuPres";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Presentación";
+            Load += frmmenuPres_Load_1;
             btnConfig.ResumeLayout(false);
             btnConfig.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pcbLogo).EndInit();
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             pnlUsuario.ResumeLayout(false);
             pnlUsuario.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -790,7 +827,6 @@
         private Button btnCobrar;
         private Button btnNuevaCompra;
         private Button btnVerPrecio;
-        private Panel panel1;
         private Label lblTotalMonto;
         private Label label5;
         private Label lblDescuentoMonto;
@@ -832,5 +868,7 @@
         private ToolStripMenuItem tollClosed;
         private ToolTip toolTip1;
         private ToolStripMenuItem cargarDeLasMarcasToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private TableLayoutPanel tableLayoutPanel1;
     }
 }
