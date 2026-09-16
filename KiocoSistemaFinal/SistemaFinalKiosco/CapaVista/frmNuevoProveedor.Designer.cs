@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNuevoProveedor));
             label1 = new Label();
-            label2 = new Label();
             label3 = new Label();
             label4 = new Label();
             label5 = new Label();
@@ -42,7 +41,6 @@
             label12 = new Label();
             label13 = new Label();
             txtRazonSocial = new TextBox();
-            txtNombreComercial = new TextBox();
             txtCuit = new TextBox();
             txtCelular = new TextBox();
             txtEmail = new TextBox();
@@ -57,6 +55,8 @@
             txtDepartamento = new TextBox();
             cmbLocalidad = new ComboBox();
             cmbTipoTelefono = new ComboBox();
+            label14 = new Label();
+            txtSucursalProveedor = new TextBox();
             SuspendLayout();
             // 
             // label1
@@ -67,15 +67,6 @@
             label1.Size = new Size(81, 15);
             label1.TabIndex = 0;
             label1.Text = "Razón Social:*";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(32, 40);
-            label2.Name = "label2";
-            label2.Size = new Size(116, 15);
-            label2.TabIndex = 1;
-            label2.Text = "Nombre Comercial:*";
             // 
             // label3
             // 
@@ -173,13 +164,6 @@
             txtRazonSocial.Name = "txtRazonSocial";
             txtRazonSocial.Size = new Size(166, 23);
             txtRazonSocial.TabIndex = 13;
-            // 
-            // txtNombreComercial
-            // 
-            txtNombreComercial.Location = new Point(154, 37);
-            txtNombreComercial.Name = "txtNombreComercial";
-            txtNombreComercial.Size = new Size(166, 23);
-            txtNombreComercial.TabIndex = 14;
             // 
             // txtCuit
             // 
@@ -291,11 +275,29 @@
             cmbTipoTelefono.Size = new Size(166, 23);
             cmbTipoTelefono.TabIndex = 32;
             // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(94, 38);
+            label14.Name = "label14";
+            label14.Size = new Size(54, 15);
+            label14.TabIndex = 33;
+            label14.Text = "Sucursal:";
+            // 
+            // txtSucursalProveedor
+            // 
+            txtSucursalProveedor.Location = new Point(154, 35);
+            txtSucursalProveedor.Name = "txtSucursalProveedor";
+            txtSucursalProveedor.Size = new Size(166, 23);
+            txtSucursalProveedor.TabIndex = 34;
+            // 
             // frmNuevoProveedor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(332, 533);
+            ClientSize = new Size(332, 515);
+            Controls.Add(txtSucursalProveedor);
+            Controls.Add(label14);
             Controls.Add(cmbTipoTelefono);
             Controls.Add(cmbLocalidad);
             Controls.Add(txtDepartamento);
@@ -310,7 +312,6 @@
             Controls.Add(txtEmail);
             Controls.Add(txtCelular);
             Controls.Add(txtCuit);
-            Controls.Add(txtNombreComercial);
             Controls.Add(txtRazonSocial);
             Controls.Add(label13);
             Controls.Add(label12);
@@ -322,7 +323,6 @@
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
-            Controls.Add(label2);
             Controls.Add(label1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "frmNuevoProveedor";
@@ -334,7 +334,6 @@
         #endregion
 
         private Label label1;
-        private Label label2;
         private Label label3;
         private Label label4;
         private Label label5;
@@ -346,7 +345,6 @@
         private Label label12;
         private Label label13;
         private TextBox txtRazonSocial;
-        private TextBox txtNombreComercial;
         private TextBox txtCuit;
         private TextBox txtCelular;
         private TextBox txtEmail;
@@ -361,5 +359,7 @@
         private TextBox txtDepartamento;
         private ComboBox cmbLocalidad;
         private ComboBox cmbTipoTelefono;
+        private Label label14;
+        private TextBox txtSucursalProveedor;
     }
 }

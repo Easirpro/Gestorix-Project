@@ -34,6 +34,7 @@ namespace CapaVista
             tablaProveedores = logica.ObtenerProveedores();
 
             FiltrarProveedores();
+
         }
         private void FiltrarProveedores()
         {
@@ -57,8 +58,11 @@ namespace CapaVista
                     continue;
                 }
 
+                string sucursal = fila["Sucursal"] == DBNull.Value? "Sin sucursal": fila["Sucursal"]?.ToString() ?? "Sin sucursal";
+
                 int indice = dtgProveedores.Rows.Add(
                     fila["IdProveedor"],
+                    sucursal,
                     fila["RazonSocial"],
                     fila["CUIT"],
                     fila["CondiciónIVA"],
@@ -66,7 +70,7 @@ namespace CapaVista
                     fila["Correo"],
                     fila["Direccion"],
                     fila["Estado"]
-                );
+                                );
 
                 dtgProveedores.Rows[indice].Tag = fila["Observacion"]?.ToString() ?? "";
             }
@@ -82,7 +86,7 @@ namespace CapaVista
 
             txtObsevaciones.Text = dtgProveedores.CurrentRow.Tag?.ToString() ?? "";
 
-            string estado = dtgProveedores.CurrentRow.Cells[7].Value?.ToString() ?? "";
+            string estado = dtgProveedores.CurrentRow.Cells[8].Value?.ToString() ?? "";
 
             if (estado == "Inactivo")
             {
@@ -95,31 +99,7 @@ namespace CapaVista
         }
         private void txtBuscar_TextChanged(object sender, EventArgs e)
         {
-            string texto = txtBuscar.Text.Trim().ToLower();
-
-            dtgProveedores.Rows.Clear();
-
-            foreach (DataRow fila in tablaProveedores.Rows)
-            {
-                string razonSocial = fila["RazonSocial"]?.ToString().ToLower() ?? "";
-                string cuit = fila["CUIT"]?.ToString().ToLower() ?? "";
-
-                if (razonSocial.Contains(texto) || cuit.Contains(texto))
-                {
-                    int indice = dtgProveedores.Rows.Add(
-                        fila["IdProveedor"],
-                        fila["RazonSocial"],
-                        fila["CUIT"],
-                        fila["CondiciónIVA"],
-                        fila["NumTelefono"],
-                        fila["Correo"],
-                        fila["Direccion"],
-                        fila["Estado"]
-                    );
-
-                    dtgProveedores.Rows[indice].Tag = fila["Observacion"]?.ToString() ?? "";
-                }
-            }
+            FiltrarProveedores();
         }
 
 
@@ -169,8 +149,8 @@ namespace CapaVista
             }
 
             int idProveedor = Convert.ToInt32(dtgProveedores.CurrentRow.Cells[0].Value);
-            string razonSocial = dtgProveedores.CurrentRow.Cells[1].Value?.ToString() ?? "";
-            string estado = dtgProveedores.CurrentRow.Cells[7].Value?.ToString() ?? "";
+            string razonSocial = dtgProveedores.CurrentRow.Cells[2].Value?.ToString() ?? "";
+            string estado = dtgProveedores.CurrentRow.Cells[8].Value?.ToString() ?? "";
 
             if (estado == "Inactivo")
             {

@@ -36,7 +36,7 @@ namespace CapaEntidades.NegocioEntidad
             public int IdSucursal { get; set; }
 
         }
-       public class ClsMarca
+        public class ClsMarca
             {
                 public int IdMarca { get; set; }
                 public string Nombre { get; set; }
@@ -136,7 +136,8 @@ namespace CapaEntidades.NegocioEntidad
             public string TipoCorreo { get; set; } 
             public string DescripcionCorreo { get; set; } 
         }
-       
+
+
 
 
 

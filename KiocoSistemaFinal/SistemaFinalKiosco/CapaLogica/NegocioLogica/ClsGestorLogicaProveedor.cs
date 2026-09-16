@@ -49,6 +49,10 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ObtenerProveedores();
         }
+        public DataTable ObtenerSucursalesPorProveedor(int idProveedor)
+        {
+            return datos.ObtenerSucursalesPorProveedor(idProveedor);
+        }
         public DataTable ObtenerProveedorPorId(int idProveedor)
         {
             return datos.ObtenerProveedorPorId(idProveedor);

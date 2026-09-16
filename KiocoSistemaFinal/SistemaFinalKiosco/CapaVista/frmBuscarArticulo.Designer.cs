@@ -69,6 +69,7 @@
             txtBuscarArticulo.Name = "txtBuscarArticulo";
             txtBuscarArticulo.Size = new Size(278, 23);
             txtBuscarArticulo.TabIndex = 2;
+            txtBuscarArticulo.TextChanged += txtBuscarArticulo_TextChanged;
             // 
             // dataGridView1
             // 
@@ -131,6 +132,7 @@
             btnBuscar.TabIndex = 6;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
             // 
             // frmBuscarArticulo
             // 

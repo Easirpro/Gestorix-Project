@@ -78,6 +78,11 @@
             label16 = new Label();
             txtSKU = new TextBox();
             txtNombreProducto = new TextBox();
+            tbpProveedor = new TabPage();
+            cmbSucursal = new ComboBox();
+            cmbProveedor = new ComboBox();
+            label14 = new Label();
+            label13 = new Label();
             tbpVencimiento.SuspendLayout();
             tbpStock.SuspendLayout();
             tbpPrecio.SuspendLayout();
@@ -85,6 +90,7 @@
             tpgGeneral.SuspendLayout();
             tabControl1.SuspendLayout();
             Marca.SuspendLayout();
+            tbpProveedor.SuspendLayout();
             SuspendLayout();
             // 
             // btnCancelar
@@ -485,6 +491,7 @@
             tabControl1.Controls.Add(tbpStock);
             tabControl1.Controls.Add(tbpVencimiento);
             tabControl1.Controls.Add(Marca);
+            tabControl1.Controls.Add(tbpProveedor);
             tabControl1.Location = new Point(12, 83);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -557,6 +564,55 @@
             txtNombreProducto.Size = new Size(192, 23);
             txtNombreProducto.TabIndex = 0;
             // 
+            // tbpProveedor
+            // 
+            tbpProveedor.Controls.Add(cmbSucursal);
+            tbpProveedor.Controls.Add(cmbProveedor);
+            tbpProveedor.Controls.Add(label14);
+            tbpProveedor.Controls.Add(label13);
+            tbpProveedor.Location = new Point(4, 24);
+            tbpProveedor.Name = "tbpProveedor";
+            tbpProveedor.Padding = new Padding(3);
+            tbpProveedor.Size = new Size(381, 194);
+            tbpProveedor.TabIndex = 7;
+            tbpProveedor.Text = "Proveedor";
+            tbpProveedor.UseVisualStyleBackColor = true;
+            // 
+            // cmbSucursal
+            // 
+            cmbSucursal.FormattingEnabled = true;
+            cmbSucursal.Location = new Point(80, 58);
+            cmbSucursal.Name = "cmbSucursal";
+            cmbSucursal.Size = new Size(150, 23);
+            cmbSucursal.TabIndex = 4;
+            // 
+            // cmbProveedor
+            // 
+            cmbProveedor.FormattingEnabled = true;
+            cmbProveedor.Location = new Point(80, 24);
+            cmbProveedor.Name = "cmbProveedor";
+            cmbProveedor.Size = new Size(150, 23);
+            cmbProveedor.TabIndex = 3;
+            cmbProveedor.SelectedIndexChanged += cmbProveedor_SelectedIndexChanged;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(23, 61);
+            label14.Name = "label14";
+            label14.Size = new Size(57, 15);
+            label14.TabIndex = 1;
+            label14.Text = "Sucursal :";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(13, 27);
+            label13.Name = "label13";
+            label13.Size = new Size(70, 15);
+            label13.TabIndex = 0;
+            label13.Text = "Proveedor : ";
+            // 
             // frmNuevoArticulo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -584,6 +640,8 @@
             tabControl1.ResumeLayout(false);
             Marca.ResumeLayout(false);
             Marca.PerformLayout();
+            tbpProveedor.ResumeLayout(false);
+            tbpProveedor.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -638,5 +696,10 @@
         private TextBox txtCodigoPorLote;
         private Label lblFechaFabricacion;
         private Label txtCodigoLote;
+        private TabPage tbpProveedor;
+        private ComboBox cmbSucursal;
+        private ComboBox cmbProveedor;
+        private Label label14;
+        private Label label13;
     }
 }

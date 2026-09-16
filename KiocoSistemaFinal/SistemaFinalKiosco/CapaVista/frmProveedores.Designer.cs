@@ -36,7 +36,10 @@
             txtBuscar = new TextBox();
             chkOcultarProveedores = new CheckBox();
             dtgProveedores = new DataGridView();
+            txtObsevaciones = new TextBox();
+            label1 = new Label();
             Column1 = new DataGridViewTextBoxColumn();
+            ClmSucursalProveedor = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
             Column3 = new DataGridViewTextBoxColumn();
             Column4 = new DataGridViewTextBoxColumn();
@@ -44,8 +47,6 @@
             Column6 = new DataGridViewTextBoxColumn();
             Column7 = new DataGridViewTextBoxColumn();
             Column8 = new DataGridViewTextBoxColumn();
-            txtObsevaciones = new TextBox();
-            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dtgProveedores).BeginInit();
             SuspendLayout();
             // 
@@ -120,11 +121,28 @@
             // 
             dtgProveedores.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dtgProveedores.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgProveedores.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6, Column7, Column8 });
-            dtgProveedores.Location = new Point(23, 55);
+            dtgProveedores.Columns.AddRange(new DataGridViewColumn[] { Column1, ClmSucursalProveedor, Column2, Column3, Column4, Column5, Column6, Column7, Column8 });
+            dtgProveedores.Location = new Point(23, 48);
             dtgProveedores.Name = "dtgProveedores";
             dtgProveedores.Size = new Size(823, 275);
             dtgProveedores.TabIndex = 7;
+            // 
+            // txtObsevaciones
+            // 
+            txtObsevaciones.Location = new Point(23, 371);
+            txtObsevaciones.Multiline = true;
+            txtObsevaciones.Name = "txtObsevaciones";
+            txtObsevaciones.Size = new Size(478, 95);
+            txtObsevaciones.TabIndex = 8;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(25, 353);
+            label1.Name = "label1";
+            label1.Size = new Size(87, 15);
+            label1.TabIndex = 9;
+            label1.Text = "Observaciones:";
             // 
             // Column1
             // 
@@ -132,6 +150,11 @@
             Column1.HeaderText = "Nro. Proveedor";
             Column1.Name = "Column1";
             Column1.Width = 60;
+            // 
+            // ClmSucursalProveedor
+            // 
+            ClmSucursalProveedor.HeaderText = "Sucursal";
+            ClmSucursalProveedor.Name = "ClmSucursalProveedor";
             // 
             // Column2
             // 
@@ -180,23 +203,6 @@
             Column8.Name = "Column8";
             Column8.Width = 69;
             // 
-            // txtObsevaciones
-            // 
-            txtObsevaciones.Location = new Point(23, 371);
-            txtObsevaciones.Multiline = true;
-            txtObsevaciones.Name = "txtObsevaciones";
-            txtObsevaciones.Size = new Size(478, 95);
-            txtObsevaciones.TabIndex = 8;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(25, 353);
-            label1.Name = "label1";
-            label1.Size = new Size(87, 15);
-            label1.TabIndex = 9;
-            label1.Text = "Observaciones:";
-            // 
             // frmProveedores
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -228,7 +234,10 @@
         private TextBox txtBuscar;
         private CheckBox chkOcultarProveedores;
         private DataGridView dtgProveedores;
+        private TextBox txtObsevaciones;
+        private Label label1;
         private DataGridViewTextBoxColumn Column1;
+        private DataGridViewTextBoxColumn ClmSucursalProveedor;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
         private DataGridViewTextBoxColumn Column4;
@@ -236,7 +245,5 @@
         private DataGridViewTextBoxColumn Column6;
         private DataGridViewTextBoxColumn Column7;
         private DataGridViewTextBoxColumn Column8;
-        private TextBox txtObsevaciones;
-        private Label label1;
     }
 }
