@@ -1545,11 +1545,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
+      "projectUniqueName": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
       "projectName": "CapaVista",
-      "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
+      "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
       "packagesPath": "C:\\Users\\janza\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\obj\\",
+      "outputPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\janza\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1566,8 +1566,8 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj": {
-              "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj"
+            "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj": {
+              "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj"
             }
           }
         }

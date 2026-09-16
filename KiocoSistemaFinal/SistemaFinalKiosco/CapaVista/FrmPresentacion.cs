@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 
 namespace CapaVista
@@ -25,6 +26,16 @@ namespace CapaVista
         public frmmenuPres()
         {
             InitializeComponent();
+
+            dtgPresentacion.ReadOnly = true;
+            dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dtgPresentacion.MultiSelect = false;
+
+            dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            dtgPresentacion.AllowUserToResizeColumns = false;
+            dtgPresentacion.AllowUserToOrderColumns = false;
+            dtgPresentacion.RowHeadersVisible = false;
 
             this.KeyPreview = true;
 
@@ -108,7 +119,7 @@ namespace CapaVista
             // Entrada de datos
             textBox1.Enabled = false;
             textBox2.Enabled = false;
-            dataGridView1.Enabled = false;
+            dtgPresentacion.Enabled = false;
 
             txtUsuario.Text = "";
             txtRol.Text = "";
@@ -286,7 +297,41 @@ namespace CapaVista
         private void btnBuscarArticulo_Click(object sender, EventArgs e)
         {
             frmBuscarArticulo buscarArticulo = new frmBuscarArticulo();
-            buscarArticulo.ShowDialog();
+
+            if (buscarArticulo.ShowDialog() == DialogResult.OK)
+            {
+                ClsProducto producto = buscarArticulo.ProductoSeleccionado;
+
+                if (producto != null)
+                {
+                    int fila = -1;
+
+                    for (int i = 0; i < dtgPresentacion.Rows.Count; i++)
+                    {
+                        if (dtgPresentacion.Rows[i].IsNewRow)
+                            continue;
+
+                        if (dtgPresentacion.Rows[i].Cells["ClnSKU"].Value == null ||
+                            string.IsNullOrWhiteSpace(dtgPresentacion.Rows[i].Cells["ClnSKU"].Value.ToString()))
+                        {
+                            fila = i;
+                            break;
+                        }
+                    }
+
+                    if (fila == -1)
+                    {
+                        fila = dtgPresentacion.Rows.Add();
+                    }
+
+                    dtgPresentacion.Rows[fila].Cells["ClnSKU"].Value = producto.SKU;
+                    dtgPresentacion.Rows[fila].Cells["ClnCodigo"].Value = producto.CodigoBarra;
+                    dtgPresentacion.Rows[fila].Cells["ClnDescripcion"].Value = producto.Descripcion;
+                    dtgPresentacion.Rows[fila].Cells["ClnCantidad"].Value = 1;
+                    dtgPresentacion.Rows[fila].Cells["ClnPrecioUnitario"].Value = producto.PrecioVenta;
+                    dtgPresentacion.Rows[fila].Cells["ClnImporte"].Value = producto.PrecioVenta;
+                }
+            }
         }
         private void EjecutarCobro()
         {
@@ -321,13 +366,35 @@ namespace CapaVista
         //rellena las filas de DGView
         private void RellenarFilas()
         {
-            int filasVisibles = dataGridView1.Height / dataGridView1.RowTemplate.Height;
-            while (dataGridView1.Rows.Count < filasVisibles)
+            int filasVisibles = dtgPresentacion.Height / dtgPresentacion.RowTemplate.Height;
+            while (dtgPresentacion.Rows.Count < filasVisibles)
             {
-                dataGridView1.Rows.Add();
+                dtgPresentacion.Rows.Add();
             }
         }
 
+        private void menuitemAdministradoarticulos_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void btnPromocion_Click(object sender, EventArgs e)
+        {
+            frmPromocion promo = new frmPromocion();
+            promo.ShowDialog();
+        }
+        private void cargarDeLasMarcasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmBuscarMarca marca = new frmBuscarMarca();
+            marca.ShowDialog();
+        }
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void frmmenuPres_Load_1(object sender, EventArgs e)
+        {
+            RellenarFilas();
+        }
 
         #endregion
 
@@ -341,32 +408,7 @@ namespace CapaVista
 
 
 
-        private void menuitemAdministradoarticulos_Click(object sender, EventArgs e)
-        {
 
-        }
-
-        private void btnPromocion_Click(object sender, EventArgs e)
-        {
-            frmPromocion promo = new frmPromocion();
-            promo.ShowDialog();
-        }
-
-        private void cargarDeLasMarcasToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmBuscarMarca marca = new frmBuscarMarca();
-            marca.ShowDialog();
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void frmmenuPres_Load_1(object sender, EventArgs e)
-        {
-            RellenarFilas();
-        }
     }
 
 }

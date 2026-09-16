@@ -41,6 +41,7 @@
             clnDescripcion = new DataGridViewTextBoxColumn();
             clnRubro = new DataGridViewTextBoxColumn();
             clnProveedor = new DataGridViewTextBoxColumn();
+            clmSucursal = new DataGridViewTextBoxColumn();
             clnVencimiento = new DataGridViewTextBoxColumn();
             clnPrecioVenta = new DataGridViewTextBoxColumn();
             clnUltActualizacion = new DataGridViewTextBoxColumn();
@@ -121,7 +122,7 @@
             // dtgCargaarticulo
             // 
             dtgCargaarticulo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgCargaarticulo.Columns.AddRange(new DataGridViewColumn[] { clnCodigo, clnDescripcion, clnRubro, clnProveedor, clnVencimiento, clnPrecioVenta, clnUltActualizacion, clnUltVenta, clnPrecioNeto, clnPrecioCosto, clnIva, clnStockActual, clnStockMinimo, clnStockMaximo });
+            dtgCargaarticulo.Columns.AddRange(new DataGridViewColumn[] { clnCodigo, clnDescripcion, clnRubro, clnProveedor, clmSucursal, clnVencimiento, clnPrecioVenta, clnUltActualizacion, clnUltVenta, clnPrecioNeto, clnPrecioCosto, clnIva, clnStockActual, clnStockMinimo, clnStockMaximo });
             dtgCargaarticulo.Location = new Point(12, 37);
             dtgCargaarticulo.Name = "dtgCargaarticulo";
             dtgCargaarticulo.Size = new Size(996, 401);
@@ -156,6 +157,11 @@
             // 
             clnProveedor.HeaderText = "Proveedor";
             clnProveedor.Name = "clnProveedor";
+            // 
+            // clmSucursal
+            // 
+            clmSucursal.HeaderText = "Sucursal";
+            clmSucursal.Name = "clmSucursal";
             // 
             // clnVencimiento
             // 
@@ -243,6 +249,7 @@
         private DataGridViewTextBoxColumn clnDescripcion;
         private DataGridViewTextBoxColumn clnRubro;
         private DataGridViewTextBoxColumn clnProveedor;
+        private DataGridViewTextBoxColumn clmSucursal;
         private DataGridViewTextBoxColumn clnVencimiento;
         private DataGridViewTextBoxColumn clnPrecioVenta;
         private DataGridViewTextBoxColumn clnUltActualizacion;

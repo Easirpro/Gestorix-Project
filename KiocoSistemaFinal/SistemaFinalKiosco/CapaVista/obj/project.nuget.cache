@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "6IzfGSSnBdw=",
+  "dgSpecHash": "kJJp0RlVuk4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
+  "projectFilePath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\janza\\.nuget\\packages\\closedxml\\0.105.1\\closedxml.0.105.1.nupkg.sha512",
     "C:\\Users\\janza\\.nuget\\packages\\closedxml.parser\\2.0.0\\closedxml.parser.2.0.0.nupkg.sha512",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "j/Z2s5P+Zvc=",
+  "dgSpecHash": "AaGX5UmJyIY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj",
+  "projectFilePath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\janza\\.nuget\\packages\\microsoft.bcl.cryptography\\8.0.0\\microsoft.bcl.cryptography.8.0.0.nupkg.sha512",
     "C:\\Users\\janza\\.nuget\\packages\\microsoft.data.sqlclient\\7.0.1\\microsoft.data.sqlclient.7.0.1.nupkg.sha512",

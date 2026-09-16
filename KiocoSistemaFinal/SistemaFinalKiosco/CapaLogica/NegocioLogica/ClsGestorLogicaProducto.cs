@@ -86,5 +86,35 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ModificarProducto(producto);
         }
+        public DataTable CargarArticulos()
+        {
+            return datos.CargarArticulos();
+        }
+        public DataTable BuscarArticulos(string texto, bool ocultarDiscontinuos)
+        {
+            return datos.BuscarArticulos(texto, ocultarDiscontinuos);
+        }
+        public DataTable ObtenerStockPorProducto(int idProducto)
+        {
+            return datos.ObtenerStockPorProducto(idProducto);
+        }
+        public void RegistrarProductoSucursalProveedor(ClsProductoSucursalProveedor relacion)
+        {
+            datos.RegistrarProductoSucursalProveedor(relacion);
+        }
+        public bool RegistrarLote(ClsLote lote)
+        {
+            return datos.RegistrarLote(lote);
+        }
+        public bool ModificarLote(ClsLote lote)
+        {
+            return datos.ModificarLote(lote);
+        }
+        public bool ModificarProductoSucursalProveedor(ClsProductoSucursalProveedor relacion)
+        {
+            return datos.ModificarProductoSucursalProveedor(relacion);
+        }
+
+
     }
 }

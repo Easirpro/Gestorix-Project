@@ -88,8 +88,8 @@
             textBox1 = new TextBox();
             textBox2 = new TextBox();
             btnBuscarArticulo = new Button();
-            dataGridView1 = new DataGridView();
-            ClnNum = new DataGridViewTextBoxColumn();
+            dtgPresentacion = new DataGridView();
+            ClnSKU = new DataGridViewTextBoxColumn();
             ClnCodigo = new DataGridViewTextBoxColumn();
             ClnDescripcion = new DataGridViewTextBoxColumn();
             ClnCantidad = new DataGridViewTextBoxColumn();
@@ -105,7 +105,7 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             btnConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dtgPresentacion).BeginInit();
             pnlUsuario.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
@@ -624,21 +624,21 @@
             btnBuscarArticulo.UseVisualStyleBackColor = true;
             btnBuscarArticulo.Click += btnBuscarArticulo_Click;
             // 
-            // dataGridView1
+            // dtgPresentacion
             // 
-            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ClnNum, ClnCodigo, ClnDescripcion, ClnCantidad, ClnPrecioUnitario, ClnImporte });
-            dataGridView1.Location = new Point(12, 83);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(557, 213);
-            dataGridView1.TabIndex = 7;
+            dtgPresentacion.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dtgPresentacion.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtgPresentacion.Columns.AddRange(new DataGridViewColumn[] { ClnSKU, ClnCodigo, ClnDescripcion, ClnCantidad, ClnPrecioUnitario, ClnImporte });
+            dtgPresentacion.Location = new Point(12, 83);
+            dtgPresentacion.Name = "dtgPresentacion";
+            dtgPresentacion.Size = new Size(557, 213);
+            dtgPresentacion.TabIndex = 7;
             // 
-            // ClnNum
+            // ClnSKU
             // 
-            ClnNum.HeaderText = "#";
-            ClnNum.Name = "ClnNum";
+            ClnSKU.HeaderText = "SKU";
+            ClnSKU.Name = "ClnSKU";
             // 
             // ClnCodigo
             // 
@@ -762,7 +762,7 @@
             Controls.Add(tableLayoutPanel1);
             Controls.Add(btnPromocion);
             Controls.Add(pnlUsuario);
-            Controls.Add(dataGridView1);
+            Controls.Add(dtgPresentacion);
             Controls.Add(btnBuscarArticulo);
             Controls.Add(textBox2);
             Controls.Add(textBox1);
@@ -787,7 +787,7 @@
             btnConfig.ResumeLayout(false);
             btnConfig.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pcbLogo).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dtgPresentacion).EndInit();
             pnlUsuario.ResumeLayout(false);
             pnlUsuario.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
@@ -838,13 +838,7 @@
         private TextBox textBox1;
         private TextBox textBox2;
         private Button btnBuscarArticulo;
-        private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn ClnNum;
-        private DataGridViewTextBoxColumn ClnCodigo;
-        private DataGridViewTextBoxColumn ClnDescripcion;
-        private DataGridViewTextBoxColumn ClnCantidad;
-        private DataGridViewTextBoxColumn ClnPrecioUnitario;
-        private DataGridViewTextBoxColumn ClnImporte;
+        private DataGridView dtgPresentacion;
         private ToolStripMenuItem ventasPorDiaToolStripMenuItem;
         private ToolStripMenuItem ventaToolStripMenuItem;
         private ToolStripMenuItem ventaPorRubroToolStripMenuItem;
@@ -870,5 +864,11 @@
         private ToolStripMenuItem cargarDeLasMarcasToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem2;
         private TableLayoutPanel tableLayoutPanel1;
+        private DataGridViewTextBoxColumn ClnSKU;
+        private DataGridViewTextBoxColumn ClnCodigo;
+        private DataGridViewTextBoxColumn ClnDescripcion;
+        private DataGridViewTextBoxColumn ClnCantidad;
+        private DataGridViewTextBoxColumn ClnPrecioUnitario;
+        private DataGridViewTextBoxColumn ClnImporte;
     }
 }

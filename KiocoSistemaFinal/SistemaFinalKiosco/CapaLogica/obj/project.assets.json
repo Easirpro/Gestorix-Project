@@ -1241,11 +1241,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj",
+      "projectUniqueName": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj",
       "projectName": "CapaLogica",
-      "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj",
+      "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj",
       "packagesPath": "C:\\Users\\janza\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\obj\\",
+      "outputPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\janza\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1262,11 +1262,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj": {
-              "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj"
+            "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj": {
+              "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj"
             },
-            "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj": {
-              "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 8-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj"
+            "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj": {
+              "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj"
             }
           }
         }

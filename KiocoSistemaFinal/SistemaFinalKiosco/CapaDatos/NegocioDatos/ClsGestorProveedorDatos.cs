@@ -107,8 +107,10 @@ namespace CapaDatos.NegocioDatos
             using (SqlConnection conexion = cn.ObtenerConexion())
             {
                 string consulta = @"
-                    UPDATE SucursalProveedor
-                    SET Nombre = @Nombre,
+                    UPDATE 
+                        SucursalProveedor
+                    SET 
+                        Nombre = @Nombre,
                         IdDireccion = @IdDireccion,
                         [CondiciónIVA] = @CondicionIVA,
                         Observacion = @Observacion
@@ -508,6 +510,10 @@ namespace CapaDatos.NegocioDatos
                         p.IdProveedor,
                         p.Nombre AS RazonSocial,
                         p.CUIT,
+
+                        sp.IdSucursal,
+                        sp.Nombre AS Sucursal,
+
                         sp.[CondiciónIVA],
                         t.NumTelefono,
                         c.Correo,
@@ -517,27 +523,37 @@ namespace CapaDatos.NegocioDatos
                             ISNULL(CAST(d.Altura AS VARCHAR(10)), '')
                         ) 
                         AS Direccion,
+
                         CASE 
                             WHEN p.Activo = 1 THEN 'Activo'
                             ELSE 'Inactivo'
                         END AS Estado,
+
                         sp.Observacion
+
                     FROM Proveedor p
-                    INNER JOIN SucursalProveedor sp 
+
+                    LEFT JOIN SucursalProveedor sp 
                         ON p.IdProveedor = sp.IdProveedor
-                    INNER JOIN Direccion d 
+
+                    LEFT JOIN Direccion d 
                         ON sp.IdDireccion = d.IdDireccion
+
                     LEFT JOIN SucursalProveedorTelefono spt 
                         ON sp.IdSucursal = spt.IdSucursal
                         AND spt.Activo = 1
+
                     LEFT JOIN Telefono t 
                         ON spt.IdTelefono = t.IdTelefono
+
                     LEFT JOIN SucursalProveedorCorreo spc 
                         ON sp.IdSucursal = spc.IdSucursal
                         AND spc.Activo = 1
+
                     LEFT JOIN Correo c 
                         ON spc.IdCorreo = c.IdCorreo
-                    ORDER BY p.IdProveedor;";
+
+                    ORDER BY p.IdProveedor, sp.IdSucursal;";
 
                 using (SqlCommand cmd = new SqlCommand(consulta, conexion))
                 {
@@ -545,6 +561,34 @@ namespace CapaDatos.NegocioDatos
                     {
                         DataTable tabla = new DataTable();
                         adaptador.Fill(tabla);
+                        return tabla;
+                    }
+                }
+            }
+        }
+        public DataTable ObtenerSucursalesPorProveedor(int idProveedor)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT
+                        IdSucursal,
+                        Nombre AS Sucursal
+                    FROM SucursalProveedor
+                    WHERE IdProveedor = @IdProveedor
+                      AND Activo = 1
+                    ORDER BY Nombre;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProveedor", idProveedor);
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+
+                        adaptador.Fill(tabla);
+
                         return tabla;
                     }
                 }
@@ -559,52 +603,38 @@ namespace CapaDatos.NegocioDatos
                         p.IdProveedor,
                         p.Nombre AS RazonSocial,
                         p.CUIT,
-
                         sp.IdSucursal,
-                        sp.Nombre AS NombreComercial,
+                        sp.Nombre AS Sucursal,
                         sp.[CondiciónIVA],
                         sp.Observacion,
-
                         d.IdDireccion,
                         d.Calle,
                         d.Altura,
                         d.Piso,
                         d.Departamento,
-
                         l.IdLocalidad,
-
                         t.IdTelefono,
                         t.NumTelefono,
                         t.IdTipo,
-
                         c.IdCorreo,
                         c.Correo
-
                     FROM Proveedor p
-
                     INNER JOIN SucursalProveedor sp
                         ON p.IdProveedor = sp.IdProveedor
-
                     INNER JOIN Direccion d
                         ON sp.IdDireccion = d.IdDireccion
-
                     INNER JOIN Localidad l
                         ON d.IdLocalidad = l.IdLocalidad
-
                     LEFT JOIN SucursalProveedorTelefono spt
                         ON sp.IdSucursal = spt.IdSucursal
                         AND spt.Activo = 1
-
                     LEFT JOIN Telefono t
                         ON spt.IdTelefono = t.IdTelefono
-
                     LEFT JOIN SucursalProveedorCorreo spc
                         ON sp.IdSucursal = spc.IdSucursal
                         AND spc.Activo = 1
-
                     LEFT JOIN Correo c
                         ON spc.IdCorreo = c.IdCorreo
-
                     WHERE p.IdProveedor = @IdProveedor;";
 
                 using (SqlCommand cmd = new SqlCommand(consulta, conexion))

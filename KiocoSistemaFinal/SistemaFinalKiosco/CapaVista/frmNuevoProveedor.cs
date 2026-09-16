@@ -61,10 +61,10 @@ namespace CapaVista
                 return false;
             }
 
-            if (validarCampo.ValidarCamposVacios(txtNombreComercial.Text))
+            if (validarCampo.ValidarCamposVacios(txtSucursalProveedor.Text))
             {
-                MessageBox.Show("Ingrese el Nombre Comercial.");
-                txtNombreComercial.Focus();
+                MessageBox.Show("Ingrese la Sucursal.");
+                txtSucursalProveedor.Focus();
                 return false;
             }
 
@@ -130,7 +130,7 @@ namespace CapaVista
 
             }
 
-            if (cmbIva.SelectedIndex == -0)
+            if (cmbIva.SelectedIndex == 0)
             {
                 MessageBox.Show("Seleccione la condición de IVA.");
                 cmbIva.Focus();
@@ -198,11 +198,9 @@ namespace CapaVista
             DataRow fila = tabla.Rows[0];
 
             txtRazonSocial.Text = fila["RazonSocial"]?.ToString() ?? "";
+            txtSucursalProveedor.Text = fila["Sucursal"]?.ToString() ?? "";
             txtCuit.Text = fila["CUIT"]?.ToString() ?? "";
-
-            txtNombreComercial.Text = fila["NombreComercial"]?.ToString() ?? "";
             txtObservaciones.Text = fila["Observacion"]?.ToString() ?? "";
-
             idDireccionModificar = Convert.ToInt32(fila["IdDireccion"]);
             idSucursalModificar = Convert.ToInt32(fila["IdSucursal"]);
             txtCalle.Text = fila["Calle"]?.ToString() ?? "";
@@ -236,7 +234,7 @@ namespace CapaVista
             cmbIva.Text = fila["CondiciónIVA"]?.ToString() ?? "";
 
         }
-
+ 
         #endregion
 
         #region Eventos
@@ -294,7 +292,7 @@ namespace CapaVista
             ClsSucursalProveedor sucursal = new ClsSucursalProveedor
             {
                 IdProveedor = idProveedor,
-                Nombre = txtNombreComercial.Text.Trim(),
+                Nombre = txtSucursalProveedor.Text.Trim(),
                 Activo = true,
                 IdDireccion = idDireccion,
                 CondicionIVA = cmbIva.Text,
@@ -314,6 +312,7 @@ namespace CapaVista
                 logica.ModificarSucursalProveedor(sucursal);
 
                 idSucursal = idSucursalModificar;
+
             }
 
             ClsTelefono telefono = new ClsTelefono

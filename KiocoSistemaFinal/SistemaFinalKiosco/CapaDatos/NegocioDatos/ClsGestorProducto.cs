@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 namespace CapaDatos.NegocioDatos
 {
@@ -99,7 +100,12 @@ namespace CapaDatos.NegocioDatos
             using (SqlConnection conexion = cn.ObtenerConexion())
             {
                 string consulta = @"
-                    SELECT ISNULL(MAX(TRY_CONVERT(INT, SKU)), 99) + 1
+                    SELECT
+                    CASE
+                        WHEN ISNULL(MAX(TRY_CONVERT(INT, SKU)), 999) < 999
+                            THEN 1000
+                        ELSE MAX(TRY_CONVERT(INT, SKU)) + 1
+                    END
                     FROM Producto;";
 
                 using (SqlCommand cmd = new SqlCommand(consulta, conexion))
@@ -431,6 +437,78 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public bool RegistrarLote(ClsLote lote)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    INSERT INTO Lote
+                    (
+                        IdProducto,
+                        CodigoLote,
+                        FechaFabricacion,
+                        FechaVencimiento,
+                        FechaIngreso,
+                        Stock,
+                        Activo,
+                        IdSucursal
+                    )
+                    VALUES
+                    (
+                        @IdProducto,
+                        @CodigoLote,
+                        @FechaFabricacion,
+                        @FechaVencimiento,
+                        @FechaIngreso,
+                        @Stock,
+                        @Activo,
+                        @IdSucursal
+                    );";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", lote.IdProducto);
+                    cmd.Parameters.AddWithValue("@CodigoLote", lote.CodigoLote);
+                    cmd.Parameters.AddWithValue("@FechaFabricacion", lote.FechaFabricacion);
+                    cmd.Parameters.AddWithValue("@FechaVencimiento", lote.FechaVencimiento);
+                    cmd.Parameters.AddWithValue("@FechaIngreso", lote.FechaIngreso);
+                    cmd.Parameters.AddWithValue("@Stock", lote.Stock);
+                    cmd.Parameters.AddWithValue("@Activo", lote.Activo);
+                    cmd.Parameters.AddWithValue("@IdSucursal", lote.IdSucursal);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        public bool ModificarLote(ClsLote lote)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE Lote
+                    SET
+                        CodigoLote = @CodigoLote,
+                        FechaFabricacion = @FechaFabricacion,
+                        FechaVencimiento = @FechaVencimiento,
+                        IdSucursal = @IdSucursal
+                    WHERE IdProducto = @IdProducto;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", lote.IdProducto);
+                    cmd.Parameters.AddWithValue("@CodigoLote", lote.CodigoLote);
+                    cmd.Parameters.AddWithValue("@FechaFabricacion", lote.FechaFabricacion);
+                    cmd.Parameters.AddWithValue("@FechaVencimiento", lote.FechaVencimiento);
+                    cmd.Parameters.AddWithValue("@IdSucursal", lote.IdSucursal);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
         public DataTable ObtenerProveedoresPorProducto(int idProducto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -504,6 +582,73 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public DataTable CargarArticulos()
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT
+                        p.IdProducto,
+                        p.CodigoBarra,
+                        p.Descripcion,
+                        c.Nombre AS Rubro,
+                        p.PrecioVenta,
+                        p.Activo,
+                        iva.Descripcion AS IVA,
+                        iva.Alicuota,
+                        s.CantidadActual,
+                        s.StockMinimo,
+                        s.StockIdeal,
+                        prov.Proveedor,
+                        prov.Sucursal,
+                        lote.FechaVencimiento
+                    FROM Producto p
+                    INNER JOIN Categoria c
+                        ON p.IdCategoria = c.IdCategoria
+                    LEFT JOIN IVA iva
+                        ON p.IdIVA = iva.IdIVA
+                    LEFT JOIN Stock s
+                        ON p.IdProducto = s.IdProducto
+                    OUTER APPLY
+                    (
+                        SELECT TOP 1
+                            pr.Nombre AS Proveedor,
+                            sp.Nombre AS Sucursal
+                        FROM ProductoSucursalProveedor psp
+                        INNER JOIN SucursalProveedor sp
+                            ON psp.IdSucursal = sp.IdSucursal
+                        INNER JOIN Proveedor pr
+                            ON sp.IdProveedor = pr.IdProveedor
+                        WHERE psp.IdProducto = p.IdProducto
+                          AND psp.Activo = 1
+                        ORDER BY
+                            psp.FechaPrecioCompra DESC,
+                            pr.Nombre,
+                            sp.Nombre
+                    ) prov
+                        OUTER APPLY
+                    (
+                        SELECT TOP 1
+                            l.FechaVencimiento
+                        FROM Lote l
+                        WHERE l.IdProducto = p.IdProducto
+                          AND l.FechaVencimiento IS NOT NULL
+                        ORDER BY l.FechaVencimiento ASC
+                    ) lote
+
+                    ORDER BY p.Descripcion;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+                        adaptador.Fill(tabla);
+                        return tabla;
+                    }
+                }
+            }
+        }
         public bool ModificarProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -541,5 +686,165 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public DataTable ObtenerStockPorProducto(int idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT
+                        IdStock,
+                        IdProducto,
+                        CantidadActual,
+                        StockMinimo,
+                        StockIdeal
+                    FROM Stock
+                    WHERE IdProducto = @IdProducto;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+
+                        adaptador.Fill(tabla);
+
+                        return tabla;
+                    }
+                }
+            }
+        }
+        public void RegistrarProductoSucursalProveedor(ClsProductoSucursalProveedor relacion)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    INSERT INTO ProductoSucursalProveedor
+                    (
+                        IdProducto,
+                        IdSucursal,
+                        PrecioCompra,
+                        FechaPrecioCompra,
+                        CodigoProveedor,
+                        Activo
+                    )
+                    VALUES
+                    (
+                        @IdProducto,
+                        @IdSucursal,
+                        @PrecioCompra,
+                        @FechaPrecioCompra,
+                        @CodigoProveedor,
+                        @Activo
+                    );";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", relacion.IdProducto);
+                    cmd.Parameters.AddWithValue("@IdSucursal", relacion.IdSucursal);
+                    cmd.Parameters.AddWithValue("@PrecioCompra",(object)relacion.PrecioCompra ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@FechaPrecioCompra",(object)relacion.FechaPrecioCompra ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CodigoProveedor",(object)relacion.CodigoProveedor ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
+
+                    conexion.Open();
+
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+        public bool ModificarProductoSucursalProveedor(ClsProductoSucursalProveedor relacion)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE ProductoSucursalProveedor
+                    SET
+                        IdSucursal = @IdSucursal,
+                        Activo = @Activo
+                    WHERE IdProducto = @IdProducto;
+
+                    IF @@ROWCOUNT = 0
+                    BEGIN
+                        INSERT INTO ProductoSucursalProveedor
+                        (
+                            IdProducto,
+                            IdSucursal,
+                            Activo
+                        )
+                        VALUES
+                        (
+                            @IdProducto,
+                            @IdSucursal,
+                            @Activo
+                        );
+                    END";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", relacion.IdProducto);
+                    cmd.Parameters.AddWithValue("@IdSucursal", relacion.IdSucursal);
+                    cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        public DataTable BuscarArticulos(string texto, bool ocultarDiscontinuos)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT
+                        p.IdProducto,
+                        p.CodigoBarra,
+                        p.SKU,
+                        p.Descripcion,
+                        c.Nombre AS Rubro,
+                        p.PrecioVenta,
+                        p.Activo,
+                        s.CantidadActual
+                    FROM Producto p
+
+                    INNER JOIN Categoria c
+                        ON p.IdCategoria = c.IdCategoria
+
+                    LEFT JOIN Stock s
+                        ON p.IdProducto = s.IdProducto
+
+                    WHERE
+                        (
+                            p.CodigoBarra LIKE @Texto
+                            OR p.SKU LIKE @Texto
+                            OR p.Descripcion LIKE @Texto
+                        )";
+
+                if (ocultarDiscontinuos)
+                {
+                    consulta += @"
+                AND p.Activo = 1";
+                }
+
+                        consulta += @"
+                    ORDER BY p.Descripcion;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@Texto", "%" + texto + "%");
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+                        adaptador.Fill(tabla);
+                        return tabla;
+                    }
+                }
+            }
+        }
+
     }
 }
