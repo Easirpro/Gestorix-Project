@@ -31,13 +31,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmInformeCobro));
             lblTitulo = new Label();
             pnlTotal = new Panel();
-            lblTextoTotal = new Label();
             lblTotal = new Label();
+            lblTextoTotal = new Label();
             cmbMetodoPago = new ComboBox();
             txtMonto = new TextBox();
             btnAgregarPago = new Button();
             lblTextoPagos = new Label();
             dtgPagos = new DataGridView();
+            ClnIdMetodoPago = new DataGridViewTextBoxColumn();
+            ClnMetodoPago = new DataGridViewTextBoxColumn();
+            ClnMontoPago = new DataGridViewTextBoxColumn();
             btnQuitarPago = new Button();
             lblTextoPagado = new Label();
             lblPagado = new Label();
@@ -45,9 +48,6 @@
             lblRestante = new Label();
             btnCancelar = new Button();
             btnConfirmar = new Button();
-            ClnIdMetodoPago = new DataGridViewTextBoxColumn();
-            ClnMetodoPago = new DataGridViewTextBoxColumn();
-            ClnMontoPago = new DataGridViewTextBoxColumn();
             txtMontoRecibido = new TextBox();
             lblTextoVuelto = new Label();
             lblVuelto = new Label();
@@ -76,6 +76,18 @@
             pnlTotal.Size = new Size(158, 38);
             pnlTotal.TabIndex = 1;
             // 
+            // lblTotal
+            // 
+            lblTotal.Dock = DockStyle.Fill;
+            lblTotal.Font = new Font("Segoe UI", 14F);
+            lblTotal.ForeColor = SystemColors.ButtonFace;
+            lblTotal.Location = new Point(0, 0);
+            lblTotal.Name = "lblTotal";
+            lblTotal.Size = new Size(158, 38);
+            lblTotal.TabIndex = 3;
+            lblTotal.Text = "$ 0,00";
+            lblTotal.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // lblTextoTotal
             // 
             lblTextoTotal.AutoSize = true;
@@ -85,16 +97,6 @@
             lblTextoTotal.TabIndex = 2;
             lblTextoTotal.Text = "TOTAL A PAGAR";
             // 
-            // lblTotal
-            // 
-            lblTotal.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            lblTotal.Font = new Font("Segoe UI", 14F);
-            lblTotal.Location = new Point(39, 5);
-            lblTotal.Name = "lblTotal";
-            lblTotal.Size = new Size(71, 30);
-            lblTotal.TabIndex = 3;
-            lblTotal.Text = "$ 0,00";
-            // 
             // cmbMetodoPago
             // 
             cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -103,6 +105,7 @@
             cmbMetodoPago.Name = "cmbMetodoPago";
             cmbMetodoPago.Size = new Size(118, 23);
             cmbMetodoPago.TabIndex = 6;
+            cmbMetodoPago.SelectedIndexChanged += cmbMetodoPago_SelectedIndexChanged;
             // 
             // txtMonto
             // 
@@ -110,6 +113,7 @@
             txtMonto.Name = "txtMonto";
             txtMonto.Size = new Size(119, 23);
             txtMonto.TabIndex = 9;
+            txtMonto.TextChanged += txtMonto_TextChanged;
             // 
             // btnAgregarPago
             // 
@@ -146,6 +150,24 @@
             dtgPagos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPagos.Size = new Size(318, 117);
             dtgPagos.TabIndex = 12;
+            // 
+            // ClnIdMetodoPago
+            // 
+            ClnIdMetodoPago.HeaderText = "ID";
+            ClnIdMetodoPago.Name = "ClnIdMetodoPago";
+            ClnIdMetodoPago.ReadOnly = true;
+            // 
+            // ClnMetodoPago
+            // 
+            ClnMetodoPago.HeaderText = "Método de pago";
+            ClnMetodoPago.Name = "ClnMetodoPago";
+            ClnMetodoPago.ReadOnly = true;
+            // 
+            // ClnMontoPago
+            // 
+            ClnMontoPago.HeaderText = "Monto";
+            ClnMontoPago.Name = "ClnMontoPago";
+            ClnMontoPago.ReadOnly = true;
             // 
             // btnQuitarPago
             // 
@@ -211,30 +233,13 @@
             btnConfirmar.UseVisualStyleBackColor = true;
             btnConfirmar.Visible = false;
             // 
-            // ClnIdMetodoPago
-            // 
-            ClnIdMetodoPago.HeaderText = "ID";
-            ClnIdMetodoPago.Name = "ClnIdMetodoPago";
-            ClnIdMetodoPago.ReadOnly = true;
-            // 
-            // ClnMetodoPago
-            // 
-            ClnMetodoPago.HeaderText = "Método de pago";
-            ClnMetodoPago.Name = "ClnMetodoPago";
-            ClnMetodoPago.ReadOnly = true;
-            // 
-            // ClnMontoPago
-            // 
-            ClnMontoPago.HeaderText = "Monto";
-            ClnMontoPago.Name = "ClnMontoPago";
-            ClnMontoPago.ReadOnly = true;
-            // 
             // txtMontoRecibido
             // 
             txtMontoRecibido.Location = new Point(23, 45);
             txtMontoRecibido.Name = "txtMontoRecibido";
             txtMontoRecibido.Size = new Size(119, 23);
             txtMontoRecibido.TabIndex = 22;
+            txtMontoRecibido.TextChanged += txtMontoRecibido_TextChanged;
             // 
             // lblTextoVuelto
             // 
@@ -315,7 +320,6 @@
             Name = "frmInformeCobro";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Informe de Cobro";
-            Load += frmInformeCobro_Load;
             pnlTotal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dtgPagos).EndInit();
             ResumeLayout(false);

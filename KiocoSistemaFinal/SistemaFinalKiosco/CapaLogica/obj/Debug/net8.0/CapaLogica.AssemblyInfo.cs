@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CapaLogica")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1f0587a2b6cfb7b7056f7e79658c5a27fc689bf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+516e122fcbb1fb6440f80e0c7177f6c855498a62")]
 [assembly: System.Reflection.AssemblyProductAttribute("CapaLogica")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CapaLogica")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
