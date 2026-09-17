@@ -139,6 +139,41 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+
+        public DataTable ObtenerProductoPorCodigoBarra(string codigoBarra)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+            SELECT
+                p.IdProducto,
+                p.CodigoBarra,
+                p.SKU,
+                p.Nombre,
+                p.Descripcion,
+                p.PrecioVenta,
+                p.Activo,
+                s.CantidadActual
+            FROM Producto p
+            LEFT JOIN Stock s
+                ON p.IdProducto = s.IdProducto
+            WHERE p.CodigoBarra = @CodigoBarra
+              AND p.Activo = 1;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@CodigoBarra", codigoBarra);
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+                        adaptador.Fill(tabla);
+
+                        return tabla;
+                    }
+                }
+            }
+        }
         public DataTable CargarCategoriasActivas()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
