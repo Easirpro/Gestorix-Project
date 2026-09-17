@@ -85,11 +85,12 @@
             label1 = new Label();
             label3 = new Label();
             label4 = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
+            txtCodigoBarra = new TextBox();
+            txtCantidad = new TextBox();
             btnBuscarArticulo = new Button();
             dtgPresentacion = new DataGridView();
             ClnSKU = new DataGridViewTextBoxColumn();
+            ClnIdProducto = new DataGridViewTextBoxColumn();
             ClnCodigo = new DataGridViewTextBoxColumn();
             ClnDescripcion = new DataGridViewTextBoxColumn();
             ClnCantidad = new DataGridViewTextBoxColumn();
@@ -392,6 +393,7 @@
             btnCambiarcantidad.TabIndex = 12;
             btnCambiarcantidad.Text = "Cambiar cantidad";
             btnCambiarcantidad.UseVisualStyleBackColor = true;
+            btnCambiarcantidad.Click += btnCambiarcantidad_Click;
             // 
             // btnCambiarprecio
             // 
@@ -432,6 +434,7 @@
             btnQuitar.TabIndex = 9;
             btnQuitar.Text = "Quitar";
             btnQuitar.UseVisualStyleBackColor = true;
+            btnQuitar.Click += btnQuitar_Click;
             // 
             // pcbLogo
             // 
@@ -597,19 +600,21 @@
             label4.TabIndex = 4;
             label4.Text = "Cantidad    ";
             // 
-            // textBox1
+            // txtCodigoBarra
             // 
-            textBox1.Location = new Point(12, 54);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(130, 23);
-            textBox1.TabIndex = 5;
+            txtCodigoBarra.Location = new Point(12, 54);
+            txtCodigoBarra.Name = "txtCodigoBarra";
+            txtCodigoBarra.Size = new Size(130, 23);
+            txtCodigoBarra.TabIndex = 5;
+            txtCodigoBarra.KeyDown += txtCodigoBarra_KeyDown;
             // 
-            // textBox2
+            // txtCantidad
             // 
-            textBox2.Location = new Point(164, 54);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(67, 23);
-            textBox2.TabIndex = 6;
+            txtCantidad.Location = new Point(164, 54);
+            txtCantidad.Name = "txtCantidad";
+            txtCantidad.Size = new Size(67, 23);
+            txtCantidad.TabIndex = 6;
+            txtCantidad.KeyDown += txtCantidad_KeyDown;
             // 
             // btnBuscarArticulo
             // 
@@ -629,7 +634,7 @@
             dtgPresentacion.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dtgPresentacion.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgPresentacion.Columns.AddRange(new DataGridViewColumn[] { ClnSKU, ClnCodigo, ClnDescripcion, ClnCantidad, ClnPrecioUnitario, ClnImporte });
+            dtgPresentacion.Columns.AddRange(new DataGridViewColumn[] { ClnSKU, ClnIdProducto, ClnCodigo, ClnDescripcion, ClnCantidad, ClnPrecioUnitario, ClnImporte });
             dtgPresentacion.Location = new Point(12, 83);
             dtgPresentacion.Name = "dtgPresentacion";
             dtgPresentacion.Size = new Size(557, 213);
@@ -639,6 +644,13 @@
             // 
             ClnSKU.HeaderText = "SKU";
             ClnSKU.Name = "ClnSKU";
+            // 
+            // ClnIdProducto
+            // 
+            ClnIdProducto.HeaderText = "IdProducto";
+            ClnIdProducto.Name = "ClnIdProducto";
+            ClnIdProducto.ReadOnly = true;
+            ClnIdProducto.Visible = false;
             // 
             // ClnCodigo
             // 
@@ -764,8 +776,8 @@
             Controls.Add(pnlUsuario);
             Controls.Add(dtgPresentacion);
             Controls.Add(btnBuscarArticulo);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
+            Controls.Add(txtCantidad);
+            Controls.Add(txtCodigoBarra);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(pcbLogo);
@@ -835,8 +847,8 @@
         private Label label1;
         private Label label3;
         private Label label4;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox txtCodigoBarra;
+        private TextBox txtCantidad;
         private Button btnBuscarArticulo;
         private DataGridView dtgPresentacion;
         private ToolStripMenuItem ventasPorDiaToolStripMenuItem;
@@ -865,6 +877,7 @@
         private ToolStripMenuItem toolStripMenuItem2;
         private TableLayoutPanel tableLayoutPanel1;
         private DataGridViewTextBoxColumn ClnSKU;
+        private DataGridViewTextBoxColumn ClnIdProducto;
         private DataGridViewTextBoxColumn ClnCodigo;
         private DataGridViewTextBoxColumn ClnDescripcion;
         private DataGridViewTextBoxColumn ClnCantidad;

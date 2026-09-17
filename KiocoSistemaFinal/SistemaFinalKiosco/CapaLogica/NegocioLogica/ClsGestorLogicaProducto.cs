@@ -26,6 +26,10 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ExisteCodigoBarra(codigoBarra, idProductoExcluir);
         }
+        public DataTable ObtenerProductoPorCodigoBarra(string codigoBarra)
+        {
+            return datos.ObtenerProductoPorCodigoBarra(codigoBarra);
+        }
         public DataTable CargarIVAsActivos()
         {
             return datos.CargarIVAsActivos();
