@@ -10,3 +10,5 @@ Practicas Profesionalizantes
 0.0.0.4- 10/09 Se centraron los formularios y dise;o de varios formularios [Ema]
 
 0.0.0.5- 10/09 Mejoras en la Pantalla Principal (datagridview) y TableLayoutPanel- Marce-
+
+0.0.0.6 19-9 Se Mergeo GestorVentas a Main sin conflictos
