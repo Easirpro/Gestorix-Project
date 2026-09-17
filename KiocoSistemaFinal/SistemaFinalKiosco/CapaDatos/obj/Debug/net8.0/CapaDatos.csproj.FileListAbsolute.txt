@@ -46,3 +46,19 @@ C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\Si
 C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\refint\CapaDatos.dll
 C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.pdb
 C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\ref\CapaDatos.dll
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\bin\Debug\net8.0\CapaDatos.deps.json
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\bin\Debug\net8.0\CapaDatos.dll
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\bin\Debug\net8.0\CapaDatos.pdb
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\bin\Debug\net8.0\CapaEntidades.dll
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\bin\Debug\net8.0\CapaEntidades.pdb
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.csproj.AssemblyReference.cache
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.GeneratedMSBuildEditorConfig.editorconfig
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.AssemblyInfoInputs.cache
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.AssemblyInfo.cs
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.csproj.CoreCompileInputs.cache
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.sourcelink.json
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.csproj.Up2Date
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.dll
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\refint\CapaDatos.dll
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\CapaDatos.pdb
+C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaDatos\obj\Debug\net8.0\ref\CapaDatos.dll
