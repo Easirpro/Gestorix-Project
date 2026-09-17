@@ -21,5 +21,10 @@ namespace CapaVista
         {
 
         }
+
+        private void btnAgregarPago_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
