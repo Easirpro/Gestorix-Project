@@ -11,4 +11,6 @@ Practicas Profesionalizantes
 
 0.0.0.5- 10/09 Mejoras en la Pantalla Principal (datagridview) y TableLayoutPanel- Marce-
 
-0.0.0.6 19-9 Se Mergeo GestorVentas a Main sin conflictos
+0.0.0.6 17-9 Se Mergeo GestorVentas a Main sin conflictos
+
+0.0.0.7 18-9 Finaliza registro de ventas con pagos, stock y movimientos -Tobias-
