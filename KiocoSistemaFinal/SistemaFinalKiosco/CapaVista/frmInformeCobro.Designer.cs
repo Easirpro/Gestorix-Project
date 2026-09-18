@@ -71,7 +71,7 @@
             // 
             pnlTotal.BackColor = Color.Green;
             pnlTotal.Controls.Add(lblTotal);
-            pnlTotal.Location = new Point(181, 48);
+            pnlTotal.Location = new Point(181, 70);
             pnlTotal.Name = "pnlTotal";
             pnlTotal.Size = new Size(158, 38);
             pnlTotal.TabIndex = 1;
@@ -91,7 +91,7 @@
             // lblTextoTotal
             // 
             lblTextoTotal.AutoSize = true;
-            lblTextoTotal.Location = new Point(215, 27);
+            lblTextoTotal.Location = new Point(216, 46);
             lblTextoTotal.Name = "lblTextoTotal";
             lblTextoTotal.Size = new Size(90, 15);
             lblTextoTotal.TabIndex = 2;
@@ -106,14 +106,16 @@
             cmbMetodoPago.Size = new Size(118, 23);
             cmbMetodoPago.TabIndex = 6;
             cmbMetodoPago.SelectedIndexChanged += cmbMetodoPago_SelectedIndexChanged;
+            cmbMetodoPago.KeyDown += cmbMetodoPago_KeyDown;
             // 
             // txtMonto
             // 
-            txtMonto.Location = new Point(23, 89);
+            txtMonto.Location = new Point(23, 58);
             txtMonto.Name = "txtMonto";
             txtMonto.Size = new Size(119, 23);
             txtMonto.TabIndex = 9;
             txtMonto.TextChanged += txtMonto_TextChanged;
+            txtMonto.KeyDown += cmbMetodoPago_KeyDown;
             // 
             // btnAgregarPago
             // 
@@ -171,12 +173,13 @@
             // 
             // btnQuitarPago
             // 
-            btnQuitarPago.Location = new Point(97, 392);
+            btnQuitarPago.Location = new Point(93, 392);
             btnQuitarPago.Name = "btnQuitarPago";
-            btnQuitarPago.Size = new Size(116, 21);
+            btnQuitarPago.Size = new Size(106, 21);
             btnQuitarPago.TabIndex = 13;
             btnQuitarPago.Text = "QUITAR MÉTODO";
             btnQuitarPago.UseVisualStyleBackColor = true;
+            btnQuitarPago.Click += btnQuitarPago_Click;
             // 
             // lblTextoPagado
             // 
@@ -218,26 +221,28 @@
             // 
             btnCancelar.Location = new Point(16, 392);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(75, 22);
+            btnCancelar.Size = new Size(75, 21);
             btnCancelar.TabIndex = 19;
             btnCancelar.Text = "CANCELAR";
             btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.Click += btnCancelar_Click;
             // 
             // btnConfirmar
             // 
-            btnConfirmar.Location = new Point(220, 392);
+            btnConfirmar.Location = new Point(202, 392);
             btnConfirmar.Name = "btnConfirmar";
-            btnConfirmar.Size = new Size(127, 21);
+            btnConfirmar.Size = new Size(139, 21);
             btnConfirmar.TabIndex = 20;
             btnConfirmar.Text = "CONFIRMAR COMPRA";
             btnConfirmar.UseVisualStyleBackColor = true;
             btnConfirmar.Visible = false;
+            btnConfirmar.Click += btnConfirmar_Click;
             // 
             // txtMontoRecibido
             // 
-            txtMontoRecibido.Location = new Point(23, 45);
+            txtMontoRecibido.Location = new Point(24, 96);
             txtMontoRecibido.Name = "txtMontoRecibido";
-            txtMontoRecibido.Size = new Size(119, 23);
+            txtMontoRecibido.Size = new Size(118, 23);
             txtMontoRecibido.TabIndex = 22;
             txtMontoRecibido.TextChanged += txtMontoRecibido_TextChanged;
             // 
@@ -263,7 +268,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 7F);
-            label1.Location = new Point(24, 30);
+            label1.Location = new Point(23, 84);
             label1.Name = "label1";
             label1.Size = new Size(89, 12);
             label1.TabIndex = 25;
@@ -273,17 +278,17 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 7F);
-            label2.Location = new Point(26, 71);
+            label2.Location = new Point(24, 46);
             label2.Name = "label2";
             label2.Size = new Size(92, 12);
             label2.TabIndex = 26;
-            label2.Text = "MONTO A APLICAR";
+            label2.Text = "MONTO A COBRAR";
             // 
             // lblMetodo
             // 
             lblMetodo.AutoSize = true;
             lblMetodo.Font = new Font("Segoe UI", 7F);
-            lblMetodo.Location = new Point(26, 116);
+            lblMetodo.Location = new Point(23, 122);
             lblMetodo.Name = "lblMetodo";
             lblMetodo.Size = new Size(91, 12);
             lblMetodo.TabIndex = 27;
