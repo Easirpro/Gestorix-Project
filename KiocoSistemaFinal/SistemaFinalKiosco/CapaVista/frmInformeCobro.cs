@@ -1,4 +1,8 @@
-﻿using System;
+﻿using CapaEntidades;
+using CapaEntidades.NegocioEntidad;
+using CapaLogica.NegocioLogica;
+using System;
+using System.Collections.Generic;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,8 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CapaLogica.NegocioLogica;
-
 
 namespace CapaVista
 {
@@ -17,20 +19,25 @@ namespace CapaVista
         private readonly decimal totalVenta;
         private decimal totalPagado = 0;
         private decimal vueltoVenta = 0;
-        public frmInformeCobro(decimal total)
+        private readonly DataGridView carritoVenta;
+        public frmInformeCobro(decimal total, DataGridView carrito)
         {
             InitializeComponent();
 
             totalVenta = total;
-
+            carritoVenta = carrito;
 
             lblTotal.Text = $"$ {totalVenta:N2}";
             lblPagado.Text = "$ 0,00";
             lblRestante.Text = $"$ {totalVenta:N2}";
             lblVuelto.Text = "$ 0,00";
 
-            btnConfirmar.Enabled = false;
+            btnConfirmar.Visible = true;
+            btnConfirmar.BringToFront();
+
             CargarMetodosPago();
+
+            txtMonto.Text = totalVenta.ToString("0.00");
         }
 
         private void CargarMetodosPago()
@@ -73,7 +80,6 @@ namespace CapaVista
 
         private void btnAgregarPago_Click(object sender, EventArgs e)
         {
-            // Validar método de pago
             if (cmbMetodoPago.SelectedIndex == -1)
             {
                 MessageBox.Show(
@@ -86,7 +92,6 @@ namespace CapaVista
                 return;
             }
 
-            // Validar monto a aplicar
             if (!decimal.TryParse(txtMonto.Text, out decimal monto) || monto <= 0)
             {
                 MessageBox.Show(
@@ -100,10 +105,8 @@ namespace CapaVista
                 return;
             }
 
-            // Calcular cuánto falta pagar
             decimal restante = totalVenta - totalPagado;
 
-            // No permitir pagar más de lo que resta
             if (monto > restante)
             {
                 MessageBox.Show(
@@ -118,73 +121,73 @@ namespace CapaVista
                 return;
             }
 
-            // Obtener método seleccionado
             int idMetodoPago =
                 Convert.ToInt32(cmbMetodoPago.SelectedValue);
 
-            string metodoPago =
-                cmbMetodoPago.Text;
+            string metodoPago = cmbMetodoPago.Text;
 
-            // Verificar si es efectivo
             bool esEfectivo = metodoPago.Equals(
                 "Efectivo",
                 StringComparison.OrdinalIgnoreCase);
 
-            // Validaciones especiales para efectivo
             if (esEfectivo)
             {
-                if (!decimal.TryParse(
-                    txtMontoRecibido.Text,
-                    out decimal montoRecibido) ||
-                    montoRecibido <= 0)
-                {
-                    MessageBox.Show(
-                        "Ingrese el monto recibido en efectivo.",
-                        "Monto recibido",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                decimal montoRecibido;
 
-                    txtMontoRecibido.SelectAll();
-                    txtMontoRecibido.Focus();
-                    return;
+                // Si está vacío, asumimos que entregó justo
+                if (string.IsNullOrWhiteSpace(txtMontoRecibido.Text))
+                {
+                    montoRecibido = monto;
+                }
+                else
+                {
+                    if (!decimal.TryParse(
+                        txtMontoRecibido.Text,
+                        out montoRecibido) ||
+                        montoRecibido <= 0)
+                    {
+                        MessageBox.Show(
+                            "Ingrese un monto recibido válido.",
+                            "Monto recibido",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+
+                        txtMontoRecibido.SelectAll();
+                        txtMontoRecibido.Focus();
+                        return;
+                    }
+
+                    if (montoRecibido < monto)
+                    {
+                        MessageBox.Show(
+                            $"El monto recibido no alcanza.\n\n" +
+                            $"Monto a aplicar: $ {monto:N2}\n" +
+                            $"Monto recibido: $ {montoRecibido:N2}",
+                            "Efectivo insuficiente",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+
+                        txtMontoRecibido.SelectAll();
+                        txtMontoRecibido.Focus();
+                        return;
+                    }
                 }
 
-                if (montoRecibido < monto)
-                {
-                    MessageBox.Show(
-                        $"El monto recibido no alcanza para cubrir el pago en efectivo.\n\n" +
-                        $"Pago en efectivo: $ {monto:N2}\n" +
-                        $"Recibido: $ {montoRecibido:N2}",
-                        "Efectivo insuficiente",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
-                    txtMontoRecibido.SelectAll();
-                    txtMontoRecibido.Focus();
-                    return;
-                }
-
-                // Guardar el vuelto
                 vueltoVenta = montoRecibido - monto;
             }
 
-            // Agregar pago a la grilla
             dtgPagos.Rows.Add(
                 idMetodoPago,
                 metodoPago,
                 monto);
 
-            // Actualizar Pagado y Restante
             CalcularPagos();
 
-            // Limpiar campos
             txtMonto.Clear();
             txtMontoRecibido.Clear();
 
             cmbMetodoPago.SelectedIndex = -1;
 
-            // Los TextChanged pueden haber puesto el vuelto en 0.
-            // Lo volvemos a mostrar usando el valor guardado.
             lblVuelto.Text = $"$ {vueltoVenta:N2}";
 
             cmbMetodoPago.Focus();
@@ -198,7 +201,148 @@ namespace CapaVista
         {
             CalcularVuelto();
         }
+        private void cmbMetodoPago_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter &&
+                cmbMetodoPago.SelectedIndex != -1)
+            {
+                e.SuppressKeyPress = true;
 
+                btnAgregarPago.PerformClick();
+            }
+        }
+
+        private void btnConfirmar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // ==========================
+                // 1. VALIDAR PAGO COMPLETO
+                // ==========================
+
+                if (totalPagado != totalVenta)
+                {
+                    MessageBox.Show(
+                        "La venta todavía no está completamente pagada.",
+                        "Confirmar venta",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+
+
+                // ==========================
+                // 2. ARMAR DETALLES
+                // ==========================
+
+                List<DetalleVentaEntidad> detalles =
+                    new List<DetalleVentaEntidad>();
+
+                foreach (DataGridViewRow fila in carritoVenta.Rows)
+                {
+                    if (fila.IsNewRow ||
+                        fila.Cells["ClnIdProducto"].Value == null)
+                    {
+                        continue;
+                    }
+
+                    int idProducto =
+                        Convert.ToInt32(
+                            fila.Cells["ClnIdProducto"].Value);
+
+                    decimal cantidad =
+                        Convert.ToDecimal(
+                            fila.Cells["ClnCantidad"].Value);
+
+                    decimal precioUnitario =
+                        Convert.ToDecimal(
+                            fila.Cells["ClnPrecioUnitario"].Value);
+
+                    decimal subtotal =
+                        Convert.ToDecimal(
+                            fila.Cells["ClnImporte"].Value);
+
+                    detalles.Add(
+                        new DetalleVentaEntidad
+                        {
+                            IdProducto = idProducto,
+                            Cantidad = cantidad,
+                            PrecioUnitario = precioUnitario,
+                            Subtotal = subtotal
+                        });
+                }
+
+
+                // ==========================
+                // 3. ARMAR PAGOS
+                // ==========================
+
+                List<PagoVentaEntidad> pagos =
+                    new List<PagoVentaEntidad>();
+
+                foreach (DataGridViewRow fila in dtgPagos.Rows)
+                {
+                    if (fila.IsNewRow ||
+                        fila.Cells["ClnIdMetodoPago"].Value == null)
+                    {
+                        continue;
+                    }
+
+                    int idMetodoPago =
+                        Convert.ToInt32(
+                            fila.Cells["ClnIdMetodoPago"].Value);
+
+                    decimal monto =
+                        Convert.ToDecimal(
+                            fila.Cells["ClnMontoPago"].Value);
+
+                    pagos.Add(
+                        new PagoVentaEntidad
+                        {
+                            IdMetodoPago = idMetodoPago,
+                            Monto = monto
+                        });
+                }
+
+
+                // ==========================
+                // 4. REGISTRAR VENTA
+                // ==========================
+
+                ClsGestorVentaLogica gestorVenta =
+                    new ClsGestorVentaLogica();
+
+                int idVenta = gestorVenta.RegistrarVenta(
+                    totalVenta,
+                    SesionUsuario.IdUsuario,
+                    detalles,
+                    pagos);
+
+
+                // ==========================
+                // 5. VENTA CORRECTA
+                // ==========================
+
+                MessageBox.Show(
+                    $"Venta #{idVenta} registrada correctamente.",
+                    "Venta registrada",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                DialogResult = DialogResult.OK;
+
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"No se pudo registrar la venta.\n\n{ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
         private void cmbMetodoPago_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbMetodoPago.SelectedIndex == -1)
@@ -208,6 +352,11 @@ namespace CapaVista
                 return;
             }
 
+            decimal restante = totalVenta - totalPagado;
+
+            // Propone automáticamente cobrar todo lo que falta
+            txtMonto.Text = restante.ToString("0.00");
+
             string metodo = cmbMetodoPago.Text;
 
             bool esEfectivo = metodo.Equals(
@@ -216,7 +365,15 @@ namespace CapaVista
 
             txtMontoRecibido.Enabled = esEfectivo;
 
-            if (!esEfectivo)
+            if (esEfectivo)
+            {
+                // Vacío significa que paga justo
+                txtMontoRecibido.Clear();
+
+                txtMonto.SelectAll();
+                txtMonto.Focus();
+            }
+            else
             {
                 txtMontoRecibido.Clear();
             }
@@ -229,12 +386,27 @@ namespace CapaVista
                     "Efectivo",
                     StringComparison.OrdinalIgnoreCase))
             {
+                return;
+            }
+
+            if (!decimal.TryParse(
+                txtMonto.Text,
+                out decimal montoEfectivo))
+            {
                 lblVuelto.Text = "$ 0,00";
                 return;
             }
 
-            if (!decimal.TryParse(txtMonto.Text, out decimal montoEfectivo) ||
-                !decimal.TryParse(txtMontoRecibido.Text, out decimal recibido))
+            // Vacío = entrega el monto justo
+            if (string.IsNullOrWhiteSpace(txtMontoRecibido.Text))
+            {
+                lblVuelto.Text = "$ 0,00";
+                return;
+            }
+
+            if (!decimal.TryParse(
+                txtMontoRecibido.Text,
+                out decimal recibido))
             {
                 lblVuelto.Text = "$ 0,00";
                 return;
@@ -247,12 +419,45 @@ namespace CapaVista
                 : "$ 0,00";
         }
 
+        private void btnQuitarPago_Click(object sender, EventArgs e)
+        {
+            if (dtgPagos.CurrentRow == null ||
+                dtgPagos.CurrentRow.IsNewRow)
+            {
+                MessageBox.Show(
+                    "Seleccione un método de pago para quitar.",
+                    "Quitar pago",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
 
+                return;
+            }
 
+            // Quitamos el pago seleccionado
+            dtgPagos.Rows.Remove(dtgPagos.CurrentRow);
 
+            // Recalculamos pagado y restante
+            CalcularPagos();
 
+            decimal restante = totalVenta - totalPagado;
 
+            // Volvemos a proponer automáticamente todo lo que falta
+            txtMonto.Text = restante.ToString("0.00");
 
+            // Como quitamos un pago, reiniciamos el vuelto
+            vueltoVenta = 0;
+            lblVuelto.Text = "$ 0,00";
 
+            txtMontoRecibido.Clear();
+
+            // Dejamos listo para seleccionar otro método
+            cmbMetodoPago.SelectedIndex = -1;
+            cmbMetodoPago.Focus();
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -583,10 +583,35 @@ namespace CapaVista
                 return;
             }
 
-            frmInformeCobro cobro = new frmInformeCobro(total);
-            cobro.ShowDialog();
+            frmInformeCobro cobro =
+    new frmInformeCobro(total, dtgPresentacion);
+
+            if (cobro.ShowDialog() == DialogResult.OK)
+            {
+                LimpiarVenta();
+            }
         }
 
+        private void LimpiarVenta()
+        {
+            // Eliminamos todos los productos del carrito
+            dtgPresentacion.Rows.Clear();
+
+            // Reiniciamos los valores de la venta
+            subtotal = 0.00m;
+            descuentoRecargo = 0.00m;
+            total = 0.00m;
+
+            // Actualizamos los montos visuales
+            CalcularYMostrarMontos();
+
+            // Volvemos a crear las filas vacías visuales
+            RellenarFilas();
+
+            // Dejamos listo para la siguiente venta
+            txtCodigoBarra.Clear();
+            txtCodigoBarra.Focus();
+        }
         private void RellenarFilas()
         {
             int filasVisibles = dtgPresentacion.Height / dtgPresentacion.RowTemplate.Height;
