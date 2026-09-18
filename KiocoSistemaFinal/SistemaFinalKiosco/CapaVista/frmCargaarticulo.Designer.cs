@@ -36,7 +36,6 @@
             btnBuscar = new Button();
             chkArticulodiscontinaudo = new CheckBox();
             dtgCargaarticulo = new DataGridView();
-            btnSalir = new Button();
             clnCodigo = new DataGridViewTextBoxColumn();
             clnDescripcion = new DataGridViewTextBoxColumn();
             clnRubro = new DataGridViewTextBoxColumn();
@@ -52,6 +51,7 @@
             clnStockActual = new DataGridViewTextBoxColumn();
             clnStockMinimo = new DataGridViewTextBoxColumn();
             clnStockMaximo = new DataGridViewTextBoxColumn();
+            btnSalir = new Button();
             ((System.ComponentModel.ISupportInitialize)dtgCargaarticulo).BeginInit();
             SuspendLayout();
             // 
@@ -125,18 +125,9 @@
             dtgCargaarticulo.Columns.AddRange(new DataGridViewColumn[] { clnCodigo, clnDescripcion, clnRubro, clnProveedor, clmSucursal, clnVencimiento, clnPrecioVenta, clnUltActualizacion, clnUltVenta, clnPrecioNeto, clnPrecioCosto, clnIva, clnStockActual, clnStockMinimo, clnStockMaximo });
             dtgCargaarticulo.Location = new Point(12, 37);
             dtgCargaarticulo.Name = "dtgCargaarticulo";
-            dtgCargaarticulo.Size = new Size(996, 401);
+            dtgCargaarticulo.Size = new Size(1263, 401);
             dtgCargaarticulo.TabIndex = 6;
             dtgCargaarticulo.CellContentClick += dtgCargaarticulo_CellContentClick;
-            // 
-            // btnSalir
-            // 
-            btnSalir.Location = new Point(862, 453);
-            btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(108, 37);
-            btnSalir.TabIndex = 7;
-            btnSalir.Text = "Salir";
-            btnSalir.UseVisualStyleBackColor = true;
             // 
             // clnCodigo
             // 
@@ -213,11 +204,20 @@
             clnStockMaximo.HeaderText = "Stock Maximo";
             clnStockMaximo.Name = "clnStockMaximo";
             // 
+            // btnSalir
+            // 
+            btnSalir.Location = new Point(862, 453);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(108, 37);
+            btnSalir.TabIndex = 7;
+            btnSalir.Text = "Salir";
+            btnSalir.UseVisualStyleBackColor = true;
+            // 
             // frmCargaarticulo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1000, 506);
+            ClientSize = new Size(1287, 506);
             Controls.Add(btnSalir);
             Controls.Add(dtgCargaarticulo);
             Controls.Add(chkArticulodiscontinaudo);
