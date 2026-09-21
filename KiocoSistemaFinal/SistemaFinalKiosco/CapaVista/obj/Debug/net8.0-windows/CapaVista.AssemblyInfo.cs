@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CapaVista")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3430a804751ec235eb54144156262c45d9854c73")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d51ef3e73558343366e88035e4ef9f3608108646")]
 [assembly: System.Reflection.AssemblyProductAttribute("CapaVista")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CapaVista")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

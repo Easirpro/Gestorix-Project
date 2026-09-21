@@ -337,3 +337,5 @@ C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\Si
 C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.pdb
 C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.genruntimeconfig.cache
 C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\ref\CapaVista.dll
+C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.frmPermisos.resources
+C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.frmNuevoRol.resources

@@ -30,6 +30,24 @@ namespace CapaLogica
 
             return datos.ObtenerNombreRol(idRol);
         }
+        public void GuardarPermisos(int idRol, List<int> permisos)
+        {
+            ClsRolDatos datos = new ClsRolDatos();
+
+            datos.GuardarPermisos(idRol, permisos);
+        }
+        public int CrearRol(string nombre)
+        {
+            ClsRolDatos datos = new ClsRolDatos();
+
+            return datos.CrearRol(nombre);
+        }
+        public void EliminarRol(int idRol)
+        {
+            ClsRolDatos datos = new ClsRolDatos();
+
+            datos.EliminarRol(idRol);
+        }
     }
 }
 

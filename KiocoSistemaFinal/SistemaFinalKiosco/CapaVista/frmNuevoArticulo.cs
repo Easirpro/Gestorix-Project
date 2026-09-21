@@ -104,6 +104,8 @@ namespace CapaVista
 
                 cmbProveedor.SelectedValue = idProveedor;
                 cmbSucursal.SelectedValue = idSucursal;
+
+                txtPrecioCosto.Text = proveedor["PrecioCompra"] == DBNull.Value? "" : proveedor["PrecioCompra"].ToString();
             }
 
             txtCodigo.Text = fila["CodigoBarra"]?.ToString() ?? "";
@@ -564,6 +566,8 @@ namespace CapaVista
                     lote.FechaFabricacion = dtpFechaFabricacion.Value.Date;
                     lote.FechaVencimiento = dtpFechaVencimiento.Value.Date;
                     lote.IdSucursal = Convert.ToInt32(cmbSucursal.SelectedValue);
+                    lote.Stock = 0;
+                    lote.Activo = true;
 
                     bool loteModificado = logica.ModificarLote(lote);
 

@@ -33,7 +33,6 @@ public class ClsUsuarioDatos
                     u.Username,
                     u.PrimerIngreso,
                     u.UltimoIngreso,
-
                     CASE
                         WHEN
                         (
@@ -44,7 +43,6 @@ public class ClsUsuarioDatos
                         THEN CAST(1 AS bit)
                         ELSE CAST(0 AS bit)
                     END AS PreguntasCompletadas,
-
                     p.Activo,
                     p.Nombre,
                     p.Apellido,
@@ -53,12 +51,9 @@ public class ClsUsuarioDatos
                     p.FechaNacimiento AS FeNac,
                     p.DNI,
                     p.CUIT
-
                 FROM Usuario u
-
                 INNER JOIN Persona p
                     ON u.IdPersona = p.IdPersona
-
                 WHERE u.Username = @user
                 AND u.PassActual = @pass";
 
@@ -552,6 +547,28 @@ public class ClsUsuarioDatos
 
                 return cantidad > 0;
             }
+        }
+    }
+    public int ObtenerIdRolPorPersona(int idPersona)
+    {
+        using (SqlConnection con = conexion.ObtenerConexion())
+        {
+            string consulta = @"
+                SELECT U.IdRol
+                FROM Usuario AS U
+                WHERE U.IdPersona = @IdPersona";
+
+            SqlCommand cmd = new SqlCommand(consulta, con);
+            cmd.Parameters.AddWithValue("@IdPersona", idPersona);
+
+            con.Open();
+
+            object resultado = cmd.ExecuteScalar();
+
+            if (resultado == null || resultado == DBNull.Value)
+                return 0;
+
+            return Convert.ToInt32(resultado);
         }
     }
 }
