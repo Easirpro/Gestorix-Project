@@ -50,22 +50,66 @@ namespace CapaVista
             txtRol.Text = rol.ObtenerNombreRol(SesionUsuario.IdRol);
 
             CargarBotones();
+
         }
 
 
         #region Metodo
         private void CargarBotones()
         {
+            //Menu principal
+            btnArt.Enabled = SesionUsuario.Permisos.Contains(100);
+            btnVentas.Enabled = SesionUsuario.Permisos.Contains(200);
+            btnCompras.Enabled = SesionUsuario.Permisos.Contains(300);
+            btnProve.Enabled = SesionUsuario.Permisos.Contains(400);
+            toolStripMenuItem1.Enabled = SesionUsuario.Permisos.Contains(500);
+            btnInformes.Enabled = SesionUsuario.Permisos.Contains(600);
+            btnCaja.Enabled = SesionUsuario.Permisos.Contains(700);
+            btnAjuste.Enabled = SesionUsuario.Permisos.Contains(800);
+            btnAyuda.Enabled = SesionUsuario.Permisos.Contains(900);
+            btnEmpleado.Enabled = SesionUsuario.Permisos.Contains(1000);
 
-            btnArt.Enabled = SesionUsuario.Permisos.Contains(1);
-            btnVentas.Enabled = SesionUsuario.Permisos.Contains(6);
-            btnCompras.Enabled = SesionUsuario.Permisos.Contains(9);
-            btnProve.Enabled = SesionUsuario.Permisos.Contains(1002);
-            btnInformes.Enabled = SesionUsuario.Permisos.Contains(1004);
-            btnHerra.Enabled = SesionUsuario.Permisos.Contains(10);
-            btnCaja.Enabled = SesionUsuario.Permisos.Contains(1005);
-            btnAyuda.Enabled = true;
-            btnAjustes.Enabled = SesionUsuario.Permisos.Contains(12);
+            //Listados
+            listaDePreciosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(510);
+            listadoDeReposiciónToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(520);
+
+            // Articulos
+            // Administrador de articulos
+            menuitemAdmistradorarticulos.Enabled = SesionUsuario.Permisos.Contains(111) || SesionUsuario.Permisos.Contains(112) || SesionUsuario.Permisos.Contains(113);
+            // Administrador de rubros
+            menuitemAdministradoarticulos.Enabled = SesionUsuario.Permisos.Contains(120);
+            // Reposicion rapida de stock
+            meniitemReporapida.Enabled = SesionUsuario.Permisos.Contains(113);
+            // Cargar de las marcas
+            cargarDeLasMarcasToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(130);
+            // Importar articulos desde Excel
+            menuitemImporexcel.Enabled = SesionUsuario.Permisos.Contains(140);
+            // Exportar articulos a Excel
+            menuitemExporexcel.Enabled = SesionUsuario.Permisos.Contains(150);
+
+            //Ventas
+            menuitemAdministradorventas.Enabled = SesionUsuario.Permisos.Contains(210);
+            notaDeCreditoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(220);
+
+            //Proveedores
+            administradorDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(410);
+            cuentaCorrienteDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(420);
+
+            //Informes
+            ventasPorDiaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(610);
+            ventaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(620);
+            ventaPorRubroToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(630);
+            ventaPorArticulosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(640);
+            ventaPorMedioDePagoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(650);
+
+            //Caja
+            nuevoIngresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(710);
+            nuevoEgresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(720);
+            abrirCajaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(730);
+            cerrarSeToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(740);
+
+            //Empleado
+            permisosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1270);
         }
         //Ingreso de plata
         public enum TipoMovimiento
@@ -81,7 +125,6 @@ namespace CapaVista
             VentasPorArticulo,
             VentaPorMedioPago
         }
-
         //bloqueo menu
         private void BloquearMenu()
         {
@@ -92,9 +135,9 @@ namespace CapaVista
             btnProve.Enabled = false;
             toolStripMenuItem1.Enabled = false;
             btnInformes.Enabled = false;
-            btnHerra.Enabled = false;
+            btnAjuste.Enabled = false;
             btnAyuda.Enabled = false;
-            btnAjustes.Enabled = false;
+            btnEmpleado.Enabled = false;
 
             // Caja queda disponible
             btnCaja.Enabled = true;
@@ -395,8 +438,14 @@ namespace CapaVista
         {
             RellenarFilas();
         }
-
+        private void tmrFechaHora_Tick(object sender, EventArgs e)
+        {
+            lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy");
+            lblHora.Text = "Hora: " + DateTime.Now.ToString("HH:mm:ss");
+        }
         #endregion
+
+
 
 
 

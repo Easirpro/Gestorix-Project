@@ -31,7 +31,6 @@ namespace CapaDatos
 
             return dt;
         }
-
         public List<int> ObtenerPermisos(int idRol)
         {
             List<int> permisos = new List<int>();
@@ -59,7 +58,6 @@ namespace CapaDatos
 
             return permisos;
         }
-
         public string ObtenerNombreRol(int idRol)
         {
             using (SqlConnection conn = conexion.ObtenerConexion())
@@ -86,5 +84,137 @@ namespace CapaDatos
                 return resultado.ToString();
             }
         }
+        public void GuardarPermisos(int idRol, List<int> permisos)
+        {
+            using (SqlConnection conn = conexion.ObtenerConexion())
+            {
+                conn.Open();
+
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        string eliminar = @"
+                            DELETE FROM RolPermiso
+                            WHERE IdRol = @IdRol";
+
+                        using (SqlCommand cmdEliminar = new SqlCommand(eliminar, conn, transaction))
+                        {
+                            cmdEliminar.Parameters.AddWithValue("@IdRol", idRol);
+                            cmdEliminar.ExecuteNonQuery();
+                        }
+
+                        string insertar = @"
+                            INSERT INTO RolPermiso (IdRol, IdPermiso)
+                            VALUES (@IdRol, @IdPermiso)";
+
+                        foreach (int idPermiso in permisos)
+                        {
+                            using (SqlCommand cmdInsertar = new SqlCommand(insertar, conn, transaction))
+                            {
+                                cmdInsertar.Parameters.AddWithValue("@IdRol", idRol);
+                                cmdInsertar.Parameters.AddWithValue("@IdPermiso", idPermiso);
+
+                                cmdInsertar.ExecuteNonQuery();
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+        public int CrearRol(string nombre)
+        {
+            using (SqlConnection conn = conexion.ObtenerConexion())
+            {
+                conn.Open();
+
+                string verificar = @"
+                    SELECT COUNT(*)
+                    FROM Rol
+                    WHERE Nombre = @Nombre";
+
+                using (SqlCommand cmdVerificar = new SqlCommand(verificar, conn))
+                {
+                    cmdVerificar.Parameters.AddWithValue("@Nombre", nombre);
+
+                    int existe = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+
+                    if (existe > 0)
+                    {
+                        return 0;
+                    }
+                }
+
+                string query = @"
+                    INSERT INTO Rol (Nombre)
+                    VALUES (@Nombre);
+
+                    SELECT CAST(SCOPE_IDENTITY() AS INT);";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Nombre", nombre);
+
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+        public void EliminarRol(int idRol)
+        {
+            using (SqlConnection conn = conexion.ObtenerConexion())
+            {
+                conn.Open();
+
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        string eliminarPermisos = @"
+                            DELETE FROM RolPermiso
+                            WHERE IdRol = @IdRol";
+
+                        using (SqlCommand cmdPermisos =
+                            new SqlCommand(eliminarPermisos, conn, transaction))
+                        {
+                            cmdPermisos.Parameters.AddWithValue("@IdRol", idRol);
+                            cmdPermisos.ExecuteNonQuery();
+                        }
+
+                        string eliminarRol = @"
+                            DELETE FROM Rol
+                            WHERE IdRol = @IdRol";
+
+                        using (SqlCommand cmdRol =
+                            new SqlCommand(eliminarRol, conn, transaction))
+                        {
+                            cmdRol.Parameters.AddWithValue("@IdRol", idRol);
+
+                            int filasEliminadas = cmdRol.ExecuteNonQuery();
+
+                            if (filasEliminadas != 1)
+                            {
+                                throw new Exception("No se pudo eliminar el rol seleccionado.");
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+
     }
 }

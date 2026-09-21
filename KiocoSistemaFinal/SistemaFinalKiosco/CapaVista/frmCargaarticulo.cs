@@ -40,30 +40,30 @@ namespace CapaVista
 
             foreach (DataRow fila in tabla.Rows)
             {
-
-                int indice = dtgCargaarticulo.Rows.Add(
+                int indice = dtgCargaarticulo.Rows.Add(                     
                     fila["CodigoBarra"],
                     fila["Descripcion"],
                     fila["Rubro"],
                     fila["Proveedor"]?.ToString() ?? "",
                     fila["Sucursal"]?.ToString() ?? "",
-                    "",
+                    "", // Vencimiento
+                    "", // Última Actualización
+                    "", // Última Venta
+                    fila["PrecioCosto"] == DBNull.Value ? "" : fila["PrecioCosto"],
                     fila["PrecioVenta"],
-                    "",
-                    "",
-                    "",
-                    "",
                     fila["IVA"],
-                    fila["CantidadActual"] == DBNull.Value ? 0 : Convert.ToInt32(fila["CantidadActual"]),
-                    fila["StockMinimo"] == DBNull.Value ? 0 : Convert.ToInt32(fila["StockMinimo"]),
-                    fila["StockIdeal"] == DBNull.Value ? 0 : Convert.ToInt32(fila["StockIdeal"])
+                    fila["CantidadActual"] == DBNull.Value? 0 : Convert.ToInt32(fila["CantidadActual"]),
+                    fila["StockMinimo"] == DBNull.Value? 0 : Convert.ToInt32(fila["StockMinimo"]),
+                    fila["StockIdeal"] == DBNull.Value? 0 : Convert.ToInt32(fila["StockIdeal"])
                 );
 
-                dtgCargaarticulo.Rows[indice].Cells["clnVencimiento"].Value = fila["FechaVencimiento"] == DBNull.Value
-                ? "" : Convert.ToDateTime(fila["FechaVencimiento"]).ToString("dd/MM/yyyy");
+                dtgCargaarticulo.Rows[indice].Tag = fila["IdProducto"];
 
+                dtgCargaarticulo.Rows[indice].Cells["clnVencimiento"].Value = fila["FechaVencimiento"] == DBNull.Value
+                    ? "" : Convert.ToDateTime(fila["FechaVencimiento"]).ToString("dd/MM/yyyy");
             }
         }
+        
 
         #endregion
 
