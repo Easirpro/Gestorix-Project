@@ -337,6 +337,7 @@ C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\Si
 C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.pdb
 C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.genruntimeconfig.cache
 C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\ref\CapaVista.dll
+<<<<<<< HEAD
 C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\bin\Debug\net8.0-windows\CapaVista.exe
 C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\bin\Debug\net8.0-windows\FrmLogin.cs
 C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\bin\Debug\net8.0-windows\CapaVista.deps.json
@@ -450,3 +451,7 @@ C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\
 C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.pdb
 C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.genruntimeconfig.cache
 C:\Proyecto\Gestorix-Project\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\ref\CapaVista.dll
+=======
+C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.frmPermisos.resources
+C:\Users\janza\Desktop\proyecto 15-9\gestorix 10-9 original\KiocoSistemaFinal\SistemaFinalKiosco\CapaVista\obj\Debug\net8.0-windows\CapaVista.frmNuevoRol.resources
+>>>>>>> EmpleadosPermisos

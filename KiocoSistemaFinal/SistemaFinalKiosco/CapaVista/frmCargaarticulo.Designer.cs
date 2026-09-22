@@ -42,10 +42,9 @@
             clnProveedor = new DataGridViewTextBoxColumn();
             clmSucursal = new DataGridViewTextBoxColumn();
             clnVencimiento = new DataGridViewTextBoxColumn();
-            clnPrecioVenta = new DataGridViewTextBoxColumn();
             clnUltActualizacion = new DataGridViewTextBoxColumn();
             clnUltVenta = new DataGridViewTextBoxColumn();
-            clnPrecioNeto = new DataGridViewTextBoxColumn();
+            clnPrecioVenta = new DataGridViewTextBoxColumn();
             clnPrecioCosto = new DataGridViewTextBoxColumn();
             clnIva = new DataGridViewTextBoxColumn();
             clnStockActual = new DataGridViewTextBoxColumn();
@@ -122,8 +121,7 @@
             // dtgCargaarticulo
             // 
             dtgCargaarticulo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgCargaarticulo.Columns.AddRange(new DataGridViewColumn[] { clnCodigo, clnDescripcion, clnRubro, clnProveedor, clmSucursal, clnVencimiento, clnPrecioVenta, clnUltActualizacion, clnUltVenta, clnPrecioNeto, clnPrecioCosto, clnIva, clnStockActual, clnStockMinimo, clnStockMaximo });
-            dtgCargaarticulo.Location = new Point(12, 37);
+            dtgCargaarticulo.Columns.AddRange(new DataGridViewColumn[] { clnCodigo, clnDescripcion, clnRubro, clnProveedor, clmSucursal, clnVencimiento, clnUltActualizacion, clnUltVenta, clnPrecioCosto, clnPrecioVenta, clnIva, clnStockActual, clnStockMinimo, clnStockMaximo }); dtgCargaarticulo.Location = new Point(12, 37);
             dtgCargaarticulo.Name = "dtgCargaarticulo";
             dtgCargaarticulo.Size = new Size(1263, 401);
             dtgCargaarticulo.TabIndex = 6;
@@ -159,11 +157,6 @@
             clnVencimiento.HeaderText = "Vencimiento";
             clnVencimiento.Name = "clnVencimiento";
             // 
-            // clnPrecioVenta
-            // 
-            clnPrecioVenta.HeaderText = "Precio Venta";
-            clnPrecioVenta.Name = "clnPrecioVenta";
-            // 
             // clnUltActualizacion
             // 
             clnUltActualizacion.HeaderText = "Ultima Actualización";
@@ -174,10 +167,10 @@
             clnUltVenta.HeaderText = "Ultima Venta";
             clnUltVenta.Name = "clnUltVenta";
             // 
-            // clnPrecioNeto
+            // clnPrecioVenta
             // 
-            clnPrecioNeto.HeaderText = "Precio Neto";
-            clnPrecioNeto.Name = "clnPrecioNeto";
+            clnPrecioVenta.HeaderText = "Precio Venta";
+            clnPrecioVenta.Name = "clnPrecioVenta";
             // 
             // clnPrecioCosto
             // 
@@ -251,10 +244,9 @@
         private DataGridViewTextBoxColumn clnProveedor;
         private DataGridViewTextBoxColumn clmSucursal;
         private DataGridViewTextBoxColumn clnVencimiento;
-        private DataGridViewTextBoxColumn clnPrecioVenta;
         private DataGridViewTextBoxColumn clnUltActualizacion;
         private DataGridViewTextBoxColumn clnUltVenta;
-        private DataGridViewTextBoxColumn clnPrecioNeto;
+        private DataGridViewTextBoxColumn clnPrecioVenta;
         private DataGridViewTextBoxColumn clnPrecioCosto;
         private DataGridViewTextBoxColumn clnIva;
         private DataGridViewTextBoxColumn clnStockActual;

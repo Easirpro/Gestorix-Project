@@ -28,39 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            TreeNode treeNode1 = new TreeNode("Archivo");
-            TreeNode treeNode2 = new TreeNode("Admistrador de Articulos");
-            TreeNode treeNode3 = new TreeNode("Administrador de Rubro");
-            TreeNode treeNode4 = new TreeNode("Reposición Rapida de Stock");
-            TreeNode treeNode5 = new TreeNode("Importar Articulos desde Excel");
-            TreeNode treeNode6 = new TreeNode("Exportar Articulos desde Excel");
-            TreeNode treeNode7 = new TreeNode("Articulo", new TreeNode[] { treeNode2, treeNode3, treeNode4, treeNode5, treeNode6 });
-            TreeNode treeNode8 = new TreeNode("Administrador de Ventas");
-            TreeNode treeNode9 = new TreeNode("Nota de Credito");
-            TreeNode treeNode10 = new TreeNode("Presupuesto");
-            TreeNode treeNode11 = new TreeNode("Ventas", new TreeNode[] { treeNode8, treeNode9, treeNode10 });
-            TreeNode treeNode12 = new TreeNode("Administrador de Compras");
-            TreeNode treeNode13 = new TreeNode("Compras", new TreeNode[] { treeNode12 });
-            TreeNode treeNode14 = new TreeNode("Administrador de Proveedores");
-            TreeNode treeNode15 = new TreeNode("Proveedor", new TreeNode[] { treeNode14 });
-            TreeNode treeNode16 = new TreeNode("Catalogo");
-            TreeNode treeNode17 = new TreeNode("Informes");
-            TreeNode treeNode18 = new TreeNode("Herramientas");
-            TreeNode treeNode19 = new TreeNode("Caja");
-            TreeNode treeNode20 = new TreeNode("Ayuda");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCargaEmpleados));
-            groupBox1 = new GroupBox();
             label20 = new Label();
             cmbTipoTelefono = new ComboBox();
             mkdCuil = new MaskedTextBox();
             dtpFechaNacimiento = new DateTimePicker();
             cmbGenero = new ComboBox();
             label18 = new Label();
-            gpbPermisos = new GroupBox();
-            treeView1 = new TreeView();
             label17 = new Label();
-            Rol = new Label();
-            cmbRol = new ComboBox();
             txtPostal = new TextBox();
             label15 = new Label();
             txtDepartamento = new TextBox();
@@ -83,14 +58,10 @@
             label4 = new Label();
             rdbFemenino = new RadioButton();
             txtDNI = new TextBox();
-            txtApellido = new TextBox();
-            txtNombre = new TextBox();
             label8 = new Label();
             label7 = new Label();
             label5 = new Label();
             label3 = new Label();
-            label2 = new Label();
-            label1 = new Label();
             label16 = new Label();
             chkActivo = new CheckBox();
             btnCrear = new Button();
@@ -101,63 +72,28 @@
             btnModificar = new Button();
             btnActualizar = new Button();
             btneliminar = new Button();
-            groupBox1.SuspendLayout();
-            gpbPermisos.SuspendLayout();
+            tpgDatosUsuario = new TabControl();
+            tpgDatosPersonales = new TabPage();
+            txtApellido = new TextBox();
+            txtNombre = new TextBox();
+            label2 = new Label();
+            label1 = new Label();
+            tpgDireccion = new TabPage();
+            tpgLocalidad = new TabPage();
+            tpgContacto = new TabPage();
+            label21 = new Label();
+            txtRolActual = new TextBox();
+            tpgDatosUsuario.SuspendLayout();
+            tpgDatosPersonales.SuspendLayout();
+            tpgDireccion.SuspendLayout();
+            tpgLocalidad.SuspendLayout();
+            tpgContacto.SuspendLayout();
             SuspendLayout();
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(label20);
-            groupBox1.Controls.Add(cmbTipoTelefono);
-            groupBox1.Controls.Add(mkdCuil);
-            groupBox1.Controls.Add(dtpFechaNacimiento);
-            groupBox1.Controls.Add(cmbGenero);
-            groupBox1.Controls.Add(label18);
-            groupBox1.Controls.Add(gpbPermisos);
-            groupBox1.Controls.Add(label17);
-            groupBox1.Controls.Add(Rol);
-            groupBox1.Controls.Add(cmbRol);
-            groupBox1.Controls.Add(txtPostal);
-            groupBox1.Controls.Add(label15);
-            groupBox1.Controls.Add(txtDepartamento);
-            groupBox1.Controls.Add(txtPiso);
-            groupBox1.Controls.Add(label14);
-            groupBox1.Controls.Add(label13);
-            groupBox1.Controls.Add(label12);
-            groupBox1.Controls.Add(txtAltura);
-            groupBox1.Controls.Add(label11);
-            groupBox1.Controls.Add(cmbLocalidad);
-            groupBox1.Controls.Add(cmbPartido);
-            groupBox1.Controls.Add(txtCorreo);
-            groupBox1.Controls.Add(label6);
-            groupBox1.Controls.Add(txtCalle);
-            groupBox1.Controls.Add(cmbProvincia);
-            groupBox1.Controls.Add(label10);
-            groupBox1.Controls.Add(txtTelefono);
-            groupBox1.Controls.Add(label9);
-            groupBox1.Controls.Add(rdbMasculino);
-            groupBox1.Controls.Add(label4);
-            groupBox1.Controls.Add(rdbFemenino);
-            groupBox1.Controls.Add(txtDNI);
-            groupBox1.Controls.Add(txtApellido);
-            groupBox1.Controls.Add(txtNombre);
-            groupBox1.Controls.Add(label8);
-            groupBox1.Controls.Add(label7);
-            groupBox1.Controls.Add(label5);
-            groupBox1.Controls.Add(label3);
-            groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(label1);
-            groupBox1.Location = new Point(28, 98);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(713, 413);
-            groupBox1.TabIndex = 0;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Datos Empleado";
             // 
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(146, 287);
+            label20.Location = new Point(145, 19);
             label20.Name = "label20";
             label20.Size = new Size(94, 15);
             label20.TabIndex = 39;
@@ -166,14 +102,14 @@
             // cmbTipoTelefono
             // 
             cmbTipoTelefono.FormattingEnabled = true;
-            cmbTipoTelefono.Location = new Point(147, 305);
+            cmbTipoTelefono.Location = new Point(146, 37);
             cmbTipoTelefono.Name = "cmbTipoTelefono";
             cmbTipoTelefono.Size = new Size(121, 23);
             cmbTipoTelefono.TabIndex = 38;
             // 
             // mkdCuil
             // 
-            mkdCuil.Location = new Point(7, 98);
+            mkdCuil.Location = new Point(12, 239);
             mkdCuil.Mask = "00-00000000-0";
             mkdCuil.Name = "mkdCuil";
             mkdCuil.Size = new Size(134, 23);
@@ -184,7 +120,7 @@
             // 
             // dtpFechaNacimiento
             // 
-            dtpFechaNacimiento.Location = new Point(290, 43);
+            dtpFechaNacimiento.Location = new Point(12, 105);
             dtpFechaNacimiento.Name = "dtpFechaNacimiento";
             dtpFechaNacimiento.Size = new Size(220, 23);
             dtpFechaNacimiento.TabIndex = 4;
@@ -192,7 +128,7 @@
             // cmbGenero
             // 
             cmbGenero.FormattingEnabled = true;
-            cmbGenero.Location = new Point(9, 158);
+            cmbGenero.Location = new Point(12, 172);
             cmbGenero.Name = "cmbGenero";
             cmbGenero.Size = new Size(121, 23);
             cmbGenero.TabIndex = 7;
@@ -201,104 +137,25 @@
             // label18
             // 
             label18.AutoSize = true;
-            label18.Location = new Point(7, 136);
+            label18.Location = new Point(10, 150);
             label18.Name = "label18";
             label18.Size = new Size(45, 15);
             label18.TabIndex = 37;
             label18.Text = "Genero";
             // 
-            // gpbPermisos
-            // 
-            gpbPermisos.Controls.Add(treeView1);
-            gpbPermisos.Location = new Point(528, 79);
-            gpbPermisos.Name = "gpbPermisos";
-            gpbPermisos.Size = new Size(185, 205);
-            gpbPermisos.TabIndex = 3;
-            gpbPermisos.TabStop = false;
-            gpbPermisos.Text = "Permisos";
-            // 
-            // treeView1
-            // 
-            treeView1.CheckBoxes = true;
-            treeView1.Dock = DockStyle.Fill;
-            treeView1.Location = new Point(3, 19);
-            treeView1.Name = "treeView1";
-            treeNode1.Name = "Nodo0";
-            treeNode1.Text = "Archivo";
-            treeNode2.Name = "Nodo2";
-            treeNode2.Text = "Admistrador de Articulos";
-            treeNode3.Name = "Nodo3";
-            treeNode3.Text = "Administrador de Rubro";
-            treeNode4.Name = "Nodo4";
-            treeNode4.Text = "Reposición Rapida de Stock";
-            treeNode5.Name = "Nodo5";
-            treeNode5.Text = "Importar Articulos desde Excel";
-            treeNode6.Name = "Nodo6";
-            treeNode6.Text = "Exportar Articulos desde Excel";
-            treeNode7.Name = "Nodo1";
-            treeNode7.Text = "Articulo";
-            treeNode8.Name = "Nodo8";
-            treeNode8.Text = "Administrador de Ventas";
-            treeNode9.Name = "Nodo9";
-            treeNode9.Text = "Nota de Credito";
-            treeNode10.Name = "Nodo10";
-            treeNode10.Text = "Presupuesto";
-            treeNode11.Name = "Nodo7";
-            treeNode11.Text = "Ventas";
-            treeNode12.Name = "Nodo12";
-            treeNode12.Text = "Administrador de Compras";
-            treeNode13.Name = "Nodo11";
-            treeNode13.Text = "Compras";
-            treeNode14.Name = "Nodo14";
-            treeNode14.Text = "Administrador de Proveedores";
-            treeNode15.Name = "Nodo13";
-            treeNode15.Text = "Proveedor";
-            treeNode16.Checked = true;
-            treeNode16.Name = "Nodo15";
-            treeNode16.Text = "Catalogo";
-            treeNode17.Name = "Nodo16";
-            treeNode17.Text = "Informes";
-            treeNode18.Name = "Nodo17";
-            treeNode18.Text = "Herramientas";
-            treeNode19.Name = "Nodo18";
-            treeNode19.Text = "Caja";
-            treeNode20.Name = "Nodo19";
-            treeNode20.Text = "Ayuda";
-            treeView1.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode7, treeNode11, treeNode13, treeNode15, treeNode16, treeNode17, treeNode18, treeNode19, treeNode20 });
-            treeView1.Size = new Size(179, 183);
-            treeView1.TabIndex = 24;
-            // 
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(14, 79);
+            label17.Location = new Point(19, 220);
             label17.Name = "label17";
             label17.Size = new Size(32, 15);
             label17.TabIndex = 36;
             label17.Text = "CUIT";
             // 
-            // Rol
-            // 
-            Rol.AutoSize = true;
-            Rol.Location = new Point(554, 25);
-            Rol.Name = "Rol";
-            Rol.Size = new Size(24, 15);
-            Rol.TabIndex = 34;
-            Rol.Text = "Rol";
-            // 
-            // cmbRol
-            // 
-            cmbRol.FormattingEnabled = true;
-            cmbRol.Location = new Point(554, 43);
-            cmbRol.Name = "cmbRol";
-            cmbRol.Size = new Size(121, 23);
-            cmbRol.TabIndex = 19;
-            cmbRol.SelectedIndexChanged += cmbRol_SelectedIndexChanged_1;
-            // 
             // txtPostal
             // 
             txtPostal.Enabled = false;
-            txtPostal.Location = new Point(441, 207);
+            txtPostal.Location = new Point(162, 107);
             txtPostal.Name = "txtPostal";
             txtPostal.Size = new Size(69, 23);
             txtPostal.TabIndex = 10;
@@ -306,7 +163,7 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(10, 335);
+            label15.Location = new Point(7, 103);
             label15.Name = "label15";
             label15.Size = new Size(105, 15);
             label15.TabIndex = 30;
@@ -314,14 +171,14 @@
             // 
             // txtDepartamento
             // 
-            txtDepartamento.Location = new Point(414, 261);
+            txtDepartamento.Location = new Point(86, 223);
             txtDepartamento.Name = "txtDepartamento";
             txtDepartamento.Size = new Size(83, 23);
             txtDepartamento.TabIndex = 17;
             // 
             // txtPiso
             // 
-            txtPiso.Location = new Point(334, 261);
+            txtPiso.Location = new Point(6, 223);
             txtPiso.Name = "txtPiso";
             txtPiso.Size = new Size(71, 23);
             txtPiso.TabIndex = 16;
@@ -329,7 +186,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(414, 243);
+            label14.Location = new Point(86, 205);
             label14.Name = "label14";
             label14.Size = new Size(83, 15);
             label14.TabIndex = 27;
@@ -338,7 +195,7 @@
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(343, 243);
+            label13.Location = new Point(15, 205);
             label13.Name = "label13";
             label13.Size = new Size(29, 15);
             label13.TabIndex = 26;
@@ -347,7 +204,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(228, 243);
+            label12.Location = new Point(227, 149);
             label12.Name = "label12";
             label12.Size = new Size(39, 15);
             label12.TabIndex = 25;
@@ -355,7 +212,7 @@
             // 
             // txtAltura
             // 
-            txtAltura.Location = new Point(228, 261);
+            txtAltura.Location = new Point(227, 167);
             txtAltura.Name = "txtAltura";
             txtAltura.Size = new Size(100, 23);
             txtAltura.TabIndex = 15;
@@ -363,7 +220,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(426, 189);
+            label11.Location = new Point(147, 89);
             label11.Name = "label11";
             label11.Size = new Size(67, 15);
             label11.TabIndex = 23;
@@ -372,7 +229,7 @@
             // cmbLocalidad
             // 
             cmbLocalidad.FormattingEnabled = true;
-            cmbLocalidad.Location = new Point(290, 207);
+            cmbLocalidad.Location = new Point(11, 107);
             cmbLocalidad.Name = "cmbLocalidad";
             cmbLocalidad.Size = new Size(146, 23);
             cmbLocalidad.TabIndex = 13;
@@ -381,7 +238,7 @@
             // cmbPartido
             // 
             cmbPartido.FormattingEnabled = true;
-            cmbPartido.Location = new Point(159, 207);
+            cmbPartido.Location = new Point(158, 44);
             cmbPartido.Name = "cmbPartido";
             cmbPartido.Size = new Size(125, 23);
             cmbPartido.TabIndex = 12;
@@ -389,7 +246,7 @@
             // 
             // txtCorreo
             // 
-            txtCorreo.Location = new Point(9, 359);
+            txtCorreo.Location = new Point(6, 127);
             txtCorreo.Name = "txtCorreo";
             txtCorreo.Size = new Size(213, 23);
             txtCorreo.TabIndex = 11;
@@ -398,7 +255,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(9, 243);
+            label6.Location = new Point(8, 149);
             label6.Name = "label6";
             label6.Size = new Size(33, 15);
             label6.TabIndex = 5;
@@ -406,7 +263,7 @@
             // 
             // txtCalle
             // 
-            txtCalle.Location = new Point(7, 261);
+            txtCalle.Location = new Point(6, 167);
             txtCalle.Name = "txtCalle";
             txtCalle.Size = new Size(215, 23);
             txtCalle.TabIndex = 14;
@@ -415,7 +272,7 @@
             // 
             cmbProvincia.DropDownWidth = 350;
             cmbProvincia.FormattingEnabled = true;
-            cmbProvincia.Location = new Point(7, 207);
+            cmbProvincia.Location = new Point(6, 44);
             cmbProvincia.MaxDropDownItems = 4;
             cmbProvincia.Name = "cmbProvincia";
             cmbProvincia.Size = new Size(146, 23);
@@ -425,7 +282,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(159, 189);
+            label10.Location = new Point(158, 26);
             label10.Name = "label10";
             label10.Size = new Size(45, 15);
             label10.TabIndex = 19;
@@ -433,7 +290,7 @@
             // 
             // txtTelefono
             // 
-            txtTelefono.Location = new Point(7, 305);
+            txtTelefono.Location = new Point(6, 37);
             txtTelefono.Name = "txtTelefono";
             txtTelefono.Size = new Size(134, 23);
             txtTelefono.TabIndex = 18;
@@ -442,7 +299,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(12, 189);
+            label9.Location = new Point(11, 26);
             label9.Name = "label9";
             label9.Size = new Size(56, 15);
             label9.TabIndex = 18;
@@ -451,7 +308,7 @@
             // rdbMasculino
             // 
             rdbMasculino.AutoSize = true;
-            rdbMasculino.Location = new Point(228, 162);
+            rdbMasculino.Location = new Point(231, 176);
             rdbMasculino.Name = "rdbMasculino";
             rdbMasculino.Size = new Size(69, 19);
             rdbMasculino.TabIndex = 9;
@@ -462,7 +319,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(290, 25);
+            label4.Location = new Point(12, 87);
             label4.Name = "label4";
             label4.Size = new Size(119, 15);
             label4.TabIndex = 3;
@@ -471,7 +328,7 @@
             // rdbFemenino
             // 
             rdbFemenino.AutoSize = true;
-            rdbFemenino.Location = new Point(163, 162);
+            rdbFemenino.Location = new Point(166, 176);
             rdbFemenino.Name = "rdbFemenino";
             rdbFemenino.Size = new Size(56, 19);
             rdbFemenino.TabIndex = 8;
@@ -481,30 +338,16 @@
             // 
             // txtDNI
             // 
-            txtDNI.Location = new Point(146, 98);
+            txtDNI.Location = new Point(151, 239);
             txtDNI.Name = "txtDNI";
             txtDNI.Size = new Size(134, 23);
             txtDNI.TabIndex = 6;
             txtDNI.KeyPress += txtDNI_KeyPress;
             // 
-            // txtApellido
-            // 
-            txtApellido.Location = new Point(146, 43);
-            txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(134, 23);
-            txtApellido.TabIndex = 3;
-            // 
-            // txtNombre
-            // 
-            txtNombre.Location = new Point(6, 43);
-            txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(134, 23);
-            txtNombre.TabIndex = 2;
-            // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(286, 189);
+            label8.Location = new Point(7, 89);
             label8.Name = "label8";
             label8.Size = new Size(58, 15);
             label8.TabIndex = 7;
@@ -513,7 +356,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(7, 287);
+            label7.Location = new Point(6, 19);
             label7.Name = "label7";
             label7.Size = new Size(52, 15);
             label7.TabIndex = 6;
@@ -522,7 +365,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(146, 80);
+            label5.Location = new Point(151, 221);
             label5.Name = "label5";
             label5.Size = new Size(27, 15);
             label5.TabIndex = 4;
@@ -531,34 +374,16 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(163, 140);
+            label3.Location = new Point(166, 154);
             label3.Name = "label3";
             label3.Size = new Size(32, 15);
             label3.TabIndex = 2;
             label3.Text = "Sexo";
             // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(146, 25);
-            label2.Name = "label2";
-            label2.Size = new Size(51, 15);
-            label2.TabIndex = 1;
-            label2.Text = "Apellido";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(7, 25);
-            label1.Name = "label1";
-            label1.Size = new Size(51, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Nombre";
-            // 
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(582, 26);
+            label16.Location = new Point(315, 40);
             label16.Name = "label16";
             label16.Size = new Size(98, 15);
             label16.TabIndex = 32;
@@ -567,7 +392,7 @@
             // chkActivo
             // 
             chkActivo.AutoSize = true;
-            chkActivo.Location = new Point(582, 56);
+            chkActivo.Location = new Point(315, 58);
             chkActivo.Name = "chkActivo";
             chkActivo.Size = new Size(60, 19);
             chkActivo.TabIndex = 31;
@@ -576,7 +401,7 @@
             // 
             // btnCrear
             // 
-            btnCrear.Location = new Point(628, 609);
+            btnCrear.Location = new Point(325, 498);
             btnCrear.Name = "btnCrear";
             btnCrear.Size = new Size(75, 23);
             btnCrear.TabIndex = 21;
@@ -586,7 +411,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(470, 609);
+            btnVolver.Location = new Point(167, 498);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 19;
@@ -613,7 +438,7 @@
             // 
             // btnNuevo
             // 
-            btnNuevo.Location = new Point(551, 609);
+            btnNuevo.Location = new Point(248, 498);
             btnNuevo.Name = "btnNuevo";
             btnNuevo.Size = new Size(71, 23);
             btnNuevo.TabIndex = 20;
@@ -623,7 +448,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(371, 609);
+            btnModificar.Location = new Point(68, 498);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(93, 23);
             btnModificar.TabIndex = 18;
@@ -643,18 +468,165 @@
             // 
             // btneliminar
             // 
-            btneliminar.Location = new Point(72, 546);
+            btneliminar.BackColor = Color.Transparent;
+            btneliminar.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btneliminar.Image = (Image)resources.GetObject("btneliminar.Image");
+            btneliminar.ImageAlign = ContentAlignment.TopCenter;
+            btneliminar.Location = new Point(405, 163);
             btneliminar.Name = "btneliminar";
-            btneliminar.Size = new Size(75, 23);
+            btneliminar.Size = new Size(106, 102);
             btneliminar.TabIndex = 34;
-            btneliminar.Text = "button1";
-            btneliminar.UseVisualStyleBackColor = true;
+            btneliminar.Text = "Permisos";
+            btneliminar.TextAlign = ContentAlignment.BottomCenter;
+            btneliminar.UseVisualStyleBackColor = false;
+            btneliminar.Click += btneliminar_Click;
+            // 
+            // tpgDatosUsuario
+            // 
+            tpgDatosUsuario.Controls.Add(tpgDatosPersonales);
+            tpgDatosUsuario.Controls.Add(tpgDireccion);
+            tpgDatosUsuario.Controls.Add(tpgLocalidad);
+            tpgDatosUsuario.Controls.Add(tpgContacto);
+            tpgDatosUsuario.Location = new Point(31, 139);
+            tpgDatosUsuario.Name = "tpgDatosUsuario";
+            tpgDatosUsuario.SelectedIndex = 0;
+            tpgDatosUsuario.Size = new Size(372, 317);
+            tpgDatosUsuario.TabIndex = 35;
+            // 
+            // tpgDatosPersonales
+            // 
+            tpgDatosPersonales.Controls.Add(mkdCuil);
+            tpgDatosPersonales.Controls.Add(label5);
+            tpgDatosPersonales.Controls.Add(txtApellido);
+            tpgDatosPersonales.Controls.Add(txtDNI);
+            tpgDatosPersonales.Controls.Add(txtNombre);
+            tpgDatosPersonales.Controls.Add(label17);
+            tpgDatosPersonales.Controls.Add(label2);
+            tpgDatosPersonales.Controls.Add(cmbGenero);
+            tpgDatosPersonales.Controls.Add(label18);
+            tpgDatosPersonales.Controls.Add(dtpFechaNacimiento);
+            tpgDatosPersonales.Controls.Add(label1);
+            tpgDatosPersonales.Controls.Add(label4);
+            tpgDatosPersonales.Controls.Add(label3);
+            tpgDatosPersonales.Controls.Add(rdbFemenino);
+            tpgDatosPersonales.Controls.Add(rdbMasculino);
+            tpgDatosPersonales.Location = new Point(4, 24);
+            tpgDatosPersonales.Name = "tpgDatosPersonales";
+            tpgDatosPersonales.Padding = new Padding(3);
+            tpgDatosPersonales.Size = new Size(364, 289);
+            tpgDatosPersonales.TabIndex = 0;
+            tpgDatosPersonales.Text = "Datos Personales";
+            tpgDatosPersonales.UseVisualStyleBackColor = true;
+            // 
+            // txtApellido
+            // 
+            txtApellido.Location = new Point(151, 45);
+            txtApellido.Name = "txtApellido";
+            txtApellido.Size = new Size(134, 23);
+            txtApellido.TabIndex = 7;
+            // 
+            // txtNombre
+            // 
+            txtNombre.Location = new Point(11, 45);
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(134, 23);
+            txtNombre.TabIndex = 6;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(151, 27);
+            label2.Name = "label2";
+            label2.Size = new Size(51, 15);
+            label2.TabIndex = 5;
+            label2.Text = "Apellido";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 27);
+            label1.Name = "label1";
+            label1.Size = new Size(51, 15);
+            label1.TabIndex = 4;
+            label1.Text = "Nombre";
+            // 
+            // tpgDireccion
+            // 
+            tpgDireccion.Controls.Add(txtCalle);
+            tpgDireccion.Controls.Add(label6);
+            tpgDireccion.Controls.Add(txtAltura);
+            tpgDireccion.Controls.Add(label12);
+            tpgDireccion.Controls.Add(txtPiso);
+            tpgDireccion.Controls.Add(label13);
+            tpgDireccion.Controls.Add(label14);
+            tpgDireccion.Controls.Add(txtDepartamento);
+            tpgDireccion.Location = new Point(4, 24);
+            tpgDireccion.Name = "tpgDireccion";
+            tpgDireccion.Padding = new Padding(3);
+            tpgDireccion.Size = new Size(364, 289);
+            tpgDireccion.TabIndex = 1;
+            tpgDireccion.Text = "Dirección";
+            tpgDireccion.UseVisualStyleBackColor = true;
+            // 
+            // tpgLocalidad
+            // 
+            tpgLocalidad.Controls.Add(cmbProvincia);
+            tpgLocalidad.Controls.Add(label9);
+            tpgLocalidad.Controls.Add(label10);
+            tpgLocalidad.Controls.Add(cmbPartido);
+            tpgLocalidad.Controls.Add(cmbLocalidad);
+            tpgLocalidad.Controls.Add(label8);
+            tpgLocalidad.Controls.Add(label11);
+            tpgLocalidad.Controls.Add(txtPostal);
+            tpgLocalidad.Location = new Point(4, 24);
+            tpgLocalidad.Name = "tpgLocalidad";
+            tpgLocalidad.Padding = new Padding(3);
+            tpgLocalidad.Size = new Size(364, 289);
+            tpgLocalidad.TabIndex = 2;
+            tpgLocalidad.Text = "Localidad";
+            tpgLocalidad.UseVisualStyleBackColor = true;
+            // 
+            // tpgContacto
+            // 
+            tpgContacto.Controls.Add(txtTelefono);
+            tpgContacto.Controls.Add(label7);
+            tpgContacto.Controls.Add(label20);
+            tpgContacto.Controls.Add(txtCorreo);
+            tpgContacto.Controls.Add(label15);
+            tpgContacto.Controls.Add(cmbTipoTelefono);
+            tpgContacto.Location = new Point(4, 24);
+            tpgContacto.Name = "tpgContacto";
+            tpgContacto.Padding = new Padding(3);
+            tpgContacto.Size = new Size(364, 289);
+            tpgContacto.TabIndex = 3;
+            tpgContacto.Text = "Contacto";
+            tpgContacto.UseVisualStyleBackColor = true;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(405, 276);
+            label21.Name = "label21";
+            label21.Size = new Size(64, 15);
+            label21.TabIndex = 36;
+            label21.Text = "Rol Actual:";
+            // 
+            // txtRolActual
+            // 
+            txtRolActual.Location = new Point(405, 294);
+            txtRolActual.Name = "txtRolActual";
+            txtRolActual.ReadOnly = true;
+            txtRolActual.Size = new Size(100, 23);
+            txtRolActual.TabIndex = 37;
             // 
             // frmCargaEmpleados
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(753, 644);
+            ClientSize = new Size(536, 550);
+            Controls.Add(txtRolActual);
+            Controls.Add(label21);
+            Controls.Add(tpgDatosUsuario);
             Controls.Add(btneliminar);
             Controls.Add(btnActualizar);
             Controls.Add(btnModificar);
@@ -663,7 +635,6 @@
             Controls.Add(label19);
             Controls.Add(btnCrear);
             Controls.Add(btnVolver);
-            Controls.Add(groupBox1);
             Controls.Add(label16);
             Controls.Add(chkActivo);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -671,9 +642,15 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Carga de Empleados";
             Load += frmCargaEmpleados_Load;
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
-            gpbPermisos.ResumeLayout(false);
+            tpgDatosUsuario.ResumeLayout(false);
+            tpgDatosPersonales.ResumeLayout(false);
+            tpgDatosPersonales.PerformLayout();
+            tpgDireccion.ResumeLayout(false);
+            tpgDireccion.PerformLayout();
+            tpgLocalidad.ResumeLayout(false);
+            tpgLocalidad.PerformLayout();
+            tpgContacto.ResumeLayout(false);
+            tpgContacto.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -681,8 +658,6 @@
         #endregion
 
         private GroupBox groupBox1;
-        private Label label2;
-        private Label label1;
         private Label label7;
         private Label label6;
         private Label label5;
@@ -690,8 +665,6 @@
         private Label label3;
         private TextBox txtCorreo;
         private TextBox txtDNI;
-        private TextBox txtApellido;
-        private TextBox txtNombre;
         private Label label8;
         private TextBox txtTelefono;
         private TextBox txtCalle;
@@ -715,14 +688,10 @@
         private TextBox txtPostal;
         private Button btnCrear;
         private Label label17;
-        private Label Rol;
-        private ComboBox cmbRol;
         private Button btnVolver;
         private DateTimePicker dtpFechaNacimiento;
         private ComboBox cmbGenero;
         private Label label18;
-        private TreeView treeView1;
-        private GroupBox gpbPermisos;
         private Label label19;
         private ComboBox lstUsuarios;
         private Button btnNuevo;
@@ -732,5 +701,16 @@
         private Label label20;
         private ComboBox cmbTipoTelefono;
         private Button btneliminar;
+        private TabControl tpgDatosUsuario;
+        private TabPage tpgDatosPersonales;
+        private TextBox txtApellido;
+        private TextBox txtNombre;
+        private Label label2;
+        private Label label1;
+        private TabPage tpgDireccion;
+        private TabPage tpgLocalidad;
+        private TabPage tpgContacto;
+        private Label label21;
+        private TextBox txtRolActual;
     }
 }
