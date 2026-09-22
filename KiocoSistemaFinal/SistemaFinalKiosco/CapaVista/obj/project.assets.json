@@ -1,7 +1,7 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
-    "net8.0-windows7.0": {
+    "net8.0-windows": {
       "ClosedXML/0.105.1": {
         "type": "package",
         "dependencies": {
@@ -1534,25 +1534,30 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net8.0-windows7.0": [
+    "net8.0-windows": [
       "CapaLogica >= 1.0.0",
       "ClosedXML >= 0.105.1"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\janza\\.nuget\\packages\\": {}
+    "C:\\Users\\Easir\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
+      "projectUniqueName": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
       "projectName": "CapaVista",
-      "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
-      "packagesPath": "C:\\Users\\janza\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\obj\\",
+      "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
+      "packagesPath": "C:\\Users\\Easir\\.nuget\\packages\\",
+      "outputPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\janza\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Easir\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1563,11 +1568,12 @@
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net8.0-windows7.0": {
+        "net8.0-windows": {
+          "framework": "net8.0-windows7.0",
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj": {
-              "projectPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj"
+            "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj": {
+              "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj"
             }
           }
         }
@@ -1582,10 +1588,11 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.400"
     },
     "frameworks": {
-      "net8.0-windows7.0": {
+      "net8.0-windows": {
+        "framework": "net8.0-windows7.0",
         "targetAlias": "net8.0-windows",
         "dependencies": {
           "ClosedXML": {
@@ -1612,7 +1619,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
