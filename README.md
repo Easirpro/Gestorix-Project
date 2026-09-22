@@ -11,12 +11,12 @@ Practicas Profesionalizares
 
 0.0.0.5- 10/09 Mejoras en la Pantalla Principal (DataGridView) y TableLayoutPanel- Marce-
 
-0.0.0.6- 17-9 Se Mergeo GestorVentas a Main sin conflictos -Marce-
+0.0.0.6- 17/9 Se Mergeo GestorVentas a Main sin conflictos -Marce-
 
-0.0.0.7- 18-9 Finaliza registro de ventas con pagos, stock y movimientos -Tobias-
+0.0.0.7- 18/9 Finaliza registro de ventas con pagos, stock y movimientos -Tobias-
 
-0.0.0.8- 21-9 Se Agrego Permisos y roles en Empleados Administradores   -Cristian-
+0.0.0.8- 21/9 Se Agrego Permisos y roles en Empleados Administradores   -Cristian-
 
-0.0.0.9- 21-9 Se Elimino carpeta Temporales de Visual  .vs/ del Repositorio y se Actualizo el .gitignore para que no vuelvan a subirlo -Marce-
+0.0.0.9- 21/9 Se Elimino carpeta Temporales de Visual  .vs/ del Repositorio y se Actualizo el .gitignore para que no vuelvan a subirlo -Marce-
 
-0.0.0.10- 21-9 Se corrigio Conflictos en Merge Main-EmpleadosPermisos en ClsConexion - Marce-
+0.0.0.10- 21/9 Se corrigio Conflictos en Merge Main-EmpleadosPermisos en ClsConexion - Marce-
