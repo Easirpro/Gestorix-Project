@@ -8,19 +8,40 @@
     "net8.0": []
   },
   "packageFolders": {
+<<<<<<< HEAD
     "C:\\Users\\tobic\\.nuget\\packages\\": {}
+=======
+    "C:\\Users\\Easir\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+>>>>>>> EmpleadosPermisos
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj",
       "projectName": "CapaEntidades",
       "projectPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj",
       "packagesPath": "C:\\Users\\tobic\\.nuget\\packages\\",
       "outputPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\obj\\",
+=======
+      "projectUniqueName": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj",
+      "projectName": "CapaEntidades",
+      "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj",
+      "packagesPath": "C:\\Users\\Easir\\.nuget\\packages\\",
+      "outputPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\obj\\",
+>>>>>>> EmpleadosPermisos
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
+<<<<<<< HEAD
         "C:\\Users\\tobic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+        "C:\\Users\\Easir\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+>>>>>>> EmpleadosPermisos
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -47,7 +68,11 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
+<<<<<<< HEAD
       "SdkAnalysisLevel": "10.0.300"
+=======
+      "SdkAnalysisLevel": "10.0.400"
+>>>>>>> EmpleadosPermisos
     },
     "frameworks": {
       "net8.0": {
@@ -69,7 +94,11 @@
             "privateAssets": "all"
           }
         },
+<<<<<<< HEAD
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
+=======
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+>>>>>>> EmpleadosPermisos
       }
     }
   }
