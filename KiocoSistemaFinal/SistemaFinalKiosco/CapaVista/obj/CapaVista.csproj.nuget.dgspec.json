@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj": {}
   },
   "projects": {
@@ -12,9 +13,30 @@
         "projectPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj",
         "packagesPath": "C:\\Users\\tobic\\.nuget\\packages\\",
         "outputPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\obj\\",
+=======
+    "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj": {}
+  },
+  "projects": {
+    "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj",
+        "projectName": "CapaDatos",
+        "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj",
+        "packagesPath": "C:\\Users\\Easir\\.nuget\\packages\\",
+        "outputPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\obj\\",
+>>>>>>> EmpleadosPermisos
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
+<<<<<<< HEAD
           "C:\\Users\\tobic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+          "C:\\Users\\Easir\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+>>>>>>> EmpleadosPermisos
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -29,8 +51,13 @@
             "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
+<<<<<<< HEAD
               "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj": {
                 "projectPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj"
+=======
+              "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj": {
+                "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj"
+>>>>>>> EmpleadosPermisos
               }
             }
           }
@@ -45,7 +72,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
+<<<<<<< HEAD
         "SdkAnalysisLevel": "10.0.300"
+=======
+        "SdkAnalysisLevel": "10.0.400"
+>>>>>>> EmpleadosPermisos
       },
       "frameworks": {
         "net8.0": {
@@ -73,6 +104,7 @@
               "privateAssets": "all"
             }
           },
+<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
@@ -85,9 +117,31 @@
         "projectPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj",
         "packagesPath": "C:\\Users\\tobic\\.nuget\\packages\\",
         "outputPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\obj\\",
+=======
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj",
+        "projectName": "CapaEntidades",
+        "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj",
+        "packagesPath": "C:\\Users\\Easir\\.nuget\\packages\\",
+        "outputPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\obj\\",
+>>>>>>> EmpleadosPermisos
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
+<<<<<<< HEAD
           "C:\\Users\\tobic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+          "C:\\Users\\Easir\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+>>>>>>> EmpleadosPermisos
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -114,7 +168,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
+<<<<<<< HEAD
         "SdkAnalysisLevel": "10.0.300"
+=======
+        "SdkAnalysisLevel": "10.0.400"
+>>>>>>> EmpleadosPermisos
       },
       "frameworks": {
         "net8.0": {
@@ -136,6 +194,7 @@
               "privateAssets": "all"
             }
           },
+<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
@@ -148,9 +207,31 @@
         "projectPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj",
         "packagesPath": "C:\\Users\\tobic\\.nuget\\packages\\",
         "outputPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\obj\\",
+=======
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj",
+        "projectName": "CapaLogica",
+        "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj",
+        "packagesPath": "C:\\Users\\Easir\\.nuget\\packages\\",
+        "outputPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\obj\\",
+>>>>>>> EmpleadosPermisos
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
+<<<<<<< HEAD
           "C:\\Users\\tobic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+          "C:\\Users\\Easir\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+>>>>>>> EmpleadosPermisos
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -165,11 +246,19 @@
             "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
+<<<<<<< HEAD
               "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj": {
                 "projectPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj"
               },
               "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj": {
                 "projectPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj"
+=======
+              "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj": {
+                "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\CapaDatos.csproj"
+              },
+              "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj": {
+                "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaEntidades\\CapaEntidades.csproj"
+>>>>>>> EmpleadosPermisos
               }
             }
           }
@@ -184,7 +273,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
+<<<<<<< HEAD
         "SdkAnalysisLevel": "10.0.300"
+=======
+        "SdkAnalysisLevel": "10.0.400"
+>>>>>>> EmpleadosPermisos
       },
       "frameworks": {
         "net8.0": {
@@ -206,6 +299,7 @@
               "privateAssets": "all"
             }
           },
+<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
@@ -218,9 +312,31 @@
         "projectPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
         "packagesPath": "C:\\Users\\tobic\\.nuget\\packages\\",
         "outputPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\obj\\",
+=======
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
+        "projectName": "CapaVista",
+        "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\CapaVista.csproj",
+        "packagesPath": "C:\\Users\\Easir\\.nuget\\packages\\",
+        "outputPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\obj\\",
+>>>>>>> EmpleadosPermisos
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
+<<<<<<< HEAD
           "C:\\Users\\tobic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+          "C:\\Users\\Easir\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+>>>>>>> EmpleadosPermisos
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -235,8 +351,13 @@
             "framework": "net8.0-windows7.0",
             "targetAlias": "net8.0-windows",
             "projectReferences": {
+<<<<<<< HEAD
               "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj": {
                 "projectPath": "C:\\Proyecto\\Gestorix-Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj"
+=======
+              "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj": {
+                "projectPath": "E:\\Proyectos\\Gestorix Project\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\CapaLogica.csproj"
+>>>>>>> EmpleadosPermisos
               }
             }
           }
@@ -251,7 +372,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
+<<<<<<< HEAD
         "SdkAnalysisLevel": "10.0.300"
+=======
+        "SdkAnalysisLevel": "10.0.400"
+>>>>>>> EmpleadosPermisos
       },
       "frameworks": {
         "net8.0-windows": {
@@ -282,7 +407,11 @@
               "privateAssets": "none"
             }
           },
+<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
+=======
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+>>>>>>> EmpleadosPermisos
         }
       }
     }
