@@ -9,7 +9,6 @@ namespace SistemaKiosco
 {
     public class Conexion
     {
-<<<<<<< HEAD
         private string cadena =
             "Server=tcp:gestorix.database.windows.net,1433;" +
             "Initial Catalog=Gestorix;" +
@@ -18,11 +17,6 @@ namespace SistemaKiosco
             "Encrypt=True;" +
             "TrustServerCertificate=False;" +
             "Connection Timeout=30;";
-=======
->>>>>>> EmpleadosPermisos
-
-        //private string cadena = "Server=(localdb)\\MSSQLLocalDB;Database=Gestorix;Trusted_Connection=True;TrustServerCertificate=True;";
-        private string cadena = "Server=tcp:gestorix.database.windows.net,1433;Database=Gestorix;User ID=GestorAdmin;Password=Gestorix123;TrustServerCertificate=True;";
         public SqlConnection ObtenerConexion()
         {
             return new SqlConnection(cadena);
