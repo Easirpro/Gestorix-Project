@@ -704,7 +704,7 @@ namespace CapaVista
 
 
 
-<<<<<<< HEAD
+
         private void btnCambiarcantidad_Click(object sender, EventArgs e)
         {
             if (dtgPresentacion.CurrentRow == null ||
@@ -816,10 +816,7 @@ namespace CapaVista
 
             txtCodigoBarra.Focus();
         }
-=======
 
-
->>>>>>> EmpleadosPermisos
     }
 
 }
