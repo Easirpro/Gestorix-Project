@@ -528,7 +528,33 @@ namespace CapaDatos.NegocioDatos
                         FechaFabricacion = @FechaFabricacion,
                         FechaVencimiento = @FechaVencimiento,
                         IdSucursal = @IdSucursal
-                    WHERE IdProducto = @IdProducto;";
+                    WHERE IdProducto = @IdProducto;
+
+                    IF @@ROWCOUNT = 0
+                    BEGIN
+                        INSERT INTO Lote
+                        (
+                            IdProducto,
+                            CodigoLote,
+                            FechaFabricacion,
+                            FechaVencimiento,
+                            FechaIngreso,
+                            Stock,
+                            Activo,
+                            IdSucursal
+                        )
+                        VALUES
+                        (
+                            @IdProducto,
+                            @CodigoLote,
+                            @FechaFabricacion,
+                            @FechaVencimiento,
+                            @FechaIngreso,
+                            @Stock,
+                            @Activo,
+                            @IdSucursal
+                        );
+                    END";
 
                 using (SqlCommand cmd = new SqlCommand(consulta, conexion))
                 {
@@ -536,6 +562,9 @@ namespace CapaDatos.NegocioDatos
                     cmd.Parameters.AddWithValue("@CodigoLote", lote.CodigoLote);
                     cmd.Parameters.AddWithValue("@FechaFabricacion", lote.FechaFabricacion);
                     cmd.Parameters.AddWithValue("@FechaVencimiento", lote.FechaVencimiento);
+                    cmd.Parameters.AddWithValue("@FechaIngreso", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@Stock", lote.Stock);
+                    cmd.Parameters.AddWithValue("@Activo", lote.Activo);
                     cmd.Parameters.AddWithValue("@IdSucursal", lote.IdSucursal);
 
                     conexion.Open();
@@ -636,19 +665,25 @@ namespace CapaDatos.NegocioDatos
                         s.StockIdeal,
                         prov.Proveedor,
                         prov.Sucursal,
+                        prov.PrecioCosto,
                         lote.FechaVencimiento
                     FROM Producto p
+
                     INNER JOIN Categoria c
                         ON p.IdCategoria = c.IdCategoria
+
                     LEFT JOIN IVA iva
                         ON p.IdIVA = iva.IdIVA
+
                     LEFT JOIN Stock s
                         ON p.IdProducto = s.IdProducto
+
                     OUTER APPLY
                     (
                         SELECT TOP 1
                             pr.Nombre AS Proveedor,
-                            sp.Nombre AS Sucursal
+                            sp.Nombre AS Sucursal,
+                            psp.PrecioCompra AS PrecioCosto
                         FROM ProductoSucursalProveedor psp
                         INNER JOIN SucursalProveedor sp
                             ON psp.IdSucursal = sp.IdSucursal
@@ -661,7 +696,8 @@ namespace CapaDatos.NegocioDatos
                             pr.Nombre,
                             sp.Nombre
                     ) prov
-                        OUTER APPLY
+
+                    OUTER APPLY
                     (
                         SELECT TOP 1
                             l.FechaVencimiento
@@ -678,7 +714,9 @@ namespace CapaDatos.NegocioDatos
                     using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                     {
                         DataTable tabla = new DataTable();
+
                         adaptador.Fill(tabla);
+
                         return tabla;
                     }
                 }

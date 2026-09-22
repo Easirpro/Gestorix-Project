@@ -3,40 +3,60 @@
   "WorkspaceRootPath": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\conexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\conexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmpresentacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpresentacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmcargaarticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaarticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmpermisos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpermisos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmbuscararticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmbuscararticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmpresentacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmpresentacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpresentacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmbuscararticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmbuscararticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmcargaempleados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaempleados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\negociodatos\\clsgestorproducto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\negociodatos\\clsgestorproducto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmcargaempleados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaempleados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmpresentacion.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpresentacion.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capalogica\\clsrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320070D0-057C-4292-BC50-0317F043DFBC}|CapaLogica\\CapaLogica.csproj|solutionrelative:capalogica\\clsrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmcargaarticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaarticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmpermisos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpermisos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmcargaarticulo.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaarticulo.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmpermisos.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmpermisos.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmnuevorol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmnuevorol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capadatos\\clsroldatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE5741A9-2F88-48DB-85E8-BC10D0236600}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\clsroldatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\capavista\\frmnuevorol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmnuevorol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmnuevorol.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmnuevorol.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|c:\\users\\janza\\desktop\\proyecto 15-9\\gestorix 10-9 original\\kiocosistemafinal\\sistemafinalkiosco\\capavista\\frmcargaarticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E703560E-D2ED-4F58-8F5F-C9EB7F988CDA}|CapaVista\\CapaVista.csproj|solutionrelative:capavista\\frmcargaarticulo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -45,32 +65,34 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 352,
-          "SelectedChildIndex": 10,
+          "DockedWidth": 207,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "FrmPresentacion.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs",
-              "RelativeDocumentMoniker": "CapaVista\\FrmPresentacion.cs",
-              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs [Dise\u00F1o]",
-              "RelativeToolTip": "CapaVista\\FrmPresentacion.cs [Dise\u00F1o]",
+              "DocumentIndex": 2,
+              "Title": "frmPermisos.cs",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPermisos.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmPermisos.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPermisos.cs",
+              "RelativeToolTip": "CapaVista\\frmPermisos.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwEgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-16T21:50:49.868Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2026-09-19T23:12:35.61Z",
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "frmBuscarArticulo.cs",
-              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmBuscarArticulo.cs",
-              "RelativeDocumentMoniker": "CapaVista\\frmBuscarArticulo.cs",
-              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmBuscarArticulo.cs",
-              "RelativeToolTip": "CapaVista\\frmBuscarArticulo.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAcwBgAAAA0AAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "Conexion.cs",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\Conexion.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\Conexion.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\Conexion.cs*",
+              "RelativeToolTip": "CapaDatos\\Conexion.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAACoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-16T20:59:52.64Z",
+              "WhenOpened": "2026-09-21T21:43:01.497Z",
               "EditorCaption": ""
             },
             {
@@ -104,96 +126,149 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "frmCargaarticulo.cs",
-              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.cs",
-              "RelativeDocumentMoniker": "CapaVista\\frmCargaarticulo.cs",
-              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.cs",
-              "RelativeToolTip": "CapaVista\\frmCargaarticulo.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAewBEAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-15T20:08:08.145Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "FrmPresentacion.cs",
               "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs",
               "RelativeDocumentMoniker": "CapaVista\\FrmPresentacion.cs",
               "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs",
               "RelativeToolTip": "CapaVista\\FrmPresentacion.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAACUAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-16T20:55:28.911Z",
+              "WhenOpened": "2026-09-20T23:42:24.375Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FrmPresentacion.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs",
+              "RelativeDocumentMoniker": "CapaVista\\FrmPresentacion.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.cs [Dise\u00F1o]",
+              "RelativeToolTip": "CapaVista\\FrmPresentacion.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-20T23:41:40.517Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "frmBuscarArticulo.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmBuscarArticulo.cs",
-              "RelativeDocumentMoniker": "CapaVista\\frmBuscarArticulo.cs",
-              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmBuscarArticulo.cs [Dise\u00F1o]",
-              "RelativeToolTip": "CapaVista\\frmBuscarArticulo.cs [Dise\u00F1o]",
+              "Title": "frmCargaEmpleados.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCargaEmpleados.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.cs [Dise\u00F1o]",
+              "RelativeToolTip": "CapaVista\\frmCargaEmpleados.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-16T21:19:09.087Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2026-09-20T23:38:37.277Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "ClsGestorProducto.cs",
-              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\NegocioDatos\\ClsGestorProducto.cs",
-              "RelativeDocumentMoniker": "CapaDatos\\NegocioDatos\\ClsGestorProducto.cs",
-              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\NegocioDatos\\ClsGestorProducto.cs",
-              "RelativeToolTip": "CapaDatos\\NegocioDatos\\ClsGestorProducto.cs",
-              "ViewState": "AgIAALcBAAAAAAAAAAAmwBwDAABQAAAAAAAAAA==",
+              "Title": "frmCargaEmpleados.cs",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCargaEmpleados.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaEmpleados.cs",
+              "RelativeToolTip": "CapaVista\\frmCargaEmpleados.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAIwHUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-16T21:25:14.228Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "FrmPresentacion.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.Designer.cs",
-              "RelativeDocumentMoniker": "CapaVista\\FrmPresentacion.Designer.cs",
-              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\FrmPresentacion.Designer.cs",
-              "RelativeToolTip": "CapaVista\\FrmPresentacion.Designer.cs",
-              "ViewState": "AgIAAF4CAAAAAAAAAAAowHECAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-16T21:21:05.382Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T23:29:03.055Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "frmCargaarticulo.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.cs",
-              "RelativeDocumentMoniker": "CapaVista\\frmCargaarticulo.cs",
-              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.cs [Dise\u00F1o]",
-              "RelativeToolTip": "CapaVista\\frmCargaarticulo.cs [Dise\u00F1o]",
+              "Title": "frmPermisos.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPermisos.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmPermisos.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPermisos.cs [Dise\u00F1o]",
+              "RelativeToolTip": "CapaVista\\frmPermisos.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-15T19:56:47.055Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2026-09-19T00:55:33.546Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "frmCargaarticulo.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.Designer.cs",
-              "RelativeDocumentMoniker": "CapaVista\\frmCargaarticulo.Designer.cs",
-              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.Designer.cs",
-              "RelativeToolTip": "CapaVista\\frmCargaarticulo.Designer.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAQwBwAAAAAAAAAAAAAAA==",
+              "Title": "frmPermisos.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPermisos.Designer.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmPermisos.Designer.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmPermisos.Designer.cs",
+              "RelativeToolTip": "CapaVista\\frmPermisos.Designer.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwB4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-16T20:02:49.016Z",
+              "WhenOpened": "2026-09-20T16:21:21.372Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ClsRol.cs",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsRol.cs",
+              "RelativeDocumentMoniker": "CapaLogica\\ClsRol.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaLogica\\ClsRol.cs",
+              "RelativeToolTip": "CapaLogica\\ClsRol.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAowBMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-19T23:10:48.331Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ClsRolDatos.cs",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsRolDatos.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\ClsRolDatos.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaDatos\\ClsRolDatos.cs",
+              "RelativeToolTip": "CapaDatos\\ClsRolDatos.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAwwIMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-19T23:10:12.795Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "frmNuevoRol.cs",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmNuevoRol.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmNuevoRol.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmNuevoRol.cs",
+              "RelativeToolTip": "CapaVista\\frmNuevoRol.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAAwDcAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-20T15:38:17.636Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "frmNuevoRol.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmNuevoRol.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmNuevoRol.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmNuevoRol.cs [Dise\u00F1o]",
+              "RelativeToolTip": "CapaVista\\frmNuevoRol.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-20T15:35:01.343Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "frmNuevoRol.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmNuevoRol.Designer.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmNuevoRol.Designer.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmNuevoRol.Designer.cs",
+              "RelativeToolTip": "CapaVista\\frmNuevoRol.Designer.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwBUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-20T15:37:47.527Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "frmCargaarticulo.cs",
+              "DocumentMoniker": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.cs",
+              "RelativeDocumentMoniker": "CapaVista\\frmCargaarticulo.cs",
+              "ToolTip": "C:\\Users\\janza\\Desktop\\proyecto 15-9\\gestorix 10-9 original\\KiocoSistemaFinal\\SistemaFinalKiosco\\CapaVista\\frmCargaarticulo.cs",
+              "RelativeToolTip": "CapaVista\\frmCargaarticulo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFIAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-18T00:17:23.589Z"
             }
           ]
         },
         {
-          "DockedWidth": 48,
+          "DockedWidth": 41,
           "SelectedChildIndex": -1,
           "Children": [
             {

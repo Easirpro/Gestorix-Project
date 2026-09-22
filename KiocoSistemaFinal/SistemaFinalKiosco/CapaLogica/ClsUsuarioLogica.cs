@@ -22,35 +22,30 @@ namespace CapaLogica
 
             return datos.ObtenerUsuarios();
         }
-
         public ClsPersona ObtenerPersonaPorId(int idPersona)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
 
             return datos.ObtenerPersonaPorId(idPersona);
         }
-
         public int ObtenerIdUsuario(string username)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
 
             return datos.ObtenerIdUsuarioPorUsername(username);
         }
-
         public ClsPreguntaSeguridad ObtenerPregunta(int idUsuario)
         {
             ClsPreguntaSeguridaDatos datos = new ClsPreguntaSeguridaDatos();
 
             return datos.ObtenerPreguntaAleatoria(idUsuario);
         }
-
         public bool ValidarRespuesta(int idUsuario, string respuesta)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
 
             return datos.ValidarRespuestaSeguridad(idUsuario, respuesta);
         }
-
         public bool CambiarPasswordRecuperacion(int idUsuario, string nuevaPassword)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
@@ -60,21 +55,18 @@ namespace CapaLogica
                 nuevaPassword
             );
         }
-
         public string ObtenerUsername(int idUsuario)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
 
             return datos.ObtenerUsername(idUsuario);
         }
-
         public string ObtenerUltimaPasswordAntigua(int idUsuario)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
 
             return datos.ObtenerUltimaPasswordAntigua(idUsuario);
         }
-
         public bool PasswordUsadaUltimasTres(int idUsuario, string password)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
@@ -84,7 +76,6 @@ namespace CapaLogica
                 password
             );
         }
-
         public bool ExistePersonaDatos(string dni, string cuit, int idPersonaActual)
         { 
             using (SqlConnection con = conexion.ObtenerConexion())
@@ -109,12 +100,17 @@ namespace CapaLogica
                 return cantidad > 0;
             }
         }
-
         public bool ExisteUsuarioPorIdPersona(int idPersona)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
 
             return datos.ExisteUsuarioPorIdPersona(idPersona);
+        }
+        public int ObtenerIdRolPorPersona(int idPersona)
+        {
+            ClsUsuarioDatos datos = new ClsUsuarioDatos();
+
+            return datos.ObtenerIdRolPorPersona(idPersona);
         }
     }
 }

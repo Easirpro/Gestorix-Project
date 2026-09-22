@@ -36,27 +36,28 @@ namespace CapaDatos
                             CUIT = @CUIT
                         WHERE IdPersona = @IdPersona";
 
-                    SqlCommand cmdPersona =new SqlCommand(queryPersona,con,trans);
+                    SqlCommand cmdPersona = new SqlCommand(queryPersona,con,trans);
 
-                    cmdPersona.Parameters.AddWithValue( "@IdPersona", persona.IdPersona);
-                    cmdPersona.Parameters.AddWithValue("@Activo", persona.Activo);
-                    cmdPersona.Parameters.AddWithValue( "@Nombre",persona.Nombre);
-                    cmdPersona.Parameters.AddWithValue( "@Apellido",persona.Apellido);
-                    cmdPersona.Parameters.AddWithValue( "@Sexo",persona.Sexo);
-                    cmdPersona.Parameters.AddWithValue("@IdGenero", persona.IdGenero);
+                    cmdPersona.Parameters.AddWithValue("@IdPersona",persona.IdPersona);
+                    cmdPersona.Parameters.AddWithValue("@Activo",persona.Activo);
+                    cmdPersona.Parameters.AddWithValue("@Nombre",persona.Nombre);
+                    cmdPersona.Parameters.AddWithValue("@Apellido",persona.Apellido);
+                    cmdPersona.Parameters.AddWithValue("@Sexo",persona.Sexo);
+                    cmdPersona.Parameters.AddWithValue("@IdGenero",persona.IdGenero);
                     cmdPersona.Parameters.AddWithValue("@FechaNacimiento",persona.FeNac);
                     cmdPersona.Parameters.AddWithValue("@DNI",persona.DNI);
                     cmdPersona.Parameters.AddWithValue("@CUIT",persona.CUIT);
-                    int filasPersona =cmdPersona.ExecuteNonQuery();
+
+                    int filasPersona = cmdPersona.ExecuteNonQuery();
 
                     string queryUsuario = @"
                         UPDATE Usuario
                         SET IdRol = @IdRol
                         WHERE IdPersona = @IdPersona";
 
-                    SqlCommand cmdUsuario = new SqlCommand( queryUsuario,con,trans);
+                    SqlCommand cmdUsuario = new SqlCommand(queryUsuario,con,trans);
 
-                    cmdUsuario.Parameters.AddWithValue("@IdRol", idRol);
+                    cmdUsuario.Parameters.AddWithValue("@IdRol",idRol);
                     cmdUsuario.Parameters.AddWithValue("@IdPersona",persona.IdPersona);
                     cmdUsuario.ExecuteNonQuery();
 

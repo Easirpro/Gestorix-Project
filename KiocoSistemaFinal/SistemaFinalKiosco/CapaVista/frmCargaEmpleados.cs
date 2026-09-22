@@ -18,7 +18,9 @@ namespace CapaVista
         private ClsDomicilio domicilioOriginal;
         private ClsCorreo correoOriginal;
         private ClsTelefono telefonoOriginal;
+        private int idRolSeleccionado;
         private bool cargandoDatosUsuario = false;
+        private bool permisosModificados = false;
 
         public frmCargaEmpleados()
         {
@@ -72,24 +74,6 @@ namespace CapaVista
             return true;
 
         }
-        private void CargarRoles()
-        {
-            CapaLogica.ClsRol rol = new CapaLogica.ClsRol();
-
-            DataTable dt = rol.ObtenerRoles();
-
-            DataRow fila = dt.NewRow();
-            fila["IdRol"] = 0;
-            fila["Nombre"] = "Seleccione un Rol";
-
-            dt.Rows.InsertAt(fila, 0);
-
-            cmbRol.DataSource = dt;
-            cmbRol.DisplayMember = "Nombre";
-            cmbRol.ValueMember = "IdRol";
-
-            cmbRol.SelectedIndex = 0;
-        }
         private void CargarGeneros()
         {
             ClsGenero genero = new ClsGenero();
@@ -131,33 +115,23 @@ namespace CapaVista
 
             cmbProvincia.SelectedIndex = 0;
         }
-        private void cmbLocalidad_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cargandoDatosUsuario)
-            {
-                return;
-            }
-
-
-            if (cmbLocalidad.SelectedIndex == -1)
-            {
-                return;
-            }
-
-
-            if (cmbLocalidad.SelectedItem is DataRowView fila)
-            {
-                txtPostal.Text = fila["CodigoPostal"].ToString();
-            }
-        }//Revisar quedo con la db anterior
         private void CargarUsuarios()
         {
             ClsUsuarioLogica usuario = new ClsUsuarioLogica();
 
-            lstUsuarios.DataSource = usuario.ObtenerUsuarios();
+            DataTable dt = usuario.ObtenerUsuarios();
 
+            DataRow fila = dt.NewRow();
+            fila["IdPersona"] = 0;
+            fila["Username"] = "-Seleccione un Usuario-";
+
+            dt.Rows.InsertAt(fila, 0);
+
+            lstUsuarios.DataSource = dt;
             lstUsuarios.DisplayMember = "Username";
             lstUsuarios.ValueMember = "IdPersona";
+
+            lstUsuarios.SelectedIndex = 0;
         }
         private void txt_KeyPress(object? sender, KeyPressEventArgs e)
         {
@@ -203,13 +177,22 @@ namespace CapaVista
                 ClsObtenerProvinciaPer traerProvincia = new ClsObtenerProvinciaPer();
                 ClsPersona persona = logica.ObtenerPersonaPorId(idPersona);
 
+                int idRol = logica.ObtenerIdRolPorPersona(idPersona);
+
+                if (idRol > 0)
+                {
+                    CapaLogica.ClsRol rol = new CapaLogica.ClsRol();
+                    txtRolActual.Text = rol.ObtenerNombreRol(idRol);
+                }
+                else
+                {
+                    txtRolActual.Clear();
+                }
+
                 if (persona == null)
                 {
-                    MessageBox.Show(
-                        "No se encontraron los datos de la persona.",
-                        "Aviso",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("No se encontraron los datos de la persona.","Aviso",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
                 }
@@ -264,15 +247,6 @@ namespace CapaVista
 
                     rdbMasculino.Checked = persona.Sexo;
                     rdbFemenino.Checked = !persona.Sexo;
-
-                    if (persona.IdRol > 0)
-                    {
-                        cmbRol.SelectedValue = persona.IdRol;
-                    }
-                    else
-                    {
-                        cmbRol.SelectedIndex = 0;
-                    }
 
                     if (persona.FeNac != DateTime.MinValue &&
                         persona.FeNac >= dtpFechaNacimiento.MinDate &&
@@ -350,11 +324,8 @@ namespace CapaVista
 
                             if (localidad != null)
                             {
-                                cmbLocalidad.SelectedValue =
-                                    localidad.IdLocalidad;
-
-                                txtPostal.Text =
-                                    localidad.CodigoPostal ?? "";
+                                cmbLocalidad.SelectedValue = localidad.IdLocalidad;
+                                txtPostal.Text = localidad.CodigoPostal ?? "";
                             }
                             else
                             {
@@ -432,23 +403,17 @@ namespace CapaVista
             {
                 cargandoDatosUsuario = false;
 
-                MessageBox.Show(
-                    "ERROR COMPLETO:\n\n" +
-                    ex.ToString(),
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show("ERROR COMPLETO:\n\n" + ex.ToString(), "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
-
-        private bool ModificarDatosUsuario(int idPersona)
+        private bool ModificarDatosUsuario(int idPersona, int idRol)
         {
 
             ClsPersona persona = new ClsPersona();
 
             persona.IdPersona = idPersona;
-            persona.IdRol = Convert.ToInt32(cmbRol.SelectedValue);
             persona.Activo = chkActivo.Checked;
             persona.Nombre = txtNombre.Text.Trim();
             persona.Apellido = txtApellido.Text.Trim();
@@ -458,17 +423,12 @@ namespace CapaVista
             persona.Sexo = rdbMasculino.Checked;
             persona.FeNac = dtpFechaNacimiento.Value;
 
-            int idRol = persona.IdRol;
-
             ClsModificarPersona modificarPersona = new ClsModificarPersona();
 
             if (!modificarPersona.ModificarPersona(persona, idRol))
             {
-                MessageBox.Show(
-                    "No se pudo modificar la información de la persona.",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show("No se pudo modificar la información de la persona.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return false;
             }
@@ -478,11 +438,8 @@ namespace CapaVista
 
             if (domicilio == null)
             {
-                MessageBox.Show(
-                    "La persona no tiene un domicilio asociado.",
-                    "Aviso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("La persona no tiene un domicilio asociado.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
             }
@@ -497,11 +454,8 @@ namespace CapaVista
 
             if (!modificarDomicilio.ModificarDomicilio(domicilio))
             {
-                MessageBox.Show(
-                    "La persona se modificó, pero no el domicilio.",
-                    "Aviso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("La persona se modificó, pero no el domicilio.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
             }
@@ -512,11 +466,8 @@ namespace CapaVista
 
             if (idTelefono <= 0)
             {
-                MessageBox.Show(
-                    "La persona no tiene un teléfono asociado.",
-                    "Aviso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("La persona no tiene un teléfono asociado.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
             }
@@ -531,11 +482,8 @@ namespace CapaVista
 
             if (!modificarTelefono.ModificarTelefono(telefono))
             {
-                MessageBox.Show(
-                    "No se pudo modificar el teléfono.",
-                    "Aviso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("No se pudo modificar el teléfono.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
             }
@@ -543,7 +491,7 @@ namespace CapaVista
             return true;
 
         }
-        private bool CambiarCorreoUsuario(int idPersona)
+        private bool CambiarCorreoUsuario(int idPersona, int idRol)
         {
             string correoNuevo = txtCorreo.Text.Trim();
 
@@ -672,13 +620,11 @@ namespace CapaVista
         //Evento Formulario
         private void frmCargaEmpleados_Load(object sender, EventArgs e)
         {
-            CargarRoles();
             CargarGeneros();
             CargarProvincias();
             CargarTiposTelefono();
 
             cmbGenero.SelectedIndex = 0;
-            cmbRol.SelectedIndex = 0;
 
             chkActivo.Checked = true;
 
@@ -717,10 +663,8 @@ namespace CapaVista
 
             if (!validarCUIL.CuilValido(mkdCuil.Text))
             {
-                MessageBox.Show("El CUIL ingresado no es válido.",
-                                "Validación",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
+                MessageBox.Show("El CUIL ingresado no es válido.", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 mkdCuil.Focus();
                 return;
@@ -730,11 +674,8 @@ namespace CapaVista
 
             if (dniDelCUIL != txtDNI.Text.Trim())
             {
-                MessageBox.Show(
-                    "El DNI no corresponde al CUIL ingresado.",
-                    "Validación",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("El DNI no corresponde al CUIL ingresado.", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
@@ -746,44 +687,63 @@ namespace CapaVista
 
             if (cmbTipoTelefono.SelectedValue == null || cmbTipoTelefono.SelectedIndex == -1)
             {
-                MessageBox.Show(
-                    "Seleccione un tipo de teléfono.",
-                    "Validación",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("Seleccione un tipo de teléfono.", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 cmbTipoTelefono.Focus();
                 return;
             }
+
             try
             {
+                frmPermisos permisos = new frmPermisos(true);
+                permisos.ShowDialog();
+
+                int idRol = permisos.IdRolSeleccionado;
+
+                if (idRol <= 0)
+                {
+                    MessageBox.Show("Debe seleccionar un rol para el empleado.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    return;
+                }
+
+                if (!permisos.TienePermisosSeleccionados)
+                {
+                    MessageBox.Show("Debe seleccionar al menos un permiso para el empleado.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    return;
+                }
+
                 ClsAltaEmpleado emp = new ClsAltaEmpleado();
 
                 bool ok = emp.CrearEmpleado(
-                txtNombre.Text,
-                txtApellido.Text,
-                dtpFechaNacimiento.Value,
-                txtDNI.Text,
-                mkdCuil.Text,
-                rdbMasculino.Checked,
-                Convert.ToInt32(cmbGenero.SelectedValue),
-                Convert.ToInt32(cmbRol.SelectedValue),
-                txtCorreo.Text,
-                txtTelefono.Text,
-                Convert.ToInt32(cmbTipoTelefono.SelectedValue),
-                txtCalle.Text,
-                int.Parse(txtAltura.Text),
-                txtPiso.Text,
-                txtDepartamento.Text,
-                Convert.ToInt32(cmbLocalidad.SelectedValue),
-                chkActivo.Checked
+                    txtNombre.Text,
+                    txtApellido.Text,
+                    dtpFechaNacimiento.Value,
+                    txtDNI.Text,
+                    mkdCuil.Text,
+                    rdbMasculino.Checked,
+                    Convert.ToInt32(cmbGenero.SelectedValue),
+                    idRol,
+                    txtCorreo.Text,
+                    txtTelefono.Text,
+                    Convert.ToInt32(cmbTipoTelefono.SelectedValue),
+                    txtCalle.Text,
+                    int.Parse(txtAltura.Text),
+                    txtPiso.Text,
+                    txtDepartamento.Text,
+                    Convert.ToInt32(cmbLocalidad.SelectedValue),
+                    chkActivo.Checked
                 );
 
                 if (ok)
                 {
-                    MessageBox.Show("Empleado creado correctamente.", "Éxito",MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Empleado creado correctamente.", "Éxito",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
             }
             catch (Exception ex)
             {
@@ -791,32 +751,14 @@ namespace CapaVista
 
                 if (ex.InnerException != null)
                 {
-                    detalle += "\n\nERROR INTERNO:\n" +
-                               ex.InnerException.Message;
+                    detalle += "\n\nERROR INTERNO:\n" + ex.InnerException.Message;
                 }
 
-                MessageBox.Show(
-                    "NO SE PUDO CREAR EL EMPLEADO\n\n" +
-                    "ERROR:\n" +
-                    detalle +
-                    "\n\nTIPO:\n" +
-                    ex.GetType().FullName +
-                    "\n\nSTACK TRACE:\n" +
-                    ex.StackTrace,
-                    "Error al crear empleado",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show("NO SE PUDO CREAR EL EMPLEADO\n\n" + "ERROR:\n" + detalle + "\n\nTIPO:\n" + ex.GetType().FullName +
+                    "\n\nSTACK TRACE:\n" + ex.StackTrace, "Error al crear empleado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        //ComboBoxRol
-        private void cmbRol_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
-
-
-        }
-        //ComboBox Genero
         private void cmbGenero_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -1009,54 +951,27 @@ namespace CapaVista
         private void btnNuevo_Click(object sender, EventArgs e)
         {
             VaciarFormularios.LimpiarControles(this);
-
+            txtRolActual.Clear();
             txtDNI.ReadOnly = false;
         }
         private void btnModificar_Click(object sender, EventArgs e)
         {
             try
             {
-
                 if (lstUsuarios.SelectedValue == null || lstUsuarios.SelectedValue is DataRowView)
                 {
-                    MessageBox.Show(
-                        "Seleccione un usuario para modificar.",
-                        "Aviso",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("Seleccione un usuario para modificar.", "Aviso",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
                 }
 
                 int idPersona = Convert.ToInt32(lstUsuarios.SelectedValue);
 
-                if (cmbRol.SelectedValue == null ||
-                    !int.TryParse(
-                        cmbRol.SelectedValue.ToString(),
-                        out int idRol) ||
-                    idRol <= 0)
+                if (cmbGenero.SelectedValue == null || !int.TryParse(cmbGenero.SelectedValue.ToString(), out int idGenero) || idGenero <= 0)
                 {
-                    MessageBox.Show(
-                        "Seleccione un rol.",
-                        "Validación",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
-                    cmbRol.Focus();
-                    return;
-                }
-
-                if (cmbGenero.SelectedValue == null ||
-                    !int.TryParse(
-                        cmbGenero.SelectedValue.ToString(),
-                        out int idGenero) ||
-                    idGenero <= 0)
-                {
-                    MessageBox.Show(
-                        "Seleccione un género.",
-                        "Validación",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("Seleccione un género.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     cmbGenero.Focus();
                     return;
@@ -1064,11 +979,8 @@ namespace CapaVista
 
                 if (cmbLocalidad.SelectedValue == null || !int.TryParse(cmbLocalidad.SelectedValue.ToString(), out int idLocalidad) || idLocalidad <= 0)
                 {
-                    MessageBox.Show(
-                        "Seleccione una localidad.",
-                        "Validación",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("Seleccione una localidad.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     cmbLocalidad.Focus();
                     return;
@@ -1076,11 +988,8 @@ namespace CapaVista
 
                 if (cmbTipoTelefono.SelectedValue == null || !int.TryParse(cmbTipoTelefono.SelectedValue.ToString(), out int idTipoTelefono) || idTipoTelefono <= 0)
                 {
-                    MessageBox.Show(
-                        "Seleccione un tipo de teléfono.",
-                        "Validación",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("Seleccione un tipo de teléfono.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     cmbTipoTelefono.Focus();
                     return;
@@ -1088,11 +997,8 @@ namespace CapaVista
 
                 if (personaOriginal == null || domicilioOriginal == null || correoOriginal == null)
                 {
-                    MessageBox.Show(
-                        "No se pudieron cargar correctamente los datos originales del usuario.",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    MessageBox.Show("No se pudieron cargar correctamente los datos originales del usuario.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     return;
                 }
@@ -1103,11 +1009,8 @@ namespace CapaVista
 
                 if (!validarCUIL.CuilValido(cuil))
                 {
-                    MessageBox.Show(
-                        "El CUIL ingresado no es válido.",
-                        "Validación",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("El CUIL ingresado no es válido.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     mkdCuil.Focus();
                     return;
@@ -1117,11 +1020,8 @@ namespace CapaVista
 
                 if (dniDelCUIL != txtDNI.Text.Trim())
                 {
-                    MessageBox.Show(
-                        "El DNI no corresponde al CUIL ingresado.",
-                        "Validación",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("El DNI no corresponde al CUIL ingresado.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     mkdCuil.Focus();
                     return;
@@ -1133,11 +1033,8 @@ namespace CapaVista
 
                 if (existe)
                 {
-                    MessageBox.Show(
-                        "Ya existe otra persona registrada con ese DNI o CUIL.",
-                        "Datos duplicados",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("Ya existe otra persona registrada con ese DNI o CUIL.", "Datos duplicados",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
                 }
@@ -1147,43 +1044,58 @@ namespace CapaVista
                     personaOriginal.Apellido != txtApellido.Text.Trim() ||
                     personaOriginal.DNI != txtDNI.Text.Trim() ||
                     personaOriginal.CUIT != cuil ||
-                    personaOriginal.IdRol != idRol ||
                     personaOriginal.Activo != chkActivo.Checked ||
                     personaOriginal.IdGenero != idGenero ||
                     personaOriginal.Sexo != rdbMasculino.Checked ||
                     personaOriginal.FeNac.Date != dtpFechaNacimiento.Value.Date ||
-
                     domicilioOriginal.Calle != txtCalle.Text.Trim() ||
                     domicilioOriginal.Altura != Convert.ToInt32(txtAltura.Text) ||
                     domicilioOriginal.Piso != txtPiso.Text.Trim() ||
                     domicilioOriginal.Departamento != txtDepartamento.Text.Trim() ||
                     domicilioOriginal.IdLocalidad != idLocalidad ||
-
-                    !correoOriginal.DireccionCorreo.Trim().Equals(txtCorreo.Text.Trim(), StringComparison.OrdinalIgnoreCase);
+                    !correoOriginal.DireccionCorreo.Trim().Equals(txtCorreo.Text.Trim(),
+                    StringComparison.OrdinalIgnoreCase);
 
                 if (telefonoOriginal != null)
                 {
                     huboCambios = huboCambios || telefonoOriginal.NumTelefono != txtTelefono.Text.Trim() || telefonoOriginal.IdTipo != idTipoTelefono;
                 }
 
+                huboCambios = huboCambios || permisosModificados;
 
                 if (!huboCambios)
                 {
-                    MessageBox.Show(
-                        "No realizó ningún cambio. Modifique algún dato antes de guardar.",
-                        "Aviso",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("No realizó ningún cambio. Modifique algún dato antes de guardar.",
+                        "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
                 }
 
-                if (!CambiarCorreoUsuario(idPersona))
+                int idRol;
+
+                if (permisosModificados)
+                {
+                    idRol = idRolSeleccionado;
+                }
+                else
+                {
+                    idRol = logica.ObtenerIdRolPorPersona(idPersona);
+                }
+
+                if (idRol <= 0)
+                {
+                    MessageBox.Show("No se pudo determinar el rol del empleado.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
+                }
+
+                if (!CambiarCorreoUsuario(idPersona, idRol))
                 {
                     return;
                 }
 
-                bool resultado = ModificarDatosUsuario(idPersona);
+                bool resultado = ModificarDatosUsuario(idPersona, idRol);
 
                 if (!resultado)
                 {
@@ -1191,16 +1103,16 @@ namespace CapaVista
                 }
 
                 MessageBox.Show(
-                    "Los datos se modificaron correctamente.",
-                    "Éxito",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    permisosModificados ? "Los cambios se guardaron correctamente." : "Los datos se modificaron correctamente.",
+                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                permisosModificados = false;
+                idRolSeleccionado = 0;
 
                 CargarUsuarios();
 
                 CargarDatosUsuario(idPersona);
             }
-
             catch (FormatException)
             {
                 MessageBox.Show(
@@ -1209,7 +1121,6 @@ namespace CapaVista
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
             }
-
             catch (Exception ex)
             {
                 MessageBox.Show(
@@ -1223,7 +1134,38 @@ namespace CapaVista
         {
             CargarUsuarios();
         }
+        private void btneliminar_Click(object sender, EventArgs e)
+        {
+            if (lstUsuarios.SelectedValue == null || lstUsuarios.SelectedValue is DataRowView)
+            {
+                MessageBox.Show("Seleccione un empleado.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
+                return;
+            }
+
+            int idPersona = Convert.ToInt32(lstUsuarios.SelectedValue);
+
+            ClsUsuarioLogica usuario = new ClsUsuarioLogica();
+
+            int idRol = usuario.ObtenerIdRolPorPersona(idPersona);
+
+            if (idRol <= 0)
+            {
+                MessageBox.Show("El empleado no tiene un rol asignado.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            frmPermisos permiso = new frmPermisos(idRol);
+            permiso.ShowDialog();
+
+            permisosModificados = permiso.PermisosModificados;
+            idRolSeleccionado = permiso.IdRolSeleccionado;
+        }
+       
+    
         #endregion
 
 
@@ -1232,6 +1174,10 @@ namespace CapaVista
 
 
 
-    
+
+
+
+
+
     }
 }

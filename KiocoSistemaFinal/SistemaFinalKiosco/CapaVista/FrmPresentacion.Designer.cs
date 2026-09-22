@@ -51,7 +51,7 @@
             ventaPorRubroToolStripMenuItem = new ToolStripMenuItem();
             ventaPorArticulosToolStripMenuItem = new ToolStripMenuItem();
             ventaPorMedioDePagoToolStripMenuItem = new ToolStripMenuItem();
-            btnHerra = new ToolStripMenuItem();
+            btnAjuste = new ToolStripMenuItem();
             idiomaToolStripMenuItem = new ToolStripMenuItem();
             inglesToolStripMenuItem = new ToolStripMenuItem();
             btnCaja = new ToolStripMenuItem();
@@ -60,7 +60,7 @@
             cerrarSeToolStripMenuItem = new ToolStripMenuItem();
             abrirCajaToolStripMenuItem = new ToolStripMenuItem();
             btnAyuda = new ToolStripMenuItem();
-            btnAjustes = new ToolStripMenuItem();
+            btnEmpleado = new ToolStripMenuItem();
             permisosToolStripMenuItem = new ToolStripMenuItem();
             btnConfig = new MenuStrip();
             toolStripMenuItem1 = new ToolStripMenuItem();
@@ -104,6 +104,9 @@
             btnPromocion = new Button();
             toolTip1 = new ToolTip(components);
             tableLayoutPanel1 = new TableLayoutPanel();
+            lblFecha = new Label();
+            lblHora = new Label();
+            tmrFechaHora = new System.Windows.Forms.Timer(components);
             btnConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgPresentacion).BeginInit();
@@ -262,13 +265,13 @@
             ventaPorMedioDePagoToolStripMenuItem.Text = "Venta por medio de pago";
             ventaPorMedioDePagoToolStripMenuItem.Click += ventaPorMedioDePagoToolStripMenuItem_Click;
             // 
-            // btnHerra
+            // btnAjuste
             // 
-            btnHerra.DropDownItems.AddRange(new ToolStripItem[] { idiomaToolStripMenuItem });
-            btnHerra.Enabled = false;
-            btnHerra.Name = "btnHerra";
-            btnHerra.Size = new Size(57, 20);
-            btnHerra.Text = "Ajustes";
+            btnAjuste.DropDownItems.AddRange(new ToolStripItem[] { idiomaToolStripMenuItem });
+            btnAjuste.Enabled = false;
+            btnAjuste.Name = "btnAjuste";
+            btnAjuste.Size = new Size(57, 20);
+            btnAjuste.Text = "Ajustes";
             // 
             // idiomaToolStripMenuItem
             // 
@@ -326,13 +329,13 @@
             btnAyuda.Size = new Size(53, 20);
             btnAyuda.Text = "Ayuda";
             // 
-            // btnAjustes
+            // btnEmpleado
             // 
-            btnAjustes.DropDownItems.AddRange(new ToolStripItem[] { permisosToolStripMenuItem });
-            btnAjustes.Enabled = false;
-            btnAjustes.Name = "btnAjustes";
-            btnAjustes.Size = new Size(72, 20);
-            btnAjustes.Text = "Empleado";
+            btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { permisosToolStripMenuItem });
+            btnEmpleado.Enabled = false;
+            btnEmpleado.Name = "btnEmpleado";
+            btnEmpleado.Size = new Size(72, 20);
+            btnEmpleado.Text = "Empleado";
             // 
             // permisosToolStripMenuItem
             // 
@@ -343,7 +346,7 @@
             // 
             // btnConfig
             // 
-            btnConfig.Items.AddRange(new ToolStripItem[] { btnArt, btnVentas, btnCompras, btnProve, toolStripMenuItem1, btnInformes, btnCaja, btnHerra, btnAyuda, btnAjustes, tollClosed, toolStripMenuItem2 });
+            btnConfig.Items.AddRange(new ToolStripItem[] { btnArt, btnVentas, btnCompras, btnProve, toolStripMenuItem1, btnInformes, btnCaja, btnAjuste, btnAyuda, btnEmpleado, tollClosed, toolStripMenuItem2 });
             btnConfig.Location = new Point(0, 0);
             btnConfig.Name = "btnConfig";
             btnConfig.Size = new Size(877, 24);
@@ -682,6 +685,8 @@
             pnlUsuario.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnlUsuario.BackColor = Color.Navy;
             pnlUsuario.BorderStyle = BorderStyle.Fixed3D;
+            pnlUsuario.Controls.Add(lblHora);
+            pnlUsuario.Controls.Add(lblFecha);
             pnlUsuario.Controls.Add(label7);
             pnlUsuario.Controls.Add(txtRol);
             pnlUsuario.Controls.Add(txtUsuario);
@@ -766,6 +771,31 @@
             tableLayoutPanel1.Size = new Size(273, 145);
             tableLayoutPanel1.TabIndex = 19;
             // 
+            // lblFecha
+            // 
+            lblFecha.AutoSize = true;
+            lblFecha.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFecha.Location = new Point(549, 8);
+            lblFecha.Name = "lblFecha";
+            lblFecha.Size = new Size(45, 15);
+            lblFecha.TabIndex = 4;
+            lblFecha.Text = "Fecha: ";
+            // 
+            // lblHora
+            // 
+            lblHora.AutoSize = true;
+            lblHora.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblHora.Location = new Point(703, 7);
+            lblHora.Name = "lblHora";
+            lblHora.Size = new Size(40, 15);
+            lblHora.TabIndex = 5;
+            lblHora.Text = "Hora: ";
+            // 
+            // tmrFechaHora
+            // 
+            tmrFechaHora.Interval = 1000;
+            tmrFechaHora.Tick += tmrFechaHora_Tick;
+            // 
             // frmmenuPres
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -814,11 +844,11 @@
         private ToolStripMenuItem btnCompras;
         private ToolStripMenuItem btnProve;
         private ToolStripMenuItem btnInformes;
-        private ToolStripMenuItem btnHerra;
+        private ToolStripMenuItem btnAjuste;
         private ToolStripMenuItem btnCaja;
         private ToolStripMenuItem cerrarSeToolStripMenuItem;
         private ToolStripMenuItem btnAyuda;
-        private ToolStripMenuItem btnAjustes;
+        private ToolStripMenuItem btnEmpleado;
         private ToolStripMenuItem permisosToolStripMenuItem;
         private MenuStrip btnConfig;
         private ToolStripMenuItem menuitemAdministradorventas;
@@ -883,5 +913,8 @@
         private DataGridViewTextBoxColumn ClnCantidad;
         private DataGridViewTextBoxColumn ClnPrecioUnitario;
         private DataGridViewTextBoxColumn ClnImporte;
+        private Label lblHora;
+        private Label lblFecha;
+        private System.Windows.Forms.Timer tmrFechaHora;
     }
 }
