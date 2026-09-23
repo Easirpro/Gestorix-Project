@@ -40,12 +40,7 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-
-        public int RegistrarVenta(
-    decimal total,
-    int idUsuario,
-    List<DetalleVentaEntidad> detalles,
-    List<PagoVentaEntidad> pagos)
+        public int RegistrarVenta(decimal total, int idUsuario, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
             {
@@ -55,240 +50,132 @@ namespace CapaDatos.NegocioDatos
 
                 try
                 {
-                    // ==========================
-                    // 1. REGISTRAR VENTA
-                    // ==========================
 
                     string sqlVenta = @"
-                INSERT INTO Venta
-                    (FechaHora, Total, IdUsuario)
-                VALUES
-                    (@FechaHora, @Total, @IdUsuario);
+                        INSERT INTO Venta
+                            (FechaHora, Total, IdUsuario)
+                        VALUES
+                            (@FechaHora, @Total, @IdUsuario);
 
-                SELECT CAST(SCOPE_IDENTITY() AS INT);";
+                        SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
                     int idVenta;
 
-                    using (SqlCommand cmdVenta =
-                        new SqlCommand(sqlVenta, conexion, transaccion))
+                    using (SqlCommand cmdVenta = new SqlCommand(sqlVenta, conexion, transaccion))
                     {
-                        cmdVenta.Parameters.AddWithValue(
-                            "@FechaHora",
-                            DateTime.Now);
-
-                        cmdVenta.Parameters.AddWithValue(
-                            "@Total",
-                            total);
-
-                        cmdVenta.Parameters.AddWithValue(
-                            "@IdUsuario",
-                            idUsuario);
-
-                        idVenta = Convert.ToInt32(
-                            cmdVenta.ExecuteScalar());
+                        cmdVenta.Parameters.AddWithValue("@FechaHora", DateTime.Now);
+                        cmdVenta.Parameters.AddWithValue("@Total", total);
+                        cmdVenta.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                        idVenta = Convert.ToInt32(cmdVenta.ExecuteScalar());
                     }
-
-
-                    // ==========================
-                    // 2. REGISTRAR DETALLES
-                    // ==========================
 
                     foreach (DetalleVentaEntidad detalle in detalles)
                     {
                         string sqlDetalle = @"
-                    INSERT INTO DetalleVenta
-                        (
-                            IdVenta,
-                            IdProducto,
-                            Cantidad,
-                            PrecioUnitario,
-                            Subtotal
-                        )
-                    VALUES
-                        (
-                            @IdVenta,
-                            @IdProducto,
-                            @Cantidad,
-                            @PrecioUnitario,
-                            @Subtotal
-                        );";
+                            INSERT INTO DetalleVenta
+                                (
+                                    IdVenta,
+                                    IdProducto,
+                                    Cantidad,
+                                    PrecioUnitario,
+                                    Subtotal
+                                )
+                            VALUES
+                                (
+                                    @IdVenta,
+                                    @IdProducto,
+                                    @Cantidad,
+                                    @PrecioUnitario,
+                                    @Subtotal
+                                );";
 
-                        using (SqlCommand cmdDetalle =
-                            new SqlCommand(
-                                sqlDetalle,
-                                conexion,
-                                transaccion))
+                        using (SqlCommand cmdDetalle = new SqlCommand(sqlDetalle,conexion,transaccion))
                         {
-                            cmdDetalle.Parameters.AddWithValue(
-                                "@IdVenta",
-                                idVenta);
-
-                            cmdDetalle.Parameters.AddWithValue(
-                                "@IdProducto",
-                                detalle.IdProducto);
-
-                            cmdDetalle.Parameters.AddWithValue(
-                                "@Cantidad",
-                                detalle.Cantidad);
-
-                            cmdDetalle.Parameters.AddWithValue(
-                                "@PrecioUnitario",
-                                detalle.PrecioUnitario);
-
-                            cmdDetalle.Parameters.AddWithValue(
-                                "@Subtotal",
-                                detalle.Subtotal);
-
+                            cmdDetalle.Parameters.AddWithValue("@IdVenta", idVenta);
+                            cmdDetalle.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
+                            cmdDetalle.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
+                            cmdDetalle.Parameters.AddWithValue("@PrecioUnitario", detalle.PrecioUnitario);
+                            cmdDetalle.Parameters.AddWithValue("@Subtotal", detalle.Subtotal);
                             cmdDetalle.ExecuteNonQuery();
                         }
 
-
-                        // ==========================
-                        // 3. DESCONTAR STOCK
-                        // ==========================
-
                         string sqlStock = @"
-                    UPDATE Stock
-                    SET CantidadActual =
-                        CantidadActual - @Cantidad
-                    WHERE IdProducto = @IdProducto
-                      AND CantidadActual >= @Cantidad;";
+                            UPDATE Stock
+                            SET CantidadActual =
+                                CantidadActual - @Cantidad
+                            WHERE IdProducto = @IdProducto
+                              AND CantidadActual >= @Cantidad;";
 
                         int filasAfectadas;
 
-                        using (SqlCommand cmdStock =
-                            new SqlCommand(
-                                sqlStock,
-                                conexion,
-                                transaccion))
+                        using (SqlCommand cmdStock = new SqlCommand(sqlStock,conexion,transaccion))
                         {
-                            cmdStock.Parameters.AddWithValue(
-                                "@Cantidad",
-                                detalle.Cantidad);
-
-                            cmdStock.Parameters.AddWithValue(
-                                "@IdProducto",
-                                detalle.IdProducto);
-
-                            filasAfectadas =
-                                cmdStock.ExecuteNonQuery();
+                            cmdStock.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
+                            cmdStock.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
+                            filasAfectadas = cmdStock.ExecuteNonQuery();
                         }
 
-                        // Si no actualizó ninguna fila:
-                        // no existe stock o ya no alcanza.
                         if (filasAfectadas == 0)
                         {
-                            throw new Exception(
-                                $"Stock insuficiente para el producto " +
-                                $"{detalle.IdProducto}.");
+                            throw new Exception($"Stock insuficiente para el producto " + $"{detalle.IdProducto}.");
                         }
 
-
-                        // ==========================
-                        // 4. MOVIMIENTO DE STOCK
-                        // ==========================
-
                         string sqlMovimiento = @"
-                    INSERT INTO MovimientoStock
-                        (
-                            IdProducto,
-                            TipoMovimiento,
-                            Cantidad,
-                            FechaHora,
-                            Observacion,
-                            IdUsuario
-                        )
-                    VALUES
-                        (
-                            @IdProducto,
-                            @TipoMovimiento,
-                            @Cantidad,
-                            @FechaHora,
-                            @Observacion,
-                            @IdUsuario
-                        );";
+                            INSERT INTO MovimientoStock
+                                (
+                                    IdProducto,
+                                    TipoMovimiento,
+                                    Cantidad,
+                                    FechaHora,
+                                    Observacion,
+                                    IdUsuario
+                                )
+                            VALUES
+                                (
+                                    @IdProducto,
+                                    @TipoMovimiento,
+                                    @Cantidad,
+                                    @FechaHora,
+                                    @Observacion,
+                                    @IdUsuario
+                                );";
 
-                        using (SqlCommand cmdMovimiento =
-                            new SqlCommand(
-                                sqlMovimiento,
-                                conexion,
-                                transaccion))
+                        using (SqlCommand cmdMovimiento = new SqlCommand(sqlMovimiento, conexion, transaccion))
                         {
-                            cmdMovimiento.Parameters.AddWithValue(
-                                "@IdProducto",
-                                detalle.IdProducto);
-
-                            cmdMovimiento.Parameters.AddWithValue(
-                                "@TipoMovimiento",
-                                "EGRESO");
-
-                            cmdMovimiento.Parameters.AddWithValue(
-                                "@Cantidad",
-                                detalle.Cantidad);
-
-                            cmdMovimiento.Parameters.AddWithValue(
-                                "@FechaHora",
-                                DateTime.Now);
-
-                            cmdMovimiento.Parameters.AddWithValue(
-                                "@Observacion",
-                                $"Venta #{idVenta}");
-
-                            cmdMovimiento.Parameters.AddWithValue(
-                                "@IdUsuario",
-                                idUsuario);
-
+                            cmdMovimiento.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
+                            cmdMovimiento.Parameters.AddWithValue("@TipoMovimiento", "EGRESO");
+                            cmdMovimiento.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
+                            cmdMovimiento.Parameters.AddWithValue("@FechaHora", DateTime.Now);
+                            cmdMovimiento.Parameters.AddWithValue("@Observacion", $"Venta #{idVenta}");
+                            cmdMovimiento.Parameters.AddWithValue("@IdUsuario", idUsuario);
                             cmdMovimiento.ExecuteNonQuery();
                         }
                     }
 
-
-                    // ==========================
-                    // 5. MÉTODOS DE PAGO
-                    // ==========================
-
                     foreach (PagoVentaEntidad pago in pagos)
                     {
                         string sqlPago = @"
-                    INSERT INTO VentaMetodoPago
-                        (
-                            IdVenta,
-                            IdMetodoPago,
-                            Monto
-                        )
-                    VALUES
-                        (
-                            @IdVenta,
-                            @IdMetodoPago,
-                            @Monto
-                        );";
+                            INSERT INTO VentaMetodoPago
+                                (
+                                    IdVenta,
+                                    IdMetodoPago,
+                                    Monto
+                                )
+                            VALUES
+                                (
+                                    @IdVenta,
+                                    @IdMetodoPago,
+                                    @Monto
+                                );";
 
-                        using (SqlCommand cmdPago =
-                            new SqlCommand(
-                                sqlPago,
-                                conexion,
-                                transaccion))
+                        using (SqlCommand cmdPago = new SqlCommand( sqlPago, conexion, transaccion))
                         {
-                            cmdPago.Parameters.AddWithValue(
-                                "@IdVenta",
-                                idVenta);
-
-                            cmdPago.Parameters.AddWithValue(
-                                "@IdMetodoPago",
-                                pago.IdMetodoPago);
-
-                            cmdPago.Parameters.AddWithValue(
-                                "@Monto",
-                                pago.Monto);
-
+                            cmdPago.Parameters.AddWithValue("@IdVenta", idVenta);
+                            cmdPago.Parameters.AddWithValue("@IdMetodoPago", pago.IdMetodoPago);
+                            cmdPago.Parameters.AddWithValue("@Monto", pago.Monto);
                             cmdPago.ExecuteNonQuery();
                         }
                     }
-
-
-                    // ==========================
-                    // 6. TODO SALIÓ BIEN
-                    // ==========================
 
                     transaccion.Commit();
 

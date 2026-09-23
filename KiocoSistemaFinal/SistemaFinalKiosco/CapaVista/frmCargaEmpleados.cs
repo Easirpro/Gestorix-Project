@@ -191,7 +191,7 @@ namespace CapaVista
 
                 if (persona == null)
                 {
-                    MessageBox.Show("No se encontraron los datos de la persona.","Aviso",
+                    MessageBox.Show("No se encontraron los datos de la persona.", "Aviso",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
@@ -612,7 +612,36 @@ namespace CapaVista
                     MessageBoxIcon.Error);
             }
         }
+        private void HabilitarEdicion(bool habilitar)
+        {
+            txtNombre.Enabled = habilitar;
+            txtApellido.Enabled = habilitar;
+            txtDNI.Enabled = habilitar;
+            mkdCuil.Enabled = habilitar;
+            dtpFechaNacimiento.Enabled = habilitar;
+            cmbGenero.Enabled = habilitar;
+            rdbMasculino.Enabled = habilitar;
+            rdbFemenino.Enabled = habilitar;
 
+            txtCalle.Enabled = habilitar;
+            txtAltura.Enabled = habilitar;
+            txtPiso.Enabled = habilitar;
+            txtDepartamento.Enabled = habilitar;
+
+            cmbProvincia.Enabled = habilitar;
+            cmbPartido.Enabled = habilitar;
+            cmbLocalidad.Enabled = habilitar;
+
+            txtPostal.Enabled = false;
+
+            txtTelefono.Enabled = habilitar;
+            cmbTipoTelefono.Enabled = habilitar;
+            txtCorreo.Enabled = habilitar;
+
+            chkActivo.Enabled = habilitar;
+
+            btnPermisos.Enabled = habilitar;
+        }
         #endregion
 
 
@@ -938,6 +967,7 @@ namespace CapaVista
             {
                 return;
             }
+
             if (lstUsuarios.SelectedValue is DataRowView)
             {
                 return;
@@ -946,12 +976,19 @@ namespace CapaVista
             int idPersona = (int)lstUsuarios.SelectedValue;
 
             CargarDatosUsuario(idPersona);
+
+            chkHabilitarEdicion.Checked = false;
+            HabilitarEdicion(false);
         }
         // evento para limpiar
         private void btnNuevo_Click(object sender, EventArgs e)
         {
             VaciarFormularios.LimpiarControles(this);
             txtRolActual.Clear();
+
+            chkHabilitarEdicion.Checked = false;
+            HabilitarEdicion(true);
+
             txtDNI.ReadOnly = false;
         }
         private void btnModificar_Click(object sender, EventArgs e)
@@ -1134,7 +1171,7 @@ namespace CapaVista
         {
             CargarUsuarios();
         }
-        private void btneliminar_Click(object sender, EventArgs e)
+        private void btnPermisos_Click(object sender, EventArgs e)
         {
             if (lstUsuarios.SelectedValue == null || lstUsuarios.SelectedValue is DataRowView)
             {
@@ -1164,9 +1201,14 @@ namespace CapaVista
             permisosModificados = permiso.PermisosModificados;
             idRolSeleccionado = permiso.IdRolSeleccionado;
         }
-       
-    
+        private void chkHabilitarEdicion_CheckedChanged(object sender, EventArgs e)
+        {
+            HabilitarEdicion(chkHabilitarEdicion.Checked);
+        }
+
         #endregion
+
+
 
 
 
