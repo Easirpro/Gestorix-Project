@@ -55,7 +55,6 @@ namespace CapaVista
 
         }
 
-
         #region Metodo
         private void CargarBotones()
         {
@@ -169,25 +168,13 @@ namespace CapaVista
             txtUsuario.Text = "";
             txtRol.Text = "";
         }
-
-
-        private void AgregarProductoAGrilla(
-    int idProducto,
-    string sku,
-    string codigoBarra,
-    string descripcion,
-    decimal precio,
-    decimal cantidad,
-    decimal stockDisponible)
+        private void AgregarProductoAGrilla(int idProducto, string sku, string codigoBarra, string descripcion, decimal precio, decimal cantidad, decimal stockDisponible)
         {
-            // No permitir productos sin stock
+
             if (stockDisponible <= 0)
             {
-                MessageBox.Show(
-                    "El producto no tiene stock disponible.",
-                    "Sin stock",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("El producto no tiene stock disponible.","Sin stock",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
@@ -196,28 +183,20 @@ namespace CapaVista
             foreach (DataGridViewRow fila in dtgPresentacion.Rows)
             {
                 if (fila.IsNewRow)
+                { 
                     continue;
+                }                  
 
-                if (fila.Cells["ClnIdProducto"].Value != null &&
-                    Convert.ToInt32(fila.Cells["ClnIdProducto"].Value) == idProducto)
+                if (fila.Cells["ClnIdProducto"].Value != null && Convert.ToInt32(fila.Cells["ClnIdProducto"].Value) == idProducto)
                 {
-                    decimal cantidadActual =
-                        Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
-
+                    decimal cantidadActual = Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
                     decimal cantidadFinal = cantidadActual + cantidad;
 
-                    // IMPORTANTE: validar antes de modificar la grilla
                     if (cantidadFinal > stockDisponible)
                     {
-                        MessageBox.Show(
-                            $"Stock insuficiente.\n\n" +
-                            $"Stock disponible: {stockDisponible}\n" +
-                            $"Cantidad cargada: {cantidadActual}\n" +
-                            $"Cantidad a agregar: {cantidad}\n" +
-                            $"Cantidad resultante: {cantidadFinal}",
-                            "Stock insuficiente",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+                        MessageBox.Show($"Stock insuficiente.\n\n" + $"Stock disponible: {stockDisponible}\n" + $"Cantidad cargada: {cantidadActual}\n" +
+                            $"Cantidad a agregar: {cantidad}\n" + $"Cantidad resultante: {cantidadFinal}",
+                            "Stock insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         return;
                     }
@@ -230,16 +209,10 @@ namespace CapaVista
                 }
             }
 
-            // Producto nuevo: también validar antes de agregarlo
             if (cantidad > stockDisponible)
             {
-                MessageBox.Show(
-                    $"Stock insuficiente.\n\n" +
-                    $"Stock disponible: {stockDisponible}\n" +
-                    $"Cantidad solicitada: {cantidad}",
-                    "Stock insuficiente",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show($"Stock insuficiente.\n\n" + $"Stock disponible: {stockDisponible}\n" +
+                    $"Cantidad solicitada: {cantidad}", "Stock insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
@@ -249,7 +222,10 @@ namespace CapaVista
             for (int i = 0; i < dtgPresentacion.Rows.Count; i++)
             {
                 if (dtgPresentacion.Rows[i].IsNewRow)
+                {
                     continue;
+                }
+                    
 
                 if (dtgPresentacion.Rows[i].Cells["ClnIdProducto"].Value == null)
                 {
@@ -273,7 +249,6 @@ namespace CapaVista
 
             CalcularYMostrarMontos();
         }
-
         private void IngresarProductoPorCodigo()
         {
             string codigoBarra = txtCodigoBarra.Text.Trim();
@@ -284,18 +259,14 @@ namespace CapaVista
                 return;
             }
 
-            // Si no se ingresa cantidad, por defecto es 1
             decimal cantidad = 1;
 
             if (!string.IsNullOrWhiteSpace(txtCantidad.Text))
             {
                 if (!decimal.TryParse(txtCantidad.Text, out cantidad) || cantidad <= 0)
                 {
-                    MessageBox.Show(
-                        "Ingrese una cantidad válida mayor a 0.",
-                        "Cantidad inválida",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("Ingrese una cantidad válida mayor a 0.","Cantidad inválida",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtCantidad.SelectAll();
                     txtCantidad.Focus();
@@ -303,20 +274,14 @@ namespace CapaVista
                 }
             }
 
-            ClsGestorLogicaProducto logicaProducto =
-                new ClsGestorLogicaProducto();
+            ClsGestorLogicaProducto logicaProducto = new ClsGestorLogicaProducto();
 
-            DataTable tablaProducto =
-                logicaProducto.ObtenerProductoPorCodigoBarra(codigoBarra);
+            DataTable tablaProducto = logicaProducto.ObtenerProductoPorCodigoBarra(codigoBarra);
 
-            // Verificamos que el código exista
             if (tablaProducto.Rows.Count == 0)
             {
-                MessageBox.Show(
-                    "No se encontró un producto con ese código de barras.",
-                    "Producto no encontrado",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show( "No se encontró un producto con ese código de barras.", "Producto no encontrado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigoBarra.SelectAll();
                 txtCodigoBarra.Focus();
@@ -331,28 +296,13 @@ namespace CapaVista
             string descripcion = producto["Descripcion"].ToString();
             decimal precio = Convert.ToDecimal(producto["PrecioVenta"]);
 
-            // Si el producto no tiene registro de stock, consideramos stock 0
-            decimal stockDisponible = producto["CantidadActual"] == DBNull.Value
-                ? 0
-                : Convert.ToDecimal(producto["CantidadActual"]);
+            decimal stockDisponible = producto["CantidadActual"] == DBNull.Value ? 0 : Convert.ToDecimal(producto["CantidadActual"]);
 
-            // Agregamos el producto.
-            // AgregarProductoAGrilla se encarga también de validar
-            // la cantidad acumulada contra el stock disponible.
-            AgregarProductoAGrilla(
-                idProducto,
-                sku,
-                codigo,
-                descripcion,
-                precio,
-                cantidad,
-                stockDisponible);
+            AgregarProductoAGrilla( idProducto, sku, codigo, descripcion, precio, cantidad, stockDisponible);
 
-            // Limpiamos para dejar preparada la próxima carga
             txtCodigoBarra.Clear();
             txtCantidad.Clear();
 
-            // El cajero queda listo para escanear el siguiente producto
             txtCodigoBarra.Focus();
         }
         #endregion
@@ -425,7 +375,6 @@ namespace CapaVista
 
             egresoPlata.ShowDialog();
         }
-
         private void listaDePreciosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmListadoPrecios listaprecio = new frmListadoPrecios();
@@ -467,7 +416,6 @@ namespace CapaVista
             frmProveedores proveedores = new frmProveedores();
             proveedores.ShowDialog();
         }
-
         //Cerrar sesion
         private void cerrarSeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -513,12 +461,12 @@ namespace CapaVista
             foreach (DataGridViewRow fila in dtgPresentacion.Rows)
             {
                 if (fila.IsNewRow)
-                    continue;
+                { 
+                    continue; 
+                }
+                    
 
-                if (fila.Cells["ClnImporte"].Value != null &&
-                    decimal.TryParse(
-                        fila.Cells["ClnImporte"].Value.ToString(),
-                        out decimal importe))
+                if (fila.Cells["ClnImporte"].Value != null && decimal.TryParse(fila.Cells["ClnImporte"].Value.ToString(), out decimal importe))
                 {
                     subtotal += importe;
                 }
@@ -530,8 +478,6 @@ namespace CapaVista
             lblDescuentoMonto.Text = $"$ {descuentoRecargo:N2}";
             lblTotalMonto.Text = $"$ {total:N2}";
         }
-
-
         private void btnConfig_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
@@ -570,7 +516,10 @@ namespace CapaVista
                     for (int i = 0; i < dtgPresentacion.Rows.Count; i++)
                     {
                         if (dtgPresentacion.Rows[i].IsNewRow)
-                            continue;
+                        { 
+                            continue; 
+                        }
+                            
 
                         if (dtgPresentacion.Rows[i].Cells["ClnSKU"].Value == null ||
                             string.IsNullOrWhiteSpace(dtgPresentacion.Rows[i].Cells["ClnSKU"].Value.ToString()))
@@ -597,61 +546,35 @@ namespace CapaVista
                 }
             }
         }
-        private void EjecutarCobro()
-        {
-            // Solo permitir cobrar si el rol tiene acceso a ventas/caja (Rol 1 o Rol 2)
-            if (IdRol == 1 || IdRol == 2)
-            {
-                MessageBox.Show($"Abriendo módulo de cobro por: $ {total:N2}", "Procesar Pago", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Aquí va tu lógica para abrir la ventana de pagos final o guardar en Base de Datos
-            }
-            else
-            {
-                MessageBox.Show("Tu usuario no tiene permisos para realizar cobros.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }//revisar esto
-
-
         private void btnCobrar_Click_1(object sender, EventArgs e)
         {
             if (total <= 0)
             {
-                MessageBox.Show(
-                    "Debe agregar al menos un producto para realizar el cobro.",
-                    "Cobrar venta",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("Debe agregar al menos un producto para realizar el cobro.","Cobrar venta",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigoBarra.Focus();
                 return;
             }
 
-            frmInformeCobro cobro =
-    new frmInformeCobro(total, dtgPresentacion);
+            frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion);
 
             if (cobro.ShowDialog() == DialogResult.OK)
             {
                 LimpiarVenta();
             }
         }
-
         private void LimpiarVenta()
         {
-            // Eliminamos todos los productos del carrito
             dtgPresentacion.Rows.Clear();
 
-            // Reiniciamos los valores de la venta
             subtotal = 0.00m;
             descuentoRecargo = 0.00m;
             total = 0.00m;
 
-            // Actualizamos los montos visuales
             CalcularYMostrarMontos();
-
-            // Volvemos a crear las filas vacías visuales
             RellenarFilas();
 
-            // Dejamos listo para la siguiente venta
             txtCodigoBarra.Clear();
             txtCodigoBarra.Focus();
         }
@@ -663,7 +586,6 @@ namespace CapaVista
                 dtgPresentacion.Rows.Add();
             }
         }
-
         private void menuitemAdministradoarticulos_Click(object sender, EventArgs e)
         {
 
@@ -691,6 +613,86 @@ namespace CapaVista
             lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy");
             lblHora.Text = "Hora: " + DateTime.Now.ToString("HH:mm:ss");
         }
+        private void btnCambiarcantidad_Click(object sender, EventArgs e)
+        {
+            if (dtgPresentacion.CurrentRow == null || dtgPresentacion.CurrentRow.Cells["ClnIdProducto"].Value == null)
+            {
+                MessageBox.Show("Seleccione un producto para cambiar la cantidad.", "Cambiar cantidad",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            DataGridViewRow fila = dtgPresentacion.CurrentRow;
+
+            int idProducto = Convert.ToInt32(fila.Cells["ClnIdProducto"].Value);
+            decimal cantidadActual = Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
+            string entrada = Microsoft.VisualBasic.Interaction.InputBox("Ingrese la nueva cantidad:", "Cambiar cantidad", cantidadActual.ToString());
+
+            if (string.IsNullOrWhiteSpace(entrada))
+            {
+                return;
+            }
+
+            if (!decimal.TryParse(entrada, out decimal nuevaCantidad) || nuevaCantidad <= 0)
+            {
+                MessageBox.Show("Ingrese una cantidad válida mayor a 0.", "Cantidad inválida",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            ClsGestorLogicaProducto logicaProducto = new ClsGestorLogicaProducto();
+
+            DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
+
+            decimal stockDisponible = 0;
+
+            if (tablaStock.Rows.Count > 0 && tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
+            {
+                stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
+            }
+
+            if (nuevaCantidad > stockDisponible)
+            {
+                MessageBox.Show($"Stock insuficiente.\n\n" + $"Stock disponible: {stockDisponible}\n" + $"Cantidad solicitada: {nuevaCantidad}",
+                    "Stock insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            decimal precioUnitario = Convert.ToDecimal(fila.Cells["ClnPrecioUnitario"].Value);
+
+            fila.Cells["ClnCantidad"].Value = nuevaCantidad;
+            fila.Cells["ClnImporte"].Value = nuevaCantidad * precioUnitario;
+
+            CalcularYMostrarMontos();
+
+            txtCodigoBarra.Focus();
+        }
+        private void btnQuitar_Click(object sender, EventArgs e)
+        {
+            if (dtgPresentacion.CurrentRow == null || dtgPresentacion.CurrentRow.Cells["ClnIdProducto"].Value == null)
+            {
+                MessageBox.Show("Seleccione un producto para quitar.", "Quitar producto",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            DataGridViewRow fila = dtgPresentacion.CurrentRow;
+
+            foreach (DataGridViewCell celda in fila.Cells)
+            {
+                celda.Value = null;
+            }
+
+            CalcularYMostrarMontos();
+
+            txtCodigoBarra.Focus();
+        }
+
+
         #endregion
 
 
@@ -705,117 +707,6 @@ namespace CapaVista
 
 
 
-        private void btnCambiarcantidad_Click(object sender, EventArgs e)
-        {
-            if (dtgPresentacion.CurrentRow == null ||
-                dtgPresentacion.CurrentRow.Cells["ClnIdProducto"].Value == null)
-            {
-                MessageBox.Show(
-                    "Seleccione un producto para cambiar la cantidad.",
-                    "Cambiar cantidad",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            DataGridViewRow fila = dtgPresentacion.CurrentRow;
-
-            int idProducto =
-                Convert.ToInt32(fila.Cells["ClnIdProducto"].Value);
-
-            decimal cantidadActual =
-                Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
-
-            string entrada = Microsoft.VisualBasic.Interaction.InputBox(
-                "Ingrese la nueva cantidad:",
-                "Cambiar cantidad",
-                cantidadActual.ToString());
-
-            if (string.IsNullOrWhiteSpace(entrada))
-                return;
-
-            if (!decimal.TryParse(entrada, out decimal nuevaCantidad) ||
-                nuevaCantidad <= 0)
-            {
-                MessageBox.Show(
-                    "Ingrese una cantidad válida mayor a 0.",
-                    "Cantidad inválida",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            // Consultamos el stock real del producto
-            ClsGestorLogicaProducto logicaProducto =
-                new ClsGestorLogicaProducto();
-
-            DataTable tablaStock =
-                logicaProducto.ObtenerStockPorProducto(idProducto);
-
-            decimal stockDisponible = 0;
-
-            if (tablaStock.Rows.Count > 0 &&
-                tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
-            {
-                stockDisponible =
-                    Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
-            }
-
-            // No permitir superar el stock
-            if (nuevaCantidad > stockDisponible)
-            {
-                MessageBox.Show(
-                    $"Stock insuficiente.\n\n" +
-                    $"Stock disponible: {stockDisponible}\n" +
-                    $"Cantidad solicitada: {nuevaCantidad}",
-                    "Stock insuficiente",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            decimal precioUnitario =
-                Convert.ToDecimal(fila.Cells["ClnPrecioUnitario"].Value);
-
-            fila.Cells["ClnCantidad"].Value = nuevaCantidad;
-            fila.Cells["ClnImporte"].Value =
-                nuevaCantidad * precioUnitario;
-
-            CalcularYMostrarMontos();
-
-            txtCodigoBarra.Focus();
-        }
-
-        private void btnQuitar_Click(object sender, EventArgs e)
-        {
-            if (dtgPresentacion.CurrentRow == null ||
-                dtgPresentacion.CurrentRow.Cells["ClnIdProducto"].Value == null)
-            {
-                MessageBox.Show(
-                    "Seleccione un producto para quitar.",
-                    "Quitar producto",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            DataGridViewRow fila = dtgPresentacion.CurrentRow;
-
-            // Limpiamos la fila en lugar de eliminarla,
-            // porque usamos RellenarFilas() para mantener la grilla completa.
-            foreach (DataGridViewCell celda in fila.Cells)
-            {
-                celda.Value = null;
-            }
-
-            CalcularYMostrarMontos();
-
-            txtCodigoBarra.Focus();
-        }
 
     }
 

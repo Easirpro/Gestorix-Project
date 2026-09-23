@@ -71,7 +71,7 @@
             btnNuevo = new Button();
             btnModificar = new Button();
             btnActualizar = new Button();
-            btneliminar = new Button();
+            btnPermisos = new Button();
             tpgDatosUsuario = new TabControl();
             tpgDatosPersonales = new TabPage();
             txtApellido = new TextBox();
@@ -83,6 +83,7 @@
             tpgContacto = new TabPage();
             label21 = new Label();
             txtRolActual = new TextBox();
+            chkHabilitarEdicion = new CheckBox();
             tpgDatosUsuario.SuspendLayout();
             tpgDatosPersonales.SuspendLayout();
             tpgDireccion.SuspendLayout();
@@ -466,20 +467,20 @@
             btnActualizar.UseVisualStyleBackColor = true;
             btnActualizar.Click += btnActualizar_Click;
             // 
-            // btneliminar
+            // btnPermisos
             // 
-            btneliminar.BackColor = Color.Transparent;
-            btneliminar.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btneliminar.Image = (Image)resources.GetObject("btneliminar.Image");
-            btneliminar.ImageAlign = ContentAlignment.TopCenter;
-            btneliminar.Location = new Point(405, 163);
-            btneliminar.Name = "btneliminar";
-            btneliminar.Size = new Size(106, 102);
-            btneliminar.TabIndex = 34;
-            btneliminar.Text = "Permisos";
-            btneliminar.TextAlign = ContentAlignment.BottomCenter;
-            btneliminar.UseVisualStyleBackColor = false;
-            btneliminar.Click += btneliminar_Click;
+            btnPermisos.BackColor = Color.Transparent;
+            btnPermisos.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnPermisos.Image = (Image)resources.GetObject("btnPermisos.Image");
+            btnPermisos.ImageAlign = ContentAlignment.TopCenter;
+            btnPermisos.Location = new Point(405, 163);
+            btnPermisos.Name = "btnPermisos";
+            btnPermisos.Size = new Size(106, 102);
+            btnPermisos.TabIndex = 34;
+            btnPermisos.Text = "Permisos";
+            btnPermisos.TextAlign = ContentAlignment.BottomCenter;
+            btnPermisos.UseVisualStyleBackColor = false;
+            btnPermisos.Click += btnPermisos_Click;
             // 
             // tpgDatosUsuario
             // 
@@ -613,21 +614,35 @@
             // 
             // txtRolActual
             // 
+            txtRolActual.Enabled = false;
             txtRolActual.Location = new Point(405, 294);
             txtRolActual.Name = "txtRolActual";
             txtRolActual.ReadOnly = true;
             txtRolActual.Size = new Size(100, 23);
             txtRolActual.TabIndex = 37;
+            txtRolActual.TabStop = false;
+            // 
+            // chkHabilitarEdicion
+            // 
+            chkHabilitarEdicion.AutoSize = true;
+            chkHabilitarEdicion.Location = new Point(31, 103);
+            chkHabilitarEdicion.Name = "chkHabilitarEdicion";
+            chkHabilitarEdicion.Size = new Size(113, 19);
+            chkHabilitarEdicion.TabIndex = 38;
+            chkHabilitarEdicion.Text = "Habilitar Edición";
+            chkHabilitarEdicion.UseVisualStyleBackColor = true;
+            chkHabilitarEdicion.CheckedChanged += chkHabilitarEdicion_CheckedChanged;
             // 
             // frmCargaEmpleados
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(536, 550);
+            Controls.Add(chkHabilitarEdicion);
             Controls.Add(txtRolActual);
             Controls.Add(label21);
             Controls.Add(tpgDatosUsuario);
-            Controls.Add(btneliminar);
+            Controls.Add(btnPermisos);
             Controls.Add(btnActualizar);
             Controls.Add(btnModificar);
             Controls.Add(btnNuevo);
@@ -700,7 +715,7 @@
         private Button btnActualizar;
         private Label label20;
         private ComboBox cmbTipoTelefono;
-        private Button btneliminar;
+        private Button btnPermisos;
         private TabControl tpgDatosUsuario;
         private TabPage tpgDatosPersonales;
         private TextBox txtApellido;
@@ -712,5 +727,6 @@
         private TabPage tpgContacto;
         private Label label21;
         private TextBox txtRolActual;
+        private CheckBox chkHabilitarEdicion;
     }
 }
