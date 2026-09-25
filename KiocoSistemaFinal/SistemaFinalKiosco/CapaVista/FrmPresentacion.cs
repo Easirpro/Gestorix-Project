@@ -29,6 +29,9 @@ namespace CapaVista
         {
             InitializeComponent();
 
+            ActualizarFechaHora();
+            tmrFechaHora.Start();
+
             dtgPresentacion.ReadOnly = true;
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
@@ -53,6 +56,7 @@ namespace CapaVista
 
             CargarBotones();
 
+            RellenarFilas();
         }
 
         #region Metodo
@@ -304,6 +308,15 @@ namespace CapaVista
             txtCantidad.Clear();
 
             txtCodigoBarra.Focus();
+        }
+        private void tmrFechaHora_Tick(object sender, EventArgs e)
+        {
+            ActualizarFechaHora();
+        }
+        private void ActualizarFechaHora()
+        {
+            lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy");
+            lblHora.Text = "Hora: " + DateTime.Now.ToString("HH:mm:ss");
         }
         #endregion
 
@@ -603,15 +616,6 @@ namespace CapaVista
         private void label2_Click(object sender, EventArgs e)
         {
 
-        }
-        private void frmmenuPres_Load_1(object sender, EventArgs e)
-        {
-            RellenarFilas();
-        }
-        private void tmrFechaHora_Tick(object sender, EventArgs e)
-        {
-            lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy");
-            lblHora.Text = "Hora: " + DateTime.Now.ToString("HH:mm:ss");
         }
         private void btnCambiarcantidad_Click(object sender, EventArgs e)
         {
