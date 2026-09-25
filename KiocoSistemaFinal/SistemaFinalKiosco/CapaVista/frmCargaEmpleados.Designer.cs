@@ -475,7 +475,7 @@
             btnPermisos.ImageAlign = ContentAlignment.TopCenter;
             btnPermisos.Location = new Point(405, 163);
             btnPermisos.Name = "btnPermisos";
-            btnPermisos.Size = new Size(106, 102);
+            btnPermisos.Size = new Size(124, 102);
             btnPermisos.TabIndex = 34;
             btnPermisos.Text = "Permisos";
             btnPermisos.TextAlign = ContentAlignment.BottomCenter;
@@ -618,7 +618,7 @@
             txtRolActual.Location = new Point(405, 294);
             txtRolActual.Name = "txtRolActual";
             txtRolActual.ReadOnly = true;
-            txtRolActual.Size = new Size(100, 23);
+            txtRolActual.Size = new Size(124, 23);
             txtRolActual.TabIndex = 37;
             txtRolActual.TabStop = false;
             // 

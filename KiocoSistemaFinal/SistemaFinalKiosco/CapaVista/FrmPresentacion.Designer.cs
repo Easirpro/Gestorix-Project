@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmmenuPres));
+            System.Windows.Forms.Timer tmrFechaHora;
             btnArt = new ToolStripMenuItem();
             menuitemAdmistradorarticulos = new ToolStripMenuItem();
             menuitemAdministradoarticulos = new ToolStripMenuItem();
@@ -69,7 +70,6 @@
             tollClosed = new ToolStripMenuItem();
             toolStripMenuItem2 = new ToolStripMenuItem();
             btnCambiarcantidad = new Button();
-            btnCambiarprecio = new Button();
             btnRecargo = new Button();
             btnDescuento = new Button();
             btnQuitar = new Button();
@@ -97,6 +97,8 @@
             ClnPrecioUnitario = new DataGridViewTextBoxColumn();
             ClnImporte = new DataGridViewTextBoxColumn();
             pnlUsuario = new Panel();
+            lblHora = new Label();
+            lblFecha = new Label();
             label7 = new Label();
             txtRol = new TextBox();
             txtUsuario = new TextBox();
@@ -104,8 +106,6 @@
             btnPromocion = new Button();
             toolTip1 = new ToolTip(components);
             tableLayoutPanel1 = new TableLayoutPanel();
-            lblFecha = new Label();
-            lblHora = new Label();
             tmrFechaHora = new System.Windows.Forms.Timer(components);
             btnConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
@@ -390,23 +390,13 @@
             // btnCambiarcantidad
             // 
             btnCambiarcantidad.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCambiarcantidad.Location = new Point(333, 315);
+            btnCambiarcantidad.Location = new Point(454, 315);
             btnCambiarcantidad.Name = "btnCambiarcantidad";
             btnCambiarcantidad.Size = new Size(115, 23);
             btnCambiarcantidad.TabIndex = 12;
             btnCambiarcantidad.Text = "Cambiar cantidad";
             btnCambiarcantidad.UseVisualStyleBackColor = true;
             btnCambiarcantidad.Click += btnCambiarcantidad_Click;
-            // 
-            // btnCambiarprecio
-            // 
-            btnCambiarprecio.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCambiarprecio.Location = new Point(454, 315);
-            btnCambiarprecio.Name = "btnCambiarprecio";
-            btnCambiarprecio.Size = new Size(115, 23);
-            btnCambiarprecio.TabIndex = 13;
-            btnCambiarprecio.Text = "Cambiar precio";
-            btnCambiarprecio.UseVisualStyleBackColor = true;
             // 
             // btnRecargo
             // 
@@ -697,6 +687,26 @@
             pnlUsuario.Size = new Size(877, 38);
             pnlUsuario.TabIndex = 17;
             // 
+            // lblHora
+            // 
+            lblHora.AutoSize = true;
+            lblHora.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblHora.Location = new Point(703, 7);
+            lblHora.Name = "lblHora";
+            lblHora.Size = new Size(40, 15);
+            lblHora.TabIndex = 5;
+            lblHora.Text = "Hora: ";
+            // 
+            // lblFecha
+            // 
+            lblFecha.AutoSize = true;
+            lblFecha.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFecha.Location = new Point(549, 8);
+            lblFecha.Name = "lblFecha";
+            lblFecha.Size = new Size(45, 15);
+            lblFecha.TabIndex = 4;
+            lblFecha.Text = "Fecha: ";
+            // 
             // label7
             // 
             label7.AutoSize = true;
@@ -771,26 +781,6 @@
             tableLayoutPanel1.Size = new Size(273, 145);
             tableLayoutPanel1.TabIndex = 19;
             // 
-            // lblFecha
-            // 
-            lblFecha.AutoSize = true;
-            lblFecha.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblFecha.Location = new Point(549, 8);
-            lblFecha.Name = "lblFecha";
-            lblFecha.Size = new Size(45, 15);
-            lblFecha.TabIndex = 4;
-            lblFecha.Text = "Fecha: ";
-            // 
-            // lblHora
-            // 
-            lblHora.AutoSize = true;
-            lblHora.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblHora.Location = new Point(703, 7);
-            lblHora.Name = "lblHora";
-            lblHora.Size = new Size(40, 15);
-            lblHora.TabIndex = 5;
-            lblHora.Text = "Hora: ";
-            // 
             // tmrFechaHora
             // 
             tmrFechaHora.Interval = 1000;
@@ -815,7 +805,6 @@
             Controls.Add(btnNuevaCompra);
             Controls.Add(btnCobrar);
             Controls.Add(btnCambiarcantidad);
-            Controls.Add(btnCambiarprecio);
             Controls.Add(btnRecargo);
             Controls.Add(btnDescuento);
             Controls.Add(btnQuitar);
@@ -825,7 +814,6 @@
             Name = "frmmenuPres";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Presentación";
-            Load += frmmenuPres_Load_1;
             btnConfig.ResumeLayout(false);
             btnConfig.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pcbLogo).EndInit();
@@ -861,7 +849,6 @@
         private ToolStripMenuItem notaDeCreditoToolStripMenuItem;
         private ToolStripMenuItem administradorDeProveedoresToolStripMenuItem;
         private Button btnCambiarcantidad;
-        private Button btnCambiarprecio;
         private Button btnRecargo;
         private Button btnDescuento;
         private Button btnQuitar;
