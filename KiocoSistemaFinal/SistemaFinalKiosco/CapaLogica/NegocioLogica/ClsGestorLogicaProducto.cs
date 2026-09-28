@@ -1,5 +1,6 @@
 ﻿using CapaDatos.NegocioDatos;
 using CapaEntidades.NegocioEntidad;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -94,6 +95,10 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.CargarArticulos();
         }
+        public DataTable CargarArticulosParaExportar(int idProveedor, int idCategoria, int idMarca, int idSucursal, int estado, bool soloStock, bool soloVencimiento, bool soloLote)
+        {
+            return datos.CargarArticulosParaExportar(idProveedor, idCategoria, idMarca, idSucursal, estado, soloStock, soloVencimiento, soloLote);
+        }
         public DataTable BuscarArticulos(string texto, bool ocultarDiscontinuos)
         {
             return datos.BuscarArticulos(texto, ocultarDiscontinuos);
@@ -117,6 +122,112 @@ namespace CapaLogica.NegocioLogica
         public bool ModificarProductoSucursalProveedor(ClsProductoSucursalProveedor relacion)
         {
             return datos.ModificarProductoSucursalProveedor(relacion);
+        }
+
+        //Metodos para excel
+        public int ObtenerIdMarcaPorNombre(string nombre)
+        {
+            DataTable tabla = datos.CargarMarcasActivas();
+
+            foreach (DataRow fila in tabla.Rows)
+            {
+                string nombreBD = fila["Nombre"].ToString();
+
+                if (string.Equals(nombreBD.Trim(), nombre.Trim(),
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    return Convert.ToInt32(fila["IdMarca"]);
+                }
+            }
+
+            return 0;
+        }
+        public int ObtenerIdCategoriaPorNombre(string nombre)
+        {
+            DataTable tabla = datos.CargarCategoriasActivas();
+
+            foreach (DataRow fila in tabla.Rows)
+            {
+                string nombreBD = fila["Nombre"].ToString();
+
+                if (string.Equals(nombreBD.Trim(), nombre.Trim(),
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    return Convert.ToInt32(fila["IdCategoria"]);
+                }
+            }
+
+            return 0;
+        }
+        public int ObtenerIdUnidadPorNombre(string nombre)
+        {
+            DataTable tabla = datos.CargarUnidades();
+
+            foreach (DataRow fila in tabla.Rows)
+            {
+                string nombreBD = fila["Nombre"].ToString();
+
+                if (string.Equals(nombreBD.Trim(), nombre.Trim(),
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    return Convert.ToInt32(fila["IdUnidad"]);
+                }
+            }
+
+            return 0;
+        }
+        public int ObtenerIdIVAPorAlicuota(string alicuota)
+        {
+            DataTable tabla = datos.CargarIVAsActivos();
+
+            foreach (DataRow fila in tabla.Rows)
+            {
+                string valorBD = fila["Alicuota"].ToString();
+
+                if (string.Equals(valorBD.Trim(), alicuota.Trim(),
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    return Convert.ToInt32(fila["IdIVA"]);
+                }
+            }
+
+            return 0;
+        }
+        public int ObtenerIdIVAPorAlicuota(decimal alicuota)
+        {
+            DataTable tabla = datos.CargarIVAsActivos();
+
+            foreach (DataRow fila in tabla.Rows)
+            {
+                decimal alicuotaBD = Convert.ToDecimal(fila["Alicuota"]);
+
+                if (alicuotaBD == alicuota)
+                {
+                    return Convert.ToInt32(fila["IdIVA"]);
+                }
+            }
+
+            return 0;
+        }
+        public int RegistrarProductoImportacion(ClsGestorEntidadProducto.ClsProducto producto,SqlConnection conexion,SqlTransaction transaccion)
+        {
+            return datos.RegistrarProductoImportacion(producto, conexion, transaccion);
+        }
+        public int ObtenerProximoSKUImportacion(SqlConnection conexion,SqlTransaction transaccion)
+        {
+            return datos.ObtenerProximoSKUImportacion(conexion, transaccion);
+        }
+        public void RegistrarProductoSucursalProveedorImportacion(ClsProductoSucursalProveedor relacion, SqlConnection conexion,SqlTransaction transaccion)
+        {
+            datos.RegistrarProductoSucursalProveedorImportacion(relacion, conexion, transaccion);
+        }
+        public void RegistrarLoteImportacion(ClsLote lote, SqlConnection conexion, SqlTransaction transaccion)
+        {
+            datos.RegistrarLoteImportacion(lote, conexion, transaccion);
+        }
+        public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal, SqlConnection conexion, SqlTransaction transaccion)
+        {
+            return datos.ObtenerIdSucursalImportacion(nombreProveedor, nombreSucursal, conexion, transaccion);
         }
 
 
