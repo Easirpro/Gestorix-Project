@@ -41,6 +41,9 @@
     <Compile Update="frmDevolucion.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frmExportarArchivos.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frmImportarArticulos.cs">
       <SubType>Form</SubType>
     </Compile>

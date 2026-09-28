@@ -35,6 +35,7 @@
             btnSeleccionar = new Button();
             btnAceptar = new Button();
             btnVolver = new Button();
+            btnDescargarPlanilla = new Button();
             SuspendLayout();
             // 
             // label1
@@ -50,7 +51,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 103);
+            label2.Location = new Point(10, 222);
             label2.Name = "label2";
             label2.Size = new Size(48, 15);
             label2.TabIndex = 1;
@@ -58,14 +59,14 @@
             // 
             // txtTraerArchivo
             // 
-            txtTraerArchivo.Location = new Point(66, 100);
+            txtTraerArchivo.Location = new Point(64, 219);
             txtTraerArchivo.Name = "txtTraerArchivo";
             txtTraerArchivo.Size = new Size(170, 23);
             txtTraerArchivo.TabIndex = 2;
             // 
             // btnSeleccionar
             // 
-            btnSeleccionar.Location = new Point(242, 100);
+            btnSeleccionar.Location = new Point(240, 219);
             btnSeleccionar.Name = "btnSeleccionar";
             btnSeleccionar.Size = new Size(95, 23);
             btnSeleccionar.TabIndex = 3;
@@ -75,27 +76,43 @@
             // 
             // btnAceptar
             // 
-            btnAceptar.Location = new Point(262, 240);
+            btnAceptar.Location = new Point(197, 287);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 23);
             btnAceptar.TabIndex = 4;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
+            btnAceptar.Click += btnAceptar_Click;
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(181, 240);
+            btnVolver.Location = new Point(278, 287);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 5;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             // 
+            // btnDescargarPlanilla
+            // 
+            btnDescargarPlanilla.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDescargarPlanilla.Image = (Image)resources.GetObject("btnDescargarPlanilla.Image");
+            btnDescargarPlanilla.ImageAlign = ContentAlignment.TopCenter;
+            btnDescargarPlanilla.Location = new Point(87, 86);
+            btnDescargarPlanilla.Name = "btnDescargarPlanilla";
+            btnDescargarPlanilla.Size = new Size(198, 108);
+            btnDescargarPlanilla.TabIndex = 6;
+            btnDescargarPlanilla.Text = "Descargar Planilla";
+            btnDescargarPlanilla.TextAlign = ContentAlignment.BottomCenter;
+            btnDescargarPlanilla.UseVisualStyleBackColor = true;
+            btnDescargarPlanilla.Click += btnDescargarPlanilla_Click;
+            // 
             // frmImportarArticulos
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(369, 353);
+            ClientSize = new Size(369, 332);
+            Controls.Add(btnDescargarPlanilla);
             Controls.Add(btnVolver);
             Controls.Add(btnAceptar);
             Controls.Add(btnSeleccionar);
@@ -104,7 +121,8 @@
             Controls.Add(label1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "frmImportarArticulos";
-            Text = "frmImportarArticulos";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Importar Articulos";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -117,5 +135,6 @@
         private Button btnSeleccionar;
         private Button btnAceptar;
         private Button btnVolver;
+        private Button btnDescargarPlanilla;
     }
 }

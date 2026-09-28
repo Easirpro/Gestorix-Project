@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmmenuPres));
             System.Windows.Forms.Timer tmrFechaHora;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmmenuPres));
             btnArt = new ToolStripMenuItem();
             menuitemAdmistradorarticulos = new ToolStripMenuItem();
             menuitemAdministradoarticulos = new ToolStripMenuItem();
@@ -114,6 +114,11 @@
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
+            // tmrFechaHora
+            // 
+            tmrFechaHora.Interval = 1000;
+            tmrFechaHora.Tick += tmrFechaHora_Tick;
+            // 
             // btnArt
             // 
             btnArt.DropDownItems.AddRange(new ToolStripItem[] { menuitemAdmistradorarticulos, menuitemAdministradoarticulos, meniitemReporapida, cargarDeLasMarcasToolStripMenuItem, menuitemImporexcel, menuitemExporexcel });
@@ -162,6 +167,7 @@
             menuitemExporexcel.Name = "menuitemExporexcel";
             menuitemExporexcel.Size = new Size(232, 22);
             menuitemExporexcel.Text = "Exportar artículos a Excel";
+            menuitemExporexcel.Click += menuitemExporexcel_Click;
             // 
             // btnVentas
             // 
@@ -780,11 +786,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
             tableLayoutPanel1.Size = new Size(273, 145);
             tableLayoutPanel1.TabIndex = 19;
-            // 
-            // tmrFechaHora
-            // 
-            tmrFechaHora.Interval = 1000;
-            tmrFechaHora.Tick += tmrFechaHora_Tick;
             // 
             // frmmenuPres
             // 
