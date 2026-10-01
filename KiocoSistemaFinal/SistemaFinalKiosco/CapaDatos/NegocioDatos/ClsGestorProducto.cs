@@ -139,7 +139,6 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-
         public DataTable ObtenerProductoPorCodigoBarra(string codigoBarra)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -722,6 +721,118 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public DataTable CargarArticulosParaExportar(int idProveedor, int idCategoria, int idMarca, int idSucursal, int estado, bool soloStock, bool soloVencimiento, bool soloLote)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT
+                        p.IdProducto,
+                        p.CodigoBarra,
+                        p.Descripcion,
+                        c.Nombre AS Rubro,
+                        m.Nombre AS Marca,
+                        p.PrecioVenta,
+                        p.Activo,
+                        iva.Descripcion AS IVA,
+                        iva.Alicuota,
+                        s.CantidadActual,
+                        s.StockMinimo,
+                        s.StockIdeal,
+                        prov.Proveedor,
+                        prov.Sucursal,
+                        prov.PrecioCosto,
+                        lote.FechaVencimiento
+                    FROM Producto p
+
+                    INNER JOIN Categoria c
+                        ON p.IdCategoria = c.IdCategoria
+
+                    INNER JOIN Marca m
+                         ON p.IdMarca = m.IdMarca
+
+                    LEFT JOIN IVA iva
+                        ON p.IdIVA = iva.IdIVA
+
+                    LEFT JOIN Stock s
+                        ON p.IdProducto = s.IdProducto
+
+                    OUTER APPLY
+                    (
+                        SELECT TOP 1
+                            pr.IdProveedor,
+                            sp.IdSucursal,
+                            pr.Nombre AS Proveedor,
+                            sp.Nombre AS Sucursal,
+                            psp.PrecioCompra AS PrecioCosto
+                        FROM ProductoSucursalProveedor psp
+                        INNER JOIN SucursalProveedor sp
+                            ON psp.IdSucursal = sp.IdSucursal
+                        INNER JOIN Proveedor pr
+                            ON sp.IdProveedor = pr.IdProveedor
+                        WHERE psp.IdProducto = p.IdProducto
+                          AND psp.Activo = 1
+                        ORDER BY
+                            psp.FechaPrecioCompra DESC,
+                            pr.Nombre,
+                            sp.Nombre
+                    ) prov
+
+                    OUTER APPLY
+                    (
+                        SELECT TOP 1
+                            l.FechaVencimiento
+                        FROM Lote l
+                        WHERE l.IdProducto = p.IdProducto
+                          AND l.FechaVencimiento IS NOT NULL
+                        ORDER BY l.FechaVencimiento ASC
+                    ) lote
+
+                    WHERE
+                        (@IdProveedor = 0 OR prov.IdProveedor = @IdProveedor)
+                        AND (@IdCategoria = 0 OR p.IdCategoria = @IdCategoria)
+                        AND (@IdMarca = 0 OR m.IdMarca = @IdMarca)
+                        AND (@IdSucursal = 0 OR prov.IdSucursal = @IdSucursal)
+                        AND (@Estado = -1 OR p.Activo = @Estado)
+
+                        AND (@SoloStock = 0 OR ISNULL(s.CantidadActual, 0) > 0)
+
+                        AND (@SoloVencimiento = 0 OR lote.FechaVencimiento IS NOT NULL)
+
+                        AND (
+                            @SoloLote = 0
+                            OR EXISTS
+                            (
+                                SELECT 1
+                                FROM Lote l2
+                                WHERE l2.IdProducto = p.IdProducto
+                            )
+                        )
+
+                    ORDER BY p.Descripcion;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProveedor", idProveedor);
+                    cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+                    cmd.Parameters.AddWithValue("@IdMarca", idMarca);
+                    cmd.Parameters.AddWithValue("@IdSucursal", idSucursal);
+                    cmd.Parameters.AddWithValue("@Estado", estado);
+                    cmd.Parameters.AddWithValue("@SoloStock", soloStock ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@SoloVencimiento", soloVencimiento ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@SoloLote", soloLote ? 1 : 0);
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+
+                        adaptador.Fill(tabla);
+
+                        return tabla;
+                    }
+                }
+            }
+        }
         public bool ModificarProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -918,6 +1029,172 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public int RegistrarProductoImportacion(ClsGestorEntidadProducto.ClsProducto producto, SqlConnection conexion, SqlTransaction transaccion)
+        {
+            string consulta = @"
+                INSERT INTO Producto
+                (
+                    CodigoBarra,
+                    SKU,
+                    Nombre,
+                    Descripcion,
+                    IdMarca,
+                    IdIVA,
+                    IdCategoria,
+                    IdUnidad,
+                    PrecioVenta,
+                    Activo
+                )
+                VALUES
+                (
+                    @CodigoBarra,
+                    @SKU,
+                    @Nombre,
+                    @Descripcion,
+                    @IdMarca,
+                    @IdIVA,
+                    @IdCategoria,
+                    @IdUnidad,
+                    @PrecioVenta,
+                    @Activo
+                );
+
+                SELECT SCOPE_IDENTITY();";
+
+            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            {
+                cmd.Parameters.AddWithValue("@CodigoBarra",string.IsNullOrWhiteSpace(producto.CodigoBarra)? (object)DBNull.Value : producto.CodigoBarra);
+                cmd.Parameters.AddWithValue("@SKU", producto.SKU);
+                cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                cmd.Parameters.AddWithValue("@Descripcion",string.IsNullOrWhiteSpace(producto.Descripcion) ? (object)DBNull.Value : producto.Descripcion);
+                cmd.Parameters.AddWithValue("@IdMarca", producto.IdMarca);
+                cmd.Parameters.AddWithValue("@IdIVA", producto.IdIVA);
+                cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
+                cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
+                cmd.Parameters.AddWithValue("@PrecioVenta", 0);
+                cmd.Parameters.AddWithValue("@Activo", true);
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+        public int ObtenerProximoSKUImportacion(SqlConnection conexion, SqlTransaction transaccion)
+        {
+            string consulta = @"
+                SELECT
+                    CASE
+                        WHEN ISNULL(MAX(TRY_CONVERT(INT, SKU)), 999) < 999
+                            THEN 1000
+                        ELSE ISNULL(MAX(TRY_CONVERT(INT, SKU)), 999) + 1
+                    END
+                FROM Producto WITH (UPDLOCK, HOLDLOCK);";
+
+            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            {
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+        public void RegistrarProductoSucursalProveedorImportacion(ClsProductoSucursalProveedor relacion, SqlConnection conexion, SqlTransaction transaccion)
+        {
+            string consulta = @"
+                INSERT INTO ProductoSucursalProveedor
+                (
+                    IdProducto,
+                    IdSucursal,
+                    PrecioCompra,
+                    FechaPrecioCompra,
+                    CodigoProveedor,
+                    Activo
+                )
+                VALUES
+                (
+                    @IdProducto,
+                    @IdSucursal,
+                    @PrecioCompra,
+                    @FechaPrecioCompra,
+                    @CodigoProveedor,
+                    @Activo
+                );";
+
+            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            {
+                cmd.Parameters.AddWithValue("@IdProducto", relacion.IdProducto);
+                cmd.Parameters.AddWithValue("@IdSucursal", relacion.IdSucursal);
+                cmd.Parameters.AddWithValue("@PrecioCompra",(object)relacion.PrecioCompra ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@FechaPrecioCompra",(object)relacion.FechaPrecioCompra ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@CodigoProveedor",(object)relacion.CodigoProveedor ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+        public void RegistrarLoteImportacion(ClsLote lote,SqlConnection conexion, SqlTransaction transaccion)
+        {
+            string consulta = @"
+                INSERT INTO Lote
+                (
+                    IdProducto,
+                    CodigoLote,
+                    FechaFabricacion,
+                    FechaVencimiento,
+                    FechaIngreso,
+                    Stock,
+                    Activo,
+                    IdSucursal
+                )
+                VALUES
+                (
+                    @IdProducto,
+                    @CodigoLote,
+                    @FechaFabricacion,
+                    @FechaVencimiento,
+                    @FechaIngreso,
+                    @Stock,
+                    @Activo,
+                    @IdSucursal
+                );";
+
+            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            {
+                cmd.Parameters.AddWithValue("@IdProducto", lote.IdProducto);
+                cmd.Parameters.AddWithValue("@CodigoLote", lote.CodigoLote);
+                cmd.Parameters.AddWithValue("@FechaFabricacion", lote.FechaFabricacion);
+                cmd.Parameters.AddWithValue("@FechaVencimiento", lote.FechaVencimiento);
+                cmd.Parameters.AddWithValue("@FechaIngreso", lote.FechaIngreso);
+                cmd.Parameters.AddWithValue("@Stock", lote.Stock);
+                cmd.Parameters.AddWithValue("@Activo", lote.Activo);
+                cmd.Parameters.AddWithValue("@IdSucursal", lote.IdSucursal);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+        public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal,SqlConnection conexion,SqlTransaction transaccion)
+        {
+            string consulta = @"
+                SELECT sp.IdSucursal
+                FROM SucursalProveedor sp
+                INNER JOIN Proveedor p
+                    ON sp.IdProveedor = p.IdProveedor
+                WHERE p.Nombre = @NombreProveedor
+                  AND sp.Nombre = @NombreSucursal
+                  AND p.Activo = 1
+                  AND sp.Activo = 1;";
+
+            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            {
+                cmd.Parameters.AddWithValue("@NombreProveedor", nombreProveedor);
+                cmd.Parameters.AddWithValue("@NombreSucursal", nombreSucursal);
+
+                object resultado = cmd.ExecuteScalar();
+
+                if (resultado == null)
+                {
+                    return 0;
+                }
+                    
+
+                return Convert.ToInt32(resultado);
+            }
+        }
+
 
     }
 }

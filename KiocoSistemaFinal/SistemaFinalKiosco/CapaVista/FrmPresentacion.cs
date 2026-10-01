@@ -29,6 +29,9 @@ namespace CapaVista
         {
             InitializeComponent();
 
+            ActualizarFechaHora();
+            //tmrFechaHora.Start();
+
             dtgPresentacion.ReadOnly = true;
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
@@ -53,6 +56,7 @@ namespace CapaVista
 
             CargarBotones();
 
+            RellenarFilas();
         }
 
         #region Metodo
@@ -150,7 +154,6 @@ namespace CapaVista
 
             // Botones del formulario
             btnCambiarcantidad.Enabled = false;
-            btnCambiarprecio.Enabled = false;
             btnRecargo.Enabled = false;
             btnDescuento.Enabled = false;
             btnQuitar.Enabled = false;
@@ -173,7 +176,7 @@ namespace CapaVista
 
             if (stockDisponible <= 0)
             {
-                MessageBox.Show("El producto no tiene stock disponible.","Sin stock",
+                MessageBox.Show("El producto no tiene stock disponible.", "Sin stock",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -183,9 +186,9 @@ namespace CapaVista
             foreach (DataGridViewRow fila in dtgPresentacion.Rows)
             {
                 if (fila.IsNewRow)
-                { 
+                {
                     continue;
-                }                  
+                }
 
                 if (fila.Cells["ClnIdProducto"].Value != null && Convert.ToInt32(fila.Cells["ClnIdProducto"].Value) == idProducto)
                 {
@@ -225,7 +228,7 @@ namespace CapaVista
                 {
                     continue;
                 }
-                    
+
 
                 if (dtgPresentacion.Rows[i].Cells["ClnIdProducto"].Value == null)
                 {
@@ -265,7 +268,7 @@ namespace CapaVista
             {
                 if (!decimal.TryParse(txtCantidad.Text, out cantidad) || cantidad <= 0)
                 {
-                    MessageBox.Show("Ingrese una cantidad válida mayor a 0.","Cantidad inválida",
+                    MessageBox.Show("Ingrese una cantidad válida mayor a 0.", "Cantidad inválida",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtCantidad.SelectAll();
@@ -280,7 +283,7 @@ namespace CapaVista
 
             if (tablaProducto.Rows.Count == 0)
             {
-                MessageBox.Show( "No se encontró un producto con ese código de barras.", "Producto no encontrado",
+                MessageBox.Show("No se encontró un producto con ese código de barras.", "Producto no encontrado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigoBarra.SelectAll();
@@ -298,12 +301,21 @@ namespace CapaVista
 
             decimal stockDisponible = producto["CantidadActual"] == DBNull.Value ? 0 : Convert.ToDecimal(producto["CantidadActual"]);
 
-            AgregarProductoAGrilla( idProducto, sku, codigo, descripcion, precio, cantidad, stockDisponible);
+            AgregarProductoAGrilla(idProducto, sku, codigo, descripcion, precio, cantidad, stockDisponible);
 
             txtCodigoBarra.Clear();
             txtCantidad.Clear();
 
             txtCodigoBarra.Focus();
+        }
+        private void tmrFechaHora_Tick(object sender, EventArgs e)
+        {
+            ActualizarFechaHora();
+        }
+        private void ActualizarFechaHora()
+        {
+            lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy");
+            lblHora.Text = "Hora: " + DateTime.Now.ToString("HH:mm:ss");
         }
         #endregion
 
@@ -326,10 +338,18 @@ namespace CapaVista
             }
         }
         //Menu Item
+
+        //Importar y Exportar
+
         private void menuitemImporexcel_Click(object sender, EventArgs e)
         {
             frmImportarArticulos frmImportar = new frmImportarArticulos();
             frmImportar.ShowDialog();
+        }
+        private void menuitemExporexcel_Click(object sender, EventArgs e)
+        {
+            frmExportarArchivos exportararchivos = new frmExportarArchivos();
+            exportararchivos.ShowDialog();
         }
         private void cuentaCorrienteDeProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -461,10 +481,10 @@ namespace CapaVista
             foreach (DataGridViewRow fila in dtgPresentacion.Rows)
             {
                 if (fila.IsNewRow)
-                { 
-                    continue; 
+                {
+                    continue;
                 }
-                    
+
 
                 if (fila.Cells["ClnImporte"].Value != null && decimal.TryParse(fila.Cells["ClnImporte"].Value.ToString(), out decimal importe))
                 {
@@ -516,10 +536,10 @@ namespace CapaVista
                     for (int i = 0; i < dtgPresentacion.Rows.Count; i++)
                     {
                         if (dtgPresentacion.Rows[i].IsNewRow)
-                        { 
-                            continue; 
+                        {
+                            continue;
                         }
-                            
+
 
                         if (dtgPresentacion.Rows[i].Cells["ClnSKU"].Value == null ||
                             string.IsNullOrWhiteSpace(dtgPresentacion.Rows[i].Cells["ClnSKU"].Value.ToString()))
@@ -550,7 +570,7 @@ namespace CapaVista
         {
             if (total <= 0)
             {
-                MessageBox.Show("Debe agregar al menos un producto para realizar el cobro.","Cobrar venta",
+                MessageBox.Show("Debe agregar al menos un producto para realizar el cobro.", "Cobrar venta",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigoBarra.Focus();
@@ -603,15 +623,6 @@ namespace CapaVista
         private void label2_Click(object sender, EventArgs e)
         {
 
-        }
-        private void frmmenuPres_Load_1(object sender, EventArgs e)
-        {
-            RellenarFilas();
-        }
-        private void tmrFechaHora_Tick(object sender, EventArgs e)
-        {
-            lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy");
-            lblHora.Text = "Hora: " + DateTime.Now.ToString("HH:mm:ss");
         }
         private void btnCambiarcantidad_Click(object sender, EventArgs e)
         {
@@ -708,6 +719,7 @@ namespace CapaVista
 
 
 
+     
     }
 
 }

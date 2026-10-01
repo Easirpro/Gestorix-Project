@@ -39,8 +39,6 @@ namespace CapaVista
         }
 
         #region Metodos
-
-        #endregion
         private void CargarProximoSKU()
         {
             ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
@@ -105,7 +103,7 @@ namespace CapaVista
                 cmbProveedor.SelectedValue = idProveedor;
                 cmbSucursal.SelectedValue = idSucursal;
 
-                txtPrecioCosto.Text = proveedor["PrecioCompra"] == DBNull.Value? "" : proveedor["PrecioCompra"].ToString();
+                txtPrecioCosto.Text = proveedor["PrecioCompra"] == DBNull.Value ? "" : proveedor["PrecioCompra"].ToString();
             }
 
             txtCodigo.Text = fila["CodigoBarra"]?.ToString() ?? "";
@@ -451,6 +449,10 @@ namespace CapaVista
 
             cmbProveedor.SelectedIndex = 0;
         }
+
+
+        #endregion
+
 
 
         #region Eventos
