@@ -30,12 +30,14 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReporapida));
             label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
+            lblCodigoArticulo = new Label();
+            lblNuevoStock = new Label();
+            txtCodigo = new TextBox();
+            txtNuevoStock = new TextBox();
             btnVolver = new Button();
-            btnCancelar = new Button();
+            btnAceptar = new Button();
+            lblNombre = new Label();
+            txtNombre = new TextBox();
             SuspendLayout();
             // 
             // label1
@@ -48,68 +50,89 @@
             label1.TabIndex = 0;
             label1.Text = "Reposición rápida de Stock";
             // 
-            // label2
+            // lblCodigoArticulo
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(78, 131);
-            label2.Name = "label2";
-            label2.Size = new Size(91, 15);
-            label2.TabIndex = 1;
-            label2.Text = "Código Articulo";
+            lblCodigoArticulo.AutoSize = true;
+            lblCodigoArticulo.Location = new Point(78, 131);
+            lblCodigoArticulo.Name = "lblCodigoArticulo";
+            lblCodigoArticulo.Size = new Size(91, 15);
+            lblCodigoArticulo.TabIndex = 1;
+            lblCodigoArticulo.Text = "Código Articulo";
             // 
-            // label3
+            // lblNuevoStock
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(78, 196);
-            label3.Name = "label3";
-            label3.Size = new Size(87, 15);
-            label3.TabIndex = 2;
-            label3.Text = "Variación Stock";
+            lblNuevoStock.AutoSize = true;
+            lblNuevoStock.Location = new Point(45, 218);
+            lblNuevoStock.Name = "lblNuevoStock";
+            lblNuevoStock.Size = new Size(124, 15);
+            lblNuevoStock.TabIndex = 2;
+            lblNuevoStock.Text = "Carga de Nuevo Stock";
             // 
-            // textBox1
+            // txtCodigo
             // 
-            textBox1.Location = new Point(182, 123);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(156, 23);
-            textBox1.TabIndex = 3;
+            txtCodigo.Location = new Point(182, 123);
+            txtCodigo.Name = "txtCodigo";
+            txtCodigo.Size = new Size(156, 23);
+            txtCodigo.TabIndex = 3;
+            txtCodigo.TextChanged += txtCodigo_TextChanged;
             // 
-            // textBox2
+            // txtNuevoStock
             // 
-            textBox2.Location = new Point(182, 188);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(156, 23);
-            textBox2.TabIndex = 4;
+            txtNuevoStock.Location = new Point(182, 210);
+            txtNuevoStock.Name = "txtNuevoStock";
+            txtNuevoStock.Size = new Size(156, 23);
+            txtNuevoStock.TabIndex = 4;
             // 
             // btnVolver
             // 
             btnVolver.ForeColor = SystemColors.ActiveCaptionText;
-            btnVolver.Location = new Point(196, 288);
+            btnVolver.Location = new Point(263, 289);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 5;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
             // 
-            // btnCancelar
+            // btnAceptar
             // 
-            btnCancelar.Location = new Point(299, 288);
-            btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(75, 23);
-            btnCancelar.TabIndex = 6;
-            btnCancelar.Text = "Cancelar";
-            btnCancelar.UseVisualStyleBackColor = true;
+            btnAceptar.Location = new Point(169, 289);
+            btnAceptar.Name = "btnAceptar";
+            btnAceptar.Size = new Size(75, 23);
+            btnAceptar.TabIndex = 6;
+            btnAceptar.Text = "Aceptar";
+            btnAceptar.UseVisualStyleBackColor = true;
+            btnAceptar.Click += btnAceptar_Click;
+            // 
+            // lblNombre
+            // 
+            lblNombre.AutoSize = true;
+            lblNombre.Location = new Point(105, 173);
+            lblNombre.Name = "lblNombre";
+            lblNombre.Size = new Size(51, 15);
+            lblNombre.TabIndex = 7;
+            lblNombre.Text = "Nombre";
+            // 
+            // txtNombre
+            // 
+            txtNombre.Location = new Point(182, 170);
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(156, 23);
+            txtNombre.TabIndex = 8;
             // 
             // frmReporapida
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(407, 357);
-            Controls.Add(btnCancelar);
+            Controls.Add(txtNombre);
+            Controls.Add(lblNombre);
+            Controls.Add(btnAceptar);
             Controls.Add(btnVolver);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
-            Controls.Add(label3);
-            Controls.Add(label2);
+            Controls.Add(txtNuevoStock);
+            Controls.Add(txtCodigo);
+            Controls.Add(lblNuevoStock);
+            Controls.Add(lblCodigoArticulo);
             Controls.Add(label1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "frmReporapida";
@@ -122,11 +145,13 @@
         #endregion
 
         private Label label1;
-        private Label label2;
-        private Label label3;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private Label lblCodigoArticulo;
+        private Label lblNuevoStock;
+        private TextBox txtCodigo;
+        private TextBox txtNuevoStock;
         private Button btnVolver;
-        private Button btnCancelar;
+        private Button btnAceptar;
+        private Label lblNombre;
+        private TextBox txtNombre;
     }
 }

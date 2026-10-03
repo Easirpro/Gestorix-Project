@@ -37,6 +37,22 @@
             dateTimePicker1 = new DateTimePicker();
             dateTimePicker2 = new DateTimePicker();
             dataGridView1 = new DataGridView();
+            Column1 = new DataGridViewTextBoxColumn();
+            Column16 = new DataGridViewTextBoxColumn();
+            Column15 = new DataGridViewTextBoxColumn();
+            Column12 = new DataGridViewTextBoxColumn();
+            Column13 = new DataGridViewTextBoxColumn();
+            Column14 = new DataGridViewTextBoxColumn();
+            Column2 = new DataGridViewTextBoxColumn();
+            Column3 = new DataGridViewTextBoxColumn();
+            Column4 = new DataGridViewTextBoxColumn();
+            Column5 = new DataGridViewTextBoxColumn();
+            Column6 = new DataGridViewTextBoxColumn();
+            Column7 = new DataGridViewTextBoxColumn();
+            Column8 = new DataGridViewTextBoxColumn();
+            Column9 = new DataGridViewTextBoxColumn();
+            Column10 = new DataGridViewTextBoxColumn();
+            Column11 = new DataGridViewTextBoxColumn();
             gpbTotales = new GroupBox();
             textBox7 = new TextBox();
             textBox6 = new TextBox();
@@ -54,22 +70,6 @@
             label3 = new Label();
             btnActualizar = new Button();
             btnVolver = new Button();
-            Column1 = new DataGridViewTextBoxColumn();
-            Column16 = new DataGridViewTextBoxColumn();
-            Column15 = new DataGridViewTextBoxColumn();
-            Column12 = new DataGridViewTextBoxColumn();
-            Column13 = new DataGridViewTextBoxColumn();
-            Column14 = new DataGridViewTextBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column3 = new DataGridViewTextBoxColumn();
-            Column4 = new DataGridViewTextBoxColumn();
-            Column5 = new DataGridViewTextBoxColumn();
-            Column6 = new DataGridViewTextBoxColumn();
-            Column7 = new DataGridViewTextBoxColumn();
-            Column8 = new DataGridViewTextBoxColumn();
-            Column9 = new DataGridViewTextBoxColumn();
-            Column10 = new DataGridViewTextBoxColumn();
-            Column11 = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             gpbTotales.SuspendLayout();
             SuspendLayout();
@@ -98,6 +98,7 @@
             btnAnular.Text = "Anular";
             btnAnular.TextAlign = ContentAlignment.MiddleRight;
             btnAnular.UseVisualStyleBackColor = true;
+            btnAnular.Click += btnAnular_Click;
             // 
             // button4
             // 
@@ -152,6 +153,86 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(832, 275);
             dataGridView1.TabIndex = 8;
+            // 
+            // Column1
+            // 
+            Column1.HeaderText = "Fecha";
+            Column1.Name = "Column1";
+            // 
+            // Column16
+            // 
+            Column16.HeaderText = "Anulada";
+            Column16.Name = "Column16";
+            // 
+            // Column15
+            // 
+            Column15.HeaderText = "Tranferencia";
+            Column15.Name = "Column15";
+            // 
+            // Column12
+            // 
+            Column12.HeaderText = "Debito";
+            Column12.Name = "Column12";
+            // 
+            // Column13
+            // 
+            Column13.HeaderText = "Observaciones";
+            Column13.Name = "Column13";
+            // 
+            // Column14
+            // 
+            Column14.HeaderText = "Completa";
+            Column14.Name = "Column14";
+            // 
+            // Column2
+            // 
+            Column2.HeaderText = "Nro. Transacción";
+            Column2.Name = "Column2";
+            // 
+            // Column3
+            // 
+            Column3.HeaderText = "Nro. Caja";
+            Column3.Name = "Column3";
+            // 
+            // Column4
+            // 
+            Column4.HeaderText = "Cajero";
+            Column4.Name = "Column4";
+            // 
+            // Column5
+            // 
+            Column5.HeaderText = "Nro. Comprobante";
+            Column5.Name = "Column5";
+            // 
+            // Column6
+            // 
+            Column6.HeaderText = "Subtotal";
+            Column6.Name = "Column6";
+            // 
+            // Column7
+            // 
+            Column7.HeaderText = "Descuento/Recargo";
+            Column7.Name = "Column7";
+            // 
+            // Column8
+            // 
+            Column8.HeaderText = "Total";
+            Column8.Name = "Column8";
+            // 
+            // Column9
+            // 
+            Column9.HeaderText = "Efectivo";
+            Column9.Name = "Column9";
+            // 
+            // Column10
+            // 
+            Column10.HeaderText = "Tarjeta de Credito";
+            Column10.Name = "Column10";
+            // 
+            // Column11
+            // 
+            Column11.HeaderText = "Cta. Cte";
+            Column11.Name = "Column11";
             // 
             // gpbTotales
             // 
@@ -305,86 +386,6 @@
             btnVolver.TabIndex = 11;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
-            // 
-            // Column1
-            // 
-            Column1.HeaderText = "Fecha";
-            Column1.Name = "Column1";
-            // 
-            // Column16
-            // 
-            Column16.HeaderText = "Anulada";
-            Column16.Name = "Column16";
-            // 
-            // Column15
-            // 
-            Column15.HeaderText = "Tranferencia";
-            Column15.Name = "Column15";
-            // 
-            // Column12
-            // 
-            Column12.HeaderText = "Debito";
-            Column12.Name = "Column12";
-            // 
-            // Column13
-            // 
-            Column13.HeaderText = "Observaciones";
-            Column13.Name = "Column13";
-            // 
-            // Column14
-            // 
-            Column14.HeaderText = "Completa";
-            Column14.Name = "Column14";
-            // 
-            // Column2
-            // 
-            Column2.HeaderText = "Nro. Transacción";
-            Column2.Name = "Column2";
-            // 
-            // Column3
-            // 
-            Column3.HeaderText = "Nro. Caja";
-            Column3.Name = "Column3";
-            // 
-            // Column4
-            // 
-            Column4.HeaderText = "Cajero";
-            Column4.Name = "Column4";
-            // 
-            // Column5
-            // 
-            Column5.HeaderText = "Nro. Comprobante";
-            Column5.Name = "Column5";
-            // 
-            // Column6
-            // 
-            Column6.HeaderText = "Subtotal";
-            Column6.Name = "Column6";
-            // 
-            // Column7
-            // 
-            Column7.HeaderText = "Descuento/Recargo";
-            Column7.Name = "Column7";
-            // 
-            // Column8
-            // 
-            Column8.HeaderText = "Total";
-            Column8.Name = "Column8";
-            // 
-            // Column9
-            // 
-            Column9.HeaderText = "Efectivo";
-            Column9.Name = "Column9";
-            // 
-            // Column10
-            // 
-            Column10.HeaderText = "Tarjeta de Credito";
-            Column10.Name = "Column10";
-            // 
-            // Column11
-            // 
-            Column11.HeaderText = "Cta. Cte";
-            Column11.Name = "Column11";
             // 
             // frmVentas
             // 

@@ -144,24 +144,64 @@ namespace CapaDatos.NegocioDatos
             using (SqlConnection conexion = cn.ObtenerConexion())
             {
                 string consulta = @"
-            SELECT
-                p.IdProducto,
-                p.CodigoBarra,
-                p.SKU,
-                p.Nombre,
-                p.Descripcion,
-                p.PrecioVenta,
-                p.Activo,
-                s.CantidadActual
-            FROM Producto p
-            LEFT JOIN Stock s
-                ON p.IdProducto = s.IdProducto
-            WHERE p.CodigoBarra = @CodigoBarra
-              AND p.Activo = 1;";
+                    SELECT
+                        p.IdProducto,
+                        p.CodigoBarra,
+                        p.SKU,
+                        p.Nombre,
+                        p.Descripcion,
+                        p.PrecioVenta,
+                        p.Activo,
+                        s.CantidadActual
+                    FROM Producto p
+                    LEFT JOIN Stock s
+                        ON p.IdProducto = s.IdProducto
+                    WHERE (p.CodigoBarra = @CodigoBarra
+                       OR p.SKU = @CodigoBarra)
+                      AND p.Activo = 1;";
 
                 using (SqlCommand cmd = new SqlCommand(consulta, conexion))
                 {
                     cmd.Parameters.AddWithValue("@CodigoBarra", codigoBarra);
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+                        adaptador.Fill(tabla);
+
+                        return tabla;
+                    }
+                }
+            }
+        }
+        public DataTable BuscarProductoPorCodigoOSku(string texto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT TOP 1
+                        p.IdProducto,
+                        p.CodigoBarra,
+                        p.SKU,
+                        p.Nombre,
+                        s.CantidadActual
+                    FROM Producto p
+                    LEFT JOIN Stock s
+                        ON p.IdProducto = s.IdProducto
+                    WHERE (p.CodigoBarra LIKE @Texto + '%'
+                       OR p.SKU LIKE @Texto + '%')
+                      AND p.Activo = 1
+                    ORDER BY
+                        CASE
+                            WHEN p.CodigoBarra = @Texto THEN 1
+                            WHEN p.SKU = @Texto THEN 1
+                            ELSE 2
+                        END,
+                        p.Nombre;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@Texto", texto);
 
                     using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                     {
@@ -284,6 +324,31 @@ namespace CapaDatos.NegocioDatos
 
             }
 
+        }
+        public DataTable CargarTodasLasCategorias()
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    SELECT
+                        IdCategoria,
+                        Nombre,
+                        Activo
+                    FROM Categoria
+                    ORDER BY Nombre;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+
+                        da.Fill(tabla);
+
+                        return tabla;
+                    }
+                }
+            }
         }
         public bool ModificarMarca(ClsGestorEntidadProducto.ClsMarca marca)
         {
@@ -471,6 +536,51 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public bool AgregarStock(int idProducto, int cantidad)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    IF EXISTS
+                    (
+                        SELECT 1
+                        FROM Stock
+                        WHERE IdProducto = @IdProducto
+                    )
+                    BEGIN
+                        UPDATE Stock
+                        SET CantidadActual = CantidadActual + @Cantidad
+                        WHERE IdProducto = @IdProducto;
+                    END
+                    ELSE
+                    BEGIN
+                        INSERT INTO Stock
+                        (
+                            IdProducto,
+                            CantidadActual,
+                            StockMinimo,
+                            StockIdeal
+                        )
+                        VALUES
+                        (
+                            @IdProducto,
+                            @Cantidad,
+                            0,
+                            0
+                        );
+                    END";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                    cmd.Parameters.AddWithValue("@Cantidad", cantidad);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
         public bool RegistrarLote(ClsLote lote)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -655,6 +765,7 @@ namespace CapaDatos.NegocioDatos
                         p.CodigoBarra,
                         p.Descripcion,
                         c.Nombre AS Rubro,
+                        m.Nombre AS Marca,
                         p.PrecioVenta,
                         p.Activo,
                         iva.Descripcion AS IVA,
@@ -667,16 +778,14 @@ namespace CapaDatos.NegocioDatos
                         prov.PrecioCosto,
                         lote.FechaVencimiento
                     FROM Producto p
-
                     INNER JOIN Categoria c
                         ON p.IdCategoria = c.IdCategoria
-
+                    INNER JOIN Marca m
+                        ON p.IdMarca = m.IdMarca
                     LEFT JOIN IVA iva
                         ON p.IdIVA = iva.IdIVA
-
                     LEFT JOIN Stock s
                         ON p.IdProducto = s.IdProducto
-
                     OUTER APPLY
                     (
                         SELECT TOP 1
@@ -695,7 +804,6 @@ namespace CapaDatos.NegocioDatos
                             pr.Nombre,
                             sp.Nombre
                     ) prov
-
                     OUTER APPLY
                     (
                         SELECT TOP 1
@@ -705,7 +813,6 @@ namespace CapaDatos.NegocioDatos
                           AND l.FechaVencimiento IS NOT NULL
                         ORDER BY l.FechaVencimiento ASC
                     ) lote
-
                     ORDER BY p.Descripcion;";
 
                 using (SqlCommand cmd = new SqlCommand(consulta, conexion))
@@ -1192,6 +1299,203 @@ namespace CapaDatos.NegocioDatos
                     
 
                 return Convert.ToInt32(resultado);
+            }
+        }
+        public bool EliminarProducto(int idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+
+                SqlTransaction transaccion = conexion.BeginTransaction();
+
+                try
+                {
+                    string[] consultas =
+                    {
+                        "DELETE FROM DetallePromocion WHERE IdProducto = @IdProducto",
+                        "DELETE FROM DetalleVenta WHERE IdProducto = @IdProducto",
+                        "DELETE FROM Devolucion WHERE IdProducto = @IdProducto",
+                        "DELETE FROM HistorialPrecio WHERE IdProducto = @IdProducto",
+                        "DELETE FROM Lote WHERE IdProducto = @IdProducto",
+                        "DELETE FROM MovimientoStock WHERE IdProducto = @IdProducto",
+                        "DELETE FROM ProductoSucursalProveedor WHERE IdProducto = @IdProducto",
+                        "DELETE FROM Stock WHERE IdProducto = @IdProducto",
+                        "DELETE FROM Producto WHERE IdProducto = @IdProducto"
+                    };
+
+                    foreach (string consulta in consultas)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+                        {
+                            cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaccion.Commit();
+
+                    return true;
+                }
+                catch
+                {
+                    transaccion.Rollback();
+                    return false;
+                }
+            }
+        }
+        public bool DescontinuarProducto(int idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE Producto
+                    SET Activo = 0
+                    WHERE IdProducto = @IdProducto;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        public bool ActivarProducto(int idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE Producto
+                    SET Activo = 1
+                    WHERE IdProducto = @IdProducto;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        public int RegistrarCategoria(string nombre, string descripcion)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    INSERT INTO Categoria
+                    (
+                        Nombre,
+                        Descripcion,
+                        Activo
+                    )
+                    VALUES
+                    (
+                        @Nombre,
+                        @Descripcion,
+                        1
+                    );
+
+                    SELECT SCOPE_IDENTITY();";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@Nombre", nombre);
+                    cmd.Parameters.AddWithValue("@Descripcion", string.IsNullOrWhiteSpace(descripcion) ? (object)DBNull.Value : descripcion);
+
+                    conexion.Open();
+
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+        public bool ModificarCategoria(int idCategoria, string nombre, string descripcion)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE Categoria
+                    SET
+                        Nombre = @Nombre,
+                        Descripcion = @Descripcion
+                    WHERE IdCategoria = @IdCategoria
+                      AND IdCategoria NOT BETWEEN 1002 AND 1012;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+                    cmd.Parameters.AddWithValue("@Nombre", nombre);
+                    cmd.Parameters.AddWithValue("@Descripcion", string.IsNullOrWhiteSpace(descripcion) ? (object)DBNull.Value : descripcion);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        public bool DesactivarCategoria(int idCategoria)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE Categoria
+                    SET Activo = 0
+                    WHERE IdCategoria = @IdCategoria
+                      AND IdCategoria NOT BETWEEN 1002 AND 1012
+                      AND Activo = 1;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        public bool HabilitarCategoria(int idCategoria)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    UPDATE Categoria
+                    SET Activo = 1
+                    WHERE IdCategoria = @IdCategoria
+                      AND IdCategoria NOT BETWEEN 1002 AND 1012
+                      AND Activo = 0;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        public bool EliminarCategoria(int idCategoria)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                string consulta = @"
+                    DELETE FROM Categoria
+                    WHERE IdCategoria = @IdCategoria
+                      AND IdCategoria NOT BETWEEN 1002 AND 1012;";
+
+                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+
+                    conexion.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
             }
         }
 
