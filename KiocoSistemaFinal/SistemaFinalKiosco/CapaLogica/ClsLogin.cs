@@ -46,6 +46,8 @@ namespace CapaLogica
             SesionUsuario.DNI = null;
             SesionUsuario.CUIT = null;
             SesionUsuario.PreguntasCompletadas = false;
+
+            SesionUsuario.SesionActiva = false;
         }
     }
 }

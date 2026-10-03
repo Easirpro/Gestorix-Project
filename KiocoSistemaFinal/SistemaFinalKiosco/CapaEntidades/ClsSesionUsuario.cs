@@ -26,6 +26,7 @@ namespace CapaEntidades
         public static string DNI { get; set; }
         public static string CUIT { get; set; }
         public static bool PreguntasCompletadas { get; set; }
+        public static bool SesionActiva { get; set; }
 
     }
 }

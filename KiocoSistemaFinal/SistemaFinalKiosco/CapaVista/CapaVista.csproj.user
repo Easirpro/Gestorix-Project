@@ -50,6 +50,9 @@
     <Compile Update="frmInformeCobro.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frmInformeCobroAlternativo.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frmIngresoPlataCaja.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +89,9 @@
     <Compile Update="frmNuevoRol.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frmNuevoRubro.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frmPermisos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +117,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmReporapida.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmBuscarRubro.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmVentaFecha.cs">

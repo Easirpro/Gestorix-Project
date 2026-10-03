@@ -17,9 +17,18 @@ namespace CapaVista
             InitializeComponent();
         }
 
+
+        #region Metodos
+
+        #endregion
+
+
+        #region Eventos
         private void button1_Click(object sender, EventArgs e)
         {
 
         }
+        #endregion
+
     }
 }

@@ -71,6 +71,30 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.CargarCategoriasActivas();
         }
+        public DataTable CargarTodasLasCategorias()
+        {
+            return datos.CargarTodasLasCategorias();
+        }
+        public int RegistrarCategoria(string nombre, string descripcion)
+        {
+            return datos.RegistrarCategoria(nombre, descripcion);
+        }
+        public bool ModificarCategoria(int idCategoria, string nombre, string descripcion)
+        {
+            return datos.ModificarCategoria(idCategoria, nombre, descripcion);
+        }
+        public bool DesactivarCategoria(int idCategoria)
+        {
+            return datos.DesactivarCategoria(idCategoria);
+        }
+        public bool HabilitarCategoria(int idCategoria)
+        {
+            return datos.HabilitarCategoria(idCategoria);
+        }
+        public bool EliminarCategoria(int idCategoria)
+        {
+            return datos.EliminarCategoria(idCategoria);
+        }
         public void RegistrarStock(int idProducto,decimal cantidadActual,decimal stockMinimo, decimal stockIdeal)
         {
             datos.RegistrarStock(idProducto,cantidadActual,stockMinimo,stockIdeal);
@@ -123,6 +147,28 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ModificarProductoSucursalProveedor(relacion);
         }
+        public bool EliminarProducto(int idProducto)
+        {
+            return datos.EliminarProducto(idProducto);
+        }
+        public bool DescontinuarProducto(int idProducto)
+        {
+            return datos.DescontinuarProducto(idProducto);
+        }
+        public bool ActivarProducto(int idProducto)
+        {
+            return datos.ActivarProducto(idProducto);
+        }
+        public DataTable BuscarProductoPorCodigoOSku(string texto)
+        {
+            return datos.BuscarProductoPorCodigoOSku(texto);
+        }
+        public bool AgregarStock(int idProducto, int cantidad)
+        {
+            return datos.AgregarStock(idProducto, cantidad);
+        }
+
+
 
         //Metodos para excel
         public int ObtenerIdMarcaPorNombre(string nombre)

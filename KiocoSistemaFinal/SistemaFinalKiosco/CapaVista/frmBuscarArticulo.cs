@@ -18,11 +18,13 @@ namespace CapaVista
         {
             InitializeComponent();
 
-            dataGridView1.ReadOnly = true;
+            dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.ReadOnly = false;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.MultiSelect = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.RowHeadersVisible = false;
+
             btnBuscar.Click += btnBuscar_Click;
         }
         public ClsProducto ProductoSeleccionado { get; private set; }
