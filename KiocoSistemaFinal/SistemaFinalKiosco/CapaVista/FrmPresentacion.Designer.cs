@@ -106,6 +106,7 @@
             tollClosed = new ToolStripMenuItem();
             toolStripMenuItem2 = new ToolStripMenuItem();
             btnConfig = new MenuStrip();
+            cargaRapidaDePreciosToolStripMenuItem = new ToolStripMenuItem();
             tmrFechaHora = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgPresentacion).BeginInit();
@@ -515,7 +516,7 @@
             // 
             // btnArt
             // 
-            btnArt.DropDownItems.AddRange(new ToolStripItem[] { menuitemAdmistradorarticulos, menuitemAdministradoarticulos, meniitemReporapida, cargarDeLasMarcasToolStripMenuItem, menuitemImporexcel, menuitemExporexcel });
+            btnArt.DropDownItems.AddRange(new ToolStripItem[] { menuitemAdmistradorarticulos, menuitemAdministradoarticulos, meniitemReporapida, cargaRapidaDePreciosToolStripMenuItem, cargarDeLasMarcasToolStripMenuItem, menuitemImporexcel, menuitemExporexcel });
             btnArt.Enabled = false;
             btnArt.Name = "btnArt";
             btnArt.Size = new Size(66, 20);
@@ -787,6 +788,13 @@
             btnConfig.Text = "menuStrip1";
             btnConfig.ItemClicked += btnConfig_ItemClicked;
             // 
+            // cargaRapidaDePreciosToolStripMenuItem
+            // 
+            cargaRapidaDePreciosToolStripMenuItem.Name = "cargaRapidaDePreciosToolStripMenuItem";
+            cargaRapidaDePreciosToolStripMenuItem.Size = new Size(232, 22);
+            cargaRapidaDePreciosToolStripMenuItem.Text = "Carga Rapida de Precios";
+            cargaRapidaDePreciosToolStripMenuItem.Click += cargaRapidaDePreciosToolStripMenuItem_Click;
+            // 
             // frmmenuPres
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -904,5 +912,6 @@
         private ToolStripMenuItem tollClosed;
         private ToolStripMenuItem toolStripMenuItem2;
         private MenuStrip btnConfig;
+        private ToolStripMenuItem cargaRapidaDePreciosToolStripMenuItem;
     }
 }

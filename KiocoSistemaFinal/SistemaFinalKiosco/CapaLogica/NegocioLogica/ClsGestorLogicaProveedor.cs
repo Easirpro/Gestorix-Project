@@ -86,6 +86,10 @@ namespace CapaLogica.NegocioLogica
         {
             datos.ModificarCorreo(correo);
         }
+        public DataTable BuscarProveedor(string texto)
+        {
+            return datos.BuscarProveedor(texto);
+        }
 
     }
 }

@@ -29,7 +29,6 @@ namespace CapaVista
         {
             bool puedeReponer = SesionUsuario.Permisos.Contains(141);
 
-            btnAceptar.Enabled = puedeReponer;
         }
 
         #endregion

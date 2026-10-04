@@ -101,7 +101,7 @@ namespace CapaVista
             btnAyuda.Enabled = SesionUsuario.Permisos.Contains(900);
 
             //Empleado
-            btnEmpleado.Enabled = SesionUsuario.Permisos.Contains(1000) || SesionUsuario.Permisos.Contains(1010) || SesionUsuario.Permisos.Contains(1020) || 
+            btnEmpleado.Enabled = SesionUsuario.Permisos.Contains(1000) || SesionUsuario.Permisos.Contains(1010) || SesionUsuario.Permisos.Contains(1020) ||
                 SesionUsuario.Permisos.Contains(1030) || SesionUsuario.Permisos.Contains(1270);
 
             //Listados
@@ -749,7 +749,12 @@ namespace CapaVista
 
             txtCodigoBarra.Focus();
         }
+        private void cargaRapidaDePreciosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmCargaRapidaPrecios formulario = new frmCargaRapidaPrecios();
 
+            formulario.ShowDialog();
+        }
 
         #endregion
 
@@ -767,7 +772,8 @@ namespace CapaVista
 
 
 
-     
+
+
     }
 
 }
