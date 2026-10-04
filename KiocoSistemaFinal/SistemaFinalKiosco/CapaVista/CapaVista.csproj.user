@@ -26,6 +26,9 @@
     <Compile Update="frmCargaEmpleados.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frmCargaRapidaPrecios.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frmCobrosecundario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -33,6 +36,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmCuentaCorrienteProveedores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmDetalleCompra.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmDetalleVenta.cs">

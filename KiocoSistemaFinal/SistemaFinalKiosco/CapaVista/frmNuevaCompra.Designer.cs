@@ -32,12 +32,19 @@
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            label8 = new Label();
+            label9 = new Label();
+            labelNumeroComprobante = new Label();
             gpbProveedor = new GroupBox();
             btnBuscar = new Button();
             txtProveedor = new TextBox();
             dateTimePicker1 = new DateTimePicker();
+            comboBox1 = new ComboBox();
+            txtNumeroComprobante = new TextBox();
             txtCodigobarra = new TextBox();
-            btnBuscarProducto = new Button();
+            btnCargarProducto = new Button();
             dataGridView1 = new DataGridView();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
@@ -45,41 +52,16 @@
             Column4 = new DataGridViewTextBoxColumn();
             Column5 = new DataGridViewTextBoxColumn();
             Column6 = new DataGridViewTextBoxColumn();
-            btnEliminarProducto = new Button();
-            gpbOpciones = new GroupBox();
-            chkActualizarStock = new CheckBox();
-            chkActualizarPrecio = new CheckBox();
-            label5 = new Label();
-            label6 = new Label();
-            label7 = new Label();
-            label8 = new Label();
-            label9 = new Label();
+            btnEliminarCompra = new Button();
             txtSubsinImpuesto = new TextBox();
-            txtImpuestosInternos = new TextBox();
-            txtSubConImpuesto = new TextBox();
             txtIva = new TextBox();
             txtTotal = new TextBox();
-            gpbFormasdePago = new GroupBox();
-            txtPagosDebito = new TextBox();
-            txtPagosCuenta = new TextBox();
-            txtPagoTransferencia = new TextBox();
-            txtPagoEfectivo = new TextBox();
-            txtPagoTarjeta = new TextBox();
-            label13 = new Label();
-            label12 = new Label();
-            label11 = new Label();
-            label10 = new Label();
-            Efectivo = new Label();
-            label4 = new Label();
             txtObservaciones = new TextBox();
             btnGuardar = new Button();
             btnCacelar = new Button();
-            comboBox1 = new ComboBox();
-            chkCompraAnulada = new CheckBox();
+            lstProductos = new ListBox();
             gpbProveedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            gpbOpciones.SuspendLayout();
-            gpbFormasdePago.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -94,20 +76,65 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(379, 40);
+            label2.Location = new Point(373, 25);
             label2.Name = "label2";
-            label2.Size = new Size(88, 15);
+            label2.Size = new Size(123, 15);
             label2.TabIndex = 1;
-            label2.Text = "Tipo de Factura";
+            label2.Text = "Tipo de Comprobante";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(380, 67);
+            label3.Location = new Point(373, 67);
             label3.Name = "label3";
             label3.Size = new Size(38, 15);
             label3.TabIndex = 2;
             label3.Text = "Fecha";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(17, 480);
+            label4.Name = "label4";
+            label4.Size = new Size(84, 15);
+            label4.TabIndex = 21;
+            label4.Text = "Observaciones";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(428, 436);
+            label5.Name = "label5";
+            label5.Size = new Size(68, 15);
+            label5.TabIndex = 15;
+            label5.Text = "Subtotal S/I";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(213, 436);
+            label8.Name = "label8";
+            label8.Size = new Size(24, 15);
+            label8.TabIndex = 16;
+            label8.Text = "IVA";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(17, 440);
+            label9.Name = "label9";
+            label9.Size = new Size(32, 15);
+            label9.TabIndex = 17;
+            label9.Text = "Total";
+            // 
+            // labelNumeroComprobante
+            // 
+            labelNumeroComprobante.AutoSize = true;
+            labelNumeroComprobante.Location = new Point(16, 226);
+            labelNumeroComprobante.Name = "labelNumeroComprobante";
+            labelNumeroComprobante.Size = new Size(115, 15);
+            labelNumeroComprobante.TabIndex = 3;
+            labelNumeroComprobante.Text = "N.º de comprobante";
             // 
             // gpbProveedor
             // 
@@ -125,55 +152,81 @@
             btnBuscar.Location = new Point(244, 31);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(105, 23);
-            btnBuscar.TabIndex = 1;
+            btnBuscar.TabIndex = 5;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
             // 
             // txtProveedor
             // 
             txtProveedor.Location = new Point(6, 32);
             txtProveedor.Name = "txtProveedor";
             txtProveedor.Size = new Size(216, 23);
-            txtProveedor.TabIndex = 0;
+            txtProveedor.TabIndex = 6;
             // 
             // dateTimePicker1
             // 
             dateTimePicker1.Location = new Point(424, 61);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(200, 23);
-            dateTimePicker1.TabIndex = 6;
-            dateTimePicker1.Value = new DateTime(2026, 6, 13, 0, 0, 0, 0);
+            dateTimePicker1.Size = new Size(215, 23);
+            dateTimePicker1.TabIndex = 7;
+            // 
+            // comboBox1
+            // 
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Factura A", "Factura B", "Factura C", "Nota de Crédito A", "Nota de Crédito B", "Nota de Crédito C" });
+            comboBox1.Location = new Point(502, 22);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(137, 23);
+            comboBox1.TabIndex = 8;
+            // 
+            // txtNumeroComprobante
+            // 
+            txtNumeroComprobante.Location = new Point(148, 223);
+            txtNumeroComprobante.Name = "txtNumeroComprobante";
+            txtNumeroComprobante.Size = new Size(160, 23);
+            txtNumeroComprobante.TabIndex = 9;
             // 
             // txtCodigobarra
             // 
             txtCodigobarra.Location = new Point(18, 116);
             txtCodigobarra.Name = "txtCodigobarra";
             txtCodigobarra.Size = new Size(145, 23);
-            txtCodigobarra.TabIndex = 7;
+            txtCodigobarra.TabIndex = 10;
+            txtCodigobarra.TextChanged += txtCodigobarra_TextChanged;
+            txtCodigobarra.KeyDown += txtCodigobarra_KeyDown;
             // 
-            // btnBuscarProducto
+            // btnCargarProducto
             // 
-            btnBuscarProducto.Location = new Point(180, 116);
-            btnBuscarProducto.Name = "btnBuscarProducto";
-            btnBuscarProducto.Size = new Size(75, 23);
-            btnBuscarProducto.TabIndex = 8;
-            btnBuscarProducto.Text = "Buscar";
-            btnBuscarProducto.UseVisualStyleBackColor = true;
-            btnBuscarProducto.Click += btnBuscarProducto_Click;
+            btnCargarProducto.Location = new Point(180, 116);
+            btnCargarProducto.Name = "btnCargarProducto";
+            btnCargarProducto.Size = new Size(75, 23);
+            btnCargarProducto.TabIndex = 11;
+            btnCargarProducto.Text = "Cargar";
+            btnCargarProducto.UseVisualStyleBackColor = true;
+            btnCargarProducto.Click += btnCargarProducto_Click;
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToResizeRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6 });
-            dataGridView1.Location = new Point(18, 149);
+            dataGridView1.Location = new Point(17, 252);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(605, 134);
-            dataGridView1.TabIndex = 9;
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Size = new Size(621, 134);
+            dataGridView1.TabIndex = 12;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            dataGridView1.CellEndEdit += dataGridView1_CellEndEdit_1;
             // 
             // Column1
             // 
             Column1.HeaderText = "Código";
             Column1.Name = "Column1";
+            Column1.ReadOnly = true;
             // 
             // Column2
             // 
@@ -184,6 +237,7 @@
             // 
             Column3.HeaderText = "Descripción";
             Column3.Name = "Column3";
+            Column3.ReadOnly = true;
             // 
             // Column4
             // 
@@ -192,331 +246,124 @@
             // 
             // Column5
             // 
-            Column5.HeaderText = "%IVA";
+            Column5.HeaderText = "% IVA";
             Column5.Name = "Column5";
+            Column5.ReadOnly = true;
             // 
             // Column6
             // 
             Column6.HeaderText = "Total";
             Column6.Name = "Column6";
+            Column6.ReadOnly = true;
             // 
-            // btnEliminarProducto
+            // btnEliminarCompra
             // 
-            btnEliminarProducto.Location = new Point(16, 296);
-            btnEliminarProducto.Name = "btnEliminarProducto";
-            btnEliminarProducto.Size = new Size(75, 23);
-            btnEliminarProducto.TabIndex = 10;
-            btnEliminarProducto.Text = "Eliminar";
-            btnEliminarProducto.UseVisualStyleBackColor = true;
-            // 
-            // gpbOpciones
-            // 
-            gpbOpciones.Controls.Add(chkActualizarStock);
-            gpbOpciones.Controls.Add(chkActualizarPrecio);
-            gpbOpciones.Location = new Point(15, 326);
-            gpbOpciones.Name = "gpbOpciones";
-            gpbOpciones.Size = new Size(262, 58);
-            gpbOpciones.TabIndex = 11;
-            gpbOpciones.TabStop = false;
-            gpbOpciones.Text = "Opciones";
-            // 
-            // chkActualizarStock
-            // 
-            chkActualizarStock.AutoSize = true;
-            chkActualizarStock.Location = new Point(144, 22);
-            chkActualizarStock.Name = "chkActualizarStock";
-            chkActualizarStock.Size = new Size(110, 19);
-            chkActualizarStock.TabIndex = 1;
-            chkActualizarStock.Text = "Actualizar Stock";
-            chkActualizarStock.UseVisualStyleBackColor = true;
-            // 
-            // chkActualizarPrecio
-            // 
-            chkActualizarPrecio.AutoSize = true;
-            chkActualizarPrecio.Location = new Point(6, 22);
-            chkActualizarPrecio.Name = "chkActualizarPrecio";
-            chkActualizarPrecio.Size = new Size(119, 19);
-            chkActualizarPrecio.TabIndex = 0;
-            chkActualizarPrecio.Text = "Actualizar Precios";
-            chkActualizarPrecio.UseVisualStyleBackColor = true;
-            chkActualizarPrecio.CheckedChanged += chkActualizarprecio_CheckedChanged;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(429, 326);
-            label5.Name = "label5";
-            label5.Size = new Size(68, 15);
-            label5.TabIndex = 12;
-            label5.Text = "Subtotal S/I";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(429, 356);
-            label6.Name = "label6";
-            label6.Size = new Size(77, 15);
-            label6.TabIndex = 13;
-            label6.Text = "Imp. Internos";
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(429, 387);
-            label7.Name = "label7";
-            label7.Size = new Size(70, 15);
-            label7.TabIndex = 14;
-            label7.Text = "Subtotal C/I";
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(429, 418);
-            label8.Name = "label8";
-            label8.Size = new Size(24, 15);
-            label8.TabIndex = 15;
-            label8.Text = "IVA";
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(429, 449);
-            label9.Name = "label9";
-            label9.Size = new Size(32, 15);
-            label9.TabIndex = 16;
-            label9.Text = "Total";
+            btnEliminarCompra.Location = new Point(16, 392);
+            btnEliminarCompra.Name = "btnEliminarCompra";
+            btnEliminarCompra.Size = new Size(75, 23);
+            btnEliminarCompra.TabIndex = 13;
+            btnEliminarCompra.Text = "Eliminar";
+            btnEliminarCompra.UseVisualStyleBackColor = true;
+            btnEliminarCompra.Click += btnEliminarCompra_Click;
             // 
             // txtSubsinImpuesto
             // 
-            txtSubsinImpuesto.Location = new Point(518, 322);
+            txtSubsinImpuesto.Location = new Point(517, 432);
             txtSubsinImpuesto.Name = "txtSubsinImpuesto";
-            txtSubsinImpuesto.Size = new Size(105, 23);
-            txtSubsinImpuesto.TabIndex = 17;
-            // 
-            // txtImpuestosInternos
-            // 
-            txtImpuestosInternos.Location = new Point(518, 353);
-            txtImpuestosInternos.Name = "txtImpuestosInternos";
-            txtImpuestosInternos.Size = new Size(105, 23);
-            txtImpuestosInternos.TabIndex = 18;
-            // 
-            // txtSubConImpuesto
-            // 
-            txtSubConImpuesto.Location = new Point(518, 384);
-            txtSubConImpuesto.Name = "txtSubConImpuesto";
-            txtSubConImpuesto.Size = new Size(105, 23);
-            txtSubConImpuesto.TabIndex = 19;
+            txtSubsinImpuesto.ReadOnly = true;
+            txtSubsinImpuesto.Size = new Size(121, 23);
+            txtSubsinImpuesto.TabIndex = 18;
             // 
             // txtIva
             // 
-            txtIva.Location = new Point(518, 415);
+            txtIva.Location = new Point(255, 432);
             txtIva.Name = "txtIva";
-            txtIva.Size = new Size(105, 23);
-            txtIva.TabIndex = 20;
+            txtIva.ReadOnly = true;
+            txtIva.Size = new Size(121, 23);
+            txtIva.TabIndex = 19;
             // 
             // txtTotal
             // 
-            txtTotal.Location = new Point(518, 446);
+            txtTotal.Location = new Point(55, 433);
             txtTotal.Name = "txtTotal";
-            txtTotal.Size = new Size(105, 23);
-            txtTotal.TabIndex = 21;
-            // 
-            // gpbFormasdePago
-            // 
-            gpbFormasdePago.Controls.Add(txtPagosDebito);
-            gpbFormasdePago.Controls.Add(txtPagosCuenta);
-            gpbFormasdePago.Controls.Add(txtPagoTransferencia);
-            gpbFormasdePago.Controls.Add(txtPagoEfectivo);
-            gpbFormasdePago.Controls.Add(txtPagoTarjeta);
-            gpbFormasdePago.Controls.Add(label13);
-            gpbFormasdePago.Controls.Add(label12);
-            gpbFormasdePago.Controls.Add(label11);
-            gpbFormasdePago.Controls.Add(label10);
-            gpbFormasdePago.Controls.Add(Efectivo);
-            gpbFormasdePago.Location = new Point(14, 391);
-            gpbFormasdePago.Name = "gpbFormasdePago";
-            gpbFormasdePago.Size = new Size(399, 76);
-            gpbFormasdePago.TabIndex = 22;
-            gpbFormasdePago.TabStop = false;
-            gpbFormasdePago.Text = "Formas de Pago";
-            // 
-            // txtPagosDebito
-            // 
-            txtPagosDebito.Location = new Point(320, 45);
-            txtPagosDebito.Name = "txtPagosDebito";
-            txtPagosDebito.Size = new Size(73, 23);
-            txtPagosDebito.TabIndex = 23;
-            // 
-            // txtPagosCuenta
-            // 
-            txtPagosCuenta.Location = new Point(241, 45);
-            txtPagosCuenta.Name = "txtPagosCuenta";
-            txtPagosCuenta.Size = new Size(73, 23);
-            txtPagosCuenta.TabIndex = 23;
-            // 
-            // txtPagoTransferencia
-            // 
-            txtPagoTransferencia.Location = new Point(162, 45);
-            txtPagoTransferencia.Name = "txtPagoTransferencia";
-            txtPagoTransferencia.Size = new Size(73, 23);
-            txtPagoTransferencia.TabIndex = 24;
-            // 
-            // txtPagoEfectivo
-            // 
-            txtPagoEfectivo.Location = new Point(4, 45);
-            txtPagoEfectivo.Name = "txtPagoEfectivo";
-            txtPagoEfectivo.Size = new Size(73, 23);
-            txtPagoEfectivo.TabIndex = 5;
-            // 
-            // txtPagoTarjeta
-            // 
-            txtPagoTarjeta.Location = new Point(83, 45);
-            txtPagoTarjeta.Name = "txtPagoTarjeta";
-            txtPagoTarjeta.Size = new Size(73, 23);
-            txtPagoTarjeta.TabIndex = 23;
-            // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Location = new Point(320, 27);
-            label13.Name = "label13";
-            label13.Size = new Size(42, 15);
-            label13.TabIndex = 4;
-            label13.Text = "Debito";
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Location = new Point(241, 27);
-            label12.Name = "label12";
-            label12.Size = new Size(49, 15);
-            label12.TabIndex = 3;
-            label12.Text = "Cta. Cte";
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(161, 27);
-            label11.Name = "label11";
-            label11.Size = new Size(76, 15);
-            label11.TabIndex = 2;
-            label11.Text = "Transferencia";
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new Point(83, 27);
-            label10.Name = "label10";
-            label10.Size = new Size(41, 15);
-            label10.TabIndex = 1;
-            label10.Text = "Tarjeta";
-            // 
-            // Efectivo
-            // 
-            Efectivo.AutoSize = true;
-            Efectivo.Location = new Point(4, 27);
-            Efectivo.Name = "Efectivo";
-            Efectivo.Size = new Size(49, 15);
-            Efectivo.TabIndex = 0;
-            Efectivo.Text = "Efectivo";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(17, 481);
-            label4.Name = "label4";
-            label4.Size = new Size(84, 15);
-            label4.TabIndex = 23;
-            label4.Text = "Observaciones";
+            txtTotal.ReadOnly = true;
+            txtTotal.Size = new Size(121, 23);
+            txtTotal.TabIndex = 20;
             // 
             // txtObservaciones
             // 
-            txtObservaciones.Location = new Point(107, 478);
+            txtObservaciones.Location = new Point(107, 477);
             txtObservaciones.Multiline = true;
             txtObservaciones.Name = "txtObservaciones";
-            txtObservaciones.Size = new Size(516, 78);
-            txtObservaciones.TabIndex = 24;
+            txtObservaciones.Size = new Size(532, 67);
+            txtObservaciones.TabIndex = 22;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(467, 582);
+            btnGuardar.Location = new Point(467, 550);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
-            btnGuardar.TabIndex = 25;
+            btnGuardar.TabIndex = 23;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // btnCacelar
             // 
-            btnCacelar.Location = new Point(548, 582);
+            btnCacelar.Location = new Point(564, 550);
             btnCacelar.Name = "btnCacelar";
             btnCacelar.Size = new Size(75, 23);
-            btnCacelar.TabIndex = 26;
+            btnCacelar.TabIndex = 24;
             btnCacelar.Text = "Cancelar";
             btnCacelar.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // lstProductos
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Factura A" });
-            comboBox1.Location = new Point(473, 32);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(125, 23);
-            comboBox1.TabIndex = 27;
-            // 
-            // chkCompraAnulada
-            // 
-            chkCompraAnulada.AutoSize = true;
-            chkCompraAnulada.Location = new Point(14, 596);
-            chkCompraAnulada.Name = "chkCompraAnulada";
-            chkCompraAnulada.Size = new Size(116, 19);
-            chkCompraAnulada.TabIndex = 28;
-            chkCompraAnulada.Text = "Compra Anulada";
-            chkCompraAnulada.UseVisualStyleBackColor = true;
-            chkCompraAnulada.CheckedChanged += chkCompraAnulada_CheckedChanged;
+            lstProductos.FormattingEnabled = true;
+            lstProductos.ImeMode = ImeMode.On;
+            lstProductos.ItemHeight = 15;
+            lstProductos.Location = new Point(18, 150);
+            lstProductos.Name = "lstProductos";
+            lstProductos.Size = new Size(237, 64);
+            lstProductos.TabIndex = 25;
+            lstProductos.Visible = false;
+            lstProductos.DoubleClick += lstProductos_DoubleClick;
             // 
             // frmNuevaCompra
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(636, 635);
-            Controls.Add(chkCompraAnulada);
-            Controls.Add(comboBox1);
+            ClientSize = new Size(675, 590);
+            Controls.Add(lstProductos);
             Controls.Add(btnCacelar);
             Controls.Add(btnGuardar);
             Controls.Add(txtObservaciones);
             Controls.Add(label4);
-            Controls.Add(gpbFormasdePago);
             Controls.Add(txtTotal);
             Controls.Add(txtIva);
-            Controls.Add(txtSubConImpuesto);
-            Controls.Add(txtImpuestosInternos);
             Controls.Add(txtSubsinImpuesto);
             Controls.Add(label9);
             Controls.Add(label8);
-            Controls.Add(label7);
-            Controls.Add(label6);
             Controls.Add(label5);
-            Controls.Add(gpbOpciones);
-            Controls.Add(btnEliminarProducto);
+            Controls.Add(btnEliminarCompra);
             Controls.Add(dataGridView1);
-            Controls.Add(btnBuscarProducto);
+            Controls.Add(btnCargarProducto);
             Controls.Add(txtCodigobarra);
+            Controls.Add(txtNumeroComprobante);
             Controls.Add(dateTimePicker1);
+            Controls.Add(comboBox1);
             Controls.Add(gpbProveedor);
+            Controls.Add(labelNumeroComprobante);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "frmNuevaCompra";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Nueva Compra";
             gpbProveedor.ResumeLayout(false);
             gpbProveedor.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            gpbOpciones.ResumeLayout(false);
-            gpbOpciones.PerformLayout();
-            gpbFormasdePago.ResumeLayout(false);
-            gpbFormasdePago.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -526,12 +373,23 @@
         private Label label1;
         private Label label2;
         private Label label3;
+        private Label label4;
+        private Label label5;
+        private Label label8;
+        private Label label9;
+        private Label labelNumeroComprobante;
+
         private GroupBox gpbProveedor;
         private Button btnBuscar;
         private TextBox txtProveedor;
+
         private DateTimePicker dateTimePicker1;
+        private ComboBox comboBox1;
+        private TextBox txtNumeroComprobante;
+
         private TextBox txtCodigobarra;
-        private Button btnBuscarProducto;
+        private Button btnCargarProducto;
+
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
@@ -539,36 +397,13 @@
         private DataGridViewTextBoxColumn Column4;
         private DataGridViewTextBoxColumn Column5;
         private DataGridViewTextBoxColumn Column6;
-        private Button btnEliminarProducto;
-        private GroupBox gpbOpciones;
-        private CheckBox chkActualizarStock;
-        private CheckBox chkActualizarPrecio;
-        private Label label5;
-        private Label label6;
-        private Label label7;
-        private Label label8;
-        private Label label9;
+        private Button btnEliminarCompra;
         private TextBox txtSubsinImpuesto;
-        private TextBox txtImpuestosInternos;
-        private TextBox txtSubConImpuesto;
         private TextBox txtIva;
         private TextBox txtTotal;
-        private GroupBox gpbFormasdePago;
-        private TextBox txtPagosDebito;
-        private TextBox txtPagosCuenta;
-        private TextBox txtPagoTransferencia;
-        private TextBox txtPagoEfectivo;
-        private TextBox txtPagoTarjeta;
-        private Label label13;
-        private Label label12;
-        private Label label11;
-        private Label label10;
-        private Label Efectivo;
-        private Label label4;
         private TextBox txtObservaciones;
         private Button btnGuardar;
         private Button btnCacelar;
-        private ComboBox comboBox1;
-        private CheckBox chkCompraAnulada;
+        private ListBox lstProductos;
     }
 }

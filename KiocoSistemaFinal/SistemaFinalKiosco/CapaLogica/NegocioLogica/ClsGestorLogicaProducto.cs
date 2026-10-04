@@ -167,6 +167,10 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.AgregarStock(idProducto, cantidad);
         }
+        public bool ModificarStock(int idProducto, decimal cantidadActual, decimal stockMinimo, decimal stockIdeal)
+        {
+            return datos.ModificarStock(idProducto, cantidadActual, stockMinimo, stockIdeal);
+        }
 
 
 
