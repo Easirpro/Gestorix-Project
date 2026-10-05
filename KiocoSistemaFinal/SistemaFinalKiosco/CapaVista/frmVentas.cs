@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CapaEntidades;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,7 +18,18 @@ namespace CapaVista
             InitializeComponent();
         }
 
-   
+        #region Metodos
+        private void AplicarPermisos()
+        {
+            bool puedeGestionarVentas = SesionUsuario.Permisos.Contains(200) || SesionUsuario.Permisos.Contains(210);
+
+            btnVerDetalle.Enabled = puedeGestionarVentas;
+            btnAnular.Enabled = puedeGestionarVentas;
+        }   //Hay que darle acciones 
+        #endregion
+
+
+        #region Eventos
 
         private void btnNuevaVenta_Click(object sender, EventArgs e)
         {
@@ -29,5 +41,11 @@ namespace CapaVista
             frmDetalleVenta detalleVenta = new frmDetalleVenta();
             detalleVenta.ShowDialog();
         }
+
+        private void btnAnular_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
     }
 }

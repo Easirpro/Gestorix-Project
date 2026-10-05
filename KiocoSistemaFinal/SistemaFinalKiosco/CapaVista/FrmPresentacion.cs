@@ -62,58 +62,97 @@ namespace CapaVista
         #region Metodo
         private void CargarBotones()
         {
-            //Menu principal
-            btnArt.Enabled = SesionUsuario.Permisos.Contains(100);
-            btnVentas.Enabled = SesionUsuario.Permisos.Contains(200);
+            //Articulo
+            btnArt.Enabled = SesionUsuario.Permisos.Contains(100) || SesionUsuario.Permisos.Contains(110) ||
+                SesionUsuario.Permisos.Contains(111) || SesionUsuario.Permisos.Contains(112) || SesionUsuario.Permisos.Contains(113) ||
+                SesionUsuario.Permisos.Contains(120) || SesionUsuario.Permisos.Contains(121) || SesionUsuario.Permisos.Contains(122) ||
+                SesionUsuario.Permisos.Contains(130) || SesionUsuario.Permisos.Contains(131) || SesionUsuario.Permisos.Contains(132) ||
+                SesionUsuario.Permisos.Contains(140) || SesionUsuario.Permisos.Contains(150);
+
+            //Ventas
+            btnVentas.Enabled = SesionUsuario.Permisos.Contains(200) || SesionUsuario.Permisos.Contains(210) || SesionUsuario.Permisos.Contains(220) ||
+                SesionUsuario.Permisos.Contains(221) || SesionUsuario.Permisos.Contains(222) ||
+                SesionUsuario.Permisos.Contains(230) || SesionUsuario.Permisos.Contains(240);
+
+            //Compras
             btnCompras.Enabled = SesionUsuario.Permisos.Contains(300);
-            btnProve.Enabled = SesionUsuario.Permisos.Contains(400);
-            toolStripMenuItem1.Enabled = SesionUsuario.Permisos.Contains(500);
-            btnInformes.Enabled = SesionUsuario.Permisos.Contains(600);
-            btnCaja.Enabled = SesionUsuario.Permisos.Contains(700);
+
+            //Proveedores
+            btnProve.Enabled = SesionUsuario.Permisos.Contains(400) ||
+                SesionUsuario.Permisos.Contains(410) || SesionUsuario.Permisos.Contains(411) ||
+                SesionUsuario.Permisos.Contains(412) || SesionUsuario.Permisos.Contains(420);
+
+            //Listados
+            toolStripMenuItem1.Enabled = SesionUsuario.Permisos.Contains(500) ||
+                SesionUsuario.Permisos.Contains(510) || SesionUsuario.Permisos.Contains(520);
+
+            //Informes
+            btnInformes.Enabled = SesionUsuario.Permisos.Contains(600) || SesionUsuario.Permisos.Contains(610) || SesionUsuario.Permisos.Contains(620) ||
+                SesionUsuario.Permisos.Contains(630) || SesionUsuario.Permisos.Contains(640) || SesionUsuario.Permisos.Contains(650);
+
+            //Caja
+            btnCaja.Enabled = SesionUsuario.Permisos.Contains(700) || SesionUsuario.Permisos.Contains(710) ||
+                SesionUsuario.Permisos.Contains(720) || SesionUsuario.Permisos.Contains(730) || SesionUsuario.Permisos.Contains(740);
+
+            //Ajustes
             btnAjuste.Enabled = SesionUsuario.Permisos.Contains(800);
+
+            //Ayuda
             btnAyuda.Enabled = SesionUsuario.Permisos.Contains(900);
-            btnEmpleado.Enabled = SesionUsuario.Permisos.Contains(1000);
+
+            //Empleado
+            btnEmpleado.Enabled = SesionUsuario.Permisos.Contains(1000) || SesionUsuario.Permisos.Contains(1010) || SesionUsuario.Permisos.Contains(1020) ||
+                SesionUsuario.Permisos.Contains(1030) || SesionUsuario.Permisos.Contains(1270);
 
             //Listados
             listaDePreciosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(510);
             listadoDeReposiciónToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(520);
 
-            // Articulos
-            // Administrador de articulos
-            menuitemAdmistradorarticulos.Enabled = SesionUsuario.Permisos.Contains(111) || SesionUsuario.Permisos.Contains(112) || SesionUsuario.Permisos.Contains(113);
-            // Administrador de rubros
-            menuitemAdministradoarticulos.Enabled = SesionUsuario.Permisos.Contains(120);
+            //Articulos operaciones
+
+            // Gestión de Articulos
+            menuitemAdmistradorarticulos.Enabled = SesionUsuario.Permisos.Contains(110) || SesionUsuario.Permisos.Contains(111) ||
+                SesionUsuario.Permisos.Contains(112) || SesionUsuario.Permisos.Contains(113);
+            // Gestión de Rubros
+            menuitemAdministradoarticulos.Enabled = SesionUsuario.Permisos.Contains(120) ||
+                SesionUsuario.Permisos.Contains(121) || SesionUsuario.Permisos.Contains(122);
             // Reposicion rapida de stock
             meniitemReporapida.Enabled = SesionUsuario.Permisos.Contains(113);
-            // Cargar de las marcas
-            cargarDeLasMarcasToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(130);
+            // Gestión de Marcas
+            cargarDeLasMarcasToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(130) ||
+                SesionUsuario.Permisos.Contains(131) || SesionUsuario.Permisos.Contains(132);
             // Importar articulos desde Excel
             menuitemImporexcel.Enabled = SesionUsuario.Permisos.Contains(140);
             // Exportar articulos a Excel
             menuitemExporexcel.Enabled = SesionUsuario.Permisos.Contains(150);
 
             //Ventas
+
+            // Realizar ventas
             menuitemAdministradorventas.Enabled = SesionUsuario.Permisos.Contains(210);
-            notaDeCreditoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(220);
+            // Devoluciones
+            notaDeCreditoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(220) ||
+                SesionUsuario.Permisos.Contains(221) || SesionUsuario.Permisos.Contains(222);
 
-            //Proveedores
-            administradorDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(410);
+            //Proveedores 
+
+            // Gestión de proveedores
+            administradorDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(410) ||
+                SesionUsuario.Permisos.Contains(411) || SesionUsuario.Permisos.Contains(412);
+            // Cuenta corriente
             cuentaCorrienteDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(420);
-
-            //Informes
+            //Informe operaciones
             ventasPorDiaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(610);
             ventaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(620);
             ventaPorRubroToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(630);
             ventaPorArticulosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(640);
             ventaPorMedioDePagoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(650);
-
-            //Caja
+            //Caja operaciones
             nuevoIngresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(710);
             nuevoEgresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(720);
             abrirCajaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(730);
             cerrarSeToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(740);
 
-            //Empleado
             permisosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1270);
         }
         //Ingreso de plata
@@ -340,7 +379,6 @@ namespace CapaVista
         //Menu Item
 
         //Importar y Exportar
-
         private void menuitemImporexcel_Click(object sender, EventArgs e)
         {
             frmImportarArticulos frmImportar = new frmImportarArticulos();
@@ -452,16 +490,24 @@ namespace CapaVista
         }
         private void abrirCajaToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (SesionUsuario.SesionActiva)
+            {
+                MessageBox.Show(
+                    "Ya hay una sesión abierta. Debe cerrar la sesión actual antes de iniciar otra.",
+                    "Sesión abierta",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                return;
+            }
+
             FrmLogin login = Application.OpenForms.OfType<FrmLogin>().FirstOrDefault();
-            /*aplication.openform coleccion de toos los formularios abierto
-            oftype- frmlogin de todos esos formulario se queda con el que sea frmlogin
-            es decir buscame el login que ya existe*/
 
             if (login != null)
             {
                 login.LimpiarCampos();
             }
-
 
             this.Close();
         }
@@ -608,7 +654,8 @@ namespace CapaVista
         }
         private void menuitemAdministradoarticulos_Click(object sender, EventArgs e)
         {
-
+            frmBuscarRubro buscarRubro = new frmBuscarRubro();
+            buscarRubro.ShowDialog();
         }
         private void btnPromocion_Click(object sender, EventArgs e)
         {
@@ -702,7 +749,12 @@ namespace CapaVista
 
             txtCodigoBarra.Focus();
         }
+        private void cargaRapidaDePreciosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmCargaRapidaPrecios formulario = new frmCargaRapidaPrecios();
 
+            formulario.ShowDialog();
+        }
 
         #endregion
 
@@ -719,7 +771,9 @@ namespace CapaVista
 
 
 
-     
+
+
+
     }
 
 }

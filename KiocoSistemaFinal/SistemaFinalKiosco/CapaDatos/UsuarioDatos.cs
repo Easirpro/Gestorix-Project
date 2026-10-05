@@ -98,8 +98,9 @@ public class ClsUsuarioDatos
                     ClsRolDatos rolDatos = new ClsRolDatos();
 
                     SesionUsuario.Permisos = rolDatos.ObtenerPermisos(SesionUsuario.IdRol);
+                    SesionUsuario.SesionActiva = true;
 
-                    return true;
+                        return true;
 
                     }
                     return false;

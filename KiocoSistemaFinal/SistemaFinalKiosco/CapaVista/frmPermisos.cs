@@ -17,6 +17,8 @@ namespace CapaVista
         private DataTable dtPermisos;
         public bool PermisosModificados { get; private set; }
         private bool cerrarAlGuardar;
+        private bool actualizandoArbol = false;
+        private HashSet<TreeNode> nodosBloqueados = new HashSet<TreeNode>();
 
         public frmPermisos()
         {
@@ -24,8 +26,11 @@ namespace CapaVista
 
             this.Load += frmPermisos_Load;
 
+            treePermisos.BeforeCheck += treePermisos_BeforeCheck;
             treePermisos.AfterCheck += treePermisos_AfterCheck;
 
+            treePermisos.DrawMode = TreeViewDrawMode.OwnerDrawText;
+            treePermisos.DrawNode += treePermisos_DrawNode;
         }
         public frmPermisos(bool cerrarAlGuardar) : this()
         {
@@ -275,30 +280,172 @@ namespace CapaVista
                 ObtenerPermisosNodo(hijo, permisos);
             }
         }
+        private void MarcarRama(TreeNode nodo, bool marcado)
+        {
+            foreach (TreeNode hijo in nodo.Nodes)
+            {
+                hijo.Checked = marcado;
+                MarcarRama(hijo, marcado);
+            }
+        }
+        private bool EsCabeza(TreeNode nodo)
+        {
+            return nodo.Parent == null;
+        }
+        private void MarcarRamaSinEventos(TreeNode nodo, bool marcado)
+        {
+            foreach (TreeNode hijo in nodo.Nodes)
+            {
+                hijo.Checked = marcado;
+                MarcarRamaSinEventos(hijo, marcado);
+            }
+        }
+        private void BloquearHijos(TreeNode nodo, bool bloquear)
+        {
+            foreach (TreeNode hijo in nodo.Nodes)
+            {
+                if (bloquear)
+                {
+                    nodosBloqueados.Add(hijo);
+                }
+                else
+                {
+                    nodosBloqueados.Remove(hijo);
+                }
+
+                BloquearHijos(hijo, bloquear);
+            }
+        }
+        private void treePermisos_BeforeCheck(object sender, TreeViewCancelEventArgs e)
+        {
+            if (actualizandoArbol)
+                return;
+
+            if (nodosBloqueados.Contains(e.Node))
+            {
+                e.Cancel = true;
+            }
+        }
         private void treePermisos_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (e.Node == null || e.Node.Tag == null || dtPermisos == null)
+            { 
+                return; 
+            }
+                
+            if (actualizandoArbol)
             {
                 return;
             }
 
-            int idPermiso = Convert.ToInt32(e.Node.Tag);
+            actualizandoArbol = true;
+
+            try
+            {
+                if (e.Node.Checked)
+                {
+                    MarcarRamaSinEventos(e.Node, true);
+                    BloquearHijos(e.Node, true);
+                }
+                else
+                {
+                    MarcarRamaSinEventos(e.Node, false);
+                    BloquearHijos(e.Node, false);
+                }
+            }
+            finally
+            {
+                actualizandoArbol = false;
+            }
+
+            MostrarInformacionPermiso(e.Node);
+
+            treePermisos.Invalidate();
+        }
+        private void MostrarInformacionPermiso(TreeNode nodo)
+        {
+            if (nodo == null || nodo.Tag == null || dtPermisos == null)
+                return;
+
+            int idPermiso = Convert.ToInt32(nodo.Tag);
 
             DataRow[] filas = dtPermisos.Select("IdPermiso = " + idPermiso);
 
             if (filas.Length == 0)
-            {
                 return;
-            }
 
             DataRow fila = filas[0];
 
-            lblPermisoSeleccionado.Text = "Permiso seleccionado: " + fila["Nombre"].ToString();
-            lblDescripcion.Text = "Descripción:\r\n" + fila["Descripcion"].ToString();
-            lblEstado.Text = "Estado del permiso:\r\n" + "Asignado al rol: " + (e.Node.Checked ? "SÍ" : "NO");
+            lblPermisoSeleccionado.Text =
+                "Permiso seleccionado: " + fila["Nombre"].ToString();
+
+            lblDescripcion.Text =
+                "Descripción:\r\n" + fila["Descripcion"].ToString();
+
+            lblEstado.Text =
+                "Estado del permiso:\r\n" +
+                "Asignado al rol: " +
+                (nodo.Checked ? "SÍ" : "NO");
+        }
+        private void AplicarBloqueoSegunEstado(TreeNode nodo)
+        {
+            if (nodo.Checked)
+            {
+                BloquearHijos(nodo, true);
+            }
+            else
+            {
+                BloquearHijos(nodo, false);
+            }
+
+            foreach (TreeNode hijo in nodo.Nodes)
+            {
+                AplicarBloqueoSegunEstado(hijo);
+            }
+        }
+        private void treePermisos_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            Color colorTexto;
+
+            if (nodosBloqueados.Contains(e.Node))
+            {
+                colorTexto = SystemColors.GrayText;
+            }
+            else
+            {
+                colorTexto = SystemColors.ControlText;
+            }
+
+            TextRenderer.DrawText(
+                e.Graphics,
+                e.Node.Text,
+                treePermisos.Font,
+                e.Bounds,
+                colorTexto,
+                TextFormatFlags.VerticalCenter
+            );
+        }
+        private void AplicarBloqueoSegunEstado(TreeNode nodo, bool padreBloqueado)
+        {
+            bool bloqueado = padreBloqueado;
+
+            if (bloqueado)
+            {
+                nodosBloqueados.Add(nodo);
+            }
+            else
+            {
+                nodosBloqueados.Remove(nodo);
+            }
+
+            foreach (TreeNode hijo in nodo.Nodes)
+            {
+                AplicarBloqueoSegunEstado(hijo, bloqueado || nodo.Checked);
+            }
         }
 
         #endregion
+
 
 
         #region Eventos
@@ -325,10 +472,30 @@ namespace CapaVista
 
             List<int> permisos = rol.ObtenerPermisos(idRol);
 
-            foreach (TreeNode nodoSeccion in treePermisos.Nodes)
+            actualizandoArbol = true;
+
+            try
             {
-                MarcarPermisos(nodoSeccion, permisos);
+                nodosBloqueados.Clear();
+
+                // Primero cargamos los permisos guardados
+                foreach (TreeNode nodoSeccion in treePermisos.Nodes)
+                {
+                    MarcarPermisos(nodoSeccion, permisos);
+                }
+
+                // Despues aplicamos los bloqueos segun la jerarquia
+                foreach (TreeNode nodoSeccion in treePermisos.Nodes)
+                {
+                    AplicarBloqueoSegunEstado(nodoSeccion, false);
+                }
             }
+            finally
+            {
+                actualizandoArbol = false;
+            }
+
+            treePermisos.Invalidate();
 
         }
         private void btnGuardar_Click(object sender, EventArgs e)

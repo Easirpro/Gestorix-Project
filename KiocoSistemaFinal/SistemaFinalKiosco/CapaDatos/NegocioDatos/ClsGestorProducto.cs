@@ -13,1147 +13,574 @@ namespace CapaDatos.NegocioDatos
 {
     public class ClsGestorProducto
     {
-
         Conexion cn = new Conexion();
 
         public DataTable CargarUnidades()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_CargarUnidades", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        IdUnidad,
-                        Nombre,
-                        Simbolo,
-                        Categoria
-                    FROM Unidad
-                    ORDER BY Nombre;";
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        da.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    da.Fill(tabla);
+                    return tabla;
                 }
             }
         }
         public int RegistrarProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarProducto", conexion))
             {
-                string consulta = @"
-                    INSERT INTO Producto
-                    (
-                        CodigoBarra,
-                        SKU,
-                        Nombre,
-                        Descripcion,
-                        IdMarca,
-                        IdIVA,
-                        IdCategoria,
-                        IdUnidad,
-                        PrecioVenta,
-                        Activo
-                    )
-                    VALUES
-                    (
-                        @CodigoBarra,
-                        @SKU,
-                        @Nombre,
-                        @Descripcion,
-                        @IdMarca,
-                        @IdIVA,
-                        @IdCategoria,
-                        @IdUnidad,
-                        @PrecioVenta,
-                        @Activo
-                    );
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@CodigoBarra", producto.CodigoBarra);
+                cmd.Parameters.AddWithValue("@SKU", producto.SKU);
+                cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                cmd.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                cmd.Parameters.AddWithValue("@IdMarca", producto.IdMarca);
+                cmd.Parameters.AddWithValue("@IdIVA", producto.IdIVA);
+                cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
+                cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
+                cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
+                cmd.Parameters.AddWithValue("@Activo", true);
 
-                    SELECT SCOPE_IDENTITY();";
+                conexion.Open();
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@CodigoBarra", producto.CodigoBarra);
-                    cmd.Parameters.AddWithValue("@SKU", producto.SKU);
-                    cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
-                    cmd.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
-                    cmd.Parameters.AddWithValue("@IdMarca", producto.IdMarca);
-                    cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
-                    cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
-                    cmd.Parameters.AddWithValue("@IdIVA", producto.IdIVA);
-                    cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
-                    cmd.Parameters.AddWithValue("@Activo", producto.Activo);
-
-                    conexion.Open();
-
-                    return Convert.ToInt32(cmd.ExecuteScalar());
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
         public int ObtenerProximoSKU()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerProximoSKU", conexion))
             {
-                string consulta = @"
-                    SELECT
-                    CASE
-                        WHEN ISNULL(MAX(TRY_CONVERT(INT, SKU)), 999) < 999
-                            THEN 1000
-                        ELSE MAX(TRY_CONVERT(INT, SKU)) + 1
-                    END
-                    FROM Producto;";
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    conexion.Open();
+                conexion.Open();
 
-                    return Convert.ToInt32(cmd.ExecuteScalar());
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
         public bool ExisteCodigoBarra(string codigoBarra, int idProductoExcluir = 0)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ExisteCodigoBarra", conexion))
             {
-                string consulta = @"
-                    SELECT COUNT(*)
-                    FROM Producto
-                    WHERE CodigoBarra = @CodigoBarra
-                      AND IdProducto <> @IdProductoExcluir;";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@CodigoBarra", codigoBarra);
+                cmd.Parameters.AddWithValue("@IdProductoExcluir", idProductoExcluir);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@CodigoBarra", codigoBarra);
-                    cmd.Parameters.AddWithValue("@IdProductoExcluir", idProductoExcluir);
+                conexion.Open();
 
-                    conexion.Open();
-
-                    int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
-
-                    return cantidad > 0;
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
         public DataTable ObtenerProductoPorCodigoBarra(string codigoBarra)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerProductoPorCodigoBarra", conexion))
             {
-                string consulta = @"
-            SELECT
-                p.IdProducto,
-                p.CodigoBarra,
-                p.SKU,
-                p.Nombre,
-                p.Descripcion,
-                p.PrecioVenta,
-                p.Activo,
-                s.CantidadActual
-            FROM Producto p
-            LEFT JOIN Stock s
-                ON p.IdProducto = s.IdProducto
-            WHERE p.CodigoBarra = @CodigoBarra
-              AND p.Activo = 1;";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@CodigoBarra", codigoBarra);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                 {
-                    cmd.Parameters.AddWithValue("@CodigoBarra", codigoBarra);
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
+                }
+            }
+        }
+        public DataTable BuscarProductoPorCodigoOSku(string texto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
 
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-                        adaptador.Fill(tabla);
+            using (SqlCommand cmd = new SqlCommand("sp_BuscarProductoPorCodigoOSku", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Texto", texto);
 
-                        return tabla;
-                    }
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                {
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
         public DataTable CargarCategoriasActivas()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_CargarCategoriasActivas", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        IdCategoria,
-                        Nombre,
-                        Activo
-                    FROM Categoria
-                    WHERE Activo = 1
-                    ORDER BY Nombre;";
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        da.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    da.Fill(tabla);
+                    return tabla;
                 }
             }
         }
         public DataTable CargarIVAsActivos()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_CargarIVAsActivos", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        IdIVA,
-                        Descripcion,
-                        Alicuota,
-                        Activo
-                    FROM IVA
-                    WHERE Activo = 1
-                    ORDER BY Alicuota;";
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        da.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    da.Fill(tabla);
+                    return tabla;
                 }
             }
         }
         public int RegistrarMarca(ClsGestorEntidadProducto.ClsMarca marca)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarMarca", conexion))
             {
-                string consulta = @"
-                    INSERT INTO Marca
-                    (
-                        Nombre,
-                        Activo
-                    )
-                    Values
-                    (
-                        @Nombre,
-                        @Activo
-                    );
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Nombre", marca.Nombre);
+                cmd.Parameters.AddWithValue("@Activo", marca.Activo);
 
-                    SELECT SCOPE_IDENTITY();";
+                conexion.Open();
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-
-                    cmd.Parameters.AddWithValue("@Nombre", marca.Nombre);
-                    cmd.Parameters.AddWithValue("@Activo", marca.Activo);
-
-                    conexion.Open();
-
-                    return Convert.ToInt32(cmd.ExecuteScalar());
-                }
-
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
         public DataTable CargarMarcasActivas()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_CargarMarcasActivas", conexion))
             {
-                string consulta = @"
-                   SELECT
-                        IdMarca,
-                        Nombre,
-                        Activo
-                    FROM Marca
-                    WHERE Activo = 1
-                    ORDER BY Nombre;";
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        da.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    da.Fill(tabla);
+                    return tabla;
                 }
-
             }
+        }
+        public DataTable CargarTodasLasCategorias()
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
 
+            using (SqlCommand cmd = new SqlCommand("sp_CargarTodasLasCategorias", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    DataTable tabla = new DataTable();
+                    da.Fill(tabla);
+                    return tabla;
+                }
+            }
         }
         public bool ModificarMarca(ClsGestorEntidadProducto.ClsMarca marca)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ModificarMarca", conexion))
             {
-                string consulta = @"
-                    UPDATE Marca 
-                    SET Nombre = @Nombre
-                    WHERE IdMarca = @IdMarca";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdMarca", marca.IdMarca);
+                cmd.Parameters.AddWithValue("@Nombre", marca.Nombre);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdMarca", marca.IdMarca);
-                    cmd.Parameters.AddWithValue("@Nombre", marca.Nombre);
+                conexion.Open();
 
-                    conexion.Open();
-
-                    return cmd.ExecuteNonQuery() > 0;
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
         public bool HabilitarMarca(int idMarca)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_HabilitarMarca", conexion))
             {
-                string consulta = @"
-                    UPDATE Marca
-                    SET Activo = 1
-                    WHERE IdMarca = @IdMarca
-                    AND Activo = 0";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdMarca", idMarca);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdMarca", idMarca);
+                conexion.Open();
 
-                    conexion.Open();
-
-                    return cmd.ExecuteNonQuery() > 0;
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
         public bool DesactivarMarca(int idMarca)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_DesactivarMarca", conexion))
             {
-                string consulta = @"
-                    UPDATE Marca
-                    SET Activo = 0
-                    WHERE IdMarca = @IdMarca
-                    AND Activo = 1";
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdMarca", idMarca);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdMarca", idMarca);
 
-                    conexion.Open();
+                conexion.Open();
 
-                    return cmd.ExecuteNonQuery() > 0;
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
         public DataTable CargarTodasLasMarcas()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_CargarTodasLasMarcas", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        IdMarca,
-                        Nombre,
-                        Activo
-                    FROM Marca
-                    ORDER BY Nombre;";
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        da.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    da.Fill(tabla);
+                    return tabla;
                 }
             }
         }
         public DataTable BuscarMarcas(string nombre, bool soloActivos)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_BuscarMarcas", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        IdMarca,
-                        Nombre,
-                        Activo
-                    FROM Marca
-                    WHERE Nombre LIKE @Nombre";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Nombre", nombre);
+                cmd.Parameters.AddWithValue("@SoloActivos", soloActivos);
 
-                if (soloActivos)
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    consulta += @"
-                        AND Activo = 1";
-                }
-
-                consulta += @"
-                    ORDER BY Nombre;";
-
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@Nombre", "%" + nombre + "%");
-
-                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        da.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    da.Fill(tabla);
+                    return tabla;
                 }
             }
         }
-        public void RegistrarStock(int idProducto,decimal cantidadActual,decimal stockMinimo,decimal stockIdeal)
+        public void RegistrarStock(int idProducto, decimal cantidadActual, decimal stockMinimo, decimal stockIdeal)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarStock", conexion))
             {
-                string consulta = @"
-                    INSERT INTO Stock
-                    (
-                        IdProducto,
-                        CantidadActual,
-                        StockMinimo,
-                        StockIdeal
-                    )
-                    VALUES
-                    (
-                        @IdProducto,
-                        @CantidadActual,
-                        @StockMinimo,
-                        @StockIdeal
-                    );";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                cmd.Parameters.AddWithValue("@CantidadActual", cantidadActual);
+                cmd.Parameters.AddWithValue("@StockMinimo", stockMinimo);
+                cmd.Parameters.AddWithValue("@StockIdeal", stockIdeal);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
-                    cmd.Parameters.AddWithValue("@CantidadActual", cantidadActual);
-                    cmd.Parameters.AddWithValue("@StockMinimo", stockMinimo);
-                    cmd.Parameters.AddWithValue("@StockIdeal", stockIdeal);
+                conexion.Open();
 
-                    conexion.Open();
-
-                    cmd.ExecuteNonQuery();
-                }
+                cmd.ExecuteNonQuery();
             }
         }
-        public bool RegistrarStock (ClsGestorEntidadProducto.ClsStock stock)
+        public bool RegistrarStock(ClsGestorEntidadProducto.ClsStock stock)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarStock", conexion))
             {
-                string consulta = @"
-                    INSERT INTO Stock
-                    (
-                        IdProducto,
-                        CantidadActual,
-                        StockMinimo,
-                        StockIdeal
-                    )
-                    VALUES
-                    (
-                        @IdProducto,
-                        @CantidadActual,
-                        @StockMinimo,
-                        @StockIdeal
-                    );";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", stock.IdProducto);
+                cmd.Parameters.AddWithValue("@CantidadActual", stock.CantidadActual);
+                cmd.Parameters.AddWithValue("@StockMinimo", stock.StockMinimo);
+                cmd.Parameters.AddWithValue("@StockIdeal", stock.StockIdeal);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdProducto", stock.IdProducto);
-                    cmd.Parameters.AddWithValue("@CantidadActual", stock.CantidadActual);
-                    cmd.Parameters.AddWithValue("@StockMinimo", stock.StockMinimo);
-                    cmd.Parameters.AddWithValue("@StockIdeal", stock.StockIdeal);
+                conexion.Open();
 
-                    conexion.Open();
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+        public bool AgregarStock(int idProducto, int cantidad)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
 
-                    return cmd.ExecuteNonQuery() > 0; 
-                }
+            using (SqlCommand cmd = new SqlCommand("sp_AgregarStock", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                cmd.Parameters.AddWithValue("@Cantidad", cantidad);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
         public bool RegistrarLote(ClsLote lote)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarLote", conexion))
             {
-                string consulta = @"
-                    INSERT INTO Lote
-                    (
-                        IdProducto,
-                        CodigoLote,
-                        FechaFabricacion,
-                        FechaVencimiento,
-                        FechaIngreso,
-                        Stock,
-                        Activo,
-                        IdSucursal
-                    )
-                    VALUES
-                    (
-                        @IdProducto,
-                        @CodigoLote,
-                        @FechaFabricacion,
-                        @FechaVencimiento,
-                        @FechaIngreso,
-                        @Stock,
-                        @Activo,
-                        @IdSucursal
-                    );";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", lote.IdProducto);
+                cmd.Parameters.AddWithValue("@CodigoLote", lote.CodigoLote);
+                cmd.Parameters.AddWithValue("@FechaFabricacion", lote.FechaFabricacion);
+                cmd.Parameters.AddWithValue("@FechaVencimiento", lote.FechaVencimiento);
+                cmd.Parameters.AddWithValue("@FechaIngreso", lote.FechaIngreso);
+                cmd.Parameters.AddWithValue("@Stock", lote.Stock);
+                cmd.Parameters.AddWithValue("@Activo", lote.Activo);
+                cmd.Parameters.AddWithValue("@IdSucursal", lote.IdSucursal);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdProducto", lote.IdProducto);
-                    cmd.Parameters.AddWithValue("@CodigoLote", lote.CodigoLote);
-                    cmd.Parameters.AddWithValue("@FechaFabricacion", lote.FechaFabricacion);
-                    cmd.Parameters.AddWithValue("@FechaVencimiento", lote.FechaVencimiento);
-                    cmd.Parameters.AddWithValue("@FechaIngreso", lote.FechaIngreso);
-                    cmd.Parameters.AddWithValue("@Stock", lote.Stock);
-                    cmd.Parameters.AddWithValue("@Activo", lote.Activo);
-                    cmd.Parameters.AddWithValue("@IdSucursal", lote.IdSucursal);
+                conexion.Open();
 
-                    conexion.Open();
-
-                    return cmd.ExecuteNonQuery() > 0;
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
         public bool ModificarLote(ClsLote lote)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ModificarLote", conexion))
             {
-                string consulta = @"
-                    UPDATE Lote
-                    SET
-                        CodigoLote = @CodigoLote,
-                        FechaFabricacion = @FechaFabricacion,
-                        FechaVencimiento = @FechaVencimiento,
-                        IdSucursal = @IdSucursal
-                    WHERE IdProducto = @IdProducto;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = lote.IdProducto;
+                cmd.Parameters.Add("@CodigoLote", SqlDbType.NVarChar, 100).Value = lote.CodigoLote;
+                cmd.Parameters.Add("@FechaFabricacion", SqlDbType.Date).Value = lote.FechaFabricacion;
+                cmd.Parameters.Add("@FechaVencimiento", SqlDbType.Date).Value = lote.FechaVencimiento;
+                cmd.Parameters.Add("@FechaIngreso", SqlDbType.DateTime2).Value = lote.FechaIngreso;
 
-                    IF @@ROWCOUNT = 0
-                    BEGIN
-                        INSERT INTO Lote
-                        (
-                            IdProducto,
-                            CodigoLote,
-                            FechaFabricacion,
-                            FechaVencimiento,
-                            FechaIngreso,
-                            Stock,
-                            Activo,
-                            IdSucursal
-                        )
-                        VALUES
-                        (
-                            @IdProducto,
-                            @CodigoLote,
-                            @FechaFabricacion,
-                            @FechaVencimiento,
-                            @FechaIngreso,
-                            @Stock,
-                            @Activo,
-                            @IdSucursal
-                        );
-                    END";
+                SqlParameter parametroStock = cmd.Parameters.Add("@Stock", SqlDbType.Decimal);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdProducto", lote.IdProducto);
-                    cmd.Parameters.AddWithValue("@CodigoLote", lote.CodigoLote);
-                    cmd.Parameters.AddWithValue("@FechaFabricacion", lote.FechaFabricacion);
-                    cmd.Parameters.AddWithValue("@FechaVencimiento", lote.FechaVencimiento);
-                    cmd.Parameters.AddWithValue("@FechaIngreso", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@Stock", lote.Stock);
-                    cmd.Parameters.AddWithValue("@Activo", lote.Activo);
-                    cmd.Parameters.AddWithValue("@IdSucursal", lote.IdSucursal);
+                parametroStock.Precision = 10;
+                parametroStock.Scale = 3;
+                parametroStock.Value = lote.Stock;
 
-                    conexion.Open();
+                cmd.Parameters.Add("@Activo", SqlDbType.Bit).Value =  lote.Activo;
+                cmd.Parameters.Add("@IdSucursal", SqlDbType.Int).Value = lote.IdSucursal;
 
-                    return cmd.ExecuteNonQuery() > 0;
-                }
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
         public DataTable ObtenerProveedoresPorProducto(int idProducto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerProveedoresPorProducto", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        psp.IdProducto,
-                        psp.IdSucursal,
-                        sp.IdProveedor,
-                        p.Nombre AS Proveedor,
-                        sp.Nombre AS Sucursal,
-                        psp.PrecioCompra,
-                        psp.FechaPrecioCompra,
-                        psp.CodigoProveedor,
-                        psp.Activo
-                    FROM ProductoSucursalProveedor psp
-                    INNER JOIN SucursalProveedor sp
-                        ON psp.IdSucursal = sp.IdSucursal
-                    INNER JOIN Proveedor p
-                        ON sp.IdProveedor = p.IdProveedor
-                    WHERE psp.IdProducto = @IdProducto
-                    ORDER BY p.Nombre, sp.Nombre;";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                 {
-                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
-
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        adaptador.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
         public DataTable ObtenerProductoPorId(int idProducto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerProductoPorId", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        p.IdProducto,
-                        p.CodigoBarra,
-                        p.SKU,
-                        p.Nombre,
-                        p.Descripcion,
-                        p.IdMarca,
-                        p.IdCategoria,
-                        p.IdUnidad,
-                        p.PrecioVenta,
-                        p.Activo,
-                        p.IdIVA
-                    FROM Producto p
-                    WHERE p.IdProducto = @IdProducto;";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                 {
-                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
-
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        adaptador.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
         public DataTable CargarArticulos()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_CargarArticulos", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        p.IdProducto,
-                        p.CodigoBarra,
-                        p.Descripcion,
-                        c.Nombre AS Rubro,
-                        p.PrecioVenta,
-                        p.Activo,
-                        iva.Descripcion AS IVA,
-                        iva.Alicuota,
-                        s.CantidadActual,
-                        s.StockMinimo,
-                        s.StockIdeal,
-                        prov.Proveedor,
-                        prov.Sucursal,
-                        prov.PrecioCosto,
-                        lote.FechaVencimiento
-                    FROM Producto p
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                    INNER JOIN Categoria c
-                        ON p.IdCategoria = c.IdCategoria
-
-                    LEFT JOIN IVA iva
-                        ON p.IdIVA = iva.IdIVA
-
-                    LEFT JOIN Stock s
-                        ON p.IdProducto = s.IdProducto
-
-                    OUTER APPLY
-                    (
-                        SELECT TOP 1
-                            pr.Nombre AS Proveedor,
-                            sp.Nombre AS Sucursal,
-                            psp.PrecioCompra AS PrecioCosto
-                        FROM ProductoSucursalProveedor psp
-                        INNER JOIN SucursalProveedor sp
-                            ON psp.IdSucursal = sp.IdSucursal
-                        INNER JOIN Proveedor pr
-                            ON sp.IdProveedor = pr.IdProveedor
-                        WHERE psp.IdProducto = p.IdProducto
-                          AND psp.Activo = 1
-                        ORDER BY
-                            psp.FechaPrecioCompra DESC,
-                            pr.Nombre,
-                            sp.Nombre
-                    ) prov
-
-                    OUTER APPLY
-                    (
-                        SELECT TOP 1
-                            l.FechaVencimiento
-                        FROM Lote l
-                        WHERE l.IdProducto = p.IdProducto
-                          AND l.FechaVencimiento IS NOT NULL
-                        ORDER BY l.FechaVencimiento ASC
-                    ) lote
-
-                    ORDER BY p.Descripcion;";
-
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                 {
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        adaptador.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
         public DataTable CargarArticulosParaExportar(int idProveedor, int idCategoria, int idMarca, int idSucursal, int estado, bool soloStock, bool soloVencimiento, bool soloLote)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_CargarArticulosParaExportar", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        p.IdProducto,
-                        p.CodigoBarra,
-                        p.Descripcion,
-                        c.Nombre AS Rubro,
-                        m.Nombre AS Marca,
-                        p.PrecioVenta,
-                        p.Activo,
-                        iva.Descripcion AS IVA,
-                        iva.Alicuota,
-                        s.CantidadActual,
-                        s.StockMinimo,
-                        s.StockIdeal,
-                        prov.Proveedor,
-                        prov.Sucursal,
-                        prov.PrecioCosto,
-                        lote.FechaVencimiento
-                    FROM Producto p
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProveedor", idProveedor);
+                cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+                cmd.Parameters.AddWithValue("@IdMarca", idMarca);
+                cmd.Parameters.AddWithValue("@IdSucursal", idSucursal);
+                cmd.Parameters.AddWithValue("@Estado", estado);
+                cmd.Parameters.AddWithValue("@SoloStock", soloStock);
+                cmd.Parameters.AddWithValue("@SoloVencimiento", soloVencimiento);
+                cmd.Parameters.AddWithValue("@SoloLote", soloLote);
 
-                    INNER JOIN Categoria c
-                        ON p.IdCategoria = c.IdCategoria
-
-                    INNER JOIN Marca m
-                         ON p.IdMarca = m.IdMarca
-
-                    LEFT JOIN IVA iva
-                        ON p.IdIVA = iva.IdIVA
-
-                    LEFT JOIN Stock s
-                        ON p.IdProducto = s.IdProducto
-
-                    OUTER APPLY
-                    (
-                        SELECT TOP 1
-                            pr.IdProveedor,
-                            sp.IdSucursal,
-                            pr.Nombre AS Proveedor,
-                            sp.Nombre AS Sucursal,
-                            psp.PrecioCompra AS PrecioCosto
-                        FROM ProductoSucursalProveedor psp
-                        INNER JOIN SucursalProveedor sp
-                            ON psp.IdSucursal = sp.IdSucursal
-                        INNER JOIN Proveedor pr
-                            ON sp.IdProveedor = pr.IdProveedor
-                        WHERE psp.IdProducto = p.IdProducto
-                          AND psp.Activo = 1
-                        ORDER BY
-                            psp.FechaPrecioCompra DESC,
-                            pr.Nombre,
-                            sp.Nombre
-                    ) prov
-
-                    OUTER APPLY
-                    (
-                        SELECT TOP 1
-                            l.FechaVencimiento
-                        FROM Lote l
-                        WHERE l.IdProducto = p.IdProducto
-                          AND l.FechaVencimiento IS NOT NULL
-                        ORDER BY l.FechaVencimiento ASC
-                    ) lote
-
-                    WHERE
-                        (@IdProveedor = 0 OR prov.IdProveedor = @IdProveedor)
-                        AND (@IdCategoria = 0 OR p.IdCategoria = @IdCategoria)
-                        AND (@IdMarca = 0 OR m.IdMarca = @IdMarca)
-                        AND (@IdSucursal = 0 OR prov.IdSucursal = @IdSucursal)
-                        AND (@Estado = -1 OR p.Activo = @Estado)
-
-                        AND (@SoloStock = 0 OR ISNULL(s.CantidadActual, 0) > 0)
-
-                        AND (@SoloVencimiento = 0 OR lote.FechaVencimiento IS NOT NULL)
-
-                        AND (
-                            @SoloLote = 0
-                            OR EXISTS
-                            (
-                                SELECT 1
-                                FROM Lote l2
-                                WHERE l2.IdProducto = p.IdProducto
-                            )
-                        )
-
-                    ORDER BY p.Descripcion;";
-
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                 {
-                    cmd.Parameters.AddWithValue("@IdProveedor", idProveedor);
-                    cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
-                    cmd.Parameters.AddWithValue("@IdMarca", idMarca);
-                    cmd.Parameters.AddWithValue("@IdSucursal", idSucursal);
-                    cmd.Parameters.AddWithValue("@Estado", estado);
-                    cmd.Parameters.AddWithValue("@SoloStock", soloStock ? 1 : 0);
-                    cmd.Parameters.AddWithValue("@SoloVencimiento", soloVencimiento ? 1 : 0);
-                    cmd.Parameters.AddWithValue("@SoloLote", soloLote ? 1 : 0);
-
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        adaptador.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
-        public bool ModificarProducto(ClsGestorEntidadProducto.ClsProducto producto)
+        public bool ModificarProducto( ClsGestorEntidadProducto.ClsProducto producto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ModificarProducto", conexion))
             {
-                string consulta = @"
-                    UPDATE Producto
-                    SET
-                        CodigoBarra = @CodigoBarra,
-                        SKU = @SKU,
-                        Nombre = @Nombre,
-                        Descripcion = @Descripcion,
-                        IdMarca = @IdMarca,
-                        IdIVA = @IdIVA,
-                        IdCategoria = @IdCategoria,
-                        IdUnidad = @IdUnidad,
-                        PrecioVenta = @PrecioVenta
-                    WHERE IdProducto = @IdProducto;";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", producto.IdProducto);
+                cmd.Parameters.AddWithValue("@CodigoBarra", producto.CodigoBarra);
+                cmd.Parameters.AddWithValue("@SKU", producto.SKU);
+                cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                cmd.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                cmd.Parameters.AddWithValue("@IdMarca", producto.IdMarca);
+                cmd.Parameters.AddWithValue("@IdIVA", producto.IdIVA);
+                cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
+                cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
+                cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdProducto", producto.IdProducto);
-                    cmd.Parameters.AddWithValue("@CodigoBarra", producto.CodigoBarra);
-                    cmd.Parameters.AddWithValue("@SKU", producto.SKU);
-                    cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
-                    cmd.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
-                    cmd.Parameters.AddWithValue("@IdMarca", producto.IdMarca);
-                    cmd.Parameters.AddWithValue("@IdIVA", producto.IdIVA);
-                    cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
-                    cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
-                    cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
+                conexion.Open();
 
-                    conexion.Open();
-
-                    return cmd.ExecuteNonQuery() > 0;
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
         public DataTable ObtenerStockPorProducto(int idProducto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerStockPorProducto", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        IdStock,
-                        IdProducto,
-                        CantidadActual,
-                        StockMinimo,
-                        StockIdeal
-                    FROM Stock
-                    WHERE IdProducto = @IdProducto;";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                 {
-                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
-
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-
-                        adaptador.Fill(tabla);
-
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
-        public void RegistrarProductoSucursalProveedor(ClsProductoSucursalProveedor relacion)
+        public void RegistrarProductoSucursalProveedor( ClsProductoSucursalProveedor relacion)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarProductoSucursalProveedor", conexion))
             {
-                string consulta = @"
-                    INSERT INTO ProductoSucursalProveedor
-                    (
-                        IdProducto,
-                        IdSucursal,
-                        PrecioCompra,
-                        FechaPrecioCompra,
-                        CodigoProveedor,
-                        Activo
-                    )
-                    VALUES
-                    (
-                        @IdProducto,
-                        @IdSucursal,
-                        @PrecioCompra,
-                        @FechaPrecioCompra,
-                        @CodigoProveedor,
-                        @Activo
-                    );";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", relacion.IdProducto);
+                cmd.Parameters.AddWithValue("@IdSucursal", relacion.IdSucursal);
+                cmd.Parameters.AddWithValue("@PrecioCompra", (object)relacion.PrecioCompra ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@FechaPrecioCompra", (object)relacion.FechaPrecioCompra ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@CodigoProveedor", (object)relacion.CodigoProveedor ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdProducto", relacion.IdProducto);
-                    cmd.Parameters.AddWithValue("@IdSucursal", relacion.IdSucursal);
-                    cmd.Parameters.AddWithValue("@PrecioCompra",(object)relacion.PrecioCompra ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@FechaPrecioCompra",(object)relacion.FechaPrecioCompra ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@CodigoProveedor",(object)relacion.CodigoProveedor ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
+                conexion.Open();
 
-                    conexion.Open();
-
-                    cmd.ExecuteNonQuery();
-
-                }
+                cmd.ExecuteNonQuery();
             }
         }
         public bool ModificarProductoSucursalProveedor(ClsProductoSucursalProveedor relacion)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ModificarProductoSucursalProveedor", conexion))
             {
-                string consulta = @"
-                    UPDATE ProductoSucursalProveedor
-                    SET
-                        IdSucursal = @IdSucursal,
-                        Activo = @Activo
-                    WHERE IdProducto = @IdProducto;
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                    IF @@ROWCOUNT = 0
-                    BEGIN
-                        INSERT INTO ProductoSucursalProveedor
-                        (
-                            IdProducto,
-                            IdSucursal,
-                            Activo
-                        )
-                        VALUES
-                        (
-                            @IdProducto,
-                            @IdSucursal,
-                            @Activo
-                        );
-                    END";
+                cmd.Parameters.AddWithValue("@IdProducto", relacion.IdProducto);
+                cmd.Parameters.AddWithValue("@IdSucursal", relacion.IdSucursal);
+                cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@IdProducto", relacion.IdProducto);
-                    cmd.Parameters.AddWithValue("@IdSucursal", relacion.IdSucursal);
-                    cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
+                conexion.Open();
 
-                    conexion.Open();
-
-                    return cmd.ExecuteNonQuery() > 0;
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
-        public DataTable BuscarArticulos(string texto, bool ocultarDiscontinuos)
+        public DataTable BuscarArticulos( string texto, bool ocultarDiscontinuos)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_BuscarArticulos", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        p.IdProducto,
-                        p.CodigoBarra,
-                        p.SKU,
-                        p.Descripcion,
-                        c.Nombre AS Rubro,
-                        p.PrecioVenta,
-                        p.Activo,
-                        s.CantidadActual
-                    FROM Producto p
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Texto", texto);
+                cmd.Parameters.AddWithValue("@OcultarDiscontinuos", ocultarDiscontinuos);
 
-                    INNER JOIN Categoria c
-                        ON p.IdCategoria = c.IdCategoria
-
-                    LEFT JOIN Stock s
-                        ON p.IdProducto = s.IdProducto
-
-                    WHERE
-                        (
-                            p.CodigoBarra LIKE @Texto
-                            OR p.SKU LIKE @Texto
-                            OR p.Descripcion LIKE @Texto
-                        )";
-
-                if (ocultarDiscontinuos)
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                 {
-                    consulta += @"
-                AND p.Activo = 1";
-                }
-
-                        consulta += @"
-                    ORDER BY p.Descripcion;";
-
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@Texto", "%" + texto + "%");
-
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-                        adaptador.Fill(tabla);
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
-        public int RegistrarProductoImportacion(ClsGestorEntidadProducto.ClsProducto producto, SqlConnection conexion, SqlTransaction transaccion)
+        public int RegistrarProductoImportacion( ClsGestorEntidadProducto.ClsProducto producto, SqlConnection conexion, SqlTransaction transaccion)
         {
-            string consulta = @"
-                INSERT INTO Producto
-                (
-                    CodigoBarra,
-                    SKU,
-                    Nombre,
-                    Descripcion,
-                    IdMarca,
-                    IdIVA,
-                    IdCategoria,
-                    IdUnidad,
-                    PrecioVenta,
-                    Activo
-                )
-                VALUES
-                (
-                    @CodigoBarra,
-                    @SKU,
-                    @Nombre,
-                    @Descripcion,
-                    @IdMarca,
-                    @IdIVA,
-                    @IdCategoria,
-                    @IdUnidad,
-                    @PrecioVenta,
-                    @Activo
-                );
-
-                SELECT SCOPE_IDENTITY();";
-
-            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarProductoImportacion", conexion, transaccion))
             {
-                cmd.Parameters.AddWithValue("@CodigoBarra",string.IsNullOrWhiteSpace(producto.CodigoBarra)? (object)DBNull.Value : producto.CodigoBarra);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@CodigoBarra", string.IsNullOrWhiteSpace(producto.CodigoBarra) ? (object)DBNull.Value : producto.CodigoBarra);
                 cmd.Parameters.AddWithValue("@SKU", producto.SKU);
                 cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
-                cmd.Parameters.AddWithValue("@Descripcion",string.IsNullOrWhiteSpace(producto.Descripcion) ? (object)DBNull.Value : producto.Descripcion);
+                cmd.Parameters.AddWithValue("@Descripcion", string.IsNullOrWhiteSpace(producto.Descripcion) ? (object)DBNull.Value : producto.Descripcion);
                 cmd.Parameters.AddWithValue("@IdMarca", producto.IdMarca);
                 cmd.Parameters.AddWithValue("@IdIVA", producto.IdIVA);
                 cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
                 cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
-                cmd.Parameters.AddWithValue("@PrecioVenta", 0);
-                cmd.Parameters.AddWithValue("@Activo", true);
+
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
         public int ObtenerProximoSKUImportacion(SqlConnection conexion, SqlTransaction transaccion)
         {
-            string consulta = @"
-                SELECT
-                    CASE
-                        WHEN ISNULL(MAX(TRY_CONVERT(INT, SKU)), 999) < 999
-                            THEN 1000
-                        ELSE ISNULL(MAX(TRY_CONVERT(INT, SKU)), 999) + 1
-                    END
-                FROM Producto WITH (UPDLOCK, HOLDLOCK);";
-
-            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerProximoSKUImportacion", conexion, transaccion))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
+
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
         public void RegistrarProductoSucursalProveedorImportacion(ClsProductoSucursalProveedor relacion, SqlConnection conexion, SqlTransaction transaccion)
         {
-            string consulta = @"
-                INSERT INTO ProductoSucursalProveedor
-                (
-                    IdProducto,
-                    IdSucursal,
-                    PrecioCompra,
-                    FechaPrecioCompra,
-                    CodigoProveedor,
-                    Activo
-                )
-                VALUES
-                (
-                    @IdProducto,
-                    @IdSucursal,
-                    @PrecioCompra,
-                    @FechaPrecioCompra,
-                    @CodigoProveedor,
-                    @Activo
-                );";
-
-            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarProductoSucursalProveedorImportacion", conexion, transaccion))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@IdProducto", relacion.IdProducto);
                 cmd.Parameters.AddWithValue("@IdSucursal", relacion.IdSucursal);
-                cmd.Parameters.AddWithValue("@PrecioCompra",(object)relacion.PrecioCompra ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@FechaPrecioCompra",(object)relacion.FechaPrecioCompra ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@CodigoProveedor",(object)relacion.CodigoProveedor ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@PrecioCompra", (object)relacion.PrecioCompra ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@FechaPrecioCompra", (object)relacion.FechaPrecioCompra ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@CodigoProveedor", (object)relacion.CodigoProveedor ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
 
                 cmd.ExecuteNonQuery();
             }
         }
-        public void RegistrarLoteImportacion(ClsLote lote,SqlConnection conexion, SqlTransaction transaccion)
+        public void RegistrarLoteImportacion(ClsLote lote, SqlConnection conexion, SqlTransaction transaccion)
         {
-            string consulta = @"
-                INSERT INTO Lote
-                (
-                    IdProducto,
-                    CodigoLote,
-                    FechaFabricacion,
-                    FechaVencimiento,
-                    FechaIngreso,
-                    Stock,
-                    Activo,
-                    IdSucursal
-                )
-                VALUES
-                (
-                    @IdProducto,
-                    @CodigoLote,
-                    @FechaFabricacion,
-                    @FechaVencimiento,
-                    @FechaIngreso,
-                    @Stock,
-                    @Activo,
-                    @IdSucursal
-                );";
-
-            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarLoteImportacion", conexion, transaccion))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@IdProducto", lote.IdProducto);
                 cmd.Parameters.AddWithValue("@CodigoLote", lote.CodigoLote);
                 cmd.Parameters.AddWithValue("@FechaFabricacion", lote.FechaFabricacion);
@@ -1166,35 +593,177 @@ namespace CapaDatos.NegocioDatos
                 cmd.ExecuteNonQuery();
             }
         }
-        public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal,SqlConnection conexion,SqlTransaction transaccion)
+        public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal, SqlConnection conexion, SqlTransaction transaccion)
         {
-            string consulta = @"
-                SELECT sp.IdSucursal
-                FROM SucursalProveedor sp
-                INNER JOIN Proveedor p
-                    ON sp.IdProveedor = p.IdProveedor
-                WHERE p.Nombre = @NombreProveedor
-                  AND sp.Nombre = @NombreSucursal
-                  AND p.Activo = 1
-                  AND sp.Activo = 1;";
-
-            using (SqlCommand cmd = new SqlCommand(consulta, conexion, transaccion))
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerIdSucursalImportacion", conexion, transaccion))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
+
                 cmd.Parameters.AddWithValue("@NombreProveedor", nombreProveedor);
+
                 cmd.Parameters.AddWithValue("@NombreSucursal", nombreSucursal);
 
-                object resultado = cmd.ExecuteScalar();
-
-                if (resultado == null)
-                {
-                    return 0;
-                }
-                    
-
-                return Convert.ToInt32(resultado);
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
+        public bool EliminarProducto(int idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
 
+            using (SqlCommand cmd = new SqlCommand("sp_EliminarProducto", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
 
+                try
+                {
+                    conexion.Open();
+
+                    return Convert.ToBoolean(cmd.ExecuteScalar());
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+        public bool DescontinuarProducto(int idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_DescontinuarProducto", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+        public bool ActivarProducto(int idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ActivarProducto", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+        public int RegistrarCategoria(string nombre, string descripcion)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarCategoria", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Nombre", nombre);
+                cmd.Parameters.AddWithValue("@Descripcion", string.IsNullOrWhiteSpace(descripcion) ? (object)DBNull.Value : descripcion);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+        public bool ModificarCategoria(int idCategoria, string nombre, string descripcion)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_ModificarCategoria", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+                cmd.Parameters.AddWithValue("@Nombre", nombre);
+                cmd.Parameters.AddWithValue( "@Descripcion", string.IsNullOrWhiteSpace(descripcion) ? (object)DBNull.Value : descripcion);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+        public bool DesactivarCategoria(int idCategoria)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_DesactivarCategoria", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+        public bool HabilitarCategoria(int idCategoria)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_HabilitarCategoria", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+        public bool EliminarCategoria(int idCategoria)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand("sp_EliminarCategoria", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+        public bool ModificarStock(int idProducto, decimal cantidadActual, decimal stockMinimo, decimal stockIdeal)
+        {
+            try
+            {
+                using (SqlConnection conexion = cn.ObtenerConexion())
+                {
+                    conexion.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("sp_ModificarStock", conexion))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = idProducto;
+
+                        SqlParameter parametroCantidad = cmd.Parameters.Add("@CantidadActual", SqlDbType.Decimal);
+                        parametroCantidad.Precision = 10;
+                        parametroCantidad.Scale = 3;
+                        parametroCantidad.Value = cantidadActual;
+
+                        SqlParameter parametroMinimo = cmd.Parameters.Add("@StockMinimo", SqlDbType.Decimal);
+                        parametroMinimo.Precision = 10;
+                        parametroMinimo.Scale = 3;
+                        parametroMinimo.Value = stockMinimo;
+
+                        SqlParameter parametroIdeal = cmd.Parameters.Add("@StockIdeal", SqlDbType.Decimal);
+                        parametroIdeal.Precision = 10;
+                        parametroIdeal.Scale = 3;
+                        parametroIdeal.Value = stockIdeal;
+
+                        return Convert.ToBoolean(cmd.ExecuteScalar());
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

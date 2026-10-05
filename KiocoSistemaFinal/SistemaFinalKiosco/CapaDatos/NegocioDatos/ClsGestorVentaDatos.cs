@@ -18,174 +18,72 @@ namespace CapaDatos.NegocioDatos
         public DataTable ObtenerMetodosPago()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerMetodosPago", conexion))
             {
-                string consulta = @"
-                    SELECT
-                        IdMetodoPago,
-                        Nombre
-                    FROM MetodoPago
-                    WHERE Activo = 1
-                    ORDER BY Nombre;";
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlCommand cmd = new SqlCommand(consulta, conexion))
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                 {
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
+                    DataTable tabla = new DataTable();
 
-                        adaptador.Fill(tabla);
+                    adaptador.Fill(tabla);
 
-                        return tabla;
-                    }
+                    return tabla;
                 }
             }
         }
-        public int RegistrarVenta(decimal total, int idUsuario, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos)
+        public int RegistrarVenta( decimal total, int idUsuario, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_RegistrarVenta", conexion))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@Total", SqlDbType.Decimal).Value = total;
+                cmd.Parameters["@Total"].Precision = 18;
+                cmd.Parameters["@Total"].Scale = 2;
+                cmd.Parameters.Add("@IdUsuario", SqlDbType.Int).Value = idUsuario;
+
+
+                DataTable tablaDetalles = new DataTable();
+
+                tablaDetalles.Columns.Add("IdProducto", typeof(int));
+                tablaDetalles.Columns.Add("Cantidad", typeof(decimal));
+                tablaDetalles.Columns.Add("PrecioUnitario", typeof(decimal));
+                tablaDetalles.Columns.Add("Subtotal", typeof(decimal));
+
+                foreach (DetalleVentaEntidad detalle in detalles)
+                {
+                    tablaDetalles.Rows.Add(detalle.IdProducto, detalle.Cantidad, detalle.PrecioUnitario, detalle.Subtotal);
+                }
+
+
+                SqlParameter parametroDetalles = cmd.Parameters.AddWithValue("@Detalles", tablaDetalles);
+
+                parametroDetalles.SqlDbType = SqlDbType.Structured;
+                parametroDetalles.TypeName = "dbo.TipoDetalleVenta";
+
+
+                DataTable tablaPagos = new DataTable();
+
+                tablaPagos.Columns.Add("IdMetodoPago", typeof(int));
+                tablaPagos.Columns.Add("Monto", typeof(decimal));
+
+                foreach (PagoVentaEntidad pago in pagos)
+                {
+                    tablaPagos.Rows.Add(pago.IdMetodoPago, pago.Monto);
+                }
+
+
+                SqlParameter parametroPagos = cmd.Parameters.AddWithValue("@Pagos", tablaPagos);
+
+                parametroPagos.SqlDbType = SqlDbType.Structured;
+                parametroPagos.TypeName = "dbo.TipoPagoVenta";
+
+
                 conexion.Open();
 
-                SqlTransaction transaccion = conexion.BeginTransaction();
-
-                try
-                {
-
-                    string sqlVenta = @"
-                        INSERT INTO Venta
-                            (FechaHora, Total, IdUsuario)
-                        VALUES
-                            (@FechaHora, @Total, @IdUsuario);
-
-                        SELECT CAST(SCOPE_IDENTITY() AS INT);";
-
-                    int idVenta;
-
-                    using (SqlCommand cmdVenta = new SqlCommand(sqlVenta, conexion, transaccion))
-                    {
-                        cmdVenta.Parameters.AddWithValue("@FechaHora", DateTime.Now);
-                        cmdVenta.Parameters.AddWithValue("@Total", total);
-                        cmdVenta.Parameters.AddWithValue("@IdUsuario", idUsuario);
-                        idVenta = Convert.ToInt32(cmdVenta.ExecuteScalar());
-                    }
-
-                    foreach (DetalleVentaEntidad detalle in detalles)
-                    {
-                        string sqlDetalle = @"
-                            INSERT INTO DetalleVenta
-                                (
-                                    IdVenta,
-                                    IdProducto,
-                                    Cantidad,
-                                    PrecioUnitario,
-                                    Subtotal
-                                )
-                            VALUES
-                                (
-                                    @IdVenta,
-                                    @IdProducto,
-                                    @Cantidad,
-                                    @PrecioUnitario,
-                                    @Subtotal
-                                );";
-
-                        using (SqlCommand cmdDetalle = new SqlCommand(sqlDetalle,conexion,transaccion))
-                        {
-                            cmdDetalle.Parameters.AddWithValue("@IdVenta", idVenta);
-                            cmdDetalle.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
-                            cmdDetalle.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
-                            cmdDetalle.Parameters.AddWithValue("@PrecioUnitario", detalle.PrecioUnitario);
-                            cmdDetalle.Parameters.AddWithValue("@Subtotal", detalle.Subtotal);
-                            cmdDetalle.ExecuteNonQuery();
-                        }
-
-                        string sqlStock = @"
-                            UPDATE Stock
-                            SET CantidadActual =
-                                CantidadActual - @Cantidad
-                            WHERE IdProducto = @IdProducto
-                              AND CantidadActual >= @Cantidad;";
-
-                        int filasAfectadas;
-
-                        using (SqlCommand cmdStock = new SqlCommand(sqlStock,conexion,transaccion))
-                        {
-                            cmdStock.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
-                            cmdStock.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
-                            filasAfectadas = cmdStock.ExecuteNonQuery();
-                        }
-
-                        if (filasAfectadas == 0)
-                        {
-                            throw new Exception($"Stock insuficiente para el producto " + $"{detalle.IdProducto}.");
-                        }
-
-                        string sqlMovimiento = @"
-                            INSERT INTO MovimientoStock
-                                (
-                                    IdProducto,
-                                    TipoMovimiento,
-                                    Cantidad,
-                                    FechaHora,
-                                    Observacion,
-                                    IdUsuario
-                                )
-                            VALUES
-                                (
-                                    @IdProducto,
-                                    @TipoMovimiento,
-                                    @Cantidad,
-                                    @FechaHora,
-                                    @Observacion,
-                                    @IdUsuario
-                                );";
-
-                        using (SqlCommand cmdMovimiento = new SqlCommand(sqlMovimiento, conexion, transaccion))
-                        {
-                            cmdMovimiento.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
-                            cmdMovimiento.Parameters.AddWithValue("@TipoMovimiento", "EGRESO");
-                            cmdMovimiento.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
-                            cmdMovimiento.Parameters.AddWithValue("@FechaHora", DateTime.Now);
-                            cmdMovimiento.Parameters.AddWithValue("@Observacion", $"Venta #{idVenta}");
-                            cmdMovimiento.Parameters.AddWithValue("@IdUsuario", idUsuario);
-                            cmdMovimiento.ExecuteNonQuery();
-                        }
-                    }
-
-                    foreach (PagoVentaEntidad pago in pagos)
-                    {
-                        string sqlPago = @"
-                            INSERT INTO VentaMetodoPago
-                                (
-                                    IdVenta,
-                                    IdMetodoPago,
-                                    Monto
-                                )
-                            VALUES
-                                (
-                                    @IdVenta,
-                                    @IdMetodoPago,
-                                    @Monto
-                                );";
-
-                        using (SqlCommand cmdPago = new SqlCommand( sqlPago, conexion, transaccion))
-                        {
-                            cmdPago.Parameters.AddWithValue("@IdVenta", idVenta);
-                            cmdPago.Parameters.AddWithValue("@IdMetodoPago", pago.IdMetodoPago);
-                            cmdPago.Parameters.AddWithValue("@Monto", pago.Monto);
-                            cmdPago.ExecuteNonQuery();
-                        }
-                    }
-
-                    transaccion.Commit();
-
-                    return idVenta;
-                }
-                catch
-                {
-                    transaccion.Rollback();
-                    throw;
-                }
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
     }

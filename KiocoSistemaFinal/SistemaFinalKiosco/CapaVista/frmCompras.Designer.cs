@@ -39,7 +39,12 @@
             btnBuscar = new Button();
             button5 = new Button();
             dataGridView1 = new DataGridView();
-            columFecha = new DataGridViewTextBoxColumn();
+            clnFecha = new DataGridViewTextBoxColumn();
+            clnProveedor = new DataGridViewTextBoxColumn();
+            clnTipoFactura = new DataGridViewTextBoxColumn();
+            clnNCoprobante = new DataGridViewTextBoxColumn();
+            clnTotal = new DataGridViewTextBoxColumn();
+            clnEstado = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -80,6 +85,7 @@
             btnAnular.Text = "Anular";
             btnAnular.TextAlign = ContentAlignment.MiddleRight;
             btnAnular.UseVisualStyleBackColor = true;
+            btnAnular.Click += btnAnular_Click;
             // 
             // dateTimePicker1
             // 
@@ -128,6 +134,7 @@
             btnBuscar.Text = "Buscar";
             btnBuscar.TextAlign = ContentAlignment.MiddleRight;
             btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
             // 
             // button5
             // 
@@ -145,22 +152,47 @@
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { columFecha });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { clnFecha, clnProveedor, clnTipoFactura, clnNCoprobante, clnTotal, clnEstado });
             dataGridView1.Location = new Point(4, 51);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(803, 365);
             dataGridView1.TabIndex = 9;
             // 
-            // columFecha
+            // clnFecha
             // 
-            columFecha.HeaderText = "Fecha";
-            columFecha.Name = "columFecha";
+            clnFecha.HeaderText = "Fecha";
+            clnFecha.Name = "clnFecha";
+            // 
+            // clnProveedor
+            // 
+            clnProveedor.HeaderText = "Proveedor";
+            clnProveedor.Name = "clnProveedor";
+            // 
+            // clnTipoFactura
+            // 
+            clnTipoFactura.HeaderText = "Tipo Factura";
+            clnTipoFactura.Name = "clnTipoFactura";
+            // 
+            // clnNCoprobante
+            // 
+            clnNCoprobante.HeaderText = "N.° Comprobante";
+            clnNCoprobante.Name = "clnNCoprobante";
+            // 
+            // clnTotal
+            // 
+            clnTotal.HeaderText = "Total";
+            clnTotal.Name = "clnTotal";
+            // 
+            // clnEstado
+            // 
+            clnEstado.HeaderText = "Estado";
+            clnEstado.Name = "clnEstado";
             // 
             // frmCompras
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(844, 450);
+            ClientSize = new Size(826, 513);
             Controls.Add(dataGridView1);
             Controls.Add(button5);
             Controls.Add(btnBuscar);
@@ -192,6 +224,11 @@
         private Button btnBuscar;
         private Button button5;
         private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn columFecha;
+        private DataGridViewTextBoxColumn clnFecha;
+        private DataGridViewTextBoxColumn clnProveedor;
+        private DataGridViewTextBoxColumn clnTipoFactura;
+        private DataGridViewTextBoxColumn clnNCoprobante;
+        private DataGridViewTextBoxColumn clnTotal;
+        private DataGridViewTextBoxColumn clnEstado;
     }
 }

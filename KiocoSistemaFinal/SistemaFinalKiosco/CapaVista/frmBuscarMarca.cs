@@ -1,4 +1,5 @@
-﻿using CapaLogica.NegocioLogica;
+﻿using CapaEntidades;
+using CapaLogica.NegocioLogica;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -64,6 +65,16 @@ namespace CapaVista
                 dataGridView1.Rows[filaIndex].Tag = fila["IdMarca"];
             }
         }
+        private void AplicarPermisos()
+        {
+            bool puedeCrear = SesionUsuario.Permisos.Contains(131);
+            bool puedeModificar = SesionUsuario.Permisos.Contains(132);
+
+            btnNuevaMarca.Enabled = puedeCrear;
+            Modificar.Enabled = puedeModificar;
+            btnDiscontinuar.Enabled = puedeModificar;
+            btnHabilitar.Enabled = puedeModificar;
+        }
 
         #endregion
 
@@ -71,9 +82,9 @@ namespace CapaVista
 
         private void frmBuscarMarca_Load(object sender, EventArgs e)
         {
+            AplicarPermisos();
             CargarMarcas();
         }
-
         private void btnNuevaMarca_Click(object sender, EventArgs e)
         {
             frmNuevaMarca nuevamarca = new frmNuevaMarca();
@@ -82,7 +93,6 @@ namespace CapaVista
 
             CargarMarcas();
         }
-
         private void Modificar_Click(object sender, EventArgs e)
         {
             if (dataGridView1.CurrentRow == null)
@@ -108,7 +118,6 @@ namespace CapaVista
 
             CargarMarcas();
         }
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
@@ -139,7 +148,6 @@ namespace CapaVista
                 dataGridView1.Rows[filaIndex].Tag = fila["IdMarca"];
             }
         }
-
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -181,12 +189,10 @@ namespace CapaVista
                 CargarMarcas();
             }
         }
-
         private void chkSoloActivos_CheckedChanged(object sender, EventArgs e)
         {
             CargarMarcas();
         }
-
         private void btnHabilitar_Click(object sender, EventArgs e)
         {
             if (dataGridView1.CurrentRow == null)

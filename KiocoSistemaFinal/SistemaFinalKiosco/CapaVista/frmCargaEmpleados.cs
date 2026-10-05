@@ -20,6 +20,7 @@ namespace CapaVista
         private ClsTelefono telefonoOriginal;
         private int idRolSeleccionado;
         private bool cargandoDatosUsuario = false;
+        private bool cargandoUsuarios = false;
         private bool permisosModificados = false;
 
         public frmCargaEmpleados()
@@ -115,23 +116,40 @@ namespace CapaVista
 
             cmbProvincia.SelectedIndex = 0;
         }
-        private void CargarUsuarios()
+        private void CargarUsuarios(int? idPersonaSeleccionado = null)
         {
-            ClsUsuarioLogica usuario = new ClsUsuarioLogica();
+            try
+            {
+                cargandoUsuarios = true;
 
-            DataTable dt = usuario.ObtenerUsuarios();
+                ClsUsuarioLogica usuario = new ClsUsuarioLogica();
 
-            DataRow fila = dt.NewRow();
-            fila["IdPersona"] = 0;
-            fila["Username"] = "-Seleccione un Usuario-";
+                DataTable dt = usuario.ObtenerUsuarios();
 
-            dt.Rows.InsertAt(fila, 0);
+                DataRow fila = dt.NewRow();
+                fila["IdPersona"] = 0;
+                fila["Username"] = "-Seleccione un Usuario-";
 
-            lstUsuarios.DataSource = dt;
-            lstUsuarios.DisplayMember = "Username";
-            lstUsuarios.ValueMember = "IdPersona";
+                dt.Rows.InsertAt(fila, 0);
 
-            lstUsuarios.SelectedIndex = 0;
+                lstUsuarios.DataSource = null;
+                lstUsuarios.DataSource = dt;
+                lstUsuarios.DisplayMember = "Username";
+                lstUsuarios.ValueMember = "IdPersona";
+
+                if (idPersonaSeleccionado.HasValue)
+                {
+                    lstUsuarios.SelectedValue = idPersonaSeleccionado.Value;
+                }
+                else
+                {
+                    lstUsuarios.SelectedIndex = 0;
+                }
+            }
+            finally
+            {
+                cargandoUsuarios = false;
+            }
         }
         private void txt_KeyPress(object? sender, KeyPressEventArgs e)
         {
@@ -963,17 +981,19 @@ namespace CapaVista
         //Evento lista buscar usuario
         private void lstUsuarios_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            if (lstUsuarios.SelectedValue == null)
-            {
+            if (cargandoUsuarios)
                 return;
-            }
+
+            if (lstUsuarios.SelectedValue == null)
+                return;
 
             if (lstUsuarios.SelectedValue is DataRowView)
-            {
                 return;
-            }
 
-            int idPersona = (int)lstUsuarios.SelectedValue;
+            int idPersona = Convert.ToInt32(lstUsuarios.SelectedValue);
+
+            if (idPersona <= 0)
+                return;
 
             CargarDatosUsuario(idPersona);
 
@@ -1139,32 +1159,21 @@ namespace CapaVista
                     return;
                 }
 
-                MessageBox.Show(
-                    permisosModificados ? "Los cambios se guardaron correctamente." : "Los datos se modificaron correctamente.",
+                MessageBox.Show( permisosModificados ? "Los cambios se guardaron correctamente." : "Los datos se modificaron correctamente.",
                     "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 permisosModificados = false;
                 idRolSeleccionado = 0;
 
-                CargarUsuarios();
-
-                CargarDatosUsuario(idPersona);
+                CargarUsuarios(idPersona);
             }
             catch (FormatException)
             {
-                MessageBox.Show(
-                    "Verifique que la altura sea un número válido.",
-                    "Datos incorrectos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("Verifique que la altura sea un número válido.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnActualizar_Click(object sender, EventArgs e)
