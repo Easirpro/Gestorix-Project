@@ -1,9 +1,12 @@
 ﻿using CapaEntidades;
+using CapaEntidades.NegocioEntidad;
 using CapaLogica;
+using CapaLogica.NegocioLogica;
 using DocumentFormat.OpenXml.Office.Word;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -11,8 +14,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
-using CapaLogica.NegocioLogica;
-using System.Data;
 
 
 namespace CapaVista
@@ -293,9 +294,9 @@ namespace CapaVista
         }
         private void IngresarProductoPorCodigo()
         {
-            string codigoBarra = txtCodigoBarra.Text.Trim();
+            string textoBusqueda = txtCodigoBarra.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(codigoBarra))
+            if (string.IsNullOrWhiteSpace(textoBusqueda))
             {
                 txtCodigoBarra.Focus();
                 return;
@@ -318,11 +319,11 @@ namespace CapaVista
 
             ClsGestorLogicaProducto logicaProducto = new ClsGestorLogicaProducto();
 
-            DataTable tablaProducto = logicaProducto.ObtenerProductoPorCodigoBarra(codigoBarra);
+            DataTable tablaProducto = logicaProducto.BuscarProductoPorCodigoOSku(textoBusqueda);
 
             if (tablaProducto.Rows.Count == 0)
             {
-                MessageBox.Show("No se encontró un producto con ese código de barras.", "Producto no encontrado",
+                MessageBox.Show("No se encontró un producto con ese código de barras o SKU.", "Producto no encontrado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigoBarra.SelectAll();
@@ -614,6 +615,21 @@ namespace CapaVista
         }
         private void btnCobrar_Click_1(object sender, EventArgs e)
         {
+            //if (total <= 0)
+            //{
+            //    MessageBox.Show("Debe agregar al menos un producto para realizar el cobro.", "Cobrar venta",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            //    txtCodigoBarra.Focus();
+            //    return;
+            //}
+
+            //frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion);
+
+            //if (cobro.ShowDialog() == DialogResult.OK)
+            //{
+            //    LimpiarVenta();
+            //}
             if (total <= 0)
             {
                 MessageBox.Show("Debe agregar al menos un producto para realizar el cobro.", "Cobrar venta",
@@ -623,13 +639,53 @@ namespace CapaVista
                 return;
             }
 
-            frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion);
+            List<DetalleVentaEntidad> detallesVenta = new List<DetalleVentaEntidad>();
+
+            foreach (DataGridViewRow fila in dtgPresentacion.Rows)
+            {
+                if (fila.IsNewRow)
+                {
+                    continue;
+                }
+
+                if (fila.Cells["ClnIdProducto"].Value == null)
+                {
+                    continue;
+                }
+
+                int idProducto = Convert.ToInt32(fila.Cells["ClnIdProducto"].Value);
+
+                if (idProducto <= 0)
+                {
+                    continue;
+                }
+
+                DetalleVentaEntidad detalle = new DetalleVentaEntidad
+                {
+                    IdProducto = idProducto,
+                    Cantidad = Convert.ToDecimal(fila.Cells["ClnCantidad"].Value),
+                    PrecioUnitario = Convert.ToDecimal(fila.Cells["ClnPrecioUnitario"].Value),
+                    Subtotal = Convert.ToDecimal(fila.Cells["ClnImporte"].Value)
+                };
+
+                detallesVenta.Add(detalle);
+            }
+
+            if (detallesVenta.Count == 0)
+            {
+                MessageBox.Show("No hay productos válidos para realizar el cobro.", "Cobrar venta",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            frmCobro cobro = new frmCobro(total, SesionUsuario.IdUsuario, detallesVenta);
 
             if (cobro.ShowDialog() == DialogResult.OK)
             {
                 LimpiarVenta();
             }
-        }
+        }//Ver
         private void LimpiarVenta()
         {
             dtgPresentacion.Rows.Clear();
