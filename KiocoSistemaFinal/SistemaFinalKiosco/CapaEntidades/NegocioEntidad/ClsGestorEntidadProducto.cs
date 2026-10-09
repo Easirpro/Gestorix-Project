@@ -128,6 +128,57 @@ namespace CapaEntidades.NegocioEntidad
             public int IdCorreo { get; set; }
             public string Correo { get; set; }
         }
+        public class ClsImportacionProveedorCosto
+        {
+            public string CodigoBarra { get; set; }
+            public string Proveedor { get; set; }
+            public string Sucursal { get; set; }
+            public decimal PrecioCompra { get; set; }
+        }
+
+        public class ClsResultadoImportacion
+        {
+            public bool Exito { get; set; }
+            public bool Advertencia { get; set; }
+            public string Titulo { get; set; }
+            public string Mensaje { get; set; }
+            public int CantidadArticulos { get; set; }
+            public int CantidadRelaciones { get; set; }
+
+            public static ClsResultadoImportacion Exitoso(string mensaje, int cantidadArticulos, int cantidadRelaciones)
+            {
+                return new ClsResultadoImportacion
+                {
+                    Exito = true,
+                    Titulo = "Importación de artículos",
+                    Mensaje = mensaje,
+                    CantidadArticulos = cantidadArticulos,
+                    CantidadRelaciones = cantidadRelaciones
+                };
+            }
+
+            public static ClsResultadoImportacion Error(string mensaje, string titulo = "Importación de artículos")
+            {
+                return new ClsResultadoImportacion
+                {
+                    Exito = false,
+                    Titulo = titulo,
+                    Mensaje = mensaje
+                };
+            }
+
+            public static ClsResultadoImportacion AdvertenciaResultado(string mensaje, string titulo = "Importación de artículos")
+            {
+                return new ClsResultadoImportacion
+                {
+                    Exito = false,
+                    Advertencia = true,
+                    Titulo = titulo,
+                    Mensaje = mensaje
+                };
+            }
+        }
+
         public class ClsSucursalProveedorCorreo 
         {
             public int IdCorreo { get; set; } 

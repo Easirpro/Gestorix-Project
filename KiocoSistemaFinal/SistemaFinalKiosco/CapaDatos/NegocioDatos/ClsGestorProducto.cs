@@ -606,6 +606,97 @@ namespace CapaDatos.NegocioDatos
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
+        public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+                using (SqlCommand cmd = new SqlCommand("sp_ObtenerIdSucursalImportacion", conexion))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@NombreProveedor", nombreProveedor);
+                    cmd.Parameters.AddWithValue("@NombreSucursal", nombreSucursal);
+                    object resultado = cmd.ExecuteScalar();
+                    return resultado == null || resultado == DBNull.Value ? 0 : Convert.ToInt32(resultado);
+                }
+            }
+        }
+
+        public void ImportarProductos(
+            List<ClsGestorEntidadProducto.ClsProducto> productos,
+            List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto> proveedoresCostos,
+            Dictionary<string, DateTime?> fechasVencimiento)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+                using (SqlTransaction transaccion = conexion.BeginTransaction())
+                {
+                    try
+                    {
+                        int siguienteSKU = ObtenerProximoSKUImportacion(conexion, transaccion);
+
+                        foreach (var producto in productos)
+                        {
+                            producto.SKU = siguienteSKU.ToString();
+                            producto.IdProducto = RegistrarProductoImportacion(producto, conexion, transaccion);
+                            siguienteSKU++;
+                        }
+
+                        foreach (var proveedorCosto in proveedoresCostos)
+                        {
+                            var producto = productos.FirstOrDefault(p => p.CodigoBarra == proveedorCosto.CodigoBarra);
+                            if (producto == null)
+                                throw new Exception($"No se encontró el artículo '{proveedorCosto.CodigoBarra}'.");
+
+                            int idSucursal = ObtenerIdSucursalImportacion(
+                                proveedorCosto.Proveedor, proveedorCosto.Sucursal, conexion, transaccion);
+
+                            if (idSucursal == 0)
+                                throw new Exception($"No se encontró la sucursal '{proveedorCosto.Sucursal}' del proveedor '{proveedorCosto.Proveedor}'.");
+
+                            var relacion = new ClsGestorEntidadProducto.ClsProductoSucursalProveedor
+                            {
+                                IdProducto = producto.IdProducto,
+                                IdSucursal = idSucursal,
+                                PrecioCompra = proveedorCosto.PrecioCompra,
+                                FechaPrecioCompra = DateTime.Now,
+                                CodigoProveedor = null,
+                                Activo = true
+                            };
+
+                            RegistrarProductoSucursalProveedorImportacion(relacion, conexion, transaccion);
+
+                            if (fechasVencimiento.TryGetValue(proveedorCosto.CodigoBarra, out DateTime? fecha)
+                                && fecha.HasValue)
+                            {
+                                var lote = new ClsGestorEntidadProducto.ClsLote
+                                {
+                                    IdProducto = producto.IdProducto,
+                                    CodigoLote = "IMP-" + producto.SKU,
+                                    FechaFabricacion = DateTime.Now.Date,
+                                    FechaVencimiento = fecha.Value.Date,
+                                    FechaIngreso = DateTime.Now,
+                                    Stock = 0,
+                                    Activo = true,
+                                    IdSucursal = idSucursal
+                                };
+
+                                RegistrarLoteImportacion(lote, conexion, transaccion);
+                            }
+                        }
+
+                        transaccion.Commit();
+                    }
+                    catch
+                    {
+                        try { transaccion.Rollback(); } catch { }
+                        throw;
+                    }
+                }
+            }
+        }
+
         public bool EliminarProducto(int idProducto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

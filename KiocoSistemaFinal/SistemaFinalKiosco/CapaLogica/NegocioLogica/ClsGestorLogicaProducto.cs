@@ -11,7 +11,7 @@ using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 namespace CapaLogica.NegocioLogica
 {
-    public class ClsGestorLogicaProducto
+    public partial class ClsGestorLogicaProducto
     {
         ClsGestorProducto datos = new ClsGestorProducto();
 
@@ -280,6 +280,19 @@ namespace CapaLogica.NegocioLogica
             return datos.ObtenerIdSucursalImportacion(nombreProveedor, nombreSucursal, conexion, transaccion);
         }
 
+
+        public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal)
+        {
+            return datos.ObtenerIdSucursalImportacion(nombreProveedor, nombreSucursal);
+        }
+
+        public void ImportarProductos(
+            List<ClsGestorEntidadProducto.ClsProducto> productos,
+            List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto> proveedoresCostos,
+            Dictionary<string, DateTime?> fechasVencimiento)
+        {
+            datos.ImportarProductos(productos, proveedoresCostos, fechasVencimiento);
+        }
 
     }
 }
