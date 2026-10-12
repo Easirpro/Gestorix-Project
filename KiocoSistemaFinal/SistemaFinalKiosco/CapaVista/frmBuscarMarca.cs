@@ -32,7 +32,7 @@ namespace CapaVista
 
         private void CargarMarcas()
         {
-            ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+            ClsLogicaProducto logica = new ClsLogicaProducto();
 
             DataTable marcas;
 
@@ -120,7 +120,7 @@ namespace CapaVista
         }
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+            ClsLogicaProducto logica = new ClsLogicaProducto();
 
             string nombre = textBox1.Text.Trim();
 
@@ -176,7 +176,7 @@ namespace CapaVista
                 return;
             }
 
-            ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+            ClsLogicaProducto logica = new ClsLogicaProducto();
 
             bool resultadoDesactivar = logica.DesactivarMarca(idMarca);
 
@@ -217,7 +217,7 @@ namespace CapaVista
                 return;
             }
 
-            ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+            ClsLogicaProducto logica = new ClsLogicaProducto();
 
             bool resultadoHabilitar = logica.HabilitarMarca(idMarca);
 

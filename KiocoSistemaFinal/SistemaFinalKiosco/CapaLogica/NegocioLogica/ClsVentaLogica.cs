@@ -12,9 +12,9 @@ using System.Linq;
 
 namespace CapaLogica.NegocioLogica
 {
-    public class ClsGestorVentaLogica
+    public class ClsVentaLogica
     {
-        ClsGestorVentaDatos datos = new ClsGestorVentaDatos();
+        ClsVentaDatos datos = new ClsVentaDatos();
 
         public DataTable ObtenerMetodosPago()
         {

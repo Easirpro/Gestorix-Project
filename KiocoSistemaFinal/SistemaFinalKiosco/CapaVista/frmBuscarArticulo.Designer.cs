@@ -39,7 +39,7 @@
             Column4 = new DataGridViewTextBoxColumn();
             Column5 = new DataGridViewTextBoxColumn();
             btnAceptar = new Button();
-            btnCancelar = new Button();
+            btnSalir = new Button();
             btnBuscar = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -115,14 +115,15 @@
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
             // 
-            // btnCancelar
+            // btnSalir
             // 
-            btnCancelar.Location = new Point(511, 382);
-            btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(75, 21);
-            btnCancelar.TabIndex = 5;
-            btnCancelar.Text = "Cancelar";
-            btnCancelar.UseVisualStyleBackColor = true;
+            btnSalir.Location = new Point(511, 382);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(75, 21);
+            btnSalir.TabIndex = 5;
+            btnSalir.Text = "Salir";
+            btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.Click += btnSalir_Click;
             // 
             // btnBuscar
             // 
@@ -140,7 +141,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(647, 450);
             Controls.Add(btnBuscar);
-            Controls.Add(btnCancelar);
+            Controls.Add(btnSalir);
             Controls.Add(btnAceptar);
             Controls.Add(dataGridView1);
             Controls.Add(txtBuscarArticulo);
@@ -167,7 +168,7 @@
         private DataGridViewTextBoxColumn Column4;
         private DataGridViewTextBoxColumn Column5;
         private Button btnAceptar;
-        private Button btnCancelar;
+        private Button btnSalir;
         private Button btnBuscar;
     }
 }

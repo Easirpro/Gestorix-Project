@@ -14,7 +14,7 @@ namespace CapaVista
 {
     public partial class frmBuscarRubro : Form
     {
-        ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+        ClsLogicaProducto logica = new ClsLogicaProducto();
         public frmBuscarRubro()
         {
             InitializeComponent();

@@ -15,7 +15,7 @@ namespace CapaVista
     public partial class frmNuevaCompra : Form
     {
         private ClsCompraLogica logica = new ClsCompraLogica();
-        private ClsGestorLogicaProveedor logicaProveedor = new ClsGestorLogicaProveedor();
+        private ClsLogicaProveedor logicaProveedor = new ClsLogicaProveedor();
         private int idProveedor = 0;
         private DataTable productosEncontrados;
 

@@ -15,7 +15,7 @@ namespace CapaVista
 {
     public partial class frmCargaarticulo : Form
     {
-        ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+        ClsLogicaProducto logica = new ClsLogicaProducto();
         public frmCargaarticulo()
         {
             InitializeComponent();

@@ -316,7 +316,7 @@ namespace CapaVista
                 }
             }
 
-            ClsGestorLogicaProducto logicaProducto = new ClsGestorLogicaProducto();
+            ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
 
             DataTable tablaProducto = logicaProducto.ObtenerProductoPorCodigoBarra(codigoBarra);
 
@@ -659,9 +659,108 @@ namespace CapaVista
         }
         private void btnPromocion_Click(object sender, EventArgs e)
         {
-            frmPromocion promo = new frmPromocion();
-            promo.ShowDialog();
-        }
+            using (frmBuscarPromo buscarPromo = new frmBuscarPromo())
+            {
+                if (buscarPromo.ShowDialog() != DialogResult.OK)
+                    return;
+
+                int idPromocion = buscarPromo.IdPromocionSeleccionada;
+
+                try
+                {
+                    ClsPromocionLogica logicaPromo = new ClsPromocionLogica();
+                    ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+
+                    DataSet datos = logicaPromo.ObtenerPromocionPorId(idPromocion);
+
+                    if (datos == null || datos.Tables.Count < 2 || datos.Tables[0].Rows.Count == 0)
+                    {
+                        MessageBox.Show("No se encontraron los datos de la promoción.");
+                        return;
+                    }
+
+                    DataRow promo = datos.Tables[0].Rows[0];
+
+                    if (promo["Activo"] == DBNull.Value || !Convert.ToBoolean(promo["Activo"]))
+                    {
+                        MessageBox.Show("La promoción seleccionada está inactiva.");
+                        return;
+                    }
+
+                    DataTable detalles = datos.Tables[1];
+
+                    if (detalles.Rows.Count == 0)
+                    {
+                        MessageBox.Show("La promoción no tiene productos asociados.");
+                        return;
+                    }
+
+                    decimal precioFinal = Convert.ToDecimal(promo["Valor"]);
+
+                    if (precioFinal < 0)
+                    {
+                        MessageBox.Show("El precio final de la promoción no es válido.");
+                        return;
+                    }
+
+                    foreach (DataRow detalle in detalles.Rows)
+                    {
+                        int idProducto = Convert.ToInt32(detalle["IdProducto"]);
+                        decimal cantidad = Convert.ToDecimal(detalle["Cantidad"]);
+
+                        DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
+
+                        decimal stockDisponible = 0m;
+
+                        if (tablaStock.Rows.Count > 0 && tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
+                        {
+                            stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
+                        }
+
+                        if (cantidad <= 0 || cantidad > stockDisponible)
+                        {
+                            MessageBox.Show("Stock insuficiente para el producto: " + detalle["NombreProducto"].ToString(), "Promociones",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                    }
+
+                    decimal subtotalAnterior = subtotal;
+                    decimal ajusteAnterior = descuentoRecargo;
+
+                    foreach (DataRow detalle in detalles.Rows)
+                    {
+                        int idProducto = Convert.ToInt32(detalle["IdProducto"]);
+                        string sku = detalle["SKU"].ToString();
+                        string codigoPromocion = promo["CodigoPromocion"].ToString();
+                        decimal precio = Convert.ToDecimal(detalle["PrecioVenta"]);
+                        decimal cantidad = Convert.ToDecimal(detalle["Cantidad"]);
+                        DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
+                        decimal stockDisponible = 0m;
+
+                        if (tablaStock.Rows.Count > 0 && tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
+                        {
+                            stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
+                        }
+
+                        AgregarProductoAGrilla(idProducto, sku, codigoPromocion, detalle["NombreProducto"].ToString(), precio, cantidad, stockDisponible);
+                    }
+
+                    decimal importeNormalAgregado = subtotal - subtotalAnterior;
+
+                    descuentoRecargo = ajusteAnterior + precioFinal - importeNormalAgregado;
+
+                    CalcularYMostrarMontos();
+
+                    txtCodigoBarra.Focus();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar la promoción: " + ex.Message, "Promociones",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }     
         private void cargarDeLasMarcasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmBuscarMarca marca = new frmBuscarMarca();
@@ -700,7 +799,7 @@ namespace CapaVista
                 return;
             }
 
-            ClsGestorLogicaProducto logicaProducto = new ClsGestorLogicaProducto();
+            ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
 
             DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
 
@@ -755,8 +854,16 @@ namespace CapaVista
 
             formulario.ShowDialog();
         }
+        private void administrarPromocionesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmPromocion promo = new frmPromocion();
+            promo.ShowDialog();
+        }
+
 
         #endregion
+
+
 
 
 

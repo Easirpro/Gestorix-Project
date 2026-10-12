@@ -7,7 +7,7 @@ using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 namespace CapaDatos.NegocioDatos
 {
-    public class ClsGestorProveedorDatos
+    public class ClsProveedorDatos
     {
         Conexion cn = new Conexion();
 

@@ -17,7 +17,7 @@ namespace CapaVista
 
     public partial class frmNuevoProveedor : Form
     {
-        ClsGestorLogicaProveedor logica = new ClsGestorLogicaProveedor();
+        ClsLogicaProveedor logica = new ClsLogicaProveedor();
 
         private int idProveedorModificar = 0;
         private int idDireccionModificar = 0;

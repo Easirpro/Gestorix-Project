@@ -14,7 +14,7 @@ namespace CapaVista
 {
     public partial class frmReporapida : Form
     {
-        private ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+        private ClsLogicaProducto logica = new ClsLogicaProducto();
         public frmReporapida()
         {
             InitializeComponent();

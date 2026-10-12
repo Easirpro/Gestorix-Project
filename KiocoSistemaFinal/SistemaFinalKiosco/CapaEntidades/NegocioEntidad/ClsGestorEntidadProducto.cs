@@ -145,38 +145,38 @@ namespace CapaEntidades.NegocioEntidad
             public int CantidadArticulos { get; set; }
             public int CantidadRelaciones { get; set; }
 
-            public static ClsResultadoImportacion Exitoso(string mensaje, int cantidadArticulos, int cantidadRelaciones)
+        public static ClsResultadoImportacion Exitoso(string mensaje, int cantidadArticulos, int cantidadRelaciones)
+        {
+        return new ClsResultadoImportacion
+        {
+            Exito = true,
+            Titulo = "Importación de artículos",
+            Mensaje = mensaje,
+            CantidadArticulos = cantidadArticulos,
+            CantidadRelaciones = cantidadRelaciones
+            };
+        }
+
+        public static ClsResultadoImportacion Error(string mensaje, string titulo = "Importación de artículos")
+        {
+            return new ClsResultadoImportacion
             {
-                return new ClsResultadoImportacion
-                {
-                    Exito = true,
-                    Titulo = "Importación de artículos",
-                    Mensaje = mensaje,
-                    CantidadArticulos = cantidadArticulos,
-                    CantidadRelaciones = cantidadRelaciones
-                };
+            Exito = false,
+            Titulo = titulo,
+            Mensaje = mensaje
+            };
             }
 
-            public static ClsResultadoImportacion Error(string mensaje, string titulo = "Importación de artículos")
+        public static ClsResultadoImportacion AdvertenciaResultado(string mensaje, string titulo = "Importación de artículos")
+        {
+            return new ClsResultadoImportacion
             {
-                return new ClsResultadoImportacion
-                {
-                    Exito = false,
-                    Titulo = titulo,
-                    Mensaje = mensaje
-                };
-            }
-
-            public static ClsResultadoImportacion AdvertenciaResultado(string mensaje, string titulo = "Importación de artículos")
-            {
-                return new ClsResultadoImportacion
-                {
-                    Exito = false,
-                    Advertencia = true,
-                    Titulo = titulo,
-                    Mensaje = mensaje
-                };
-            }
+                Exito = false,
+                Advertencia = true,
+                Titulo = titulo,
+                Mensaje = mensaje
+            };
+        }
         }
 
         public class ClsSucursalProveedorCorreo 

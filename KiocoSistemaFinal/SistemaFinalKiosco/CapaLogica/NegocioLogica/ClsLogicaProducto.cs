@@ -11,11 +11,11 @@ using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 namespace CapaLogica.NegocioLogica
 {
-    public partial class ClsGestorLogicaProducto
+    public partial class ClsLogicaProducto
     {
-        ClsGestorProducto datos = new ClsGestorProducto();
+        CapaDatos.NegocioDatos.ClsProductoDatos datos = new CapaDatos.NegocioDatos.ClsProductoDatos();
 
-        public int RegistrarProducto(ClsProducto producto)
+        public int RegistrarProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
             return datos.RegistrarProducto(producto);
         }
@@ -111,7 +111,7 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ObtenerProductoPorId(idProducto);
         }
-        public bool ModificarProducto(ClsProducto producto)
+        public bool ModificarProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
             return datos.ModificarProducto(producto);
         }

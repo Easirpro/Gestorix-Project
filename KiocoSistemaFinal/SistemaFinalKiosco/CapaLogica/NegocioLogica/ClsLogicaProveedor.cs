@@ -5,9 +5,9 @@ using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 namespace CapaLogica.NegocioLogica
 {
-    public class ClsGestorLogicaProveedor
+    public class ClsLogicaProveedor
     {
-        ClsGestorProveedorDatos datos = new ClsGestorProveedorDatos();
+        ClsProveedorDatos datos = new ClsProveedorDatos();
 
         public int RegistrarProveedor(ClsProveedor proveedor)
         {
