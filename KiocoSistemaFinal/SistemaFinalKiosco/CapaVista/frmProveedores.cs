@@ -13,7 +13,7 @@ namespace CapaVista
 {
     public partial class frmProveedores : Form
     {
-        ClsGestorLogicaProveedor logica = new ClsGestorLogicaProveedor();
+        ClsLogicaProveedor logica = new ClsLogicaProveedor();
         DataTable tablaProveedores;
 
         public frmProveedores()

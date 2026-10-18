@@ -17,6 +17,9 @@
     <Compile Update="frmBuscarMarca.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frmBuscarPromo.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frmCambioProveedor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -26,10 +29,10 @@
     <Compile Update="frmCargaEmpleados.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="frmCargaRapidaPrecios.cs">
+    <Compile Update="frmCargaMecanicaVolumen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="frmCobro.cs">
+    <Compile Update="frmCargaRapidaPrecios.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmCobrosecundario.cs">
@@ -51,6 +54,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmExportarArchivos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmGestionBackup.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmImportarArticulos.cs">
@@ -129,6 +135,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmBuscarRubro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmTiempoPromocion.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmVentaFecha.cs">

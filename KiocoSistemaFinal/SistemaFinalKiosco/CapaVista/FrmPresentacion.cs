@@ -1,12 +1,9 @@
 ﻿using CapaEntidades;
-using CapaEntidades.NegocioEntidad;
 using CapaLogica;
-using CapaLogica.NegocioLogica;
 using DocumentFormat.OpenXml.Office.Word;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -14,8 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
-
-
+using CapaLogica.NegocioLogica;
+using System.Data;
 namespace CapaVista
 {
     public partial class frmmenuPres : Form
@@ -29,7 +26,6 @@ namespace CapaVista
         public frmmenuPres()
         {
             InitializeComponent();
-
             ActualizarFechaHora();
             //tmrFechaHora.Start();
 
@@ -46,6 +42,7 @@ namespace CapaVista
             this.KeyPreview = true;
 
             this.Load += frmmenuPres_Load;
+            this.Load += FrmPresentacion_Load;
         }
         private void frmmenuPres_Load(object sender, EventArgs e)
         {
@@ -58,6 +55,7 @@ namespace CapaVista
             CargarBotones();
 
             RellenarFilas();
+            CalcularYMostrarMontos();
         }
 
         #region Metodo
@@ -213,90 +211,77 @@ namespace CapaVista
         }
         private void AgregarProductoAGrilla(int idProducto, string sku, string codigoBarra, string descripcion, decimal precio, decimal cantidad, decimal stockDisponible)
         {
-
-            if (stockDisponible <= 0)
+            if (cantidad <= 0)
             {
-                MessageBox.Show("El producto no tiene stock disponible.", "Sin stock",
+                MessageBox.Show("La cantidad debe ser mayor a cero.", "Cantidad inválida",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                 return;
             }
 
-            // Buscar si el producto ya está cargado
+            if (precio < 0)
+            {
+                MessageBox.Show("El precio no puede ser negativo.", "Precio inválido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            decimal cantidadYaCargada = 0m;
+
+            foreach (DataGridViewRow fila in dtgPresentacion.Rows)
+            {
+                if (fila.IsNewRow || fila.Cells["ClnIdProducto"].Value == null)
+                    continue;
+
+                if (Convert.ToInt32(fila.Cells["ClnIdProducto"].Value) == idProducto)
+                {
+                    cantidadYaCargada += Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
+                }
+            }
+
+            if (stockDisponible <= 0 || cantidadYaCargada + cantidad > stockDisponible)
+            {
+                MessageBox.Show($"Stock insuficiente.\nStock disponible: {stockDisponible}\n" + $"Cantidad ya cargada: {cantidadYaCargada}\n" +
+                    $"Cantidad a agregar: {cantidad}", "Stock insuficiente",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataGridViewRow filaDestino = null;
+
             foreach (DataGridViewRow fila in dtgPresentacion.Rows)
             {
                 if (fila.IsNewRow)
-                {
                     continue;
-                }
 
-                if (fila.Cells["ClnIdProducto"].Value != null && Convert.ToInt32(fila.Cells["ClnIdProducto"].Value) == idProducto)
+                if (fila.Cells["ClnIdProducto"].Value == null || string.IsNullOrWhiteSpace(Convert.ToString(fila.Cells["ClnIdProducto"].Value)))
                 {
-                    decimal cantidadActual = Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
-                    decimal cantidadFinal = cantidadActual + cantidad;
-
-                    if (cantidadFinal > stockDisponible)
-                    {
-                        MessageBox.Show($"Stock insuficiente.\n\n" + $"Stock disponible: {stockDisponible}\n" + $"Cantidad cargada: {cantidadActual}\n" +
-                            $"Cantidad a agregar: {cantidad}\n" + $"Cantidad resultante: {cantidadFinal}",
-                            "Stock insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                        return;
-                    }
-
-                    fila.Cells["ClnCantidad"].Value = cantidadFinal;
-                    fila.Cells["ClnImporte"].Value = cantidadFinal * precio;
-
-                    CalcularYMostrarMontos();
-                    return;
-                }
-            }
-
-            if (cantidad > stockDisponible)
-            {
-                MessageBox.Show($"Stock insuficiente.\n\n" + $"Stock disponible: {stockDisponible}\n" +
-                    $"Cantidad solicitada: {cantidad}", "Stock insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            int nuevaFila = -1;
-
-            for (int i = 0; i < dtgPresentacion.Rows.Count; i++)
-            {
-                if (dtgPresentacion.Rows[i].IsNewRow)
-                {
-                    continue;
-                }
-
-
-                if (dtgPresentacion.Rows[i].Cells["ClnIdProducto"].Value == null)
-                {
-                    nuevaFila = i;
+                    filaDestino = fila;
                     break;
                 }
             }
 
-            if (nuevaFila == -1)
+            if (filaDestino == null)
             {
-                nuevaFila = dtgPresentacion.Rows.Add();
+                int indice = dtgPresentacion.Rows.Add();
+                filaDestino = dtgPresentacion.Rows[indice];
             }
 
-            dtgPresentacion.Rows[nuevaFila].Cells["ClnIdProducto"].Value = idProducto;
-            dtgPresentacion.Rows[nuevaFila].Cells["ClnSKU"].Value = sku;
-            dtgPresentacion.Rows[nuevaFila].Cells["ClnCodigo"].Value = codigoBarra;
-            dtgPresentacion.Rows[nuevaFila].Cells["ClnDescripcion"].Value = descripcion;
-            dtgPresentacion.Rows[nuevaFila].Cells["ClnCantidad"].Value = cantidad;
-            dtgPresentacion.Rows[nuevaFila].Cells["ClnPrecioUnitario"].Value = precio;
-            dtgPresentacion.Rows[nuevaFila].Cells["ClnImporte"].Value = cantidad * precio;
+            filaDestino.Cells["ClnIdProducto"].Value = idProducto;
+            filaDestino.Cells["ClnSKU"].Value = sku;
+            filaDestino.Cells["ClnCodigo"].Value = codigoBarra;
+            filaDestino.Cells["ClnDescripcion"].Value = descripcion;
+            filaDestino.Cells["ClnCantidad"].Value = cantidad;
+            filaDestino.Cells["ClnPrecioUnitario"].Value = precio;
+            filaDestino.Cells["ClnImporte"].Value = Math.Round(cantidad * precio, 2);
 
             CalcularYMostrarMontos();
+            dtgPresentacion.Refresh();
         }
         private void IngresarProductoPorCodigo()
         {
-            string textoBusqueda = txtCodigoBarra.Text.Trim();
+            string codigoBarra = txtCodigoBarra.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(textoBusqueda))
+            if (string.IsNullOrWhiteSpace(codigoBarra))
             {
                 txtCodigoBarra.Focus();
                 return;
@@ -317,13 +302,13 @@ namespace CapaVista
                 }
             }
 
-            ClsGestorLogicaProducto logicaProducto = new ClsGestorLogicaProducto();
+            ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
 
-            DataTable tablaProducto = logicaProducto.BuscarProductoPorCodigoOSku(textoBusqueda);
+            DataTable tablaProducto = logicaProducto.ObtenerProductoPorCodigoBarra(codigoBarra);
 
             if (tablaProducto.Rows.Count == 0)
             {
-                MessageBox.Show("No se encontró un producto con ese código de barras o SKU.", "Producto no encontrado",
+                MessageBox.Show("No se encontró un producto con ese código de barras.", "Producto no encontrado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigoBarra.SelectAll();
@@ -357,6 +342,8 @@ namespace CapaVista
             lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy");
             lblHora.Text = "Hora: " + DateTime.Now.ToString("HH:mm:ss");
         }
+
+
         #endregion
 
         #region Eventos
@@ -523,27 +510,34 @@ namespace CapaVista
         }
         private void CalcularYMostrarMontos()
         {
-            subtotal = 0.00m;
+            decimal nuevoSubtotal = 0m;
 
             foreach (DataGridViewRow fila in dtgPresentacion.Rows)
             {
-                if (fila.IsNewRow)
-                {
+                if (fila.IsNewRow || fila.Cells["ClnIdProducto"].Value == null)
                     continue;
-                }
 
+                object valorImporte = fila.Cells["ClnImporte"].Value;
 
-                if (fila.Cells["ClnImporte"].Value != null && decimal.TryParse(fila.Cells["ClnImporte"].Value.ToString(), out decimal importe))
+                if (valorImporte != null && valorImporte != DBNull.Value && decimal.TryParse(Convert.ToString(valorImporte), out decimal importe))
                 {
-                    subtotal += importe;
+                    nuevoSubtotal += importe;
                 }
             }
 
-            total = subtotal + descuentoRecargo;
+            subtotal = Math.Round(nuevoSubtotal, 2);
+            total = Math.Max(0m, Math.Round(subtotal + descuentoRecargo, 2));
 
-            lblSubtotalMonto.Text = $"$ {subtotal:N2}";
-            lblDescuentoMonto.Text = $"$ {descuentoRecargo:N2}";
-            lblTotalMonto.Text = $"$ {total:N2}";
+            lblSubtotalMonto.Text = subtotal.ToString("C2");
+            lblDescuentoMonto.Text = Math.Abs(descuentoRecargo).ToString("C2");
+
+            lblTotalMonto.Visible = true;
+            lblTotalMonto.AutoSize = false;
+            lblTotalMonto.Dock = System.Windows.Forms.DockStyle.Fill;
+            lblTotalMonto.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            lblTotalMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
+
+            lblTotalMonto.Text = total.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR"));
         }
         private void btnConfig_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -570,66 +564,37 @@ namespace CapaVista
         }
         private void btnBuscarArticulo_Click(object sender, EventArgs e)
         {
-            frmBuscarArticulo buscarArticulo = new frmBuscarArticulo();
-
-            if (buscarArticulo.ShowDialog() == DialogResult.OK)
+            using (frmBuscarArticulo buscarArticulo = new frmBuscarArticulo())
             {
+                buscarArticulo.ShowDialog();
+
                 ClsProducto producto = buscarArticulo.ProductoSeleccionado;
 
-                if (producto != null)
+                if (producto == null)
                 {
-                    int fila = -1;
-
-                    for (int i = 0; i < dtgPresentacion.Rows.Count; i++)
-                    {
-                        if (dtgPresentacion.Rows[i].IsNewRow)
-                        {
-                            continue;
-                        }
-
-
-                        if (dtgPresentacion.Rows[i].Cells["ClnSKU"].Value == null ||
-                            string.IsNullOrWhiteSpace(dtgPresentacion.Rows[i].Cells["ClnSKU"].Value.ToString()))
-                        {
-                            fila = i;
-                            break;
-                        }
-                    }
-
-                    if (fila == -1)
-                    {
-                        fila = dtgPresentacion.Rows.Add();
-                    }
-
-                    dtgPresentacion.Rows[fila].Cells["ClnIdProducto"].Value = producto.IdProducto;
-                    dtgPresentacion.Rows[fila].Cells["ClnSKU"].Value = producto.SKU;
-                    dtgPresentacion.Rows[fila].Cells["ClnCodigo"].Value = producto.CodigoBarra;
-                    dtgPresentacion.Rows[fila].Cells["ClnDescripcion"].Value = producto.Descripcion;
-                    dtgPresentacion.Rows[fila].Cells["ClnCantidad"].Value = 1;
-                    dtgPresentacion.Rows[fila].Cells["ClnPrecioUnitario"].Value = producto.PrecioVenta;
-                    dtgPresentacion.Rows[fila].Cells["ClnImporte"].Value = producto.PrecioVenta;
-
-                    CalcularYMostrarMontos();
+                    MessageBox.Show("No se recibió ningún producto seleccionado. " + "Revisá el botón de selección de frmBuscarArticulo.", "Producto no seleccionado",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+
+                ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+
+                DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(producto.IdProducto);
+
+                decimal stockDisponible = 0m;
+
+                if (tablaStock != null && tablaStock.Rows.Count > 0 && tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
+                {
+                    stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
+                }
+
+                AgregarProductoAGrilla(producto.IdProducto, producto.SKU, producto.CodigoBarra, producto.Descripcion, producto.PrecioVenta, 1m, stockDisponible);
+
+                txtCodigoBarra.Focus();
             }
         }
         private void btnCobrar_Click_1(object sender, EventArgs e)
         {
-            //if (total <= 0)
-            //{
-            //    MessageBox.Show("Debe agregar al menos un producto para realizar el cobro.", "Cobrar venta",
-            //        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-            //    txtCodigoBarra.Focus();
-            //    return;
-            //}
-
-            //frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion);
-
-            //if (cobro.ShowDialog() == DialogResult.OK)
-            //{
-            //    LimpiarVenta();
-            //}
             if (total <= 0)
             {
                 MessageBox.Show("Debe agregar al menos un producto para realizar el cobro.", "Cobrar venta",
@@ -639,53 +604,13 @@ namespace CapaVista
                 return;
             }
 
-            List<DetalleVentaEntidad> detallesVenta = new List<DetalleVentaEntidad>();
-
-            foreach (DataGridViewRow fila in dtgPresentacion.Rows)
-            {
-                if (fila.IsNewRow)
-                {
-                    continue;
-                }
-
-                if (fila.Cells["ClnIdProducto"].Value == null)
-                {
-                    continue;
-                }
-
-                int idProducto = Convert.ToInt32(fila.Cells["ClnIdProducto"].Value);
-
-                if (idProducto <= 0)
-                {
-                    continue;
-                }
-
-                DetalleVentaEntidad detalle = new DetalleVentaEntidad
-                {
-                    IdProducto = idProducto,
-                    Cantidad = Convert.ToDecimal(fila.Cells["ClnCantidad"].Value),
-                    PrecioUnitario = Convert.ToDecimal(fila.Cells["ClnPrecioUnitario"].Value),
-                    Subtotal = Convert.ToDecimal(fila.Cells["ClnImporte"].Value)
-                };
-
-                detallesVenta.Add(detalle);
-            }
-
-            if (detallesVenta.Count == 0)
-            {
-                MessageBox.Show("No hay productos válidos para realizar el cobro.", "Cobrar venta",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            frmCobro cobro = new frmCobro(total, SesionUsuario.IdUsuario, detallesVenta);
+            frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion);
 
             if (cobro.ShowDialog() == DialogResult.OK)
             {
                 LimpiarVenta();
             }
-        }//Ver
+        }
         private void LimpiarVenta()
         {
             dtgPresentacion.Rows.Clear();
@@ -715,8 +640,188 @@ namespace CapaVista
         }
         private void btnPromocion_Click(object sender, EventArgs e)
         {
-            frmPromocion promo = new frmPromocion();
-            promo.ShowDialog();
+            using (frmBuscarPromo buscarPromo = new frmBuscarPromo())
+            {
+                if (buscarPromo.ShowDialog() != DialogResult.OK)
+                    return;
+
+                int idPromocion = buscarPromo.IdPromocionSeleccionada;
+
+                try
+                {
+                    ClsPromocionLogica logicaPromo = new ClsPromocionLogica();
+                    ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+
+                    DataSet datos = logicaPromo.ObtenerPromocionPorId(idPromocion);
+
+                    if (datos == null || datos.Tables.Count < 2 || datos.Tables[0].Rows.Count == 0)
+                    {
+                        MessageBox.Show("No se encontraron los datos de la promoción.");
+                        return;
+                    }
+
+                    DataRow promo = datos.Tables[0].Rows[0];
+
+                    if (promo["Activo"] == DBNull.Value || !Convert.ToBoolean(promo["Activo"]))
+                    {
+                        MessageBox.Show("La promoción seleccionada está inactiva.");
+                        return;
+                    }
+
+                    DataTable detalles = datos.Tables[1];
+
+                    if (detalles.Rows.Count == 0)
+                    {
+                        MessageBox.Show("La promoción no tiene productos asociados.");
+                        return;
+                    }
+
+                    int idTipoPromocion = Convert.ToInt32(promo["IdTipoPromocion"]);
+                    decimal valor = Convert.ToDecimal(promo["Valor"]);
+
+                    DataTable tipos = logicaPromo.ObtenerTiposPromocion();
+
+                    DataRow[] tiposEncontrados = tipos.Select("IdTipoPromocion = " + idTipoPromocion);
+
+                    if (tiposEncontrados.Length == 0)
+                    {
+                        MessageBox.Show("No se encontró el tipo de promoción.");
+                        return;
+                    }
+
+                    DataRow tipoPromocion = tiposEncontrados[0];
+
+                    bool esVolumen = tipoPromocion["CantidadLleva"] != DBNull.Value && tipoPromocion["CantidadPaga"] != DBNull.Value;
+
+                    int cantidadLleva = 0;
+                    int cantidadPaga = 0;
+
+                    if (esVolumen)
+                    {
+                        cantidadLleva = Convert.ToInt32(tipoPromocion["CantidadLleva"]);
+                        cantidadPaga = Convert.ToInt32(tipoPromocion["CantidadPaga"]);
+
+                        if (cantidadLleva <= 0 || cantidadPaga <= 0 ||
+                            cantidadPaga >= cantidadLleva)
+                        {
+                            MessageBox.Show("La mecánica de volumen no es válida.");
+                            return;
+                        }
+                    }
+                    else if (idTipoPromocion == 4)
+                    {
+                        if (valor <= 0 || valor > 100)
+                        {
+                            MessageBox.Show("El porcentaje de descuento no es válido.");
+                            return;
+                        }
+                    }
+                    else if (idTipoPromocion == 5)
+                    {
+                        if (valor <= 0)
+                        {
+                            MessageBox.Show("El precio especial no es válido.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("El tipo de promoción no es válido.");
+                        return;
+                    }
+
+                    decimal precioFinal = 0m;
+
+                    foreach (DataRow detalle in detalles.Rows)
+                    {
+                        decimal cantidadConfigurada = Convert.ToDecimal(detalle["Cantidad"]);
+                        decimal precioUnitario = Convert.ToDecimal(detalle["PrecioVenta"]);
+
+                        if (cantidadConfigurada <= 0 || precioUnitario < 0)
+                        {
+                            MessageBox.Show("La cantidad o el precio de un producto no son válidos.");
+                            return;
+                        }
+
+                        if (esVolumen)
+                        {
+                            precioFinal += cantidadConfigurada * cantidadPaga * precioUnitario;
+                        }
+                        else if (idTipoPromocion == 4)
+                        {
+                            precioFinal += cantidadConfigurada * precioUnitario * (1m - valor / 100m);
+                        }
+                        else if (idTipoPromocion == 5)
+                        {
+                            precioFinal += cantidadConfigurada * valor;
+                        }
+                    }
+
+                    precioFinal = Math.Round(precioFinal, 2);
+
+                    foreach (DataRow detalle in detalles.Rows)
+                    {
+                        int idProducto = Convert.ToInt32(detalle["IdProducto"]);
+                        decimal cantidadConfigurada = Convert.ToDecimal(detalle["Cantidad"]);
+                        decimal cantidadAgregar = esVolumen ? cantidadConfigurada * cantidadLleva : cantidadConfigurada;
+
+                        DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
+
+                        decimal stockDisponible = 0m;
+
+                        if (tablaStock.Rows.Count > 0 && tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
+                        {
+                            stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
+                        }
+
+                        if (cantidadAgregar > stockDisponible)
+                        {
+                            MessageBox.Show("Stock insuficiente para el producto: " + detalle["NombreProducto"].ToString(), "Promociones",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+
+                    decimal subtotalAnterior = subtotal;
+                    decimal ajusteAnterior = descuentoRecargo;
+
+                    foreach (DataRow detalle in detalles.Rows)
+                    {
+                        int idProducto = Convert.ToInt32(detalle["IdProducto"]);
+                        string sku = detalle["SKU"].ToString();
+                        string codigoPromocion = promo["CodigoPromocion"].ToString();
+                        decimal precio = Convert.ToDecimal(detalle["PrecioVenta"]);
+                        decimal cantidadConfigurada = Convert.ToDecimal(detalle["Cantidad"]);
+                        decimal cantidad = esVolumen ? cantidadConfigurada * cantidadLleva : cantidadConfigurada;
+
+                        DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
+
+                        decimal stockDisponible = 0m;
+
+                        if (tablaStock.Rows.Count > 0 && tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
+                        {
+                            stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
+                        }
+
+                        AgregarProductoAGrilla(idProducto, sku, codigoPromocion, detalle["NombreProducto"].ToString(), precio, cantidad, stockDisponible);
+                    }
+
+                    decimal importeNormalAgregado = subtotal - subtotalAnterior;
+                    decimal descuentoPromocion = importeNormalAgregado - precioFinal;
+
+                    descuentoRecargo = ajusteAnterior - descuentoPromocion;
+
+                    CalcularYMostrarMontos();
+
+                    txtCodigoBarra.Focus();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar la promoción: " + ex.Message, "Promociones",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
         private void cargarDeLasMarcasToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -756,7 +861,7 @@ namespace CapaVista
                 return;
             }
 
-            ClsGestorLogicaProducto logicaProducto = new ClsGestorLogicaProducto();
+            ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
 
             DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
 
@@ -811,23 +916,33 @@ namespace CapaVista
 
             formulario.ShowDialog();
         }
+        private void administrarPromocionesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmPromocion promo = new frmPromocion();
+            promo.ShowDialog();
+        }
+        private void gestioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmGestionBackup frm = new frmGestionBackup();
+            frm.ShowDialog();
+        }
+        private void FrmPresentacion_Load(object sender,EventArgs e)
+        {
+            // backup automatico
+
+            try
+            {
+                ClsBackupLogica backup = new ClsBackupLogica();
+                backup.BackupAutomatico();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,"Error", MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+        }
 
         #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }
