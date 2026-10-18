@@ -25,7 +25,7 @@ namespace CapaVista
 
             this.Load += frmNuevoArticulo_Load;
 
-          
+
         }
         public frmNuevoArticulo(int idProducto)
         {
@@ -35,7 +35,7 @@ namespace CapaVista
 
             this.Load += frmNuevoArticulo_Load;
 
-            
+
         }
 
         #region Metodos
@@ -752,10 +752,10 @@ namespace CapaVista
             int idProveedor;
 
             if (!int.TryParse(cmbProveedor.SelectedValue.ToString(), out idProveedor))
-            { 
-                return; 
+            {
+                return;
             }
-                
+
 
             if (idProveedor == 0)
             {
@@ -782,9 +782,13 @@ namespace CapaVista
             cmbSucursal.ValueMember = "IdSucursal";
             cmbSucursal.SelectedIndex = 0;
         }
-
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
         #endregion
+
 
 
 

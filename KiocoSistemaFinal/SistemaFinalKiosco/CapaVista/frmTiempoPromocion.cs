@@ -12,6 +12,8 @@ namespace CapaVista
 {
     public partial class frmTiempoPromocion : Form
     {
+        private bool actualizandoControles = false;
+
         public bool EsRecurrente { get; private set; }
         public DateTime FechaInicioSeleccionada { get; private set; }
         public DateTime FechaFinSeleccionada { get; private set; }
@@ -23,14 +25,36 @@ namespace CapaVista
             InitializeComponent();
 
             this.Load += frmTiempoPromocion_Load;
+
             rdbPorPeriodo.CheckedChanged += rdbPorPeriodo_CheckedChanged;
             rdbRecurrente.CheckedChanged += rdbRecurrente_CheckedChanged;
-            btnAceptar.Click += btnAceptar_Click;
+
+            dtpFechaInicio.ValueChanged += dtpFechaInicio_ValueChanged;
+            dtpFechaFin.ValueChanged += dtpFechaFin_ValueChanged;
+
+            dtpHoraInicio.ValueChanged += dtpHoraInicio_ValueChanged;
+            dtpHoraFin.ValueChanged += dtpHoraFin_ValueChanged;
         }
 
+
         #region Metodos
+
         private void frmTiempoPromocion_Load(object sender, EventArgs e)
         {
+            DateTime ahora = DateTime.Now;
+            DateTime hoy = ahora.Date;
+
+            // Las fechas empiezan en el día actual.
+            dtpFechaInicio.MinDate = hoy;
+            dtpFechaInicio.Value = hoy;
+
+            dtpFechaFin.MinDate = hoy;
+            dtpFechaFin.Value = hoy;
+
+            // Los horarios empiezan con la hora actual.
+            dtpHoraInicio.Value = ahora;
+            dtpHoraFin.Value = ahora.AddHours(1);
+
             rdbPorPeriodo.Checked = true;
             ActualizarControlesVigencia();
         }
@@ -41,6 +65,75 @@ namespace CapaVista
         private void rdbRecurrente_CheckedChanged(object sender, EventArgs e)
         {
             ActualizarControlesVigencia();
+        }
+        private void dtpFechaInicio_ValueChanged(object sender, EventArgs e)
+        {
+            dtpFechaFin.MinDate = dtpFechaInicio.Value.Date;
+
+            if (dtpFechaFin.Value.Date < dtpFechaInicio.Value.Date)
+            {
+                dtpFechaFin.Value = dtpFechaInicio.Value.Date;
+            }
+
+            ValidarHorarioInicio();
+            ValidarHorarioFin();
+        }
+        private void dtpFechaFin_ValueChanged(object sender, EventArgs e)
+        {
+            ValidarHorarioFin();
+        }
+        private void dtpHoraInicio_ValueChanged(object sender, EventArgs e)
+        {
+            ValidarHorarioInicio();
+            ValidarHorarioFin();
+        }
+        private void dtpHoraFin_ValueChanged(object sender, EventArgs e)
+        {
+            ValidarHorarioFin();
+        }
+        private void ValidarHorarioInicio()
+        {
+            DateTime ahora = DateTime.Now;
+
+            if (dtpFechaInicio.Value.Date == ahora.Date &&
+                dtpHoraInicio.Value.TimeOfDay < ahora.TimeOfDay)
+            {
+                DateTime horaActual = DateTime.Now;
+
+                // Conservamos la fecha que tiene permitido el control.
+                DateTime nuevaHora = dtpHoraInicio.Value.Date
+                    .AddHours(horaActual.Hour)
+                    .AddMinutes(horaActual.Minute)
+                    .AddSeconds(horaActual.Second);
+
+                if (nuevaHora >= dtpHoraInicio.MinDate &&
+                    nuevaHora <= dtpHoraInicio.MaxDate)
+                {
+                    dtpHoraInicio.Value = nuevaHora;
+                }
+            }
+        }
+        private void ValidarHorarioFin()
+        {
+            DateTime ahora = DateTime.Now;
+
+            if (dtpFechaFin.Value.Date < dtpFechaInicio.Value.Date)
+            {
+                dtpFechaFin.Value = dtpFechaInicio.Value.Date;
+            }
+
+            if (dtpFechaFin.Value.Date == dtpFechaInicio.Value.Date && dtpHoraFin.Value.TimeOfDay <= dtpHoraInicio.Value.TimeOfDay)
+            {
+                if (dtpHoraInicio.Value.TimeOfDay < new TimeSpan(23, 59, 0))
+                {
+                    dtpHoraFin.Value = dtpHoraInicio.Value.AddMinutes(1);
+                }
+            }
+
+            if (dtpFechaFin.Value.Date == ahora.Date && dtpHoraFin.Value.TimeOfDay < ahora.TimeOfDay)
+            {
+                dtpHoraFin.Value = ahora;
+            }
         }
         private void ActualizarControlesVigencia()
         {
@@ -56,7 +149,7 @@ namespace CapaVista
         #region Eventos
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            if (dtpHoraFin.Value.TimeOfDay == dtpHoraInicio.Value.TimeOfDay)
+            if (dtpFechaFin.Value.Date == dtpFechaInicio.Value.Date && dtpHoraFin.Value.TimeOfDay <= dtpHoraInicio.Value.TimeOfDay)
             {
                 MessageBox.Show("La hora de fin no puede ser igual a la hora de inicio.", "Horario inválido",
                     MessageBoxButtons.OK,  MessageBoxIcon.Warning);

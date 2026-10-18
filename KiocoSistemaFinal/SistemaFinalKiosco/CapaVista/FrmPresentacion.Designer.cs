@@ -93,6 +93,7 @@
             ventaPorRubroToolStripMenuItem = new ToolStripMenuItem();
             ventaPorArticulosToolStripMenuItem = new ToolStripMenuItem();
             ventaPorMedioDePagoToolStripMenuItem = new ToolStripMenuItem();
+            ajustesToolStripMenuItem = new ToolStripMenuItem();
             btnCaja = new ToolStripMenuItem();
             nuevoIngresoToolStripMenuItem = new ToolStripMenuItem();
             nuevoEgresoToolStripMenuItem = new ToolStripMenuItem();
@@ -104,6 +105,7 @@
             btnAyuda = new ToolStripMenuItem();
             btnEmpleado = new ToolStripMenuItem();
             permisosToolStripMenuItem = new ToolStripMenuItem();
+            gestioToolStripMenuItem = new ToolStripMenuItem();
             tollClosed = new ToolStripMenuItem();
             btnConfig = new MenuStrip();
             toolStripMenuItem2 = new ToolStripMenuItem();
@@ -229,7 +231,7 @@
             lblTotalMonto.Name = "lblTotalMonto";
             lblTotalMonto.Size = new Size(131, 37);
             lblTotalMonto.TabIndex = 5;
-            lblTotalMonto.Text = "label6";
+            lblTotalMonto.Text = "$0000";
             lblTotalMonto.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label5
@@ -257,7 +259,7 @@
             lblDescuentoMonto.Name = "lblDescuentoMonto";
             lblDescuentoMonto.Size = new Size(131, 39);
             lblDescuentoMonto.TabIndex = 3;
-            lblDescuentoMonto.Text = "label4";
+            lblDescuentoMonto.Text = "$0000";
             lblDescuentoMonto.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblSubtotalMonto
@@ -271,7 +273,7 @@
             lblSubtotalMonto.Name = "lblSubtotalMonto";
             lblSubtotalMonto.Size = new Size(131, 39);
             lblSubtotalMonto.TabIndex = 2;
-            lblSubtotalMonto.Text = "label3";
+            lblSubtotalMonto.Text = "$0000";
             lblSubtotalMonto.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label2
@@ -654,7 +656,7 @@
             // 
             // btnInformes
             // 
-            btnInformes.DropDownItems.AddRange(new ToolStripItem[] { ventasPorDiaToolStripMenuItem, ventaToolStripMenuItem, ventaPorRubroToolStripMenuItem, ventaPorArticulosToolStripMenuItem, ventaPorMedioDePagoToolStripMenuItem });
+            btnInformes.DropDownItems.AddRange(new ToolStripItem[] { ventasPorDiaToolStripMenuItem, ventaToolStripMenuItem, ventaPorRubroToolStripMenuItem, ventaPorArticulosToolStripMenuItem, ventaPorMedioDePagoToolStripMenuItem, ajustesToolStripMenuItem });
             btnInformes.Enabled = false;
             btnInformes.Name = "btnInformes";
             btnInformes.Size = new Size(66, 20);
@@ -694,6 +696,12 @@
             ventaPorMedioDePagoToolStripMenuItem.Size = new Size(212, 22);
             ventaPorMedioDePagoToolStripMenuItem.Text = "Venta por medio de pago";
             ventaPorMedioDePagoToolStripMenuItem.Click += ventaPorMedioDePagoToolStripMenuItem_Click;
+            // 
+            // ajustesToolStripMenuItem
+            // 
+            ajustesToolStripMenuItem.Name = "ajustesToolStripMenuItem";
+            ajustesToolStripMenuItem.Size = new Size(212, 22);
+            ajustesToolStripMenuItem.Text = "Ajustes";
             // 
             // btnCaja
             // 
@@ -761,7 +769,7 @@
             // 
             // btnEmpleado
             // 
-            btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { permisosToolStripMenuItem });
+            btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { permisosToolStripMenuItem, gestioToolStripMenuItem });
             btnEmpleado.Enabled = false;
             btnEmpleado.Name = "btnEmpleado";
             btnEmpleado.Size = new Size(72, 20);
@@ -770,9 +778,16 @@
             // permisosToolStripMenuItem
             // 
             permisosToolStripMenuItem.Name = "permisosToolStripMenuItem";
-            permisosToolStripMenuItem.Size = new Size(127, 22);
+            permisosToolStripMenuItem.Size = new Size(180, 22);
             permisosToolStripMenuItem.Text = "Empleado";
             permisosToolStripMenuItem.Click += permisosToolStripMenuItem_Click;
+            // 
+            // gestioToolStripMenuItem
+            // 
+            gestioToolStripMenuItem.Name = "gestioToolStripMenuItem";
+            gestioToolStripMenuItem.Size = new Size(180, 22);
+            gestioToolStripMenuItem.Text = "Gestión de Backup";
+            gestioToolStripMenuItem.Click += gestioToolStripMenuItem_Click;
             // 
             // tollClosed
             // 
@@ -924,5 +939,7 @@
         private ToolStripMenuItem cargaRapidaDePreciosToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem administrarPromocionesToolStripMenuItem;
+        private ToolStripMenuItem ajustesToolStripMenuItem;
+        private ToolStripMenuItem gestioToolStripMenuItem;
     }
 }

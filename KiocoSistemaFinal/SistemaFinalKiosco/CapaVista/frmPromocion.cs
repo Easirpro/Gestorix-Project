@@ -18,6 +18,11 @@ namespace CapaVista
         private DataTable tiposPromocion;
         private int idPromocionSeleccionada = 0;
         private bool actualizandoListaPromociones = false;
+        private DateTime? fechaInicioPromocion = null;
+        private DateTime? fechaFinPromocion = null;
+        private bool vigenciaConfigurada = false;
+        private bool promocionActivaSeleccionada = true;
+        private bool actualizandoCheckboxEstado = false;
 
 
         public frmPromocion()
@@ -318,8 +323,14 @@ namespace CapaVista
 
                     decimal cantidadParaCalcular = cantidad;
 
-                    if (idTipoPromocion >= 1 && idTipoPromocion <= 3)
+                    DataRow mecanica = ObtenerMecanicaVolumenSeleccionada();
+
+                    bool esVolumen = mecanica != null;
+
+                    if (esVolumen)
                     {
+                        cantidadLleva = Convert.ToInt32(mecanica["CantidadLleva"]);
+                        cantidadPaga = Convert.ToInt32(mecanica["CantidadPaga"]);
                         cantidadParaCalcular = cantidadLleva;
                     }
 
@@ -354,7 +365,8 @@ namespace CapaVista
 
                 if (datosPromocion == null || datosPromocion.Tables.Count < 2 || datosPromocion.Tables[0].Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron los datos de la promoción.", "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("No se encontraron los datos de la promoción.", "Promociones",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -368,7 +380,11 @@ namespace CapaVista
 
                 txtBuscarPromo.Text = promocion["CodigoPromocion"].ToString() + " - " + promocion["Nombre"].ToString();
 
-                chkDesactivarPromo.Checked = !Convert.ToBoolean(promocion["Activo"]);
+                promocionActivaSeleccionada = Convert.ToBoolean(promocion["Activo"]);
+
+                chkDesactivarPromo.Checked = false;
+
+                ActualizarTextoCheckboxPromocion();
 
                 DateTime fechaInicio = Convert.ToDateTime(promocion["FechaInicio"]);
 
@@ -377,6 +393,7 @@ namespace CapaVista
                 if (promocion["FechaFin"] != DBNull.Value)
                 {
                     DateTime fechaFin = Convert.ToDateTime(promocion["FechaFin"]);
+
                     resumenVigencia += Environment.NewLine + "Fin: " + fechaFin.ToString("dd/MM/yyyy");
                 }
                 else
@@ -387,7 +404,6 @@ namespace CapaVista
                 lblResumenVigencia.Text = resumenVigencia;
 
                 int idTipo = Convert.ToInt32(promocion["IdTipoPromocion"]);
-
 
                 if (idTipo >= 1 && idTipo <= 3)
                 {
@@ -421,13 +437,20 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar la promoción: " + ex.Message,
-                    "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al cargar la promoción: " + ex.Message, "Promociones",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void LimpiarFormularioPromocion()
         {
+            promocionActivaSeleccionada = true;
+            chkDesactivarPromo.Checked = false;
+
             VaciarFormularios.LimpiarControles(this);
+
+            fechaInicioPromocion = null;
+            fechaFinPromocion = null;
+            vigenciaConfigurada = false;
 
             idPromocionSeleccionada = 0;
 
@@ -447,8 +470,13 @@ namespace CapaVista
             cmbDescuentoVolumen.Enabled = false;
             txtDescuentoPorcentual.Enabled = false;
             txtBajaPrecio.Enabled = false;
-        }
 
+            ActualizarTextoCheckboxPromocion();
+        }
+        private void ActualizarTextoCheckboxPromocion()
+        {
+            chkDesactivarPromo.Text = promocionActivaSeleccionada ? "Desactivar promoción" : "Activar promoción";
+        }
 
 
         #endregion
@@ -462,6 +490,9 @@ namespace CapaVista
             ConfigurarGrillaProductos();
 
             lstPromocionesEncontradas.Visible = false;
+            lstPromocionesEncontradas.DrawMode = DrawMode.OwnerDrawFixed;
+            lstPromocionesEncontradas.ItemHeight = 22;
+            lstPromocionesEncontradas.DrawItem += lstPromocionesEncontradas_DrawItem;
 
             txtCodigoPromocion.Text = string.Empty;
             txtCodigoPromocion.ReadOnly = true;
@@ -517,7 +548,7 @@ namespace CapaVista
                 if (cmbMecanicaPromocional.SelectedValue == null)
                 {
                     MessageBox.Show("Debe seleccionar una mecánica promocional.", "Promociones",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     cmbMecanicaPromocional.Focus();
                     return;
@@ -529,6 +560,14 @@ namespace CapaVista
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtNombrePromocion.Focus();
+                    return;
+                }
+
+                if (!vigenciaConfigurada || fechaInicioPromocion == null)
+                {
+                    MessageBox.Show("Debe configurar la fecha de vigencia de la promoción.",
+                        "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                     return;
                 }
 
@@ -544,11 +583,10 @@ namespace CapaVista
 
                 int idTipoPromocion = ObtenerIdTipoPromocion();
 
-                if (idTipoPromocion >= 1 && idTipoPromocion <= 3
-                    && HayProductosDiferentes())
+                if (idTipoPromocion >= 1 && idTipoPromocion <= 3 && HayProductosDiferentes())
                 {
-                    MessageBox.Show("Las promociones por volumen solo pueden aplicarse a un mismo producto. No se pueden combinar productos diferentes.", "Validación de promoción",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Las promociones por volumen solo pueden aplicarse a un mismo producto. No se pueden combinar productos diferentes.",
+                        "Validación de promoción", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
                 }
@@ -582,8 +620,8 @@ namespace CapaVista
                     Descripcion = string.Empty,
                     IdTipoPromocion = idTipoPromocion,
                     Valor = valorPromocion,
-                    FechaInicio = DateTime.Today,
-                    FechaFin = null,
+                    FechaInicio = fechaInicioPromocion.Value.Date,
+                    FechaFin = fechaFinPromocion.HasValue ? fechaFinPromocion.Value.Date : (DateTime?)null,
                     Activo = !chkDesactivarPromo.Checked
                 };
 
@@ -591,15 +629,14 @@ namespace CapaVista
 
                 int idPromocion = logica.GuardarPromocion(promocion, detalles, out codigoPromocion);
 
-                MessageBox.Show("La promoción se guardó correctamente.\nCódigo: " + codigoPromocion, "Promociones",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("La promoción se guardó correctamente.\nCódigo: " + codigoPromocion,
+                    "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 LimpiarFormularioPromocion();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar la promoción: " + ex.Message, "Promociones",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al guardar la promoción: " + ex.Message, "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void txtBuscarPromo_TextChanged(object sender, EventArgs e)
@@ -661,17 +698,25 @@ namespace CapaVista
             {
                 if (ventana.ShowDialog(this) == DialogResult.OK)
                 {
+                    fechaInicioPromocion = ventana.FechaInicioSeleccionada;
+                    fechaFinPromocion = ventana.EsRecurrente ? (DateTime?)null : ventana.FechaFinSeleccionada;
+
+                    vigenciaConfigurada = true;
+
                     if (ventana.EsRecurrente)
                     {
                         string dias = string.Join(", ", ventana.DiasSeleccionados);
 
                         lblResumenVigencia.Text = $"Días: {dias}\n" +
-                            $"Horario: {ventana.HoraInicioSeleccionada:hh\\:mm} - " + $"{ventana.HoraFinSeleccionada:hh\\:mm}";
+                            $"Horario: {ventana.HoraInicioSeleccionada:hh\\:mm} - " +
+                            $"{ventana.HoraFinSeleccionada:hh\\:mm}";
                     }
                     else
                     {
-                        lblResumenVigencia.Text = $"Del {ventana.FechaInicioSeleccionada:dd/MM/yyyy} " + $"al {ventana.FechaFinSeleccionada:dd/MM/yyyy}\n" +
-                            $"Horario: {ventana.HoraInicioSeleccionada:hh\\:mm} - " + $"{ventana.HoraFinSeleccionada:hh\\:mm}";
+                        lblResumenVigencia.Text = $"Del {ventana.FechaInicioSeleccionada:dd/MM/yyyy} " +
+                            $"al {ventana.FechaFinSeleccionada:dd/MM/yyyy}\n" +
+                            $"Horario: {ventana.HoraInicioSeleccionada:hh\\:mm} - " +
+                            $"{ventana.HoraFinSeleccionada:hh\\:mm}";
                     }
                 }
             }
@@ -789,7 +834,7 @@ namespace CapaVista
                     Valor = valorPromocion,
                     FechaInicio = fechaInicio,
                     FechaFin = fechaFin,
-                    Activo = !chkDesactivarPromo.Checked
+                    Activo = promocionActivaSeleccionada
                 };
 
                 List<ClsDetallePromocion> detalles = new List<ClsDetallePromocion>();
@@ -846,12 +891,126 @@ namespace CapaVista
 
             CargarPromocionSeleccionada(idPromocion);
         }
+        private void lstPromocionesEncontradas_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0)
+                return;
 
+            e.DrawBackground();
 
+            DataRowView fila = lstPromocionesEncontradas.Items[e.Index] as DataRowView;
+
+            if (fila != null)
+            {
+                string texto = Convert.ToString(fila["TextoMostrar"]);
+                bool activo = true;
+
+                if (fila.DataView.Table.Columns.Contains("Activo") && fila["Activo"] != DBNull.Value)
+                {
+                    activo = Convert.ToBoolean(fila["Activo"]);
+                }
+
+                Color colorTexto = activo ? e.ForeColor : Color.Red;
+
+                TextRenderer.DrawText(e.Graphics, texto, e.Font, e.Bounds, colorTexto, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+            }
+
+            e.DrawFocusRectangle();
+        }
+        private void chkDesactivarPromo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (actualizandoCheckboxEstado)
+                return;
+
+            if (idPromocionSeleccionada <= 0)
+            {
+                actualizandoCheckboxEstado = true;
+                chkDesactivarPromo.Checked = false;
+                actualizandoCheckboxEstado = false;
+
+                ActualizarTextoCheckboxPromocion();
+                return;
+            }
+
+            if (!chkDesactivarPromo.Checked)
+                return;
+
+            try
+            {
+                bool nuevoEstado = !promocionActivaSeleccionada;
+
+                logica.CambiarEstadoPromocion(idPromocionSeleccionada, nuevoEstado);
+
+                promocionActivaSeleccionada = nuevoEstado;
+
+                MessageBox.Show(nuevoEstado ? "La promoción se activó correctamente." : "La promoción se desactivó correctamente.", "Promociones",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                ActualizarTextoCheckboxPromocion();
+
+                if (!string.IsNullOrWhiteSpace(txtBuscarPromo.Text))
+                {
+                    string textoActual = txtBuscarPromo.Text;
+                    txtBuscarPromo.Text = string.Empty;
+                    txtBuscarPromo.Text = textoActual;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo cambiar el estado de la promoción: " + ex.Message, "Promociones",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                actualizandoCheckboxEstado = true;
+                chkDesactivarPromo.Checked = false;
+                actualizandoCheckboxEstado = false;
+
+                ActualizarTextoCheckboxPromocion();
+            }
+        }
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        private void btnAgregarMecanica_Click(object sender, EventArgs e)
+        {
+            using (frmCargaMecanicaVolumen frm = new frmCargaMecanicaVolumen())
+            {
+                if (frm.ShowDialog() != DialogResult.OK)
+                    return;
+
+                int lleva = frm.CantidadLlevaSeleccionada;
+                int paga = frm.CantidadPagaSeleccionada;
+                string nombre = $"{lleva}x{paga}";
+
+                try
+                {
+                    int idNuevo = logica.AgregarMecanicaVolumen(nombre, lleva, paga);
+
+                    CargarTiposPromocion();
+
+                    cmbDescuentoVolumen.SelectedValue = idNuevo;
+
+                    MessageBox.Show( "La mecánica se guardó correctamente.", "Agregar mecánica",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information
+                    );
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error al agregar mecánica",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error
+                    );
+                }
+            }
+        }
         #endregion
 
-  
 
-     
+
+
+
+
+
     }
 }

@@ -269,6 +269,46 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public void CambiarEstadoPromocion(int idPromocion, bool activo)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(
+                @"UPDATE dbo.Promocion
+                SET Activo = @Activo
+                WHERE IdPromocion = @IdPromocion", conexion))
+            {
+                cmd.Parameters.Add("@IdPromocion", SqlDbType.Int).Value = idPromocion;
+                cmd.Parameters.Add("@Activo", SqlDbType.Bit).Value = activo;
+
+                conexion.Open();
+
+                int filasAfectadas = cmd.ExecuteNonQuery();
+
+                if (filasAfectadas == 0)
+                    throw new Exception("No se encontró la promoción para cambiar su estado.");
+            }
+        }
+        public int AgregarMecanicaVolumen(string nombre, int lleva, int paga)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_AgregarMecanicaVolumen", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@Nombre", SqlDbType.NVarChar, 60).Value = nombre;
+                cmd.Parameters.Add("@CantidadLleva", SqlDbType.Int).Value = lleva;
+                cmd.Parameters.Add("@CantidadPaga", SqlDbType.Int).Value = paga;
+
+                SqlParameter parametroId = cmd.Parameters.Add("@IdTipoPromocion", SqlDbType.Int);
+
+                parametroId.Direction = ParameterDirection.Output;
+
+                conexion.Open();
+                cmd.ExecuteNonQuery();
+
+                return Convert.ToInt32(parametroId.Value);
+            }
+        }
 
 
 

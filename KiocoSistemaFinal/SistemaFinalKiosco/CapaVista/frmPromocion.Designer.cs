@@ -252,6 +252,7 @@
             btnAgregarMecanica.TabIndex = 7;
             btnAgregarMecanica.Text = "+ Agregar mecánica";
             btnAgregarMecanica.UseVisualStyleBackColor = true;
+            btnAgregarMecanica.Click += btnAgregarMecanica_Click;
             // 
             // txtBajaPrecio
             // 
@@ -324,6 +325,7 @@
             lstPromocionesEncontradas.Name = "lstPromocionesEncontradas";
             lstPromocionesEncontradas.Size = new Size(236, 79);
             lstPromocionesEncontradas.TabIndex = 21;
+            lstPromocionesEncontradas.DrawItem += lstPromocionesEncontradas_DrawItem;
             lstPromocionesEncontradas.SelectedIndexChanged += lstPromocionesEncontradas_SelectedIndexChanged;
             lstPromocionesEncontradas.DoubleClick += lstPromocionesEncontradas_DoubleClick;
             // 
@@ -466,6 +468,7 @@
             btnVolver.TabIndex = 15;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
             // 
             // label14
             // 
@@ -504,10 +507,11 @@
             chkDesactivarPromo.AutoSize = true;
             chkDesactivarPromo.Location = new Point(879, 73);
             chkDesactivarPromo.Name = "chkDesactivarPromo";
-            chkDesactivarPromo.Size = new Size(83, 19);
+            chkDesactivarPromo.Size = new Size(142, 19);
             chkDesactivarPromo.TabIndex = 22;
-            chkDesactivarPromo.Text = "checkBox1";
+            chkDesactivarPromo.Text = "Desactivar Promoción";
             chkDesactivarPromo.UseVisualStyleBackColor = true;
+            chkDesactivarPromo.CheckedChanged += chkDesactivarPromo_CheckedChanged;
             // 
             // frmPromocion
             // 
