@@ -28,7 +28,7 @@ namespace CapaVista
         {
             try
             {
-                ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+                ClsLogicaProducto logica = new ClsLogicaProducto();
 
                 using (XLWorkbook libro = new XLWorkbook(rutaArchivo))
                 {
@@ -646,7 +646,7 @@ namespace CapaVista
                     IXLWorksheet hojaSucursales = libro.Worksheets.Add("_SUCURSALES");
 
                     //Marcas
-                    DataTable tablaMarcas = new ClsGestorLogicaProducto().CargarMarcasActivas();
+                    DataTable tablaMarcas = new ClsLogicaProducto().CargarMarcasActivas();
 
                     hojaMarcas.Cell(1, 1).Value = "Marca";
 
@@ -660,7 +660,7 @@ namespace CapaVista
                     }
 
                     //Categorias
-                    DataTable tablaCategorias = new ClsGestorLogicaProducto().CargarCategoriasActivas();
+                    DataTable tablaCategorias = new ClsLogicaProducto().CargarCategoriasActivas();
 
                     hojaCategorias.Cell(1, 1).Value = "Categoría";
 
@@ -674,7 +674,7 @@ namespace CapaVista
                     }
 
                     //Unidades
-                    DataTable tablaUnidades = new ClsGestorLogicaProducto().CargarUnidades();
+                    DataTable tablaUnidades = new ClsLogicaProducto().CargarUnidades();
 
                     hojaUnidades.Cell(1, 1).Value = "Unidad";
 
@@ -688,7 +688,7 @@ namespace CapaVista
                     }
 
                     //Iva
-                    DataTable tablaIVA = new ClsGestorLogicaProducto().CargarIVAsActivos();
+                    DataTable tablaIVA = new ClsLogicaProducto().CargarIVAsActivos();
 
                     hojaIVA.Cell(1, 1).Value = "Alicuota";
 
@@ -702,7 +702,7 @@ namespace CapaVista
                     }
 
                     //Proveedores
-                    ClsGestorLogicaProveedor logicaProveedor = new ClsGestorLogicaProveedor();
+                    ClsLogicaProveedor logicaProveedor = new ClsLogicaProveedor();
                     DataTable tablaProveedores = logicaProveedor.ObtenerProveedores();
 
                     hojaProveedores.Cell(1, 1).Value = "IdProveedor";

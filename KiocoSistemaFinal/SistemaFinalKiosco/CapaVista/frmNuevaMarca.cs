@@ -62,7 +62,7 @@ namespace CapaVista
                 marca.Nombre = txtNombre.Text.Trim();
                 marca.Activo = true;
 
-                ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+                ClsLogicaProducto logica = new ClsLogicaProducto();
 
                 if (IdMarca == 0)
                 {

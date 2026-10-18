@@ -13,7 +13,8 @@ namespace CapaVista
 {
     public partial class frmBuscarArticulo : Form
     {
-        private CapaLogica.NegocioLogica.ClsGestorLogicaProducto logica = new CapaLogica.NegocioLogica.ClsGestorLogicaProducto();
+        private CapaLogica.NegocioLogica.ClsLogicaProducto logica = new CapaLogica.NegocioLogica.ClsLogicaProducto();
+
         public frmBuscarArticulo()
         {
             InitializeComponent();
@@ -28,6 +29,7 @@ namespace CapaVista
             btnBuscar.Click += btnBuscar_Click;
         }
         public ClsProducto ProductoSeleccionado { get; private set; }
+        public Action<ClsProducto> ProductoAgregado { get; set; }
 
         #region Metodos
 
@@ -42,7 +44,13 @@ namespace CapaVista
                 return;
             }
 
-            DataRow fila = (DataRow)dataGridView1.CurrentRow.Tag;
+            DataRow fila = dataGridView1.CurrentRow.Tag as DataRow;
+
+            if (fila == null)
+            {
+                MessageBox.Show("No se pudo obtener el artículo seleccionado.");
+                return;
+            }
 
             ClsProducto producto = new ClsProducto
             {
@@ -54,12 +62,8 @@ namespace CapaVista
                 Activo = Convert.ToBoolean(fila["Activo"])
             };
 
-            ProductoSeleccionado = producto;
-
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            ProductoAgregado?.Invoke(producto);
         }
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string texto = txtBuscarArticulo.Text.Trim();
@@ -83,8 +87,6 @@ namespace CapaVista
                 dataGridView1.Rows[indice].Tag = fila;
             }
         }
-        #endregion
-
         private void txtBuscarArticulo_TextChanged(object sender, EventArgs e)
         {
             string texto = txtBuscarArticulo.Text.Trim();
@@ -108,5 +110,12 @@ namespace CapaVista
                 dataGridView1.Rows[indice].Tag = fila;
             }
         }
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        #endregion
+
+
     }
 }

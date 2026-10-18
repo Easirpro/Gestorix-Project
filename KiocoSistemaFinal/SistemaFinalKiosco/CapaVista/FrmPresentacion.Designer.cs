@@ -72,6 +72,7 @@
             menuitemAdmistradorarticulos = new ToolStripMenuItem();
             menuitemAdministradoarticulos = new ToolStripMenuItem();
             meniitemReporapida = new ToolStripMenuItem();
+            cargaRapidaDePreciosToolStripMenuItem = new ToolStripMenuItem();
             cargarDeLasMarcasToolStripMenuItem = new ToolStripMenuItem();
             menuitemImporexcel = new ToolStripMenuItem();
             menuitemExporexcel = new ToolStripMenuItem();
@@ -92,6 +93,7 @@
             ventaPorRubroToolStripMenuItem = new ToolStripMenuItem();
             ventaPorArticulosToolStripMenuItem = new ToolStripMenuItem();
             ventaPorMedioDePagoToolStripMenuItem = new ToolStripMenuItem();
+            ajustesToolStripMenuItem = new ToolStripMenuItem();
             btnCaja = new ToolStripMenuItem();
             nuevoIngresoToolStripMenuItem = new ToolStripMenuItem();
             nuevoEgresoToolStripMenuItem = new ToolStripMenuItem();
@@ -103,10 +105,11 @@
             btnAyuda = new ToolStripMenuItem();
             btnEmpleado = new ToolStripMenuItem();
             permisosToolStripMenuItem = new ToolStripMenuItem();
+            gestioToolStripMenuItem = new ToolStripMenuItem();
             tollClosed = new ToolStripMenuItem();
-            toolStripMenuItem2 = new ToolStripMenuItem();
             btnConfig = new MenuStrip();
-            cargaRapidaDePreciosToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem2 = new ToolStripMenuItem();
+            administrarPromocionesToolStripMenuItem = new ToolStripMenuItem();
             tmrFechaHora = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgPresentacion).BeginInit();
@@ -228,7 +231,7 @@
             lblTotalMonto.Name = "lblTotalMonto";
             lblTotalMonto.Size = new Size(131, 37);
             lblTotalMonto.TabIndex = 5;
-            lblTotalMonto.Text = "label6";
+            lblTotalMonto.Text = "$0000";
             lblTotalMonto.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label5
@@ -256,7 +259,7 @@
             lblDescuentoMonto.Name = "lblDescuentoMonto";
             lblDescuentoMonto.Size = new Size(131, 39);
             lblDescuentoMonto.TabIndex = 3;
-            lblDescuentoMonto.Text = "label4";
+            lblDescuentoMonto.Text = "$0000";
             lblDescuentoMonto.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblSubtotalMonto
@@ -270,7 +273,7 @@
             lblSubtotalMonto.Name = "lblSubtotalMonto";
             lblSubtotalMonto.Size = new Size(131, 39);
             lblSubtotalMonto.TabIndex = 2;
-            lblSubtotalMonto.Text = "label3";
+            lblSubtotalMonto.Text = "$0000";
             lblSubtotalMonto.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label2
@@ -543,6 +546,13 @@
             meniitemReporapida.Text = "Reposición rápida de stock";
             meniitemReporapida.Click += meniitemReporapida_Click;
             // 
+            // cargaRapidaDePreciosToolStripMenuItem
+            // 
+            cargaRapidaDePreciosToolStripMenuItem.Name = "cargaRapidaDePreciosToolStripMenuItem";
+            cargaRapidaDePreciosToolStripMenuItem.Size = new Size(232, 22);
+            cargaRapidaDePreciosToolStripMenuItem.Text = "Carga Rapida de Precios";
+            cargaRapidaDePreciosToolStripMenuItem.Click += cargaRapidaDePreciosToolStripMenuItem_Click;
+            // 
             // cargarDeLasMarcasToolStripMenuItem
             // 
             cargarDeLasMarcasToolStripMenuItem.Name = "cargarDeLasMarcasToolStripMenuItem";
@@ -646,7 +656,7 @@
             // 
             // btnInformes
             // 
-            btnInformes.DropDownItems.AddRange(new ToolStripItem[] { ventasPorDiaToolStripMenuItem, ventaToolStripMenuItem, ventaPorRubroToolStripMenuItem, ventaPorArticulosToolStripMenuItem, ventaPorMedioDePagoToolStripMenuItem });
+            btnInformes.DropDownItems.AddRange(new ToolStripItem[] { ventasPorDiaToolStripMenuItem, ventaToolStripMenuItem, ventaPorRubroToolStripMenuItem, ventaPorArticulosToolStripMenuItem, ventaPorMedioDePagoToolStripMenuItem, ajustesToolStripMenuItem });
             btnInformes.Enabled = false;
             btnInformes.Name = "btnInformes";
             btnInformes.Size = new Size(66, 20);
@@ -686,6 +696,12 @@
             ventaPorMedioDePagoToolStripMenuItem.Size = new Size(212, 22);
             ventaPorMedioDePagoToolStripMenuItem.Text = "Venta por medio de pago";
             ventaPorMedioDePagoToolStripMenuItem.Click += ventaPorMedioDePagoToolStripMenuItem_Click;
+            // 
+            // ajustesToolStripMenuItem
+            // 
+            ajustesToolStripMenuItem.Name = "ajustesToolStripMenuItem";
+            ajustesToolStripMenuItem.Size = new Size(212, 22);
+            ajustesToolStripMenuItem.Text = "Ajustes";
             // 
             // btnCaja
             // 
@@ -753,7 +769,7 @@
             // 
             // btnEmpleado
             // 
-            btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { permisosToolStripMenuItem });
+            btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { permisosToolStripMenuItem, gestioToolStripMenuItem });
             btnEmpleado.Enabled = false;
             btnEmpleado.Name = "btnEmpleado";
             btnEmpleado.Size = new Size(72, 20);
@@ -762,9 +778,16 @@
             // permisosToolStripMenuItem
             // 
             permisosToolStripMenuItem.Name = "permisosToolStripMenuItem";
-            permisosToolStripMenuItem.Size = new Size(127, 22);
+            permisosToolStripMenuItem.Size = new Size(180, 22);
             permisosToolStripMenuItem.Text = "Empleado";
             permisosToolStripMenuItem.Click += permisosToolStripMenuItem_Click;
+            // 
+            // gestioToolStripMenuItem
+            // 
+            gestioToolStripMenuItem.Name = "gestioToolStripMenuItem";
+            gestioToolStripMenuItem.Size = new Size(180, 22);
+            gestioToolStripMenuItem.Text = "Gestión de Backup";
+            gestioToolStripMenuItem.Click += gestioToolStripMenuItem_Click;
             // 
             // tollClosed
             // 
@@ -773,14 +796,9 @@
             tollClosed.Size = new Size(28, 20);
             tollClosed.Click += tollClosed_Click;
             // 
-            // toolStripMenuItem2
-            // 
-            toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new Size(12, 20);
-            // 
             // btnConfig
             // 
-            btnConfig.Items.AddRange(new ToolStripItem[] { btnArt, btnVentas, btnCompras, btnProve, toolStripMenuItem1, btnInformes, btnCaja, btnAjuste, btnAyuda, btnEmpleado, tollClosed, toolStripMenuItem2 });
+            btnConfig.Items.AddRange(new ToolStripItem[] { btnArt, toolStripMenuItem2, btnVentas, btnCompras, btnProve, toolStripMenuItem1, btnInformes, btnCaja, btnAjuste, btnAyuda, btnEmpleado, tollClosed });
             btnConfig.Location = new Point(0, 0);
             btnConfig.Name = "btnConfig";
             btnConfig.Size = new Size(877, 24);
@@ -788,12 +806,19 @@
             btnConfig.Text = "menuStrip1";
             btnConfig.ItemClicked += btnConfig_ItemClicked;
             // 
-            // cargaRapidaDePreciosToolStripMenuItem
+            // toolStripMenuItem2
             // 
-            cargaRapidaDePreciosToolStripMenuItem.Name = "cargaRapidaDePreciosToolStripMenuItem";
-            cargaRapidaDePreciosToolStripMenuItem.Size = new Size(232, 22);
-            cargaRapidaDePreciosToolStripMenuItem.Text = "Carga Rapida de Precios";
-            cargaRapidaDePreciosToolStripMenuItem.Click += cargaRapidaDePreciosToolStripMenuItem_Click;
+            toolStripMenuItem2.DropDownItems.AddRange(new ToolStripItem[] { administrarPromocionesToolStripMenuItem });
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new Size(89, 20);
+            toolStripMenuItem2.Text = "Promociones";
+            // 
+            // administrarPromocionesToolStripMenuItem
+            // 
+            administrarPromocionesToolStripMenuItem.Name = "administrarPromocionesToolStripMenuItem";
+            administrarPromocionesToolStripMenuItem.Size = new Size(209, 22);
+            administrarPromocionesToolStripMenuItem.Text = "Administrar Promociones";
+            administrarPromocionesToolStripMenuItem.Click += administrarPromocionesToolStripMenuItem_Click;
             // 
             // frmmenuPres
             // 
@@ -910,8 +935,11 @@
         private ToolStripMenuItem btnEmpleado;
         private ToolStripMenuItem permisosToolStripMenuItem;
         private ToolStripMenuItem tollClosed;
-        private ToolStripMenuItem toolStripMenuItem2;
         private MenuStrip btnConfig;
         private ToolStripMenuItem cargaRapidaDePreciosToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private ToolStripMenuItem administrarPromocionesToolStripMenuItem;
+        private ToolStripMenuItem ajustesToolStripMenuItem;
+        private ToolStripMenuItem gestioToolStripMenuItem;
     }
 }

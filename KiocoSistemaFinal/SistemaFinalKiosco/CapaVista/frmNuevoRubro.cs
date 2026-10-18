@@ -13,7 +13,7 @@ namespace CapaVista
 {
     public partial class frmNuevoRubro : Form
     {
-        ClsGestorLogicaProducto logica = new ClsGestorLogicaProducto();
+        ClsLogicaProducto logica = new ClsLogicaProducto();
 
         private int idCategoria = 0;
         public frmNuevoRubro()
