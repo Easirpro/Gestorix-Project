@@ -621,11 +621,7 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-
-        public void ImportarProductos(
-            List<ClsGestorEntidadProducto.ClsProducto> productos,
-            List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto> proveedoresCostos,
-            Dictionary<string, DateTime?> fechasVencimiento)
+        public void ImportarProductos(List<ClsGestorEntidadProducto.ClsProducto> productos, List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto> proveedoresCostos, Dictionary<string, DateTime?> fechasVencimiento)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
             {
@@ -649,8 +645,7 @@ namespace CapaDatos.NegocioDatos
                             if (producto == null)
                                 throw new Exception($"No se encontró el artículo '{proveedorCosto.CodigoBarra}'.");
 
-                            int idSucursal = ObtenerIdSucursalImportacion(
-                                proveedorCosto.Proveedor, proveedorCosto.Sucursal, conexion, transaccion);
+                            int idSucursal = ObtenerIdSucursalImportacion(proveedorCosto.Proveedor, proveedorCosto.Sucursal, conexion, transaccion);
 
                             if (idSucursal == 0)
                                 throw new Exception($"No se encontró la sucursal '{proveedorCosto.Sucursal}' del proveedor '{proveedorCosto.Proveedor}'.");
@@ -667,8 +662,7 @@ namespace CapaDatos.NegocioDatos
 
                             RegistrarProductoSucursalProveedorImportacion(relacion, conexion, transaccion);
 
-                            if (fechasVencimiento.TryGetValue(proveedorCosto.CodigoBarra, out DateTime? fecha)
-                                && fecha.HasValue)
+                            if (fechasVencimiento.TryGetValue(proveedorCosto.CodigoBarra, out DateTime? fecha) && fecha.HasValue)
                             {
                                 var lote = new ClsGestorEntidadProducto.ClsLote
                                 {
@@ -696,7 +690,6 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-
         public bool EliminarProducto(int idProducto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -705,17 +698,11 @@ namespace CapaDatos.NegocioDatos
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                conexion.Open();
 
-                try
-                {
-                    conexion.Open();
+                object resultado = cmd.ExecuteScalar();
 
-                    return Convert.ToBoolean(cmd.ExecuteScalar());
-                }
-                catch
-                {
-                    return false;
-                }
+                return resultado != null && resultado != DBNull.Value && Convert.ToBoolean(resultado);
             }
         }
         public bool DescontinuarProducto(int idProducto)

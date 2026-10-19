@@ -15,22 +15,32 @@ namespace CapaVista
 {
     public partial class frmCargaarticulo : Form
     {
+        private bool formularioCargado = false;
+
         ClsLogicaProducto logica = new ClsLogicaProducto();
+
         public frmCargaarticulo()
         {
             InitializeComponent();
 
             dtgCargaarticulo.AutoGenerateColumns = false;
-
             dtgCargaarticulo.ReadOnly = true;
 
             dtgCargaarticulo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgCargaarticulo.MultiSelect = false;
 
-            dtgCargaarticulo.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dtgCargaarticulo.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
             dtgCargaarticulo.AllowUserToResizeColumns = false;
             dtgCargaarticulo.AllowUserToOrderColumns = false;
             dtgCargaarticulo.RowHeadersVisible = false;
+            dtgCargaarticulo.Columns["clnCodigo"].FillWeight = 80;
+            dtgCargaarticulo.Columns["clnDescripcion"].FillWeight = 200;
+            dtgCargaarticulo.Columns["clnRubro"].FillWeight = 100;
+            dtgCargaarticulo.Columns["clnMarca"].FillWeight = 100;
+            dtgCargaarticulo.Columns["clnPrecioVenta"].FillWeight = 90;
+            dtgCargaarticulo.Columns["clnStockActual"].FillWeight = 90;
+            dtgCargaarticulo.Columns["clnDetalle"].FillWeight = 90;
 
             foreach (DataGridViewColumn columna in dtgCargaarticulo.Columns)
             {
@@ -47,50 +57,38 @@ namespace CapaVista
 
             dtgCargaarticulo.Rows.Clear();
 
-
             foreach (DataRow fila in tabla.Rows)
             {
-                bool activo = fila["Activo"] != DBNull.Value && Convert.ToBoolean(fila["Activo"]);
+                bool activo = Convert.ToBoolean(fila["Activo"]);
 
                 if (chkArticulodiscontinaudo.Checked && activo)
-                {
                     continue;
-                }
 
                 if (!chkArticulodiscontinaudo.Checked && !activo)
-                {
                     continue;
-                }
 
-                int indice = dtgCargaarticulo.Rows.Add(
-                    fila["CodigoBarra"],
-                    fila["Descripcion"],
-                    fila["Rubro"],
-                    fila["Marca"]?.ToString() ?? "",
-                    fila["Proveedor"]?.ToString() ?? "",
-                    fila["Sucursal"]?.ToString() ?? "",
-                    "", // Vencimiento
-                    "", // Última Actualización
-                    "", // Última Venta
-                    fila["PrecioCosto"] == DBNull.Value ? "" : fila["PrecioCosto"],
-                    fila["PrecioVenta"],
-                    fila["IVA"],
-                    fila["CantidadActual"] == DBNull.Value ? 0 : Convert.ToInt32(fila["CantidadActual"]),
-                    fila["StockMinimo"] == DBNull.Value ? 0 : Convert.ToInt32(fila["StockMinimo"]),
-                    fila["StockIdeal"] == DBNull.Value ? 0 : Convert.ToInt32(fila["StockIdeal"]),
-                    fila["Activo"] == DBNull.Value ? "Activo" : (Convert.ToBoolean(fila["Activo"]) ? "Activo" : "Inactivo")
-                );
+                int indice = dtgCargaarticulo.Rows.Add();
 
-                dtgCargaarticulo.Rows[indice].Tag = fila["IdProducto"];
-                dtgCargaarticulo.Rows[indice].Cells["clnVencimiento"].Value = fila["FechaVencimiento"] == DBNull.Value ? "" : Convert.ToDateTime(fila["FechaVencimiento"]).ToString("dd/MM/yyyy");
+                DataGridViewRow filaGrilla = dtgCargaarticulo.Rows[indice];
+
+                filaGrilla.Tag = fila["IdProducto"];
+                filaGrilla.Cells["clnCodigo"].Value = fila["CodigoBarra"];
+                filaGrilla.Cells["clnDescripcion"].Value = fila["Descripcion"];
+                filaGrilla.Cells["clnRubro"].Value = fila["Rubro"];
+                filaGrilla.Cells["clnMarca"].Value = fila["Marca"];
+                filaGrilla.Cells["clnPrecioVenta"].Value = fila["PrecioVenta"] == DBNull.Value ? 0m : Convert.ToDecimal(fila["PrecioVenta"]);
+                filaGrilla.Cells["clnStockActual"].Value = fila["CantidadActual"] == DBNull.Value ? 0m : Convert.ToDecimal(fila["CantidadActual"]);
+
             }
+
+            FiltrarArticulos();
         }
         private void AplicarPermisos()
         {
             bool puedeCrear = SesionUsuario.Permisos.Contains(100) || SesionUsuario.Permisos.Contains(111);
             bool puedeModificar = SesionUsuario.Permisos.Contains(100) || SesionUsuario.Permisos.Contains(112);
 
-            btnNuevoArticulo.Enabled = puedeCrear;
+            //btnNuevoArticulo.Enabled = puedeCrear;
             btnModificar.Enabled = puedeModificar;
             btnEliminar.Enabled = puedeModificar;
         }
@@ -178,11 +176,73 @@ namespace CapaVista
             AplicarPermisos();
             CargarRubros();
             CargarMarcas();
-            CargarArticulos();
+
+            dtgCargaarticulo.Rows.Clear();
+
+            formularioCargado = true;
         }
         private void dtgCargaarticulo_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                return;
 
+            if (dtgCargaarticulo.Columns[e.ColumnIndex].Name != "clnDetalle")
+                return;
+
+            object valorId = dtgCargaarticulo.Rows[e.RowIndex].Tag;
+
+            if (valorId == null || !int.TryParse(valorId.ToString(), out int idProducto))
+            {
+                MessageBox.Show(
+                    "No se pudo identificar el artículo seleccionado.", "Gestorix",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataTable tabla = logica.CargarArticulos();
+            DataRow detalle = null;
+
+            foreach (DataRow fila in tabla.Rows)
+            {
+                if (Convert.ToInt32(fila["IdProducto"]) == idProducto)
+                {
+                    detalle = fila;
+                    break;
+                }
+            }
+
+            if (detalle == null)
+            {
+                MessageBox.Show("No se encontró el artículo.", "Gestorix");
+                return;
+            }
+
+            string ObtenerTexto(string columna)
+            {
+                if (!tabla.Columns.Contains(columna) || detalle[columna] == DBNull.Value)
+                    return "No disponible";
+
+                return detalle[columna].ToString();
+            }
+
+            string mensaje =
+                $"Código: {ObtenerTexto("CodigoBarra")}\n" +
+                $"Descripción: {ObtenerTexto("Descripcion")}\n" +
+                $"Rubro: {ObtenerTexto("Rubro")}\n" +
+                $"Marca: {ObtenerTexto("Marca")}\n" +
+                $"Proveedor: {ObtenerTexto("Proveedor")}\n" +
+                $"Sucursal: {ObtenerTexto("Sucursal")}\n" +
+                $"Precio de costo: {ObtenerTexto("PrecioCosto")}\n" +
+                $"Precio de venta: {ObtenerTexto("PrecioVenta")}\n" +
+                $"IVA: {ObtenerTexto("IVA")}\n" +
+                $"Alícuota: {ObtenerTexto("Alicuota")}\n" +
+                $"Stock actual: {ObtenerTexto("CantidadActual")}\n" +
+                $"Stock mínimo: {ObtenerTexto("StockMinimo")}\n" +
+                $"Stock ideal: {ObtenerTexto("StockIdeal")}\n" +
+                $"Vencimiento: {ObtenerTexto("FechaVencimiento")}\n" +
+                $"Estado: {(Convert.ToBoolean(detalle["Activo"]) ? "Activo" : "Discontinuado")}";
+
+            MessageBox.Show(mensaje, "Detalle del artículo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void btnEliminar_Click(object sender, EventArgs e)
         {
@@ -225,72 +285,84 @@ namespace CapaVista
                 return;
             }
 
-            int idProducto = Convert.ToInt32(dtgCargaarticulo.CurrentRow.Tag);
+            object valorId = dtgCargaarticulo.CurrentRow.Tag;
 
-            if (chkArticulodiscontinaudo.Checked)
+            if (valorId == null || !int.TryParse(valorId.ToString(), out int idProducto))
             {
-                bool activado = logica.ActivarProducto(idProducto);
+                MessageBox.Show("No se pudo identificar el artículo seleccionado.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-                if (activado)
+            bool estaDiscontinuado = chkArticulodiscontinaudo.Checked;
+
+            string mensaje = estaDiscontinuado ? "¿Desea volver a activar este artículo?" : "¿Desea discontinuar este artículo?";
+
+            DialogResult respuesta = MessageBox.Show(mensaje, estaDiscontinuado ? "Activar artículo" : "Descontinuar artículo",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (respuesta != DialogResult.Yes)
+                return;
+
+            try
+            {
+                bool resultado = estaDiscontinuado ? logica.ActivarProducto(idProducto) : logica.DescontinuarProducto(idProducto);
+
+                if (resultado)
                 {
-                    MessageBox.Show("El artículo fue activado correctamente.", "Artículo activado",
+                    MessageBox.Show(estaDiscontinuado ? "El artículo fue activado correctamente." : "El artículo fue discontinuado correctamente.", "Operación exitosa",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     CargarArticulos();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo activar el artículo.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No se pudo actualizar el estado del artículo.", "Aviso",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-
-                return;
             }
-
-            DialogResult respuesta = MessageBox.Show("¿Está seguro de que desea discontinuar el artículo seleccionado?",
-                "Discontinuar artículo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (respuesta != DialogResult.Yes)
+            catch (Exception ex)
             {
-                return;
-            }
-
-            bool discontinuado = logica.DescontinuarProducto(idProducto);
-
-            if (discontinuado)
-            {
-                CargarArticulos();
-            }
-            else
-            {
-                MessageBox.Show("No se pudo discontinuar el artículo.", "Error",
+                MessageBox.Show("Ocurrió un error al cambiar el estado del artículo.\n\nDetalle: " + ex.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void chkArticulodiscontinaudo_CheckedChanged(object sender, EventArgs e)
         {
             btnDiscontinuar.Text = chkArticulodiscontinaudo.Checked ? "Activar" : "Descontinuar";
-
-            CargarArticulos();
         }
         private void txtBuscarCodigoNombre_TextChanged(object sender, EventArgs e)
         {
-            FiltrarArticulos();
+            if (formularioCargado && dtgCargaarticulo.Rows.Count > 0)
+                FiltrarArticulos();
         }
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            FiltrarArticulos();
-
-            cmbRubro.SelectedIndex = 0;
-            cmbMarca.SelectedIndex = 0;
+            CargarArticulos();
         }
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+        private void cmbRubro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (formularioCargado)
+                FiltrarArticulos();
+        }
+        private void cmbMarca_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (formularioCargado)
+                FiltrarArticulos();
+        }
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+
+        }
 
 
         #endregion
+
+
 
 
 

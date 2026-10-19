@@ -27,7 +27,6 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-
         public void ActualizarPrecios(DataTable precios)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

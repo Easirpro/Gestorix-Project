@@ -69,6 +69,7 @@
             toolTip1 = new ToolTip(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             btnArt = new ToolStripMenuItem();
+            cargarArticuloNuevoToolStripMenuItem = new ToolStripMenuItem();
             menuitemAdmistradorarticulos = new ToolStripMenuItem();
             menuitemAdministradoarticulos = new ToolStripMenuItem();
             meniitemReporapida = new ToolStripMenuItem();
@@ -110,6 +111,7 @@
             btnConfig = new MenuStrip();
             toolStripMenuItem2 = new ToolStripMenuItem();
             administrarPromocionesToolStripMenuItem = new ToolStripMenuItem();
+            bitacoraToolStripMenuItem = new ToolStripMenuItem();
             tmrFechaHora = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgPresentacion).BeginInit();
@@ -519,24 +521,31 @@
             // 
             // btnArt
             // 
-            btnArt.DropDownItems.AddRange(new ToolStripItem[] { menuitemAdmistradorarticulos, menuitemAdministradoarticulos, meniitemReporapida, cargaRapidaDePreciosToolStripMenuItem, cargarDeLasMarcasToolStripMenuItem, menuitemImporexcel, menuitemExporexcel });
+            btnArt.DropDownItems.AddRange(new ToolStripItem[] { cargarArticuloNuevoToolStripMenuItem, menuitemAdmistradorarticulos, menuitemAdministradoarticulos, meniitemReporapida, cargaRapidaDePreciosToolStripMenuItem, cargarDeLasMarcasToolStripMenuItem, menuitemImporexcel, menuitemExporexcel });
             btnArt.Enabled = false;
             btnArt.Name = "btnArt";
             btnArt.Size = new Size(66, 20);
             btnArt.Text = "Artículos";
             // 
+            // cargarArticuloNuevoToolStripMenuItem
+            // 
+            cargarArticuloNuevoToolStripMenuItem.Name = "cargarArticuloNuevoToolStripMenuItem";
+            cargarArticuloNuevoToolStripMenuItem.Size = new Size(232, 22);
+            cargarArticuloNuevoToolStripMenuItem.Text = "Cargar articulo nuevo";
+            cargarArticuloNuevoToolStripMenuItem.Click += cargarArticuloNuevoToolStripMenuItem_Click;
+            // 
             // menuitemAdmistradorarticulos
             // 
             menuitemAdmistradorarticulos.Name = "menuitemAdmistradorarticulos";
             menuitemAdmistradorarticulos.Size = new Size(232, 22);
-            menuitemAdmistradorarticulos.Text = "Admistrador de artículos";
+            menuitemAdmistradorarticulos.Text = "Modificar artículo";
             menuitemAdmistradorarticulos.Click += menuitemAdmistradorarticulos_Click;
             // 
             // menuitemAdministradoarticulos
             // 
             menuitemAdministradoarticulos.Name = "menuitemAdministradoarticulos";
             menuitemAdministradoarticulos.Size = new Size(232, 22);
-            menuitemAdministradoarticulos.Text = "Administrador de rubros";
+            menuitemAdministradoarticulos.Text = "Agregar categoria ";
             menuitemAdministradoarticulos.Click += menuitemAdministradoarticulos_Click;
             // 
             // meniitemReporapida
@@ -766,10 +775,15 @@
             btnAyuda.Name = "btnAyuda";
             btnAyuda.Size = new Size(53, 20);
             btnAyuda.Text = "Ayuda";
+            btnAyuda.Click += btnAyuda_Click;
             // 
             // btnEmpleado
             // 
+
             btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { permisosToolStripMenuItem, gestioToolStripMenuItem });
+
+            btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { permisosToolStripMenuItem, bitacoraToolStripMenuItem });
+
             btnEmpleado.Enabled = false;
             btnEmpleado.Name = "btnEmpleado";
             btnEmpleado.Size = new Size(72, 20);
@@ -820,6 +834,13 @@
             administrarPromocionesToolStripMenuItem.Text = "Administrar Promociones";
             administrarPromocionesToolStripMenuItem.Click += administrarPromocionesToolStripMenuItem_Click;
             // 
+            // bitacoraToolStripMenuItem
+            // 
+            bitacoraToolStripMenuItem.Name = "bitacoraToolStripMenuItem";
+            bitacoraToolStripMenuItem.Size = new Size(180, 22);
+            bitacoraToolStripMenuItem.Text = "Bitacora";
+            bitacoraToolStripMenuItem.Click += bitacoraToolStripMenuItem_Click;
+            // 
             // frmmenuPres
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -848,6 +869,7 @@
             Name = "frmmenuPres";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Presentación";
+            Load += frmmenuPres_Load_1;
             ((System.ComponentModel.ISupportInitialize)pcbLogo).EndInit();
             ((System.ComponentModel.ISupportInitialize)dtgPresentacion).EndInit();
             pnlUsuario.ResumeLayout(false);
@@ -939,7 +961,12 @@
         private ToolStripMenuItem cargaRapidaDePreciosToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem administrarPromocionesToolStripMenuItem;
+
         private ToolStripMenuItem ajustesToolStripMenuItem;
         private ToolStripMenuItem gestioToolStripMenuItem;
+
+        private ToolStripMenuItem cargarArticuloNuevoToolStripMenuItem;
+        private ToolStripMenuItem bitacoraToolStripMenuItem;
+
     }
 }

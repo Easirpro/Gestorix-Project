@@ -29,19 +29,16 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmInformeCobro));
-            lblTitulo = new Label();
+            lblRestaPago = new Label();
             pnlTotal = new Panel();
             lblTotal = new Label();
             lblTextoTotal = new Label();
-            cmbMetodoPago = new ComboBox();
-            txtMonto = new TextBox();
-            btnAgregarPago = new Button();
+            btnEfectivo = new Button();
             lblTextoPagos = new Label();
             dtgPagos = new DataGridView();
             ClnIdMetodoPago = new DataGridViewTextBoxColumn();
             ClnMetodoPago = new DataGridViewTextBoxColumn();
             ClnMontoPago = new DataGridViewTextBoxColumn();
-            btnQuitarPago = new Button();
             lblTextoPagado = new Label();
             lblPagado = new Label();
             lblTextoRestante = new Label();
@@ -52,28 +49,32 @@
             lblTextoVuelto = new Label();
             lblVuelto = new Label();
             label1 = new Label();
-            label2 = new Label();
-            lblMetodo = new Label();
+            btnTransferencia = new Button();
+            btnDebito = new Button();
+            pnlResta = new Panel();
+            lblRestaP = new Label();
+            lblCobro = new Label();
             pnlTotal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtgPagos).BeginInit();
+            pnlResta.SuspendLayout();
             SuspendLayout();
             // 
-            // lblTitulo
+            // lblRestaPago
             // 
-            lblTitulo.AutoSize = true;
-            lblTitulo.Location = new Point(11, 9);
-            lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(118, 15);
-            lblTitulo.TabIndex = 0;
-            lblTitulo.Text = "INFORME DE COBRO";
+            lblRestaPago.AutoSize = true;
+            lblRestaPago.Location = new Point(227, 79);
+            lblRestaPago.Name = "lblRestaPago";
+            lblRestaPago.Size = new Size(79, 15);
+            lblRestaPago.TabIndex = 0;
+            lblRestaPago.Text = "RESTA PAGAR";
             // 
             // pnlTotal
             // 
             pnlTotal.BackColor = Color.Green;
             pnlTotal.Controls.Add(lblTotal);
-            pnlTotal.Location = new Point(181, 70);
+            pnlTotal.Location = new Point(169, 27);
             pnlTotal.Name = "pnlTotal";
-            pnlTotal.Size = new Size(158, 38);
+            pnlTotal.Size = new Size(200, 38);
             pnlTotal.TabIndex = 1;
             // 
             // lblTotal
@@ -83,7 +84,7 @@
             lblTotal.ForeColor = SystemColors.ButtonFace;
             lblTotal.Location = new Point(0, 0);
             lblTotal.Name = "lblTotal";
-            lblTotal.Size = new Size(158, 38);
+            lblTotal.Size = new Size(200, 38);
             lblTotal.TabIndex = 3;
             lblTotal.Text = "$ 0,00";
             lblTotal.TextAlign = ContentAlignment.MiddleCenter;
@@ -91,47 +92,27 @@
             // lblTextoTotal
             // 
             lblTextoTotal.AutoSize = true;
-            lblTextoTotal.Location = new Point(216, 46);
+            lblTextoTotal.Location = new Point(227, 9);
             lblTextoTotal.Name = "lblTextoTotal";
             lblTextoTotal.Size = new Size(90, 15);
             lblTextoTotal.TabIndex = 2;
             lblTextoTotal.Text = "TOTAL A PAGAR";
             // 
-            // cmbMetodoPago
+            // btnEfectivo
             // 
-            cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMetodoPago.FormattingEnabled = true;
-            cmbMetodoPago.Location = new Point(24, 134);
-            cmbMetodoPago.Name = "cmbMetodoPago";
-            cmbMetodoPago.Size = new Size(118, 23);
-            cmbMetodoPago.TabIndex = 6;
-            cmbMetodoPago.SelectedIndexChanged += cmbMetodoPago_SelectedIndexChanged;
-            cmbMetodoPago.KeyDown += cmbMetodoPago_KeyDown;
-            // 
-            // txtMonto
-            // 
-            txtMonto.Location = new Point(23, 58);
-            txtMonto.Name = "txtMonto";
-            txtMonto.Size = new Size(119, 23);
-            txtMonto.TabIndex = 9;
-            txtMonto.TextChanged += txtMonto_TextChanged;
-            txtMonto.KeyDown += cmbMetodoPago_KeyDown;
-            // 
-            // btnAgregarPago
-            // 
-            btnAgregarPago.Location = new Point(162, 134);
-            btnAgregarPago.Name = "btnAgregarPago";
-            btnAgregarPago.Size = new Size(180, 24);
-            btnAgregarPago.TabIndex = 10;
-            btnAgregarPago.Text = "AGREGAR MÉTODO DE PAGO";
-            btnAgregarPago.UseVisualStyleBackColor = true;
-            btnAgregarPago.Click += btnAgregarPago_Click;
+            btnEfectivo.Location = new Point(23, 143);
+            btnEfectivo.Name = "btnEfectivo";
+            btnEfectivo.Size = new Size(93, 36);
+            btnEfectivo.TabIndex = 10;
+            btnEfectivo.Text = "Efectivo";
+            btnEfectivo.UseVisualStyleBackColor = true;
+            btnEfectivo.Click += btnEfectivo_Click;
             // 
             // lblTextoPagos
             // 
             lblTextoPagos.AutoSize = true;
             lblTextoPagos.Font = new Font("Segoe UI", 7F);
-            lblTextoPagos.Location = new Point(24, 176);
+            lblTextoPagos.Location = new Point(24, 194);
             lblTextoPagos.Name = "lblTextoPagos";
             lblTextoPagos.Size = new Size(96, 12);
             lblTextoPagos.TabIndex = 11;
@@ -144,7 +125,7 @@
             dtgPagos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dtgPagos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtgPagos.Columns.AddRange(new DataGridViewColumn[] { ClnIdMetodoPago, ClnMetodoPago, ClnMontoPago });
-            dtgPagos.Location = new Point(24, 196);
+            dtgPagos.Location = new Point(24, 214);
             dtgPagos.MultiSelect = false;
             dtgPagos.Name = "dtgPagos";
             dtgPagos.ReadOnly = true;
@@ -171,20 +152,10 @@
             ClnMontoPago.Name = "ClnMontoPago";
             ClnMontoPago.ReadOnly = true;
             // 
-            // btnQuitarPago
-            // 
-            btnQuitarPago.Location = new Point(93, 392);
-            btnQuitarPago.Name = "btnQuitarPago";
-            btnQuitarPago.Size = new Size(106, 21);
-            btnQuitarPago.TabIndex = 13;
-            btnQuitarPago.Text = "QUITAR MÉTODO";
-            btnQuitarPago.UseVisualStyleBackColor = true;
-            btnQuitarPago.Click += btnQuitarPago_Click;
-            // 
             // lblTextoPagado
             // 
             lblTextoPagado.AutoSize = true;
-            lblTextoPagado.Location = new Point(23, 327);
+            lblTextoPagado.Location = new Point(23, 345);
             lblTextoPagado.Name = "lblTextoPagado";
             lblTextoPagado.Size = new Size(54, 15);
             lblTextoPagado.TabIndex = 15;
@@ -193,7 +164,7 @@
             // lblPagado
             // 
             lblPagado.AutoSize = true;
-            lblPagado.Location = new Point(304, 327);
+            lblPagado.Location = new Point(304, 345);
             lblPagado.Name = "lblPagado";
             lblPagado.Size = new Size(37, 15);
             lblPagado.TabIndex = 16;
@@ -202,7 +173,7 @@
             // lblTextoRestante
             // 
             lblTextoRestante.AutoSize = true;
-            lblTextoRestante.Location = new Point(23, 342);
+            lblTextoRestante.Location = new Point(23, 360);
             lblTextoRestante.Name = "lblTextoRestante";
             lblTextoRestante.Size = new Size(60, 15);
             lblTextoRestante.TabIndex = 17;
@@ -211,7 +182,7 @@
             // lblRestante
             // 
             lblRestante.AutoSize = true;
-            lblRestante.Location = new Point(304, 342);
+            lblRestante.Location = new Point(304, 360);
             lblRestante.Name = "lblRestante";
             lblRestante.Size = new Size(37, 15);
             lblRestante.TabIndex = 18;
@@ -219,7 +190,7 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(16, 392);
+            btnCancelar.Location = new Point(121, 392);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 21);
             btnCancelar.TabIndex = 19;
@@ -240,7 +211,7 @@
             // 
             // txtMontoRecibido
             // 
-            txtMontoRecibido.Location = new Point(24, 96);
+            txtMontoRecibido.Location = new Point(24, 114);
             txtMontoRecibido.Name = "txtMontoRecibido";
             txtMontoRecibido.Size = new Size(118, 23);
             txtMontoRecibido.TabIndex = 22;
@@ -249,7 +220,7 @@
             // lblTextoVuelto
             // 
             lblTextoVuelto.AutoSize = true;
-            lblTextoVuelto.Location = new Point(24, 357);
+            lblTextoVuelto.Location = new Point(24, 375);
             lblTextoVuelto.Name = "lblTextoVuelto";
             lblTextoVuelto.Size = new Size(47, 15);
             lblTextoVuelto.TabIndex = 23;
@@ -258,7 +229,7 @@
             // lblVuelto
             // 
             lblVuelto.AutoSize = true;
-            lblVuelto.Location = new Point(304, 357);
+            lblVuelto.Location = new Point(304, 375);
             lblVuelto.Name = "lblVuelto";
             lblVuelto.Size = new Size(37, 15);
             lblVuelto.TabIndex = 24;
@@ -268,39 +239,72 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 7F);
-            label1.Location = new Point(23, 84);
+            label1.Location = new Point(23, 99);
             label1.Name = "label1";
             label1.Size = new Size(89, 12);
             label1.TabIndex = 25;
             label1.Text = "MONTO RECIBIDO";
             // 
-            // label2
+            // btnTransferencia
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 7F);
-            label2.Location = new Point(24, 46);
-            label2.Name = "label2";
-            label2.Size = new Size(92, 12);
-            label2.TabIndex = 26;
-            label2.Text = "MONTO A COBRAR";
+            btnTransferencia.Location = new Point(132, 143);
+            btnTransferencia.Name = "btnTransferencia";
+            btnTransferencia.Size = new Size(92, 35);
+            btnTransferencia.TabIndex = 26;
+            btnTransferencia.Text = "Transferencia";
+            btnTransferencia.UseVisualStyleBackColor = true;
+            btnTransferencia.Click += btnTransferencia_Click;
             // 
-            // lblMetodo
+            // btnDebito
             // 
-            lblMetodo.AutoSize = true;
-            lblMetodo.Font = new Font("Segoe UI", 7F);
-            lblMetodo.Location = new Point(23, 122);
-            lblMetodo.Name = "lblMetodo";
-            lblMetodo.Size = new Size(91, 12);
-            lblMetodo.TabIndex = 27;
-            lblMetodo.Text = "METODO DE PAGO";
+            btnDebito.Location = new Point(249, 144);
+            btnDebito.Name = "btnDebito";
+            btnDebito.Size = new Size(92, 35);
+            btnDebito.TabIndex = 27;
+            btnDebito.Text = "Debito";
+            btnDebito.UseVisualStyleBackColor = true;
+            btnDebito.Click += btnDebito_Click;
+            // 
+            // pnlResta
+            // 
+            pnlResta.BackColor = Color.Green;
+            pnlResta.BorderStyle = BorderStyle.FixedSingle;
+            pnlResta.Controls.Add(lblRestaP);
+            pnlResta.Location = new Point(170, 94);
+            pnlResta.Name = "pnlResta";
+            pnlResta.Size = new Size(200, 38);
+            pnlResta.TabIndex = 28;
+            // 
+            // lblRestaP
+            // 
+            lblRestaP.AutoSize = true;
+            lblRestaP.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblRestaP.ForeColor = SystemColors.Control;
+            lblRestaP.Location = new Point(75, 8);
+            lblRestaP.Name = "lblRestaP";
+            lblRestaP.Size = new Size(50, 20);
+            lblRestaP.TabIndex = 0;
+            lblRestaP.Text = "label2";
+            // 
+            // lblCobro
+            // 
+            lblCobro.AutoSize = true;
+            lblCobro.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCobro.Location = new Point(12, 9);
+            lblCobro.Name = "lblCobro";
+            lblCobro.Size = new Size(76, 25);
+            lblCobro.TabIndex = 29;
+            lblCobro.Text = "COBRO";
             // 
             // frmInformeCobro
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(382, 435);
-            Controls.Add(lblMetodo);
-            Controls.Add(label2);
+            Controls.Add(lblCobro);
+            Controls.Add(pnlResta);
+            Controls.Add(btnDebito);
+            Controls.Add(btnTransferencia);
             Controls.Add(label1);
             Controls.Add(lblVuelto);
             Controls.Add(lblTextoVuelto);
@@ -311,15 +315,12 @@
             Controls.Add(lblTextoRestante);
             Controls.Add(lblPagado);
             Controls.Add(lblTextoPagado);
-            Controls.Add(btnQuitarPago);
             Controls.Add(dtgPagos);
             Controls.Add(lblTextoPagos);
-            Controls.Add(btnAgregarPago);
-            Controls.Add(txtMonto);
-            Controls.Add(cmbMetodoPago);
+            Controls.Add(btnEfectivo);
             Controls.Add(lblTextoTotal);
             Controls.Add(pnlTotal);
-            Controls.Add(lblTitulo);
+            Controls.Add(lblRestaPago);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "frmInformeCobro";
@@ -327,22 +328,21 @@
             Text = "Informe de Cobro";
             pnlTotal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dtgPagos).EndInit();
+            pnlResta.ResumeLayout(false);
+            pnlResta.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label lblTitulo;
+        private Label lblRestaPago;
         private Panel pnlTotal;
         private Label lblTextoTotal;
         private Label lblTotal;
-        private ComboBox cmbMetodoPago;
-        private TextBox txtMonto;
-        private Button btnAgregarPago;
+        private Button btnEfectivo;
         private Label lblTextoPagos;
         private DataGridView dtgPagos;
-        private Button btnQuitarPago;
         private DataGridViewTextBoxColumn ClnIdMetodoPago;
         private DataGridViewTextBoxColumn ClnMetodoPago;
         private DataGridViewTextBoxColumn ClnMontoPago;
@@ -356,7 +356,10 @@
         private Label lblTextoVuelto;
         private Label lblVuelto;
         private Label label1;
-        private Label label2;
-        private Label lblMetodo;
+        private Button btnTransferencia;
+        private Button btnDebito;
+        private Panel pnlResta;
+        private Label lblRestaP;
+        private Label lblCobro;
     }
 }

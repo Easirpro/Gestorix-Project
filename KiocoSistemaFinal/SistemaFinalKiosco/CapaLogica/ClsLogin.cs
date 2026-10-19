@@ -1,11 +1,12 @@
-﻿using CapaSesion;
+﻿using CapaDatos;
+using CapaEntidades;
+using CapaLogica.BitacoraLogi;
+using CapaSesion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CapaDatos;
-using CapaEntidades;
 
 
 
@@ -23,10 +24,39 @@ namespace CapaLogica
         {
             string pass = ClsSeguridad.SHA256(usuario + password);
 
-            return datos.ValidarUsuario(usuario, pass);
+            bool resultado = datos.ValidarUsuario(usuario, pass);
+
+            clsBitacoraLogica bitacora = new clsBitacoraLogica();
+
+            if (resultado)
+            {
+                bitacora.RegistrarBitacora( SesionUsuario.IdUsuario, "LOGIN", "Seguridad", 
+                    SesionUsuario.IdUsuario, "Inicio de sesión correcto.");
+            }
+            else
+            {
+                bitacora.RegistrarBitacora( null, "LOGIN_FALLIDO", "Seguridad",
+                    null, "Intento de inicio de sesión fallido para el usuario: " + usuario);
+            }
+
+            return resultado;
         }
         public void CerrarSesion()
         {
+            if (SesionUsuario.IdUsuario > 0)
+            {
+                clsBitacoraLogica bitacora = new clsBitacoraLogica();
+
+                bitacora.RegistrarBitacora(
+                    SesionUsuario.IdUsuario,
+                    "LOGOUT",
+                    "Seguridad",
+                    SesionUsuario.IdUsuario,
+                    "Cierre de sesión."
+                );
+            }
+
+
             SesionUsuario.Permisos.Clear();
 
             SesionUsuario.IdUsuario = 0;

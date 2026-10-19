@@ -17,9 +17,10 @@ namespace CapaVista
     public partial class frmInformeCobro : Form
     {
         private readonly decimal totalVenta;
+        private readonly DataGridView carritoVenta;
         private decimal totalPagado = 0;
         private decimal vueltoVenta = 0;
-        private readonly DataGridView carritoVenta;
+        private Button botonMetodoSeleccionado = null;
         public frmInformeCobro(decimal total, DataGridView carrito)
         {
             InitializeComponent();
@@ -31,25 +32,139 @@ namespace CapaVista
             lblPagado.Text = "$ 0,00";
             lblRestante.Text = $"$ {totalVenta:N2}";
             lblVuelto.Text = "$ 0,00";
+            lblRestaP.Text = $"$ {totalVenta:N2}";
+
+            txtMontoRecibido.Text = totalVenta.ToString("0.00");
 
             btnConfirmar.Visible = true;
+            btnConfirmar.Enabled = false;
             btnConfirmar.BringToFront();
 
-            CargarMetodosPago();
-
-            txtMonto.Text = totalVenta.ToString("0.00");
         }
 
-        private void CargarMetodosPago()
+        #region Metodos
+        private void AgregarPago(string metodoPago)
+        {
+            decimal restante = totalVenta - totalPagado;
+
+            if (restante <= 0)
+            {
+                MessageBox.Show("La venta ya está completamente pagada.", "Agregar pago",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                return;
+            }
+
+            if (!decimal.TryParse(txtMontoRecibido.Text, out decimal monto))
+            {
+                MessageBox.Show("Ingrese un monto válido.", "Monto inválido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                txtMontoRecibido.Focus();
+                return;
+            }
+
+            if (monto <= 0)
+            {
+                MessageBox.Show("El monto debe ser mayor que cero.", "Monto inválido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                txtMontoRecibido.SelectAll();
+                txtMontoRecibido.Focus();
+                return;
+            }
+
+            bool esEfectivo = metodoPago.Equals("Efectivo", StringComparison.OrdinalIgnoreCase);
+
+            decimal montoAplicado = monto;
+
+            if (esEfectivo)
+            {
+                if (monto < restante)
+                {
+                    montoAplicado = monto;
+                    vueltoVenta = 0;
+                }
+                else
+                {
+                    montoAplicado = restante;
+                    vueltoVenta = monto - restante;
+                }
+            }
+
+            else
+            {
+                bool yaHayPagos = totalPagado > 0;
+
+                if (yaHayPagos && monto < restante)
+                {
+                    MessageBox.Show($"El importe no alcanza para completar el pago con este método.\n\n" + $"Saldo pendiente: $ {restante:N2}\n" +  $"Importe ingresado: $ {monto:N2}", "Importe insuficiente",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    txtMontoRecibido.SelectAll();
+                    txtMontoRecibido.Focus();
+                    return;
+                }
+
+                if (monto > restante)
+                {
+                    MessageBox.Show($"El monto supera el saldo restante.\n\n" + $"Saldo pendiente: $ {restante:N2}", "Monto inválido",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    txtMontoRecibido.SelectAll();
+                    txtMontoRecibido.Focus();
+                    return;
+                }
+
+                vueltoVenta = 0;
+            }
+
+
+            int idMetodoPago = ObtenerIdMetodoPago(metodoPago);
+
+            dtgPagos.Rows.Add(idMetodoPago, metodoPago, montoAplicado);
+
+            CalcularPagos();
+
+            lblVuelto.Text = $"$ {vueltoVenta:N2}";
+
+            txtMontoRecibido.Clear();
+        }
+        private int ObtenerIdMetodoPago(string metodoPago)
         {
             ClsVentaLogica gestorVenta = new ClsVentaLogica();
 
             DataTable tabla = gestorVenta.ObtenerMetodosPago();
 
-            cmbMetodoPago.DataSource = tabla;
-            cmbMetodoPago.DisplayMember = "Nombre";
-            cmbMetodoPago.ValueMember = "IdMetodoPago";
-            cmbMetodoPago.SelectedIndex = -1;
+            foreach (DataRow fila in tabla.Rows)
+            {
+                string nombre = fila["Nombre"].ToString();
+
+                if (nombre.Equals(
+                    metodoPago,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    return Convert.ToInt32(fila["IdMetodoPago"]);
+                }
+            }
+
+            throw new Exception(
+                $"No se encontró el método de pago '{metodoPago}' en la base de datos.");
+        }
+        private void CalcularVuelto()
+        {
+            if (!decimal.TryParse(txtMontoRecibido.Text, out decimal montoRecibido))
+            {
+                vueltoVenta = 0;
+                lblVuelto.Text = "$ 0,00";
+                return;
+            }
+
+            decimal restante = Math.Max(totalVenta - totalPagado, 0);
+
+            vueltoVenta = montoRecibido > restante ? montoRecibido - restante : 0;
+
+            lblVuelto.Text = $"$ {vueltoVenta:N2}";
         }
         private void CalcularPagos()
         {
@@ -60,123 +175,111 @@ namespace CapaVista
                 if (fila.IsNewRow)
                     continue;
 
-                if (fila.Cells["ClnMontoPago"].Value != null &&decimal.TryParse( fila.Cells["ClnMontoPago"].Value.ToString(), out decimal monto))
+                if (fila.Cells["ClnMontoPago"].Value != null && decimal.TryParse(fila.Cells["ClnMontoPago"].Value.ToString(), out decimal monto))
                 {
                     totalPagado += monto;
                 }
             }
 
-            decimal restante = totalVenta - totalPagado;
+            decimal restante = Math.Max(totalVenta - totalPagado, 0);
 
             lblPagado.Text = $"$ {totalPagado:N2}";
-            lblRestante.Text = $"$ {Math.Max(restante, 0):N2}";
+            lblRestante.Text = $"$ {restante:N2}";
+            lblRestaP.Text = $"$ {restante:N2}";
 
             btnConfirmar.Enabled = restante == 0;
         }
-        private void btnAgregarPago_Click(object sender, EventArgs e)
+        private bool SeleccionarMetodoPago(string metodoPago, Button boton)
         {
-            if (cmbMetodoPago.SelectedIndex == -1)
+            if (botonMetodoSeleccionado == boton)
             {
-                MessageBox.Show("Seleccione un método de pago.", "Método de pago",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                cmbMetodoPago.Focus();
-                return;
-            }
-
-            if (!decimal.TryParse(txtMonto.Text, out decimal monto) || monto <= 0)
-            {
-                MessageBox.Show("Ingrese un monto válido mayor a 0.", "Monto inválido",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                txtMonto.SelectAll();
-                txtMonto.Focus();
-                return;
-            }
-
-            decimal restante = totalVenta - totalPagado;
-
-            if (monto > restante)
-            {
-                MessageBox.Show($"El monto ingresado supera el saldo restante.\n\n" + $"Restante: $ {restante:N2}", "Monto inválido",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                txtMonto.SelectAll();
-                txtMonto.Focus();
-                return;
-            }
-
-            int idMetodoPago =
-                Convert.ToInt32(cmbMetodoPago.SelectedValue);
-
-            string metodoPago = cmbMetodoPago.Text;
-
-            bool esEfectivo = metodoPago.Equals("Efectivo", StringComparison.OrdinalIgnoreCase);
-
-            if (esEfectivo)
-            {
-                decimal montoRecibido;
-
-                if (string.IsNullOrWhiteSpace(txtMontoRecibido.Text))
+                for (int i = dtgPagos.Rows.Count - 1; i >= 0; i--)
                 {
-                    montoRecibido = monto;
-                }
-                else
-                {
-                    if (!decimal.TryParse(txtMontoRecibido.Text, out montoRecibido) || montoRecibido <= 0)
+                    DataGridViewRow fila = dtgPagos.Rows[i];
+
+                    if (fila.IsNewRow)
+                        continue;
+
+                    string metodoFila = fila.Cells["ClnMetodoPago"].Value?.ToString();
+
+                    if (string.Equals(metodoFila, metodoPago, StringComparison.OrdinalIgnoreCase))
                     {
-                        MessageBox.Show("Ingrese un monto recibido válido.", "Monto recibido",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                        txtMontoRecibido.SelectAll();
-                        txtMontoRecibido.Focus();
-                        return;
-                    }
-
-                    if (montoRecibido < monto)
-                    {
-                        MessageBox.Show($"El monto recibido no alcanza.\n\n" + $"Monto a aplicar: $ {monto:N2}\n" + $"Monto recibido: $ {montoRecibido:N2}", "Efectivo insuficiente",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                        txtMontoRecibido.SelectAll();
-                        txtMontoRecibido.Focus();
-                        return;
+                        dtgPagos.Rows.RemoveAt(i);
                     }
                 }
 
-                vueltoVenta = montoRecibido - monto;
+                boton.UseVisualStyleBackColor = true;
+                boton.BackColor = SystemColors.Control;
+                botonMetodoSeleccionado = null;
+
+                CalcularPagos();
+
+                decimal restante = Math.Max(totalVenta - totalPagado, 0);
+
+                txtMontoRecibido.Text = restante.ToString("0.00");
+
+                CalcularVuelto();
+
+                return false;
             }
 
-            dtgPagos.Rows.Add(idMetodoPago, metodoPago, monto);
+            HashSet<string> metodosUtilizados = new HashSet<string>( StringComparer.OrdinalIgnoreCase);
 
-            CalcularPagos();
+            foreach (DataGridViewRow fila in dtgPagos.Rows)
+            {
+                if (fila.IsNewRow)
+                    continue;
 
-            txtMonto.Clear();
-            txtMontoRecibido.Clear();
+                object valor = fila.Cells["ClnMetodoPago"].Value;
 
-            cmbMetodoPago.SelectedIndex = -1;
+                if (valor != null)
+                    metodosUtilizados.Add(valor.ToString());
+            }
 
-            lblVuelto.Text = $"$ {vueltoVenta:N2}";
+            if (metodosUtilizados.Count >= 2 &&
+                !metodosUtilizados.Contains(metodoPago))
+            {
+                MessageBox.Show("Solo se permiten dos métodos de pago diferentes por venta.", "Límite de métodos de pago",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            cmbMetodoPago.Focus();
+                return false;
+            }
+
+            if (botonMetodoSeleccionado != null)
+            {
+                botonMetodoSeleccionado.UseVisualStyleBackColor = true;
+                botonMetodoSeleccionado.BackColor = SystemColors.Control;
+            }
+
+            botonMetodoSeleccionado = boton;
+            botonMetodoSeleccionado.UseVisualStyleBackColor = false;
+            botonMetodoSeleccionado.BackColor = Color.LightGreen;
+
+            return true;
         }
-        private void txtMonto_TextChanged(object sender, EventArgs e)
+
+
+        #endregion
+
+        #region Eventos
+        private void btnEfectivo_Click(object sender, EventArgs e)
         {
-            CalcularVuelto();
+            if (SeleccionarMetodoPago("Efectivo", btnEfectivo))
+                AgregarPago("Efectivo");
+        }
+        private void btnTransferencia_Click(object sender, EventArgs e)
+        {
+            if (SeleccionarMetodoPago("Transferencia", btnTransferencia))
+                AgregarPago("Transferencia");
+        }
+        private void btnDebito_Click(object sender, EventArgs e)
+        {
+            if (SeleccionarMetodoPago("Débito", btnDebito))
+                AgregarPago("Débito");
         }
         private void txtMontoRecibido_TextChanged(object sender, EventArgs e)
         {
             CalcularVuelto();
-        }
-        private void cmbMetodoPago_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter &&
-                cmbMetodoPago.SelectedIndex != -1)
-            {
-                e.SuppressKeyPress = true;
-
-                btnAgregarPago.PerformClick();
-            }
         }
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
@@ -237,7 +340,7 @@ namespace CapaVista
 
                 ClsVentaLogica gestorVenta = new ClsVentaLogica();
 
-                int idVenta = gestorVenta.RegistrarVenta(totalVenta, SesionUsuario.IdUsuario, detalles, pagos);
+                int idVenta = gestorVenta.RegistrarVenta(totalVenta, SesionUsuario.IdUsuario, null, detalles, pagos);
 
                 MessageBox.Show($"Venta #{idVenta} registrada correctamente.", "Venta registrada",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -252,95 +355,13 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void cmbMetodoPago_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbMetodoPago.SelectedIndex == -1)
-            {
-                txtMontoRecibido.Clear();
-                txtMontoRecibido.Enabled = false;
-                return;
-            }
-
-            decimal restante = totalVenta - totalPagado;
-
-            txtMonto.Text = restante.ToString("0.00");
-
-            string metodo = cmbMetodoPago.Text;
-
-            bool esEfectivo = metodo.Equals("Efectivo", StringComparison.OrdinalIgnoreCase);
-
-            txtMontoRecibido.Enabled = esEfectivo;
-
-            if (esEfectivo)
-            {
-                txtMontoRecibido.Clear();
-
-                txtMonto.SelectAll();
-                txtMonto.Focus();
-            }
-            else
-            {
-                txtMontoRecibido.Clear();
-            }
-        }
-        private void CalcularVuelto()
-        {
-            if (cmbMetodoPago.SelectedIndex == -1 || !cmbMetodoPago.Text.Equals("Efectivo", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
-
-            if (!decimal.TryParse(txtMonto.Text, out decimal montoEfectivo))
-            {
-                lblVuelto.Text = "$ 0,00";
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtMontoRecibido.Text))
-            {
-                lblVuelto.Text = "$ 0,00";
-                return;
-            }
-
-            if (!decimal.TryParse(txtMontoRecibido.Text, out decimal recibido))
-            {
-                lblVuelto.Text = "$ 0,00";
-                return;
-            }
-
-            decimal vuelto = recibido - montoEfectivo;
-
-            lblVuelto.Text = vuelto >= 0 ? $"$ {vuelto:N2}" : "$ 0,00";
-        }
-        private void btnQuitarPago_Click(object sender, EventArgs e)
-        {
-            if (dtgPagos.CurrentRow == null || dtgPagos.CurrentRow.IsNewRow)
-            {
-                MessageBox.Show("Seleccione un método de pago para quitar.", "Quitar pago",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            dtgPagos.Rows.Remove(dtgPagos.CurrentRow);
-
-            CalcularPagos();
-
-            decimal restante = totalVenta - totalPagado;
-
-            txtMonto.Text = restante.ToString("0.00");
-
-            vueltoVenta = 0;
-            lblVuelto.Text = "$ 0,00";
-
-            txtMontoRecibido.Clear();
-
-            cmbMetodoPago.SelectedIndex = -1;
-            cmbMetodoPago.Focus();
-        }
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
+        #endregion
+
+
     }
 }

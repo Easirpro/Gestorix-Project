@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CapaEntidades
 {
@@ -9,10 +10,16 @@ namespace CapaEntidades
         public string Descripcion { get; set; }
         public int IdTipoPromocion { get; set; }
         public decimal Valor { get; set; }
+
         public DateTime FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
         public bool Activo { get; set; }
+        public bool EsRecurrente { get; set; }
+        public TimeSpan HoraInicio { get; set; }
+        public TimeSpan HoraFin { get; set; }
+        public List<DayOfWeek> DiasSeleccionados { get; set; } = new List<DayOfWeek>();
     }
+
     public class ClsDetallePromocion
     {
         public int IdDetallePromocion { get; set; }
