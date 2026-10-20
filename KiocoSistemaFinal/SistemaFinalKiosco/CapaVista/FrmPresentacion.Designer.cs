@@ -100,13 +100,13 @@
             nuevoEgresoToolStripMenuItem = new ToolStripMenuItem();
             cerrarSeToolStripMenuItem = new ToolStripMenuItem();
             abrirCajaToolStripMenuItem = new ToolStripMenuItem();
-            btnAjuste = new ToolStripMenuItem();
-            idiomaToolStripMenuItem = new ToolStripMenuItem();
+            btnIdioma = new ToolStripMenuItem();
             inglesToolStripMenuItem = new ToolStripMenuItem();
-            btnAyuda = new ToolStripMenuItem();
+            españolToolStripMenuItem = new ToolStripMenuItem();
+            idiomaToolStripMenuItem = new ToolStripMenuItem();
             btnEmpleado = new ToolStripMenuItem();
-            permisosToolStripMenuItem = new ToolStripMenuItem();
             gestioToolStripMenuItem = new ToolStripMenuItem();
+            permisosToolStripMenuItem = new ToolStripMenuItem();
             bitacoraToolStripMenuItem = new ToolStripMenuItem();
             tollClosed = new ToolStripMenuItem();
             btnConfig = new MenuStrip();
@@ -748,35 +748,33 @@
             abrirCajaToolStripMenuItem.Text = "Abrir Caja";
             abrirCajaToolStripMenuItem.Click += abrirCajaToolStripMenuItem_Click;
             //
-            // btnAjuste
+            // btnIdioma
             //
-            btnAjuste.DropDownItems.AddRange(new ToolStripItem[] { idiomaToolStripMenuItem });
-            btnAjuste.Enabled = false;
-            btnAjuste.Name = "btnAjuste";
-            btnAjuste.Size = new Size(57, 20);
-            btnAjuste.Text = "Ajustes";
-            //
-            // idiomaToolStripMenuItem
-            //
-            idiomaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { inglesToolStripMenuItem });
-            idiomaToolStripMenuItem.Name = "idiomaToolStripMenuItem";
-            idiomaToolStripMenuItem.Size = new Size(180, 22);
-            idiomaToolStripMenuItem.Text = "Idioma";
-            idiomaToolStripMenuItem.Click += idiomaToolStripMenuItem_Click;
+            btnIdioma.DropDownItems.AddRange(new ToolStripItem[] { inglesToolStripMenuItem, españolToolStripMenuItem });
+            btnIdioma.Name = "btnIdioma";
+            btnIdioma.Size = new Size(56, 20);
+            btnIdioma.Text = "Idioma";
             //
             // inglesToolStripMenuItem
             //
+            inglesToolStripMenuItem.Image = (Image)resources.GetObject("inglesToolStripMenuItem.Image");
             inglesToolStripMenuItem.Name = "inglesToolStripMenuItem";
             inglesToolStripMenuItem.Size = new Size(180, 22);
-            inglesToolStripMenuItem.Text = "Ingles";
+            inglesToolStripMenuItem.Text = "English";
+            inglesToolStripMenuItem.Click += inglesToolStripMenuItem_Click;
             //
-            // btnAyuda
+            // españolToolStripMenuItem
             //
-            btnAyuda.Enabled = false;
-            btnAyuda.Name = "btnAyuda";
-            btnAyuda.Size = new Size(53, 20);
-            btnAyuda.Text = "Ayuda";
-            btnAyuda.Click += btnAyuda_Click;
+            españolToolStripMenuItem.Image = (Image)resources.GetObject("españolToolStripMenuItem.Image");
+            españolToolStripMenuItem.Name = "españolToolStripMenuItem";
+            españolToolStripMenuItem.Size = new Size(180, 22);
+            españolToolStripMenuItem.Text = "Español";
+            españolToolStripMenuItem.Click += españolToolStripMenuItem_Click;
+            //
+            // idiomaToolStripMenuItem
+            //
+            idiomaToolStripMenuItem.Name = "idiomaToolStripMenuItem";
+            idiomaToolStripMenuItem.Size = new Size(32, 19);
             //
             // btnEmpleado
             //
@@ -786,24 +784,24 @@
             btnEmpleado.Size = new Size(72, 20);
             btnEmpleado.Text = "Empleado";
             //
-            // permisosToolStripMenuItem
-            //
-            permisosToolStripMenuItem.Name = "permisosToolStripMenuItem";
-            permisosToolStripMenuItem.Size = new Size(172, 22);
-            permisosToolStripMenuItem.Text = "Empleado";
-            permisosToolStripMenuItem.Click += permisosToolStripMenuItem_Click;
-            //
             // gestioToolStripMenuItem
             //
             gestioToolStripMenuItem.Name = "gestioToolStripMenuItem";
-            gestioToolStripMenuItem.Size = new Size(172, 22);
+            gestioToolStripMenuItem.Size = new Size(180, 22);
             gestioToolStripMenuItem.Text = "Gestión de Backup";
             gestioToolStripMenuItem.Click += gestioToolStripMenuItem_Click;
+            //
+            // permisosToolStripMenuItem
+            //
+            permisosToolStripMenuItem.Name = "permisosToolStripMenuItem";
+            permisosToolStripMenuItem.Size = new Size(180, 22);
+            permisosToolStripMenuItem.Text = "Empleado";
+            permisosToolStripMenuItem.Click += permisosToolStripMenuItem_Click;
             //
             // bitacoraToolStripMenuItem
             //
             bitacoraToolStripMenuItem.Name = "bitacoraToolStripMenuItem";
-            bitacoraToolStripMenuItem.Size = new Size(172, 22);
+            bitacoraToolStripMenuItem.Size = new Size(180, 22);
             bitacoraToolStripMenuItem.Text = "Bitacora";
             bitacoraToolStripMenuItem.Click += bitacoraToolStripMenuItem_Click;
             //
@@ -816,7 +814,7 @@
             //
             // btnConfig
             //
-            btnConfig.Items.AddRange(new ToolStripItem[] { btnArt, toolStripMenuItem2, btnVentas, btnCompras, btnProve, toolStripMenuItem1, btnInformes, btnCaja, btnAjuste, btnAyuda, btnEmpleado, tollClosed });
+            btnConfig.Items.AddRange(new ToolStripItem[] { btnArt, toolStripMenuItem2, btnVentas, btnCompras, btnProve, toolStripMenuItem1, btnInformes, btnCaja, btnIdioma, btnEmpleado, tollClosed });
             btnConfig.Location = new Point(0, 0);
             btnConfig.Name = "btnConfig";
             btnConfig.Size = new Size(877, 24);
@@ -866,7 +864,6 @@
             Name = "frmmenuPres";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Presentación";
-            Load += frmmenuPres_Load_1;
             ((System.ComponentModel.ISupportInitialize)pcbLogo).EndInit();
             ((System.ComponentModel.ISupportInitialize)dtgPresentacion).EndInit();
             pnlUsuario.ResumeLayout(false);
@@ -947,10 +944,9 @@
         private ToolStripMenuItem nuevoEgresoToolStripMenuItem;
         private ToolStripMenuItem cerrarSeToolStripMenuItem;
         private ToolStripMenuItem abrirCajaToolStripMenuItem;
-        private ToolStripMenuItem btnAjuste;
+        private ToolStripMenuItem btnIdioma;
         private ToolStripMenuItem idiomaToolStripMenuItem;
         private ToolStripMenuItem inglesToolStripMenuItem;
-        private ToolStripMenuItem btnAyuda;
         private ToolStripMenuItem btnEmpleado;
         private ToolStripMenuItem permisosToolStripMenuItem;
         private ToolStripMenuItem tollClosed;
@@ -964,6 +960,6 @@
 
         private ToolStripMenuItem cargarArticuloNuevoToolStripMenuItem;
         private ToolStripMenuItem bitacoraToolStripMenuItem;
-
+        private ToolStripMenuItem españolToolStripMenuItem;
     }
 }

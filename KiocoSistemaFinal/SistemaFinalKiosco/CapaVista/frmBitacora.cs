@@ -22,6 +22,7 @@ namespace CapaVista
             ConfigurarFormulario();
             ConfigurarEventos();
             CargarBitacora();
+
         }
 
         #region Metodos
@@ -46,7 +47,7 @@ namespace CapaVista
         {
             this.btnUsuario.Click += btnUsuario_Click;
             this.btnSeguridad.Click += btnSeguridad_Click;
-            //this.btnProductosStock.Click += btnProductosStock_Click;
+            this.btnProducto.Click += btnProducto_Click;
             //this.btnVentasPagos.Click += btnVentasPagos_Click;
             this.btnPromociones.Click += btnPromociones_Click;
             this.btnErrores.Click += btnErrores_Click;
@@ -61,12 +62,7 @@ namespace CapaVista
             this.categoriaActual = string.Empty;
             this.AplicarFiltros();
         }
-
-        private void ConsultarBitacora(
-            DateTime? fechaDesde,
-            DateTime? fechaHasta,
-            string categoria,
-            string buscar)
+        private void ConsultarBitacora(DateTime? fechaDesde, DateTime? fechaHasta, string categoria, string buscar)
         {
             try
             {
@@ -287,13 +283,9 @@ namespace CapaVista
         {
             this.SeleccionarCategoria("Seguridad", "Seguridad");
         }
-        private void btnProductosStock_Click(object sender, EventArgs e)
+        private void btnProducto_Click(object sender, EventArgs e)
         {
-            this.SeleccionarCategoria("ProductosStock", "Productos y Stock");
-        }
-        private void btnVentasPagos_Click(object sender, EventArgs e)
-        {
-            this.SeleccionarCategoria("VentasPagos", "Ventas y Pagos");
+            this.SeleccionarCategoria("ProductosStock", "Productos");
         }
         private void btnCompras_Click(object sender, EventArgs e)
         {
@@ -340,5 +332,39 @@ namespace CapaVista
 
         }
 
+        private void btnProbarFalla_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                throw new InvalidOperationException(
+                    "Prueba controlada de registro de error técnico.");
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    logica.RegistrarError(
+                        null,
+                        "frmBitacora.btnProbarFalla_Click",
+                        ex.GetType().FullName,
+                        ex.Message,
+                        ex.ToString());
+
+                    MessageBox.Show(
+                        "Falla realizada",
+                        "Prueba de falla",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+                catch (Exception exRegistro)
+                {
+                    MessageBox.Show(
+                        "No se pudo registrar la falla.\n\n" + exRegistro.Message,
+                        "Error de registro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }
