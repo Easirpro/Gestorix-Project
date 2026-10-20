@@ -1,6 +1,9 @@
 ﻿using CapaDatos.NegocioDatos;
 using CapaEntidades;
 using System.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CapaLogica.NegocioLogica
 {
@@ -27,6 +30,36 @@ namespace CapaLogica.NegocioLogica
             {
                 throw new Exception("La fecha de finalización no puede ser anterior a la fecha de inicio.");
             }
+
+
+            if (promocion.HoraFin <= promocion.HoraInicio)
+            {
+                throw new Exception("La hora de finalización debe ser posterior a la hora de inicio.");
+            }
+
+            if (promocion.EsRecurrente)
+            {
+                if (promocion.DiasSeleccionados == null || promocion.DiasSeleccionados.Count == 0)
+                {
+                    throw new Exception(
+                        "Debe seleccionar al menos un día para una promoción recurrente.");
+                }
+
+                if (promocion.DiasSeleccionados.Distinct().Count() != promocion.DiasSeleccionados.Count)
+                {
+                    throw new Exception(
+                        "Hay días de la semana duplicados en la vigencia.");
+                }
+            }
+            else
+            {
+                if (!promocion.FechaFin.HasValue)
+                {
+                    throw new Exception(
+                        "Debe indicar la fecha de finalización de la promoción.");
+                }
+            }
+
 
             DataTable tipos = datos.ObtenerTiposPromocion();
 

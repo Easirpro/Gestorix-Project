@@ -921,6 +921,7 @@ namespace CapaVista
             frmPromocion promo = new frmPromocion();
             promo.ShowDialog();
         }
+
         private void gestioToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmGestionBackup frm = new frmGestionBackup();
@@ -942,8 +943,51 @@ namespace CapaVista
             }
         }
 
+        private void cargarArticuloNuevoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmNuevoArticulo nuevoarticulo = new frmNuevoArticulo();
+            nuevoarticulo.ShowDialog();
+
+        }
+
         #endregion
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private void btnAyuda_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frmmenuPres_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bitacoraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmBitacora bitacora = new frmBitacora();
+            bitacora.ShowDialog();
+        }
 
     }
 

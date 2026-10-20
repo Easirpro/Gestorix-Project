@@ -460,43 +460,49 @@ namespace CapaVista
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(txtNombreProducto.Text))
+                if (!ValidarDatos())
                 {
-                    MessageBox.Show("Ingrese el nombre del artículo.");
-                    txtNombreProducto.Focus();
+                    MessageBox.Show("Revise los datos ingresados. Hay campos vacíos o valores inválidos.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (cmbMarca.SelectedValue == null)
-                {
-                    MessageBox.Show("Seleccione una marca.");
-                    return;
-                }
-
-                if (cmbRubro.SelectedValue == null)
-                {
-                    MessageBox.Show("Seleccione un rubro.");
-                    return;
-                }
-
-                if (cmbUnidadVenta.SelectedValue == null)
-                {
-                    MessageBox.Show("Seleccione una unidad de venta.");
-                    return;
-                }
-
-                if (cmbProveedor.SelectedValue == null ||
-                    Convert.ToInt32(cmbProveedor.SelectedValue) == 0)
+                if (cmbProveedor.SelectedValue == null || !int.TryParse(cmbProveedor.SelectedValue.ToString(), out int idProveedor) || idProveedor == 0)
                 {
                     MessageBox.Show("Seleccione un proveedor.");
+                    cmbProveedor.Focus();
                     return;
                 }
 
                 if (cmbSucursal.SelectedValue == null ||
-                    Convert.ToInt32(cmbSucursal.SelectedValue) == 0)
+                    !int.TryParse(cmbSucursal.SelectedValue.ToString(), out int idSucursal) ||
+                    idSucursal == 0)
                 {
                     MessageBox.Show("Seleccione una sucursal.");
+                    cmbSucursal.Focus();
                     return;
+                }
+
+                if (!decimal.TryParse(txtPrecioVenta.Text, out decimal precioVenta))
+                {
+                    MessageBox.Show("Ingrese un precio de venta válido.");
+                    txtPrecioVenta.Focus();
+                    return;
+                }
+
+                decimal stockActual = 0;
+                decimal stockMinimo = 0;
+                decimal stockIdeal = 0;
+
+                if (chkControlStock.Checked)
+                {
+                    if (!decimal.TryParse(txtStockActual.Text, out stockActual) ||
+                        !decimal.TryParse(txtStockMinimo.Text, out stockMinimo) ||
+                        !decimal.TryParse(txtStockMaximo.Text, out stockIdeal))
+                    {
+                        MessageBox.Show("Revise los valores de stock ingresados.");
+                        return;
+                    }
                 }
 
                 ClsProducto producto = new ClsProducto();
@@ -508,26 +514,7 @@ namespace CapaVista
                 producto.IdMarca = Convert.ToInt32(cmbMarca.SelectedValue);
                 producto.IdCategoria = Convert.ToInt32(cmbRubro.SelectedValue);
                 producto.IdUnidad = Convert.ToInt32(cmbUnidadVenta.SelectedValue);
-
-                if (chkActivarIva.Checked)
-                {
-                    producto.IdIVA = Convert.ToInt32(cmbIva.SelectedValue);
-                }
-                else
-                {
-                    producto.IdIVA = 1;
-                }
-
-                decimal precioVenta;
-
-                if (!decimal.TryParse(txtPrecioVenta.Text, out precioVenta))
-                {
-                    MessageBox.Show("Ingrese un precio de venta válido.");
-                    txtPrecioVenta.Focus();
-                    return;
-                }
-
-                producto.PrecioVenta = precioVenta;
+                producto.IdIVA = chkActivarIva.Checked ? Convert.ToInt32(cmbIva.SelectedValue) : 1; producto.PrecioVenta = precioVenta;
 
                 if (idProductoModificar != 0)
                 {
@@ -539,93 +526,53 @@ namespace CapaVista
                     {
                         MessageBox.Show("No se pudo modificar el artículo.", "Modificar artículo",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                         return;
                     }
 
-                    decimal stockActual;
-
-                    if (!decimal.TryParse(txtStockActual.Text, out stockActual))
-                    {
-                        MessageBox.Show("Ingrese un stock actual válido.", "Modificar artículo",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                        txtStockActual.Focus();
-                        return;
-                    }
-
-                    decimal stockMinimo = 0;
-                    decimal stockIdeal = 0;
-
-                    if (chkControlStock.Checked)
-                    {
-                        if (!decimal.TryParse(txtStockMinimo.Text, out stockMinimo))
-                        {
-                            MessageBox.Show("Ingrese un stock mínimo válido.", "Modificar artículo",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                            txtStockMinimo.Focus();
-                            return;
-                        }
-
-                        if (!decimal.TryParse(txtStockMaximo.Text, out stockIdeal))
-                        {
-                            MessageBox.Show("Ingrese un stock ideal válido.", "Modificar artículo",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                            txtStockMaximo.Focus();
-                            return;
-                        }
-                    }
-
-                    bool stockModificado = logica.ModificarStock(
-                        idProductoModificar,
-                        stockActual,
-                        stockMinimo,
-                        stockIdeal);
+                    bool stockModificado = logica.ModificarStock(idProductoModificar, stockActual, stockMinimo, stockIdeal);
 
                     if (!stockModificado)
                     {
                         MessageBox.Show("El artículo se modificó, pero no se pudo actualizar el stock.", "Modificar artículo",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                         return;
                     }
 
                     ClsProductoSucursalProveedor relacion = new ClsProductoSucursalProveedor();
 
                     relacion.IdProducto = idProductoModificar;
-                    relacion.IdSucursal = Convert.ToInt32(cmbSucursal.SelectedValue);
+                    relacion.IdSucursal = idSucursal;
                     relacion.Activo = true;
 
                     bool relacionModificada = logica.ModificarProductoSucursalProveedor(relacion);
 
                     if (!relacionModificada)
                     {
-                        MessageBox.Show("El artículo se modificó, pero no se pudo actualizar el proveedor/sucursal.", "Modificar artículo",
+                        MessageBox.Show("El artículo y el stock se modificaron, pero no se pudo actualizar la sucursal.", "Modificar artículo",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                         return;
                     }
 
-                    ClsLote lote = new ClsLote();
-
-                    lote.IdProducto = idProductoModificar;
-                    lote.CodigoLote = txtCodigoPorLote.Text.Trim();
-                    lote.FechaFabricacion = dtpFechaFabricacion.Value.Date;
-                    lote.FechaVencimiento = dtpFechaVencimiento.Value.Date;
-                    lote.IdSucursal = Convert.ToInt32(cmbSucursal.SelectedValue);
-                    lote.Stock = 0;
-                    lote.Activo = true;
-
-                    bool loteModificado = logica.ModificarLote(lote);
-
-                    if (!loteModificado)
+                    if (chkControlLote.Checked || chkAlertaVencimiento.Checked)
                     {
-                        MessageBox.Show("El artículo se modificó, pero no se pudo actualizar el lote.", "Modificar artículo",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        ClsLote lote = new ClsLote();
 
-                        return;
+                        lote.IdProducto = idProductoModificar;
+                        lote.CodigoLote = txtCodigoPorLote.Text.Trim();
+                        lote.FechaFabricacion = dtpFechaFabricacion.Value.Date;
+                        lote.FechaVencimiento = dtpFechaVencimiento.Value.Date;
+                        lote.IdSucursal = idSucursal;
+                        lote.Stock = 0;
+                        lote.Activo = true;
+
+                        bool loteModificado = logica.ModificarLote(lote);
+
+                        if (!loteModificado)
+                        {
+                            MessageBox.Show("El artículo, el stock y la sucursal se actualizaron, pero no se pudo modificar el lote.", "Modificar artículo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
                     }
 
                     MessageBox.Show("Artículo modificado correctamente.", "Modificar artículo",
@@ -633,7 +580,6 @@ namespace CapaVista
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
-
                     return;
                 }
 
@@ -643,27 +589,15 @@ namespace CapaVista
                 {
                     MessageBox.Show("No se pudo registrar el artículo.", "Nuevo artículo",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                     return;
                 }
 
-                decimal nuevoStockActual = 0;
-                decimal nuevoStockMinimo = 0;
-                decimal nuevoStockIdeal = 0;
-
-                if (chkControlStock.Checked)
-                {
-                    decimal.TryParse(txtStockActual.Text, out nuevoStockActual);
-                    decimal.TryParse(txtStockMinimo.Text, out nuevoStockMinimo);
-                    decimal.TryParse(txtStockMaximo.Text, out nuevoStockIdeal);
-                }
-
-                logica.RegistrarStock(idProducto, nuevoStockActual, nuevoStockMinimo, nuevoStockIdeal);
+                logica.RegistrarStock(idProducto, stockActual, stockMinimo, stockIdeal);
 
                 ClsProductoSucursalProveedor nuevaRelacion = new ClsProductoSucursalProveedor();
 
                 nuevaRelacion.IdProducto = idProducto;
-                nuevaRelacion.IdSucursal = Convert.ToInt32(cmbSucursal.SelectedValue);
+                nuevaRelacion.IdSucursal = idSucursal;
                 nuevaRelacion.Activo = true;
 
                 logica.RegistrarProductoSucursalProveedor(nuevaRelacion);
@@ -679,13 +613,14 @@ namespace CapaVista
                     lote.FechaIngreso = DateTime.Now;
                     lote.Stock = 0;
                     lote.Activo = true;
-                    lote.IdSucursal = Convert.ToInt32(cmbSucursal.SelectedValue);
+                    lote.IdSucursal = idSucursal;
 
                     bool loteRegistrado = logica.RegistrarLote(lote);
 
                     if (!loteRegistrado)
                     {
-                        MessageBox.Show("No se pudo registrar el lote.");
+                        MessageBox.Show("El artículo se registró, pero no se pudo registrar el lote.", "Nuevo artículo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
                 }
