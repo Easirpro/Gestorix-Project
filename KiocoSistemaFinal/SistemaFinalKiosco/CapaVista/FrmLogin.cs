@@ -86,20 +86,23 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                try
-                {
-                    clsBitacoraLogica bitacora = new clsBitacoraLogica();
+                MessageBox.Show(ex.ToString(),"ERROR",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+                //try
+                //{
+                //    clsBitacoraLogica bitacora = new clsBitacoraLogica();
 
-                    bitacora.RegistrarBitacora(SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null, "ERROR",
-                        "Errores", null, "Error durante el inicio de sesión: " + ex.Message);
-                }
-                catch
-                {
-                    // este carch evita que un fallo al registrar la bitácora oculte el error original.
-                }
+                //    bitacora.RegistrarBitacora(SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null, "ERROR",
+                //        "Errores", null, "Error durante el inicio de sesión: " + ex.Message);
+                //}
+                //catch
+                //{
+                //    // este carch evita que un fallo al registrar la bitácora oculte el error original.
+                //}
 
-                MessageBox.Show("Ocurrió un error técnico durante el inicio de sesión. " + "Si el problema continúa, contacte al administrador.", "Error del sistema",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show("Ocurrió un error técnico durante el inicio de sesión. " + "Si el problema continúa, contacte al administrador.", "Error del sistema",
+                //    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void AbrirFormularioPrincipal(Form formulario)

@@ -1,4 +1,5 @@
-﻿using CapaEntidades.NegocioEntidad;
+﻿using CapaDatos.SistemaKiosco;
+using CapaEntidades.NegocioEntidad;
 using Microsoft.Data.SqlClient;
 using SistemaKiosco;
 using System;
@@ -33,6 +34,7 @@ namespace CapaDatos.NegocioDatos
         }
         public int RegistrarProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
+            string dvh = GenerarDVHProducto(producto);
             using (SqlConnection conexion = cn.ObtenerConexion())
 
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarProducto", conexion))
@@ -48,6 +50,7 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
                 cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
                 cmd.Parameters.AddWithValue("@Activo", true);
+                cmd.Parameters.AddWithValue("@DVH", dvh);
 
                 conexion.Open();
 
@@ -868,5 +871,103 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        private string GenerarDVHProducto(ClsGestorEntidadProducto.ClsProducto producto)
+        {
+            string cadena =
+                producto.CodigoBarra +
+                producto.SKU +
+                producto.Nombre +
+                producto.Descripcion +
+                producto.IdMarca +
+                producto.IdIVA +
+                producto.IdCategoria +
+                producto.IdUnidad +
+                producto.PrecioVenta;
+
+            return ClsDigitoVerificador
+                .GenerarHash(cadena);
+        }
+        public void RecalcularDVHProductos()
+        {
+            using (SqlConnection conexion =
+                   cn.ObtenerConexion())
+            {
+                conexion.Open();
+
+                string sql =
+                @"SELECT
+            IdProducto,
+            CodigoBarra,
+            SKU,
+            Nombre,
+            Descripcion,
+            IdMarca,
+            IdIVA,
+            IdCategoria,
+            IdUnidad,
+            PrecioVenta,
+            Activo
+          FROM Producto
+          WHERE DVH IS NULL";
+
+                using (SqlCommand cmd =
+                       new SqlCommand(sql, conexion))
+                {
+                    using (SqlDataReader dr =
+                           cmd.ExecuteReader())
+                    {
+                        List<ClsGestorEntidadProducto.ClsProducto>
+                            productos =
+                            new List<ClsGestorEntidadProducto.ClsProducto>();
+
+                        while (dr.Read())
+                        {
+                            productos.Add(
+                                new ClsGestorEntidadProducto.ClsProducto
+                                {
+                                    IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                                    CodigoBarra = dr["CodigoBarra"].ToString(),
+                                    SKU = dr["SKU"].ToString(),
+                                    Nombre = dr["Nombre"].ToString(),
+                                    Descripcion = dr["Descripcion"].ToString(),
+                                    IdMarca = Convert.ToInt32(dr["IdMarca"]),
+                                    IdIVA = Convert.ToInt32(dr["IdIVA"]),
+                                    IdCategoria = Convert.ToInt32(dr["IdCategoria"]),
+                                    IdUnidad = Convert.ToInt32(dr["IdUnidad"]),
+                                    PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
+                                    Activo = Convert.ToBoolean(dr["Activo"])
+                                });
+                        }
+
+                        dr.Close();
+
+                        foreach (var producto in productos)
+                        {
+                            string dvh =
+                                GenerarDVHProducto(producto);
+
+                            string update =
+                            @"UPDATE Producto
+                      SET DVH = @DVH
+                      WHERE IdProducto = @IdProducto";
+
+                            using (SqlCommand cmdUpdate =
+                                new SqlCommand(update, conexion))
+                            {
+                                cmdUpdate.Parameters.AddWithValue(
+                                    "@DVH", dvh);
+
+                                cmdUpdate.Parameters.AddWithValue(
+                                    "@IdProducto",
+                                    producto.IdProducto);
+
+                                cmdUpdate.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

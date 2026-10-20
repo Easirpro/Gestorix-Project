@@ -1,6 +1,7 @@
-﻿using CapaEntidades.NegocioEntidad;
-using CapaLogica.NegocioLogica;
+﻿using CapaDatos.NegocioDatos;
+using CapaEntidades.NegocioEntidad;
 using CapaLogica.BitacoraLogi;
+using CapaLogica.NegocioLogica;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -53,6 +54,7 @@ namespace CapaVista
         {
             try
             {
+                ClsProductoDatos datos = new ClsProductoDatos();datos.RecalcularDVHProductos();
                 CargarMarcas();
                 CargarCategorias();
                 CargarUnidades();

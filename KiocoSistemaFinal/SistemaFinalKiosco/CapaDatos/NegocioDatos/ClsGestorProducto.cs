@@ -1,4 +1,5 @@
-﻿using CapaEntidades.NegocioEntidad;
+﻿using CapaDatos.SistemaKiosco;
+using CapaEntidades.NegocioEntidad;
 using Microsoft.Data.SqlClient;
 using SistemaKiosco;
 using System;
@@ -7,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 namespace CapaDatos.NegocioDatos
@@ -33,6 +35,7 @@ namespace CapaDatos.NegocioDatos
         }
         public int RegistrarProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
+            string dvh =GenerarDVHProducto(producto);
             using (SqlConnection conexion = cn.ObtenerConexion())
 
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarProducto", conexion))
@@ -48,6 +51,7 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
                 cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
                 cmd.Parameters.AddWithValue("@Activo", true);
+                cmd.Parameters.AddWithValue("@DVH", dvh);
 
                 conexion.Open();
 
@@ -764,6 +768,22 @@ namespace CapaDatos.NegocioDatos
             {
                 return false;
             }
+        }
+        private string GenerarDVHProducto(ClsGestorEntidadProducto.ClsProducto producto)
+        {
+            string cadena =
+                producto.CodigoBarra +
+                producto.SKU +
+                producto.Nombre +
+                producto.Descripcion +
+                producto.IdMarca +
+                producto.IdIVA +
+                producto.IdCategoria +
+                producto.IdUnidad +
+                producto.PrecioVenta;
+
+            return ClsDigitoVerificador
+                .GenerarHash(cadena);
         }
     }
 }

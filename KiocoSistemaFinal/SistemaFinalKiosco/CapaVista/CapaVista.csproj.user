@@ -11,6 +11,9 @@
     <Compile Update="frmAgregarArticuloCompra.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frmBitacora.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frmBuscarArticulo.cs">
       <SubType>Form</SubType>
     </Compile>
