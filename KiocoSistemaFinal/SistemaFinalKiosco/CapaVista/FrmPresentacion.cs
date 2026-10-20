@@ -17,7 +17,7 @@ namespace CapaVista
 {
     public partial class frmmenuPres : Form
     {
-        public int IdRol { get; set; }
+        private bool idiomaIngles = false;
 
         private decimal subtotal = 0.00m;
         private decimal descuentoRecargo = 0.00m;
@@ -56,6 +56,208 @@ namespace CapaVista
 
             RellenarFilas();
             CalcularYMostrarMontos();
+        }
+
+        private void AplicarIdioma()
+        {
+            // ===== MENÚ PRINCIPAL =====
+            btnArt.Text = idiomaIngles ? "Products" : "Artículos";
+            btnVentas.Text = idiomaIngles ? "Sales" : "Ventas";
+            btnCompras.Text = idiomaIngles ? "Purchases" : "Compras";
+            btnProve.Text = idiomaIngles ? "Suppliers" : "Proveedores";
+            toolStripMenuItem1.Text = idiomaIngles ? "Lists" : "Listados";
+            btnInformes.Text = idiomaIngles ? "Reports" : "Informes";
+            btnCaja.Text = idiomaIngles ? "Cash Register" : "Caja";
+            btnAjuste.Text = idiomaIngles ? "Settings" : "Ajustes";
+            btnAyuda.Text = idiomaIngles ? "Help" : "Ayuda";
+            btnEmpleado.Text = idiomaIngles ? "Employees" : "Empleado";
+            toolStripMenuItem2.Text = idiomaIngles ? "Promotions" : "Promociones";
+
+            // ===== ARTÍCULOS =====
+            cargarArticuloNuevoToolStripMenuItem.Text =
+                idiomaIngles ? "Add New Product" : "Cargar artículo nuevo";
+
+            menuitemAdmistradorarticulos.Text =
+                idiomaIngles ? "Edit Product" : "Modificar artículo";
+
+            menuitemAdministradoarticulos.Text =
+                idiomaIngles ? "Add Category" : "Agregar categoría";
+
+            meniitemReporapida.Text =
+                idiomaIngles ? "Quick Stock Replenishment" : "Reposición rápida de stock";
+
+            cargaRapidaDePreciosToolStripMenuItem.Text =
+                idiomaIngles ? "Quick Price Update" : "Carga rápida de precios";
+
+            cargarDeLasMarcasToolStripMenuItem.Text =
+                idiomaIngles ? "Load Brands" : "Cargar de las marcas";
+
+            menuitemImporexcel.Text =
+                idiomaIngles ? "Import Products from Excel" : "Importar artículos desde Excel";
+
+            menuitemExporexcel.Text =
+                idiomaIngles ? "Export Products to Excel" : "Exportar artículos a Excel";
+
+            // ===== VENTAS =====
+            menuitemAdministradorventas.Text =
+                idiomaIngles ? "Sales Management" : "Administrador de ventas";
+
+            notaDeCreditoToolStripMenuItem.Text =
+                idiomaIngles ? "Returns" : "Devolución";
+
+            // ===== COMPRAS =====
+            menuitemAministradorcompras.Text =
+                idiomaIngles ? "Purchase Management" : "Administrador de compras";
+
+            // ===== PROVEEDORES =====
+            administradorDeProveedoresToolStripMenuItem.Text =
+                idiomaIngles ? "Supplier Management" : "Administrador de proveedores";
+
+            cuentaCorrienteDeProveedoresToolStripMenuItem.Text =
+                idiomaIngles ? "Supplier Account" : "Cuenta corriente de proveedores";
+
+            // ===== LISTADOS =====
+            listaDePreciosToolStripMenuItem.Text =
+                idiomaIngles ? "Price List" : "Lista de precios";
+
+            listadoDeReposiciónToolStripMenuItem.Text =
+                idiomaIngles ? "Restocking List" : "Listado de reposición";
+
+            // ===== INFORMES =====
+            ventasPorDiaToolStripMenuItem.Text =
+                idiomaIngles ? "Sales by Date" : "Ventas por fecha";
+
+            ventaToolStripMenuItem.Text =
+                idiomaIngles ? "Sales Details by Date" : "Venta con detalle de fecha";
+
+            ventaPorRubroToolStripMenuItem.Text =
+                idiomaIngles ? "Sales by Category" : "Venta por rubro";
+
+            ventaPorArticulosToolStripMenuItem.Text =
+                idiomaIngles ? "Sales by Product" : "Venta por artículos";
+
+            ventaPorMedioDePagoToolStripMenuItem.Text =
+                idiomaIngles ? "Sales by Payment Method" : "Venta por medio de pago";
+
+            ajustesToolStripMenuItem.Text =
+                idiomaIngles ? "Settings" : "Ajustes";
+
+            // ===== CAJA =====
+            nuevoIngresoToolStripMenuItem.Text =
+                idiomaIngles ? "New Deposit" : "Nuevo ingreso";
+
+            nuevoEgresoToolStripMenuItem.Text =
+                idiomaIngles ? "New Withdrawal" : "Nuevo egreso";
+
+            cerrarSeToolStripMenuItem.Text =
+                idiomaIngles ? "Close Cash Register" : "Cerrar caja";
+
+            abrirCajaToolStripMenuItem.Text =
+                idiomaIngles ? "Open Cash Register" : "Abrir caja";
+
+            // ===== AJUSTES E IDIOMA =====
+            idiomaToolStripMenuItem.Text =
+                idiomaIngles ? "Language" : "Idioma";
+
+            inglesToolStripMenuItem.Text =
+                idiomaIngles ? "Spanish" : "English";
+
+            // ===== EMPLEADOS =====
+            permisosToolStripMenuItem.Text =
+                idiomaIngles ? "Employees" : "Empleado";
+
+            gestioToolStripMenuItem.Text =
+                idiomaIngles ? "Backup Management" : "Gestión de Backup";
+
+            bitacoraToolStripMenuItem.Text =
+                idiomaIngles ? "Activity Log" : "Bitácora";
+
+            // ===== PROMOCIONES =====
+            administrarPromocionesToolStripMenuItem.Text =
+                idiomaIngles ? "Manage Promotions" : "Administrar promociones";
+
+            btnPromocion.Text =
+                idiomaIngles ? "Promotions" : "Promociones";
+
+            // ===== BOTONES DE VENTA =====
+            btnCobrar.Text =
+                idiomaIngles ? "F2 - Pay" : "F2 - Cobrar";
+
+            btnNuevaCompra.Text =
+                idiomaIngles ? "F4 - New Purchase" : "F4 - Nueva Compra";
+
+            btnVerPrecio.Text =
+                idiomaIngles ? "F5 - View Price" : "F5 - Ver Precio";
+
+            btnCambiarcantidad.Text =
+                idiomaIngles ? "Change Quantity" : "Cambiar cantidad";
+
+            btnBuscarArticulo.Text =
+                idiomaIngles ? "Search Product" : "Buscar artículo";
+
+            btnQuitar.Text =
+                idiomaIngles ? "Remove" : "Quitar";
+
+            btnDescuento.Text =
+                idiomaIngles ? "Discount" : "Descuento";
+
+            btnRecargo.Text =
+                idiomaIngles ? "Surcharge" : "Recargo";
+
+            // ===== ETIQUETAS DE PRODUCTOS =====
+            label3.Text =
+                idiomaIngles ? "Barcode" : "Código de barras";
+
+            label4.Text =
+                idiomaIngles ? "Quantity" : "Cantidad";
+
+            // ===== TOTALES =====
+            label1.Text =
+                idiomaIngles ? "Subtotal" : "Subtotal";
+
+            label2.Text =
+                idiomaIngles ? "Discount/Surcharge" : "Descuento/Recargo";
+
+            label5.Text =
+                idiomaIngles ? "Total" : "Total";
+
+            // ===== DATOS DEL USUARIO =====
+            label6.Text =
+                idiomaIngles ? "User:" : "Usuario:";
+
+            label7.Text =
+                idiomaIngles ? "Role:" : "Rol:";
+
+            lblFecha.Text =
+                idiomaIngles ? "Date:" : "Fecha:";
+
+            lblHora.Text =
+                idiomaIngles ? "Time:" : "Hora:";
+
+            // ===== COLUMNAS DE LA TABLA =====
+            ClnSKU.HeaderText = "SKU";
+
+            ClnIdProducto.HeaderText =
+                idiomaIngles ? "Product ID" : "IdProducto";
+
+            ClnCodigo.HeaderText =
+                idiomaIngles ? "Code" : "Código";
+
+            ClnDescripcion.HeaderText =
+                idiomaIngles ? "Description" : "Descripción";
+
+            ClnCantidad.HeaderText =
+                idiomaIngles ? "Quantity" : "Cantidad";
+
+            ClnPrecioUnitario.HeaderText =
+                idiomaIngles ? "Unit Price" : "Precio Unitario";
+
+            ClnImporte.HeaderText =
+                idiomaIngles ? "Amount" : "Importe";
+
+            // ===== FORMULARIO =====
+            this.Text =
+                idiomaIngles ? "Sales Terminal" : "Presentación";
         }
 
         #region Metodo
@@ -927,7 +1129,7 @@ namespace CapaVista
             frmGestionBackup frm = new frmGestionBackup();
             frm.ShowDialog();
         }
-        private void FrmPresentacion_Load(object sender,EventArgs e)
+        private void FrmPresentacion_Load(object sender, EventArgs e)
         {
             // backup automatico
 
@@ -939,7 +1141,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    ex.Message,"Error", MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -989,6 +1191,11 @@ namespace CapaVista
             bitacora.ShowDialog();
         }
 
+        private void idiomaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            idiomaIngles = !idiomaIngles;
+            AplicarIdioma();
+        }
     }
 
 }

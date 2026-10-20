@@ -14,7 +14,7 @@ namespace CapaVista
     {
         private clsBitacoraLogica logica = new clsBitacoraLogica();
         private string categoriaActual = string.Empty;
-
+        private bool registrandoError = false;
 
         public frmBitacora()
         {
@@ -33,7 +33,11 @@ namespace CapaVista
             this.dgvBitacora.AllowUserToDeleteRows = false;
             this.dgvBitacora.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             this.dgvBitacora.MultiSelect = false;
-            this.dgvBitacora.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvBitacora.ScrollBars = ScrollBars.Both;
+            this.dgvBitacora.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvBitacora.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            this.dgvBitacora.AllowUserToResizeColumns = true;
+            this.dgvBitacora.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             this.dtpFechaDesde.Value = DateTime.Today.AddDays(-30);
             this.dtpFechaHasta.Value = DateTime.Today;
             this.lblCategoriaActual.Text = "Todos los registros";
@@ -42,8 +46,8 @@ namespace CapaVista
         {
             this.btnUsuario.Click += btnUsuario_Click;
             this.btnSeguridad.Click += btnSeguridad_Click;
-            this.btnProductosStock.Click += btnProductosStock_Click;
-            this.btnVentasPagos.Click += btnVentasPagos_Click;
+            //this.btnProductosStock.Click += btnProductosStock_Click;
+            //this.btnVentasPagos.Click += btnVentasPagos_Click;
             this.btnPromociones.Click += btnPromociones_Click;
             this.btnErrores.Click += btnErrores_Click;
             this.btnFiltrar.Click += btnFiltrar_Click;
@@ -54,25 +58,62 @@ namespace CapaVista
         }
         private void CargarBitacora()
         {
-            this.dgvBitacora.DataSource = null;
-            this.dgvBitacora.Rows.Clear();
-            this.LimpiarDetalles();
+            this.categoriaActual = string.Empty;
+            this.AplicarFiltros();
         }
-        private void ConsultarBitacora(DateTime? fechaDesde, DateTime? fechaHasta, string categoria, string buscar)
+
+        private void ConsultarBitacora(
+            DateTime? fechaDesde,
+            DateTime? fechaHasta,
+            string categoria,
+            string buscar)
         {
             try
             {
-                DataTable tabla = this.logica.ObtenerBitacora(fechaDesde, fechaHasta, categoria, buscar);
+                DataTable tabla;
 
-                this.dgvBitacora.DataSource = tabla;
+                if (categoria == "Errores")
+                    tabla = logica.ObtenerErrores(fechaDesde, fechaHasta, buscar, null);
+                else
+                    tabla = logica.ObtenerBitacora(fechaDesde, fechaHasta, categoria, buscar);
 
+                dgvBitacora.DataSource = tabla;
                 ConfigurarColumnas();
                 LimpiarDetalles();
+
+                if (dgvBitacora.Rows.Count > 0)
+                    dgvBitacora.ClearSelection();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo cargar la bitácora.\n\n" + ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!registrandoError)
+                {
+                    registrandoError = true;
+
+                    try
+                    {
+                        logica.RegistrarError(
+                            null,
+                            "frmBitacora.ConsultarBitacora",
+                            ex.GetType().FullName,
+                            ex.Message,
+                            ex.ToString());
+                    }
+                    catch (Exception exRegistro)
+                    {
+                        System.Diagnostics.Debug.WriteLine(exRegistro.ToString());
+                    }
+                    finally
+                    {
+                        registrandoError = false;
+                    }
+                }
+
+                MessageBox.Show(
+                    "No se pudieron cargar los registros.\n\n" + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
         private void ConfigurarColumnas()
@@ -81,6 +122,12 @@ namespace CapaVista
             {
                 this.dgvBitacora.Columns["IdBitacora"].HeaderText = "N.º";
                 this.dgvBitacora.Columns["IdBitacora"].FillWeight = 45;
+            }
+
+            if (this.dgvBitacora.Columns.Contains("IdError"))
+            {
+                this.dgvBitacora.Columns["IdError"].HeaderText = "N.º";
+                this.dgvBitacora.Columns["IdError"].FillWeight = 45;
             }
 
             if (this.dgvBitacora.Columns.Contains("IdUsuario"))
@@ -119,6 +166,33 @@ namespace CapaVista
             {
                 this.dgvBitacora.Columns["Descripcion"].HeaderText = "Descripción";
             }
+
+            if (this.dgvBitacora.Columns.Contains("Modulo"))
+            {
+                this.dgvBitacora.Columns["Modulo"].HeaderText = "Módulo";
+            }
+
+            if (this.dgvBitacora.Columns.Contains("TipoExcepcion"))
+            {
+                this.dgvBitacora.Columns["TipoExcepcion"].HeaderText = "Tipo de excepción";
+            }
+
+            if (this.dgvBitacora.Columns.Contains("Mensaje"))
+            {
+                this.dgvBitacora.Columns["Mensaje"].HeaderText = "Mensaje";
+            }
+
+            if (this.dgvBitacora.Columns.Contains("DetalleTecnico"))
+            {
+                this.dgvBitacora.Columns["DetalleTecnico"].Visible = false;
+            }
+
+            if (this.dgvBitacora.Columns.Contains("Estado"))
+            {
+                this.dgvBitacora.Columns["Estado"].HeaderText = "Estado";
+            }
+
+            this.dgvBitacora.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
         }
         private void AplicarFiltros()
         {
@@ -143,11 +217,32 @@ namespace CapaVista
 
             this.lblDetalleFecha.Text = "Fecha: " + ObtenerValor(fila, "FechaHora");
 
-            this.lblDetalleUsuario.Text = "Usuario: " + ObtenerValor(fila, "Username");
+            if (this.categoriaActual == "Errores")
+            {
+                this.lblDetalleUsuario.Text = "ID usuario: " + ObtenerValor(fila, "IdUsuario");
 
-            this.lblDetalleAccion.Text = "Acción: " + ObtenerValor(fila, "Accion");
+                this.lblDetalleAccion.Text = "Excepción: " + ObtenerValor(fila, "TipoExcepcion");
 
-            this.lblDetalleDescripcion.Text = "Descripción: " + ObtenerValor(fila, "Descripcion");
+                string mensaje = ObtenerValor(fila, "Mensaje");
+                string detalle = ObtenerValor(fila, "DetalleTecnico");
+                string estado = ObtenerValor(fila, "Estado");
+                string modulo = ObtenerValor(fila, "Modulo");
+
+                this.lblDetalleDescripcion.Text =
+                    "Módulo: " + modulo +
+                    Environment.NewLine +
+                    "Estado: " + estado +
+                    Environment.NewLine +
+                    "Mensaje: " + mensaje +
+                    Environment.NewLine +
+                    "Detalle técnico: " + detalle;
+            }
+            else
+            {
+                this.lblDetalleUsuario.Text = "Usuario: " + ObtenerValor(fila, "Username");
+                this.lblDetalleAccion.Text = "Acción: " + ObtenerValor(fila, "Accion");
+                this.lblDetalleDescripcion.Text = "Descripción: " + ObtenerValor(fila, "Descripcion");
+            }
         }
         private string ObtenerValor(DataGridViewRow fila, string columna)
         {
@@ -245,6 +340,5 @@ namespace CapaVista
 
         }
 
-   
     }
 }

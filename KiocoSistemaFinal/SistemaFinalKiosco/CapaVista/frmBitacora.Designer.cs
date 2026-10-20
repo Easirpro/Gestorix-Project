@@ -12,8 +12,6 @@
         private System.Windows.Forms.Label lblSubtitulo;
         private System.Windows.Forms.Panel pnlCategorias;
         private System.Windows.Forms.Button btnUsuario;
-        private System.Windows.Forms.Button btnProductosStock;
-        private System.Windows.Forms.Button btnVentasPagos;
         private System.Windows.Forms.Button btnPromociones;
         private System.Windows.Forms.Button btnErrores;
         private System.Windows.Forms.Panel pnlFiltros;
@@ -66,8 +64,6 @@
             btnErrores = new Button();
             btnPromociones = new Button();
             btnUsuario = new Button();
-            btnVentasPagos = new Button();
-            btnProductosStock = new Button();
             pnlFiltros = new Panel();
             lblBuscar = new Label();
             txtBuscar = new TextBox();
@@ -139,8 +135,6 @@
             pnlCategorias.Controls.Add(btnErrores);
             pnlCategorias.Controls.Add(btnPromociones);
             pnlCategorias.Controls.Add(btnUsuario);
-            pnlCategorias.Controls.Add(btnVentasPagos);
-            pnlCategorias.Controls.Add(btnProductosStock);
             pnlCategorias.Dock = DockStyle.Top;
             pnlCategorias.Location = new Point(0, 70);
             pnlCategorias.Name = "pnlCategorias";
@@ -156,7 +150,7 @@
             btnCompras.FlatStyle = FlatStyle.Flat;
             btnCompras.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnCompras.ForeColor = Color.White;
-            btnCompras.Location = new Point(602, 16);
+            btnCompras.Location = new Point(310, 16);
             btnCompras.Name = "btnCompras";
             btnCompras.Size = new Size(130, 40);
             btnCompras.TabIndex = 7;
@@ -188,7 +182,7 @@
             btnErrores.FlatStyle = FlatStyle.Flat;
             btnErrores.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnErrores.ForeColor = Color.White;
-            btnErrores.Location = new Point(874, 16);
+            btnErrores.Location = new Point(582, 16);
             btnErrores.Name = "btnErrores";
             btnErrores.Size = new Size(130, 40);
             btnErrores.TabIndex = 5;
@@ -204,7 +198,7 @@
             btnPromociones.FlatStyle = FlatStyle.Flat;
             btnPromociones.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnPromociones.ForeColor = Color.White;
-            btnPromociones.Location = new Point(738, 16);
+            btnPromociones.Location = new Point(446, 16);
             btnPromociones.Name = "btnPromociones";
             btnPromociones.Size = new Size(130, 40);
             btnPromociones.TabIndex = 4;
@@ -227,36 +221,6 @@
             btnUsuario.Text = "Usuarios ";
             btnUsuario.UseVisualStyleBackColor = false;
             btnUsuario.Click += btnUsuario_Click;
-            // 
-            // btnVentasPagos
-            // 
-            btnVentasPagos.BackColor = Color.FromArgb(52, 73, 94);
-            btnVentasPagos.Cursor = Cursors.Hand;
-            btnVentasPagos.FlatAppearance.BorderSize = 0;
-            btnVentasPagos.FlatStyle = FlatStyle.Flat;
-            btnVentasPagos.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnVentasPagos.ForeColor = Color.White;
-            btnVentasPagos.Location = new Point(456, 16);
-            btnVentasPagos.Name = "btnVentasPagos";
-            btnVentasPagos.Size = new Size(140, 40);
-            btnVentasPagos.TabIndex = 3;
-            btnVentasPagos.Text = "Ventas y Pagos";
-            btnVentasPagos.UseVisualStyleBackColor = false;
-            // 
-            // btnProductosStock
-            // 
-            btnProductosStock.BackColor = Color.FromArgb(52, 73, 94);
-            btnProductosStock.Cursor = Cursors.Hand;
-            btnProductosStock.FlatAppearance.BorderSize = 0;
-            btnProductosStock.FlatStyle = FlatStyle.Flat;
-            btnProductosStock.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnProductosStock.ForeColor = Color.White;
-            btnProductosStock.Location = new Point(310, 16);
-            btnProductosStock.Name = "btnProductosStock";
-            btnProductosStock.Size = new Size(140, 40);
-            btnProductosStock.TabIndex = 1;
-            btnProductosStock.Text = "Productos y Stock";
-            btnProductosStock.UseVisualStyleBackColor = false;
             // 
             // pnlFiltros
             // 
