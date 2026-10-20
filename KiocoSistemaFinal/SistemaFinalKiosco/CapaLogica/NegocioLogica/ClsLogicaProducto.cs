@@ -1,6 +1,9 @@
 ﻿using CapaDatos.NegocioDatos;
+using CapaEntidades;
 using CapaEntidades.NegocioEntidad;
+using CapaLogica.BitacoraLogi;
 using Microsoft.Data.SqlClient;
+using SistemaKiosco;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,11 +16,90 @@ namespace CapaLogica.NegocioLogica
 {
     public partial class ClsLogicaProducto
     {
+        private clsBitacoraLogica bitacora = new clsBitacoraLogica();
         CapaDatos.NegocioDatos.ClsProductoDatos datos = new CapaDatos.NegocioDatos.ClsProductoDatos();
+
+
 
         public int RegistrarProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
-            return datos.RegistrarProducto(producto);
+            int idProducto = this.datos.RegistrarProducto(producto);
+
+            if (idProducto > 0)
+            {
+                this.RegistrarEventoBitacora(
+                    "CREAR",
+                    "Producto",
+                    idProducto,
+                    "Se creó el producto: " + producto.Nombre
+                );
+            }
+
+            return idProducto;
+        }
+        public bool ModificarProducto(ClsGestorEntidadProducto.ClsProducto producto)
+        {
+            bool modificado = this.datos.ModificarProducto(producto);
+
+            if (modificado)
+            {
+                this.RegistrarEventoBitacora(
+                    "MODIFICAR",
+                    "Producto",
+                    producto.IdProducto,
+                    "Se modificó el producto: " + producto.Nombre
+                );
+            }
+
+            return modificado;
+        }
+        public bool EliminarProducto(int idProducto)
+        {
+            bool eliminado = this.datos.EliminarProducto(idProducto);
+
+            if (eliminado)
+            {
+                this.RegistrarEventoBitacora(
+                    "ELIMINAR",
+                    "Producto",
+                    idProducto,
+                    "Se eliminó el producto con ID " + idProducto
+                );
+            }
+
+            return eliminado;
+        }
+        public bool DescontinuarProducto(int idProducto)
+        {
+            bool descontinuado = this.datos.DescontinuarProducto(idProducto);
+
+            if (descontinuado)
+            {
+                this.RegistrarEventoBitacora(
+                    "DISCONTINUAR",
+                    "Producto",
+                    idProducto,
+                    "Se discontinuó el producto con ID " + idProducto
+                );
+            }
+
+            return descontinuado;
+        }
+        public bool ActivarProducto(int idProducto)
+        {
+            bool activado = this.datos.ActivarProducto(idProducto);
+
+            if (activado)
+            {
+                this.RegistrarEventoBitacora(
+                    "ACTIVAR",
+                    "Producto",
+                    idProducto,
+                    "Se reactivó el producto con ID " + idProducto
+                );
+            }
+
+            return activado;
         }
         public int ObtenerProximoSKU()
         {
@@ -111,10 +193,6 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ObtenerProductoPorId(idProducto);
         }
-        public bool ModificarProducto(ClsGestorEntidadProducto.ClsProducto producto)
-        {
-            return datos.ModificarProducto(producto);
-        }
         public DataTable CargarArticulos()
         {
             return datos.CargarArticulos();
@@ -147,18 +225,6 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ModificarProductoSucursalProveedor(relacion);
         }
-        public bool EliminarProducto(int idProducto)
-        {
-            return datos.EliminarProducto(idProducto);
-        }
-        public bool DescontinuarProducto(int idProducto)
-        {
-            return datos.DescontinuarProducto(idProducto);
-        }
-        public bool ActivarProducto(int idProducto)
-        {
-            return datos.ActivarProducto(idProducto);
-        }
         public DataTable BuscarProductoPorCodigoOSku(string texto)
         {
             return datos.BuscarProductoPorCodigoOSku(texto);
@@ -170,6 +236,24 @@ namespace CapaLogica.NegocioLogica
         public bool ModificarStock(int idProducto, decimal cantidadActual, decimal stockMinimo, decimal stockIdeal)
         {
             return datos.ModificarStock(idProducto, cantidadActual, stockMinimo, stockIdeal);
+        }
+        private void RegistrarEventoBitacora(string accion, string tablaAfectada, int? idRegistroAfectado, string descripcion)
+        {
+            try
+            {
+                this.bitacora.RegistrarBitacora(
+                    SesionUsuario.IdUsuario,
+                    accion,
+                    tablaAfectada,
+                    idRegistroAfectado,
+                    descripcion
+                );
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error al registrar la bitácora: " + ex.ToString()
+                );
+            }
         }
 
 
@@ -279,20 +363,29 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ObtenerIdSucursalImportacion(nombreProveedor, nombreSucursal, conexion, transaccion);
         }
-
-
         public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal)
         {
             return datos.ObtenerIdSucursalImportacion(nombreProveedor, nombreSucursal);
         }
-
-        public void ImportarProductos(
-            List<ClsGestorEntidadProducto.ClsProducto> productos,
-            List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto> proveedoresCostos,
-            Dictionary<string, DateTime?> fechasVencimiento)
+        public void ImportarProductos(List<ClsGestorEntidadProducto.ClsProducto> productos, List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto> proveedoresCostos, Dictionary<string, DateTime?> fechasVencimiento)
         {
-            datos.ImportarProductos(productos, proveedoresCostos, fechasVencimiento);
+            this.datos.ImportarProductos(
+                productos,
+                proveedoresCostos,
+                fechasVencimiento
+            );
+
+            if (productos != null && productos.Count > 0)
+            {
+                this.RegistrarEventoBitacora(
+                    "IMPORTAR",
+                    "Producto",
+                    null,
+                    "Se importaron " + productos.Count + " productos."
+                );
+            }
         }
+
 
     }
 }

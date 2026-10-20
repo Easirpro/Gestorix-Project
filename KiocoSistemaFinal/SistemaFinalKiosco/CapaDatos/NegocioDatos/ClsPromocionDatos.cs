@@ -3,6 +3,8 @@ using Microsoft.Data.SqlClient;
 using SistemaKiosco;
 using System.Collections.Generic;
 using System.Data;
+using System;
+using System.Linq;
 
 namespace CapaDatos.NegocioDatos
 {
@@ -74,6 +76,12 @@ namespace CapaDatos.NegocioDatos
                             cmd.Parameters.Add("@FechaInicio", SqlDbType.DateTime2).Value = promocion.FechaInicio;
                             cmd.Parameters.Add("@FechaFin", SqlDbType.DateTime2).Value = promocion.FechaFin.HasValue ? promocion.FechaFin.Value : DBNull.Value;
                             cmd.Parameters.Add("@Activo", SqlDbType.Bit).Value = promocion.Activo;
+                            cmd.Parameters.Add("@EsRecurrente", SqlDbType.Bit).Value = promocion.EsRecurrente;
+                            cmd.Parameters.Add("@HoraInicio", SqlDbType.Time).Value = promocion.HoraInicio;
+                            cmd.Parameters.Add("@HoraFin", SqlDbType.Time).Value = promocion.HoraFin;
+                            string diasSemana = promocion.EsRecurrente ? string.Join(",", promocion.DiasSeleccionados.Select(d => (int)d)) : null;
+                            cmd.Parameters.Add("@DiasSemana", SqlDbType.NVarChar, 50).Value = (object)diasSemana ?? DBNull.Value;
+
 
                             SqlParameter parametroId = cmd.Parameters.Add("@IdPromocion", SqlDbType.Int);
 
@@ -222,6 +230,13 @@ namespace CapaDatos.NegocioDatos
                             cmd.Parameters.Add("@FechaInicio", SqlDbType.DateTime2).Value = promocion.FechaInicio;
                             cmd.Parameters.Add("@FechaFin", SqlDbType.DateTime2).Value = promocion.FechaFin.HasValue ? (object)promocion.FechaFin.Value : DBNull.Value;
                             cmd.Parameters.Add("@Activo", SqlDbType.Bit).Value = promocion.Activo;
+                            cmd.Parameters.Add("@EsRecurrente", SqlDbType.Bit).Value = promocion.EsRecurrente;
+                            cmd.Parameters.Add("@HoraInicio", SqlDbType.Time).Value = promocion.HoraInicio;
+                            cmd.Parameters.Add("@HoraFin", SqlDbType.Time).Value = promocion.HoraFin;
+                            string diasSemana = promocion.EsRecurrente ? string.Join(",", promocion.DiasSeleccionados.Select(d => (int)d)) : null;
+                            cmd.Parameters.Add("@DiasSemana", SqlDbType.NVarChar, 50) .Value = (object)diasSemana ?? DBNull.Value;
+
+
 
                             cmd.ExecuteNonQuery();
                         }

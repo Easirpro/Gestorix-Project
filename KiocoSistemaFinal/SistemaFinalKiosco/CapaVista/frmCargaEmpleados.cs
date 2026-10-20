@@ -7,6 +7,8 @@ using SistemaKiosco;
 using System.ComponentModel;
 using System.Data;
 using static CapaLogica.ClsValidarNumero;
+using CapaLogica.BitacoraLogi;
+using CapaSesion;
 
 
 namespace CapaVista
@@ -1015,7 +1017,7 @@ namespace CapaVista
         {
             try
             {
-                if (lstUsuarios.SelectedValue == null || lstUsuarios.SelectedValue is DataRowView)
+                if (lstUsuarios.SelectedValue == null || !int.TryParse(lstUsuarios.SelectedValue.ToString(), out int idPersonaSeleccionada))
                 {
                     MessageBox.Show("Seleccione un usuario para modificar.", "Aviso",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1023,7 +1025,7 @@ namespace CapaVista
                     return;
                 }
 
-                int idPersona = Convert.ToInt32(lstUsuarios.SelectedValue);
+                int idPersona = idPersonaSeleccionada;
 
                 if (cmbGenero.SelectedValue == null || !int.TryParse(cmbGenero.SelectedValue.ToString(), out int idGenero) || idGenero <= 0)
                 {
@@ -1120,6 +1122,10 @@ namespace CapaVista
 
                 huboCambios = huboCambios || permisosModificados;
 
+                bool estadoAnterior = personaOriginal.Activo;
+                bool estadoNuevo = chkActivo.Checked;
+
+
                 if (!huboCambios)
                 {
                     MessageBox.Show("No realizó ningún cambio. Modifique algún dato antes de guardar.",
@@ -1158,8 +1164,60 @@ namespace CapaVista
                 {
                     return;
                 }
+                string accionBitacora;
 
-                MessageBox.Show( permisosModificados ? "Los cambios se guardaron correctamente." : "Los datos se modificaron correctamente.",
+                if (estadoAnterior && !estadoNuevo)
+                {
+                    accionBitacora = "BAJA";
+                }
+                else if (!estadoAnterior && estadoNuevo)
+                {
+                    accionBitacora = "REACTIVAR";
+                }
+                else
+                {
+                    accionBitacora = "MODIFICAR";
+                }
+
+                ClsUsuarioLogica logicaUsuario = new ClsUsuarioLogica();
+
+                DataRowView filaSeleccionada = lstUsuarios.SelectedItem as DataRowView;
+
+                if (filaSeleccionada == null)
+                {
+                    throw new Exception("No se pudo identificar el usuario seleccionado.");
+                }
+
+                string usernameAfectado = filaSeleccionada["Username"].ToString();
+
+                int idUsuarioAfectado = logicaUsuario.ObtenerIdUsuario(usernameAfectado);
+
+                if (idUsuarioAfectado <= 0)
+                {
+                    throw new Exception("No se pudo obtener el ID del usuario afectado.");
+                }
+
+                clsBitacoraLogica bitacora = new clsBitacoraLogica();
+
+                string descripcionBitacora;
+
+                if (accionBitacora == "BAJA")
+                {
+                    descripcionBitacora = "Baja lógica del usuario: " + usernameAfectado;
+                }
+                else if (accionBitacora == "REACTIVAR")
+                {
+                    descripcionBitacora = "Reactivación del usuario: " + usernameAfectado;
+                }
+                else
+                {
+                    descripcionBitacora = "Modificación de datos del usuario: " + usernameAfectado;
+                }
+
+                bitacora.RegistrarBitacora(SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null, accionBitacora,
+                    "Usuario", idUsuarioAfectado, descripcionBitacora);
+
+                MessageBox.Show(permisosModificados ? "Los cambios se guardaron correctamente." : "Los datos se modificaron correctamente.",
                     "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 permisosModificados = false;
@@ -1182,10 +1240,20 @@ namespace CapaVista
         }
         private void btnPermisos_Click(object sender, EventArgs e)
         {
-            if (lstUsuarios.SelectedValue == null || lstUsuarios.SelectedValue is DataRowView)
+
+            if (string.IsNullOrWhiteSpace(txtDNI.Text) || lstUsuarios.SelectedValue == null || lstUsuarios.SelectedValue is DataRowView || Convert.ToInt32(lstUsuarios.SelectedValue) <= 0)
             {
-                MessageBox.Show("Seleccione un empleado.", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                using (frmPermisos permiso = new frmPermisos(true))
+                {
+                    permiso.ShowDialog();
+
+                    if (permiso.IdRolSeleccionado > 0)
+                    {
+                        idRolSeleccionado = permiso.IdRolSeleccionado;
+                        permisosModificados = permiso.PermisosModificados;
+                        txtRolActual.Text = permiso.IdRolSeleccionado.ToString();
+                    }
+                }
 
                 return;
             }
@@ -1193,22 +1261,22 @@ namespace CapaVista
             int idPersona = Convert.ToInt32(lstUsuarios.SelectedValue);
 
             ClsUsuarioLogica usuario = new ClsUsuarioLogica();
-
             int idRol = usuario.ObtenerIdRolPorPersona(idPersona);
 
             if (idRol <= 0)
             {
                 MessageBox.Show("El empleado no tiene un rol asignado.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                 return;
             }
 
-            frmPermisos permiso = new frmPermisos(idRol);
-            permiso.ShowDialog();
+            using (frmPermisos permiso = new frmPermisos(idRol))
+            {
+                permiso.ShowDialog();
 
-            permisosModificados = permiso.PermisosModificados;
-            idRolSeleccionado = permiso.IdRolSeleccionado;
+                permisosModificados = permiso.PermisosModificados;
+                idRolSeleccionado = permiso.IdRolSeleccionado;
+            }
         }
         private void chkHabilitarEdicion_CheckedChanged(object sender, EventArgs e)
         {

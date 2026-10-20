@@ -1,5 +1,6 @@
 ﻿using CapaEntidades;
 using CapaLogica;
+using CapaLogica.BitacoraLogi;
 using CapaSesion;
 using System;
 using System.Collections.Generic;
@@ -33,53 +34,72 @@ namespace CapaVista
 
             if (validoCV.ValidarCamposVacios(txtUser.Text) || validoCV.ValidarCamposVacios(txtPass.Text))
             {
-                MessageBox.Show("Complete todos los campos antes de continuar", "Datos incompletos",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Complete todos los campos antes de continuar", "Datos incompletos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
 
-            ClsLogin login = new ClsLogin();
-
-            bool ingreso = login.IniciarSesion(txtUser.Text, txtPass.Text);
-
-            if (!ingreso)
+            try
             {
-                if (login.UsuarioBloqueado)
+                ClsLogin login = new ClsLogin();
+
+                bool ingreso = login.IniciarSesion(txtUser.Text, txtPass.Text);
+
+                if (!ingreso)
                 {
-                    MessageBox.Show("Usuario bloqueado.","Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (login.UsuarioBloqueado)
+                    {
+                        MessageBox.Show("Usuario bloqueado.", "Acceso denegado",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Usuario o contraseña incorrectos.", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    return;
+                }
+
+                if (SesionUsuario.PrimerIngreso)
+                {
+                    FrmPrimerIngreso primerIngreso = new FrmPrimerIngreso();
+                    AbrirFormularioPrincipal(primerIngreso);
+                    return;
+                }
+
+                ClsPreguntaSeguridadLogica preguntas = new ClsPreguntaSeguridadLogica();
+
+                bool tienePreguntas = preguntas.UsuarioTienePreguntas(SesionUsuario.IdUsuario);
+
+                if (!tienePreguntas)
+                {
+                    frmPreguntasSegu frm = new frmPreguntasSegu();
+                    AbrirFormularioPrincipal(frm);
                 }
                 else
                 {
-                    MessageBox.Show( "Usuario o contraseña incorrectos.", "Error", MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    frmmenuPres frm = new frmmenuPres();
+                    AbrirFormularioPrincipal(frm);
+                }
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    clsBitacoraLogica bitacora = new clsBitacoraLogica();
+
+                    bitacora.RegistrarBitacora(SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null, "ERROR",
+                        "Errores", null, "Error durante el inicio de sesión: " + ex.Message);
+                }
+                catch
+                {
+                    // este carch evita que un fallo al registrar la bitácora oculte el error original.
                 }
 
-                return;
-            }
-
-            if (SesionUsuario.PrimerIngreso)
-            {
-                FrmPrimerIngreso primerIngreso = new FrmPrimerIngreso();
-
-                AbrirFormularioPrincipal(primerIngreso);
-
-                return;
-            }
-
-            ClsPreguntaSeguridadLogica preguntas = new ClsPreguntaSeguridadLogica();
-
-            bool tienePreguntas = preguntas.UsuarioTienePreguntas(SesionUsuario.IdUsuario);
-
-            if (!tienePreguntas)
-            {
-                frmPreguntasSegu frm = new frmPreguntasSegu();
-
-                AbrirFormularioPrincipal(frm);
-            }
-            else
-            {
-                frmmenuPres frm = new frmmenuPres();
-
-                AbrirFormularioPrincipal(frm);
+                MessageBox.Show("Ocurrió un error técnico durante el inicio de sesión. " + "Si el problema continúa, contacte al administrador.", "Error del sistema",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void AbrirFormularioPrincipal(Form formulario)
