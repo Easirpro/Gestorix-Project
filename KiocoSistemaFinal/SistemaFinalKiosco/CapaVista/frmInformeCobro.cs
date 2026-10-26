@@ -98,7 +98,7 @@ namespace CapaVista
 
                 if (yaHayPagos && monto < restante)
                 {
-                    MessageBox.Show($"El importe no alcanza para completar el pago con este método.\n\n" + $"Saldo pendiente: $ {restante:N2}\n" +  $"Importe ingresado: $ {monto:N2}", "Importe insuficiente",
+                    MessageBox.Show($"El importe no alcanza para completar el pago con este método.\n\n" + $"Saldo pendiente: $ {restante:N2}\n" + $"Importe ingresado: $ {monto:N2}", "Importe insuficiente",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtMontoRecibido.SelectAll();
@@ -223,7 +223,7 @@ namespace CapaVista
                 return false;
             }
 
-            HashSet<string> metodosUtilizados = new HashSet<string>( StringComparer.OrdinalIgnoreCase);
+            HashSet<string> metodosUtilizados = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (DataGridViewRow fila in dtgPagos.Rows)
             {
@@ -363,5 +363,9 @@ namespace CapaVista
         #endregion
 
 
+        private void frmInformeCobro_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

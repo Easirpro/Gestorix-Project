@@ -18,12 +18,20 @@ namespace CapaVista
         private ClsLogicaProveedor logicaProveedor = new ClsLogicaProveedor();
         private int idProveedor = 0;
         private DataTable productosEncontrados;
+        private DataTable proveedoresEncontrados;
 
         public frmNuevaCompra(bool mostrarChk)
         {
             InitializeComponent();
 
-            dataGridView1.CellEndEdit += dataGridView1_CellEndEdit_1;
+            dtgNuevaCompra.Columns["Column1"].ReadOnly = true;
+            dtgNuevaCompra.Columns["Column2"].ReadOnly = false;
+            dtgNuevaCompra.Columns["Column3"].ReadOnly = true;
+            dtgNuevaCompra.Columns["Column4"].ReadOnly = true;
+            dtgNuevaCompra.Columns["Column5"].ReadOnly = true;
+            dtgNuevaCompra.Columns["Column6"].ReadOnly = true;
+
+            dtgNuevaCompra.CellEndEdit += dataGridView1_CellEndEdit_1;
             txtCodigobarra.TextChanged += txtCodigobarra_TextChanged;
             txtCodigobarra.KeyDown += txtCodigobarra_KeyDown;
 
@@ -38,7 +46,7 @@ namespace CapaVista
             decimal subtotalSinIVA = 0;
             decimal ivaTotal = 0;
 
-            foreach (DataGridViewRow fila in dataGridView1.Rows)
+            foreach (DataGridViewRow fila in dtgNuevaCompra.Rows)
             {
                 if (fila.IsNewRow)
                 {
@@ -55,8 +63,8 @@ namespace CapaVista
                 decimal precio = Convert.ToDecimal(fila.Cells["Column4"].Value);
                 decimal porcentajeIVA = Convert.ToDecimal(fila.Cells["Column5"].Value);
 
-                decimal subtotal = cantidad * precio;
-                decimal iva = subtotal * porcentajeIVA / 100;
+                decimal subtotal = Math.Round(cantidad * precio, 2, MidpointRounding.AwayFromZero);
+                decimal iva = Math.Round(subtotal * porcentajeIVA / 100, 2, MidpointRounding.AwayFromZero);
 
                 subtotalSinIVA += subtotal;
                 ivaTotal += iva;
@@ -70,18 +78,34 @@ namespace CapaVista
         }
         private void ConfigurarAutocompletadoProveedores()
         {
-            DataTable tabla = logicaProveedor.BuscarProveedor("");
-            AutoCompleteStringCollection proveedores = new AutoCompleteStringCollection();
+            txtProveedor.AutoCompleteMode = AutoCompleteMode.None;
+            txtProveedor.AutoCompleteSource = AutoCompleteSource.None;
 
-            foreach (DataRow fila in tabla.Rows)
+            lstProveedores.Visible = false;
+        }
+        private void SeleccionarProveedor()
+        {
+            if (proveedoresEncontrados == null ||
+                lstProveedores.SelectedIndex < 0 ||
+                lstProveedores.SelectedIndex >= proveedoresEncontrados.Rows.Count)
             {
-                proveedores.Add(fila["Nombre"].ToString());
+                return;
             }
 
-            txtProveedor.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            txtProveedor.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtProveedor.AutoCompleteCustomSource = proveedores;
+            DataRow proveedor = proveedoresEncontrados.Rows[lstProveedores.SelectedIndex];
+
+            idProveedor = Convert.ToInt32(proveedor["IdProveedor"]);
+            txtProveedor.Text = proveedor["Nombre"].ToString();
+
+            lstProveedores.Visible = false;
+            lstProveedores.Items.Clear();
+            proveedoresEncontrados = null;
+
+            txtProveedor.SelectionStart = txtProveedor.Text.Length;
         }
+
+
+
         #endregion
 
 
@@ -110,16 +134,18 @@ namespace CapaVista
             decimal precio = Convert.ToDecimal(producto["PrecioVenta"]);
             decimal iva = Convert.ToDecimal(producto["Alicuota"]);
 
-            int indice = dataGridView1.Rows.Add();
+            int indice = dtgNuevaCompra.Rows.Add();
 
-            DataGridViewRow fila = dataGridView1.Rows[indice];
+            DataGridViewRow fila = dtgNuevaCompra.Rows[indice];
 
             fila.Cells["Column1"].Value = codigoBarra;
             fila.Cells["Column2"].Value = 1;
             fila.Cells["Column3"].Value = nombre;
             fila.Cells["Column4"].Value = precio;
             fila.Cells["Column5"].Value = iva;
-            fila.Cells["Column6"].Value = precio * (1 + iva / 100);
+            decimal subtotal = Math.Round(precio, 2, MidpointRounding.AwayFromZero);
+            decimal ivaCalculado = Math.Round(subtotal * iva / 100, 2, MidpointRounding.AwayFromZero);
+            fila.Cells["Column6"].Value = subtotal + ivaCalculado;
 
             fila.Tag = idProducto;
 
@@ -143,33 +169,25 @@ namespace CapaVista
                 return;
             }
 
-            DataGridViewRow fila = dataGridView1.Rows[e.RowIndex];
+            DataGridViewRow fila = dtgNuevaCompra.Rows[e.RowIndex];
 
             if (fila.Cells["Column2"].Value == null || fila.Cells["Column4"].Value == null || fila.Cells["Column5"].Value == null)
             {
                 return;
             }
 
-
-            if (!decimal.TryParse(fila.Cells["Column2"].Value.ToString(), out decimal cantidad) || cantidad <= 0)
+            if (!decimal.TryParse(fila.Cells["Column2"].Value.ToString(), out decimal cantidad))
             {
-                cantidad = 1;
-                fila.Cells["Column2"].Value = 1;
+                cantidad = 0;
+                fila.Cells["Column2"].Value = 0;
             }
 
-            if (!decimal.TryParse(fila.Cells["Column4"].Value.ToString(), out decimal precio) || precio < 0)
-            {
-                precio = 0;
-                fila.Cells["Column4"].Value = 0;
-            }
+            decimal precio = Convert.ToDecimal(fila.Cells["Column4"].Value);
+            decimal iva = Convert.ToDecimal(fila.Cells["Column5"].Value);
 
-            if (!decimal.TryParse(fila.Cells["Column5"].Value.ToString(), out decimal iva))
-            {
-                iva = 0;
-            }
-
-            decimal subtotal = cantidad * precio;
-            decimal total = subtotal + (subtotal * iva / 100);
+            decimal subtotal = Math.Round(cantidad * precio, 2, MidpointRounding.AwayFromZero);
+            decimal ivaCalculado = Math.Round(subtotal * iva / 100, 2, MidpointRounding.AwayFromZero);
+            decimal total = subtotal + ivaCalculado;
 
             fila.Cells["Column6"].Value = total;
 
@@ -181,7 +199,7 @@ namespace CapaVista
         }
         private void btnEliminarCompra_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count == 0)
+            if (dtgNuevaCompra.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Seleccione un producto para eliminar.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -197,7 +215,7 @@ namespace CapaVista
                 return;
             }
 
-            dataGridView1.Rows.RemoveAt(dataGridView1.SelectedRows[0].Index);
+            dtgNuevaCompra.Rows.RemoveAt(dtgNuevaCompra.SelectedRows[0].Index);
 
             CalcularTotales();
         }
@@ -212,12 +230,12 @@ namespace CapaVista
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(comboBox1.Text))
+            if (string.IsNullOrWhiteSpace(cmbTipoComprobante.Text))
             {
                 MessageBox.Show("Debe seleccionar un tipo de comprobante.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                comboBox1.Focus();
+                cmbTipoComprobante.Focus();
                 return;
             }
 
@@ -230,7 +248,16 @@ namespace CapaVista
                 return;
             }
 
-            if (dataGridView1.Rows.Count == 0)
+            if (dtpFechaPedido.Value.Date > DateTime.Today)
+            {
+                MessageBox.Show("La fecha de compra no puede ser futura.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                dtpFechaPedido.Focus();
+                return;
+            }
+
+            if (dtgNuevaCompra.Rows.Cast<DataGridViewRow>().All(fila => fila.IsNewRow))
             {
                 MessageBox.Show("Debe agregar al menos un producto a la compra.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -244,8 +271,8 @@ namespace CapaVista
                 ClsCompraEntidad compra = new ClsCompraEntidad();
 
                 compra.IdProveedor = idProveedor;
-                compra.Fecha = dateTimePicker1.Value;
-                compra.TipoComprobante = comboBox1.Text.Trim();
+                compra.Fecha = dtpFechaPedido.Value;
+                compra.TipoComprobante = cmbTipoComprobante.Text.Trim();
                 compra.NumeroComprobante = txtNumeroComprobante.Text.Trim();
                 compra.SubtotalSinIVA = Convert.ToDecimal(txtSubsinImpuesto.Text);
                 compra.IVA = Convert.ToDecimal(txtIva.Text);
@@ -253,7 +280,7 @@ namespace CapaVista
                 compra.Observaciones = txtObservaciones.Text.Trim();
                 compra.Detalles = new List<ClsDetalleCompraEntidad>();
 
-                foreach (DataGridViewRow fila in dataGridView1.Rows)
+                foreach (DataGridViewRow fila in dtgNuevaCompra.Rows)
                 {
                     if (fila.IsNewRow)
                     {
@@ -268,13 +295,49 @@ namespace CapaVista
                         return;
                     }
 
+                    if (fila.Cells["Column2"].Value == null || fila.Cells["Column4"].Value == null || fila.Cells["Column5"].Value == null)
+                    {
+                        MessageBox.Show("Complete la cantidad, el precio y el IVA del producto.", "Aviso",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        return;
+                    }
+
+                    if (!decimal.TryParse(fila.Cells["Column2"].Value.ToString(), out decimal cantidad) || cantidad <= 0)
+                    {
+                        MessageBox.Show("La cantidad debe ser mayor que cero.", "Aviso",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        return;
+                    }
+
+                    if (!decimal.TryParse(fila.Cells["Column4"].Value.ToString(), out decimal precio) || precio < 0)
+                    {
+                        MessageBox.Show("El precio sin IVA no puede ser negativo.", "Aviso",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        return;
+                    }
+
+                    if (!decimal.TryParse(fila.Cells["Column5"].Value.ToString(), out decimal porcentajeIVA) ||  porcentajeIVA < 0 || porcentajeIVA > 100)
+                    {
+                        MessageBox.Show("El porcentaje de IVA debe estar entre 0 y 100.", "Aviso",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        return;
+                    }
+
                     ClsDetalleCompraEntidad detalle = new ClsDetalleCompraEntidad();
 
                     detalle.IdProducto = Convert.ToInt32(fila.Tag);
-                    detalle.Cantidad = Convert.ToDecimal(fila.Cells["Column2"].Value);
-                    detalle.PrecioSinIVA = Convert.ToDecimal(fila.Cells["Column4"].Value);
-                    detalle.PorcentajeIVA = Convert.ToDecimal(fila.Cells["Column5"].Value);
-                    detalle.Total = Convert.ToDecimal(fila.Cells["Column6"].Value);
+                    detalle.Cantidad = decimal.Round(cantidad, 3, MidpointRounding.AwayFromZero);
+                    detalle.PrecioSinIVA = decimal.Round(precio, 2, MidpointRounding.AwayFromZero);
+                    detalle.PorcentajeIVA = decimal.Round(porcentajeIVA, 2, MidpointRounding.AwayFromZero);
+
+                    decimal subtotalDetalle = Math.Round(detalle.Cantidad * detalle.PrecioSinIVA, 2, MidpointRounding.AwayFromZero);
+                    decimal ivaDetalle = Math.Round(subtotalDetalle * detalle.PorcentajeIVA / 100, 2, MidpointRounding.AwayFromZero);
+
+                    detalle.Total = subtotalDetalle + ivaDetalle;
 
                     compra.Detalles.Add(detalle);
                 }
@@ -409,6 +472,75 @@ namespace CapaVista
         {
             btnCargarProducto_Click(sender, e);
         }
+        private void txtProveedor_TextChanged(object sender, EventArgs e)
+        {
+            string texto = txtProveedor.Text.Trim();
+
+            idProveedor = 0;
+            lstProveedores.Items.Clear();
+            lstProveedores.Visible = false;
+
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                proveedoresEncontrados = null;
+                return;
+            }
+
+            proveedoresEncontrados = logicaProveedor.BuscarProveedor(texto);
+
+            if (proveedoresEncontrados == null || proveedoresEncontrados.Rows.Count == 0)
+            {
+                proveedoresEncontrados = null;
+                return;
+            }
+
+            foreach (DataRow fila in proveedoresEncontrados.Rows)
+            {
+                lstProveedores.Items.Add(fila["Nombre"].ToString() + " - " + fila["IdProveedor"].ToString());
+            }
+
+            lstProveedores.Visible = true;
+            lstProveedores.BringToFront();
+
+            if (lstProveedores.Items.Count > 0)
+                lstProveedores.SelectedIndex = 0;
+
+        }
+        private void txtProveedor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!lstProveedores.Visible || lstProveedores.Items.Count == 0)
+                return;
+
+            if (e.KeyCode == Keys.Down)
+            {
+                e.SuppressKeyPress = true;
+
+                if (lstProveedores.SelectedIndex < lstProveedores.Items.Count - 1)
+                    lstProveedores.SelectedIndex++;
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                e.SuppressKeyPress = true;
+
+                if (lstProveedores.SelectedIndex > 0)
+                    lstProveedores.SelectedIndex--;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                SeleccionarProveedor();
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true;
+                lstProveedores.Visible = false;
+            }
+        }
+        private void txtProveedor_DoubleClick(object sender, EventArgs e)
+        {
+            SeleccionarProveedor();
+        }
+
 
         #endregion
 
@@ -422,5 +554,9 @@ namespace CapaVista
 
 
 
+
+
+
+ 
     }
 }

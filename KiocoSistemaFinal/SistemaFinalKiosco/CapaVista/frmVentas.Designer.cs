@@ -46,6 +46,8 @@
             btnVolver = new Button();
             lblObservaciones = new Label();
             lstObservaciones = new ListBox();
+            lblDescripcion = new Label();
+            btnAnuladas = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -53,7 +55,7 @@
             // 
             btnAnular.Image = (Image)resources.GetObject("btnAnular.Image");
             btnAnular.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAnular.Location = new Point(12, 15);
+            btnAnular.Location = new Point(12, 22);
             btnAnular.Name = "btnAnular";
             btnAnular.Size = new Size(84, 36);
             btnAnular.TabIndex = 2;
@@ -65,17 +67,20 @@
             // btnBuscar
             // 
             btnBuscar.Image = (Image)resources.GetObject("btnBuscar.Image");
-            btnBuscar.Location = new Point(376, 15);
+            btnBuscar.ImageAlign = ContentAlignment.MiddleLeft;
+            btnBuscar.Location = new Point(376, 27);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(45, 33);
+            btnBuscar.Size = new Size(78, 33);
             btnBuscar.TabIndex = 3;
+            btnBuscar.Text = "Buscar";
+            btnBuscar.TextAlign = ContentAlignment.MiddleRight;
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(111, 25);
+            label1.Location = new Point(107, 36);
             label1.Name = "label1";
             label1.Size = new Size(42, 15);
             label1.TabIndex = 4;
@@ -84,7 +89,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(248, 25);
+            label2.Location = new Point(245, 36);
             label2.Name = "label2";
             label2.Size = new Size(40, 15);
             label2.TabIndex = 5;
@@ -94,7 +99,7 @@
             // 
             dtpDesde.CustomFormat = "d/MM/yyyy";
             dtpDesde.Format = DateTimePickerFormat.Custom;
-            dtpDesde.Location = new Point(155, 20);
+            dtpDesde.Location = new Point(155, 30);
             dtpDesde.Name = "dtpDesde";
             dtpDesde.Size = new Size(78, 23);
             dtpDesde.TabIndex = 6;
@@ -103,7 +108,7 @@
             // 
             dtpHasta.CustomFormat = "d/MM/yyyy";
             dtpHasta.Format = DateTimePickerFormat.Custom;
-            dtpHasta.Location = new Point(286, 19);
+            dtpHasta.Location = new Point(291, 30);
             dtpHasta.Name = "dtpHasta";
             dtpHasta.Size = new Size(79, 23);
             dtpHasta.TabIndex = 7;
@@ -112,9 +117,9 @@
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { clnFecha, clnTransaccion, clnCajero, clnTotal, clnAnulada, clnDetalle });
-            dataGridView1.Location = new Point(12, 66);
+            dataGridView1.Location = new Point(12, 74);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(745, 275);
+            dataGridView1.Size = new Size(745, 223);
             dataGridView1.TabIndex = 8;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
             // 
@@ -153,16 +158,19 @@
             // btnActualizar
             // 
             btnActualizar.Image = (Image)resources.GetObject("btnActualizar.Image");
-            btnActualizar.Location = new Point(427, 15);
+            btnActualizar.ImageAlign = ContentAlignment.MiddleLeft;
+            btnActualizar.Location = new Point(460, 27);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(49, 33);
+            btnActualizar.Size = new Size(98, 33);
             btnActualizar.TabIndex = 10;
+            btnActualizar.Text = "Actualizar";
+            btnActualizar.TextAlign = ContentAlignment.MiddleRight;
             btnActualizar.UseVisualStyleBackColor = true;
             btnActualizar.Click += btnActualizar_Click;
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(575, 490);
+            btnVolver.Location = new Point(676, 400);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(81, 23);
             btnVolver.TabIndex = 11;
@@ -173,7 +181,7 @@
             // lblObservaciones
             // 
             lblObservaciones.AutoSize = true;
-            lblObservaciones.Location = new Point(12, 362);
+            lblObservaciones.Location = new Point(13, 311);
             lblObservaciones.Name = "lblObservaciones";
             lblObservaciones.Size = new Size(84, 15);
             lblObservaciones.TabIndex = 12;
@@ -183,17 +191,40 @@
             // 
             lstObservaciones.FormattingEnabled = true;
             lstObservaciones.ItemHeight = 15;
-            lstObservaciones.Location = new Point(11, 380);
+            lstObservaciones.Location = new Point(12, 329);
             lstObservaciones.Name = "lstObservaciones";
             lstObservaciones.Size = new Size(562, 94);
             lstObservaciones.TabIndex = 13;
             lstObservaciones.SelectedIndexChanged += lstObservaciones_SelectedIndexChanged;
             // 
+            // lblDescripcion
+            // 
+            lblDescripcion.AutoSize = true;
+            lblDescripcion.Font = new Font("Segoe UI", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDescripcion.Location = new Point(107, 56);
+            lblDescripcion.Name = "lblDescripcion";
+            lblDescripcion.Size = new Size(224, 12);
+            lblDescripcion.TabIndex = 14;
+            lblDescripcion.Text = "* Seleccione las fechas de busqueda para ver las ventas.\r\n";
+            // 
+            // btnAnuladas
+            // 
+            btnAnuladas.AutoSize = true;
+            btnAnuladas.Location = new Point(576, 32);
+            btnAnuladas.Name = "btnAnuladas";
+            btnAnuladas.Size = new Size(154, 19);
+            btnAnuladas.TabIndex = 15;
+            btnAnuladas.Text = "Ver solo ventas anuladas";
+            btnAnuladas.UseVisualStyleBackColor = true;
+            btnAnuladas.CheckedChanged += btnAnuladas_CheckedChanged;
+            // 
             // frmVentas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(787, 538);
+            ClientSize = new Size(787, 436);
+            Controls.Add(btnAnuladas);
+            Controls.Add(lblDescripcion);
             Controls.Add(lstObservaciones);
             Controls.Add(lblObservaciones);
             Controls.Add(btnVolver);
@@ -232,5 +263,7 @@
         private DataGridViewTextBoxColumn clnTotal;
         private DataGridViewTextBoxColumn clnAnulada;
         private DataGridViewButtonColumn clnDetalle;
+        private Label lblDescripcion;
+        private CheckBox btnAnuladas;
     }
 }

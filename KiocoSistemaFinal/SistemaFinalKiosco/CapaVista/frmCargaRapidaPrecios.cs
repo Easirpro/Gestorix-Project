@@ -20,7 +20,6 @@ namespace CapaVista
             InitializeComponent();
 
             txtBuscarProducto.KeyDown += txtBuscarProducto_KeyDown;
-            btnAplicarAumento.Click += btnAplicarAumento_Click;
 
             ConfigurarAutocompletadoProductos();
         }
@@ -89,7 +88,7 @@ namespace CapaVista
 
             int indice = dgvPrecios.Rows.Add();
 
-            dgvPrecios.Rows[indice].Cells["clnCodigo"].Value = string.IsNullOrWhiteSpace(sku) ? codigo: codigo + " / " + sku;
+            dgvPrecios.Rows[indice].Cells["clnCodigo"].Value = string.IsNullOrWhiteSpace(sku) ? codigo : codigo + " / " + sku;
             dgvPrecios.Rows[indice].Cells["clnProducto"].Value = nombre;
             dgvPrecios.Rows[indice].Cells["clnPrecioActual"].Value = precio.ToString("N2");
             dgvPrecios.Rows[indice].Cells["clnNuevoPrecio"].Value = precio.ToString("N2");
@@ -271,5 +270,19 @@ namespace CapaVista
         #endregion
 
 
+        private void gpbBusqueda_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

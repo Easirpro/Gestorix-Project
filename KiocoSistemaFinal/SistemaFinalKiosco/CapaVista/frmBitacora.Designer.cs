@@ -60,7 +60,6 @@ namespace CapaVista
             lblTitulo = new Label();
             lblSubtitulo = new Label();
             pnlCategorias = new Panel();
-            btnProbarFalla = new Button();
             btnProducto = new Button();
             btnSeguridad = new Button();
             btnErrores = new Button();
@@ -92,9 +91,9 @@ namespace CapaVista
             ((System.ComponentModel.ISupportInitialize)dgvBitacora).BeginInit();
             pnlDetalles.SuspendLayout();
             SuspendLayout();
-            //
+            // 
             // pnlEncabezado
-            //
+            // 
             pnlEncabezado.BackColor = Color.White;
             pnlEncabezado.Controls.Add(lblTitulo);
             pnlEncabezado.Controls.Add(lblSubtitulo);
@@ -104,9 +103,9 @@ namespace CapaVista
             pnlEncabezado.Padding = new Padding(25, 15, 15, 10);
             pnlEncabezado.Size = new Size(1236, 70);
             pnlEncabezado.TabIndex = 4;
-            //
+            // 
             // lblTitulo
-            //
+            // 
             lblTitulo.AutoSize = true;
             lblTitulo.BackColor = Color.White;
             lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -116,9 +115,9 @@ namespace CapaVista
             lblTitulo.Size = new Size(243, 32);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Bitácora del sistema";
-            //
+            // 
             // lblSubtitulo
-            //
+            // 
             lblSubtitulo.AutoSize = true;
             lblSubtitulo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSubtitulo.ForeColor = Color.Black;
@@ -128,11 +127,10 @@ namespace CapaVista
             lblSubtitulo.TabIndex = 1;
             lblSubtitulo.Text = "Registro y seguimiento de las operaciones realizadas en Gestorix";
             lblSubtitulo.Click += lblSubtitulo_Click;
-            //
+            // 
             // pnlCategorias
-            //
+            // 
             pnlCategorias.BackColor = Color.White;
-            pnlCategorias.Controls.Add(btnProbarFalla);
             pnlCategorias.Controls.Add(btnProducto);
             pnlCategorias.Controls.Add(btnSeguridad);
             pnlCategorias.Controls.Add(btnErrores);
@@ -144,19 +142,9 @@ namespace CapaVista
             pnlCategorias.Padding = new Padding(18, 16, 18, 16);
             pnlCategorias.Size = new Size(1236, 73);
             pnlCategorias.TabIndex = 3;
-            //
-            // btnProbarFalla
-            //
-            btnProbarFalla.Location = new Point(915, 16);
-            btnProbarFalla.Name = "btnProbarFalla";
-            btnProbarFalla.Size = new Size(130, 40);
-            btnProbarFalla.TabIndex = 9;
-            btnProbarFalla.Text = "Prueba de Falla";
-            btnProbarFalla.UseVisualStyleBackColor = true;
-            btnProbarFalla.Click += btnProbarFalla_Click;
-            //
+            // 
             // btnProducto
-            //
+            // 
             btnProducto.BackColor = Color.FromArgb(52, 73, 94);
             btnProducto.Cursor = Cursors.Hand;
             btnProducto.FlatAppearance.BorderSize = 0;
@@ -170,9 +158,9 @@ namespace CapaVista
             btnProducto.Text = "Productos";
             btnProducto.UseVisualStyleBackColor = false;
             btnProducto.Click += btnProducto_Click;
-            //
+            // 
             // btnSeguridad
-            //
+            // 
             btnSeguridad.BackColor = Color.FromArgb(52, 73, 94);
             btnSeguridad.Cursor = Cursors.Hand;
             btnSeguridad.FlatAppearance.BorderSize = 0;
@@ -186,9 +174,9 @@ namespace CapaVista
             btnSeguridad.Text = "Seguridad";
             btnSeguridad.UseVisualStyleBackColor = false;
             btnSeguridad.Click += btnSeguridad_Click;
-            //
+            // 
             // btnErrores
-            //
+            // 
             btnErrores.BackColor = Color.FromArgb(192, 57, 43);
             btnErrores.Cursor = Cursors.Hand;
             btnErrores.FlatAppearance.BorderSize = 0;
@@ -202,9 +190,9 @@ namespace CapaVista
             btnErrores.Text = "Errores técnicos";
             btnErrores.UseVisualStyleBackColor = false;
             btnErrores.Click += btnErrores_Click;
-            //
+            // 
             // btnPromociones
-            //
+            // 
             btnPromociones.BackColor = Color.FromArgb(52, 73, 94);
             btnPromociones.Cursor = Cursors.Hand;
             btnPromociones.FlatAppearance.BorderSize = 0;
@@ -218,9 +206,9 @@ namespace CapaVista
             btnPromociones.Text = "Promociones";
             btnPromociones.UseVisualStyleBackColor = false;
             btnPromociones.Click += btnPromociones_Click;
-            //
+            // 
             // btnUsuario
-            //
+            // 
             btnUsuario.BackColor = Color.FromArgb(52, 73, 94);
             btnUsuario.Cursor = Cursors.Hand;
             btnUsuario.FlatAppearance.BorderSize = 0;
@@ -234,9 +222,9 @@ namespace CapaVista
             btnUsuario.Text = "Usuarios ";
             btnUsuario.UseVisualStyleBackColor = false;
             btnUsuario.Click += btnUsuario_Click;
-            //
+            // 
             // pnlFiltros
-            //
+            // 
             pnlFiltros.BackColor = Color.White;
             pnlFiltros.Controls.Add(lblBuscar);
             pnlFiltros.Controls.Add(txtBuscar);
@@ -253,9 +241,9 @@ namespace CapaVista
             pnlFiltros.Padding = new Padding(20, 12, 20, 12);
             pnlFiltros.Size = new Size(1236, 75);
             pnlFiltros.TabIndex = 2;
-            //
+            // 
             // lblBuscar
-            //
+            // 
             lblBuscar.AutoSize = true;
             lblBuscar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblBuscar.ForeColor = Color.FromArgb(52, 73, 94);
@@ -264,9 +252,9 @@ namespace CapaVista
             lblBuscar.Size = new Size(44, 15);
             lblBuscar.TabIndex = 0;
             lblBuscar.Text = "Buscar";
-            //
+            // 
             // txtBuscar
-            //
+            // 
             txtBuscar.BorderStyle = BorderStyle.FixedSingle;
             txtBuscar.Font = new Font("Segoe UI", 10F);
             txtBuscar.Location = new Point(20, 35);
@@ -274,9 +262,9 @@ namespace CapaVista
             txtBuscar.Size = new Size(245, 25);
             txtBuscar.TabIndex = 1;
             txtBuscar.TextChanged += txtBuscar_TextChanged;
-            //
+            // 
             // lblFechaDesde
-            //
+            // 
             lblFechaDesde.AutoSize = true;
             lblFechaDesde.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblFechaDesde.ForeColor = Color.FromArgb(52, 73, 94);
@@ -285,17 +273,17 @@ namespace CapaVista
             lblFechaDesde.Size = new Size(42, 15);
             lblFechaDesde.TabIndex = 2;
             lblFechaDesde.Text = "Desde";
-            //
+            // 
             // dtpFechaDesde
-            //
+            // 
             dtpFechaDesde.Format = DateTimePickerFormat.Short;
             dtpFechaDesde.Location = new Point(285, 35);
             dtpFechaDesde.Name = "dtpFechaDesde";
             dtpFechaDesde.Size = new Size(125, 23);
             dtpFechaDesde.TabIndex = 3;
-            //
+            // 
             // lblFechaHasta
-            //
+            // 
             lblFechaHasta.AutoSize = true;
             lblFechaHasta.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblFechaHasta.ForeColor = Color.FromArgb(52, 73, 94);
@@ -304,17 +292,17 @@ namespace CapaVista
             lblFechaHasta.Size = new Size(38, 15);
             lblFechaHasta.TabIndex = 4;
             lblFechaHasta.Text = "Hasta";
-            //
+            // 
             // dtpFechaHasta
-            //
+            // 
             dtpFechaHasta.Format = DateTimePickerFormat.Short;
             dtpFechaHasta.Location = new Point(425, 35);
             dtpFechaHasta.Name = "dtpFechaHasta";
             dtpFechaHasta.Size = new Size(125, 23);
             dtpFechaHasta.TabIndex = 5;
-            //
+            // 
             // btnFiltrar
-            //
+            // 
             btnFiltrar.BackColor = Color.FromArgb(41, 128, 185);
             btnFiltrar.Cursor = Cursors.Hand;
             btnFiltrar.FlatAppearance.BorderSize = 0;
@@ -328,9 +316,9 @@ namespace CapaVista
             btnFiltrar.Text = "Filtrar";
             btnFiltrar.UseVisualStyleBackColor = false;
             btnFiltrar.Click += btnFiltrar_Click;
-            //
+            // 
             // btnLimpiar
-            //
+            // 
             btnLimpiar.BackColor = Color.FromArgb(236, 240, 241);
             btnLimpiar.Cursor = Cursors.Hand;
             btnLimpiar.FlatAppearance.BorderColor = Color.FromArgb(210, 215, 220);
@@ -343,9 +331,9 @@ namespace CapaVista
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.UseVisualStyleBackColor = false;
             btnLimpiar.Click += btnLimpiar_Click;
-            //
+            // 
             // btnActualizar
-            //
+            // 
             btnActualizar.BackColor = Color.FromArgb(39, 174, 96);
             btnActualizar.Cursor = Cursors.Hand;
             btnActualizar.FlatAppearance.BorderSize = 0;
@@ -359,9 +347,9 @@ namespace CapaVista
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = false;
             btnActualizar.Click += btnActualizar_Click;
-            //
+            // 
             // pnlContenido
-            //
+            // 
             pnlContenido.BackColor = Color.White;
             pnlContenido.Controls.Add(dgvBitacora);
             pnlContenido.Controls.Add(lblCategoriaActual);
@@ -371,9 +359,9 @@ namespace CapaVista
             pnlContenido.Padding = new Padding(18, 12, 18, 12);
             pnlContenido.Size = new Size(1236, 482);
             pnlContenido.TabIndex = 0;
-            //
+            // 
             // dgvBitacora
-            //
+            // 
             dgvBitacora.AllowUserToAddRows = false;
             dgvBitacora.AllowUserToDeleteRows = false;
             dgvBitacora.AllowUserToResizeColumns = false;
@@ -414,9 +402,9 @@ namespace CapaVista
             dgvBitacora.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvBitacora.Size = new Size(1200, 423);
             dgvBitacora.TabIndex = 0;
-            //
+            // 
             // lblCategoriaActual
-            //
+            // 
             lblCategoriaActual.Dock = DockStyle.Top;
             lblCategoriaActual.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblCategoriaActual.ForeColor = Color.FromArgb(31, 45, 61);
@@ -426,9 +414,9 @@ namespace CapaVista
             lblCategoriaActual.TabIndex = 1;
             lblCategoriaActual.Text = "Registros de la bitácora";
             lblCategoriaActual.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // pnlDetalles
-            //
+            // 
             pnlDetalles.BackColor = Color.White;
             pnlDetalles.Controls.Add(lblDetalles);
             pnlDetalles.Controls.Add(lblDetalleFecha);
@@ -441,9 +429,9 @@ namespace CapaVista
             pnlDetalles.Padding = new Padding(20, 5, 20, 5);
             pnlDetalles.Size = new Size(1236, 150);
             pnlDetalles.TabIndex = 1;
-            //
+            // 
             // lblDetalles
-            //
+            // 
             lblDetalles.AutoSize = true;
             lblDetalles.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblDetalles.ForeColor = Color.FromArgb(31, 45, 61);
@@ -452,9 +440,9 @@ namespace CapaVista
             lblDetalles.Size = new Size(138, 19);
             lblDetalles.TabIndex = 0;
             lblDetalles.Text = "Detalle del registro";
-            //
+            // 
             // lblDetalleFecha
-            //
+            // 
             lblDetalleFecha.AutoSize = true;
             lblDetalleFecha.Font = new Font("Segoe UI", 8F);
             lblDetalleFecha.ForeColor = Color.FromArgb(52, 73, 94);
@@ -463,9 +451,9 @@ namespace CapaVista
             lblDetalleFecha.Size = new Size(82, 13);
             lblDetalleFecha.TabIndex = 1;
             lblDetalleFecha.Text = "Fecha y hora: -";
-            //
+            // 
             // lblDetalleUsuario
-            //
+            // 
             lblDetalleUsuario.AutoSize = true;
             lblDetalleUsuario.Font = new Font("Segoe UI", 8F);
             lblDetalleUsuario.ForeColor = Color.FromArgb(52, 73, 94);
@@ -474,9 +462,9 @@ namespace CapaVista
             lblDetalleUsuario.Size = new Size(57, 13);
             lblDetalleUsuario.TabIndex = 2;
             lblDetalleUsuario.Text = "Usuario: -";
-            //
+            // 
             // lblDetalleAccion
-            //
+            // 
             lblDetalleAccion.AutoSize = true;
             lblDetalleAccion.Font = new Font("Segoe UI", 8F);
             lblDetalleAccion.ForeColor = Color.FromArgb(52, 73, 94);
@@ -485,9 +473,9 @@ namespace CapaVista
             lblDetalleAccion.Size = new Size(51, 13);
             lblDetalleAccion.TabIndex = 3;
             lblDetalleAccion.Text = "Acción: -";
-            //
+            // 
             // lblDetalleDescripcion
-            //
+            // 
             lblDetalleDescripcion.Font = new Font("Segoe UI", 8F);
             lblDetalleDescripcion.ForeColor = Color.FromArgb(52, 73, 94);
             lblDetalleDescripcion.Location = new Point(350, 55);
@@ -495,9 +483,9 @@ namespace CapaVista
             lblDetalleDescripcion.Size = new Size(800, 55);
             lblDetalleDescripcion.TabIndex = 4;
             lblDetalleDescripcion.Text = "Descripción: -";
-            //
+            // 
             // frmBitacora
-            //
+            // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 247, 250);
@@ -530,6 +518,5 @@ namespace CapaVista
 
         private Button btnSeguridad;
         private Button btnProducto;
-        private Button btnProbarFalla;
     }
 }

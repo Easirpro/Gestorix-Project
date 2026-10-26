@@ -67,8 +67,17 @@ namespace CapaVista
                 if (!tabla.Columns.Contains("TextoBusqueda"))
                     tabla.Columns.Add("TextoBusqueda", typeof(string));
 
-                foreach (DataRow fila in tabla.Rows)
+                for (int i = tabla.Rows.Count - 1; i >= 0; i--)
                 {
+                    DataRow fila = tabla.Rows[i];
+                    int idPromocion = Convert.ToInt32(fila["IdPromocion"]);
+
+                    if (!TieneStockSuficiente(idPromocion))
+                    {
+                        tabla.Rows.RemoveAt(i);
+                        continue;
+                    }
+
                     string codigo = fila["CodigoPromocion"].ToString();
                     string nombre = fila["Nombre"].ToString();
                     string descripcion = tabla.Columns.Contains("Descripcion") ? fila["Descripcion"].ToString() : "";
@@ -103,6 +112,51 @@ namespace CapaVista
                 actualizandoCombo = false;
             }
         }
+        private bool TieneStockSuficiente(int idPromocion)
+        {
+            try
+            {
+                DataSet datos = logica.ObtenerPromocionPorId(idPromocion);
+
+                if (datos.Tables.Count < 2 || datos.Tables[1].Rows.Count == 0)
+                    return false;
+
+                DataRow promo = datos.Tables[0].Rows[0];
+
+                bool esVolumen = promo["CantidadLleva"] != DBNull.Value && promo["CantidadPaga"] != DBNull.Value;
+
+                decimal cantidadLleva = esVolumen ? Convert.ToDecimal(promo["CantidadLleva"]) : 1m;
+
+                var logicaProducto = new ClsLogicaProducto();
+
+                foreach (DataRow detalle in datos.Tables[1].Rows)
+                {
+                    int idProducto = Convert.ToInt32(detalle["IdProducto"]);
+                    decimal cantidad = Convert.ToDecimal(detalle["Cantidad"]);
+
+                    if (esVolumen)
+                        cantidad *= cantidadLleva;
+
+                    DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
+
+                    if (tablaStock == null || tablaStock.Rows.Count == 0)
+                        return false;
+
+                    decimal stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
+
+                    if (stockDisponible < cantidad)
+                        return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
 
         #endregion
 
@@ -154,28 +208,15 @@ namespace CapaVista
         }
         private void dtgBuscarPromo_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
+
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
                 return;
 
             dtgBuscarPromo.ClearSelection();
             dtgBuscarPromo.Rows[e.RowIndex].Selected = true;
 
             if (dtgBuscarPromo.Columns[e.ColumnIndex].Name == "clnDetalle")
-            {
-                object valor = dtgBuscarPromo.Rows[e.RowIndex].Tag;
-
-                if (valor == null)
-                {
-                    MessageBox.Show("Primero buscá y seleccioná una promoción.", "Promociones",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                IdPromocionSeleccionada = Convert.ToInt32(valor);
-                DialogResult = DialogResult.OK;
-                Close();
                 return;
-            }
 
             dtgBuscarPromo.Rows[e.RowIndex].Cells["clnDetalle"].Selected = false;
         }
@@ -233,7 +274,147 @@ namespace CapaVista
             DialogResult = DialogResult.OK;
             Close();
         }
+        private void btnLimpiarBusqueda_Click(object sender, EventArgs e)
+        {
+            dtgBuscarPromo.Rows.Clear();
+        }
+        private void dtgBuscarPromo_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                return;
+
+            if (dtgBuscarPromo.Columns[e.ColumnIndex].Name != "clnDetalle")
+                return;
+
+            try
+            {
+                string codigo = Convert.ToString(dtgBuscarPromo.Rows[e.RowIndex].Cells["clnCodigo"].Value);
+
+                DataTable tablaPromociones = logica.BuscarPromociones("");
+
+                DataRow[] coincidencias = tablaPromociones.Select("CodigoPromocion = '" + codigo.Replace("'", "''") + "'");
+
+                if (coincidencias.Length == 0)
+                {
+                    MessageBox.Show("No se encontró la promoción seleccionada.", "Detalle de la promoción",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int idPromocion = Convert.ToInt32(coincidencias[0]["IdPromocion"]);
+
+                DataSet datos = logica.ObtenerPromocionPorId(idPromocion);
+
+                if (datos.Tables.Count < 2 || datos.Tables[0].Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron los datos de la promoción.", "Detalle de la promoción",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                DataRow promo = datos.Tables[0].Rows[0];
+                DataTable detalles = datos.Tables[1];
+
+                StringBuilder mensaje = new StringBuilder();
+
+                mensaje.AppendLine("PROMOCIÓN");
+                mensaje.AppendLine("--------------------------------");
+                mensaje.AppendLine("Código: " + promo["CodigoPromocion"]);
+                mensaje.AppendLine("Nombre: " + promo["Nombre"]);
+
+                if (promo["Descripcion"] != DBNull.Value)
+                    mensaje.AppendLine("Descripción: " + promo["Descripcion"]);
+
+                mensaje.AppendLine("Tipo: " + promo["NombreTipoPromocion"]);
+                mensaje.AppendLine();
+
+                mensaje.AppendLine("PRODUCTOS INCLUIDOS");
+                mensaje.AppendLine("--------------------------------");
+
+                if (detalles.Rows.Count == 0)
+                {
+                    mensaje.AppendLine("No hay productos asociados.");
+                }
+                else
+                {
+                    foreach (DataRow detalle in detalles.Rows)
+                    {
+                        mensaje.AppendLine("- " + detalle["NombreProducto"] + " | Cantidad: " + detalle["Cantidad"]);
+                    }
+                }
+
+                mensaje.AppendLine();
+                mensaje.AppendLine("VALOR CONFIGURADO");
+                mensaje.AppendLine("--------------------------------");
+
+                string nombreTipo = Convert.ToString(promo["NombreTipoPromocion"]).ToLowerInvariant();
+
+                decimal valor = Convert.ToDecimal(promo["Valor"]);
+
+                if (nombreTipo.Contains("porcent"))
+                {
+                    mensaje.AppendLine("Descuento: " + valor + "%");
+                }
+                else if (nombreTipo.Contains("precio"))
+                {
+                    mensaje.AppendLine("Precio especial: " + valor.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR")));
+                }
+                else if (promo["CantidadLleva"] != DBNull.Value && promo["CantidadPaga"] != DBNull.Value)
+                {
+                    int lleva = Convert.ToInt32(promo["CantidadLleva"]);
+                    int paga = Convert.ToInt32(promo["CantidadPaga"]);
+
+                    mensaje.AppendLine("Promoción por cantidad: llevás " + lleva + " y pagás " + paga + ".");
+                }
+                else
+                {
+                    mensaje.AppendLine("Promoción por cantidad o condición especial.");
+                }
+
+                mensaje.AppendLine();
+                mensaje.AppendLine("VIGENCIA");
+                mensaje.AppendLine("--------------------------------");
+
+                if (promo["FechaInicio"] != DBNull.Value)
+                {
+                    mensaje.AppendLine("Fecha de inicio: " + Convert.ToDateTime(promo["FechaInicio"]).ToShortDateString());
+                }
+
+                if (promo["FechaFin"] != DBNull.Value)
+                {
+                    mensaje.AppendLine("Fecha de fin: " + Convert.ToDateTime(promo["FechaFin"]).ToShortDateString());
+                }
+
+                if (promo["EsRecurrente"] != DBNull.Value && Convert.ToBoolean(promo["EsRecurrente"]))
+                {
+                    mensaje.AppendLine("Vigencia recurrente: Sí");
+
+                    if (promo["HoraInicio"] != DBNull.Value && promo["HoraFin"] != DBNull.Value)
+                    {
+                        mensaje.AppendLine("Horario: " + promo["HoraInicio"] + " a " + promo["HoraFin"]);
+                    }
+
+                    if (datos.Tables.Count >= 3 && datos.Tables[2].Rows.Count > 0)
+                    {
+                        string[] dias = datos.Tables[2].AsEnumerable().Select(f => Convert.ToString(f["DiaSemana"])).ToArray();
+
+                        mensaje.AppendLine("Días: " + string.Join(", ", dias));
+                    }
+                }
+
+                MessageBox.Show(mensaje.ToString(), "Detalle de la promoción",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al mostrar el detalle: " + ex.Message, "Detalle de la promoción",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
         #endregion
+
 
 
 

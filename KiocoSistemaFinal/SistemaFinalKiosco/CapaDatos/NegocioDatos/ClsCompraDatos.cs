@@ -2,11 +2,8 @@
 using Microsoft.Data.SqlClient;
 using SistemaKiosco;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CapaDatos.NegocioDatos
 {
@@ -17,100 +14,194 @@ namespace CapaDatos.NegocioDatos
         public DataTable BuscarProducto(string texto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_BuscarProducto", conexion))
             {
-                using (SqlCommand cmd = new SqlCommand("sp_BuscarProducto", conexion))
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Texto", texto);
+
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@Texto", texto);
-
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-                        adaptador.Fill(tabla);
-                        return tabla;
-                    }
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
-        public int GuardarCompra(ClsCompraEntidad compra)
+        public int GuardarCompra(ClsCompraEntidad compra, int idUsuario)
         {
+            if (compra == null)
+                throw new ArgumentNullException(nameof(compra));
+
+            if (compra.Detalles == null || compra.Detalles.Count == 0)
+                throw new InvalidOperationException("La compra debe tener al menos un producto.");
+
+            if (idUsuario <= 0)
+                throw new InvalidOperationException("No hay un usuario válido para registrar la compra.");
+
+            if (compra.Detalles.Any(d => d.IdProducto <= 0 || d.Cantidad <= 0))
+            {
+                throw new InvalidOperationException("La compra contiene productos o cantidades inválidas.");
+            }
+
             using (SqlConnection conexion = cn.ObtenerConexion())
             {
                 conexion.Open();
 
-                using (SqlCommand cmd = new SqlCommand("sp_GuardarCompra", conexion))
+                using (SqlTransaction transaccion = conexion.BeginTransaction())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@IdProveedor", compra.IdProveedor);
-                    cmd.Parameters.AddWithValue("@Fecha", compra.Fecha);
-                    cmd.Parameters.AddWithValue("@TipoComprobante", compra.TipoComprobante);
-                    cmd.Parameters.AddWithValue("@NumeroComprobante", compra.NumeroComprobante);
-                    cmd.Parameters.AddWithValue("@SubtotalSinIVA", compra.SubtotalSinIVA);
-                    cmd.Parameters.AddWithValue("@IVA", compra.IVA);
-                    cmd.Parameters.AddWithValue("@Total", compra.Total);
-                    cmd.Parameters.AddWithValue("@Observaciones", string.IsNullOrWhiteSpace(compra.Observaciones) ? (object)DBNull.Value : compra.Observaciones);
-
-                    DataTable tablaDetalles = new DataTable();
-
-                    tablaDetalles.Columns.Add("IdProducto", typeof(int));
-                    tablaDetalles.Columns.Add("Cantidad", typeof(decimal));
-                    tablaDetalles.Columns.Add("PrecioSinIVA", typeof(decimal));
-                    tablaDetalles.Columns.Add("PorcentajeIVA", typeof(decimal));
-                    tablaDetalles.Columns.Add("Total", typeof(decimal));
-
-                    foreach (ClsDetalleCompraEntidad detalle in compra.Detalles)
+                    try
                     {
-                        tablaDetalles.Rows.Add(detalle.IdProducto, detalle.Cantidad, detalle.PrecioSinIVA,detalle.PorcentajeIVA, detalle.Total);
+                        int idCompra;
+
+                        using (SqlCommand cmd = new SqlCommand("sp_GuardarCompra", conexion, transaccion))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@IdProveedor", compra.IdProveedor);
+                            cmd.Parameters.AddWithValue("@Fecha", compra.Fecha);
+                            cmd.Parameters.AddWithValue("@TipoComprobante", compra.TipoComprobante);
+                            cmd.Parameters.AddWithValue("@NumeroComprobante", string.IsNullOrWhiteSpace(compra.NumeroComprobante) ? (object)DBNull.Value : compra.NumeroComprobante);
+
+                            SqlParameter parametroSubtotal = cmd.Parameters.Add("@SubtotalSinIVA", SqlDbType.Decimal);
+                            parametroSubtotal.Precision = 18;
+                            parametroSubtotal.Scale = 2;
+                            parametroSubtotal.Value = decimal.Round(compra.SubtotalSinIVA, 2, MidpointRounding.AwayFromZero);
+
+                            SqlParameter parametroIVA = cmd.Parameters.Add("@IVA", SqlDbType.Decimal);
+                            parametroIVA.Precision = 18;
+                            parametroIVA.Scale = 2;
+                            parametroIVA.Value = decimal.Round(compra.IVA, 2, MidpointRounding.AwayFromZero);
+
+                            SqlParameter parametroTotal = cmd.Parameters.Add("@Total", SqlDbType.Decimal);
+                            parametroTotal.Precision = 18;
+                            parametroTotal.Scale = 2;
+                            parametroTotal.Value = decimal.Round(compra.Total, 2, MidpointRounding.AwayFromZero);
+
+                            cmd.Parameters.AddWithValue("@Observaciones", string.IsNullOrWhiteSpace(compra.Observaciones) ? (object)DBNull.Value : compra.Observaciones);
+
+                            DataTable tablaDetalles = new DataTable();
+                            tablaDetalles.Columns.Add("IdProducto", typeof(int));
+                            tablaDetalles.Columns.Add("Cantidad", typeof(decimal));
+                            tablaDetalles.Columns.Add("PrecioSinIVA", typeof(decimal));
+                            tablaDetalles.Columns.Add("PorcentajeIVA", typeof(decimal));
+                            tablaDetalles.Columns.Add("Total", typeof(decimal));
+
+                            foreach (ClsDetalleCompraEntidad detalle in compra.Detalles)
+                            {
+                                decimal cantidadDetalle = decimal.Round(detalle.Cantidad, 3, MidpointRounding.AwayFromZero);
+                                decimal precioDetalle = decimal.Round(detalle.PrecioSinIVA, 2, MidpointRounding.AwayFromZero);
+                                decimal porcentajeIVA = decimal.Round(detalle.PorcentajeIVA, 2, MidpointRounding.AwayFromZero);
+                                decimal subtotalDetalle = decimal.Round(cantidadDetalle * precioDetalle, 2, MidpointRounding.AwayFromZero);
+                                decimal ivaDetalle = decimal.Round(subtotalDetalle * porcentajeIVA / 100, 2, MidpointRounding.AwayFromZero);
+                                decimal totalDetalle = subtotalDetalle + ivaDetalle;
+
+                                tablaDetalles.Rows.Add(detalle.IdProducto, cantidadDetalle, precioDetalle, porcentajeIVA, totalDetalle);
+                            }
+
+                            SqlParameter parametroDetalles = cmd.Parameters.AddWithValue("@Detalles", tablaDetalles);
+                            parametroDetalles.SqlDbType = SqlDbType.Structured;
+                            parametroDetalles.TypeName = "dbo.TipoDetalleCompra";
+
+                            idCompra = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
+
+                        foreach (var grupo in compra.Detalles.GroupBy(d => d.IdProducto))
+                        {
+                            decimal cantidad = decimal.Round(grupo.Sum(d => d.Cantidad), 3, MidpointRounding.AwayFromZero);
+
+                            using (SqlCommand cmdStock = new SqlCommand(@"
+                                    UPDATE dbo.Stock WITH (UPDLOCK, HOLDLOCK)
+                                    SET CantidadActual = CantidadActual + @Cantidad
+                                    WHERE IdProducto = @IdProducto;
+
+                                    IF @@ROWCOUNT = 0
+                                    BEGIN
+                                        INSERT INTO dbo.Stock
+                                            (IdProducto, CantidadActual,
+                                             StockMinimo, StockIdeal)
+                                        VALUES
+                                            (@IdProducto, @Cantidad, 0, 0);
+                                    END;", conexion, transaccion))
+                            {
+                                cmdStock.Parameters.Add("@IdProducto", SqlDbType.Int).Value = grupo.Key;
+                                cmdStock.Parameters.Add("@Cantidad", SqlDbType.Decimal).Value = cantidad;
+                                cmdStock.Parameters["@Cantidad"].Precision = 10;
+                                cmdStock.Parameters["@Cantidad"].Scale = 3;
+
+                                cmdStock.ExecuteNonQuery();
+                            }
+
+                            using (SqlCommand cmdMovimiento = new SqlCommand(@"
+                                    INSERT INTO dbo.MovimientoStock
+                                        (IdProducto, TipoMovimiento, Cantidad,
+                                         FechaHora, Observacion, IdUsuario)
+                                    VALUES
+                                        (@IdProducto, N'INGRESO', @Cantidad,
+                                         SYSDATETIME(), @Observacion, @IdUsuario);",
+                                conexion, transaccion))
+                            {
+                                cmdMovimiento.Parameters.Add("@IdProducto", SqlDbType.Int).Value = grupo.Key;
+                                cmdMovimiento.Parameters.Add("@Cantidad", SqlDbType.Decimal).Value = cantidad;
+                                cmdMovimiento.Parameters["@Cantidad"].Precision = 10;
+                                cmdMovimiento.Parameters["@Cantidad"].Scale = 3;
+                                cmdMovimiento.Parameters.Add("@Observacion", SqlDbType.NVarChar, 255).Value = "Compra #" + idCompra;
+                                cmdMovimiento.Parameters.Add("@IdUsuario", SqlDbType.Int).Value = idUsuario;
+                                cmdMovimiento.ExecuteNonQuery();
+                            }
+                        }
+
+                        transaccion.Commit();
+                        return idCompra;
                     }
+                    catch
+                    {
+                        try
+                        {
+                            transaccion.Rollback();
+                        }
+                        catch
+                        {
 
-                    SqlParameter parametroDetalles = cmd.Parameters.AddWithValue("@Detalles", tablaDetalles);
+                        }
 
-                    parametroDetalles.SqlDbType = SqlDbType.Structured;
-                    parametroDetalles.TypeName = "dbo.TipoDetalleCompra";
-
-                    return Convert.ToInt32(cmd.ExecuteScalar());
+                        throw;
+                    }
                 }
             }
         }
         public DataTable ObtenerCompras(DateTime desde, DateTime hasta)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerCompras", conexion))
             {
-                using (SqlCommand cmd = new SqlCommand("sp_ObtenerCompras", conexion))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Desde", desde.Date);
-                    cmd.Parameters.AddWithValue("@Hasta", hasta.Date);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Desde", desde.Date);
+                cmd.Parameters.AddWithValue("@Hasta", hasta.Date);
 
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-                        adaptador.Fill(tabla);
-                        return tabla;
-                    }
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                {
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
         public DataTable ObtenerDetalleCompra(int idCompra)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerDetalleCompra", conexion))
             {
-                using (SqlCommand cmd = new SqlCommand("sp_ObtenerDetalleCompra", conexion))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@IdCompra", idCompra);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdCompra", idCompra);
 
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-                        adaptador.Fill(tabla);
-                        return tabla;
-                    }
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                {
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
                 }
             }
         }
-        public void AnularCompra(int idCompra, string motivo)
+        public void AnularCompra(int idCompra, string motivo, int idUsuario)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
             {
@@ -121,11 +212,10 @@ namespace CapaDatos.NegocioDatos
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@IdCompra", idCompra);
                     cmd.Parameters.AddWithValue("@Motivo", motivo);
-
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
                     cmd.ExecuteNonQuery();
                 }
             }
         }
-
     }
 }
