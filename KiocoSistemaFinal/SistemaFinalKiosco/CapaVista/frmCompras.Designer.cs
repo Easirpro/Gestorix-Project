@@ -45,6 +45,7 @@
             clnNCoprobante = new DataGridViewTextBoxColumn();
             clnTotal = new DataGridViewTextBoxColumn();
             clnEstado = new DataGridViewTextBoxColumn();
+            btnSalir = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -188,11 +189,22 @@
             clnEstado.HeaderText = "Estado";
             clnEstado.Name = "clnEstado";
             // 
+            // btnSalir
+            // 
+            btnSalir.Location = new Point(648, 454);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(91, 33);
+            btnSalir.TabIndex = 10;
+            btnSalir.Text = "Salir";
+            btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.Click += btnSalir_Click;
+            // 
             // frmCompras
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(826, 513);
+            Controls.Add(btnSalir);
             Controls.Add(dataGridView1);
             Controls.Add(button5);
             Controls.Add(btnBuscar);
@@ -230,5 +242,6 @@
         private DataGridViewTextBoxColumn clnNCoprobante;
         private DataGridViewTextBoxColumn clnTotal;
         private DataGridViewTextBoxColumn clnEstado;
+        private Button btnSalir;
     }
 }

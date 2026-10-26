@@ -25,7 +25,11 @@ namespace CapaVista
             Load += frmVentas_Load;
             btnActualizar.Click += btnActualizar_Click;
             btnVolver.Click += btnVolver_Click;
+            btnAnuladas.Checked = false;
+            CargarVentas();
             dataGridView1.SelectionChanged += dataGridView1_SelectionChanged;
+
+         
         }
 
 
@@ -35,7 +39,7 @@ namespace CapaVista
             bool puedeGestionarVentas = SesionUsuario.Permisos.Contains(200) || SesionUsuario.Permisos.Contains(210);
 
             btnAnular.Enabled = puedeGestionarVentas;
-        }   //Hay que darle acciones 
+        }
         private void CargarVentas()
         {
             try
@@ -68,6 +72,9 @@ namespace CapaVista
                 clnDetalle.UseColumnTextForButtonValue = true;
                 clnDetalle.Text = "Ver detalle";
                 dataGridView1.DataSource = ventas;
+
+                AplicarFiltroAnuladas();
+
                 dataGridView1.CellFormatting -= dataGridView1_CellFormatting;
                 dataGridView1.CellFormatting += dataGridView1_CellFormatting;
                 dataGridView1.ReadOnly = true;
@@ -75,7 +82,7 @@ namespace CapaVista
                 dataGridView1.AllowUserToDeleteRows = false;
                 dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dataGridView1.MultiSelect = false;
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
                 ActualizarBotonAnular();
                 CargarObservaciones();
@@ -197,9 +204,19 @@ namespace CapaVista
             e.Value = anulada ? "Anulada" : "Activa";
             e.FormattingApplied = true;
         }
+        private void AplicarFiltroAnuladas()
+        {
+            string filtro = btnAnuladas.Checked ? "Anulada = true" : "Anulada = false";
 
-
-
+            if (dataGridView1.DataSource is DataTable tabla)
+            {
+                tabla.DefaultView.RowFilter = filtro;
+            }
+            else if (dataGridView1.DataSource is DataView vista)
+            {
+                vista.RowFilter = filtro;
+            }
+        }
 
         #endregion
 
@@ -345,8 +362,13 @@ namespace CapaVista
         {
 
         }
-
+        private void btnAnuladas_CheckedChanged(object sender, EventArgs e)
+        {
+            AplicarFiltroAnuladas();
+           
+        }
         #endregion
+
 
 
 

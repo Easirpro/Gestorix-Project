@@ -1,4 +1,5 @@
 ﻿using CapaLogica.BitacoraLogi;
+using SistemaKiosco;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -321,50 +322,16 @@ namespace CapaVista
         {
             this.AplicarFiltros();
         }
-
-
-
-        #endregion
-
-
         private void lblSubtitulo_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void btnProbarFalla_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                throw new InvalidOperationException(
-                    "Prueba controlada de registro de error técnico.");
-            }
-            catch (Exception ex)
-            {
-                try
-                {
-                    logica.RegistrarError(
-                        null,
-                        "frmBitacora.btnProbarFalla_Click",
-                        ex.GetType().FullName,
-                        ex.Message,
-                        ex.ToString());
 
-                    MessageBox.Show(
-                        "Falla realizada",
-                        "Prueba de falla",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                }
-                catch (Exception exRegistro)
-                {
-                    MessageBox.Show(
-                        "No se pudo registrar la falla.\n\n" + exRegistro.Message,
-                        "Error de registro",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-        }
+        #endregion
+
+
+
+
     }
 }
