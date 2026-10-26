@@ -71,9 +71,6 @@
     <Compile Update="frmInformeCobro.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="frmInformeCobroAlternativo.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="frmIngresoPlataCaja.cs">
       <SubType>Form</SubType>
     </Compile>

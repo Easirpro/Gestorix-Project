@@ -1418,6 +1418,7 @@ namespace CapaVista
         }
         private void FrmPresentacion_Load(object sender, EventArgs e)
         {
+
             // backup automatico
 
             try

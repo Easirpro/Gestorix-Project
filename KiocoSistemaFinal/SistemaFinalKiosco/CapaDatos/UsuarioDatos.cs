@@ -1,4 +1,5 @@
 ﻿using CapaDatos;
+using CapaDatos.SistemaKiosco;
 using CapaEntidades;
 using Microsoft.Data.SqlClient;
 using SistemaKiosco;
@@ -8,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CapaEntidades;
 
 
 public class ClsUsuarioDatos
@@ -131,7 +133,7 @@ public class ClsUsuarioDatos
     public int RegistrarUsuario(ClslUsuario usuario)
     {
         int idUsuario = 0;
-
+        string dvh = GenerarDVHUsuario(usuario);
         using (SqlConnection con = conexion.ObtenerConexion())
         {
             con.Open();
@@ -163,6 +165,7 @@ public class ClsUsuarioDatos
                     PassActual,
                     PrimerIngreso,
                     UltimoIngreso
+                    DVH
                 )
                 VALUES
                 (
@@ -173,6 +176,7 @@ public class ClsUsuarioDatos
                     @PassActual,
                     @PrimerIngreso,
                     @UltimoIngreso
+                    @DVH
                 );
 
                 SELECT SCOPE_IDENTITY();";
@@ -186,7 +190,7 @@ public class ClsUsuarioDatos
                 cmd.Parameters.AddWithValue("@PassActual", usuario.PassActual);
                 cmd.Parameters.AddWithValue("@PrimerIngreso", usuario.PrimerIngreso);
                 cmd.Parameters.AddWithValue( "@UltimoIngreso",(object)usuario.UltimoLogin ?? DBNull.Value);
-
+                cmd.Parameters.AddWithValue("@DVH",dvh);
                 idUsuario =Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
@@ -572,5 +576,103 @@ public class ClsUsuarioDatos
             return Convert.ToInt32(resultado);
         }
     }
+    private string GenerarDVHUsuario(ClslUsuario usuario)
+    {
+        string cadena =
+            usuario.Estado.ToString() +
+            usuario.IdPersona.ToString() +
+            usuario.IdRol.ToString() +
+            (usuario.Username ?? "") +
+            (usuario.PassActual ?? "") +
+            usuario.PrimerIngreso.ToString() +
+            (usuario.UltimoLogin?.ToString() ?? "");
+
+        return ClsDigitoVerificador
+            .GenerarHash(cadena);
+    }
+    public void RecalcularDVHUsuarios()
+    {
+        using (SqlConnection con =
+            conexion.ObtenerConexion())
+        {
+            con.Open();
+
+            string sql =
+            @"SELECT
+            IdUsuario,
+            Estado,
+            IdPersona,
+            IdRol,
+            Username,
+            PassActual,
+            PrimerIngreso,
+            UltimoIngreso
+          FROM Usuario
+          WHERE DVH IS NULL";
+
+            using (SqlCommand cmd =
+                new SqlCommand(sql, con))
+            {
+                using (SqlDataReader dr =
+                    cmd.ExecuteReader())
+                {
+                    List<ClslUsuario> usuarios =
+                        new List<ClslUsuario>();
+
+                    while (dr.Read())
+                    {
+                        usuarios.Add(new ClslUsuario
+                        {
+                            IdUsuario =
+                                Convert.ToInt32(dr["IdUsuario"]),
+                            Estado =
+                                Convert.ToBoolean(dr["Estado"]),
+                            IdPersona =
+                                Convert.ToInt32(dr["IdPersona"]),
+                            IdRol =
+                                Convert.ToInt32(dr["IdRol"]),
+                            Username =
+                                dr["Username"].ToString(),
+                            PassActual =
+                                dr["PassActual"].ToString(),
+                            PrimerIngreso =
+                                Convert.ToBoolean(dr["PrimerIngreso"]),
+                            UltimoLogin =
+                                dr["UltimoIngreso"] == DBNull.Value
+                                ? null
+                                : Convert.ToDateTime(dr["UltimoIngreso"])
+                        });
+                    }
+
+                    dr.Close();
+
+                    foreach (var usuario in usuarios)
+                    {
+                        string dvh =
+                            GenerarDVHUsuario(usuario);
+
+                        string update =
+                            @"UPDATE Usuario
+                          SET DVH = @DVH
+                          WHERE IdUsuario = @IdUsuario";
+
+                        using (SqlCommand updateCmd =
+                            new SqlCommand(update, con))
+                        {
+                            updateCmd.Parameters.AddWithValue(
+                                "@DVH", dvh);
+
+                            updateCmd.Parameters.AddWithValue(
+                                "@IdUsuario",
+                                usuario.IdUsuario);
+
+                            updateCmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 
