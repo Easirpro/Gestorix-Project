@@ -113,7 +113,7 @@ namespace CapaVista
 
             // idioma
             idiomaToolStripMenuItem.Text = idiomaIngles ? "Language" : "Idioma";
-            inglesToolStripMenuItem.Text = idiomaIngles ? "Spanish" : "English";
+            inglesToolStripMenuItem.Text = idiomaIngles ? "Ingles" : "English";
 
             // empleados
             permisosToolStripMenuItem.Text = idiomaIngles ? "Employees" : "Empleado";
