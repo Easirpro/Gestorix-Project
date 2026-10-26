@@ -69,6 +69,7 @@
             btnLimpiarBusqueda.TabIndex = 3;
             btnLimpiarBusqueda.Text = "Limpiar busqueda";
             btnLimpiarBusqueda.UseVisualStyleBackColor = true;
+            btnLimpiarBusqueda.Click += btnLimpiarBusqueda_Click;
             // 
             // btnContinuar
             // 
@@ -86,9 +87,10 @@
             dtgBuscarPromo.Columns.AddRange(new DataGridViewColumn[] { clnCodigo, clnNombre, clnEstado, clnDetalle });
             dtgBuscarPromo.Location = new Point(12, 120);
             dtgBuscarPromo.Name = "dtgBuscarPromo";
-            dtgBuscarPromo.Size = new Size(641, 150);
+            dtgBuscarPromo.Size = new Size(501, 150);
             dtgBuscarPromo.TabIndex = 5;
             dtgBuscarPromo.CellClick += dtgBuscarPromo_CellClick;
+            dtgBuscarPromo.CellContentClick += dtgBuscarPromo_CellContentClick;
             // 
             // clnCodigo
             // 
@@ -115,6 +117,9 @@
             // 
             clnDetalle.HeaderText = "Detalle";
             clnDetalle.Name = "clnDetalle";
+            clnDetalle.Resizable = DataGridViewTriState.False;
+            clnDetalle.Text = "Ver Detalle";
+            clnDetalle.UseColumnTextForButtonValue = true;
             // 
             // cmbBuscarPromo
             // 
@@ -130,7 +135,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(711, 316);
+            ClientSize = new Size(525, 316);
             Controls.Add(cmbBuscarPromo);
             Controls.Add(dtgBuscarPromo);
             Controls.Add(btnContinuar);
@@ -138,9 +143,10 @@
             Controls.Add(lblDescipcionPromo);
             Controls.Add(lblBuscarPromo);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimizeBox = false;
             Name = "frmBuscarPromo";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "frmBuscarPromo";
+            Text = "Buscar Promoción";
             Load += frmBuscarPromo_Load_1;
             ((System.ComponentModel.ISupportInitialize)dtgBuscarPromo).EndInit();
             ResumeLayout(false);

@@ -41,7 +41,6 @@ namespace CapaLogica.BitacoraLogi
 
             return datos.ObtenerBitacora(fechaDesde, fechaHasta, categoria, buscar);
         }
-
         public void RegistrarError( int? idUsuario, string modulo, string tipoExcepcion, string mensaje, string detalleTecnico)
         {
             if (string.IsNullOrWhiteSpace(modulo))

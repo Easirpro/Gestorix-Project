@@ -1,11 +1,8 @@
 ﻿using CapaDatos.NegocioDatos;
+using CapaEntidades;
 using CapaEntidades.NegocioEntidades;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CapaLogica.NegocioLogica
 {
@@ -19,7 +16,15 @@ namespace CapaLogica.NegocioLogica
         }
         public int GuardarCompra(ClsCompraEntidad compra)
         {
-            return datos.GuardarCompra(compra);
+            int idUsuario = SesionUsuario.IdUsuario;
+
+            if (idUsuario <= 0)
+            {
+                throw new InvalidOperationException(
+                    "No hay una sesión de usuario válida. Volvé a iniciar sesión.");
+            }
+
+            return datos.GuardarCompra(compra, idUsuario);
         }
         public DataTable ObtenerCompras(DateTime desde, DateTime hasta)
         {
@@ -31,7 +36,14 @@ namespace CapaLogica.NegocioLogica
         }
         public void AnularCompra(int idCompra, string motivo)
         {
-            datos.AnularCompra(idCompra, motivo);
+            int idUsuario = SesionUsuario.IdUsuario;
+
+            if (idUsuario <= 0)
+            {
+                throw new InvalidOperationException("No hay una sesión de usuario válida. Volvé a iniciar sesión.");
+            }
+
+            datos.AnularCompra(idCompra, motivo, idUsuario);
         }
     }
 }

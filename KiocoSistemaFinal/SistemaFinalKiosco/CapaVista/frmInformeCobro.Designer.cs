@@ -211,7 +211,7 @@
             // 
             // txtMontoRecibido
             // 
-            txtMontoRecibido.Location = new Point(24, 114);
+            txtMontoRecibido.Location = new Point(23, 79);
             txtMontoRecibido.Name = "txtMontoRecibido";
             txtMontoRecibido.Size = new Size(118, 23);
             txtMontoRecibido.TabIndex = 22;
@@ -239,7 +239,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 7F);
-            label1.Location = new Point(23, 99);
+            label1.Location = new Point(22, 64);
             label1.Name = "label1";
             label1.Size = new Size(89, 12);
             label1.TabIndex = 25;
@@ -326,6 +326,7 @@
             Name = "frmInformeCobro";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Informe de Cobro";
+            Load += frmInformeCobro_Load;
             pnlTotal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dtgPagos).EndInit();
             pnlResta.ResumeLayout(false);

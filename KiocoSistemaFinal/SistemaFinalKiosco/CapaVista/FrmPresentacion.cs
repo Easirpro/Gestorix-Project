@@ -1,6 +1,8 @@
 ﻿using CapaEntidades;
 using CapaLogica;
+using CapaLogica.NegocioLogica;
 using DocumentFormat.OpenXml.Office.Word;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,39 +13,48 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
-using CapaLogica.NegocioLogica;
-using System.Data;
+
 namespace CapaVista
 {
     public partial class frmmenuPres : Form
     {
         private bool idiomaIngles = false;
-
         private decimal subtotal = 0.00m;
         private decimal descuentoRecargo = 0.00m;
         private decimal total;
+        private ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+        private DataTable tablaProductosEncontrados;
+        private readonly HashSet<DataGridViewRow> filasDePromocion = new HashSet<DataGridViewRow>();
+
+        private frmCobroSecundario formularioSecundario;
+
 
         public frmmenuPres()
         {
             InitializeComponent();
+
+            MinimumSize = new Size(900, 620);
+            StartPosition = FormStartPosition.CenterScreen;
+            KeyPreview = true;
+
             ActualizarFechaHora();
-            //tmrFechaHora.Start();
+            tmrFechaHora.Start();
 
             dtgPresentacion.ReadOnly = true;
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
-
             dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
             dtgPresentacion.AllowUserToResizeColumns = false;
             dtgPresentacion.AllowUserToOrderColumns = false;
             dtgPresentacion.RowHeadersVisible = false;
 
-            this.KeyPreview = true;
+            Load += frmmenuPres_Load;
+            Load += FrmPresentacion_Load;
 
-            this.Load += frmmenuPres_Load;
-            this.Load += FrmPresentacion_Load;
+            Resize += (sender, e) => AjustarDiseno();
+            Shown += (sender, e) => AjustarDiseno();
         }
+
         private void frmmenuPres_Load(object sender, EventArgs e)
         {
             txtUsuario.Text = SesionUsuario.Username;
@@ -51,6 +62,10 @@ namespace CapaVista
             CapaLogica.ClsRol rol = new CapaLogica.ClsRol();
 
             txtRol.Text = rol.ObtenerNombreRol(SesionUsuario.IdRol);
+
+            txtCantidad.Text = "1";
+
+            this.KeyPreview = true;
 
             CargarBotones();
 
@@ -127,16 +142,11 @@ namespace CapaVista
             // botones de vernta
             btnCobrar.Text = idiomaIngles ? "F2 - Pay" : "F2 - Cobrar";
             btnNuevaCompra.Text = idiomaIngles ? "F4 - New Purchase" : "F4 - Nueva Compra";
-            btnVerPrecio.Text = idiomaIngles ? "F5 - View Price" : "F5 - Ver Precio";
             btnCambiarcantidad.Text = idiomaIngles ? "Change Quantity" : "Cambiar cantidad";
-            btnBuscarArticulo.Text = idiomaIngles ? "Search Product" : "Buscar artículo";
             btnQuitar.Text = idiomaIngles ? "Remove" : "Quitar";
-            btnDescuento.Text = idiomaIngles ? "Discount" : "Descuento";
-            btnRecargo.Text = idiomaIngles ? "Surcharge" : "Recargo";
 
             // etiqueta de productos
-            label3.Text = idiomaIngles ? "Barcode" : "Código de barras";
-            label4.Text = idiomaIngles ? "Quantity" : "Cantidad";
+            label3.Text = idiomaIngles ? "Scan a code or type part of the SKU or name." : "Escaneá un código o escribí parte del SKU o del nombre."; label4.Text = idiomaIngles ? "Quantity" : "Cantidad";
 
             // totales
             label1.Text = idiomaIngles ? "Subtotal" : "Subtotal";
@@ -168,6 +178,72 @@ namespace CapaVista
         }
 
         #region Metodo
+
+        private void AjustarDiseno()
+        {
+            if (WindowState == FormWindowState.Minimized || !IsHandleCreated)
+                return;
+
+            SuspendLayout();
+
+            try
+            {
+                int ancho = ClientSize.Width;
+                int alto = ClientSize.Height;
+                int margen = 12;
+                int altoMenu = btnConfig.Bottom;
+                int altoPie = pnlUsuario.Height;
+                int espacioInferior = 10;
+
+                pnlUsuario.SetBounds(0, alto - altoPie, ancho, altoPie);
+
+                int anchoDerecha = Math.Clamp((int)(ancho * 0.32), 260, 360);
+                int xDerecha = ancho - margen - anchoDerecha;
+                int anchoIzquierda = xDerecha - margen * 2;
+                int anchoCantidad = Math.Clamp((int)(anchoIzquierda * 0.25), 95, 140);
+                int separacion = 12;
+                int anchoCodigo = Math.Max(150, anchoIzquierda - anchoCantidad - separacion);
+
+                label3.SetBounds(margen, altoMenu + 11, anchoCodigo, 18);
+                txtCodigoBarra.SetBounds(margen, altoMenu + 30, anchoCodigo, 25);
+                label4.SetBounds(margen + anchoCodigo + separacion, altoMenu + 11, anchoCantidad, 18);
+                txtCantidad.SetBounds(margen + anchoCodigo + separacion, altoMenu + 30, anchoCantidad, 25);
+
+                int yGrilla = altoMenu + 70;
+                int yBotones = alto - altoPie - 94;
+                int altoGrilla = Math.Max(150, yBotones - yGrilla - 6);
+
+                dtgPresentacion.SetBounds(margen, yGrilla, anchoIzquierda, altoGrilla);
+                yBotones = dtgPresentacion.Bottom + 6;
+                btnPromocion.SetBounds(margen, yBotones, 207, 74);
+                btnQuitar.SetBounds(Math.Max(margen + 215, xDerecha - 208), yBotones, 75, 28);
+                btnCambiarcantidad.SetBounds(Math.Max(margen + 295, xDerecha - 127), yBotones, 115, 28);
+                tableLayoutPanel1.SetBounds(xDerecha, altoMenu + 30, anchoDerecha, 145);
+                btnCobrar.SetBounds(xDerecha, tableLayoutPanel1.Bottom + 6, anchoDerecha, 45);
+                btnNuevaCompra.SetBounds(xDerecha, btnCobrar.Bottom + 6, anchoDerecha, 45);
+
+                int yLogo = btnNuevaCompra.Bottom + 8;
+                int altoLogo = Math.Max(60, pnlUsuario.Top - yLogo - espacioInferior);
+
+                pcbLogo.SetBounds(xDerecha, yLogo, anchoDerecha, altoLogo);
+
+                lstDescripcion.Left = txtCodigoBarra.Left;
+                lstDescripcion.Width = txtCodigoBarra.Width;
+                lstDescripcion.Height = 94;
+
+                if (lstDescripcion.Visible)
+                {
+                    lstDescripcion.BringToFront();
+                }
+
+                lblHora.Left = ancho - lblHora.Width - margen;
+                lblFecha.Left = lblHora.Left - lblFecha.Width - 20;
+            }
+            finally
+            {
+                ResumeLayout(true);
+            }
+        }
         private void CargarBotones()
         {
             //Articulo
@@ -297,13 +373,9 @@ namespace CapaVista
 
             // Botones del formulario
             btnCambiarcantidad.Enabled = false;
-            btnRecargo.Enabled = false;
-            btnDescuento.Enabled = false;
             btnQuitar.Enabled = false;
             btnCobrar.Enabled = false;
             btnNuevaCompra.Enabled = false;
-            btnVerPrecio.Enabled = false;
-            btnBuscarArticulo.Enabled = false;
             btnPromocion.Enabled = false;
 
             // Entrada de datos
@@ -314,20 +386,20 @@ namespace CapaVista
             txtUsuario.Text = "";
             txtRol.Text = "";
         }
-        private void AgregarProductoAGrilla(int idProducto, string sku, string codigoBarra, string descripcion, decimal precio, decimal cantidad, decimal stockDisponible)
+        private bool AgregarProductoAGrilla(int idProducto, string sku, string codigoBarra, string descripcion, decimal precio, decimal cantidad, decimal stockDisponible)
         {
             if (cantidad <= 0)
             {
                 MessageBox.Show("La cantidad debe ser mayor a cero.", "Cantidad inválida",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false;
             }
 
             if (precio < 0)
             {
                 MessageBox.Show("El precio no puede ser negativo.", "Precio inválido",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false;
             }
 
             decimal cantidadYaCargada = 0m;
@@ -337,19 +409,35 @@ namespace CapaVista
                 if (fila.IsNewRow || fila.Cells["ClnIdProducto"].Value == null)
                     continue;
 
-                if (Convert.ToInt32(fila.Cells["ClnIdProducto"].Value) == idProducto)
+                if (int.TryParse(Convert.ToString(fila.Cells["ClnIdProducto"].Value), out int idCargado) && idCargado == idProducto)
                 {
-                    cantidadYaCargada += Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
+                    if (decimal.TryParse(Convert.ToString(fila.Cells["ClnCantidad"].Value), out decimal cantidadCargada))
+                    {
+                        cantidadYaCargada += cantidadCargada;
+                    }
                 }
             }
 
-            if (stockDisponible <= 0 || cantidadYaCargada + cantidad > stockDisponible)
+            decimal cantidadEnGrillaSecundaria = 0m;
+
+            if (formularioSecundario != null && !formularioSecundario.IsDisposed)
             {
-                MessageBox.Show($"Stock insuficiente.\nStock disponible: {stockDisponible}\n" + $"Cantidad ya cargada: {cantidadYaCargada}\n" +
-                    $"Cantidad a agregar: {cantidad}", "Stock insuficiente",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                cantidadEnGrillaSecundaria = formularioSecundario.ObtenerCantidadCargada(idProducto);
             }
+
+            decimal cantidadTotal = cantidadYaCargada + cantidadEnGrillaSecundaria + cantidad;
+
+            if (stockDisponible <= 0 || cantidadTotal > stockDisponible)
+            {
+                decimal stockRestante = Math.Max(0m, stockDisponible - cantidadYaCargada - cantidadEnGrillaSecundaria);
+
+                MessageBox.Show($"Stock insuficiente.\n" + $"Stock en sistema: {stockDisponible}\n" + $"Cantidad en venta principal: {cantidadYaCargada}\n" +
+                    $"Cantidad en venta secundaria: {cantidadEnGrillaSecundaria}\n" + $"Stock disponible para agregar: {stockRestante}\n" + $"Cantidad a agregar: {cantidad}",
+                    "Stock insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return false;
+            }
+
 
             DataGridViewRow filaDestino = null;
 
@@ -381,6 +469,8 @@ namespace CapaVista
 
             CalcularYMostrarMontos();
             dtgPresentacion.Refresh();
+
+            return true;
         }
         private void IngresarProductoPorCodigo()
         {
@@ -447,6 +537,109 @@ namespace CapaVista
             lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy");
             lblHora.Text = "Hora: " + DateTime.Now.ToString("HH:mm:ss");
         }
+        private void LimpiarVenta()
+        {
+            dtgPresentacion.Rows.Clear();
+
+            subtotal = 0.00m;
+            descuentoRecargo = 0.00m;
+            total = 0.00m;
+
+            CalcularYMostrarMontos();
+            RellenarFilas();
+
+            txtCodigoBarra.Clear();
+            txtCodigoBarra.Focus();
+        }
+        private void RellenarFilas()
+        {
+            int filasVisibles = dtgPresentacion.Height / dtgPresentacion.RowTemplate.Height;
+            while (dtgPresentacion.Rows.Count < filasVisibles)
+            {
+                dtgPresentacion.Rows.Add();
+            }
+        }
+        private void CalcularYMostrarMontos()
+        {
+            decimal nuevoSubtotal = 0m;
+
+            foreach (DataGridViewRow fila in dtgPresentacion.Rows)
+            {
+                if (fila.IsNewRow || fila.Cells["ClnIdProducto"].Value == null)
+                    continue;
+
+                object valorImporte = fila.Cells["ClnImporte"].Value;
+
+                if (valorImporte != null && valorImporte != DBNull.Value && decimal.TryParse(Convert.ToString(valorImporte), out decimal importe))
+                {
+                    nuevoSubtotal += importe;
+                }
+            }
+
+            subtotal = Math.Round(nuevoSubtotal, 2);
+            total = Math.Max(0m, Math.Round(subtotal + descuentoRecargo, 2));
+
+            lblSubtotalMonto.Text = subtotal.ToString("C2");
+            lblDescuentoMonto.Text = Math.Abs(descuentoRecargo).ToString("C2");
+
+            lblTotalMonto.Visible = true;
+            lblTotalMonto.AutoSize = false;
+            lblTotalMonto.Dock = System.Windows.Forms.DockStyle.Fill;
+            lblTotalMonto.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            lblTotalMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
+
+            lblTotalMonto.Text = total.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR"));
+        }
+        private void AgregarProductoSeleccionado()
+        {
+            if (lstDescripcion.SelectedIndex < 0 || tablaProductosEncontrados == null)
+                return;
+
+            decimal cantidad;
+
+            if (!decimal.TryParse(txtCantidad.Text.Trim(), out cantidad) ||
+                cantidad <= 0)
+            {
+                MessageBox.Show("Ingresá una cantidad válida mayor que cero.", "Cantidad inválida",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                txtCantidad.Focus();
+                txtCantidad.SelectAll();
+                return;
+            }
+
+            int indice = lstDescripcion.SelectedIndex;
+
+            if (indice >= tablaProductosEncontrados.Rows.Count)
+                return;
+
+            DataRow fila = tablaProductosEncontrados.Rows[indice];
+
+            int idProducto = Convert.ToInt32(fila["IdProducto"]);
+            string sku = fila["SKU"].ToString();
+            string codigoBarra = fila["CodigoBarra"].ToString();
+            string descripcion = fila["Descripcion"].ToString();
+            decimal precio = Convert.ToDecimal(fila["PrecioVenta"]);
+
+            ClsLogicaProducto logica = new ClsLogicaProducto();
+            DataTable tablaStock = logica.ObtenerStockPorProducto(idProducto);
+
+            decimal stockDisponible = 0m;
+
+            if (tablaStock != null && tablaStock.Rows.Count > 0 && tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
+            {
+                stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
+            }
+
+            // Agregar usando la cantidad ingresada
+            AgregarProductoAGrilla(idProducto, sku, codigoBarra, descripcion, precio, cantidad, stockDisponible);
+
+            lstDescripcion.Visible = false;
+            lstDescripcion.Items.Clear();
+            txtCodigoBarra.Clear();
+            txtCodigoBarra.Focus();
+        }
+
 
 
         #endregion
@@ -461,6 +654,46 @@ namespace CapaVista
                 IngresarProductoPorCodigo();
             }
         }
+        private void txtCodigoBarra_TextChanged(object sender, EventArgs e)
+        {
+            string texto = txtCodigoBarra.Text.Trim();
+
+            lstDescripcion.Items.Clear();
+            tablaProductosEncontrados = null;
+
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                lstDescripcion.Visible = false;
+                return;
+            }
+
+            try
+            {
+                tablaProductosEncontrados = logicaProducto.BuscarArticulos(texto, true);
+
+                if (tablaProductosEncontrados == null || tablaProductosEncontrados.Rows.Count == 0)
+                {
+                    lstDescripcion.Visible = false;
+                    return;
+                }
+
+                foreach (DataRow fila in tablaProductosEncontrados.Rows)
+                {
+                    string descripcion = fila["Descripcion"].ToString();
+
+                    lstDescripcion.Items.Add(descripcion);
+                }
+
+                lstDescripcion.Visible = lstDescripcion.Items.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                lstDescripcion.Visible = false;
+
+                MessageBox.Show("Error al buscar artículos: " + ex.Message, "Búsqueda de artículos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void txtCantidad_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -469,8 +702,32 @@ namespace CapaVista
                 IngresarProductoPorCodigo();
             }
         }
+        private void lstDescripcion_DoubleClick(object sender, EventArgs e)
+        {
+            AgregarProductoSeleccionado();
+        }
+        private void lstDescripcion_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                AgregarProductoSeleccionado();
+            }
+        }
         //Menu Item
-
+        private void frmmenuPres_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F2)
+            {
+                e.SuppressKeyPress = true;
+                btnCobrar.PerformClick();
+            }
+            else if (e.KeyCode == Keys.F4)
+            {
+                e.SuppressKeyPress = true;
+                btnNuevaCompra.PerformClick();
+            }
+        }
         //Importar y Exportar
         private void menuitemImporexcel_Click(object sender, EventArgs e)
         {
@@ -613,37 +870,6 @@ namespace CapaVista
 
             }
         }
-        private void CalcularYMostrarMontos()
-        {
-            decimal nuevoSubtotal = 0m;
-
-            foreach (DataGridViewRow fila in dtgPresentacion.Rows)
-            {
-                if (fila.IsNewRow || fila.Cells["ClnIdProducto"].Value == null)
-                    continue;
-
-                object valorImporte = fila.Cells["ClnImporte"].Value;
-
-                if (valorImporte != null && valorImporte != DBNull.Value && decimal.TryParse(Convert.ToString(valorImporte), out decimal importe))
-                {
-                    nuevoSubtotal += importe;
-                }
-            }
-
-            subtotal = Math.Round(nuevoSubtotal, 2);
-            total = Math.Max(0m, Math.Round(subtotal + descuentoRecargo, 2));
-
-            lblSubtotalMonto.Text = subtotal.ToString("C2");
-            lblDescuentoMonto.Text = Math.Abs(descuentoRecargo).ToString("C2");
-
-            lblTotalMonto.Visible = true;
-            lblTotalMonto.AutoSize = false;
-            lblTotalMonto.Dock = System.Windows.Forms.DockStyle.Fill;
-            lblTotalMonto.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            lblTotalMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
-
-            lblTotalMonto.Text = total.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR"));
-        }
         private void btnConfig_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
@@ -654,17 +880,45 @@ namespace CapaVista
             Carga.ShowDialog();
         }
         private void btnNuevaCompra_Click(object sender, EventArgs e)
-
         {
-            btnNuevaCompra.Enabled = false;
-            frmCobroSecundario secundario = new frmCobroSecundario();
+            bool hayProductos = false;
 
-            secundario.FormClosed += (s, arg) =>
+            foreach (DataGridViewRow fila in dtgPresentacion.Rows)
             {
-                btnNuevaCompra.Enabled = true;
+                if (fila.IsNewRow || fila.Cells["ClnIdProducto"].Value == null)
+                    continue;
+
+                if (!string.IsNullOrWhiteSpace(Convert.ToString(fila.Cells["ClnIdProducto"].Value)))
+                {
+                    hayProductos = true;
+                    break;
+                }
+            }
+
+            if (!hayProductos)
+            {
+                MessageBox.Show("Primero debe cargar al menos un producto en la venta principal.", "Venta sin productos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                txtCodigoBarra.Focus();
+                return;
+            }
+
+            // Evita abrir una segunda ventana secundaria
+            if (formularioSecundario != null && !formularioSecundario.IsDisposed)
+            {
+                formularioSecundario.Activate();
+                return;
+            }
+
+            formularioSecundario = new frmCobroSecundario(dtgPresentacion);
+
+            formularioSecundario.FormClosed += (s, arg) =>
+            {
+                formularioSecundario = null;
             };
 
-            secundario.Show();
+            formularioSecundario.Show();
 
         }
         private void btnBuscarArticulo_Click(object sender, EventArgs e)
@@ -714,28 +968,6 @@ namespace CapaVista
             if (cobro.ShowDialog() == DialogResult.OK)
             {
                 LimpiarVenta();
-            }
-        }
-        private void LimpiarVenta()
-        {
-            dtgPresentacion.Rows.Clear();
-
-            subtotal = 0.00m;
-            descuentoRecargo = 0.00m;
-            total = 0.00m;
-
-            CalcularYMostrarMontos();
-            RellenarFilas();
-
-            txtCodigoBarra.Clear();
-            txtCodigoBarra.Focus();
-        }
-        private void RellenarFilas()
-        {
-            int filasVisibles = dtgPresentacion.Height / dtgPresentacion.RowTemplate.Height;
-            while (dtgPresentacion.Rows.Count < filasVisibles)
-            {
-                dtgPresentacion.Rows.Add();
             }
         }
         private void menuitemAdministradoarticulos_Click(object sender, EventArgs e)
@@ -806,8 +1038,7 @@ namespace CapaVista
                         cantidadLleva = Convert.ToInt32(tipoPromocion["CantidadLleva"]);
                         cantidadPaga = Convert.ToInt32(tipoPromocion["CantidadPaga"]);
 
-                        if (cantidadLleva <= 0 || cantidadPaga <= 0 ||
-                            cantidadPaga >= cantidadLleva)
+                        if (cantidadLleva <= 0 || cantidadPaga <= 0 || cantidadPaga >= cantidadLleva)
                         {
                             MessageBox.Show("La mecánica de volumen no es válida.");
                             return;
@@ -837,6 +1068,32 @@ namespace CapaVista
 
                     decimal precioFinal = 0m;
 
+                    DataTable respaldoGrilla = new DataTable();
+
+                    foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
+                    {
+                        respaldoGrilla.Columns.Add(columna.Name, typeof(object));
+                    }
+
+                    foreach (DataGridViewRow fila in dtgPresentacion.Rows)
+                    {
+                        if (fila.IsNewRow)
+                            continue;
+
+                        DataRow nuevaFila = respaldoGrilla.NewRow();
+
+                        foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
+                        {
+                            nuevaFila[columna.Name] = fila.Cells[columna.Name].Value ?? DBNull.Value;
+                        }
+
+                        respaldoGrilla.Rows.Add(nuevaFila);
+                    }
+
+                    decimal subtotalAnterior = subtotal;
+                    decimal ajusteAnterior = descuentoRecargo;
+                    decimal totalAnterior = total;
+
                     foreach (DataRow detalle in detalles.Rows)
                     {
                         decimal cantidadConfigurada = Convert.ToDecimal(detalle["Cantidad"]);
@@ -864,11 +1121,29 @@ namespace CapaVista
 
                     precioFinal = Math.Round(precioFinal, 2);
 
+                    var cantidadesPromocion = new Dictionary<int, decimal>();
+
                     foreach (DataRow detalle in detalles.Rows)
                     {
                         int idProducto = Convert.ToInt32(detalle["IdProducto"]);
                         decimal cantidadConfigurada = Convert.ToDecimal(detalle["Cantidad"]);
+
                         decimal cantidadAgregar = esVolumen ? cantidadConfigurada * cantidadLleva : cantidadConfigurada;
+
+                        if (cantidadesPromocion.ContainsKey(idProducto))
+                        {
+                            cantidadesPromocion[idProducto] += cantidadAgregar;
+                        }
+                        else
+                        {
+                            cantidadesPromocion[idProducto] = cantidadAgregar;
+                        }
+                    }
+
+                    foreach (var producto in cantidadesPromocion)
+                    {
+                        int idProducto = producto.Key;
+                        decimal cantidadAgregar = producto.Value;
 
                         DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
 
@@ -879,25 +1154,51 @@ namespace CapaVista
                             stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
                         }
 
-                        if (cantidadAgregar > stockDisponible)
+                        decimal cantidadEnPrincipal = 0m;
+
+                        foreach (DataGridViewRow fila in dtgPresentacion.Rows)
                         {
-                            MessageBox.Show("Stock insuficiente para el producto: " + detalle["NombreProducto"].ToString(), "Promociones",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            if (fila.IsNewRow || fila.Cells["ClnIdProducto"].Value == null)
+                            {
+                                continue;
+                            }
+
+                            if (int.TryParse(Convert.ToString(fila.Cells["ClnIdProducto"].Value), out int idCargado) && idCargado == idProducto)
+                            {
+                                if (decimal.TryParse(Convert.ToString(fila.Cells["ClnCantidad"].Value), out decimal cantidadCargada))
+                                {
+                                    cantidadEnPrincipal += cantidadCargada;
+                                }
+                            }
+                        }
+
+                        decimal cantidadEnSecundaria = 0m;
+
+                        if (formularioSecundario != null && !formularioSecundario.IsDisposed)
+                        {
+                            cantidadEnSecundaria = formularioSecundario.ObtenerCantidadCargada(idProducto);
+                        }
+
+                        if (cantidadEnPrincipal + cantidadEnSecundaria + cantidadAgregar > stockDisponible)
+                        {
+                            MessageBox.Show("Stock insuficiente para un producto de la promoción.\n\n" + $"ID del producto: {idProducto}\n" +
+                                $"Stock en sistema: {stockDisponible}\n" + $"En venta principal: {cantidadEnPrincipal}\n" + $"En venta secundaria: {cantidadEnSecundaria}\n" +
+                                $"Cantidad requerida por la promoción: {cantidadAgregar}",
+                                "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                             return;
                         }
                     }
 
-                    decimal subtotalAnterior = subtotal;
-                    decimal ajusteAnterior = descuentoRecargo;
 
                     foreach (DataRow detalle in detalles.Rows)
                     {
                         int idProducto = Convert.ToInt32(detalle["IdProducto"]);
                         string sku = detalle["SKU"].ToString();
-                        string codigoPromocion = promo["CodigoPromocion"].ToString();
+                        string codigoPromocion = "PROMOCION";
                         decimal precio = Convert.ToDecimal(detalle["PrecioVenta"]);
                         decimal cantidadConfigurada = Convert.ToDecimal(detalle["Cantidad"]);
+
                         decimal cantidad = esVolumen ? cantidadConfigurada * cantidadLleva : cantidadConfigurada;
 
                         DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
@@ -909,7 +1210,45 @@ namespace CapaVista
                             stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
                         }
 
-                        AgregarProductoAGrilla(idProducto, sku, codigoPromocion, detalle["NombreProducto"].ToString(), precio, cantidad, stockDisponible);
+                        bool agregado = AgregarProductoAGrilla(idProducto, sku, codigoPromocion, detalle["NombreProducto"].ToString(), precio, cantidad, stockDisponible);
+
+                        if (agregado && dtgPresentacion.Rows.Count > 0)
+                        {
+                            DataGridViewRow filaAgregada = dtgPresentacion.Rows[dtgPresentacion.Rows.Count - 1];
+
+                            filasDePromocion.Add(filaAgregada);
+                        }
+
+                        if (!agregado)
+                        {
+                            dtgPresentacion.Rows.Clear();
+
+                            foreach (DataRow filaRespaldo in respaldoGrilla.Rows)
+                            {
+                                int indice = dtgPresentacion.Rows.Add();
+                                DataGridViewRow filaNueva = dtgPresentacion.Rows[indice];
+
+                                foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
+                                {
+                                    object valorCelda = filaRespaldo[columna.Name];
+
+                                    filaNueva.Cells[columna.Name].Value = valorCelda == DBNull.Value ? null : valorCelda;
+                                }
+                            }
+
+                            subtotal = subtotalAnterior;
+                            descuentoRecargo = ajusteAnterior;
+                            total = totalAnterior;
+
+                            CalcularYMostrarMontos();
+                            txtCodigoBarra.Focus();
+
+                            MessageBox.Show("No se pudo cargar toda la promoción. Se restauró la venta anterior.", "Promociones",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                            return;
+                        }
+
                     }
 
                     decimal importeNormalAgregado = subtotal - subtotalAnterior;
@@ -918,6 +1257,7 @@ namespace CapaVista
                     descuentoRecargo = ajusteAnterior - descuentoPromocion;
 
                     CalcularYMostrarMontos();
+
 
                     txtCodigoBarra.Focus();
                 }
@@ -949,6 +1289,21 @@ namespace CapaVista
 
             DataGridViewRow fila = dtgPresentacion.CurrentRow;
 
+            string codigoFila = Convert.ToString(fila.Cells["ClnCodigo"].Value);
+
+            if (codigoFila == "PROMOCION")
+            {
+                MessageBox.Show(
+                    "No se puede modificar la cantidad de un producto que pertenece a una promoción.",
+                    "Cambiar cantidad",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtCodigoBarra.Focus();
+                return;
+            }
+
+
             int idProducto = Convert.ToInt32(fila.Cells["ClnIdProducto"].Value);
             decimal cantidadActual = Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
             string entrada = Microsoft.VisualBasic.Interaction.InputBox("Ingrese la nueva cantidad:", "Cambiar cantidad", cantidadActual.ToString());
@@ -977,13 +1332,43 @@ namespace CapaVista
                 stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
             }
 
-            if (nuevaCantidad > stockDisponible)
+            decimal cantidadEnGrillaPrincipalSinFila = 0m;
+
+            foreach (DataGridViewRow otraFila in dtgPresentacion.Rows)
             {
-                MessageBox.Show($"Stock insuficiente.\n\n" + $"Stock disponible: {stockDisponible}\n" + $"Cantidad solicitada: {nuevaCantidad}",
+                if (otraFila.IsNewRow || otraFila == fila || otraFila.Cells["ClnIdProducto"].Value == null)
+                    continue;
+
+                if (int.TryParse(Convert.ToString(otraFila.Cells["ClnIdProducto"].Value), out int idCargado) && idCargado == idProducto)
+                {
+                    if (decimal.TryParse(Convert.ToString(otraFila.Cells["ClnCantidad"].Value), out decimal cantidadCargada))
+                    {
+                        cantidadEnGrillaPrincipalSinFila += cantidadCargada;
+                    }
+                }
+            }
+
+            decimal cantidadEnGrillaSecundaria = 0m;
+
+            if (formularioSecundario != null && !formularioSecundario.IsDisposed)
+            {
+                cantidadEnGrillaSecundaria = formularioSecundario.ObtenerCantidadCargada(idProducto);
+            }
+
+            decimal cantidadTotal = cantidadEnGrillaPrincipalSinFila + cantidadEnGrillaSecundaria + nuevaCantidad;
+
+            if (stockDisponible <= 0 || cantidadTotal > stockDisponible)
+            {
+                decimal stockRestante = Math.Max(0m, stockDisponible - cantidadEnGrillaPrincipalSinFila - cantidadEnGrillaSecundaria);
+
+                MessageBox.Show($"Stock insuficiente.\n\n" + $"Stock en sistema: {stockDisponible}\n" +
+                    $"Otras unidades en venta principal: {cantidadEnGrillaPrincipalSinFila}\n" + $"Unidades en venta secundaria: {cantidadEnGrillaSecundaria}\n" +
+                    $"Disponible para esta fila: {stockRestante}\n" + $"Cantidad solicitada: {nuevaCantidad}",
                     "Stock insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
+
 
             decimal precioUnitario = Convert.ToDecimal(fila.Cells["ClnPrecioUnitario"].Value);
 
@@ -1026,7 +1411,6 @@ namespace CapaVista
             frmPromocion promo = new frmPromocion();
             promo.ShowDialog();
         }
-
         private void gestioToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmGestionBackup frm = new frmGestionBackup();
@@ -1047,13 +1431,17 @@ namespace CapaVista
                     ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void cargarArticuloNuevoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmNuevoArticulo nuevoarticulo = new frmNuevoArticulo();
             nuevoarticulo.ShowDialog();
 
         }
+        private void lstDescripcion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
 
         //idioma
         private void btnIdioma_Click(object sender, EventArgs e)
@@ -1104,6 +1492,17 @@ namespace CapaVista
 
 
 
+
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txtCantidad_TextChanged(object sender, EventArgs e)
+        {
+
+        }
 
 
     }

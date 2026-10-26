@@ -133,12 +133,6 @@ namespace CapaVista
 
             CargarCompras();
         }
-
-
-
-        #endregion
-
-
         private void btnAnular_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count == 0)
@@ -204,5 +198,16 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+
+        #endregion
+
+
+
     }
 }
