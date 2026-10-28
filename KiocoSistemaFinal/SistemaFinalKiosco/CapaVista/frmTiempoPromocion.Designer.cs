@@ -48,6 +48,7 @@
             dtpFechaInicio = new DateTimePicker();
             dtpFechaFin = new DateTimePicker();
             grpDiasSemana = new GroupBox();
+            chkTodaSemana = new CheckBox();
             chkLunes = new CheckBox();
             chkMartes = new CheckBox();
             chkMiercoles = new CheckBox();
@@ -148,6 +149,7 @@
             // 
             // grpDiasSemana
             // 
+            grpDiasSemana.Controls.Add(chkTodaSemana);
             grpDiasSemana.Controls.Add(chkLunes);
             grpDiasSemana.Controls.Add(chkMartes);
             grpDiasSemana.Controls.Add(chkMiercoles);
@@ -161,6 +163,17 @@
             grpDiasSemana.TabIndex = 2;
             grpDiasSemana.TabStop = false;
             grpDiasSemana.Text = "Días de la semana (para vigencia recurrente)";
+            // 
+            // chkTodaSemana
+            // 
+            chkTodaSemana.AutoSize = true;
+            chkTodaSemana.Location = new Point(206, 60);
+            chkTodaSemana.Name = "chkTodaSemana";
+            chkTodaSemana.Size = new Size(172, 19);
+            chkTodaSemana.TabIndex = 7;
+            chkTodaSemana.Text = "Seleccionar toda la semana.";
+            chkTodaSemana.UseVisualStyleBackColor = true;
+            chkTodaSemana.CheckedChanged += chkTodaSemana_CheckedChanged;
             // 
             // chkLunes
             // 
@@ -328,5 +341,6 @@
             grpHorario.PerformLayout();
             ResumeLayout(false);
         }
+        private CheckBox chkTodaSemana;
     }
 }
