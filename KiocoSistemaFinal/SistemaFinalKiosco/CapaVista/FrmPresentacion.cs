@@ -38,7 +38,7 @@ namespace CapaVista
             KeyPreview = true;
 
             ActualizarFechaHora();
-            tmrFechaHora.Start();
+            //tmrFechaHora.Start();
 
             dtgPresentacion.ReadOnly = true;
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -1505,7 +1505,11 @@ namespace CapaVista
 
         }
 
-
+        private void recepciónDeMercaderiaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmRecepcionCompra recepcion = new frmRecepcionCompra();
+            recepcion.ShowDialog();
+        }
     }
 
 }

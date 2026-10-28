@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmmenuPres));
+            System.Windows.Forms.Timer tmrFechaHora;
             btnCambiarcantidad = new Button();
             btnQuitar = new Button();
             pcbLogo = new PictureBox();
@@ -109,6 +110,7 @@
             administrarPromocionesToolStripMenuItem = new ToolStripMenuItem();
             lblDescripcionSku = new Label();
             lstDescripcion = new ListBox();
+            recepciónDeMercaderiaToolStripMenuItem = new ToolStripMenuItem();
             tmrFechaHora = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgPresentacion).BeginInit();
@@ -116,11 +118,6 @@
             tableLayoutPanel1.SuspendLayout();
             btnConfig.SuspendLayout();
             SuspendLayout();
-            // 
-            // tmrFechaHora
-            // 
-            tmrFechaHora.Interval = 1000;
-            tmrFechaHora.Tick += tmrFechaHora_Tick;
             // 
             // btnCambiarcantidad
             // 
@@ -564,7 +561,7 @@
             // 
             // btnCompras
             // 
-            btnCompras.DropDownItems.AddRange(new ToolStripItem[] { menuitemAministradorcompras });
+            btnCompras.DropDownItems.AddRange(new ToolStripItem[] { menuitemAministradorcompras, recepciónDeMercaderiaToolStripMenuItem });
             btnCompras.Enabled = false;
             btnCompras.Name = "btnCompras";
             btnCompras.Size = new Size(67, 20);
@@ -816,6 +813,18 @@
             lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
             lstDescripcion.KeyDown += lstDescripcion_KeyDown;
             // 
+            // tmrFechaHora
+            // 
+            tmrFechaHora.Interval = 1000;
+            tmrFechaHora.Tick += tmrFechaHora_Tick;
+            // 
+            // recepciónDeMercaderiaToolStripMenuItem
+            // 
+            recepciónDeMercaderiaToolStripMenuItem.Name = "recepciónDeMercaderiaToolStripMenuItem";
+            recepciónDeMercaderiaToolStripMenuItem.Size = new Size(217, 22);
+            recepciónDeMercaderiaToolStripMenuItem.Text = "Recepción de mercaderia";
+            recepciónDeMercaderiaToolStripMenuItem.Click += recepciónDeMercaderiaToolStripMenuItem_Click;
+            // 
             // frmmenuPres
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -938,5 +947,6 @@
         private ToolStripMenuItem españolToolStripMenuItem;
         private Label lblDescripcionSku;
         private ListBox lstDescripcion;
+        private ToolStripMenuItem recepciónDeMercaderiaToolStripMenuItem;
     }
 }

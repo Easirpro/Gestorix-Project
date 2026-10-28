@@ -35,6 +35,12 @@ namespace CapaVista
             txtCodigobarra.TextChanged += txtCodigobarra_TextChanged;
             txtCodigobarra.KeyDown += txtCodigobarra_KeyDown;
 
+            txtProveedor.KeyDown -= txtProveedor_KeyDown;
+            txtProveedor.KeyDown += txtProveedor_KeyDown;
+
+            txtProveedor.DoubleClick -= txtProveedor_DoubleClick;
+            txtProveedor.DoubleClick += txtProveedor_DoubleClick;
+
             ConfigurarAutocompletadoProveedores();
         }
 
@@ -85,24 +91,35 @@ namespace CapaVista
         }
         private void SeleccionarProveedor()
         {
-            if (proveedoresEncontrados == null ||
-                lstProveedores.SelectedIndex < 0 ||
-                lstProveedores.SelectedIndex >= proveedoresEncontrados.Rows.Count)
+            if (proveedoresEncontrados == null || proveedoresEncontrados.Rows.Count == 0)
             {
                 return;
             }
 
-            DataRow proveedor = proveedoresEncontrados.Rows[lstProveedores.SelectedIndex];
+            int indice = lstProveedores.SelectedIndex;
 
-            idProveedor = Convert.ToInt32(proveedor["IdProveedor"]);
-            txtProveedor.Text = proveedor["Nombre"].ToString();
+            if (indice < 0 || indice >= proveedoresEncontrados.Rows.Count)
+            {
+                indice = 0;
+            }
+
+            DataRow proveedor = proveedoresEncontrados.Rows[indice];
+
+            string nombreProveedor = proveedor["Nombre"].ToString();
+            int idSeleccionado = Convert.ToInt32(proveedor["IdProveedor"]);
+
+            txtProveedor.Text = nombreProveedor;
+            idProveedor = idSeleccionado;
 
             lstProveedores.Visible = false;
             lstProveedores.Items.Clear();
             proveedoresEncontrados = null;
 
             txtProveedor.SelectionStart = txtProveedor.Text.Length;
+            txtCodigobarra.Focus();
         }
+
+
 
 
 
@@ -239,15 +256,6 @@ namespace CapaVista
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtNumeroComprobante.Text))
-            {
-                MessageBox.Show("Debe ingresar el número de comprobante.", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                txtNumeroComprobante.Focus();
-                return;
-            }
-
             if (dtpFechaPedido.Value.Date > DateTime.Today)
             {
                 MessageBox.Show("La fecha de compra no puede ser futura.", "Aviso",
@@ -273,7 +281,7 @@ namespace CapaVista
                 compra.IdProveedor = idProveedor;
                 compra.Fecha = dtpFechaPedido.Value;
                 compra.TipoComprobante = cmbTipoComprobante.Text.Trim();
-                compra.NumeroComprobante = txtNumeroComprobante.Text.Trim();
+                compra.NumeroComprobante = string.IsNullOrWhiteSpace(txtNumeroComprobante.Text) ? null : txtNumeroComprobante.Text.Trim();
                 compra.SubtotalSinIVA = Convert.ToDecimal(txtSubsinImpuesto.Text);
                 compra.IVA = Convert.ToDecimal(txtIva.Text);
                 compra.Total = Convert.ToDecimal(txtTotal.Text);
@@ -508,27 +516,45 @@ namespace CapaVista
         }
         private void txtProveedor_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!lstProveedores.Visible || lstProveedores.Items.Count == 0)
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+
+                if (proveedoresEncontrados != null && proveedoresEncontrados.Rows.Count > 0)
+                {
+                    SeleccionarProveedor();
+                }
+                else
+                {
+                    btnBuscar_Click(sender, e);
+                }
+
                 return;
+            }
+
+            if (!lstProveedores.Visible || lstProveedores.Items.Count == 0)
+            {
+                return;
+            }
 
             if (e.KeyCode == Keys.Down)
             {
                 e.SuppressKeyPress = true;
 
                 if (lstProveedores.SelectedIndex < lstProveedores.Items.Count - 1)
+                {
                     lstProveedores.SelectedIndex++;
+                }
             }
             else if (e.KeyCode == Keys.Up)
             {
                 e.SuppressKeyPress = true;
 
                 if (lstProveedores.SelectedIndex > 0)
+                {
                     lstProveedores.SelectedIndex--;
-            }
-            else if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                SeleccionarProveedor();
+                }
             }
             else if (e.KeyCode == Keys.Escape)
             {

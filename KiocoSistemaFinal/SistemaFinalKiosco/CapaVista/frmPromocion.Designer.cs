@@ -57,7 +57,6 @@
             label5 = new Label();
             label4 = new Label();
             btnGuardarPromo = new Button();
-            btnModificar = new Button();
             btnEliminar = new Button();
             btnVolver = new Button();
             label14 = new Label();
@@ -66,11 +65,14 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             txtBuscarPromo = new TextBox();
             chkDesactivarPromo = new CheckBox();
+            gpbModificar = new GroupBox();
+            lblPromoDescrip = new Label();
             gpbDatosGenerales.SuspendLayout();
             gpbSeleccionarArticulo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgtCargaArticulo).BeginInit();
             gpbTipoPromocion.SuspendLayout();
             gpbVistaPrevia.SuspendLayout();
+            gpbModificar.SuspendLayout();
             SuspendLayout();
             // 
             // lblNombrePromo
@@ -100,11 +102,16 @@
             // 
             // txtCodigoPromocion
             // 
+            txtCodigoPromocion.Enabled = false;
+            txtCodigoPromocion.BackColor = SystemColors.Window;
             txtCodigoPromocion.Location = new Point(259, 36);
+            txtCodigoPromocion.Multiline = true;
             txtCodigoPromocion.Name = "txtCodigoPromocion";
-            txtCodigoPromocion.ReadOnly = true;
             txtCodigoPromocion.Size = new Size(136, 23);
             txtCodigoPromocion.TabIndex = 7;
+            txtCodigoPromocion.TabStop = false;
+            txtCodigoPromocion.Cursor = Cursors.Default;
+            txtCodigoPromocion.WordWrap = false;
             // 
             // gpbDatosGenerales
             // 
@@ -219,7 +226,7 @@
             gpbTipoPromocion.Controls.Add(txtDescuentoPorcentual);
             gpbTipoPromocion.Controls.Add(lblMecanicaPromo);
             gpbTipoPromocion.Controls.Add(lblDescuentoPorcentual);
-            gpbTipoPromocion.Location = new Point(520, 131);
+            gpbTipoPromocion.Location = new Point(525, 166);
             gpbTipoPromocion.Name = "gpbTipoPromocion";
             gpbTipoPromocion.Size = new Size(494, 165);
             gpbTipoPromocion.TabIndex = 10;
@@ -321,9 +328,9 @@
             // 
             lstPromocionesEncontradas.FormattingEnabled = true;
             lstPromocionesEncontradas.ItemHeight = 15;
-            lstPromocionesEncontradas.Location = new Point(628, 109);
+            lstPromocionesEncontradas.Location = new Point(113, 52);
             lstPromocionesEncontradas.Name = "lstPromocionesEncontradas";
-            lstPromocionesEncontradas.Size = new Size(236, 79);
+            lstPromocionesEncontradas.Size = new Size(244, 79);
             lstPromocionesEncontradas.TabIndex = 21;
             lstPromocionesEncontradas.DrawItem += lstPromocionesEncontradas_DrawItem;
             lstPromocionesEncontradas.SelectedIndexChanged += lstPromocionesEncontradas_SelectedIndexChanged;
@@ -340,7 +347,7 @@
             gpbVistaPrevia.Controls.Add(lblPrecioNormal);
             gpbVistaPrevia.Controls.Add(label5);
             gpbVistaPrevia.Controls.Add(label4);
-            gpbVistaPrevia.Location = new Point(520, 302);
+            gpbVistaPrevia.Location = new Point(525, 337);
             gpbVistaPrevia.Name = "gpbVistaPrevia";
             gpbVistaPrevia.Size = new Size(494, 135);
             gpbVistaPrevia.TabIndex = 11;
@@ -350,27 +357,30 @@
             // label12
             // 
             label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label12.Location = new Point(395, 99);
             label12.Name = "label12";
-            label12.Size = new Size(13, 15);
+            label12.Size = new Size(23, 25);
             label12.TabIndex = 8;
             label12.Text = "$";
             // 
             // lblPrecioPromocional
             // 
             lblPrecioPromocional.AutoSize = true;
+            lblPrecioPromocional.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPrecioPromocional.Location = new Point(424, 99);
             lblPrecioPromocional.Name = "lblPrecioPromocional";
-            lblPrecioPromocional.Size = new Size(31, 15);
+            lblPrecioPromocional.Size = new Size(56, 25);
             lblPrecioPromocional.TabIndex = 7;
             lblPrecioPromocional.Text = "0000";
             // 
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(12, 99);
+            label10.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label10.Location = new Point(6, 99);
             label10.Name = "label10";
-            label10.Size = new Size(111, 15);
+            label10.Size = new Size(187, 25);
             label10.TabIndex = 6;
             label10.Text = "Precio Promocional";
             // 
@@ -432,7 +442,7 @@
             // 
             // btnGuardarPromo
             // 
-            btnGuardarPromo.Location = new Point(889, 465);
+            btnGuardarPromo.Location = new Point(889, 495);
             btnGuardarPromo.Name = "btnGuardarPromo";
             btnGuardarPromo.Size = new Size(125, 23);
             btnGuardarPromo.TabIndex = 12;
@@ -440,19 +450,9 @@
             btnGuardarPromo.UseVisualStyleBackColor = true;
             btnGuardarPromo.Click += btnGuardarPromo_Click;
             // 
-            // btnModificar
-            // 
-            btnModificar.Location = new Point(808, 465);
-            btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(75, 23);
-            btnModificar.TabIndex = 13;
-            btnModificar.Text = "Modificar";
-            btnModificar.UseVisualStyleBackColor = true;
-            btnModificar.Click += btnModificar_Click;
-            // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(727, 465);
+            btnEliminar.Location = new Point(810, 495);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 14;
@@ -462,7 +462,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(646, 465);
+            btnVolver.Location = new Point(729, 495);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 15;
@@ -483,7 +483,7 @@
             // lblBuscarPromo
             // 
             lblBuscarPromo.AutoSize = true;
-            lblBuscarPromo.Location = new Point(515, 79);
+            lblBuscarPromo.Location = new Point(6, 34);
             lblBuscarPromo.Name = "lblBuscarPromo";
             lblBuscarPromo.Size = new Size(107, 15);
             lblBuscarPromo.TabIndex = 18;
@@ -496,16 +496,16 @@
             // 
             // txtBuscarPromo
             // 
-            txtBuscarPromo.Location = new Point(628, 73);
+            txtBuscarPromo.Location = new Point(113, 26);
             txtBuscarPromo.Name = "txtBuscarPromo";
-            txtBuscarPromo.Size = new Size(236, 23);
+            txtBuscarPromo.Size = new Size(244, 23);
             txtBuscarPromo.TabIndex = 20;
             txtBuscarPromo.TextChanged += txtBuscarPromo_TextChanged;
             // 
             // chkDesactivarPromo
             // 
             chkDesactivarPromo.AutoSize = true;
-            chkDesactivarPromo.Location = new Point(879, 73);
+            chkDesactivarPromo.Location = new Point(371, 27);
             chkDesactivarPromo.Name = "chkDesactivarPromo";
             chkDesactivarPromo.Size = new Size(142, 19);
             chkDesactivarPromo.TabIndex = 22;
@@ -513,24 +513,43 @@
             chkDesactivarPromo.UseVisualStyleBackColor = true;
             chkDesactivarPromo.CheckedChanged += chkDesactivarPromo_CheckedChanged;
             // 
+            // gpbModificar
+            // 
+            gpbModificar.Controls.Add(lblPromoDescrip);
+            gpbModificar.Controls.Add(lstPromocionesEncontradas);
+            gpbModificar.Controls.Add(lblBuscarPromo);
+            gpbModificar.Controls.Add(chkDesactivarPromo);
+            gpbModificar.Controls.Add(txtBuscarPromo);
+            gpbModificar.Location = new Point(512, 12);
+            gpbModificar.Name = "gpbModificar";
+            gpbModificar.Size = new Size(519, 135);
+            gpbModificar.TabIndex = 23;
+            gpbModificar.TabStop = false;
+            gpbModificar.Text = "Seleccionar promoción para modificar";
+            // 
+            // lblPromoDescrip
+            // 
+            lblPromoDescrip.AutoSize = true;
+            lblPromoDescrip.Location = new Point(6, 105);
+            lblPromoDescrip.Name = "lblPromoDescrip";
+            lblPromoDescrip.Size = new Size(352, 15);
+            lblPromoDescrip.TabIndex = 23;
+            lblPromoDescrip.Text = "* Las promociónes que estan en rojo son las que estan desactivas.";
+            // 
             // frmPromocion
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1033, 512);
-            Controls.Add(chkDesactivarPromo);
-            Controls.Add(lstPromocionesEncontradas);
-            Controls.Add(txtBuscarPromo);
-            Controls.Add(lblBuscarPromo);
+            ClientSize = new Size(1046, 530);
             Controls.Add(label14);
             Controls.Add(btnVolver);
             Controls.Add(btnEliminar);
-            Controls.Add(btnModificar);
             Controls.Add(btnGuardarPromo);
             Controls.Add(gpbVistaPrevia);
             Controls.Add(gpbTipoPromocion);
             Controls.Add(gpbSeleccionarArticulo);
             Controls.Add(gpbDatosGenerales);
+            Controls.Add(gpbModificar);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "frmPromocion";
             StartPosition = FormStartPosition.CenterScreen;
@@ -545,6 +564,8 @@
             gpbTipoPromocion.PerformLayout();
             gpbVistaPrevia.ResumeLayout(false);
             gpbVistaPrevia.PerformLayout();
+            gpbModificar.ResumeLayout(false);
+            gpbModificar.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -580,7 +601,6 @@
         private Label label5;
         private Label label4;
         private Button btnGuardarPromo;
-        private Button btnModificar;
         private Button btnEliminar;
         private Button btnVolver;
         private Label label14;
@@ -598,5 +618,7 @@
         private DataGridViewTextBoxColumn clnPrecio;
         private DataGridViewButtonColumn clnEliminar;
         private CheckBox chkDesactivarPromo;
+        private GroupBox gpbModificar;
+        private Label lblPromoDescrip;
     }
 }
