@@ -38,7 +38,7 @@ namespace CapaVista
             KeyPreview = true;
 
             ActualizarFechaHora();
-            tmrFechaHora.Start();
+            //tmrFechaHora.Start();
 
             dtgPresentacion.ReadOnly = true;
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
