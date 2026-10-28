@@ -1,13 +1,10 @@
-﻿using Microsoft.Data.SqlClient;
-using SistemaKiosco;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CapaDatos.SistemaKiosco;
 using CapaEntidades.NegocioEntidad;
-using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
+using SistemaKiosco;
+using System.Data;
+
+
 
 namespace CapaDatos.NegocioDatos
 {
@@ -34,6 +31,7 @@ namespace CapaDatos.NegocioDatos
         }
         public int RegistrarVenta( decimal total, int idUsuario, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos)
         {
+            string dvh =GenerarDVHVenta(total,idUsuario);
             using (SqlConnection conexion = cn.ObtenerConexion())
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarVenta", conexion))
             {
@@ -43,6 +41,7 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters["@Total"].Precision = 18;
                 cmd.Parameters["@Total"].Scale = 2;
                 cmd.Parameters.Add("@IdUsuario", SqlDbType.Int).Value = idUsuario;
+                cmd.Parameters.AddWithValue("@DVH",dvh);
 
 
                 DataTable tablaDetalles = new DataTable();
@@ -80,11 +79,18 @@ namespace CapaDatos.NegocioDatos
                 parametroPagos.SqlDbType = SqlDbType.Structured;
                 parametroPagos.TypeName = "dbo.TipoPagoVenta";
 
-
+               
                 conexion.Open();
 
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
+        private string GenerarDVHVenta(decimal total,int idUsuario)
+        {
+            string cadena = total.ToString() +idUsuario.ToString();
+
+            return ClsDigitoVerificador.GenerarHash(cadena);
+        }
     }
+
 }

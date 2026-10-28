@@ -35,6 +35,7 @@ namespace CapaVista
             try
             {
                 ClsBackupLogica backup = new ClsBackupLogica();
+                
                 bool resultado = backup.GenerarBackup(txtRutabk.Text);
                 MessageBox.Show("Backup generado correctamente");
             }
@@ -86,7 +87,21 @@ namespace CapaVista
                     string archivoBackup = lstBackup.SelectedItem.ToString();
 
                     ClsBackupLogica backupLogica = new ClsBackupLogica();
+                    if (!backupLogica.ValidarHashBackup(archivoBackup))
+                    {
+                        DialogResult respuesta =
+                            MessageBox.Show(@"ADVERTENCIA
+                           Este respaldo no posee una firma válida de Gestorix o fue modificado después de ser generado.
+                           Esto puede ocurrir si el archivo fue recibido de otro integrante del equipo.
+                           ¿Desea continuar con la restauración?","Advertencia",
 
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                        if (respuesta == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
                     bool exito = backupLogica.RestaurarBackup(archivoBackup);
 
                     if (exito)

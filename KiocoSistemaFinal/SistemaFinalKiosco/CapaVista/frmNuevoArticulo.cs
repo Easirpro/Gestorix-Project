@@ -545,6 +545,7 @@ namespace CapaVista
                 producto.IdUnidad = Convert.ToInt32(cmbUnidadVenta.SelectedValue);
                 producto.IdIVA = chkActivarIva.Checked ? Convert.ToInt32(cmbIva.SelectedValue) : 1;
                 producto.PrecioVenta = precioVenta;
+                
 
                 if (idProductoModificar != 0)
                 {

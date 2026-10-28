@@ -474,6 +474,7 @@ namespace CapaDatos.NegocioDatos
         }
         public bool ModificarProducto( ClsGestorEntidadProducto.ClsProducto producto)
         {
+            string dvh = GenerarDVHProducto(producto);
             using (SqlConnection conexion = cn.ObtenerConexion())
 
             using (SqlCommand cmd = new SqlCommand("sp_ModificarProducto", conexion))
@@ -489,7 +490,7 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
                 cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
                 cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
-
+                cmd.Parameters.AddWithValue("@DVH", dvh);
                 conexion.Open();
 
                 return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
@@ -514,6 +515,7 @@ namespace CapaDatos.NegocioDatos
         }
         public void RegistrarProductoSucursalProveedor( ClsProductoSucursalProveedor relacion)
         {
+
             using (SqlConnection conexion = cn.ObtenerConexion())
 
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarProductoSucursalProveedor", conexion))
@@ -525,6 +527,7 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters.AddWithValue("@FechaPrecioCompra", (object)relacion.FechaPrecioCompra ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@CodigoProveedor", (object)relacion.CodigoProveedor ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
+               
 
                 conexion.Open();
 

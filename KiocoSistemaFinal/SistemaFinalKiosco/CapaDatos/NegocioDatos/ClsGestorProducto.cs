@@ -448,6 +448,7 @@ namespace CapaDatos.NegocioDatos
         }
         public bool ModificarProducto( ClsGestorEntidadProducto.ClsProducto producto)
         {
+            string dvh = GenerarDVHProducto(producto);
             using (SqlConnection conexion = cn.ObtenerConexion())
 
             using (SqlCommand cmd = new SqlCommand("sp_ModificarProducto", conexion))
@@ -463,6 +464,7 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
                 cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
                 cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
+                cmd.Parameters.AddWithValue("@DVH",dvh);
 
                 conexion.Open();
 

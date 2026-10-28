@@ -1,6 +1,8 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Data.SqlClient;
 using SistemaKiosco;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CapaLogica
 {
@@ -36,6 +38,9 @@ namespace CapaLogica
                            new SqlCommand(sql, cn))
                     {
                         cmd.ExecuteNonQuery();
+                        string hash = CalcularHashArchivo(archivo);
+
+                        File.WriteAllText(archivo + ".hash",hash);
                     }
                 }
 
@@ -45,6 +50,34 @@ namespace CapaLogica
             {
                 throw new Exception(ex.Message);
             }
+        }
+        private string CalcularHashArchivo(string rutaArchivo)
+        {
+            using (FileStream stream =
+                   File.OpenRead(rutaArchivo))
+            {
+                using (SHA256 sha =
+                       SHA256.Create())
+                {
+                    byte[] hash =
+                        sha.ComputeHash(stream);
+
+                    return Convert.ToHexString(hash);
+                }
+            }
+        }
+        public bool ValidarHashBackup(string archivoBackup)
+        {
+            string archivoHash = archivoBackup + ".hash";
+
+            if (!File.Exists(archivoHash))
+                return false;
+
+            string hashGuardado =File.ReadAllText(archivoHash);
+
+            string hashActual =CalcularHashArchivo(archivoBackup);
+
+            return hashGuardado == hashActual;
         }
         public bool RestaurarBackup(string archivoBackup)
         {

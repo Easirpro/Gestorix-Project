@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmmenuPres));
             System.Windows.Forms.Timer tmrFechaHora;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmmenuPres));
             btnCambiarcantidad = new Button();
             btnQuitar = new Button();
             pcbLogo = new PictureBox();
@@ -78,6 +78,7 @@
             notaDeCreditoToolStripMenuItem = new ToolStripMenuItem();
             btnCompras = new ToolStripMenuItem();
             menuitemAministradorcompras = new ToolStripMenuItem();
+            recepciónDeMercaderiaToolStripMenuItem = new ToolStripMenuItem();
             btnProve = new ToolStripMenuItem();
             administradorDeProveedoresToolStripMenuItem = new ToolStripMenuItem();
             cuentaCorrienteDeProveedoresToolStripMenuItem = new ToolStripMenuItem();
@@ -110,7 +111,6 @@
             administrarPromocionesToolStripMenuItem = new ToolStripMenuItem();
             lblDescripcionSku = new Label();
             lstDescripcion = new ListBox();
-            recepciónDeMercaderiaToolStripMenuItem = new ToolStripMenuItem();
             tmrFechaHora = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgPresentacion).BeginInit();
@@ -118,6 +118,11 @@
             tableLayoutPanel1.SuspendLayout();
             btnConfig.SuspendLayout();
             SuspendLayout();
+            // 
+            // tmrFechaHora
+            // 
+            tmrFechaHora.Interval = 1000;
+            tmrFechaHora.Tick += tmrFechaHora_Tick;
             // 
             // btnCambiarcantidad
             // 
@@ -574,6 +579,13 @@
             menuitemAministradorcompras.Text = "Administrador de Compras";
             menuitemAministradorcompras.Click += menuitemAministradorcompras_Click;
             // 
+            // recepciónDeMercaderiaToolStripMenuItem
+            // 
+            recepciónDeMercaderiaToolStripMenuItem.Name = "recepciónDeMercaderiaToolStripMenuItem";
+            recepciónDeMercaderiaToolStripMenuItem.Size = new Size(217, 22);
+            recepciónDeMercaderiaToolStripMenuItem.Text = "Recepción de mercaderia";
+            recepciónDeMercaderiaToolStripMenuItem.Click += recepciónDeMercaderiaToolStripMenuItem_Click;
+            // 
             // btnProve
             // 
             btnProve.DropDownItems.AddRange(new ToolStripItem[] { administradorDeProveedoresToolStripMenuItem, cuentaCorrienteDeProveedoresToolStripMenuItem });
@@ -735,27 +747,27 @@
             btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { gestioToolStripMenuItem, permisosToolStripMenuItem, bitacoraToolStripMenuItem });
             btnEmpleado.Enabled = false;
             btnEmpleado.Name = "btnEmpleado";
-            btnEmpleado.Size = new Size(72, 20);
-            btnEmpleado.Text = "Empleado";
+            btnEmpleado.Size = new Size(100, 20);
+            btnEmpleado.Text = "Administracion";
             // 
             // gestioToolStripMenuItem
             // 
             gestioToolStripMenuItem.Name = "gestioToolStripMenuItem";
-            gestioToolStripMenuItem.Size = new Size(172, 22);
+            gestioToolStripMenuItem.Size = new Size(180, 22);
             gestioToolStripMenuItem.Text = "Gestión de Backup";
             gestioToolStripMenuItem.Click += gestioToolStripMenuItem_Click;
             // 
             // permisosToolStripMenuItem
             // 
             permisosToolStripMenuItem.Name = "permisosToolStripMenuItem";
-            permisosToolStripMenuItem.Size = new Size(172, 22);
+            permisosToolStripMenuItem.Size = new Size(180, 22);
             permisosToolStripMenuItem.Text = "Empleado";
             permisosToolStripMenuItem.Click += permisosToolStripMenuItem_Click;
             // 
             // bitacoraToolStripMenuItem
             // 
             bitacoraToolStripMenuItem.Name = "bitacoraToolStripMenuItem";
-            bitacoraToolStripMenuItem.Size = new Size(172, 22);
+            bitacoraToolStripMenuItem.Size = new Size(180, 22);
             bitacoraToolStripMenuItem.Text = "Bitacora";
             bitacoraToolStripMenuItem.Click += bitacoraToolStripMenuItem_Click;
             // 
@@ -812,18 +824,6 @@
             lstDescripcion.SelectedIndexChanged += lstDescripcion_SelectedIndexChanged;
             lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
             lstDescripcion.KeyDown += lstDescripcion_KeyDown;
-            // 
-            // tmrFechaHora
-            // 
-            tmrFechaHora.Interval = 1000;
-            tmrFechaHora.Tick += tmrFechaHora_Tick;
-            // 
-            // recepciónDeMercaderiaToolStripMenuItem
-            // 
-            recepciónDeMercaderiaToolStripMenuItem.Name = "recepciónDeMercaderiaToolStripMenuItem";
-            recepciónDeMercaderiaToolStripMenuItem.Size = new Size(217, 22);
-            recepciónDeMercaderiaToolStripMenuItem.Text = "Recepción de mercaderia";
-            recepciónDeMercaderiaToolStripMenuItem.Click += recepciónDeMercaderiaToolStripMenuItem_Click;
             // 
             // frmmenuPres
             // 

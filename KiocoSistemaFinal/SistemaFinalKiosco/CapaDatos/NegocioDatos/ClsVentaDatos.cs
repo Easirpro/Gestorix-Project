@@ -1,13 +1,14 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using CapaDatos.SistemaKiosco;
+using CapaEntidades.NegocioEntidad;
+using Microsoft.Data.SqlClient;
 using SistemaKiosco;
 using System;
+using System.Collections.Generic;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CapaEntidades.NegocioEntidad;
-using System.Collections.Generic;
 
 namespace CapaDatos.NegocioDatos
 {
@@ -34,6 +35,7 @@ namespace CapaDatos.NegocioDatos
         }
         public int RegistrarVenta(decimal total, int idUsuario, string observaciones, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos)
         {
+            string dvh = GenerarDVHVenta(total, idUsuario);
             using (SqlConnection conexion = cn.ObtenerConexion())
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarVenta", conexion))
             {
@@ -42,6 +44,7 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters["@Total"].Precision = 18;
                 cmd.Parameters["@Total"].Scale = 2;
                 cmd.Parameters.Add("@IdUsuario", SqlDbType.Int).Value = idUsuario;
+                cmd.Parameters.AddWithValue("@DVH", dvh);
 
                 SqlParameter parametroObservaciones = cmd.Parameters.Add("@Observaciones", SqlDbType.NVarChar, 1000);
 
@@ -146,7 +149,12 @@ namespace CapaDatos.NegocioDatos
                     throw new Exception("No se encontró la venta seleccionada.");
             }
         }
+        private string GenerarDVHVenta(decimal total, int idUsuario)
+        {
+            string cadena = total.ToString() + idUsuario.ToString();
 
+            return ClsDigitoVerificador.GenerarHash(cadena);
+        }
 
 
     }
