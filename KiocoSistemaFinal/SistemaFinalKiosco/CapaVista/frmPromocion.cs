@@ -21,6 +21,21 @@ namespace CapaVista
         private DateTime? fechaInicioPromocion = null;
         private DateTime? fechaFinPromocion = null;
         private bool vigenciaConfigurada = false;
+        private bool modoEdicionPromocion = false;
+
+        private string nombreOriginal = "";
+        private int tipoOriginal = 0;
+        private decimal valorOriginal = 0;
+        private bool estadoOriginal = true;
+
+        private DateTime? fechaInicioOriginal = null;
+        private DateTime? fechaFinOriginal = null;
+        private bool recurrenteOriginal = false;
+        private TimeSpan horaInicioOriginal = TimeSpan.Zero;
+        private TimeSpan horaFinOriginal = TimeSpan.Zero;
+        private List<DayOfWeek> diasOriginales = new List<DayOfWeek>();
+
+        private Dictionary<int, decimal> detallesOriginales = new Dictionary<int, decimal>();
 
         private bool promocionActivaSeleccionada = true;
         private bool actualizandoCheckboxEstado = false;
@@ -389,6 +404,8 @@ namespace CapaVista
                 DataTable detalles = datosPromocion.Tables[1];
 
                 idPromocionSeleccionada = idPromocion;
+                modoEdicionPromocion = true;
+                btnGuardarPromo.Text = "Guardar cambios";
 
                 txtCodigoPromocion.Text = promocion["CodigoPromocion"].ToString();
                 txtNombrePromocion.Text = promocion["Nombre"].ToString();
@@ -458,6 +475,7 @@ namespace CapaVista
                         horaFinPromocion.ToString(@"hh\:mm");
 
                 }
+
                 else
                 {
                     resumenVigencia = "La promoción no tiene un período de vigencia completo.";
@@ -496,6 +514,34 @@ namespace CapaVista
                 }
 
                 ActualizarVistaPrevia();
+
+                nombreOriginal = txtNombrePromocion.Text.Trim();
+                tipoOriginal = ObtenerIdTipoPromocion();
+                valorOriginal = ObtenerValorPromocion();
+                estadoOriginal = promocionActivaSeleccionada;
+
+                fechaInicioOriginal = fechaInicioPromocion;
+                fechaFinOriginal = fechaFinPromocion;
+
+                recurrenteOriginal = promocionEsRecurrente;
+                horaInicioOriginal = horaInicioPromocion;
+                horaFinOriginal = horaFinPromocion;
+
+                diasOriginales = new List<DayOfWeek>(diasVigenciaPromocion);
+
+                detallesOriginales.Clear();
+
+                foreach (DataGridViewRow fila in dgtCargaArticulo.Rows)
+                {
+                    if (fila.IsNewRow || fila.Tag == null)
+                        continue;
+
+                    int idProducto = Convert.ToInt32(fila.Tag);
+
+                    decimal cantidad = Convert.ToDecimal(fila.Cells["clnCantidad"].Value);
+
+                    detallesOriginales[idProducto] = cantidad;
+                }
             }
             catch (Exception ex)
             {
@@ -523,9 +569,12 @@ namespace CapaVista
             vigenciaConfigurada = false;
 
             idPromocionSeleccionada = 0;
+            modoEdicionPromocion = false;
+            btnGuardarPromo.Text = "Guardar Promoción";
 
-            txtCodigoPromocion.ReadOnly = true;
-            txtCodigoPromocion.Enabled = true;
+            txtCodigoPromocion.Enabled = false;
+            txtCodigoPromocion.TabStop = false;
+            txtCodigoPromocion.Cursor = Cursors.Default;
 
             lstPromocionesEncontradas.DataSource = null;
             lstPromocionesEncontradas.Visible = false;
@@ -565,8 +614,9 @@ namespace CapaVista
             lstPromocionesEncontradas.DrawItem += lstPromocionesEncontradas_DrawItem;
 
             txtCodigoPromocion.Text = string.Empty;
-            txtCodigoPromocion.ReadOnly = true;
-            txtCodigoPromocion.Enabled = true;
+            txtCodigoPromocion.Enabled = false;
+            txtCodigoPromocion.TabStop = false;
+            txtCodigoPromocion.Cursor = Cursors.Default;
 
             txtDescuentoPorcentual.Clear();
             txtBajaPrecio.Clear();
@@ -615,29 +665,31 @@ namespace CapaVista
         {
             try
             {
+                bool editando = modoEdicionPromocion &&  idPromocionSeleccionada > 0;
+
                 if (cmbMecanicaPromocional.SelectedValue == null)
                 {
                     MessageBox.Show("Debe seleccionar una mecánica promocional.", "Promociones",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                     cmbMecanicaPromocional.Focus();
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(txtNombrePromocion.Text))
                 {
-                    MessageBox.Show("Debe ingresar el nombre de la promoción.", "Promociones",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                    MessageBox.Show(
+                        "Debe ingresar el nombre de la promoción.",
+                        "Promociones",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                     txtNombrePromocion.Focus();
                     return;
                 }
 
                 if (!vigenciaConfigurada || fechaInicioPromocion == null)
                 {
-                    MessageBox.Show("Debe configurar la fecha de vigencia de la promoción.",
-                        "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                    MessageBox.Show("Debe configurar la fecha de vigencia de la promoción.", "Promociones",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -647,7 +699,6 @@ namespace CapaVista
                 {
                     MessageBox.Show("Debe agregar al menos un producto a la promoción.", "Promociones",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                     return;
                 }
 
@@ -655,11 +706,12 @@ namespace CapaVista
 
                 if (idTipoPromocion >= 1 && idTipoPromocion <= 3 && HayProductosDiferentes())
                 {
-                    MessageBox.Show("Las promociones por volumen solo pueden aplicarse a un mismo producto. No se pueden combinar productos diferentes.",
-                        "Validación de promoción", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                    MessageBox.Show("Las promociones por volumen solo pueden aplicarse a un mismo producto. No se pueden combinar productos diferentes.", "Validación de promoción",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+
+                decimal valorPromocion = ObtenerValorPromocion();
 
                 List<ClsDetallePromocion> detalles = new List<ClsDetallePromocion>();
 
@@ -682,8 +734,39 @@ namespace CapaVista
                     });
                 }
 
-                decimal valorPromocion = ObtenerValorPromocion();
+                if (editando)
+                {
+                    bool huboCambios =
+                        txtNombrePromocion.Text.Trim() != nombreOriginal ||
+                        idTipoPromocion != tipoOriginal ||
+                        valorPromocion != valorOriginal ||
+                        !Nullable.Equals(fechaInicioPromocion, fechaInicioOriginal) ||
+                        !Nullable.Equals(fechaFinPromocion, fechaFinOriginal) ||
+                        promocionEsRecurrente != recurrenteOriginal ||
+                        horaInicioPromocion != horaInicioOriginal ||
+                        horaFinPromocion != horaFinOriginal ||
+                        !diasOriginales.OrderBy(d => d).SequenceEqual(diasVigenciaPromocion.OrderBy(d => d)) ||
+                        detallesOriginales.Count != detalles.Count;
 
+                    if (!huboCambios)
+                    {
+                        foreach (ClsDetallePromocion detalle in detalles)
+                        {
+                            if (!detallesOriginales.TryGetValue(detalle.IdProducto, out decimal cantidadOriginal) || cantidadOriginal != detalle.Cantidad)
+                            {
+                                huboCambios = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!huboCambios)
+                    {
+                        MessageBox.Show( "Debe realizar un cambio para continuar.", "Sin cambios",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                }
 
                 ClsPromocion promocion = new ClsPromocion
                 {
@@ -693,28 +776,50 @@ namespace CapaVista
                     Valor = valorPromocion,
                     FechaInicio = fechaInicioPromocion.Value.Date,
                     FechaFin = fechaFinPromocion.HasValue ? fechaFinPromocion.Value.Date : (DateTime?)null,
-
-                    Activo = !chkDesactivarPromo.Checked,
+                    Activo = editando ? promocionActivaSeleccionada : true,
                     EsRecurrente = promocionEsRecurrente,
                     HoraInicio = horaInicioPromocion,
                     HoraFin = horaFinPromocion,
                     DiasSeleccionados = new List<DayOfWeek>(diasVigenciaPromocion)
-
                 };
 
+                if (editando)
+                {
+                    DataSet datosPromocion = logica.ObtenerPromocionPorId(idPromocionSeleccionada);
 
-                string codigoPromocion;
+                    if (datosPromocion.Tables.Count > 0 && datosPromocion.Tables[0].Rows.Count > 0)
+                    {
+                        DataRow filaPromocion = datosPromocion.Tables[0].Rows[0];
 
-                int idPromocion = logica.GuardarPromocion(promocion, detalles, out codigoPromocion);
+                        if (filaPromocion.Table.Columns.Contains("Descripcion") && filaPromocion["Descripcion"] != DBNull.Value)
+                        {
+                            promocion.Descripcion = filaPromocion["Descripcion"].ToString();
+                        }
+                    }
 
-                MessageBox.Show("La promoción se guardó correctamente.\nCódigo: " + codigoPromocion,
-                    "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    promocion.IdPromocion = idPromocionSeleccionada;
+
+                    logica.ModificarPromocion(promocion, detalles);
+
+                    MessageBox.Show("La promoción se modificó correctamente.", "Promociones",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    string codigoPromocion;
+
+                    logica.GuardarPromocion(promocion, detalles, out codigoPromocion);
+
+                    MessageBox.Show("La promoción se guardó correctamente.\nCódigo: " + codigoPromocion, "Promociones",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
                 LimpiarFormularioPromocion();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar la promoción: " + ex.Message, "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al guardar la promoción: " + ex.Message, "Promociones",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void txtBuscarPromo_TextChanged(object sender, EventArgs e)
@@ -874,111 +979,6 @@ namespace CapaVista
             {
                 MessageBox.Show("Error al eliminar la promoción: " + ex.Message, "Promociones",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void btnModificar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (idPromocionSeleccionada <= 0)
-                {
-                    MessageBox.Show("Primero debe buscar y seleccionar una promoción para modificar.",
-                        "Modificar promoción", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(txtNombrePromocion.Text))
-                {
-                    MessageBox.Show("Debe ingresar el nombre de la promoción.","Modificar promoción", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtNombrePromocion.Focus();
-                    return;
-                }
-
-                if (!vigenciaConfigurada)
-                {
-                    MessageBox.Show("Debe configurar la vigencia de la promoción antes de modificarla.", "Modificar promoción",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                int idTipoPromocion = ObtenerIdTipoPromocion();
-
-                if (idTipoPromocion >= 1 && idTipoPromocion <= 3 && HayProductosDiferentes())
-                {
-                    MessageBox.Show("Las promociones por volumen solo pueden aplicarse a un mismo producto.", "Validación de promoción",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                decimal valorPromocion = ObtenerValorPromocion();
-
-                DataSet datosPromocion = logica.ObtenerPromocionPorId(idPromocionSeleccionada);
-
-                if (datosPromocion == null || datosPromocion.Tables.Count == 0 || datosPromocion.Tables[0].Rows.Count == 0)
-                {
-                    MessageBox.Show("No se encontraron los datos de la promoción.");
-                    return;
-                }
-
-                DataRow filaPromocion = datosPromocion.Tables[0].Rows[0];
-
-                string descripcion = filaPromocion["Descripcion"] == DBNull.Value ? string.Empty : Convert.ToString(filaPromocion["Descripcion"]);
-
-                ClsPromocion promocion = new ClsPromocion
-                {
-                    IdPromocion = idPromocionSeleccionada,
-                    Nombre = txtNombrePromocion.Text.Trim(),
-                    Descripcion = descripcion,
-                    IdTipoPromocion = idTipoPromocion,
-                    Valor = valorPromocion,
-
-                    Activo = promocionActivaSeleccionada,
-
-                    FechaInicio = fechaInicioPromocion.Value.Date,
-                    FechaFin = fechaFinPromocion.HasValue ? fechaFinPromocion.Value.Date : (DateTime?)null,
-                    EsRecurrente = promocionEsRecurrente,
-                    HoraInicio = horaInicioPromocion,
-                    HoraFin = horaFinPromocion,
-
-                    DiasSeleccionados = new List<DayOfWeek>(diasVigenciaPromocion ?? new List<DayOfWeek>())
-
-                };
-
-                List<ClsDetallePromocion> detalles = new List<ClsDetallePromocion>();
-
-                foreach (DataGridViewRow fila in dgtCargaArticulo.Rows)
-                {
-                    if (fila.IsNewRow)
-                        continue;
-
-                    if (fila.Tag == null || !int.TryParse(Convert.ToString(fila.Tag), out int idProducto) || idProducto <= 0)
-                    {
-                        throw new Exception("No se pudo identificar uno de los artículos. Quitalo de la grilla y volvé a agregarlo.");
-                    }
-
-                    if (fila.Cells["clnCantidad"].Value == null || !decimal.TryParse(Convert.ToString(fila.Cells["clnCantidad"].Value), out decimal cantidad) || cantidad <= 0)
-                    {
-                        throw new Exception("Verificá que todos los artículos tengan una cantidad válida mayor que cero.");
-                    }
-
-                    detalles.Add(new ClsDetallePromocion
-                    {
-                        IdProducto = idProducto,
-                        Cantidad = cantidad
-                    });
-                }
-
-                logica.ModificarPromocion(promocion, detalles);
-
-                MessageBox.Show("La promoción, su vigencia y sus artículos se modificaron correctamente.", "Modificar promoción",
-                    MessageBoxButtons.OK,  MessageBoxIcon.Information);
-
-                LimpiarFormularioPromocion();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("No se pudo modificar la promoción: " + ex.Message, "Error",
-                    MessageBoxButtons.OK,  MessageBoxIcon.Error);
             }
         }
         private void lstPromocionesEncontradas_DoubleClick(object sender, EventArgs e)

@@ -93,18 +93,17 @@ namespace CapaVista
         }
         private void ValidarHorarioInicio()
         {
+
+            if (rdbRecurrente.Checked)
+                return;
+
             DateTime ahora = DateTime.Now;
 
-            if (dtpFechaInicio.Value.Date == ahora.Date &&
-                dtpHoraInicio.Value.TimeOfDay < ahora.TimeOfDay)
+            if (dtpFechaInicio.Value.Date == ahora.Date && dtpHoraInicio.Value.TimeOfDay < ahora.TimeOfDay)
             {
                 DateTime horaActual = DateTime.Now;
 
-                // Conservamos la fecha que tiene permitido el control.
-                DateTime nuevaHora = dtpHoraInicio.Value.Date
-                    .AddHours(horaActual.Hour)
-                    .AddMinutes(horaActual.Minute)
-                    .AddSeconds(horaActual.Second);
+                DateTime nuevaHora = dtpHoraInicio.Value.Date.AddHours(horaActual.Hour).AddMinutes(horaActual.Minute).AddSeconds(horaActual.Second);
 
                 if (nuevaHora >= dtpHoraInicio.MinDate &&
                     nuevaHora <= dtpHoraInicio.MaxDate)
@@ -115,6 +114,20 @@ namespace CapaVista
         }
         private void ValidarHorarioFin()
         {
+            if (rdbRecurrente.Checked)
+            {
+
+                if (dtpFechaFin.Value.Date == dtpFechaInicio.Value.Date && dtpHoraFin.Value.TimeOfDay <= dtpHoraInicio.Value.TimeOfDay)
+                {
+                    if (dtpHoraInicio.Value.TimeOfDay < new TimeSpan(23, 59, 0))
+                    {
+                        dtpHoraFin.Value = dtpHoraInicio.Value.AddMinutes(1);
+                    }
+                }
+
+                return;
+            }
+
             DateTime ahora = DateTime.Now;
 
             if (dtpFechaFin.Value.Date < dtpFechaInicio.Value.Date)
@@ -135,6 +148,7 @@ namespace CapaVista
                 dtpHoraFin.Value = ahora;
             }
         }
+
         private void ActualizarControlesVigencia()
         {
             bool porPeriodo = rdbPorPeriodo.Checked;
@@ -152,7 +166,7 @@ namespace CapaVista
             if (dtpFechaFin.Value.Date == dtpFechaInicio.Value.Date && dtpHoraFin.Value.TimeOfDay <= dtpHoraInicio.Value.TimeOfDay)
             {
                 MessageBox.Show("La hora de fin no puede ser igual a la hora de inicio.", "Horario inválido",
-                    MessageBoxButtons.OK,  MessageBoxIcon.Warning);
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -168,7 +182,7 @@ namespace CapaVista
             }
             else
             {
-                bool hayDiaSeleccionado = chkLunes.Checked || chkMartes.Checked ||chkMiercoles.Checked || chkJueves.Checked || chkViernes.Checked || chkSabado.Checked || chkDomingo.Checked;
+                bool hayDiaSeleccionado = chkLunes.Checked || chkMartes.Checked || chkMiercoles.Checked || chkJueves.Checked || chkViernes.Checked || chkSabado.Checked || chkDomingo.Checked;
 
                 if (!hayDiaSeleccionado)
                 {
@@ -217,8 +231,20 @@ namespace CapaVista
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
+        private void chkTodaSemana_CheckedChanged(object sender, EventArgs e)
+        {
+            bool seleccionarTodos = chkTodaSemana.Checked;
 
+            chkLunes.Checked = seleccionarTodos;
+            chkMartes.Checked = seleccionarTodos;
+            chkMiercoles.Checked = seleccionarTodos;
+            chkJueves.Checked = seleccionarTodos;
+            chkViernes.Checked = seleccionarTodos;
+            chkSabado.Checked = seleccionarTodos;
+            chkDomingo.Checked = seleccionarTodos;
+        }
         #endregion
+
 
 
 
