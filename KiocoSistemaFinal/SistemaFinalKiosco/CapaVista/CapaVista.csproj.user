@@ -5,10 +5,16 @@
     <Compile Update="fmrNuevoPagoProvee.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frmAbrirCaja.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frmActualizacionmasiva.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmAgregarArticuloCompra.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmBalance.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmBitacora.cs">
@@ -21,6 +27,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmBuscarPromo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmCaja.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmCambioProveedor.cs">
@@ -36,6 +45,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmCargaRapidaPrecios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmCerrarCaja.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmCobro.cs">
@@ -63,6 +75,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmGestionBackup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmHistorialCaja.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmImportarArticulos.cs">
@@ -135,6 +150,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmRecupResSegur.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmRegistrarPagoCompra.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frmReporapida.cs">

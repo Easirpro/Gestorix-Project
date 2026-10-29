@@ -28,103 +28,199 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmIngresoPlataCaja));
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            btnGuardar = new Button();
-            btnCancelar = new Button();
+            lblTitulo = new System.Windows.Forms.Label();
+            lblConcepto = new System.Windows.Forms.Label();
+            cmbConcepto = new System.Windows.Forms.ComboBox();
+            lblMedioPago = new System.Windows.Forms.Label();
+            cmbMedioPago = new System.Windows.Forms.ComboBox();
+            lblImporte = new System.Windows.Forms.Label();
+            nudImporte = new System.Windows.Forms.NumericUpDown();
+            lblDisponible = new System.Windows.Forms.Label();
+            lblEmpleado = new System.Windows.Forms.Label();
+            cmbEmpleado = new System.Windows.Forms.ComboBox();
+            lblObservacion = new System.Windows.Forms.Label();
+            txtObservacion = new System.Windows.Forms.TextBox();
+            btnGuardar = new System.Windows.Forms.Button();
+            btnCancelar = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)nudImporte).BeginInit();
             SuspendLayout();
             // 
-            // label1
+            // lblTitulo
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(102, 62);
-            label1.Name = "label1";
-            label1.Size = new Size(65, 25);
-            label1.TabIndex = 0;
-            label1.Text = "label1";
+            lblTitulo.Location = new System.Drawing.Point(15, 15);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.TabIndex = 0;
+            lblTitulo.Text = "Nuevo movimiento";
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
-            // label2
+            // lblConcepto
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(41, 119);
-            label2.Name = "label2";
-            label2.Size = new Size(65, 15);
-            label2.TabIndex = 1;
-            label2.Text = "Concepto: ";
+            lblConcepto.Location = new System.Drawing.Point(15, 55);
+            lblConcepto.Name = "lblConcepto";
+            lblConcepto.TabIndex = 1;
+            lblConcepto.Text = "Concepto:";
+            lblConcepto.AutoSize = true;
             // 
-            // label3
+            // cmbConcepto
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(41, 163);
-            label3.Name = "label3";
-            label3.Size = new Size(52, 15);
-            label3.TabIndex = 2;
-            label3.Text = "Importe:";
+            cmbConcepto.Location = new System.Drawing.Point(130, 51);
+            cmbConcepto.Name = "cmbConcepto";
+            cmbConcepto.Size = new System.Drawing.Size(250, 23);
+            cmbConcepto.TabIndex = 2;
+            cmbConcepto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbConcepto.FormattingEnabled = true;
+            cmbConcepto.SelectedIndexChanged += cmbConcepto_SelectedIndexChanged;
             // 
-            // textBox1
+            // lblMedioPago
             // 
-            textBox1.Location = new Point(110, 111);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(294, 23);
-            textBox1.TabIndex = 3;
+            lblMedioPago.Location = new System.Drawing.Point(15, 90);
+            lblMedioPago.Name = "lblMedioPago";
+            lblMedioPago.TabIndex = 3;
+            lblMedioPago.Text = "Medio de pago:";
+            lblMedioPago.AutoSize = true;
             // 
-            // textBox2
+            // cmbMedioPago
             // 
-            textBox2.Location = new Point(110, 155);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(126, 23);
-            textBox2.TabIndex = 4;
+            cmbMedioPago.Location = new System.Drawing.Point(130, 86);
+            cmbMedioPago.Name = "cmbMedioPago";
+            cmbMedioPago.Size = new System.Drawing.Size(250, 23);
+            cmbMedioPago.TabIndex = 4;
+            cmbMedioPago.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbMedioPago.FormattingEnabled = true;
+            cmbMedioPago.SelectedIndexChanged += cmbMedioPago_SelectedIndexChanged;
+            // 
+            // lblImporte
+            // 
+            lblImporte.Location = new System.Drawing.Point(15, 125);
+            lblImporte.Name = "lblImporte";
+            lblImporte.TabIndex = 5;
+            lblImporte.Text = "Importe:";
+            lblImporte.AutoSize = true;
+            // 
+            // nudImporte
+            // 
+            nudImporte.Location = new System.Drawing.Point(130, 121);
+            nudImporte.Name = "nudImporte";
+            nudImporte.Size = new System.Drawing.Size(140, 23);
+            nudImporte.TabIndex = 6;
+            nudImporte.DecimalPlaces = 2;
+            nudImporte.Maximum = new decimal(new int[] { 99999999, 0, 0, 131072 });
+            nudImporte.ThousandsSeparator = true;
+            nudImporte.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblDisponible
+            // 
+            lblDisponible.Location = new System.Drawing.Point(280, 125);
+            lblDisponible.Name = "lblDisponible";
+            lblDisponible.TabIndex = 7;
+            lblDisponible.Text = "";
+            lblDisponible.AutoSize = true;
+            lblDisponible.ForeColor = System.Drawing.SystemColors.GrayText;
+            // 
+            // lblEmpleado
+            // 
+            lblEmpleado.Location = new System.Drawing.Point(15, 160);
+            lblEmpleado.Name = "lblEmpleado";
+            lblEmpleado.TabIndex = 8;
+            lblEmpleado.Text = "Empleado:";
+            lblEmpleado.AutoSize = true;
+            // 
+            // cmbEmpleado
+            // 
+            cmbEmpleado.Location = new System.Drawing.Point(130, 156);
+            cmbEmpleado.Name = "cmbEmpleado";
+            cmbEmpleado.Size = new System.Drawing.Size(250, 23);
+            cmbEmpleado.TabIndex = 9;
+            cmbEmpleado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbEmpleado.FormattingEnabled = true;
+            // 
+            // lblObservacion
+            // 
+            lblObservacion.Location = new System.Drawing.Point(15, 195);
+            lblObservacion.Name = "lblObservacion";
+            lblObservacion.TabIndex = 10;
+            lblObservacion.Text = "Observación:";
+            lblObservacion.AutoSize = true;
+            // 
+            // txtObservacion
+            // 
+            txtObservacion.Location = new System.Drawing.Point(130, 192);
+            txtObservacion.Name = "txtObservacion";
+            txtObservacion.Size = new System.Drawing.Size(250, 60);
+            txtObservacion.TabIndex = 11;
+            txtObservacion.Multiline = true;
+            txtObservacion.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtObservacion.MaxLength = 255;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(233, 233);
+            btnGuardar.Location = new System.Drawing.Point(160, 270);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(75, 23);
-            btnGuardar.TabIndex = 5;
+            btnGuardar.Size = new System.Drawing.Size(105, 32);
+            btnGuardar.TabIndex = 12;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(321, 233);
+            btnCancelar.Location = new System.Drawing.Point(275, 270);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(75, 23);
-            btnCancelar.TabIndex = 6;
+            btnCancelar.Size = new System.Drawing.Size(105, 32);
+            btnCancelar.TabIndex = 13;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.Click += btnCancelar_Click;
             // 
             // frmIngresoPlataCaja
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(416, 302);
-            Controls.Add(btnCancelar);
+            AcceptButton = btnGuardar;
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = btnCancelar;
+            ClientSize = new System.Drawing.Size(400, 316);
+            Controls.Add(lblTitulo);
+            Controls.Add(lblConcepto);
+            Controls.Add(cmbConcepto);
+            Controls.Add(lblMedioPago);
+            Controls.Add(cmbMedioPago);
+            Controls.Add(lblImporte);
+            Controls.Add(nudImporte);
+            Controls.Add(lblDisponible);
+            Controls.Add(lblEmpleado);
+            Controls.Add(cmbEmpleado);
+            Controls.Add(lblObservacion);
+            Controls.Add(txtObservacion);
             Controls.Add(btnGuardar);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Icon = (Icon)resources.GetObject("$this.Icon");
+            Controls.Add(btnCancelar);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "frmIngresoPlataCaja";
-            Text = "frmIngresoPlataCaja";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "Movimiento de caja";
+            Load += frmIngresoPlataCaja_Load;
+            ((System.ComponentModel.ISupportInitialize)nudImporte).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label label1;
-        private Label label2;
-        private Label label3;
-        private TextBox textBox1;
-        private TextBox textBox2;
-        private Button btnGuardar;
-        private Button btnCancelar;
+        private System.Windows.Forms.Label lblTitulo;
+        private System.Windows.Forms.Label lblConcepto;
+        private System.Windows.Forms.ComboBox cmbConcepto;
+        private System.Windows.Forms.Label lblMedioPago;
+        private System.Windows.Forms.ComboBox cmbMedioPago;
+        private System.Windows.Forms.Label lblImporte;
+        private System.Windows.Forms.NumericUpDown nudImporte;
+        private System.Windows.Forms.Label lblDisponible;
+        private System.Windows.Forms.Label lblEmpleado;
+        private System.Windows.Forms.ComboBox cmbEmpleado;
+        private System.Windows.Forms.Label lblObservacion;
+        private System.Windows.Forms.TextBox txtObservacion;
+        private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.Button btnCancelar;
     }
 }

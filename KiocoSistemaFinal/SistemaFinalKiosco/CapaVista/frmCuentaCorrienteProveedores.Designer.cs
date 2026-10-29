@@ -28,155 +28,216 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCuentaCorrienteProveedores));
-            btnNuevoPago = new Button();
-            label1 = new Label();
-            txtBuscarProveedor = new TextBox();
-            btnCambiarProveedor = new Button();
-            btnActualizar = new Button();
-            dgvCuentaCorriente = new DataGridView();
-            clmFechaHora = new DataGridViewTextBoxColumn();
-            clmCajero = new DataGridViewTextBoxColumn();
-            clmConcepto = new DataGridViewTextBoxColumn();
-            clmCreditos = new DataGridViewTextBoxColumn();
-            clmDebito = new DataGridViewTextBoxColumn();
-            clmSaldo = new DataGridViewTextBoxColumn();
-            btnVolver = new Button();
-            ((System.ComponentModel.ISupportInitialize)dgvCuentaCorriente).BeginInit();
+            lblProveedor = new System.Windows.Forms.Label();
+            cmbProveedor = new System.Windows.Forms.ComboBox();
+            chkTodos = new System.Windows.Forms.CheckBox();
+            chkIncluirPagadas = new System.Windows.Forms.CheckBox();
+            btnBuscar = new System.Windows.Forms.Button();
+            lblCompras = new System.Windows.Forms.Label();
+            dgvCompras = new System.Windows.Forms.DataGridView();
+            lblTotalDeuda = new System.Windows.Forms.Label();
+            lblVencido = new System.Windows.Forms.Label();
+            btnRegistrarPago = new System.Windows.Forms.Button();
+            btnAnularPago = new System.Windows.Forms.Button();
+            lblPagos = new System.Windows.Forms.Label();
+            dgvPagos = new System.Windows.Forms.DataGridView();
+            btnSalir = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)dgvCompras).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPagos).BeginInit();
             SuspendLayout();
             // 
-            // btnNuevoPago
+            // lblProveedor
             // 
-            btnNuevoPago.Image = (Image)resources.GetObject("btnNuevoPago.Image");
-            btnNuevoPago.ImageAlign = ContentAlignment.MiddleLeft;
-            btnNuevoPago.Location = new Point(22, 26);
-            btnNuevoPago.Name = "btnNuevoPago";
-            btnNuevoPago.Size = new Size(101, 32);
-            btnNuevoPago.TabIndex = 0;
-            btnNuevoPago.Text = "Nuevo pago";
-            btnNuevoPago.TextAlign = ContentAlignment.MiddleRight;
-            btnNuevoPago.UseVisualStyleBackColor = true;
-            btnNuevoPago.Click += btnNuevoPago_Click;
+            lblProveedor.Location = new System.Drawing.Point(12, 17);
+            lblProveedor.Name = "lblProveedor";
+            lblProveedor.TabIndex = 0;
+            lblProveedor.Text = "Proveedor:";
+            lblProveedor.AutoSize = true;
             // 
-            // label1
+            // cmbProveedor
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(129, 35);
-            label1.Name = "label1";
-            label1.Size = new Size(64, 15);
-            label1.TabIndex = 1;
-            label1.Text = "Proveedor:";
+            cmbProveedor.Location = new System.Drawing.Point(85, 13);
+            cmbProveedor.Name = "cmbProveedor";
+            cmbProveedor.Size = new System.Drawing.Size(260, 23);
+            cmbProveedor.TabIndex = 1;
+            cmbProveedor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbProveedor.FormattingEnabled = true;
             // 
-            // txtBuscarProveedor
+            // chkTodos
             // 
-            txtBuscarProveedor.Location = new Point(208, 31);
-            txtBuscarProveedor.Name = "txtBuscarProveedor";
-            txtBuscarProveedor.Size = new Size(194, 23);
-            txtBuscarProveedor.TabIndex = 2;
+            chkTodos.Location = new System.Drawing.Point(360, 15);
+            chkTodos.Name = "chkTodos";
+            chkTodos.TabIndex = 2;
+            chkTodos.Text = "Todos los proveedores";
+            chkTodos.AutoSize = true;
+            chkTodos.UseVisualStyleBackColor = true;
+            chkTodos.CheckedChanged += chkTodos_CheckedChanged;
             // 
-            // btnCambiarProveedor
+            // chkIncluirPagadas
             // 
-            btnCambiarProveedor.Image = (Image)resources.GetObject("btnCambiarProveedor.Image");
-            btnCambiarProveedor.ImageAlign = ContentAlignment.MiddleLeft;
-            btnCambiarProveedor.Location = new Point(415, 26);
-            btnCambiarProveedor.Name = "btnCambiarProveedor";
-            btnCambiarProveedor.Size = new Size(147, 32);
-            btnCambiarProveedor.TabIndex = 3;
-            btnCambiarProveedor.Text = "Cambiar Proveedor";
-            btnCambiarProveedor.TextAlign = ContentAlignment.MiddleRight;
-            btnCambiarProveedor.UseVisualStyleBackColor = true;
+            chkIncluirPagadas.Location = new System.Drawing.Point(530, 15);
+            chkIncluirPagadas.Name = "chkIncluirPagadas";
+            chkIncluirPagadas.TabIndex = 3;
+            chkIncluirPagadas.Text = "Incluir compras pagadas";
+            chkIncluirPagadas.AutoSize = true;
+            chkIncluirPagadas.UseVisualStyleBackColor = true;
             // 
-            // btnActualizar
+            // btnBuscar
             // 
-            btnActualizar.Image = (Image)resources.GetObject("btnActualizar.Image");
-            btnActualizar.Location = new Point(576, 25);
-            btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(75, 32);
-            btnActualizar.TabIndex = 4;
-            btnActualizar.UseVisualStyleBackColor = true;
+            btnBuscar.Location = new System.Drawing.Point(715, 11);
+            btnBuscar.Name = "btnBuscar";
+            btnBuscar.Size = new System.Drawing.Size(100, 28);
+            btnBuscar.TabIndex = 4;
+            btnBuscar.Text = "Buscar";
+            btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
             // 
-            // dgvCuentaCorriente
+            // lblCompras
             // 
-            dgvCuentaCorriente.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCuentaCorriente.Columns.AddRange(new DataGridViewColumn[] { clmFechaHora, clmCajero, clmConcepto, clmCreditos, clmDebito, clmSaldo });
-            dgvCuentaCorriente.Location = new Point(22, 78);
-            dgvCuentaCorriente.Name = "dgvCuentaCorriente";
-            dgvCuentaCorriente.Size = new Size(629, 268);
-            dgvCuentaCorriente.TabIndex = 5;
+            lblCompras.Location = new System.Drawing.Point(12, 52);
+            lblCompras.Name = "lblCompras";
+            lblCompras.TabIndex = 5;
+            lblCompras.Text = "Compras";
+            lblCompras.AutoSize = true;
+            lblCompras.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
-            // clmFechaHora
+            // dgvCompras
             // 
-            clmFechaHora.HeaderText = "Fecha/Hora";
-            clmFechaHora.Name = "clmFechaHora";
+            dgvCompras.Location = new System.Drawing.Point(12, 72);
+            dgvCompras.Name = "dgvCompras";
+            dgvCompras.Size = new System.Drawing.Size(960, 250);
+            dgvCompras.TabIndex = 6;
+            dgvCompras.AllowUserToAddRows = false;
+            dgvCompras.AllowUserToDeleteRows = false;
+            dgvCompras.BackgroundColor = System.Drawing.SystemColors.Window;
+            dgvCompras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvCompras.ReadOnly = true;
+            dgvCompras.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            dgvCompras.DataBindingComplete += dgvCompras_DataBindingComplete;
+            dgvCompras.SelectionChanged += dgvCompras_SelectionChanged;
             // 
-            // clmCajero
+            // lblTotalDeuda
             // 
-            clmCajero.HeaderText = "Cajero";
-            clmCajero.Name = "clmCajero";
+            lblTotalDeuda.Location = new System.Drawing.Point(12, 332);
+            lblTotalDeuda.Name = "lblTotalDeuda";
+            lblTotalDeuda.TabIndex = 7;
+            lblTotalDeuda.Text = "Deuda total: $ 0,00";
+            lblTotalDeuda.AutoSize = true;
+            lblTotalDeuda.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
-            // clmConcepto
+            // lblVencido
             // 
-            clmConcepto.HeaderText = "Concepto";
-            clmConcepto.Name = "clmConcepto";
+            lblVencido.Location = new System.Drawing.Point(300, 335);
+            lblVencido.Name = "lblVencido";
+            lblVencido.TabIndex = 8;
+            lblVencido.Text = "Vencido: $ 0,00";
+            lblVencido.AutoSize = true;
+            lblVencido.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            lblVencido.ForeColor = System.Drawing.Color.Firebrick;
             // 
-            // clmCreditos
+            // btnRegistrarPago
             // 
-            clmCreditos.HeaderText = "Creditos";
-            clmCreditos.Name = "clmCreditos";
+            btnRegistrarPago.Location = new System.Drawing.Point(712, 328);
+            btnRegistrarPago.Name = "btnRegistrarPago";
+            btnRegistrarPago.Size = new System.Drawing.Size(130, 32);
+            btnRegistrarPago.TabIndex = 9;
+            btnRegistrarPago.Text = "Registrar pago";
+            btnRegistrarPago.UseVisualStyleBackColor = true;
+            btnRegistrarPago.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            btnRegistrarPago.Click += btnRegistrarPago_Click;
             // 
-            // clmDebito
+            // btnAnularPago
             // 
-            clmDebito.HeaderText = "Debito";
-            clmDebito.Name = "clmDebito";
+            btnAnularPago.Location = new System.Drawing.Point(848, 328);
+            btnAnularPago.Name = "btnAnularPago";
+            btnAnularPago.Size = new System.Drawing.Size(124, 32);
+            btnAnularPago.TabIndex = 10;
+            btnAnularPago.Text = "Anular pago";
+            btnAnularPago.UseVisualStyleBackColor = true;
+            btnAnularPago.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            btnAnularPago.Click += btnAnularPago_Click;
             // 
-            // clmSaldo
+            // lblPagos
             // 
-            clmSaldo.HeaderText = "Saldo";
-            clmSaldo.Name = "clmSaldo";
+            lblPagos.Location = new System.Drawing.Point(12, 372);
+            lblPagos.Name = "lblPagos";
+            lblPagos.TabIndex = 11;
+            lblPagos.Text = "Pagos de la compra seleccionada";
+            lblPagos.AutoSize = true;
+            lblPagos.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
-            // btnVolver
+            // dgvPagos
             // 
-            btnVolver.Location = new Point(576, 387);
-            btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(75, 23);
-            btnVolver.TabIndex = 6;
-            btnVolver.Text = "Volver";
-            btnVolver.UseVisualStyleBackColor = true;
+            dgvPagos.Location = new System.Drawing.Point(12, 392);
+            dgvPagos.Name = "dgvPagos";
+            dgvPagos.Size = new System.Drawing.Size(960, 170);
+            dgvPagos.TabIndex = 12;
+            dgvPagos.AllowUserToAddRows = false;
+            dgvPagos.AllowUserToDeleteRows = false;
+            dgvPagos.BackgroundColor = System.Drawing.SystemColors.Window;
+            dgvPagos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPagos.ReadOnly = true;
+            dgvPagos.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            dgvPagos.DataBindingComplete += dgvPagos_DataBindingComplete;
+            // 
+            // btnSalir
+            // 
+            btnSalir.Location = new System.Drawing.Point(852, 572);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new System.Drawing.Size(120, 30);
+            btnSalir.TabIndex = 13;
+            btnSalir.Text = "Salir";
+            btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+            btnSalir.Click += btnSalir_Click;
             // 
             // frmCuentaCorrienteProveedores
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(692, 445);
-            Controls.Add(btnVolver);
-            Controls.Add(dgvCuentaCorriente);
-            Controls.Add(btnActualizar);
-            Controls.Add(btnCambiarProveedor);
-            Controls.Add(txtBuscarProveedor);
-            Controls.Add(label1);
-            Controls.Add(btnNuevoPago);
-            Icon = (Icon)resources.GetObject("$this.Icon");
+            AcceptButton = btnBuscar;
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = btnSalir;
+            ClientSize = new System.Drawing.Size(984, 614);
+            Controls.Add(lblProveedor);
+            Controls.Add(cmbProveedor);
+            Controls.Add(chkTodos);
+            Controls.Add(chkIncluirPagadas);
+            Controls.Add(btnBuscar);
+            Controls.Add(lblCompras);
+            Controls.Add(dgvCompras);
+            Controls.Add(lblTotalDeuda);
+            Controls.Add(lblVencido);
+            Controls.Add(btnRegistrarPago);
+            Controls.Add(btnAnularPago);
+            Controls.Add(lblPagos);
+            Controls.Add(dgvPagos);
+            Controls.Add(btnSalir);
+            MinimumSize = new System.Drawing.Size(1000, 650);
             Name = "frmCuentaCorrienteProveedores";
-            Text = "Cuenta Corriente de Proveedores";
-            ((System.ComponentModel.ISupportInitialize)dgvCuentaCorriente).EndInit();
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "Cuenta corriente de proveedores";
+            Load += frmCuentaCorrienteProveedores_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvCompras).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPagos).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Button btnNuevoPago;
-        private Label label1;
-        private TextBox txtBuscarProveedor;
-        private Button btnCambiarProveedor;
-        private Button btnActualizar;
-        private DataGridView dgvCuentaCorriente;
-        private DataGridViewTextBoxColumn clmFechaHora;
-        private DataGridViewTextBoxColumn clmCajero;
-        private DataGridViewTextBoxColumn clmConcepto;
-        private DataGridViewTextBoxColumn clmCreditos;
-        private DataGridViewTextBoxColumn clmDebito;
-        private DataGridViewTextBoxColumn clmSaldo;
-        private Button btnVolver;
+        private System.Windows.Forms.Label lblProveedor;
+        private System.Windows.Forms.ComboBox cmbProveedor;
+        private System.Windows.Forms.CheckBox chkTodos;
+        private System.Windows.Forms.CheckBox chkIncluirPagadas;
+        private System.Windows.Forms.Button btnBuscar;
+        private System.Windows.Forms.Label lblCompras;
+        private System.Windows.Forms.DataGridView dgvCompras;
+        private System.Windows.Forms.Label lblTotalDeuda;
+        private System.Windows.Forms.Label lblVencido;
+        private System.Windows.Forms.Button btnRegistrarPago;
+        private System.Windows.Forms.Button btnAnularPago;
+        private System.Windows.Forms.Label lblPagos;
+        private System.Windows.Forms.DataGridView dgvPagos;
+        private System.Windows.Forms.Button btnSalir;
     }
 }
