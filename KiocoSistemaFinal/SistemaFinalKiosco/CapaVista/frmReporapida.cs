@@ -14,7 +14,7 @@ namespace CapaVista
 {
     public partial class frmReporapida : Form
     {
-        private ClsLogicaProducto logica = new ClsLogicaProducto();
+        private ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
         private ClsPrecioLogica logicaPrecios = new ClsPrecioLogica();
         private string modoActual = "";
         private DataTable resultadosBusqueda;
@@ -501,7 +501,7 @@ namespace CapaVista
                 }
                 else if (modoActual == "STOCK")
                 {
-                    ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+                    ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
                     bool hayCambios = false;
 
                     foreach (DataGridViewRow fila in dgvProductos.Rows)

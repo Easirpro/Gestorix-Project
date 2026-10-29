@@ -24,7 +24,7 @@ namespace CapaVista
         private decimal subtotal = 0.00m;
         private decimal descuentoRecargo = 0.00m;
         private decimal total;
-        private ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+        private ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
         private DataTable tablaProductosEncontrados;
         private readonly HashSet<DataGridViewRow> filasDePromocion = new HashSet<DataGridViewRow>();
 
@@ -526,7 +526,7 @@ namespace CapaVista
                 }
             }
 
-            ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+            ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
 
             DataTable tablaProducto = logicaProducto.ObtenerProductoPorCodigoBarra(codigoBarra);
 
@@ -716,7 +716,7 @@ namespace CapaVista
             string descripcion = fila["Descripcion"].ToString();
             decimal precio = Convert.ToDecimal(fila["PrecioVenta"]);
 
-            ClsLogicaProducto logica = new ClsLogicaProducto();
+            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
             DataTable tablaStock = logica.ObtenerStockPorProducto(idProducto);
 
             decimal stockDisponible = 0m;
@@ -1070,7 +1070,7 @@ namespace CapaVista
                     return;
                 }
 
-                ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+                ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
 
                 DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(producto.IdProducto);
 
@@ -1127,7 +1127,7 @@ namespace CapaVista
                 try
                 {
                     ClsPromocionLogica logicaPromo = new ClsPromocionLogica();
-                    ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+                    ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
 
                     DataSet datos = logicaPromo.ObtenerPromocionPorId(idPromocion);
 
@@ -1468,7 +1468,7 @@ namespace CapaVista
                 return;
             }
 
-            ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+            ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
 
             DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
 

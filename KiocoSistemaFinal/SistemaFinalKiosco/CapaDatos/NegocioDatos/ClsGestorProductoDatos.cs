@@ -8,12 +8,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 namespace CapaDatos.NegocioDatos
 {
-    public class ClsGestorProducto
+    public class ClsGestorProductoDatos
     {
         Conexion cn = new Conexion();
 
@@ -35,7 +34,7 @@ namespace CapaDatos.NegocioDatos
         }
         public int RegistrarProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
-            string dvh =GenerarDVHProducto(producto);
+            string dvh = GenerarDVHProducto(producto);
             using (SqlConnection conexion = cn.ObtenerConexion())
 
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarProducto", conexion))
@@ -279,31 +278,53 @@ namespace CapaDatos.NegocioDatos
         public void RegistrarStock(int idProducto, decimal cantidadActual, decimal stockMinimo, decimal stockIdeal)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
-
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarStock", conexion))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
-                cmd.Parameters.AddWithValue("@CantidadActual", cantidadActual);
-                cmd.Parameters.AddWithValue("@StockMinimo", stockMinimo);
-                cmd.Parameters.AddWithValue("@StockIdeal", stockIdeal);
+                cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = idProducto;
+
+                SqlParameter cantidad = cmd.Parameters.Add("@CantidadActual", SqlDbType.Decimal);
+                cantidad.Precision = 10;
+                cantidad.Scale = 3;
+                cantidad.Value = cantidadActual;
+
+                SqlParameter minimo = cmd.Parameters.Add("@StockMinimo", SqlDbType.Decimal);
+                minimo.Precision = 10;
+                minimo.Scale = 3;
+                minimo.Value = stockMinimo;
+
+                SqlParameter ideal = cmd.Parameters.Add("@StockIdeal", SqlDbType.Decimal);
+                ideal.Precision = 10;
+                ideal.Scale = 3;
+                ideal.Value = stockIdeal;
 
                 conexion.Open();
-
                 cmd.ExecuteNonQuery();
             }
         }
         public bool RegistrarStock(ClsGestorEntidadProducto.ClsStock stock)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
-
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarStock", conexion))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@IdProducto", stock.IdProducto);
-                cmd.Parameters.AddWithValue("@CantidadActual", stock.CantidadActual);
-                cmd.Parameters.AddWithValue("@StockMinimo", stock.StockMinimo);
-                cmd.Parameters.AddWithValue("@StockIdeal", stock.StockIdeal);
+
+                cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = stock.IdProducto;
+
+                SqlParameter parametroCantidad = cmd.Parameters.Add("@CantidadActual", SqlDbType.Decimal);
+                parametroCantidad.Precision = 10;
+                parametroCantidad.Scale = 3;
+                parametroCantidad.Value = stock.CantidadActual;
+
+                SqlParameter parametroMinimo = cmd.Parameters.Add("@StockMinimo", SqlDbType.Decimal);
+                parametroMinimo.Precision = 10;
+                parametroMinimo.Scale = 3;
+                parametroMinimo.Value = stock.StockMinimo;
+
+                SqlParameter parametroIdeal = cmd.Parameters.Add("@StockIdeal", SqlDbType.Decimal);
+                parametroIdeal.Precision = 10;
+                parametroIdeal.Scale = 3;
+                parametroIdeal.Value = stock.StockIdeal;
 
                 conexion.Open();
 
@@ -328,18 +349,23 @@ namespace CapaDatos.NegocioDatos
         public bool RegistrarLote(ClsLote lote)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
-
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarLote", conexion))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@IdProducto", lote.IdProducto);
-                cmd.Parameters.AddWithValue("@CodigoLote", lote.CodigoLote);
-                cmd.Parameters.AddWithValue("@FechaFabricacion", lote.FechaFabricacion);
-                cmd.Parameters.AddWithValue("@FechaVencimiento", lote.FechaVencimiento);
-                cmd.Parameters.AddWithValue("@FechaIngreso", lote.FechaIngreso);
-                cmd.Parameters.AddWithValue("@Stock", lote.Stock);
-                cmd.Parameters.AddWithValue("@Activo", lote.Activo);
-                cmd.Parameters.AddWithValue("@IdSucursal", lote.IdSucursal);
+
+                cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = lote.IdProducto;
+                cmd.Parameters.Add("@CodigoLote", SqlDbType.NVarChar, 100).Value = lote.CodigoLote;
+                cmd.Parameters.Add("@FechaFabricacion", SqlDbType.Date).Value = lote.FechaFabricacion;
+                cmd.Parameters.Add("@FechaVencimiento", SqlDbType.Date).Value = lote.FechaVencimiento;
+                cmd.Parameters.Add("@FechaIngreso", SqlDbType.DateTime2).Value = lote.FechaIngreso;
+
+                SqlParameter parametroStock = cmd.Parameters.Add("@Stock", SqlDbType.Decimal);
+                parametroStock.Precision = 10;
+                parametroStock.Scale = 3;
+                parametroStock.Value = lote.Stock;
+
+                cmd.Parameters.Add("@Activo", SqlDbType.Bit).Value = lote.Activo;
+                cmd.Parameters.Add("@IdSucursal", SqlDbType.Int).Value = lote.IdSucursal;
 
                 conexion.Open();
 
@@ -352,6 +378,7 @@ namespace CapaDatos.NegocioDatos
             using (SqlCommand cmd = new SqlCommand("sp_ModificarLote", conexion))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
+
                 cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = lote.IdProducto;
                 cmd.Parameters.Add("@CodigoLote", SqlDbType.NVarChar, 100).Value = lote.CodigoLote;
                 cmd.Parameters.Add("@FechaFabricacion", SqlDbType.Date).Value = lote.FechaFabricacion;
@@ -359,12 +386,11 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters.Add("@FechaIngreso", SqlDbType.DateTime2).Value = lote.FechaIngreso;
 
                 SqlParameter parametroStock = cmd.Parameters.Add("@Stock", SqlDbType.Decimal);
-
                 parametroStock.Precision = 10;
                 parametroStock.Scale = 3;
                 parametroStock.Value = lote.Stock;
 
-                cmd.Parameters.Add("@Activo", SqlDbType.Bit).Value =  lote.Activo;
+                cmd.Parameters.Add("@Activo", SqlDbType.Bit).Value = lote.Activo;
                 cmd.Parameters.Add("@IdSucursal", SqlDbType.Int).Value = lote.IdSucursal;
 
                 conexion.Open();
@@ -464,8 +490,7 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
                 cmd.Parameters.AddWithValue("@IdUnidad", producto.IdUnidad);
                 cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
-                cmd.Parameters.AddWithValue("@DVH",dvh);
-
+                cmd.Parameters.AddWithValue("@DVH", dvh);
                 conexion.Open();
 
                 return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
@@ -490,6 +515,7 @@ namespace CapaDatos.NegocioDatos
         }
         public void RegistrarProductoSucursalProveedor( ClsProductoSucursalProveedor relacion)
         {
+
             using (SqlConnection conexion = cn.ObtenerConexion())
 
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarProductoSucursalProveedor", conexion))
@@ -501,6 +527,7 @@ namespace CapaDatos.NegocioDatos
                 cmd.Parameters.AddWithValue("@FechaPrecioCompra", (object)relacion.FechaPrecioCompra ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@CodigoProveedor", (object)relacion.CodigoProveedor ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
+               
 
                 conexion.Open();
 
@@ -514,13 +541,17 @@ namespace CapaDatos.NegocioDatos
             {
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@IdProducto", relacion.IdProducto);
-                cmd.Parameters.AddWithValue("@IdSucursal", relacion.IdSucursal);
-                cmd.Parameters.AddWithValue("@Activo", relacion.Activo);
+                cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = relacion.IdProducto;
+                cmd.Parameters.Add("@IdSucursal", SqlDbType.Int).Value = relacion.IdSucursal;
+                cmd.Parameters.Add("@Activo", SqlDbType.Bit).Value = relacion.Activo;
 
                 conexion.Open();
 
-                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+                object resultado = cmd.ExecuteScalar();
+
+                return resultado != null
+                    && resultado != DBNull.Value
+                    && Convert.ToInt32(resultado) > 0;
             }
         }
         public DataTable BuscarArticulos( string texto, bool ocultarDiscontinuos)
@@ -612,6 +643,90 @@ namespace CapaDatos.NegocioDatos
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
+        public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+                using (SqlCommand cmd = new SqlCommand("sp_ObtenerIdSucursalImportacion", conexion))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@NombreProveedor", nombreProveedor);
+                    cmd.Parameters.AddWithValue("@NombreSucursal", nombreSucursal);
+                    object resultado = cmd.ExecuteScalar();
+                    return resultado == null || resultado == DBNull.Value ? 0 : Convert.ToInt32(resultado);
+                }
+            }
+        }
+        public void ImportarProductos(List<ClsGestorEntidadProducto.ClsProducto> productos, List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto> proveedoresCostos, Dictionary<string, DateTime?> fechasVencimiento)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+                using (SqlTransaction transaccion = conexion.BeginTransaction())
+                {
+                    try
+                    {
+                        int siguienteSKU = ObtenerProximoSKUImportacion(conexion, transaccion);
+
+                        foreach (var producto in productos)
+                        {
+                            producto.SKU = siguienteSKU.ToString();
+                            producto.IdProducto = RegistrarProductoImportacion(producto, conexion, transaccion);
+                            siguienteSKU++;
+                        }
+
+                        foreach (var proveedorCosto in proveedoresCostos)
+                        {
+                            var producto = productos.FirstOrDefault(p => p.CodigoBarra == proveedorCosto.CodigoBarra);
+                            if (producto == null)
+                                throw new Exception($"No se encontró el artículo '{proveedorCosto.CodigoBarra}'.");
+
+                            int idSucursal = ObtenerIdSucursalImportacion(proveedorCosto.Proveedor, proveedorCosto.Sucursal, conexion, transaccion);
+
+                            if (idSucursal == 0)
+                                throw new Exception($"No se encontró la sucursal '{proveedorCosto.Sucursal}' del proveedor '{proveedorCosto.Proveedor}'.");
+
+                            var relacion = new ClsGestorEntidadProducto.ClsProductoSucursalProveedor
+                            {
+                                IdProducto = producto.IdProducto,
+                                IdSucursal = idSucursal,
+                                PrecioCompra = proveedorCosto.PrecioCompra,
+                                FechaPrecioCompra = DateTime.Now,
+                                CodigoProveedor = null,
+                                Activo = true
+                            };
+
+                            RegistrarProductoSucursalProveedorImportacion(relacion, conexion, transaccion);
+
+                            if (fechasVencimiento.TryGetValue(proveedorCosto.CodigoBarra, out DateTime? fecha) && fecha.HasValue)
+                            {
+                                var lote = new ClsGestorEntidadProducto.ClsLote
+                                {
+                                    IdProducto = producto.IdProducto,
+                                    CodigoLote = "IMP-" + producto.SKU,
+                                    FechaFabricacion = DateTime.Now.Date,
+                                    FechaVencimiento = fecha.Value.Date,
+                                    FechaIngreso = DateTime.Now,
+                                    Stock = 0,
+                                    Activo = true,
+                                    IdSucursal = idSucursal
+                                };
+
+                                RegistrarLoteImportacion(lote, conexion, transaccion);
+                            }
+                        }
+
+                        transaccion.Commit();
+                    }
+                    catch
+                    {
+                        try { transaccion.Rollback(); } catch { }
+                        throw;
+                    }
+                }
+            }
+        }
         public bool EliminarProducto(int idProducto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -620,17 +735,11 @@ namespace CapaDatos.NegocioDatos
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                conexion.Open();
 
-                try
-                {
-                    conexion.Open();
+                object resultado = cmd.ExecuteScalar();
 
-                    return Convert.ToBoolean(cmd.ExecuteScalar());
-                }
-                catch
-                {
-                    return false;
-                }
+                return resultado != null && resultado != DBNull.Value && Convert.ToBoolean(resultado);
             }
         }
         public bool DescontinuarProducto(int idProducto)
@@ -736,39 +845,33 @@ namespace CapaDatos.NegocioDatos
         }
         public bool ModificarStock(int idProducto, decimal cantidadActual, decimal stockMinimo, decimal stockIdeal)
         {
-            try
+            using (SqlConnection conexion = cn.ObtenerConexion())
             {
-                using (SqlConnection conexion = cn.ObtenerConexion())
+                conexion.Open();
+
+                using (SqlCommand cmd = new SqlCommand("sp_ModificarStock", conexion))
                 {
-                    conexion.Open();
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                    using (SqlCommand cmd = new SqlCommand("sp_ModificarStock", conexion))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = idProducto;
+                    cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = idProducto;
 
-                        SqlParameter parametroCantidad = cmd.Parameters.Add("@CantidadActual", SqlDbType.Decimal);
-                        parametroCantidad.Precision = 10;
-                        parametroCantidad.Scale = 3;
-                        parametroCantidad.Value = cantidadActual;
+                    SqlParameter parametroCantidad = cmd.Parameters.Add("@CantidadActual", SqlDbType.Decimal);
+                    parametroCantidad.Precision = 10;
+                    parametroCantidad.Scale = 3;
+                    parametroCantidad.Value = cantidadActual;
 
-                        SqlParameter parametroMinimo = cmd.Parameters.Add("@StockMinimo", SqlDbType.Decimal);
-                        parametroMinimo.Precision = 10;
-                        parametroMinimo.Scale = 3;
-                        parametroMinimo.Value = stockMinimo;
+                    SqlParameter parametroMinimo = cmd.Parameters.Add("@StockMinimo", SqlDbType.Decimal);
+                    parametroMinimo.Precision = 10;
+                    parametroMinimo.Scale = 3;
+                    parametroMinimo.Value = stockMinimo;
 
-                        SqlParameter parametroIdeal = cmd.Parameters.Add("@StockIdeal", SqlDbType.Decimal);
-                        parametroIdeal.Precision = 10;
-                        parametroIdeal.Scale = 3;
-                        parametroIdeal.Value = stockIdeal;
+                    SqlParameter parametroIdeal = cmd.Parameters.Add("@StockIdeal", SqlDbType.Decimal);
+                    parametroIdeal.Precision = 10;
+                    parametroIdeal.Scale = 3;
+                    parametroIdeal.Value = stockIdeal;
 
-                        return Convert.ToBoolean(cmd.ExecuteScalar());
-                    }
+                    return Convert.ToBoolean(cmd.ExecuteScalar());
                 }
-            }
-            catch
-            {
-                return false;
             }
         }
         private string GenerarDVHProducto(ClsGestorEntidadProducto.ClsProducto producto)
@@ -787,5 +890,110 @@ namespace CapaDatos.NegocioDatos
             return ClsDigitoVerificador
                 .GenerarHash(cadena);
         }
+        public void RecalcularDVHProductos()
+        {
+            using (SqlConnection conexion =
+                   cn.ObtenerConexion())
+            {
+                conexion.Open();
+
+                string sql =
+                @"SELECT
+            IdProducto,
+            CodigoBarra,
+            SKU,
+            Nombre,
+            Descripcion,
+            IdMarca,
+            IdIVA,
+            IdCategoria,
+            IdUnidad,
+            PrecioVenta,
+            Activo
+          FROM Producto
+          WHERE DVH IS NULL";
+
+                using (SqlCommand cmd =
+                       new SqlCommand(sql, conexion))
+                {
+                    using (SqlDataReader dr =
+                           cmd.ExecuteReader())
+                    {
+                        List<ClsGestorEntidadProducto.ClsProducto>
+                            productos =
+                            new List<ClsGestorEntidadProducto.ClsProducto>();
+
+                        while (dr.Read())
+                        {
+                            productos.Add(
+                                new ClsGestorEntidadProducto.ClsProducto
+                                {
+                                    IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                                    CodigoBarra = dr["CodigoBarra"].ToString(),
+                                    SKU = dr["SKU"].ToString(),
+                                    Nombre = dr["Nombre"].ToString(),
+                                    Descripcion = dr["Descripcion"].ToString(),
+                                    IdMarca = Convert.ToInt32(dr["IdMarca"]),
+                                    IdIVA = Convert.ToInt32(dr["IdIVA"]),
+                                    IdCategoria = Convert.ToInt32(dr["IdCategoria"]),
+                                    IdUnidad = Convert.ToInt32(dr["IdUnidad"]),
+                                    PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
+                                    Activo = Convert.ToBoolean(dr["Activo"])
+                                });
+                        }
+
+                        dr.Close();
+
+                        foreach (var producto in productos)
+                        {
+                            string dvh =
+                                GenerarDVHProducto(producto);
+
+                            string update =
+                            @"UPDATE Producto
+                      SET DVH = @DVH
+                      WHERE IdProducto = @IdProducto";
+
+                            using (SqlCommand cmdUpdate =
+                                new SqlCommand(update, conexion))
+                            {
+                                cmdUpdate.Parameters.AddWithValue(
+                                    "@DVH", dvh);
+
+                                cmdUpdate.Parameters.AddWithValue(
+                                    "@IdProducto",
+                                    producto.IdProducto);
+
+                                cmdUpdate.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public DataTable BuscarProductosConFiltrosRapida(string texto, int? idProveedor, int? idSucursal, int? idCategoria, int? idMarca)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("dbo.sp_BuscarProductosConFiltrosRapida", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@Texto", SqlDbType.NVarChar, 100).Value = texto;
+                cmd.Parameters.Add("@IdProveedor", SqlDbType.Int).Value = (object)idProveedor ?? DBNull.Value;
+                cmd.Parameters.Add("@IdSucursal", SqlDbType.Int).Value = (object)idSucursal ?? DBNull.Value;
+                cmd.Parameters.Add("@IdCategoria", SqlDbType.Int).Value = (object)idCategoria ?? DBNull.Value;
+                cmd.Parameters.Add("@IdMarca", SqlDbType.Int).Value = (object)idMarca ?? DBNull.Value;
+
+                DataTable tabla = new DataTable();
+
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                {
+                    adaptador.Fill(tabla);
+                }
+
+                return tabla;
+            }
+        }
+
     }
 }

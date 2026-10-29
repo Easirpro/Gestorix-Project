@@ -1,9 +1,6 @@
-﻿using CapaDatos;
-using CapaEntidades;
+﻿using CapaEntidades;
 using CapaLogica;
 using CapaVista;
-using Microsoft.Data.SqlClient;
-using SistemaKiosco;
 using System.ComponentModel;
 using System.Data;
 using static CapaLogica.ClsValidarNumero;
@@ -15,7 +12,6 @@ namespace CapaVista
 {
     public partial class frmCargaEmpleados : Form
     {
-        private Conexion cadena = new Conexion();
         private ClsPersona personaOriginal;
         private ClsDomicilio domicilioOriginal;
         private ClsCorreo correoOriginal;

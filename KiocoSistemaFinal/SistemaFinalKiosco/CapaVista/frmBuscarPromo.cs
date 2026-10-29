@@ -127,7 +127,7 @@ namespace CapaVista
 
                 decimal cantidadLleva = esVolumen ? Convert.ToDecimal(promo["CantidadLleva"]) : 1m;
 
-                var logicaProducto = new ClsLogicaProducto();
+                var logicaProducto = new ClsGestorProductoLogica();
 
                 foreach (DataRow detalle in datos.Tables[1].Rows)
                 {

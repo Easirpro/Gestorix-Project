@@ -16,14 +16,14 @@ namespace CapaVista
 {
     public partial class frmExportarArchivos : Form
     {
-        private ClsLogicaProducto logicaProducto;
+        private ClsGestorProductoLogica logicaProducto;
         private ClsLogicaProveedor logicaProveedor;
 
         public frmExportarArchivos()
         {
             InitializeComponent();
 
-            logicaProducto = new ClsLogicaProducto();
+            logicaProducto = new ClsGestorProductoLogica();
             logicaProveedor = new ClsLogicaProveedor();
         }
 

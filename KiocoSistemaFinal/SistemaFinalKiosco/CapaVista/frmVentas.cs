@@ -13,7 +13,7 @@ namespace CapaVista
 {
     public partial class frmVentas : Form
     {
-        private readonly CapaLogica.NegocioLogica.ClsVentaLogica logicaVenta = new CapaLogica.NegocioLogica.ClsVentaLogica();
+        private readonly CapaLogica.NegocioLogica.ClsGestorVentaLogica logicaVenta = new CapaLogica.NegocioLogica.ClsGestorVentaLogica();
 
         public frmVentas()
         {

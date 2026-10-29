@@ -17,7 +17,7 @@ namespace CapaVista
     {
         private bool formularioCargado = false;
 
-        ClsLogicaProducto logica = new ClsLogicaProducto();
+        ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
         public frmCargaarticulo()
         {

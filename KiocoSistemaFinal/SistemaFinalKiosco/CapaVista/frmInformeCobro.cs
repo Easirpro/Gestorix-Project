@@ -143,7 +143,7 @@ namespace CapaVista
         }
         private int ObtenerIdMetodoPago(string metodoPago)
         {
-            ClsVentaLogica gestorVenta = new ClsVentaLogica();
+            ClsGestorVentaLogica gestorVenta = new ClsGestorVentaLogica();
 
             DataTable tabla = gestorVenta.ObtenerMetodosPago();
 
@@ -349,7 +349,7 @@ namespace CapaVista
                         });
                 }
 
-                ClsVentaLogica gestorVenta = new ClsVentaLogica();
+                ClsGestorVentaLogica gestorVenta = new ClsGestorVentaLogica();
 
                 int idVenta = gestorVenta.RegistrarVenta(totalVenta, SesionUsuario.IdUsuario, null, detalles, pagos, promociones);   // [PROMO]
 

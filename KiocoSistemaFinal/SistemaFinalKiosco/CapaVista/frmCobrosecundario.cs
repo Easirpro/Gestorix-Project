@@ -19,7 +19,7 @@ namespace CapaVista
         private decimal descuentoRecargo = 0.00m;
         private decimal total = 0.00m;
 
-        private ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+        private ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
         private DataTable tablaProductosEncontrados;
 
         private DataGridView grillaPrincipal;
@@ -185,7 +185,7 @@ namespace CapaVista
                 }
             }
 
-            ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+            ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
 
             DataTable tablaProducto = logicaProducto.ObtenerProductoPorCodigoBarra(codigoBarra);
 
@@ -422,7 +422,7 @@ namespace CapaVista
                     return;
                 }
 
-                ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+                ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
 
                 DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(producto.IdProducto);
 
@@ -484,7 +484,7 @@ namespace CapaVista
                 return;
             }
 
-            ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+            ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
 
             DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(idProducto);
 
@@ -544,7 +544,7 @@ namespace CapaVista
                 try
                 {
                     ClsPromocionLogica logicaPromo = new ClsPromocionLogica();
-                    ClsLogicaProducto logicaProducto = new ClsLogicaProducto();
+                    ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
 
                     DataSet datos = logicaPromo.ObtenerPromocionPorId(idPromocion);
 

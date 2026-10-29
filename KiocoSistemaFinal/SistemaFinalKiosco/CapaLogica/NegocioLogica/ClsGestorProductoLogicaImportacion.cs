@@ -9,13 +9,13 @@ using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 namespace CapaLogica.NegocioLogica
 {
-    public partial class ClsLogicaProducto
+    public partial class ClsGestorProductoLogica
     {
         public ClsGestorEntidadProducto.ClsResultadoImportacion ImportarArticulosDesdeExcel(string rutaArchivo)
             {
                 try
                 {
-                    ClsLogicaProducto logica = this;
+                    ClsGestorProductoLogica logica = this;
 
                     using (XLWorkbook libro = new XLWorkbook(rutaArchivo))
                     {
@@ -499,7 +499,7 @@ namespace CapaLogica.NegocioLogica
                         IXLWorksheet hojaSucursales = libro.Worksheets.Add("_SUCURSALES");
 
                         //Marcas
-                        DataTable tablaMarcas = new ClsLogicaProducto().CargarMarcasActivas();
+                        DataTable tablaMarcas = new ClsGestorProductoLogica().CargarMarcasActivas();
 
                         hojaMarcas.Cell(1, 1).Value = "Marca";
 
@@ -513,7 +513,7 @@ namespace CapaLogica.NegocioLogica
                         }
 
                         //Categorias
-                        DataTable tablaCategorias = new ClsLogicaProducto().CargarCategoriasActivas();
+                        DataTable tablaCategorias = new ClsGestorProductoLogica().CargarCategoriasActivas();
 
                         hojaCategorias.Cell(1, 1).Value = "Categoría";
 
@@ -527,7 +527,7 @@ namespace CapaLogica.NegocioLogica
                         }
 
                         //Unidades
-                        DataTable tablaUnidades = new ClsLogicaProducto().CargarUnidades();
+                        DataTable tablaUnidades = new ClsGestorProductoLogica().CargarUnidades();
 
                         hojaUnidades.Cell(1, 1).Value = "Unidad";
 
@@ -541,7 +541,7 @@ namespace CapaLogica.NegocioLogica
                         }
 
                         //Iva
-                        DataTable tablaIVA = new ClsLogicaProducto().CargarIVAsActivos();
+                        DataTable tablaIVA = new ClsGestorProductoLogica().CargarIVAsActivos();
 
                         hojaIVA.Cell(1, 1).Value = "Alicuota";
 
