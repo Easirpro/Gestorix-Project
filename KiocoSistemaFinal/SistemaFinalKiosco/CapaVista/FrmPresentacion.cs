@@ -68,6 +68,27 @@ namespace CapaVista
             this.KeyPreview = true;
 
             CargarBotones();
+            try
+            {
+                if (SesionUsuario.Permisos.Contains(730) && !new ClsCajaLogica().HayCajaAbierta())
+                {
+                    DialogResult abrir = MessageBox.Show("La caja está cerrada.\n\n¿Desea abrirla ahora?",
+                        "Caja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (abrir == DialogResult.Yes)
+                    {
+                        using (frmAbrirCaja apertura = new frmAbrirCaja())
+                        {
+                            apertura.ShowDialog();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo verificar la caja.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             RellenarFilas();
             CalcularYMostrarMontos();
@@ -333,6 +354,8 @@ namespace CapaVista
             nuevoEgresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(720);
             abrirCajaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(730);
             cerrarSeToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(740);
+            estadoCajaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(700);   
+            balanceToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(600);      
 
             permisosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1270);
         }
@@ -369,6 +392,7 @@ namespace CapaVista
             nuevoIngresoToolStripMenuItem.Enabled = false;
             nuevoEgresoToolStripMenuItem.Enabled = false;
             cerrarSeToolStripMenuItem.Enabled = false;
+            estadoCajaToolStripMenuItem.Enabled = false;
             abrirCajaToolStripMenuItem.Enabled = true;
 
             // Botones del formulario
@@ -827,6 +851,46 @@ namespace CapaVista
         //Cerrar sesion
         private void cerrarSeToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+            try
+            {
+                ClsCajaLogica logicaCaja = new ClsCajaLogica();
+                var sesionCaja = logicaCaja.ObtenerSesionAbierta();
+
+                if (sesionCaja != null)
+                {
+                    DialogResult arqueo = MessageBox.Show(
+                        "¿Desea hacer el arqueo y cerrar la caja?\n\n" +
+                        "Sí: cuenta el efectivo y cierra la caja.\n" +
+                        "No: cierra solo su sesión y la caja sigue abierta para el próximo turno.",
+                        "Cerrar caja", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                    if (arqueo == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+
+                    if (arqueo == DialogResult.Yes)
+                    {
+                        using (frmCerrarCaja cierre = new frmCerrarCaja(sesionCaja.IdSesionCaja))
+                        {
+
+                            if (cierre.ShowDialog() != DialogResult.OK)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo verificar la caja.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
             DialogResult resultado = MessageBox.Show("Estas seguro de cerrar la sesión?", "Cerrar sesión", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (resultado == DialogResult.Yes)
@@ -835,7 +899,6 @@ namespace CapaVista
                 login.CerrarSesion();
 
                 BloquearMenu();
-
             }
         }
         private void abrirCajaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1509,6 +1572,22 @@ namespace CapaVista
         {
             frmRecepcionCompra recepcion = new frmRecepcionCompra();
             recepcion.ShowDialog();
+        }
+
+        private void estadoCajaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (frmCaja caja = new frmCaja())
+            {
+                caja.ShowDialog();
+            }
+        }
+
+        private void balanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (frmBalance balance = new frmBalance())
+            {
+                balance.ShowDialog();
+            }
         }
     }
 

@@ -97,6 +97,7 @@
             nuevoEgresoToolStripMenuItem = new ToolStripMenuItem();
             cerrarSeToolStripMenuItem = new ToolStripMenuItem();
             abrirCajaToolStripMenuItem = new ToolStripMenuItem();
+            estadoCajaToolStripMenuItem = new ToolStripMenuItem();
             btnIdioma = new ToolStripMenuItem();
             inglesToolStripMenuItem = new ToolStripMenuItem();
             españolToolStripMenuItem = new ToolStripMenuItem();
@@ -111,6 +112,7 @@
             administrarPromocionesToolStripMenuItem = new ToolStripMenuItem();
             lblDescripcionSku = new Label();
             lstDescripcion = new ListBox();
+            balanceToolStripMenuItem = new ToolStripMenuItem();
             tmrFechaHora = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)pcbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgPresentacion).BeginInit();
@@ -631,7 +633,7 @@
             // 
             // btnInformes
             // 
-            btnInformes.DropDownItems.AddRange(new ToolStripItem[] { ventasPorDiaToolStripMenuItem, ventaToolStripMenuItem, ventaPorRubroToolStripMenuItem, ventaPorArticulosToolStripMenuItem, ventaPorMedioDePagoToolStripMenuItem, ajustesToolStripMenuItem });
+            btnInformes.DropDownItems.AddRange(new ToolStripItem[] { ventasPorDiaToolStripMenuItem, ventaToolStripMenuItem, ventaPorRubroToolStripMenuItem, ventaPorArticulosToolStripMenuItem, ventaPorMedioDePagoToolStripMenuItem, ajustesToolStripMenuItem, balanceToolStripMenuItem });
             btnInformes.Enabled = false;
             btnInformes.Name = "btnInformes";
             btnInformes.Size = new Size(66, 20);
@@ -680,7 +682,7 @@
             // 
             // btnCaja
             // 
-            btnCaja.DropDownItems.AddRange(new ToolStripItem[] { nuevoIngresoToolStripMenuItem, nuevoEgresoToolStripMenuItem, cerrarSeToolStripMenuItem, abrirCajaToolStripMenuItem });
+            btnCaja.DropDownItems.AddRange(new ToolStripItem[] { nuevoIngresoToolStripMenuItem, nuevoEgresoToolStripMenuItem, cerrarSeToolStripMenuItem, abrirCajaToolStripMenuItem, estadoCajaToolStripMenuItem });
             btnCaja.Enabled = false;
             btnCaja.Name = "btnCaja";
             btnCaja.Size = new Size(42, 20);
@@ -689,30 +691,37 @@
             // nuevoIngresoToolStripMenuItem
             // 
             nuevoIngresoToolStripMenuItem.Name = "nuevoIngresoToolStripMenuItem";
-            nuevoIngresoToolStripMenuItem.Size = new Size(151, 22);
+            nuevoIngresoToolStripMenuItem.Size = new Size(180, 22);
             nuevoIngresoToolStripMenuItem.Text = "Nuevo Ingreso";
             nuevoIngresoToolStripMenuItem.Click += nuevoIngresoToolStripMenuItem_Click;
             // 
             // nuevoEgresoToolStripMenuItem
             // 
             nuevoEgresoToolStripMenuItem.Name = "nuevoEgresoToolStripMenuItem";
-            nuevoEgresoToolStripMenuItem.Size = new Size(151, 22);
+            nuevoEgresoToolStripMenuItem.Size = new Size(180, 22);
             nuevoEgresoToolStripMenuItem.Text = "Nuevo Egreso";
             nuevoEgresoToolStripMenuItem.Click += nuevoEgresoToolStripMenuItem_Click;
             // 
             // cerrarSeToolStripMenuItem
             // 
             cerrarSeToolStripMenuItem.Name = "cerrarSeToolStripMenuItem";
-            cerrarSeToolStripMenuItem.Size = new Size(151, 22);
-            cerrarSeToolStripMenuItem.Text = "Cerrar caja";
+            cerrarSeToolStripMenuItem.Size = new Size(180, 22);
+            cerrarSeToolStripMenuItem.Text = "Cerrar Caja";
             cerrarSeToolStripMenuItem.Click += cerrarSeToolStripMenuItem_Click;
             // 
             // abrirCajaToolStripMenuItem
             // 
             abrirCajaToolStripMenuItem.Name = "abrirCajaToolStripMenuItem";
-            abrirCajaToolStripMenuItem.Size = new Size(151, 22);
+            abrirCajaToolStripMenuItem.Size = new Size(180, 22);
             abrirCajaToolStripMenuItem.Text = "Abrir Caja";
             abrirCajaToolStripMenuItem.Click += abrirCajaToolStripMenuItem_Click;
+            // 
+            // estadoCajaToolStripMenuItem
+            // 
+            estadoCajaToolStripMenuItem.Name = "estadoCajaToolStripMenuItem";
+            estadoCajaToolStripMenuItem.Size = new Size(180, 22);
+            estadoCajaToolStripMenuItem.Text = "Estado de Caja";
+            estadoCajaToolStripMenuItem.Click += estadoCajaToolStripMenuItem_Click;
             // 
             // btnIdioma
             // 
@@ -753,21 +762,21 @@
             // gestioToolStripMenuItem
             // 
             gestioToolStripMenuItem.Name = "gestioToolStripMenuItem";
-            gestioToolStripMenuItem.Size = new Size(180, 22);
+            gestioToolStripMenuItem.Size = new Size(172, 22);
             gestioToolStripMenuItem.Text = "Gestión de Backup";
             gestioToolStripMenuItem.Click += gestioToolStripMenuItem_Click;
             // 
             // permisosToolStripMenuItem
             // 
             permisosToolStripMenuItem.Name = "permisosToolStripMenuItem";
-            permisosToolStripMenuItem.Size = new Size(180, 22);
+            permisosToolStripMenuItem.Size = new Size(172, 22);
             permisosToolStripMenuItem.Text = "Empleado";
             permisosToolStripMenuItem.Click += permisosToolStripMenuItem_Click;
             // 
             // bitacoraToolStripMenuItem
             // 
             bitacoraToolStripMenuItem.Name = "bitacoraToolStripMenuItem";
-            bitacoraToolStripMenuItem.Size = new Size(180, 22);
+            bitacoraToolStripMenuItem.Size = new Size(172, 22);
             bitacoraToolStripMenuItem.Text = "Bitacora";
             bitacoraToolStripMenuItem.Click += bitacoraToolStripMenuItem_Click;
             // 
@@ -824,6 +833,13 @@
             lstDescripcion.SelectedIndexChanged += lstDescripcion_SelectedIndexChanged;
             lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
             lstDescripcion.KeyDown += lstDescripcion_KeyDown;
+            // 
+            // balanceToolStripMenuItem
+            // 
+            balanceToolStripMenuItem.Name = "balanceToolStripMenuItem";
+            balanceToolStripMenuItem.Size = new Size(212, 22);
+            balanceToolStripMenuItem.Text = "Balance";
+            balanceToolStripMenuItem.Click += balanceToolStripMenuItem_Click;
             // 
             // frmmenuPres
             // 
@@ -948,5 +964,7 @@
         private Label lblDescripcionSku;
         private ListBox lstDescripcion;
         private ToolStripMenuItem recepciónDeMercaderiaToolStripMenuItem;
+        private ToolStripMenuItem estadoCajaToolStripMenuItem;
+        private ToolStripMenuItem balanceToolStripMenuItem;
     }
 }
