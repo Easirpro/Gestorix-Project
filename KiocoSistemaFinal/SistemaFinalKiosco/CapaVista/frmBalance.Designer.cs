@@ -42,6 +42,7 @@
             tabPorDia = new System.Windows.Forms.TabPage();
             tabEmpleados = new System.Windows.Forms.TabPage();
             tabProductos = new System.Windows.Forms.TabPage();
+            tabPromociones = new System.Windows.Forms.TabPage();
             tabDetalle = new System.Windows.Forms.TabPage();
             grpIndicadores = new System.Windows.Forms.GroupBox();
             lblTitVentas = new System.Windows.Forms.Label();
@@ -61,6 +62,7 @@
             dgvPorDia = new System.Windows.Forms.DataGridView();
             dgvEmpleados = new System.Windows.Forms.DataGridView();
             dgvProductos = new System.Windows.Forms.DataGridView();
+            dgvPromociones = new System.Windows.Forms.DataGridView();
             lblTipoDetalle = new System.Windows.Forms.Label();
             cmbTipoDetalle = new System.Windows.Forms.ComboBox();
             lblMedioDetalle = new System.Windows.Forms.Label();
@@ -77,6 +79,7 @@
             tabPorDia.SuspendLayout();
             tabEmpleados.SuspendLayout();
             tabProductos.SuspendLayout();
+            tabPromociones.SuspendLayout();
             tabDetalle.SuspendLayout();
             grpIndicadores.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvResumen).BeginInit();
@@ -84,6 +87,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvPorDia).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEmpleados).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPromociones).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDetalle).BeginInit();
             SuspendLayout();
             // 
@@ -167,6 +171,7 @@
             tabBalance.Controls.Add(tabPorDia);
             tabBalance.Controls.Add(tabEmpleados);
             tabBalance.Controls.Add(tabProductos);
+            tabBalance.Controls.Add(tabPromociones);
             tabBalance.Controls.Add(tabDetalle);
             tabBalance.Location = new System.Drawing.Point(12, 50);
             tabBalance.Name = "tabBalance";
@@ -230,6 +235,17 @@
             tabProductos.Padding = new System.Windows.Forms.Padding(3);
             tabProductos.UseVisualStyleBackColor = true;
             // 
+            // tabPromociones
+            // 
+            tabPromociones.Controls.Add(dgvPromociones);
+            tabPromociones.Location = new System.Drawing.Point(4, 24);
+            tabPromociones.Name = "tabPromociones";
+            tabPromociones.Size = new System.Drawing.Size(1068, 548);
+            tabPromociones.TabIndex = 5;
+            tabPromociones.Text = "Por promoción";
+            tabPromociones.Padding = new System.Windows.Forms.Padding(3);
+            tabPromociones.UseVisualStyleBackColor = true;
+            // 
             // tabDetalle
             // 
             tabDetalle.Controls.Add(lblTipoDetalle);
@@ -244,7 +260,7 @@
             tabDetalle.Location = new System.Drawing.Point(4, 24);
             tabDetalle.Name = "tabDetalle";
             tabDetalle.Size = new System.Drawing.Size(1068, 548);
-            tabDetalle.TabIndex = 5;
+            tabDetalle.TabIndex = 6;
             tabDetalle.Text = "Detalle de movimientos";
             tabDetalle.Padding = new System.Windows.Forms.Padding(3);
             tabDetalle.UseVisualStyleBackColor = true;
@@ -444,11 +460,25 @@
             dgvProductos.Dock = System.Windows.Forms.DockStyle.Fill;
             dgvProductos.DataBindingComplete += grilla_DataBindingComplete;
             // 
+            // dgvPromociones
+            // 
+            dgvPromociones.Location = new System.Drawing.Point(3, 3);
+            dgvPromociones.Name = "dgvPromociones";
+            dgvPromociones.Size = new System.Drawing.Size(1062, 542);
+            dgvPromociones.TabIndex = 27;
+            dgvPromociones.AllowUserToAddRows = false;
+            dgvPromociones.AllowUserToDeleteRows = false;
+            dgvPromociones.BackgroundColor = System.Drawing.SystemColors.Window;
+            dgvPromociones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPromociones.ReadOnly = true;
+            dgvPromociones.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgvPromociones.DataBindingComplete += grilla_DataBindingComplete;
+            // 
             // lblTipoDetalle
             // 
             lblTipoDetalle.Location = new System.Drawing.Point(6, 13);
             lblTipoDetalle.Name = "lblTipoDetalle";
-            lblTipoDetalle.TabIndex = 27;
+            lblTipoDetalle.TabIndex = 28;
             lblTipoDetalle.Text = "Tipo:";
             lblTipoDetalle.AutoSize = true;
             // 
@@ -457,7 +487,7 @@
             cmbTipoDetalle.Location = new System.Drawing.Point(45, 9);
             cmbTipoDetalle.Name = "cmbTipoDetalle";
             cmbTipoDetalle.Size = new System.Drawing.Size(120, 23);
-            cmbTipoDetalle.TabIndex = 28;
+            cmbTipoDetalle.TabIndex = 29;
             cmbTipoDetalle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cmbTipoDetalle.FormattingEnabled = true;
             // 
@@ -465,7 +495,7 @@
             // 
             lblMedioDetalle.Location = new System.Drawing.Point(180, 13);
             lblMedioDetalle.Name = "lblMedioDetalle";
-            lblMedioDetalle.TabIndex = 29;
+            lblMedioDetalle.TabIndex = 30;
             lblMedioDetalle.Text = "Medio de pago:";
             lblMedioDetalle.AutoSize = true;
             // 
@@ -474,7 +504,7 @@
             cmbMedioDetalle.Location = new System.Drawing.Point(275, 9);
             cmbMedioDetalle.Name = "cmbMedioDetalle";
             cmbMedioDetalle.Size = new System.Drawing.Size(160, 23);
-            cmbMedioDetalle.TabIndex = 30;
+            cmbMedioDetalle.TabIndex = 31;
             cmbMedioDetalle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cmbMedioDetalle.FormattingEnabled = true;
             // 
@@ -482,7 +512,7 @@
             // 
             lblUsuarioDetalle.Location = new System.Drawing.Point(450, 13);
             lblUsuarioDetalle.Name = "lblUsuarioDetalle";
-            lblUsuarioDetalle.TabIndex = 31;
+            lblUsuarioDetalle.TabIndex = 32;
             lblUsuarioDetalle.Text = "Registrado por:";
             lblUsuarioDetalle.AutoSize = true;
             // 
@@ -491,7 +521,7 @@
             cmbUsuarioDetalle.Location = new System.Drawing.Point(550, 9);
             cmbUsuarioDetalle.Name = "cmbUsuarioDetalle";
             cmbUsuarioDetalle.Size = new System.Drawing.Size(200, 23);
-            cmbUsuarioDetalle.TabIndex = 32;
+            cmbUsuarioDetalle.TabIndex = 33;
             cmbUsuarioDetalle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cmbUsuarioDetalle.FormattingEnabled = true;
             // 
@@ -500,7 +530,7 @@
             btnFiltrarDetalle.Location = new System.Drawing.Point(765, 7);
             btnFiltrarDetalle.Name = "btnFiltrarDetalle";
             btnFiltrarDetalle.Size = new System.Drawing.Size(100, 28);
-            btnFiltrarDetalle.TabIndex = 33;
+            btnFiltrarDetalle.TabIndex = 34;
             btnFiltrarDetalle.Text = "Filtrar";
             btnFiltrarDetalle.UseVisualStyleBackColor = true;
             btnFiltrarDetalle.Click += btnFiltrarDetalle_Click;
@@ -510,7 +540,7 @@
             dgvDetalle.Location = new System.Drawing.Point(6, 42);
             dgvDetalle.Name = "dgvDetalle";
             dgvDetalle.Size = new System.Drawing.Size(1056, 470);
-            dgvDetalle.TabIndex = 34;
+            dgvDetalle.TabIndex = 35;
             dgvDetalle.AllowUserToAddRows = false;
             dgvDetalle.AllowUserToDeleteRows = false;
             dgvDetalle.BackgroundColor = System.Drawing.SystemColors.Window;
@@ -523,7 +553,7 @@
             // 
             lblTotalDetalle.Location = new System.Drawing.Point(6, 520);
             lblTotalDetalle.Name = "lblTotalDetalle";
-            lblTotalDetalle.TabIndex = 35;
+            lblTotalDetalle.TabIndex = 36;
             lblTotalDetalle.Text = "";
             lblTotalDetalle.AutoSize = true;
             lblTotalDetalle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
@@ -534,7 +564,7 @@
             btnSalir.Location = new System.Drawing.Point(968, 634);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new System.Drawing.Size(120, 30);
-            btnSalir.TabIndex = 36;
+            btnSalir.TabIndex = 37;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
@@ -567,11 +597,14 @@
             ((System.ComponentModel.ISupportInitialize)dgvPorDia).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvEmpleados).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPromociones).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvDetalle).EndInit();
             grpIndicadores.ResumeLayout(false);
             grpIndicadores.PerformLayout();
             tabDetalle.ResumeLayout(false);
             tabDetalle.PerformLayout();
+            tabPromociones.ResumeLayout(false);
+            tabPromociones.PerformLayout();
             tabProductos.ResumeLayout(false);
             tabProductos.PerformLayout();
             tabEmpleados.ResumeLayout(false);
@@ -603,6 +636,7 @@
         private System.Windows.Forms.TabPage tabPorDia;
         private System.Windows.Forms.TabPage tabEmpleados;
         private System.Windows.Forms.TabPage tabProductos;
+        private System.Windows.Forms.TabPage tabPromociones;
         private System.Windows.Forms.TabPage tabDetalle;
         private System.Windows.Forms.GroupBox grpIndicadores;
         private System.Windows.Forms.Label lblTitVentas;
@@ -622,6 +656,7 @@
         private System.Windows.Forms.DataGridView dgvPorDia;
         private System.Windows.Forms.DataGridView dgvEmpleados;
         private System.Windows.Forms.DataGridView dgvProductos;
+        private System.Windows.Forms.DataGridView dgvPromociones;
         private System.Windows.Forms.Label lblTipoDetalle;
         private System.Windows.Forms.ComboBox cmbTipoDetalle;
         private System.Windows.Forms.Label lblMedioDetalle;

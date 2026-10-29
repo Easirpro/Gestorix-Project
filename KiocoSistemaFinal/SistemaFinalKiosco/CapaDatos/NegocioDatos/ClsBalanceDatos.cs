@@ -56,6 +56,11 @@ namespace CapaDatos.NegocioDatos
             return EjecutarConsultaPorFechas("sp_BalancePorProducto", desde, hasta);
         }
 
+        public DataTable ObtenerPorPromocion(DateTime desde, DateTime hasta)
+        {
+            return EjecutarConsultaPorFechas("sp_BalancePorPromocion", desde, hasta);
+        }
+
         // tipo: "I" ingresos, "E" egresos, null todos. Los null no filtran.
         public DataTable ObtenerDetalle(DateTime desde, DateTime hasta, string tipo,
                                         int? idMetodoPago, int? idUsuario)

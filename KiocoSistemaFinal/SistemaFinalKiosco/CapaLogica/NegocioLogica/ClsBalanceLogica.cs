@@ -38,6 +38,11 @@ namespace CapaLogica.NegocioLogica
             return datos.ObtenerPorProducto(desde, hasta);
         }
 
+        public DataTable ObtenerPorPromocion(DateTime desde, DateTime hasta)
+        {
+            return datos.ObtenerPorPromocion(desde, hasta);
+        }
+
         public DataTable ObtenerDetalle(DateTime desde, DateTime hasta, string tipo,
                                         int? idMetodoPago, int? idUsuario)
         {

@@ -28,279 +28,398 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNuevaDevolucion));
-            label1 = new Label();
-            label2 = new Label();
-            dateTimePicker1 = new DateTimePicker();
-            textBox1 = new TextBox();
-            label3 = new Label();
-            comboBox1 = new ComboBox();
-            label4 = new Label();
-            label5 = new Label();
-            label6 = new Label();
-            numericUpDown1 = new NumericUpDown();
-            textBox2 = new TextBox();
-            button1 = new Button();
-            textBox3 = new TextBox();
-            label7 = new Label();
-            label8 = new Label();
-            textBox4 = new TextBox();
-            textBox5 = new TextBox();
-            label9 = new Label();
-            label10 = new Label();
-            textBox6 = new TextBox();
-            btnGuardar = new Button();
-            btnCancelar = new Button();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            grpVenta = new System.Windows.Forms.GroupBox();
+            lblDesde = new System.Windows.Forms.Label();
+            dtpDesde = new System.Windows.Forms.DateTimePicker();
+            lblHasta = new System.Windows.Forms.Label();
+            dtpHasta = new System.Windows.Forms.DateTimePicker();
+            lblNroVenta = new System.Windows.Forms.Label();
+            txtNroVenta = new System.Windows.Forms.TextBox();
+            btnBuscarVentas = new System.Windows.Forms.Button();
+            dgvVentas = new System.Windows.Forms.DataGridView();
+            grpProducto = new System.Windows.Forms.GroupBox();
+            dgvDetalle = new System.Windows.Forms.DataGridView();
+            grpDatos = new System.Windows.Forms.GroupBox();
+            lblCantidad = new System.Windows.Forms.Label();
+            nudCantidad = new System.Windows.Forms.NumericUpDown();
+            lblPrecio = new System.Windows.Forms.Label();
+            lblPrecioValor = new System.Windows.Forms.Label();
+            lblImporte = new System.Windows.Forms.Label();
+            lblImporteValor = new System.Windows.Forms.Label();
+            lblMotivo = new System.Windows.Forms.Label();
+            cmbMotivo = new System.Windows.Forms.ComboBox();
+            lblObservacion = new System.Windows.Forms.Label();
+            txtObservacion = new System.Windows.Forms.TextBox();
+            lblReintegro = new System.Windows.Forms.Label();
+            rbEfectivo = new System.Windows.Forms.RadioButton();
+            rbCambio = new System.Windows.Forms.RadioButton();
+            chkReingresaStock = new System.Windows.Forms.CheckBox();
+            lblCaja = new System.Windows.Forms.Label();
+            btnRegistrar = new System.Windows.Forms.Button();
+            btnCancelar = new System.Windows.Forms.Button();
+            grpVenta.SuspendLayout();
+            grpProducto.SuspendLayout();
+            grpDatos.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvVentas).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDetalle).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudCantidad).BeginInit();
             SuspendLayout();
             // 
-            // label1
+            // grpVenta
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(13, 16);
-            label1.Name = "label1";
-            label1.Size = new Size(38, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Fecha";
+            grpVenta.Controls.Add(lblDesde);
+            grpVenta.Controls.Add(dtpDesde);
+            grpVenta.Controls.Add(lblHasta);
+            grpVenta.Controls.Add(dtpHasta);
+            grpVenta.Controls.Add(lblNroVenta);
+            grpVenta.Controls.Add(txtNroVenta);
+            grpVenta.Controls.Add(btnBuscarVentas);
+            grpVenta.Controls.Add(dgvVentas);
+            grpVenta.Location = new System.Drawing.Point(12, 8);
+            grpVenta.Name = "grpVenta";
+            grpVenta.Size = new System.Drawing.Size(796, 205);
+            grpVenta.TabIndex = 0;
+            grpVenta.Text = "1. Venta de la que se devuelve";
+            grpVenta.TabStop = false;
             // 
-            // label2
+            // lblDesde
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(184, 16);
-            label2.Name = "label2";
-            label2.Size = new Size(92, 15);
-            label2.TabIndex = 1;
-            label2.Text = "Nro. devolución";
+            lblDesde.Location = new System.Drawing.Point(12, 28);
+            lblDesde.Name = "lblDesde";
+            lblDesde.TabIndex = 1;
+            lblDesde.Text = "Desde:";
+            lblDesde.AutoSize = true;
             // 
-            // dateTimePicker1
+            // dtpDesde
             // 
-            dateTimePicker1.CustomFormat = "d/MM/yyyy";
-            dateTimePicker1.Format = DateTimePickerFormat.Custom;
-            dateTimePicker1.Location = new Point(12, 38);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(136, 23);
-            dateTimePicker1.TabIndex = 2;
+            dtpDesde.Location = new System.Drawing.Point(60, 24);
+            dtpDesde.Name = "dtpDesde";
+            dtpDesde.Size = new System.Drawing.Size(115, 23);
+            dtpDesde.TabIndex = 2;
+            dtpDesde.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             // 
-            // textBox1
+            // lblHasta
             // 
-            textBox1.Location = new Point(184, 38);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(136, 23);
-            textBox1.TabIndex = 3;
+            lblHasta.Location = new System.Drawing.Point(185, 28);
+            lblHasta.Name = "lblHasta";
+            lblHasta.TabIndex = 3;
+            lblHasta.Text = "Hasta:";
+            lblHasta.AutoSize = true;
             // 
-            // label3
+            // dtpHasta
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(12, 84);
-            label3.Name = "label3";
-            label3.Size = new Size(136, 15);
-            label3.TabIndex = 4;
-            label3.Text = "Motivo de la Devolución";
+            dtpHasta.Location = new System.Drawing.Point(230, 24);
+            dtpHasta.Name = "dtpHasta";
+            dtpHasta.Size = new System.Drawing.Size(115, 23);
+            dtpHasta.TabIndex = 4;
+            dtpHasta.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             // 
-            // comboBox1
+            // lblNroVenta
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(12, 102);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(308, 23);
-            comboBox1.TabIndex = 5;
+            lblNroVenta.Location = new System.Drawing.Point(370, 28);
+            lblNroVenta.Name = "lblNroVenta";
+            lblNroVenta.TabIndex = 5;
+            lblNroVenta.Text = "o N.º de venta:";
+            lblNroVenta.AutoSize = true;
             // 
-            // label4
+            // txtNroVenta
             // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.ForeColor = Color.Navy;
-            label4.Location = new Point(10, 144);
-            label4.Name = "label4";
-            label4.Size = new Size(73, 20);
-            label4.TabIndex = 6;
-            label4.Text = "Producto";
+            txtNroVenta.Location = new System.Drawing.Point(470, 24);
+            txtNroVenta.Name = "txtNroVenta";
+            txtNroVenta.Size = new System.Drawing.Size(90, 23);
+            txtNroVenta.TabIndex = 6;
             // 
-            // label5
+            // btnBuscarVentas
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(17, 178);
-            label5.Name = "label5";
-            label5.Size = new Size(46, 15);
-            label5.TabIndex = 7;
-            label5.Text = "Código";
+            btnBuscarVentas.Location = new System.Drawing.Point(575, 22);
+            btnBuscarVentas.Name = "btnBuscarVentas";
+            btnBuscarVentas.Size = new System.Drawing.Size(100, 27);
+            btnBuscarVentas.TabIndex = 7;
+            btnBuscarVentas.Text = "Buscar";
+            btnBuscarVentas.UseVisualStyleBackColor = true;
+            btnBuscarVentas.Click += btnBuscarVentas_Click;
             // 
-            // label6
+            // dgvVentas
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(184, 178);
-            label6.Name = "label6";
-            label6.Size = new Size(69, 15);
-            label6.TabIndex = 8;
-            label6.Text = "Descripción";
+            dgvVentas.Location = new System.Drawing.Point(12, 58);
+            dgvVentas.Name = "dgvVentas";
+            dgvVentas.Size = new System.Drawing.Size(772, 135);
+            dgvVentas.TabIndex = 8;
+            dgvVentas.AllowUserToAddRows = false;
+            dgvVentas.AllowUserToDeleteRows = false;
+            dgvVentas.BackgroundColor = System.Drawing.SystemColors.Window;
+            dgvVentas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvVentas.ReadOnly = true;
+            dgvVentas.SelectionChanged += dgvVentas_SelectionChanged;
+            dgvVentas.DataBindingComplete += dgvVentas_DataBindingComplete;
             // 
-            // numericUpDown1
+            // grpProducto
             // 
-            numericUpDown1.Location = new Point(13, 266);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(99, 23);
-            numericUpDown1.TabIndex = 9;
+            grpProducto.Controls.Add(dgvDetalle);
+            grpProducto.Location = new System.Drawing.Point(12, 218);
+            grpProducto.Name = "grpProducto";
+            grpProducto.Size = new System.Drawing.Size(796, 155);
+            grpProducto.TabIndex = 9;
+            grpProducto.Text = "2. Producto a devolver";
+            grpProducto.TabStop = false;
             // 
-            // textBox2
+            // dgvDetalle
             // 
-            textBox2.Location = new Point(13, 200);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(112, 23);
-            textBox2.TabIndex = 10;
+            dgvDetalle.Location = new System.Drawing.Point(12, 22);
+            dgvDetalle.Name = "dgvDetalle";
+            dgvDetalle.Size = new System.Drawing.Size(772, 122);
+            dgvDetalle.TabIndex = 10;
+            dgvDetalle.AllowUserToAddRows = false;
+            dgvDetalle.AllowUserToDeleteRows = false;
+            dgvDetalle.BackgroundColor = System.Drawing.SystemColors.Window;
+            dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDetalle.ReadOnly = true;
+            dgvDetalle.SelectionChanged += dgvDetalle_SelectionChanged;
+            dgvDetalle.DataBindingComplete += dgvDetalle_DataBindingComplete;
             // 
-            // button1
+            // grpDatos
             // 
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.Location = new Point(125, 200);
-            button1.Name = "button1";
-            button1.Size = new Size(42, 23);
-            button1.TabIndex = 11;
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            grpDatos.Controls.Add(lblCantidad);
+            grpDatos.Controls.Add(nudCantidad);
+            grpDatos.Controls.Add(lblPrecio);
+            grpDatos.Controls.Add(lblPrecioValor);
+            grpDatos.Controls.Add(lblImporte);
+            grpDatos.Controls.Add(lblImporteValor);
+            grpDatos.Controls.Add(lblMotivo);
+            grpDatos.Controls.Add(cmbMotivo);
+            grpDatos.Controls.Add(lblObservacion);
+            grpDatos.Controls.Add(txtObservacion);
+            grpDatos.Controls.Add(lblReintegro);
+            grpDatos.Controls.Add(rbEfectivo);
+            grpDatos.Controls.Add(rbCambio);
+            grpDatos.Controls.Add(chkReingresaStock);
+            grpDatos.Controls.Add(lblCaja);
+            grpDatos.Location = new System.Drawing.Point(12, 378);
+            grpDatos.Name = "grpDatos";
+            grpDatos.Size = new System.Drawing.Size(796, 195);
+            grpDatos.TabIndex = 11;
+            grpDatos.Text = "3. Datos de la devolución";
+            grpDatos.TabStop = false;
             // 
-            // textBox3
+            // lblCantidad
             // 
-            textBox3.Location = new Point(184, 201);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(274, 23);
-            textBox3.TabIndex = 12;
+            lblCantidad.Location = new System.Drawing.Point(15, 30);
+            lblCantidad.Name = "lblCantidad";
+            lblCantidad.TabIndex = 12;
+            lblCantidad.Text = "Cantidad:";
+            lblCantidad.AutoSize = true;
             // 
-            // label7
+            // nudCantidad
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(13, 247);
-            label7.Name = "label7";
-            label7.Size = new Size(55, 15);
-            label7.TabIndex = 13;
-            label7.Text = "Cantidad";
+            nudCantidad.Location = new System.Drawing.Point(105, 26);
+            nudCantidad.Name = "nudCantidad";
+            nudCantidad.Size = new System.Drawing.Size(100, 23);
+            nudCantidad.TabIndex = 13;
+            nudCantidad.DecimalPlaces = 2;
+            nudCantidad.Maximum = new decimal(new int[] { 99999999, 0, 0, 131072 });
+            nudCantidad.ThousandsSeparator = true;
+            nudCantidad.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            nudCantidad.DecimalPlaces = 0;
+            nudCantidad.ValueChanged += nudCantidad_ValueChanged;
             // 
-            // label8
+            // lblPrecio
             // 
-            label8.AutoSize = true;
-            label8.Location = new Point(141, 248);
-            label8.Name = "label8";
-            label8.Size = new Size(85, 15);
-            label8.TabIndex = 14;
-            label8.Text = "Precio Unitario";
+            lblPrecio.Location = new System.Drawing.Point(225, 30);
+            lblPrecio.Name = "lblPrecio";
+            lblPrecio.TabIndex = 14;
+            lblPrecio.Text = "Precio por unidad:";
+            lblPrecio.AutoSize = true;
             // 
-            // textBox4
+            // lblPrecioValor
             // 
-            textBox4.Location = new Point(141, 266);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(167, 23);
-            textBox4.TabIndex = 15;
+            lblPrecioValor.Location = new System.Drawing.Point(340, 30);
+            lblPrecioValor.Name = "lblPrecioValor";
+            lblPrecioValor.TabIndex = 15;
+            lblPrecioValor.Text = "$ 0,00";
+            lblPrecioValor.AutoSize = true;
+            lblPrecioValor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
-            // textBox5
+            // lblImporte
             // 
-            textBox5.Location = new Point(337, 265);
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(100, 23);
-            textBox5.TabIndex = 16;
+            lblImporte.Location = new System.Drawing.Point(470, 30);
+            lblImporte.Name = "lblImporte";
+            lblImporte.TabIndex = 16;
+            lblImporte.Text = "Importe:";
+            lblImporte.AutoSize = true;
             // 
-            // label9
+            // lblImporteValor
             // 
-            label9.AutoSize = true;
-            label9.Location = new Point(337, 247);
-            label9.Name = "label9";
-            label9.Size = new Size(32, 15);
-            label9.TabIndex = 17;
-            label9.Text = "Total";
+            lblImporteValor.Location = new System.Drawing.Point(535, 26);
+            lblImporteValor.Name = "lblImporteValor";
+            lblImporteValor.TabIndex = 17;
+            lblImporteValor.Text = "$ 0,00";
+            lblImporteValor.AutoSize = true;
+            lblImporteValor.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
-            // label10
+            // lblMotivo
             // 
-            label10.AutoSize = true;
-            label10.Location = new Point(13, 319);
-            label10.Name = "label10";
-            label10.Size = new Size(143, 15);
-            label10.TabIndex = 18;
-            label10.Text = "Observaciones (Opcional)";
+            lblMotivo.Location = new System.Drawing.Point(15, 66);
+            lblMotivo.Name = "lblMotivo";
+            lblMotivo.TabIndex = 18;
+            lblMotivo.Text = "Motivo:";
+            lblMotivo.AutoSize = true;
             // 
-            // textBox6
+            // cmbMotivo
             // 
-            textBox6.Location = new Point(17, 346);
-            textBox6.MaxLength = 255;
-            textBox6.Multiline = true;
-            textBox6.Name = "textBox6";
-            textBox6.ScrollBars = ScrollBars.Vertical;
-            textBox6.Size = new Size(441, 83);
-            textBox6.TabIndex = 19;
+            cmbMotivo.Location = new System.Drawing.Point(105, 62);
+            cmbMotivo.Name = "cmbMotivo";
+            cmbMotivo.Size = new System.Drawing.Size(245, 23);
+            cmbMotivo.TabIndex = 19;
+            cmbMotivo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbMotivo.FormattingEnabled = true;
+            cmbMotivo.SelectedIndexChanged += cmbMotivo_SelectedIndexChanged;
             // 
-            // btnGuardar
+            // lblObservacion
             // 
-            btnGuardar.Location = new Point(337, 456);
-            btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(75, 23);
-            btnGuardar.TabIndex = 20;
-            btnGuardar.Text = "Guardar";
-            btnGuardar.UseVisualStyleBackColor = true;
+            lblObservacion.Location = new System.Drawing.Point(375, 66);
+            lblObservacion.Name = "lblObservacion";
+            lblObservacion.TabIndex = 20;
+            lblObservacion.Text = "Observaciones (opcional):";
+            lblObservacion.AutoSize = true;
+            // 
+            // txtObservacion
+            // 
+            txtObservacion.Location = new System.Drawing.Point(375, 86);
+            txtObservacion.Name = "txtObservacion";
+            txtObservacion.Size = new System.Drawing.Size(405, 55);
+            txtObservacion.TabIndex = 21;
+            txtObservacion.Multiline = true;
+            txtObservacion.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtObservacion.MaxLength = 150;
+            // 
+            // lblReintegro
+            // 
+            lblReintegro.Location = new System.Drawing.Point(15, 100);
+            lblReintegro.Name = "lblReintegro";
+            lblReintegro.TabIndex = 22;
+            lblReintegro.Text = "Reintegro:";
+            lblReintegro.AutoSize = true;
+            // 
+            // rbEfectivo
+            // 
+            rbEfectivo.Location = new System.Drawing.Point(105, 98);
+            rbEfectivo.Name = "rbEfectivo";
+            rbEfectivo.TabIndex = 23;
+            rbEfectivo.Text = "Devolver el dinero en efectivo";
+            rbEfectivo.AutoSize = true;
+            rbEfectivo.UseVisualStyleBackColor = true;
+            rbEfectivo.Checked = true;
+            rbEfectivo.CheckedChanged += rbReintegro_CheckedChanged;
+            // 
+            // rbCambio
+            // 
+            rbCambio.Location = new System.Drawing.Point(105, 121);
+            rbCambio.Name = "rbCambio";
+            rbCambio.TabIndex = 24;
+            rbCambio.Text = "Entregar otra unidad del mismo producto";
+            rbCambio.AutoSize = true;
+            rbCambio.UseVisualStyleBackColor = true;
+            rbCambio.CheckedChanged += rbReintegro_CheckedChanged;
+            // 
+            // chkReingresaStock
+            // 
+            chkReingresaStock.Location = new System.Drawing.Point(15, 155);
+            chkReingresaStock.Name = "chkReingresaStock";
+            chkReingresaStock.TabIndex = 25;
+            chkReingresaStock.Text = "La unidad devuelta está en condiciones y vuelve al stock";
+            chkReingresaStock.AutoSize = true;
+            chkReingresaStock.UseVisualStyleBackColor = true;
+            // 
+            // lblCaja
+            // 
+            lblCaja.Location = new System.Drawing.Point(375, 155);
+            lblCaja.Name = "lblCaja";
+            lblCaja.TabIndex = 26;
+            lblCaja.Text = "";
+            lblCaja.AutoSize = true;
+            lblCaja.ForeColor = System.Drawing.SystemColors.GrayText;
+            // 
+            // btnRegistrar
+            // 
+            btnRegistrar.Location = new System.Drawing.Point(582, 582);
+            btnRegistrar.Name = "btnRegistrar";
+            btnRegistrar.Size = new System.Drawing.Size(110, 32);
+            btnRegistrar.TabIndex = 27;
+            btnRegistrar.Text = "Registrar";
+            btnRegistrar.UseVisualStyleBackColor = true;
+            btnRegistrar.Click += btnRegistrar_Click;
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(431, 456);
+            btnCancelar.Location = new System.Drawing.Point(698, 582);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(75, 23);
-            btnCancelar.TabIndex = 21;
+            btnCancelar.Size = new System.Drawing.Size(110, 32);
+            btnCancelar.TabIndex = 28;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.Click += btnCancelar_Click;
             // 
             // frmNuevaDevolucion
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(531, 489);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = btnCancelar;
+            ClientSize = new System.Drawing.Size(820, 626);
+            Controls.Add(grpVenta);
+            Controls.Add(grpProducto);
+            Controls.Add(grpDatos);
+            Controls.Add(btnRegistrar);
             Controls.Add(btnCancelar);
-            Controls.Add(btnGuardar);
-            Controls.Add(textBox6);
-            Controls.Add(label10);
-            Controls.Add(label9);
-            Controls.Add(textBox5);
-            Controls.Add(textBox4);
-            Controls.Add(label8);
-            Controls.Add(label7);
-            Controls.Add(textBox3);
-            Controls.Add(button1);
-            Controls.Add(textBox2);
-            Controls.Add(numericUpDown1);
-            Controls.Add(label6);
-            Controls.Add(label5);
-            Controls.Add(label4);
-            Controls.Add(comboBox1);
-            Controls.Add(label3);
-            Controls.Add(textBox1);
-            Controls.Add(dateTimePicker1);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Icon = (Icon)resources.GetObject("$this.Icon");
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "frmNuevaDevolucion";
-            Text = "Nueva Devolución";
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "Nueva devolución";
+            Load += frmNuevaDevolucion_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvVentas).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDetalle).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudCantidad).EndInit();
+            grpDatos.ResumeLayout(false);
+            grpDatos.PerformLayout();
+            grpProducto.ResumeLayout(false);
+            grpProducto.PerformLayout();
+            grpVenta.ResumeLayout(false);
+            grpVenta.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label label1;
-        private Label label2;
-        private DateTimePicker dateTimePicker1;
-        private TextBox textBox1;
-        private Label label3;
-        private ComboBox comboBox1;
-        private Label label4;
-        private Label label5;
-        private Label label6;
-        private NumericUpDown numericUpDown1;
-        private TextBox textBox2;
-        private Button button1;
-        private TextBox textBox3;
-        private Label label7;
-        private Label label8;
-        private TextBox textBox4;
-        private TextBox textBox5;
-        private Label label9;
-        private Label label10;
-        private TextBox textBox6;
-        private Button btnGuardar;
-        private Button btnCancelar;
+        private System.Windows.Forms.GroupBox grpVenta;
+        private System.Windows.Forms.Label lblDesde;
+        private System.Windows.Forms.DateTimePicker dtpDesde;
+        private System.Windows.Forms.Label lblHasta;
+        private System.Windows.Forms.DateTimePicker dtpHasta;
+        private System.Windows.Forms.Label lblNroVenta;
+        private System.Windows.Forms.TextBox txtNroVenta;
+        private System.Windows.Forms.Button btnBuscarVentas;
+        private System.Windows.Forms.DataGridView dgvVentas;
+        private System.Windows.Forms.GroupBox grpProducto;
+        private System.Windows.Forms.DataGridView dgvDetalle;
+        private System.Windows.Forms.GroupBox grpDatos;
+        private System.Windows.Forms.Label lblCantidad;
+        private System.Windows.Forms.NumericUpDown nudCantidad;
+        private System.Windows.Forms.Label lblPrecio;
+        private System.Windows.Forms.Label lblPrecioValor;
+        private System.Windows.Forms.Label lblImporte;
+        private System.Windows.Forms.Label lblImporteValor;
+        private System.Windows.Forms.Label lblMotivo;
+        private System.Windows.Forms.ComboBox cmbMotivo;
+        private System.Windows.Forms.Label lblObservacion;
+        private System.Windows.Forms.TextBox txtObservacion;
+        private System.Windows.Forms.Label lblReintegro;
+        private System.Windows.Forms.RadioButton rbEfectivo;
+        private System.Windows.Forms.RadioButton rbCambio;
+        private System.Windows.Forms.CheckBox chkReingresaStock;
+        private System.Windows.Forms.Label lblCaja;
+        private System.Windows.Forms.Button btnRegistrar;
+        private System.Windows.Forms.Button btnCancelar;
     }
 }

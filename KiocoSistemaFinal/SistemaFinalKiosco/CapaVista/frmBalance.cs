@@ -25,6 +25,7 @@ namespace CapaVista
         private DataTable tablaPorDia;
         private DataTable tablaEmpleados;
         private DataTable tablaProductos;
+        private DataTable tablaPromociones;
         private DataTable tablaDetalle;
         private DateTime desdeConsultado;
         private DateTime hastaConsultado;
@@ -54,18 +55,24 @@ namespace CapaVista
             { "NroOperacion", "N.º operación" },
             { "RegistradoPor", "Registrado por" },
             { "SesionCaja", "Caja" },
-            { "Observacion", "Observación" }
+            { "Observacion", "Observación" },
+            { "Codigo", "Código" },
+            { "Promocion", "Promoción" },
+            { "VecesAplicada", "Veces aplicada" },
+            { "ImporteLista", "Importe de lista" },
+            { "ImporteCobrado", "Cobrado" },
+            { "CostoEstimado", "Costo est." }
         };
 
         // Columnas técnicas que no se muestran.
-        private static readonly string[] Ocultas = { "Orden", "IdMetodoPago", "IdUsuario", "IdProducto" };
+        private static readonly string[] Ocultas = { "Orden", "IdMetodoPago", "IdUsuario", "IdProducto", "IdPromocion" };
 
         public frmBalance()
         {
             InitializeComponent();
 
             foreach (DataGridView grilla in new[] { dgvResumen, dgvMedioPago, dgvPorDia,
-                                                    dgvEmpleados, dgvProductos, dgvDetalle })
+                                                    dgvEmpleados, dgvProductos, dgvPromociones, dgvDetalle })
             {
                 ConfigurarGrid(grilla);
             }
@@ -162,6 +169,7 @@ namespace CapaVista
                 tablaPorDia = logica.ObtenerPorDia(desde, hasta);
                 tablaEmpleados = logica.ObtenerPorEmpleado(desde, hasta);
                 tablaProductos = logica.ObtenerPorProducto(desde, hasta);
+                tablaPromociones = logica.ObtenerPorPromocion(desde, hasta);
 
                 desdeConsultado = desde;
                 hastaConsultado = hasta;
@@ -171,6 +179,7 @@ namespace CapaVista
                 dgvPorDia.DataSource = tablaPorDia;
                 dgvEmpleados.DataSource = tablaEmpleados;
                 dgvProductos.DataSource = tablaProductos;
+                dgvPromociones.DataSource = tablaPromociones;
 
                 MostrarIndicadores();
                 ConsultarDetalle();
@@ -382,6 +391,11 @@ namespace CapaVista
         {
             grilla_DataBindingComplete(sender, e);
 
+            if (dgvResumen.Columns.Contains("Seccion"))
+            {
+                dgvResumen.Columns["Seccion"].HeaderText = "Sección";
+            }
+
             // Los totales del bloque "Resultado" se destacan en negrita.
             Font negrita = new Font(dgvResumen.Font, FontStyle.Bold);
             foreach (DataGridViewRow fila in dgvResumen.Rows)
@@ -446,6 +460,7 @@ namespace CapaVista
                         ExportarHoja(libro, "Por dia", "Balance por día", tablaPorDia);
                         ExportarHoja(libro, "Empleados", "Balance por empleado", tablaEmpleados);
                         ExportarHoja(libro, "Productos", "Balance por producto", tablaProductos);
+                        ExportarHoja(libro, "Promociones", "Balance por promoción", tablaPromociones);
                         ExportarHoja(libro, "Detalle", "Detalle de movimientos", tablaDetalle);
 
                         libro.SaveAs(guardar.FileName);

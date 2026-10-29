@@ -33,7 +33,8 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-        public int RegistrarVenta(decimal total, int idUsuario, string observaciones, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos)
+        public int RegistrarVenta(decimal total, int idUsuario, string observaciones, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos,
+                                  List<ClsPromocionVentaEntidad> promociones = null)   // [PROMO] opcional
         {
             string dvh = GenerarDVHVenta(total, idUsuario);
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -85,6 +86,9 @@ namespace CapaDatos.NegocioDatos
 
                 parametroPagos.SqlDbType = SqlDbType.Structured;
                 parametroPagos.TypeName = "dbo.TipoPagoVenta";
+
+                // [PROMO] Promociones aplicadas (si no hay, no se envía el parámetro)
+                ClsPromocionVentaDatos.AgregarParametroPromociones(cmd, promociones);
 
                 conexion.Open();
 
