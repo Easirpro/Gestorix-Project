@@ -2,156 +2,418 @@
 {
     partial class frmReporapida
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        private System.Windows.Forms.Button btnVolver;
+        private System.Windows.Forms.Button btnAceptar;
+        private System.Windows.Forms.Panel pnlBotones;
+        private System.Windows.Forms.Button btnCancelar;
+        private System.Windows.Forms.Button btnGuardarCambios;
+        private System.Windows.Forms.DataGridView dgvProductos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clnCodigo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clnProducto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clnPrecioActual;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clnNuevoPrecio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clnStockActual;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clnCantidadReponer;
+        private System.Windows.Forms.Panel pnlBusqueda;
+        private System.Windows.Forms.ListBox lstDescripcion;
+        private System.Windows.Forms.Label lblCodigoArticulo;
+        private System.Windows.Forms.TextBox txtCodigo;
+        private System.Windows.Forms.TableLayoutPanel tlpFiltros;
+        private System.Windows.Forms.Label lblProveedor;
+        private System.Windows.Forms.ComboBox cmbProveedor;
+        private System.Windows.Forms.Label lblCategoria;
+        private System.Windows.Forms.ComboBox cmbCategoria;
+        private System.Windows.Forms.Label lblMarca;
+        private System.Windows.Forms.ComboBox cmbMarca;
+        private System.Windows.Forms.Panel pnlModo;
+        private System.Windows.Forms.Button btnActualizarPrecios;
+        private System.Windows.Forms.Button btnReponerStock;
+        private System.Windows.Forms.Label lblModo;
+        private System.Windows.Forms.Label lblTitulo;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
+
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReporapida));
-            label1 = new Label();
-            lblCodigoArticulo = new Label();
-            lblNuevoStock = new Label();
+            pnlBotones = new Panel();
+            btnCancelar = new Button();
+            btnGuardarCambios = new Button();
+            dgvProductos = new DataGridView();
+            clnCodigo = new DataGridViewTextBoxColumn();
+            clnProducto = new DataGridViewTextBoxColumn();
+            clnPrecioActual = new DataGridViewTextBoxColumn();
+            clnNuevoPrecio = new DataGridViewTextBoxColumn();
+            clnStockActual = new DataGridViewTextBoxColumn();
+            clnCantidadReponer = new DataGridViewTextBoxColumn();
+            pnlBusqueda = new Panel();
             txtCodigo = new TextBox();
-            txtNuevoStock = new TextBox();
-            btnVolver = new Button();
-            btnAceptar = new Button();
-            lblNombre = new Label();
-            txtNombre = new TextBox();
+            lblCodigoArticulo = new Label();
+            lstDescripcion = new ListBox();
+            tlpFiltros = new TableLayoutPanel();
+            lblProveedor = new Label();
+            cmbProveedor = new ComboBox();
+            lblCategoria = new Label();
+            cmbCategoria = new ComboBox();
+            lblMarca = new Label();
+            cmbMarca = new ComboBox();
+            cmbSucursal = new ComboBox();
+            lblSucursal = new Label();
+            pnlModo = new Panel();
+            btnActualizarPrecios = new Button();
+            btnReponerStock = new Button();
+            lblModo = new Label();
+            lblTitulo = new Label();
+            pnlBotones.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
+            pnlBusqueda.SuspendLayout();
+            tlpFiltros.SuspendLayout();
+            pnlModo.SuspendLayout();
             SuspendLayout();
             // 
-            // label1
+            // pnlBotones
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Calibri", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(70, 40);
-            label1.Name = "label1";
-            label1.Size = new Size(281, 29);
-            label1.TabIndex = 0;
-            label1.Text = "Reposición rápida de Stock";
+            pnlBotones.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnlBotones.Controls.Add(btnCancelar);
+            pnlBotones.Controls.Add(btnGuardarCambios);
+            pnlBotones.Location = new Point(13, 569);
+            pnlBotones.Name = "pnlBotones";
+            pnlBotones.Size = new Size(977, 40);
+            pnlBotones.TabIndex = 4;
+            // 
+            // btnCancelar
+            // 
+            btnCancelar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnCancelar.Location = new Point(743, 8);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Size = new Size(100, 23);
+            btnCancelar.TabIndex = 11;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.UseVisualStyleBackColor = true;
+            // 
+            // btnGuardarCambios
+            // 
+            btnGuardarCambios.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnGuardarCambios.Location = new Point(854, 8);
+            btnGuardarCambios.Name = "btnGuardarCambios";
+            btnGuardarCambios.Size = new Size(116, 23);
+            btnGuardarCambios.TabIndex = 10;
+            btnGuardarCambios.Text = "Guardar cambios";
+            btnGuardarCambios.UseVisualStyleBackColor = true;
+            btnGuardarCambios.Click += btnGuardarCambios_Click;
+            // 
+            // dgvProductos
+            // 
+            dgvProductos.AllowUserToAddRows = false;
+            dgvProductos.AllowUserToDeleteRows = false;
+            dgvProductos.AllowUserToResizeRows = false;
+            dgvProductos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvProductos.BackgroundColor = SystemColors.Window;
+            dgvProductos.BorderStyle = BorderStyle.Fixed3D;
+            dgvProductos.ColumnHeadersHeight = 32;
+            dgvProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvProductos.Columns.AddRange(new DataGridViewColumn[] { clnCodigo, clnProducto, clnPrecioActual, clnNuevoPrecio, clnStockActual, clnCantidadReponer });
+            dgvProductos.Location = new Point(13, 215);
+            dgvProductos.MultiSelect = false;
+            dgvProductos.Name = "dgvProductos";
+            dgvProductos.RowHeadersVisible = false;
+            dgvProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvProductos.Size = new Size(980, 348);
+            dgvProductos.TabIndex = 7;
+            // 
+            // clnCodigo
+            // 
+            clnCodigo.FillWeight = 15F;
+            clnCodigo.HeaderText = "Código / SKU";
+            clnCodigo.MinimumWidth = 85;
+            clnCodigo.Name = "clnCodigo";
+            clnCodigo.ReadOnly = true;
+            // 
+            // clnProducto
+            // 
+            clnProducto.FillWeight = 25F;
+            clnProducto.HeaderText = "Producto";
+            clnProducto.MinimumWidth = 150;
+            clnProducto.Name = "clnProducto";
+            clnProducto.ReadOnly = true;
+            clnProducto.Width = 150;
+            // 
+            // clnPrecioActual
+            // 
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N2";
+            clnPrecioActual.DefaultCellStyle = dataGridViewCellStyle1;
+            clnPrecioActual.FillWeight = 15F;
+            clnPrecioActual.HeaderText = "Precio actual";
+            clnPrecioActual.MinimumWidth = 95;
+            clnPrecioActual.Name = "clnPrecioActual";
+            clnPrecioActual.ReadOnly = true;
+            // 
+            // clnNuevoPrecio
+            // 
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N2";
+            clnNuevoPrecio.DefaultCellStyle = dataGridViewCellStyle2;
+            clnNuevoPrecio.FillWeight = 15F;
+            clnNuevoPrecio.HeaderText = "Nuevo precio";
+            clnNuevoPrecio.MinimumWidth = 95;
+            clnNuevoPrecio.Name = "clnNuevoPrecio";
+            // 
+            // clnStockActual
+            // 
+            clnStockActual.FillWeight = 12F;
+            clnStockActual.HeaderText = "Stock actual";
+            clnStockActual.MinimumWidth = 90;
+            clnStockActual.Name = "clnStockActual";
+            clnStockActual.ReadOnly = true;
+            // 
+            // clnCantidadReponer
+            // 
+            clnCantidadReponer.FillWeight = 18F;
+            clnCantidadReponer.HeaderText = "Cantidad a ingresar";
+            clnCantidadReponer.MinimumWidth = 125;
+            clnCantidadReponer.Name = "clnCantidadReponer";
+            clnCantidadReponer.Width = 125;
+            // 
+            // pnlBusqueda
+            // 
+            pnlBusqueda.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlBusqueda.Controls.Add(txtCodigo);
+            pnlBusqueda.Controls.Add(lblCodigoArticulo);
+            pnlBusqueda.Location = new Point(13, 167);
+            pnlBusqueda.Name = "pnlBusqueda";
+            pnlBusqueda.Size = new Size(980, 42);
+            pnlBusqueda.TabIndex = 3;
+            // 
+            // txtCodigo
+            // 
+            txtCodigo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtCodigo.Location = new Point(179, 13);
+            txtCodigo.Name = "txtCodigo";
+            txtCodigo.Size = new Size(550, 23);
+            txtCodigo.TabIndex = 1;
+            txtCodigo.TextChanged += txtCodigo_TextChanged;
+            txtCodigo.KeyDown += txtCodigo_KeyDown;
             // 
             // lblCodigoArticulo
             // 
             lblCodigoArticulo.AutoSize = true;
-            lblCodigoArticulo.Location = new Point(78, 131);
+            lblCodigoArticulo.Location = new Point(3, 16);
             lblCodigoArticulo.Name = "lblCodigoArticulo";
-            lblCodigoArticulo.Size = new Size(91, 15);
-            lblCodigoArticulo.TabIndex = 1;
-            lblCodigoArticulo.Text = "Código Articulo";
+            lblCodigoArticulo.Size = new Size(170, 15);
+            lblCodigoArticulo.TabIndex = 0;
+            lblCodigoArticulo.Text = "Buscar código / SKU / nombre:";
             // 
-            // lblNuevoStock
+            // lstDescripcion
             // 
-            lblNuevoStock.AutoSize = true;
-            lblNuevoStock.Location = new Point(45, 218);
-            lblNuevoStock.Name = "lblNuevoStock";
-            lblNuevoStock.Size = new Size(124, 15);
-            lblNuevoStock.TabIndex = 2;
-            lblNuevoStock.Text = "Carga de Nuevo Stock";
+            lstDescripcion.IntegralHeight = false;
+            lstDescripcion.ItemHeight = 15;
+            lstDescripcion.Location = new Point(192, 205);
+            lstDescripcion.Name = "lstDescripcion";
+            lstDescripcion.Size = new Size(550, 120);
+            lstDescripcion.TabIndex = 12;
+            lstDescripcion.Visible = false;
+            lstDescripcion.SelectedIndexChanged += lstDescripcion_SelectedIndexChanged;
+            lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
+            lstDescripcion.KeyDown += lstDescripcion_KeyDown;
             // 
-            // txtCodigo
+            // tlpFiltros
             // 
-            txtCodigo.Location = new Point(182, 123);
-            txtCodigo.Name = "txtCodigo";
-            txtCodigo.Size = new Size(156, 23);
-            txtCodigo.TabIndex = 3;
-            txtCodigo.TextChanged += txtCodigo_TextChanged;
+            tlpFiltros.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tlpFiltros.ColumnCount = 4;
+            tlpFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpFiltros.Controls.Add(lblProveedor, 0, 0);
+            tlpFiltros.Controls.Add(cmbProveedor, 0, 1);
+            tlpFiltros.Controls.Add(lblCategoria, 1, 0);
+            tlpFiltros.Controls.Add(cmbCategoria, 1, 1);
+            tlpFiltros.Controls.Add(lblMarca, 2, 0);
+            tlpFiltros.Controls.Add(cmbMarca, 2, 1);
+            tlpFiltros.Controls.Add(cmbSucursal, 3, 1);
+            tlpFiltros.Controls.Add(lblSucursal, 3, 0);
+            tlpFiltros.Location = new Point(13, 99);
+            tlpFiltros.Name = "tlpFiltros";
+            tlpFiltros.Padding = new Padding(0, 2, 0, 2);
+            tlpFiltros.RowCount = 2;
+            tlpFiltros.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            tlpFiltros.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlpFiltros.Size = new Size(980, 62);
+            tlpFiltros.TabIndex = 2;
             // 
-            // txtNuevoStock
+            // lblProveedor
             // 
-            txtNuevoStock.Location = new Point(182, 210);
-            txtNuevoStock.Name = "txtNuevoStock";
-            txtNuevoStock.Size = new Size(156, 23);
-            txtNuevoStock.TabIndex = 4;
+            lblProveedor.Dock = DockStyle.Fill;
+            lblProveedor.Location = new Point(3, 2);
+            lblProveedor.Name = "lblProveedor";
+            lblProveedor.Size = new Size(239, 25);
+            lblProveedor.TabIndex = 0;
+            lblProveedor.Text = "Proveedor";
+            lblProveedor.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // btnVolver
+            // cmbProveedor
             // 
-            btnVolver.ForeColor = SystemColors.ActiveCaptionText;
-            btnVolver.Location = new Point(263, 289);
-            btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(75, 23);
-            btnVolver.TabIndex = 5;
-            btnVolver.Text = "Volver";
-            btnVolver.UseVisualStyleBackColor = true;
-            btnVolver.Click += btnVolver_Click;
+            cmbProveedor.Dock = DockStyle.Fill;
+            cmbProveedor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbProveedor.FormattingEnabled = true;
+            cmbProveedor.Location = new Point(3, 30);
+            cmbProveedor.Name = "cmbProveedor";
+            cmbProveedor.Size = new Size(239, 23);
+            cmbProveedor.TabIndex = 3;
+            cmbProveedor.SelectedIndexChanged += cmbProveedor_SelectedIndexChanged;
             // 
-            // btnAceptar
+            // lblCategoria
             // 
-            btnAceptar.Location = new Point(169, 289);
-            btnAceptar.Name = "btnAceptar";
-            btnAceptar.Size = new Size(75, 23);
-            btnAceptar.TabIndex = 6;
-            btnAceptar.Text = "Aceptar";
-            btnAceptar.UseVisualStyleBackColor = true;
-            btnAceptar.Click += btnAceptar_Click;
+            lblCategoria.Dock = DockStyle.Fill;
+            lblCategoria.Location = new Point(248, 2);
+            lblCategoria.Name = "lblCategoria";
+            lblCategoria.Size = new Size(239, 25);
+            lblCategoria.TabIndex = 4;
+            lblCategoria.Text = "Categoría";
+            lblCategoria.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // lblNombre
+            // cmbCategoria
             // 
-            lblNombre.AutoSize = true;
-            lblNombre.Location = new Point(105, 173);
-            lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(51, 15);
-            lblNombre.TabIndex = 7;
-            lblNombre.Text = "Nombre";
+            cmbCategoria.Dock = DockStyle.Fill;
+            cmbCategoria.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCategoria.FormattingEnabled = true;
+            cmbCategoria.Location = new Point(248, 30);
+            cmbCategoria.Name = "cmbCategoria";
+            cmbCategoria.Size = new Size(239, 23);
+            cmbCategoria.TabIndex = 4;
             // 
-            // txtNombre
+            // lblMarca
             // 
-            txtNombre.Location = new Point(182, 170);
-            txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(156, 23);
-            txtNombre.TabIndex = 8;
+            lblMarca.Dock = DockStyle.Fill;
+            lblMarca.Location = new Point(493, 2);
+            lblMarca.Name = "lblMarca";
+            lblMarca.Size = new Size(239, 25);
+            lblMarca.TabIndex = 5;
+            lblMarca.Text = "Marca";
+            lblMarca.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // cmbMarca
+            // 
+            cmbMarca.Dock = DockStyle.Fill;
+            cmbMarca.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMarca.FormattingEnabled = true;
+            cmbMarca.Location = new Point(493, 30);
+            cmbMarca.Name = "cmbMarca";
+            cmbMarca.Size = new Size(239, 23);
+            cmbMarca.TabIndex = 5;
+            // 
+            // cmbSucursal
+            // 
+            cmbSucursal.FormattingEnabled = true;
+            cmbSucursal.Location = new Point(738, 30);
+            cmbSucursal.Name = "cmbSucursal";
+            cmbSucursal.Size = new Size(239, 23);
+            cmbSucursal.TabIndex = 7;
+            // 
+            // lblSucursal
+            // 
+            lblSucursal.AutoSize = true;
+            lblSucursal.Location = new Point(738, 2);
+            lblSucursal.Name = "lblSucursal";
+            lblSucursal.Size = new Size(51, 15);
+            lblSucursal.TabIndex = 6;
+            lblSucursal.Text = "Sucursal";
+            // 
+            // pnlModo
+            // 
+            pnlModo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlModo.Controls.Add(btnActualizarPrecios);
+            pnlModo.Controls.Add(btnReponerStock);
+            pnlModo.Controls.Add(lblModo);
+            pnlModo.Location = new Point(13, 55);
+            pnlModo.Name = "pnlModo";
+            pnlModo.Size = new Size(980, 38);
+            pnlModo.TabIndex = 1;
+            // 
+            // btnActualizarPrecios
+            // 
+            btnActualizarPrecios.Location = new Point(149, 3);
+            btnActualizarPrecios.Name = "btnActualizarPrecios";
+            btnActualizarPrecios.Size = new Size(150, 34);
+            btnActualizarPrecios.TabIndex = 1;
+            btnActualizarPrecios.Text = "Actualizar precios";
+            btnActualizarPrecios.UseVisualStyleBackColor = true;
+            btnActualizarPrecios.Click += btnActualizarPrecios_Click;
+            // 
+            // btnReponerStock
+            // 
+            btnReponerStock.Location = new Point(314, 4);
+            btnReponerStock.Name = "btnReponerStock";
+            btnReponerStock.Size = new Size(150, 34);
+            btnReponerStock.TabIndex = 2;
+            btnReponerStock.Text = "Reponer stock";
+            btnReponerStock.UseVisualStyleBackColor = true;
+            btnReponerStock.Click += btnReponerStock_Click;
+            // 
+            // lblModo
+            // 
+            lblModo.AutoSize = true;
+            lblModo.Location = new Point(3, 14);
+            lblModo.Name = "lblModo";
+            lblModo.Size = new Size(109, 15);
+            lblModo.TabIndex = 3;
+            lblModo.Text = "¿Qué querés hacer?";
+            // 
+            // lblTitulo
+            // 
+            lblTitulo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblTitulo.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            lblTitulo.Location = new Point(13, 10);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(980, 42);
+            lblTitulo.TabIndex = 0;
+            lblTitulo.Text = "Gestión rápida de productos";
+            lblTitulo.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // frmReporapida
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(407, 357);
-            Controls.Add(txtNombre);
-            Controls.Add(lblNombre);
-            Controls.Add(btnAceptar);
-            Controls.Add(btnVolver);
-            Controls.Add(txtNuevoStock);
-            Controls.Add(txtCodigo);
-            Controls.Add(lblNuevoStock);
-            Controls.Add(lblCodigoArticulo);
-            Controls.Add(label1);
+            ClientSize = new Size(1006, 622);
+            Controls.Add(lstDescripcion);
+            Controls.Add(pnlBotones);
+            Controls.Add(dgvProductos);
+            Controls.Add(pnlBusqueda);
+            Controls.Add(tlpFiltros);
+            Controls.Add(pnlModo);
+            Controls.Add(lblTitulo);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(800, 500);
             Name = "frmReporapida";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Reposición Rapida";
+            Text = "Gestión rápida de productos";
+            pnlBotones.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvProductos).EndInit();
+            pnlBusqueda.ResumeLayout(false);
+            pnlBusqueda.PerformLayout();
+            tlpFiltros.ResumeLayout(false);
+            tlpFiltros.PerformLayout();
+            pnlModo.ResumeLayout(false);
+            pnlModo.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private Label label1;
-        private Label lblCodigoArticulo;
-        private Label lblNuevoStock;
-        private TextBox txtCodigo;
-        private TextBox txtNuevoStock;
-        private Button btnVolver;
-        private Button btnAceptar;
-        private Label lblNombre;
-        private TextBox txtNombre;
+        private ComboBox cmbSucursal;
+        private Label lblSucursal;
     }
 }

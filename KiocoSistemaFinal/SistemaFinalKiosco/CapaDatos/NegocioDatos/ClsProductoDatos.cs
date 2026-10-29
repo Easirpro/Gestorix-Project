@@ -971,6 +971,29 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public DataTable BuscarProductosConFiltrosRapida(string texto, int? idProveedor, int? idSucursal, int? idCategoria, int? idMarca)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("dbo.sp_BuscarProductosConFiltrosRapida", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@Texto", SqlDbType.NVarChar, 100).Value = texto;
+                cmd.Parameters.Add("@IdProveedor", SqlDbType.Int).Value = (object)idProveedor ?? DBNull.Value;
+                cmd.Parameters.Add("@IdSucursal", SqlDbType.Int).Value = (object)idSucursal ?? DBNull.Value;
+                cmd.Parameters.Add("@IdCategoria", SqlDbType.Int).Value = (object)idCategoria ?? DBNull.Value;
+                cmd.Parameters.Add("@IdMarca", SqlDbType.Int).Value = (object)idMarca ?? DBNull.Value;
+
+                DataTable tabla = new DataTable();
+
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                {
+                    adaptador.Fill(tabla);
+                }
+
+                return tabla;
+            }
+        }
 
     }
 }

@@ -255,7 +255,11 @@ namespace CapaLogica.NegocioLogica
                 );
             }
         }
-
+        public DataTable BuscarProductosConFiltrosRapida( string texto, int? idProveedor, int? idSucursal, int? idCategoria, int? idMarca)
+        {
+            return datos.BuscarProductosConFiltrosRapida(
+                texto, idProveedor, idSucursal, idCategoria, idMarca);
+        }
 
 
         //Metodos para excel
