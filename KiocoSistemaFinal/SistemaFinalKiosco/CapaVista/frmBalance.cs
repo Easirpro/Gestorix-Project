@@ -60,8 +60,7 @@ namespace CapaVista
             { "Promocion", "Promoción" },
             { "VecesAplicada", "Veces aplicada" },
             { "ImporteLista", "Importe de lista" },
-            { "ImporteCobrado", "Cobrado" },
-            { "CostoEstimado", "Costo est." }
+            { "ImporteCobrado", "Cobrado" }
         };
 
         // Columnas técnicas que no se muestran.
