@@ -20,7 +20,8 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ObtenerMetodosPago();
         }
-        public int RegistrarVenta( decimal total, int idUsuario, string observaciones, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos)
+        public int RegistrarVenta( decimal total, int idUsuario, string observaciones, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos,
+                                   List<ClsPromocionVentaEntidad> promociones = null)   // [PROMO] opcional
         {
             if (total <= 0)
                 throw new Exception("El total de la venta debe ser mayor a cero.");
@@ -39,7 +40,7 @@ namespace CapaLogica.NegocioLogica
                     $"Los pagos ($ {totalPagos:N2}) no coinciden con el total de la venta ($ {total:N2}).");
             }
 
-            return datos.RegistrarVenta( total, idUsuario, observaciones, detalles, pagos);
+            return datos.RegistrarVenta( total, idUsuario, observaciones, detalles, pagos, promociones);
         }
         public DataTable ObtenerVentas(DateTime desde, DateTime hasta)
         {

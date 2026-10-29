@@ -13,11 +13,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
+using CapaEntidades.NegocioEntidad;
 
 namespace CapaVista
 {
     public partial class frmmenuPres : Form
     {
+
         private bool idiomaIngles = false;
         private decimal subtotal = 0.00m;
         private decimal descuentoRecargo = 0.00m;
@@ -27,6 +29,9 @@ namespace CapaVista
         private readonly HashSet<DataGridViewRow> filasDePromocion = new HashSet<DataGridViewRow>();
 
         private frmCobroSecundario formularioSecundario;
+
+        // [PROMO] Promociones aplicadas en la venta en curso (se guardan al cobrar)
+        private readonly List<ClsPromocionVentaEntidad> promocionesAplicadas = new List<ClsPromocionVentaEntidad>();
 
 
         public frmmenuPres()
@@ -68,6 +73,27 @@ namespace CapaVista
             this.KeyPreview = true;
 
             CargarBotones();
+            try
+            {
+                if (SesionUsuario.Permisos.Contains(730) && !new ClsCajaLogica().HayCajaAbierta())
+                {
+                    DialogResult abrir = MessageBox.Show("La caja está cerrada.\n\n¿Desea abrirla ahora?",
+                        "Caja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (abrir == DialogResult.Yes)
+                    {
+                        using (frmAbrirCaja apertura = new frmAbrirCaja())
+                        {
+                            apertura.ShowDialog();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo verificar la caja.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             RellenarFilas();
             CalcularYMostrarMontos();
@@ -333,6 +359,8 @@ namespace CapaVista
             nuevoEgresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(720);
             abrirCajaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(730);
             cerrarSeToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(740);
+            estadoCajaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(700);
+            balanceToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(600);
 
             permisosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1270);
         }
@@ -369,6 +397,7 @@ namespace CapaVista
             nuevoIngresoToolStripMenuItem.Enabled = false;
             nuevoEgresoToolStripMenuItem.Enabled = false;
             cerrarSeToolStripMenuItem.Enabled = false;
+            estadoCajaToolStripMenuItem.Enabled = false;
             abrirCajaToolStripMenuItem.Enabled = true;
 
             // Botones del formulario
@@ -544,6 +573,7 @@ namespace CapaVista
             subtotal = 0.00m;
             descuentoRecargo = 0.00m;
             total = 0.00m;
+            promocionesAplicadas.Clear();   // [PROMO]
 
             CalcularYMostrarMontos();
             RellenarFilas();
@@ -589,6 +619,71 @@ namespace CapaVista
             lblTotalMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
 
             lblTotalMonto.Text = total.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR"));
+        }
+        // [PROMO] Anota una promoción aplicada. Si la misma promo se aplica de nuevo
+        // en la misma venta, suma una vez más.
+        private void RegistrarPromocionAplicada(int idPromocion, string nombre, decimal importeLista, decimal importeCobrado)
+        {
+            ClsPromocionVentaEntidad existente = promocionesAplicadas.FirstOrDefault(p => p.IdPromocion == idPromocion);
+
+            if (existente == null)
+            {
+                promocionesAplicadas.Add(new ClsPromocionVentaEntidad
+                {
+                    IdPromocion = idPromocion,
+                    Nombre = nombre,
+                    Veces = 1,
+                    ImporteLista = Math.Round(importeLista, 2),
+                    ImporteCobrado = Math.Round(importeCobrado, 2)
+                });
+            }
+            else
+            {
+                existente.Veces += 1;
+                existente.ImporteLista += Math.Round(importeLista, 2);
+                existente.ImporteCobrado += Math.Round(importeCobrado, 2);
+            }
+        }
+
+        // [CAJA] Devuelve true si hay caja abierta. Si no la hay y el usuario
+        // tiene permiso (730), ofrece abrirla en el momento.
+        private bool VerificarCajaAbierta()
+        {
+            try
+            {
+                ClsCajaLogica logicaCaja = new ClsCajaLogica();
+
+                if (logicaCaja.HayCajaAbierta())
+                {
+                    return true;
+                }
+
+                if (!SesionUsuario.Permisos.Contains(730))
+                {
+                    MessageBox.Show("No hay una caja abierta. Pida a un encargado que abra la caja para poder vender.",
+                        "Caja cerrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+
+                DialogResult respuesta = MessageBox.Show("No hay una caja abierta.\n\n¿Desea abrirla ahora?",
+                    "Caja cerrada", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (respuesta != DialogResult.Yes)
+                {
+                    return false;
+                }
+
+                using (frmAbrirCaja abrir = new frmAbrirCaja())
+                {
+                    return abrir.ShowDialog() == DialogResult.OK;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo verificar la caja.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
         }
         private void AgregarProductoSeleccionado()
         {
@@ -827,6 +922,46 @@ namespace CapaVista
         //Cerrar sesion
         private void cerrarSeToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+            try
+            {
+                ClsCajaLogica logicaCaja = new ClsCajaLogica();
+                var sesionCaja = logicaCaja.ObtenerSesionAbierta();
+
+                if (sesionCaja != null)
+                {
+                    DialogResult arqueo = MessageBox.Show(
+                        "¿Desea hacer el arqueo y cerrar la caja?\n\n" +
+                        "Sí: cuenta el efectivo y cierra la caja.\n" +
+                        "No: cierra solo su sesión y la caja sigue abierta para el próximo turno.",
+                        "Cerrar caja", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                    if (arqueo == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+
+                    if (arqueo == DialogResult.Yes)
+                    {
+                        using (frmCerrarCaja cierre = new frmCerrarCaja(sesionCaja.IdSesionCaja))
+                        {
+
+                            if (cierre.ShowDialog() != DialogResult.OK)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo verificar la caja.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
             DialogResult resultado = MessageBox.Show("Estas seguro de cerrar la sesión?", "Cerrar sesión", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (resultado == DialogResult.Yes)
@@ -835,7 +970,6 @@ namespace CapaVista
                 login.CerrarSesion();
 
                 BloquearMenu();
-
             }
         }
         private void abrirCajaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -963,7 +1097,13 @@ namespace CapaVista
                 return;
             }
 
-            frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion);
+            // [CAJA] Sin caja abierta no se puede vender
+            if (!VerificarCajaAbierta())
+            {
+                return;
+            }
+
+            frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion, promocionesAplicadas);   // [PROMO]
 
             if (cobro.ShowDialog() == DialogResult.OK)
             {
@@ -1256,6 +1396,13 @@ namespace CapaVista
 
                     descuentoRecargo = ajusteAnterior - descuentoPromocion;
 
+                    // [PROMO] Anotar la promoción para guardarla al cobrar
+                    RegistrarPromocionAplicada(
+                        idPromocion,
+                        promo.Table.Columns.Contains("Nombre") ? Convert.ToString(promo["Nombre"]) : "",
+                        importeNormalAgregado,
+                        precioFinal);
+
                     CalcularYMostrarMontos();
 
 
@@ -1391,6 +1538,40 @@ namespace CapaVista
 
             DataGridViewRow fila = dtgPresentacion.CurrentRow;
 
+            // [PROMO] Si el producto es de una promoción, se quitan todas las
+            // promociones juntas (si no, el descuento quedaba aplicado igual).
+            if (Convert.ToString(fila.Cells["ClnCodigo"].Value) == "PROMOCION")
+            {
+                DialogResult quitarPromos = MessageBox.Show(
+                    "Ese producto pertenece a una promoción.\n\n" +
+                    "Se van a quitar todos los productos de promociones y su descuento. ¿Continuar?",
+                    "Quitar promoción", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (quitarPromos != DialogResult.Yes)
+                {
+                    return;
+                }
+
+                foreach (DataGridViewRow filaPromo in dtgPresentacion.Rows)
+                {
+                    if (Convert.ToString(filaPromo.Cells["ClnCodigo"].Value) == "PROMOCION")
+                    {
+                        foreach (DataGridViewCell celdaPromo in filaPromo.Cells)
+                        {
+                            celdaPromo.Value = null;
+                        }
+                    }
+                }
+
+                filasDePromocion.Clear();
+                promocionesAplicadas.Clear();
+                descuentoRecargo = 0m;
+
+                CalcularYMostrarMontos();
+                txtCodigoBarra.Focus();
+                return;
+            }
+
             foreach (DataGridViewCell celda in fila.Cells)
             {
                 celda.Value = null;
@@ -1509,6 +1690,22 @@ namespace CapaVista
         {
             frmRecepcionCompra recepcion = new frmRecepcionCompra();
             recepcion.ShowDialog();
+        }
+
+        private void estadoCajaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (frmCaja caja = new frmCaja())
+            {
+                caja.ShowDialog();
+            }
+        }
+
+        private void balanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (frmBalance balance = new frmBalance())
+            {
+                balance.ShowDialog();
+            }
         }
     }
 

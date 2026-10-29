@@ -60,12 +60,21 @@ namespace CapaVista
             txtObservaciones = new TextBox();
             btnGuardar = new Button();
             btnCacelar = new Button();
+            grpCondicionPago = new GroupBox();
+            chkPagaDesdeCaja = new CheckBox();
+            cmbMedioPagoCompra = new ComboBox();
+            lblMedioPagoCompra = new Label();
+            cmbCondicionPago = new ComboBox();
+            lblCondicionPago = new Label();
+            lblVencimiento = new Label();
+            dtpVencimiento = new DateTimePicker();
             gpbProveedor.SuspendLayout();
             gpbPedido.SuspendLayout();
             gpbComprobante.SuspendLayout();
             gpbProductos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtgNuevaCompra).BeginInit();
             gpbTotales.SuspendLayout();
+            grpCondicionPago.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -98,7 +107,7 @@ namespace CapaVista
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 506);
+            label4.Location = new Point(12, 583);
             label4.Name = "label4";
             label4.Size = new Size(84, 15);
             label4.TabIndex = 5;
@@ -459,17 +468,17 @@ namespace CapaVista
             // txtObservaciones
             // 
             txtObservaciones.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtObservaciones.Location = new Point(12, 526);
+            txtObservaciones.Location = new Point(12, 603);
             txtObservaciones.Multiline = true;
             txtObservaciones.Name = "txtObservaciones";
             txtObservaciones.ScrollBars = ScrollBars.Vertical;
-            txtObservaciones.Size = new Size(896, 50);
+            txtObservaciones.Size = new Size(896, 76);
             txtObservaciones.TabIndex = 6;
             // 
             // btnGuardar
             // 
             btnGuardar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnGuardar.Location = new Point(650, 592);
+            btnGuardar.Location = new Point(650, 685);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(125, 30);
             btnGuardar.TabIndex = 7;
@@ -480,18 +489,99 @@ namespace CapaVista
             // btnCacelar
             // 
             btnCacelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCacelar.Location = new Point(785, 592);
+            btnCacelar.Location = new Point(785, 685);
             btnCacelar.Name = "btnCacelar";
             btnCacelar.Size = new Size(123, 30);
             btnCacelar.TabIndex = 8;
             btnCacelar.Text = "Cancelar";
             btnCacelar.UseVisualStyleBackColor = true;
             // 
+            // grpCondicionPago
+            // 
+            grpCondicionPago.Controls.Add(dtpVencimiento);
+            grpCondicionPago.Controls.Add(lblVencimiento);
+            grpCondicionPago.Controls.Add(chkPagaDesdeCaja);
+            grpCondicionPago.Controls.Add(cmbMedioPagoCompra);
+            grpCondicionPago.Controls.Add(lblMedioPagoCompra);
+            grpCondicionPago.Controls.Add(cmbCondicionPago);
+            grpCondicionPago.Controls.Add(lblCondicionPago);
+            grpCondicionPago.Location = new Point(12, 505);
+            grpCondicionPago.Name = "grpCondicionPago";
+            grpCondicionPago.Size = new Size(896, 75);
+            grpCondicionPago.TabIndex = 10;
+            grpCondicionPago.TabStop = false;
+            grpCondicionPago.Text = "Condición de pago";
+            // 
+            // chkPagaDesdeCaja
+            // 
+            chkPagaDesdeCaja.AutoSize = true;
+            chkPagaDesdeCaja.Location = new Point(429, 24);
+            chkPagaDesdeCaja.Name = "chkPagaDesdeCaja";
+            chkPagaDesdeCaja.Size = new Size(138, 19);
+            chkPagaDesdeCaja.TabIndex = 4;
+            chkPagaDesdeCaja.Text = "Sale de la caja abierta";
+            chkPagaDesdeCaja.UseVisualStyleBackColor = true;
+            // 
+            // cmbMedioPagoCompra
+            // 
+            cmbMedioPagoCompra.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMedioPagoCompra.FormattingEnabled = true;
+            cmbMedioPagoCompra.Location = new Point(303, 21);
+            cmbMedioPagoCompra.Name = "cmbMedioPagoCompra";
+            cmbMedioPagoCompra.Size = new Size(101, 23);
+            cmbMedioPagoCompra.TabIndex = 3;
+            // 
+            // lblMedioPagoCompra
+            // 
+            lblMedioPagoCompra.AutoSize = true;
+            lblMedioPagoCompra.Location = new Point(204, 24);
+            lblMedioPagoCompra.Name = "lblMedioPagoCompra";
+            lblMedioPagoCompra.Size = new Size(90, 15);
+            lblMedioPagoCompra.TabIndex = 2;
+            lblMedioPagoCompra.Text = "Medio de pago:";
+            // 
+            // cmbCondicionPago
+            // 
+            cmbCondicionPago.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCondicionPago.FormattingEnabled = true;
+            cmbCondicionPago.Location = new Point(85, 20);
+            cmbCondicionPago.Name = "cmbCondicionPago";
+            cmbCondicionPago.Size = new Size(101, 23);
+            cmbCondicionPago.TabIndex = 1;
+            cmbCondicionPago.SelectedIndexChanged += cmbCondicionPago_SelectedIndexChanged;
+            // 
+            // lblCondicionPago
+            // 
+            lblCondicionPago.AutoSize = true;
+            lblCondicionPago.Location = new Point(14, 23);
+            lblCondicionPago.Name = "lblCondicionPago";
+            lblCondicionPago.Size = new Size(65, 15);
+            lblCondicionPago.TabIndex = 0;
+            lblCondicionPago.Text = "Condición:";
+            // 
+            // lblVencimiento
+            // 
+            lblVencimiento.AutoSize = true;
+            lblVencimiento.Location = new Point(574, 26);
+            lblVencimiento.Name = "lblVencimiento";
+            lblVencimiento.Size = new Size(41, 15);
+            lblVencimiento.TabIndex = 5;
+            lblVencimiento.Text = "Vence:";
+            // 
+            // dtpVencimiento
+            // 
+            dtpVencimiento.Format = DateTimePickerFormat.Short;
+            dtpVencimiento.Location = new Point(621, 22);
+            dtpVencimiento.Name = "dtpVencimiento";
+            dtpVencimiento.Size = new Size(218, 23);
+            dtpVencimiento.TabIndex = 6;
+            // 
             // frmNuevaCompra
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(920, 650);
+            ClientSize = new Size(920, 720);
+            Controls.Add(grpCondicionPago);
             Controls.Add(lstProveedores);
             Controls.Add(gpbPedido);
             Controls.Add(gpbProveedor);
@@ -518,6 +608,8 @@ namespace CapaVista
             ((System.ComponentModel.ISupportInitialize)dtgNuevaCompra).EndInit();
             gpbTotales.ResumeLayout(false);
             gpbTotales.PerformLayout();
+            grpCondicionPago.ResumeLayout(false);
+            grpCondicionPago.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -574,5 +666,13 @@ namespace CapaVista
         private TextBox txtObservaciones;
         private Button btnGuardar;
         private Button btnCacelar;
+        private GroupBox grpCondicionPago;
+        private Label lblCondicionPago;
+        private CheckBox chkPagaDesdeCaja;
+        private ComboBox cmbMedioPagoCompra;
+        private Label lblMedioPagoCompra;
+        private ComboBox cmbCondicionPago;
+        private DateTimePicker dtpVencimiento;
+        private Label lblVencimiento;
     }
 }

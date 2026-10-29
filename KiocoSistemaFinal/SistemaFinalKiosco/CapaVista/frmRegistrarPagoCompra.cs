@@ -1,0 +1,215 @@
+﻿using CapaEntidades.NegocioEntidad;
+using CapaLogica.NegocioLogica;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using CapaEntidades;
+namespace CapaVista
+{
+    public partial class frmRegistrarPagoCompra : Form
+    {
+        private ClsPagoCompraLogica logica = new ClsPagoCompraLogica();
+        private ClsCajaLogica logicaCaja = new ClsCajaLogica();
+
+        private readonly int idCompra;
+        private readonly string proveedor;
+        private readonly decimal saldo;
+        private ClsSesionCajaEntidad sesionCaja;   // null = no hay caja abierta
+
+        public frmRegistrarPagoCompra(int idCompra, string proveedor, decimal saldo)
+        {
+            InitializeComponent();
+            this.idCompra = idCompra;
+            this.proveedor = proveedor;
+            this.saldo = saldo;
+        }
+
+        private void frmRegistrarPagoCompra_Load(object sender, EventArgs e)
+        {
+            lblCompra.Text = "Compra N.º " + idCompra + "  -  " + proveedor;
+            lblSaldo.Text = $"Saldo pendiente: $ {saldo:N2}";
+
+            nudMonto.Maximum = saldo;
+            nudMonto.Value = saldo;
+
+            try
+            {
+                CargarMediosPago();
+                sesionCaja = logicaCaja.ObtenerSesionAbierta();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudieron cargar los datos.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            if (sesionCaja == null)
+            {
+                chkDesdeCaja.Checked = false;
+                chkDesdeCaja.Enabled = false;
+                chkDesdeCaja.Text = "El dinero sale de la caja (no hay caja abierta)";
+            }
+            else
+            {
+                chkDesdeCaja.Checked = EsEfectivo();
+            }
+
+            ActualizarDisponible();
+        }
+
+        #region Metodos
+
+        private void CargarMediosPago()
+        {
+            DataTable tabla = logicaCaja.ObtenerMetodosPago();
+
+            // "Cuenta Corriente" es la condición de la deuda, no una forma de pagarla.
+            foreach (DataRow fila in tabla.Select("Nombre = 'Cuenta Corriente'"))
+            {
+                tabla.Rows.Remove(fila);
+            }
+
+            cmbMedioPago.DataSource = tabla;
+            cmbMedioPago.DisplayMember = "Nombre";
+            cmbMedioPago.ValueMember = "IdMetodoPago";
+
+            int indiceEfectivo = cmbMedioPago.FindStringExact("Efectivo");
+            if (indiceEfectivo >= 0)
+            {
+                cmbMedioPago.SelectedIndex = indiceEfectivo;
+            }
+        }
+
+        private bool EsEfectivo()
+        {
+            return cmbMedioPago.Text == "Efectivo";
+        }
+
+        private void ActualizarDisponible()
+        {
+            if (sesionCaja != null && chkDesdeCaja.Checked && EsEfectivo())
+            {
+                lblDisponible.Text = $"Efectivo disponible en caja: $ {sesionCaja.EfectivoEsperado:N2}";
+            }
+            else
+            {
+                lblDisponible.Text = "";
+            }
+        }
+
+        private bool ValidarCampos()
+        {
+            if (cmbMedioPago.SelectedValue == null)
+            {
+                MessageBox.Show("Seleccione un medio de pago.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbMedioPago.Focus();
+                return false;
+            }
+
+            if (nudMonto.Value <= 0)
+            {
+                MessageBox.Show("El monto debe ser mayor a cero.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                nudMonto.Focus();
+                return false;
+            }
+
+            if (nudMonto.Value > saldo)
+            {
+                MessageBox.Show("El monto no puede superar el saldo pendiente.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                nudMonto.Focus();
+                return false;
+            }
+
+            if (sesionCaja != null && chkDesdeCaja.Checked && EsEfectivo()
+                && nudMonto.Value > sesionCaja.EfectivoEsperado)
+            {
+                MessageBox.Show("El monto supera el efectivo disponible en la caja ($ " +
+                                sesionCaja.EfectivoEsperado.ToString("N2") + ").", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                nudMonto.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
+        #region Eventos
+
+        private void cmbMedioPago_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActualizarDisponible();
+        }
+
+        private void chkDesdeCaja_CheckedChanged(object sender, EventArgs e)
+        {
+            ActualizarDisponible();
+        }
+
+        private void btnTotal_Click(object sender, EventArgs e)
+        {
+            nudMonto.Value = saldo;
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            if (!ValidarCampos())
+            {
+                return;
+            }
+
+            ClsPagoCompraEntidad pago = new ClsPagoCompraEntidad();
+            pago.IdCompra = idCompra;
+            pago.IdMetodoPago = Convert.ToInt32(cmbMedioPago.SelectedValue);
+            pago.Monto = nudMonto.Value;
+            pago.IdUsuario = SesionUsuario.IdUsuario;
+            pago.IdSesionCaja = (sesionCaja != null && chkDesdeCaja.Checked)
+                ? sesionCaja.IdSesionCaja
+                : (int?)null;
+            pago.Observacion = txtObservacion.Text.Trim();
+
+            try
+            {
+                pago = logica.RegistrarPago(pago);
+
+                string mensaje = "El pago se registró correctamente.\n\n" +
+                                 "Pago N.º " + pago.IdPagoCompra +
+                                 "\nMonto: $ " + pago.Monto.ToString("N2") +
+                                 "\nSaldo restante: $ " + pago.SaldoRestante.ToString("N2");
+
+                if (pago.SaldoRestante == 0)
+                {
+                    mensaje += "\n\nLa compra quedó totalmente pagada.";
+                }
+
+                MessageBox.Show(mensaje, "Pago registrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo registrar el pago.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
+
+        #endregion
+    }
+}

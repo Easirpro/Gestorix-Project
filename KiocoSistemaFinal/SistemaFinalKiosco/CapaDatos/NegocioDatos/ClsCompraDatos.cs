@@ -78,6 +78,17 @@ namespace CapaDatos.NegocioDatos
 
                             cmd.Parameters.AddWithValue("@Observaciones", string.IsNullOrWhiteSpace(compra.Observaciones) ? (object)DBNull.Value : compra.Observaciones);
 
+                            cmd.Parameters.AddWithValue("@IdUsuario",
+                                compra.IdUsuario.HasValue ? (object)compra.IdUsuario.Value : DBNull.Value);
+                            cmd.Parameters.AddWithValue("@CondicionPago",
+                                string.IsNullOrWhiteSpace(compra.CondicionPago) ? "CONTADO" : compra.CondicionPago);
+                            cmd.Parameters.AddWithValue("@FechaVencimiento",
+                                compra.FechaVencimiento.HasValue ? (object)compra.FechaVencimiento.Value.Date : DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IdMetodoPago",
+                                compra.IdMetodoPago.HasValue ? (object)compra.IdMetodoPago.Value : DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IdSesionCaja",
+                                compra.IdSesionCaja.HasValue ? (object)compra.IdSesionCaja.Value : DBNull.Value);
+
                             DataTable tablaDetalles = new DataTable();
                             tablaDetalles.Columns.Add("IdProducto", typeof(int));
                             tablaDetalles.Columns.Add("Cantidad", typeof(decimal));

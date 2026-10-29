@@ -21,6 +21,7 @@ namespace CapaVista
         private decimal totalPagado = 0;
         private decimal vueltoVenta = 0;
         private Button botonMetodoSeleccionado = null;
+        private List<ClsPromocionVentaEntidad> promociones = new List<ClsPromocionVentaEntidad>();   // [PROMO]
         public frmInformeCobro(decimal total, DataGridView carrito)
         {
             InitializeComponent();
@@ -40,6 +41,16 @@ namespace CapaVista
             btnConfirmar.Enabled = false;
             btnConfirmar.BringToFront();
 
+        }
+
+        // [PROMO] Igual que el anterior, pero recibe las promociones aplicadas en la venta
+        public frmInformeCobro(decimal total, DataGridView carrito, List<ClsPromocionVentaEntidad> promocionesAplicadas)
+            : this(total, carrito)
+        {
+            if (promocionesAplicadas != null)
+            {
+                promociones = promocionesAplicadas;
+            }
         }
 
         #region Metodos
@@ -340,7 +351,7 @@ namespace CapaVista
 
                 ClsVentaLogica gestorVenta = new ClsVentaLogica();
 
-                int idVenta = gestorVenta.RegistrarVenta(totalVenta, SesionUsuario.IdUsuario, null, detalles, pagos);
+                int idVenta = gestorVenta.RegistrarVenta(totalVenta, SesionUsuario.IdUsuario, null, detalles, pagos, promociones);   // [PROMO]
 
                 MessageBox.Show($"Venta #{idVenta} registrada correctamente.", "Venta registrada",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);

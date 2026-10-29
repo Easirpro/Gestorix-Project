@@ -1,4 +1,5 @@
-﻿using CapaLogica.NegocioLogica;
+﻿using CapaEntidades.NegocioEntidad;
+using CapaLogica.NegocioLogica;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,6 +24,9 @@ namespace CapaVista
 
         private DataGridView grillaPrincipal;
 
+        // [PROMO] Promociones aplicadas en esta venta (se guardan al cobrar)
+        private readonly List<ClsPromocionVentaEntidad> promocionesAplicadas = new List<ClsPromocionVentaEntidad>();
+
         public frmCobroSecundario()
         {
             InitializeComponent();
@@ -36,6 +40,30 @@ namespace CapaVista
 
 
         #region Metodos
+        // [PROMO] Anota una promoción aplicada. Si la misma promo se aplica de nuevo
+        // en la misma venta, suma una vez más.
+        private void RegistrarPromocionAplicada(int idPromocion, string nombre, decimal importeLista, decimal importeCobrado)
+        {
+            ClsPromocionVentaEntidad existente = promocionesAplicadas.FirstOrDefault(p => p.IdPromocion == idPromocion);
+
+            if (existente == null)
+            {
+                promocionesAplicadas.Add(new ClsPromocionVentaEntidad
+                {
+                    IdPromocion = idPromocion,
+                    Nombre = nombre,
+                    Veces = 1,
+                    ImporteLista = Math.Round(importeLista, 2),
+                    ImporteCobrado = Math.Round(importeCobrado, 2)
+                });
+            }
+            else
+            {
+                existente.Veces += 1;
+                existente.ImporteLista += Math.Round(importeLista, 2);
+                existente.ImporteCobrado += Math.Round(importeCobrado, 2);
+            }
+        }
         private bool AgregarProductoAGrilla(int idProducto, string sku, string codigoBarra, string descripcion, decimal precio, decimal cantidad, decimal stockDisponible)
         {
             if (cantidad <= 0)
@@ -226,6 +254,7 @@ namespace CapaVista
             subtotal = 0m;
             descuentoRecargo = 0m;
             total = 0m;
+            promocionesAplicadas.Clear();   // [PROMO]
 
             CalcularYMostrarMontos();
             RellenarFilas();
@@ -370,7 +399,7 @@ namespace CapaVista
                 return;
             }
 
-            using (frmInformeCobro formularioCobro = new frmInformeCobro(total, dtgPresentacion))
+            using (frmInformeCobro formularioCobro = new frmInformeCobro(total, dtgPresentacion, promocionesAplicadas))   // [PROMO]
             {
                 if (formularioCobro.ShowDialog() == DialogResult.OK)
                 {
@@ -736,6 +765,13 @@ namespace CapaVista
                     decimal descuentoPromocion = importeNormalAgregado - precioFinal;
 
                     descuentoRecargo = ajusteAnterior - descuentoPromocion;
+
+                    // [PROMO] Anotar la promoción para guardarla al cobrar
+                    RegistrarPromocionAplicada(
+                        idPromocion,
+                        promo.Table.Columns.Contains("Nombre") ? Convert.ToString(promo["Nombre"]) : "",
+                        importeNormalAgregado,
+                        precioFinal);
 
                     CalcularYMostrarMontos();
                     txtCodigoBarra.Focus();
