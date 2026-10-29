@@ -1,8 +1,6 @@
 ﻿using CapaEntidades.NegocioEntidad;
 using CapaLogica.NegocioLogica;
 using ClosedXML.Excel;
-using Microsoft.Data.SqlClient;
-using SistemaKiosco;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,7 +26,7 @@ namespace CapaVista
         {
             try
             {
-                ClsLogicaProducto logica = new ClsLogicaProducto();
+                ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
                 using (XLWorkbook libro = new XLWorkbook(rutaArchivo))
                 {
@@ -56,7 +54,6 @@ namespace CapaVista
                     //Listas temporalres
                     List<string> errores = new List<string>();
                     List<ClsGestorEntidadProducto.ClsProducto> productos = new List<ClsGestorEntidadProducto.ClsProducto>();
-                    List<ClsGestorEntidadProducto.ClsProductoSucursalProveedor> relaciones = new List<ClsGestorEntidadProducto.ClsProductoSucursalProveedor>();
                     List<(string CodigoBarra, string Proveedor, string Sucursal, decimal PrecioCompra)> proveedoresCostos = new List<(string CodigoBarra, string Proveedor, string Sucursal, decimal PrecioCompra)>();
                     Dictionary<string, DateTime?> fechasVencimiento = new Dictionary<string, DateTime?>();
 
@@ -374,43 +371,16 @@ namespace CapaVista
                     }
 
                     //Validar proveedores y sucursales
-                    if (errores.Count == 0 && proveedoresCostos.Count > 0)
+                    if (errores.Count == 0)
                     {
-                        Conexion conexionValidacion = new Conexion();
-
-                        using (SqlConnection conexion = conexionValidacion.ObtenerConexion())
+                        foreach (var proveedorCosto in proveedoresCostos)
                         {
-                            conexion.Open();
+                            int idSucursal = logica.ObtenerIdSucursalImportacion(proveedorCosto.Proveedor, proveedorCosto.Sucursal);
 
-                            using (SqlTransaction transaccion = conexion.BeginTransaction())
+                            if (idSucursal == 0)
                             {
-                                try
-                                {
-                                    foreach (var proveedorCosto in proveedoresCostos)
-                                    {
-                                        int idSucursal = logica.ObtenerIdSucursalImportacion( proveedorCosto.Proveedor,  proveedorCosto.Sucursal, conexion, transaccion);
-
-                                        if (idSucursal == 0)
-                                        {
-                                            errores.Add($"PROVEEDORES_COSTOS: el proveedor '{proveedorCosto.Proveedor}' " +
-                                                $"no tiene una sucursal activa llamada '{proveedorCosto.Sucursal}'.");
-                                        }
-                                    }
-
-                                    transaccion.Rollback();
-                                }
-                                catch
-                                {
-                                    try
-                                    {
-                                        transaccion.Rollback();
-                                    }
-                                    catch
-                                    {
-                                    }
-
-                                    throw;
-                                }
+                                errores.Add($"PROVEEDORES_COSTOS: el proveedor '{proveedorCosto.Proveedor}' " +
+                                    $"no tiene una sucursal activa llamada '{proveedorCosto.Sucursal}'.");
                             }
                         }
                     }
@@ -427,109 +397,30 @@ namespace CapaVista
                         return;
                     }
 
-                    //Guardartodo en una transaccion
-                    Conexion cn = new Conexion();
-
-                    using (SqlConnection conexion = cn.ObtenerConexion())
-                    {
-                        conexion.Open();
-
-                        using (SqlTransaction transaccion = conexion.BeginTransaction())
+                    //Guardar todo en una transaccion (capa de datos)
+                    List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto> costosImportacion = proveedoresCostos
+                        .Select(pc => new ClsGestorEntidadProducto.ClsImportacionProveedorCosto
                         {
-                            try
-                            {
+                            CodigoBarra = pc.CodigoBarra,
+                            Proveedor = pc.Proveedor,
+                            Sucursal = pc.Sucursal,
+                            PrecioCompra = pc.PrecioCompra
+                        })
+                        .ToList();
 
-                                //Obtener siguiente sku
-                                int siguienteSKU = logica.ObtenerProximoSKUImportacion(conexion, transaccion);
+                    try
+                    {
+                        logica.ImportarProductos(productos, costosImportacion, fechasVencimiento);
 
-                                //Registrar producto
-                                foreach (ClsGestorEntidadProducto.ClsProducto producto in productos)
-                                {
-                                    producto.SKU = siguienteSKU.ToString();
-
-                                    int idProducto = logica.RegistrarProductoImportacion(producto, conexion, transaccion);
-
-                                    producto.IdProducto = idProducto;
-
-                                    siguienteSKU++;
-                                }
-
-                                //Registrarproveedore costo y lote
-                                foreach (var proveedorCosto in proveedoresCostos)
-                                {
-                                    ClsGestorEntidadProducto.ClsProducto producto = productos.FirstOrDefault(p => p.CodigoBarra == proveedorCosto.CodigoBarra);
-
-                                    if (producto == null)
-                                    {
-                                        throw new Exception($"No se encontró el artículo con código de barra '{proveedorCosto.CodigoBarra}'.");
-                                    }
-
-                                    int idSucursal = logica.ObtenerIdSucursalImportacion(proveedorCosto.Proveedor,proveedorCosto.Sucursal,conexion, transaccion);
-
-                                    if (idSucursal == 0)
-                                    {
-                                        throw new Exception($"No se encontró la sucursal '{proveedorCosto.Sucursal}' " +
-                                            $"del proveedor '{proveedorCosto.Proveedor}'.");
-                                    }
-
-                                    //Relacion sucursal proveedor
-                                    ClsGestorEntidadProducto.ClsProductoSucursalProveedor relacion = new ClsGestorEntidadProducto.ClsProductoSucursalProveedor();
-
-                                    relacion.IdProducto = producto.IdProducto;
-                                    relacion.IdSucursal = idSucursal;
-                                    relacion.PrecioCompra = proveedorCosto.PrecioCompra;
-                                    relacion.FechaPrecioCompra = DateTime.Now;
-                                    relacion.CodigoProveedor = null;
-                                    relacion.Activo = true;
-                                    logica.RegistrarProductoSucursalProveedorImportacion(relacion, conexion,transaccion);
-                                    relaciones.Add(relacion);
-
-                                    //Lote
-                                    DateTime? fechaVencimiento = null;
-
-                                    if (!string.IsNullOrWhiteSpace(proveedorCosto.CodigoBarra))
-                                    {
-                                        fechasVencimiento.TryGetValue(proveedorCosto.CodigoBarra, out fechaVencimiento);
-                                    }
-
-                                    if (fechaVencimiento.HasValue)
-                                    {
-                                        ClsLote lote = new ClsLote();
-
-                                        lote.IdProducto = producto.IdProducto;
-                                        lote.CodigoLote = "IMP-" + producto.SKU;
-                                        lote.FechaFabricacion = DateTime.Now.Date;
-                                        lote.FechaVencimiento = fechaVencimiento.Value.Date;
-                                        lote.FechaIngreso = DateTime.Now;
-                                        lote.Stock = 0;
-                                        lote.Activo = true;
-                                        lote.IdSucursal = idSucursal;
-                                        logica.RegistrarLoteImportacion(lote, conexion, transaccion);
-                                    }
-                                }
-
-                                //Confirmar todo
-                                transaccion.Commit();
-
-                                MessageBox.Show($"Importación realizada correctamente.\n\n" +$"Artículos importados: {productos.Count}\n" +
-                                    $"Relaciones proveedor/sucursal: {relaciones.Count}", "Importación de artículos",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                            catch (Exception ex)
-                            {
-                                try
-                                {
-                                    transaccion.Rollback();
-                                }
-                                catch
-                                {
-                                }
-
-                                MessageBox.Show("No se pudo completar la importación.\n\n" +
-                                    "No se guardó ningún artículo, proveedor, costo ni lote.\n\n" +ex.Message, "Error de importación",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                        }
+                        MessageBox.Show($"Importación realizada correctamente.\n\n" +$"Artículos importados: {productos.Count}\n" +
+                            $"Relaciones proveedor/sucursal: {costosImportacion.Count}", "Importación de artículos",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("No se pudo completar la importación.\n\n" +
+                            "No se guardó ningún artículo, proveedor, costo ni lote.\n\n" +ex.Message, "Error de importación",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -646,7 +537,7 @@ namespace CapaVista
                     IXLWorksheet hojaSucursales = libro.Worksheets.Add("_SUCURSALES");
 
                     //Marcas
-                    DataTable tablaMarcas = new ClsLogicaProducto().CargarMarcasActivas();
+                    DataTable tablaMarcas = new ClsGestorProductoLogica().CargarMarcasActivas();
 
                     hojaMarcas.Cell(1, 1).Value = "Marca";
 
@@ -660,7 +551,7 @@ namespace CapaVista
                     }
 
                     //Categorias
-                    DataTable tablaCategorias = new ClsLogicaProducto().CargarCategoriasActivas();
+                    DataTable tablaCategorias = new ClsGestorProductoLogica().CargarCategoriasActivas();
 
                     hojaCategorias.Cell(1, 1).Value = "Categoría";
 
@@ -674,7 +565,7 @@ namespace CapaVista
                     }
 
                     //Unidades
-                    DataTable tablaUnidades = new ClsLogicaProducto().CargarUnidades();
+                    DataTable tablaUnidades = new ClsGestorProductoLogica().CargarUnidades();
 
                     hojaUnidades.Cell(1, 1).Value = "Unidad";
 
@@ -688,7 +579,7 @@ namespace CapaVista
                     }
 
                     //Iva
-                    DataTable tablaIVA = new ClsLogicaProducto().CargarIVAsActivos();
+                    DataTable tablaIVA = new ClsGestorProductoLogica().CargarIVAsActivos();
 
                     hojaIVA.Cell(1, 1).Value = "Alicuota";
 

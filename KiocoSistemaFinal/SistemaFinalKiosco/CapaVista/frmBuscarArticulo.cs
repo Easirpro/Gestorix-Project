@@ -13,7 +13,7 @@ namespace CapaVista
 {
     public partial class frmBuscarArticulo : Form
     {
-        private CapaLogica.NegocioLogica.ClsLogicaProducto logica = new CapaLogica.NegocioLogica.ClsLogicaProducto();
+        private CapaLogica.NegocioLogica.ClsGestorProductoLogica logica = new CapaLogica.NegocioLogica.ClsGestorProductoLogica();
 
         public frmBuscarArticulo()
         {

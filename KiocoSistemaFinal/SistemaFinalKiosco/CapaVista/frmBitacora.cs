@@ -1,5 +1,4 @@
 ﻿using CapaLogica.BitacoraLogi;
-using SistemaKiosco;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

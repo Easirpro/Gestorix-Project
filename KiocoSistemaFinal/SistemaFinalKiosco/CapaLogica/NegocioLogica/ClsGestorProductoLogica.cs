@@ -14,10 +14,10 @@ using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 
 namespace CapaLogica.NegocioLogica
 {
-    public partial class ClsLogicaProducto
+    public partial class ClsGestorProductoLogica
     {
         private clsBitacoraLogica bitacora = new clsBitacoraLogica();
-        CapaDatos.NegocioDatos.ClsProductoDatos datos = new CapaDatos.NegocioDatos.ClsProductoDatos();
+        CapaDatos.NegocioDatos.ClsGestorProductoDatos datos = new CapaDatos.NegocioDatos.ClsGestorProductoDatos();
 
 
 
@@ -100,6 +100,10 @@ namespace CapaLogica.NegocioLogica
             }
 
             return activado;
+        }
+        public void RecalcularDVHProductos()
+        {
+            datos.RecalcularDVHProductos();
         }
         public int ObtenerProximoSKU()
         {
@@ -346,26 +350,6 @@ namespace CapaLogica.NegocioLogica
             }
 
             return 0;
-        }
-        public int RegistrarProductoImportacion(ClsGestorEntidadProducto.ClsProducto producto,SqlConnection conexion,SqlTransaction transaccion)
-        {
-            return datos.RegistrarProductoImportacion(producto, conexion, transaccion);
-        }
-        public int ObtenerProximoSKUImportacion(SqlConnection conexion,SqlTransaction transaccion)
-        {
-            return datos.ObtenerProximoSKUImportacion(conexion, transaccion);
-        }
-        public void RegistrarProductoSucursalProveedorImportacion(ClsProductoSucursalProveedor relacion, SqlConnection conexion,SqlTransaction transaccion)
-        {
-            datos.RegistrarProductoSucursalProveedorImportacion(relacion, conexion, transaccion);
-        }
-        public void RegistrarLoteImportacion(ClsLote lote, SqlConnection conexion, SqlTransaction transaccion)
-        {
-            datos.RegistrarLoteImportacion(lote, conexion, transaccion);
-        }
-        public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal, SqlConnection conexion, SqlTransaction transaccion)
-        {
-            return datos.ObtenerIdSucursalImportacion(nombreProveedor, nombreSucursal, conexion, transaccion);
         }
         public int ObtenerIdSucursalImportacion(string nombreProveedor, string nombreSucursal)
         {

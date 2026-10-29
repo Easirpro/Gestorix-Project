@@ -497,7 +497,7 @@ namespace CapaVista
 
             try
             {
-                int resultado = logicaVenta.RegistrarVenta(totalVenta, idUsuario, detallesVenta, pagos);
+                int resultado = logicaVenta.RegistrarVenta(totalVenta, idUsuario, null, detallesVenta, pagos);
 
                 MessageBox.Show("¡Venta realizada correctamente!\n\n" + $"Total cobrado: $ {totalVenta:N2}", "Venta realizada",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);

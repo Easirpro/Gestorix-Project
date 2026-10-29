@@ -60,7 +60,6 @@
             btnEliminar = new Button();
             btnVolver = new Button();
             label14 = new Label();
-            sqlCommandBuilder1 = new Microsoft.Data.SqlClient.SqlCommandBuilder();
             lblBuscarPromo = new Label();
             contextMenuStrip1 = new ContextMenuStrip(components);
             txtBuscarPromo = new TextBox();
@@ -604,7 +603,6 @@
         private Button btnEliminar;
         private Button btnVolver;
         private Label label14;
-        private Microsoft.Data.SqlClient.SqlCommandBuilder sqlCommandBuilder1;
         private Label lblBuscarPromo;
         private ContextMenuStrip contextMenuStrip1;
         private TextBox txtBuscarPromo;

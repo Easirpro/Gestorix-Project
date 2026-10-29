@@ -1,5 +1,4 @@
-﻿using CapaDatos.NegocioDatos;
-using CapaEntidades.NegocioEntidad;
+﻿using CapaEntidades.NegocioEntidad;
 using CapaLogica.BitacoraLogi;
 using CapaLogica.NegocioLogica;
 using System;
@@ -18,7 +17,7 @@ namespace CapaVista
     public partial class frmNuevoArticulo : Form
     {
         ClsLogicaProveedor logicaProveedor = new ClsLogicaProveedor();
-        ClsLogicaProducto logica = new ClsLogicaProducto();
+        ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
         private clsBitacoraLogica logicaBitacora = new clsBitacoraLogica();
         private int idProductoModificar = 0;
@@ -44,7 +43,7 @@ namespace CapaVista
         #region Metodos
         private void CargarProximoSKU()
         {
-            ClsLogicaProducto logica = new ClsLogicaProducto();
+            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
             int proximoSKU = logica.ObtenerProximoSKU();
 
@@ -54,7 +53,7 @@ namespace CapaVista
         {
             try
             {
-                ClsProductoDatos datos = new ClsProductoDatos();datos.RecalcularDVHProductos();
+                new ClsGestorProductoLogica().RecalcularDVHProductos();
                 CargarMarcas();
                 CargarCategorias();
                 CargarUnidades();
@@ -103,7 +102,7 @@ namespace CapaVista
         }
         private void CargarProductoModificar()
         {
-            ClsLogicaProducto logica = new ClsLogicaProducto();
+            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
             DataTable tabla = logica.ObtenerProductoPorId(idProductoModificar);
 
@@ -194,7 +193,7 @@ namespace CapaVista
         }
         private void CargarMarcas()
         {
-            ClsLogicaProducto logica = new ClsLogicaProducto();
+            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
             cmbMarca.DataSource = logica.CargarMarcasActivas();
 
@@ -205,7 +204,7 @@ namespace CapaVista
         }
         private void CargarCategorias()
         {
-            ClsLogicaProducto logica = new ClsLogicaProducto();
+            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
             cmbRubro.DataSource = logica.CargarCategoriasActivas();
 
@@ -216,7 +215,7 @@ namespace CapaVista
         }
         private void CargarUnidades()
         {
-            ClsLogicaProducto logica = new ClsLogicaProducto();
+            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
             cmbUnidadVenta.DataSource = logica.CargarUnidades();
 
@@ -227,7 +226,7 @@ namespace CapaVista
         }
         private void CargarIVAs()
         {
-            ClsLogicaProducto logica = new ClsLogicaProducto();
+            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
             cmbIva.DataSource = logica.CargarIVAsActivos();
             cmbIva.DisplayMember = "Alicuota";
@@ -244,7 +243,7 @@ namespace CapaVista
 
             string codigoBarra = txtCodigo.Text.Trim();
 
-            ClsLogicaProducto logica = new ClsLogicaProducto();
+            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
 
             if (logica.ExisteCodigoBarra(codigoBarra, idProductoModificar))
             {
