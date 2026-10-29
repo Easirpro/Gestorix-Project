@@ -1,4 +1,6 @@
-﻿using CapaEntidades.NegocioEntidades;
+﻿using CapaEntidades;
+using CapaEntidades.NegocioEntidad;
+using CapaEntidades.NegocioEntidades;
 using CapaLogica.NegocioLogica;
 using System;
 using System.Collections.Generic;
@@ -19,7 +21,7 @@ namespace CapaVista
         private int idProveedor = 0;
         private DataTable productosEncontrados;
         private DataTable proveedoresEncontrados;
-
+        private ClsCajaLogica logicaCaja = new ClsCajaLogica();
         public frmNuevaCompra(bool mostrarChk)
         {
             InitializeComponent();
@@ -42,11 +44,67 @@ namespace CapaVista
             txtProveedor.DoubleClick += txtProveedor_DoubleClick;
 
             ConfigurarAutocompletadoProveedores();
+            CargarOpcionesPago();
         }
 
 
 
+        
+
         #region Metodos
+
+        private void CargarOpcionesPago()
+        {
+            cmbCondicionPago.Items.Clear();
+            cmbCondicionPago.Items.Add("Contado");
+            cmbCondicionPago.Items.Add("Cuenta corriente");
+            cmbCondicionPago.SelectedIndex = 0;
+
+            try
+            {
+                DataTable medios = logicaCaja.ObtenerMetodosPago();
+
+                // "Cuenta Corriente" se elige como condición, no como medio de pago.
+                foreach (DataRow fila in medios.Select("Nombre = 'Cuenta Corriente'"))
+                {
+                    medios.Rows.Remove(fila);
+                }
+
+                cmbMedioPagoCompra.DataSource = medios;
+                cmbMedioPagoCompra.DisplayMember = "Nombre";
+                cmbMedioPagoCompra.ValueMember = "IdMetodoPago";
+
+                // Si no hay caja abierta, el pago no puede salir de la caja.
+                chkPagaDesdeCaja.Enabled = logicaCaja.HayCajaAbierta();
+                chkPagaDesdeCaja.Checked = chkPagaDesdeCaja.Enabled;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudieron cargar los medios de pago.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            dtpVencimiento.Value = DateTime.Today.AddDays(30);
+            ActualizarOpcionesPago();
+        }
+
+        private bool EsCuentaCorriente()
+        {
+            return cmbCondicionPago.SelectedIndex == 1;
+        }
+
+        private void ActualizarOpcionesPago()
+        {
+            bool ctaCte = EsCuentaCorriente();
+
+            lblMedioPagoCompra.Enabled = !ctaCte;
+            cmbMedioPagoCompra.Enabled = !ctaCte;
+            chkPagaDesdeCaja.Visible = !ctaCte;
+            lblVencimiento.Enabled = ctaCte;
+            dtpVencimiento.Enabled = ctaCte;
+        }
+
+        
         private void CalcularTotales()
         {
             decimal subtotalSinIVA = 0;
@@ -286,6 +344,46 @@ namespace CapaVista
                 compra.IVA = Convert.ToDecimal(txtIva.Text);
                 compra.Total = Convert.ToDecimal(txtTotal.Text);
                 compra.Observaciones = txtObservaciones.Text.Trim();
+
+     
+                compra.IdUsuario = SesionUsuario.IdUsuario;
+
+                if (EsCuentaCorriente())
+                {
+                    if (dtpVencimiento.Value.Date < dtpVencimiento.Value.Date)
+                    {
+                        MessageBox.Show("La fecha de vencimiento no puede ser anterior a la fecha de la compra.",
+                            "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    compra.CondicionPago = "CTA_CTE";
+                    compra.FechaVencimiento = dtpVencimiento.Value.Date;
+                    compra.IdMetodoPago = null;
+                    compra.IdSesionCaja = null;
+                }
+                else
+                {
+                    if (cmbMedioPagoCompra.SelectedValue == null)
+                    {
+                        MessageBox.Show("Seleccione el medio de pago de la compra.", "Aviso",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    compra.CondicionPago = "CONTADO";
+                    compra.FechaVencimiento = null;
+                    compra.IdMetodoPago = Convert.ToInt32(cmbMedioPagoCompra.SelectedValue);
+
+                    if (chkPagaDesdeCaja.Enabled && chkPagaDesdeCaja.Checked)
+                    {
+                        ClsSesionCajaEntidad sesion = logicaCaja.ObtenerSesionAbierta();
+                        compra.IdSesionCaja = sesion != null ? sesion.IdSesionCaja : (int?)null;
+                    }
+                }
+                // ===== FIN NUEVO =====
+
+                compra.Detalles = new List<ClsDetalleCompraEntidad>();   // ← esto ya lo tenías
                 compra.Detalles = new List<ClsDetalleCompraEntidad>();
 
                 foreach (DataGridViewRow fila in dtgNuevaCompra.Rows)
@@ -327,7 +425,7 @@ namespace CapaVista
                         return;
                     }
 
-                    if (!decimal.TryParse(fila.Cells["Column5"].Value.ToString(), out decimal porcentajeIVA) ||  porcentajeIVA < 0 || porcentajeIVA > 100)
+                    if (!decimal.TryParse(fila.Cells["Column5"].Value.ToString(), out decimal porcentajeIVA) || porcentajeIVA < 0 || porcentajeIVA > 100)
                     {
                         MessageBox.Show("El porcentaje de IVA debe estar entre 0 y 100.", "Aviso",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -583,6 +681,11 @@ namespace CapaVista
 
 
 
- 
+
+
+        private void cmbCondicionPago_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActualizarOpcionesPago();
+        }
     }
 }
