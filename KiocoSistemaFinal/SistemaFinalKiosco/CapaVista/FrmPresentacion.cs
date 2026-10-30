@@ -1593,20 +1593,21 @@ namespace CapaVista
             frmGestionBackup frm = new frmGestionBackup();
             frm.ShowDialog();
         }
-        private void FrmPresentacion_Load(object sender, EventArgs e)
+        private async void FrmPresentacion_Load(object sender, EventArgs e)
         {
 
-            // backup automatico
+            // backup automatico: con la base remota se descarga por la red, así que se hace
+            // en segundo plano para no congelar la pantalla al iniciar.
 
             try
             {
                 ClsBackupLogica backup = new ClsBackupLogica();
-                backup.BackupAutomatico();
+                await Task.Run(() => backup.BackupAutomatico());
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "No se pudo generar el backup automático: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void cargarArticuloNuevoToolStripMenuItem_Click(object sender, EventArgs e)

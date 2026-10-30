@@ -37,11 +37,12 @@ namespace CapaVista
                 ClsBackupLogica backup = new ClsBackupLogica();
                 
                 bool resultado = backup.GenerarBackup(txtRutabk.Text);
-                MessageBox.Show("Backup generado correctamente");
+                MessageBox.Show("Backup generado correctamente en " + txtRutabk.Text);
+                CargarBackups();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "ERROR",
+                MessageBox.Show(ex.Message, "ERROR",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -72,6 +73,26 @@ namespace CapaVista
 
                 return;
             }
+
+            // Avisar antes de pedir confirmación: con la base en otra PC no se puede restaurar.
+            try
+            {
+                if (!new ClsBackupLogica().ServidorEsEstaPc())
+                {
+                    MessageBox.Show(
+                        "La base de datos está en otra PC. Por ahora el backup solo se puede restaurar desde la PC donde está la base.",
+                        "Gestión de Backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+
             DialogResult resultado = MessageBox.Show(
                 "La restauración reemplazará completamente la información actual de la base de datos.\n" +
                 "Todos los cambios realizados después de la fecha del backup seleccionado se perderán.\n" +
