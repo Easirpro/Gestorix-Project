@@ -44,5 +44,20 @@ namespace CapaSesion
             for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
             return sb.ToString();
         }
+
+        // Hash de una respuesta de seguridad. Se normaliza (sin espacios en los extremos y en
+        // minúsculas) y se usa el IdUsuario como sal. Usa UTF-16 para coincidir con
+        // HASHBYTES('SHA2_256', nvarchar) de SQL Server, que se usó para migrar las respuestas.
+        public static string HashRespuesta(int idUsuario, string respuesta)
+        {
+            string texto = idUsuario + "|" + (respuesta ?? "").Trim().ToLowerInvariant();
+
+            using (SHA256 sha256 = System.Security.Cryptography.SHA256.Create())
+            {
+                byte[] hash = sha256.ComputeHash(Encoding.Unicode.GetBytes(texto));
+
+                return Convert.ToHexString(hash);
+            }
+        }
     }
 }

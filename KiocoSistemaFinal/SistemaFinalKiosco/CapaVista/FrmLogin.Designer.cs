@@ -117,7 +117,7 @@
             btnMostrar.TabIndex = 7;
             btnMostrar.Text = "👁";
             btnMostrar.UseVisualStyleBackColor = false;
-            btnMostrar.Click += button1_Click;
+            btnMostrar.Click += btnMostrar_Click;
             // 
             // panel1
             // 
@@ -133,7 +133,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(326, 259);
             panel1.TabIndex = 9;
-            panel1.Paint += panel1_Paint;
             // 
             // lblContraseña
             // 
