@@ -130,6 +130,7 @@
             // btnCofigurarFechas
             // 
             btnCofigurarFechas.FlatStyle = FlatStyle.Popup;
+            btnCofigurarFechas.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btnCofigurarFechas.Location = new Point(15, 65);
             btnCofigurarFechas.Name = "btnCofigurarFechas";
             btnCofigurarFechas.Size = new Size(453, 44);
@@ -143,6 +144,7 @@
             lblResumenVigencia.BackColor = Color.Honeydew;
             lblResumenVigencia.BorderStyle = BorderStyle.FixedSingle;
             lblResumenVigencia.ForeColor = Color.DarkGreen;
+            lblResumenVigencia.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblResumenVigencia.Location = new Point(15, 110);
             lblResumenVigencia.Name = "lblResumenVigencia";
             lblResumenVigencia.Size = new Size(453, 35);
@@ -164,6 +166,7 @@
             // 
             // btnAgregarProducto
             // 
+            btnAgregarProducto.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnAgregarProducto.Location = new Point(333, 202);
             btnAgregarProducto.Name = "btnAgregarProducto";
             btnAgregarProducto.Size = new Size(135, 30);
@@ -185,6 +188,7 @@
             // 
             dgtCargaArticulo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgtCargaArticulo.Columns.AddRange(new DataGridViewColumn[] { clnProducto, clnCantidad, clnPrecio, clnEliminar });
+            dgtCargaArticulo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgtCargaArticulo.Location = new Point(9, 46);
             dgtCargaArticulo.Name = "dgtCargaArticulo";
             dgtCargaArticulo.Size = new Size(459, 150);
@@ -252,6 +256,7 @@
             // 
             // btnAgregarMecanica
             // 
+            btnAgregarMecanica.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnAgregarMecanica.Location = new Point(307, 105);
             btnAgregarMecanica.Name = "btnAgregarMecanica";
             btnAgregarMecanica.Size = new Size(161, 30);
@@ -327,6 +332,7 @@
             // 
             lstPromocionesEncontradas.FormattingEnabled = true;
             lstPromocionesEncontradas.ItemHeight = 15;
+            lstPromocionesEncontradas.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lstPromocionesEncontradas.Location = new Point(113, 52);
             lstPromocionesEncontradas.Name = "lstPromocionesEncontradas";
             lstPromocionesEncontradas.Size = new Size(244, 79);
@@ -357,6 +363,7 @@
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label12.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label12.Location = new Point(395, 99);
             label12.Name = "label12";
             label12.Size = new Size(23, 25);
@@ -367,6 +374,7 @@
             // 
             lblPrecioPromocional.AutoSize = true;
             lblPrecioPromocional.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPrecioPromocional.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblPrecioPromocional.Location = new Point(424, 99);
             lblPrecioPromocional.Name = "lblPrecioPromocional";
             lblPrecioPromocional.Size = new Size(56, 25);
@@ -441,6 +449,7 @@
             // 
             // btnGuardarPromo
             // 
+            btnGuardarPromo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnGuardarPromo.Location = new Point(889, 495);
             btnGuardarPromo.Name = "btnGuardarPromo";
             btnGuardarPromo.Size = new Size(125, 23);
@@ -451,6 +460,7 @@
             // 
             // btnEliminar
             // 
+            btnEliminar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnEliminar.Location = new Point(810, 495);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
@@ -461,6 +471,7 @@
             // 
             // btnVolver
             // 
+            btnVolver.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnVolver.Location = new Point(729, 495);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
@@ -495,6 +506,7 @@
             // 
             // txtBuscarPromo
             // 
+            txtBuscarPromo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtBuscarPromo.Location = new Point(113, 26);
             txtBuscarPromo.Name = "txtBuscarPromo";
             txtBuscarPromo.Size = new Size(244, 23);
@@ -504,6 +516,7 @@
             // chkDesactivarPromo
             // 
             chkDesactivarPromo.AutoSize = true;
+            chkDesactivarPromo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             chkDesactivarPromo.Location = new Point(371, 27);
             chkDesactivarPromo.Name = "chkDesactivarPromo";
             chkDesactivarPromo.Size = new Size(142, 19);
@@ -550,6 +563,7 @@
             Controls.Add(gpbDatosGenerales);
             Controls.Add(gpbModificar);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(1062, 569);
             Name = "frmPromocion";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Promociones";

@@ -133,6 +133,17 @@ namespace CapaVista
 
             CargarCompras();
         }
+        private void btnLimpiarFiltros_Click(object sender, EventArgs e)
+        {
+            // Vuelve los filtros al estado con el que abre el formulario (hoy - hoy).
+            dateTimePicker1.Value = DateTime.Today;
+            dateTimePicker2.Value = DateTime.Today;
+            txtBuscarCompra.Clear();
+
+            CargarCompras();
+
+            txtBuscarCompra.Focus();
+        }
         private void btnAnular_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count == 0)

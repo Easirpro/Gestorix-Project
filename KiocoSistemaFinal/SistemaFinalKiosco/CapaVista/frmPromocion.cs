@@ -48,9 +48,80 @@ namespace CapaVista
 
 
 
+        // Posición y tamaño de cada sección en el diseño original (ClientSize 1046 x 530).
+        private Size tamanoDiseno;
+        private Dictionary<Control, Rectangle> limitesDiseno;
+
+        // Posición vertical original de cada control dentro de "Vista previa".
+        private Dictionary<Control, int> topDisenoVistaPrevia = new Dictionary<Control, int>();
+
         public frmPromocion()
         {
             InitializeComponent();
+
+            tamanoDiseno = ClientSize;
+            limitesDiseno = new Dictionary<Control, Rectangle>
+            {
+                { gpbDatosGenerales, gpbDatosGenerales.Bounds },
+                { gpbSeleccionarArticulo, gpbSeleccionarArticulo.Bounds },
+                { gpbModificar, gpbModificar.Bounds },
+                { gpbTipoPromocion, gpbTipoPromocion.Bounds },
+                { gpbVistaPrevia, gpbVistaPrevia.Bounds }
+            };
+
+            foreach (Control control in gpbVistaPrevia.Controls)
+            {
+                topDisenoVistaPrevia[control] = control.Top;
+            }
+
+            Resize += (sender, e) => DistribuirSecciones();
+        }
+
+        // Cada columna recibe la mitad del ancho extra. El alto extra va a
+        // "Seleccionar Artículos" (izquierda) y "Vista previa" (derecha).
+        private void DistribuirSecciones()
+        {
+            if (WindowState == FormWindowState.Minimized)
+                return;
+
+            int extraAncho = Math.Max(0, ClientSize.Width - tamanoDiseno.Width);
+            int extraAlto = Math.Max(0, ClientSize.Height - tamanoDiseno.Height);
+
+            int mitad = extraAncho / 2;
+
+            SuspendLayout();
+
+            // Columna izquierda
+            Ubicar(gpbDatosGenerales, 0, mitad, 0);
+            Ubicar(gpbSeleccionarArticulo, 0, mitad, extraAlto);
+
+            // Columna derecha
+            Ubicar(gpbModificar, mitad, extraAncho - mitad, 0);
+            Ubicar(gpbTipoPromocion, mitad, extraAncho - mitad, 0);
+            Ubicar(gpbVistaPrevia, mitad, extraAncho - mitad, extraAlto);
+
+            AjustarContenidoVistaPrevia();
+
+            ResumeLayout(true);
+        }
+        // Reparte las filas de "Vista previa" (precio normal, descuento, precio promocional)
+        // a lo alto del recuadro, en la misma proporción que en el diseño original.
+        private void AjustarContenidoVistaPrevia()
+        {
+            int altoOriginal = limitesDiseno[gpbVistaPrevia].Height;
+            int altoActual = gpbVistaPrevia.Height;
+
+            foreach (KeyValuePair<Control, int> item in topDisenoVistaPrevia)
+            {
+                item.Key.Top = item.Value * altoActual / altoOriginal;
+            }
+        }
+        private void Ubicar(Control seccion, int corrimiento, int extraAncho, int extraAlto)
+        {
+            Rectangle original = limitesDiseno[seccion];
+
+            seccion.SetBounds(original.Left + corrimiento, original.Top,
+                original.Width + extraAncho, original.Height + extraAlto);
         }
 
         #region Metodos

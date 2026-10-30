@@ -34,6 +34,8 @@
         private System.Windows.Forms.TextBox txtTotal;
 
         private System.Windows.Forms.Button btnCerrar;
+        private System.Windows.Forms.Label lblTitulo;
+        private System.Windows.Forms.Label lblDescripcion;
 
         protected override void Dispose(bool disposing)
         {
@@ -76,13 +78,33 @@
             lblTotalTitulo = new Label();
             txtTotal = new TextBox();
             btnCerrar = new Button();
+            lblTitulo = new Label();
+            lblDescripcion = new Label();
             gpbComprobante.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDetalle).BeginInit();
             gpbObservaciones.SuspendLayout();
             SuspendLayout();
-            // 
+            //
+            // lblTitulo
+            //
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            lblTitulo.Location = new Point(10, 8);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.TabIndex = 11;
+            lblTitulo.Text = "Detalle de la compra";
+            //
+            // lblDescripcion
+            //
+            lblDescripcion.AutoSize = true;
+            lblDescripcion.ForeColor = SystemColors.GrayText;
+            lblDescripcion.Location = new Point(13, 40);
+            lblDescripcion.Name = "lblDescripcion";
+            lblDescripcion.TabIndex = 12;
+            lblDescripcion.Text = "Datos del comprobante, productos y totales de la compra seleccionada.";
+            //
             // gpbComprobante
-            // 
+            //
             gpbComprobante.Controls.Add(lblProveedorTitulo);
             gpbComprobante.Controls.Add(txtProveedor);
             gpbComprobante.Controls.Add(lblFechaTitulo);
@@ -91,7 +113,8 @@
             gpbComprobante.Controls.Add(txtTipoComprobante);
             gpbComprobante.Controls.Add(lblNumeroTitulo);
             gpbComprobante.Controls.Add(txtNumeroComprobante);
-            gpbComprobante.Location = new Point(12, 12);
+            gpbComprobante.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gpbComprobante.Location = new Point(12, 64);
             gpbComprobante.Name = "gpbComprobante";
             gpbComprobante.Size = new Size(776, 105);
             gpbComprobante.TabIndex = 0;
@@ -170,7 +193,7 @@
             // 
             lblProductos.AutoSize = true;
             lblProductos.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblProductos.Location = new Point(12, 130);
+            lblProductos.Location = new Point(12, 180);
             lblProductos.Name = "lblProductos";
             lblProductos.Size = new Size(63, 15);
             lblProductos.TabIndex = 10;
@@ -184,7 +207,8 @@
             dgvDetalle.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvDetalle.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDetalle.Columns.AddRange(new DataGridViewColumn[] { clnCodigo, clnProducto, clnCantidad, clnPrecio, clnIVA, clnTotal });
-            dgvDetalle.Location = new Point(12, 150);
+            dgvDetalle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvDetalle.Location = new Point(12, 200);
             dgvDetalle.MultiSelect = false;
             dgvDetalle.Name = "dgvDetalle";
             dgvDetalle.ReadOnly = true;
@@ -232,7 +256,8 @@
             // gpbObservaciones
             // 
             gpbObservaciones.Controls.Add(txtObservaciones);
-            gpbObservaciones.Location = new Point(12, 385);
+            gpbObservaciones.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gpbObservaciones.Location = new Point(12, 432);
             gpbObservaciones.Name = "gpbObservaciones";
             gpbObservaciones.Size = new Size(470, 105);
             gpbObservaciones.TabIndex = 2;
@@ -253,7 +278,8 @@
             // lblSubtotalTitulo
             // 
             lblSubtotalTitulo.AutoSize = true;
-            lblSubtotalTitulo.Location = new Point(500, 390);
+            lblSubtotalTitulo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            lblSubtotalTitulo.Location = new Point(500, 437);
             lblSubtotalTitulo.Name = "lblSubtotalTitulo";
             lblSubtotalTitulo.Size = new Size(85, 15);
             lblSubtotalTitulo.TabIndex = 9;
@@ -261,7 +287,8 @@
             // 
             // txtSubtotal
             // 
-            txtSubtotal.Location = new Point(640, 387);
+            txtSubtotal.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            txtSubtotal.Location = new Point(640, 434);
             txtSubtotal.Name = "txtSubtotal";
             txtSubtotal.ReadOnly = true;
             txtSubtotal.Size = new Size(148, 23);
@@ -271,7 +298,8 @@
             // lblIVATitulo
             // 
             lblIVATitulo.AutoSize = true;
-            lblIVATitulo.Location = new Point(500, 425);
+            lblIVATitulo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            lblIVATitulo.Location = new Point(500, 472);
             lblIVATitulo.Name = "lblIVATitulo";
             lblIVATitulo.Size = new Size(27, 15);
             lblIVATitulo.TabIndex = 8;
@@ -279,7 +307,8 @@
             // 
             // txtIVA
             // 
-            txtIVA.Location = new Point(640, 422);
+            txtIVA.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            txtIVA.Location = new Point(640, 469);
             txtIVA.Name = "txtIVA";
             txtIVA.ReadOnly = true;
             txtIVA.Size = new Size(148, 23);
@@ -290,7 +319,8 @@
             // 
             lblTotalTitulo.AutoSize = true;
             lblTotalTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblTotalTitulo.Location = new Point(500, 460);
+            lblTotalTitulo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            lblTotalTitulo.Location = new Point(500, 507);
             lblTotalTitulo.Name = "lblTotalTitulo";
             lblTotalTitulo.Size = new Size(46, 15);
             lblTotalTitulo.TabIndex = 7;
@@ -299,7 +329,8 @@
             // txtTotal
             // 
             txtTotal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtTotal.Location = new Point(640, 457);
+            txtTotal.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            txtTotal.Location = new Point(640, 504);
             txtTotal.Name = "txtTotal";
             txtTotal.ReadOnly = true;
             txtTotal.Size = new Size(148, 23);
@@ -308,7 +339,8 @@
             // 
             // btnCerrar
             // 
-            btnCerrar.Location = new Point(688, 500);
+            btnCerrar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnCerrar.Location = new Point(688, 547);
             btnCerrar.Name = "btnCerrar";
             btnCerrar.Size = new Size(100, 32);
             btnCerrar.TabIndex = 6;
@@ -320,7 +352,9 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 550);
+            ClientSize = new Size(800, 591);
+            Controls.Add(lblTitulo);
+            Controls.Add(lblDescripcion);
             Controls.Add(btnCerrar);
             Controls.Add(txtTotal);
             Controls.Add(lblTotalTitulo);
@@ -332,10 +366,9 @@
             Controls.Add(dgvDetalle);
             Controls.Add(lblProductos);
             Controls.Add(gpbComprobante);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MaximizeBox = false;
             MinimizeBox = false;
+            MinimumSize = new Size(816, 630);
             Name = "frmDetalleCompra";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Detalle de compra";

@@ -29,6 +29,26 @@ namespace CapaVista
             InitializeComponent();
             ConfigurarGrid(dgvVentas);
             ConfigurarGrid(dgvDetalle);
+
+            Resize += (sender, e) => DistribuirAltura();
+        }
+
+        // Reparte el alto disponible entre "1. Venta" y "2. Producto" en la misma
+        // proporción del diseño (205 / 155). "3. Datos" y los botones quedan abajo por Anchor.
+        private void DistribuirAltura()
+        {
+            const int separacion = 5;
+
+            int arriba = grpVenta.Top;
+            int abajo = grpDatos.Top - separacion;
+            int disponible = abajo - arriba - separacion;
+
+            if (disponible <= 0)
+                return;
+
+            grpVenta.Height = disponible * 205 / 360;
+            grpProducto.Top = grpVenta.Bottom + separacion;
+            grpProducto.Height = abajo - grpProducto.Top;
         }
 
         private void frmNuevaDevolucion_Load(object sender, EventArgs e)

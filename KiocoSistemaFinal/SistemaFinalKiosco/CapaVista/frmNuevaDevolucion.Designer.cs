@@ -75,6 +75,7 @@
             grpVenta.Controls.Add(txtNroVenta);
             grpVenta.Controls.Add(btnBuscarVentas);
             grpVenta.Controls.Add(dgvVentas);
+            grpVenta.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             grpVenta.Location = new System.Drawing.Point(12, 8);
             grpVenta.Name = "grpVenta";
             grpVenta.Size = new System.Drawing.Size(796, 205);
@@ -141,6 +142,7 @@
             // 
             // dgvVentas
             // 
+            dgvVentas.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             dgvVentas.Location = new System.Drawing.Point(12, 58);
             dgvVentas.Name = "dgvVentas";
             dgvVentas.Size = new System.Drawing.Size(772, 135);
@@ -156,6 +158,7 @@
             // grpProducto
             // 
             grpProducto.Controls.Add(dgvDetalle);
+            grpProducto.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             grpProducto.Location = new System.Drawing.Point(12, 218);
             grpProducto.Name = "grpProducto";
             grpProducto.Size = new System.Drawing.Size(796, 155);
@@ -165,6 +168,7 @@
             // 
             // dgvDetalle
             // 
+            dgvDetalle.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             dgvDetalle.Location = new System.Drawing.Point(12, 22);
             dgvDetalle.Name = "dgvDetalle";
             dgvDetalle.Size = new System.Drawing.Size(772, 122);
@@ -194,6 +198,7 @@
             grpDatos.Controls.Add(rbCambio);
             grpDatos.Controls.Add(chkReingresaStock);
             grpDatos.Controls.Add(lblCaja);
+            grpDatos.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             grpDatos.Location = new System.Drawing.Point(12, 378);
             grpDatos.Name = "grpDatos";
             grpDatos.Size = new System.Drawing.Size(796, 195);
@@ -284,6 +289,7 @@
             // 
             // txtObservacion
             // 
+            txtObservacion.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             txtObservacion.Location = new System.Drawing.Point(375, 86);
             txtObservacion.Name = "txtObservacion";
             txtObservacion.Size = new System.Drawing.Size(405, 55);
@@ -341,6 +347,7 @@
             // 
             // btnRegistrar
             // 
+            btnRegistrar.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             btnRegistrar.Location = new System.Drawing.Point(582, 582);
             btnRegistrar.Name = "btnRegistrar";
             btnRegistrar.Size = new System.Drawing.Size(110, 32);
@@ -351,6 +358,7 @@
             // 
             // btnCancelar
             // 
+            btnCancelar.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             btnCancelar.Location = new System.Drawing.Point(698, 582);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new System.Drawing.Size(110, 32);
@@ -370,8 +378,9 @@
             Controls.Add(grpDatos);
             Controls.Add(btnRegistrar);
             Controls.Add(btnCancelar);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            MaximizeBox = true;
+            MinimumSize = new System.Drawing.Size(836, 665);
             MinimizeBox = false;
             Name = "frmNuevaDevolucion";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
