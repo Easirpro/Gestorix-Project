@@ -203,7 +203,7 @@ public class ClsUsuarioDatos
                     Username,
                     PassActual,
                     PrimerIngreso,
-                    UltimoIngreso
+                    UltimoIngreso,
                     DVH
                 )
                 VALUES
@@ -214,7 +214,7 @@ public class ClsUsuarioDatos
                     @Username,
                     @PassActual,
                     @PrimerIngreso,
-                    @UltimoIngreso
+                    @UltimoIngreso,
                     @DVH
                 );
 
@@ -253,14 +253,31 @@ public class ClsUsuarioDatos
                 AND
                     PassActual = @PassTemporal";
 
-            SqlCommand cmd = new SqlCommand(query, conn);
+            SqlTransaction trans = conn.BeginTransaction();
 
-            cmd.Parameters.AddWithValue("@NuevaPass",hashNueva);
-            cmd.Parameters.AddWithValue("@IdUsuario",idUsuario);
-            cmd.Parameters.AddWithValue("@PassTemporal",hashTemporal);
-            int filasAfectadas =cmd.ExecuteNonQuery();
+            try
+            {
+                SqlCommand cmd = new SqlCommand(query, conn, trans);
 
-            return filasAfectadas > 0;
+                cmd.Parameters.AddWithValue("@NuevaPass",hashNueva);
+                cmd.Parameters.AddWithValue("@IdUsuario",idUsuario);
+                cmd.Parameters.AddWithValue("@PassTemporal",hashTemporal);
+                int filasAfectadas =cmd.ExecuteNonQuery();
+
+                if (filasAfectadas > 0)
+                {
+                    ActualizarDVHUsuario(idUsuario, conn, trans);
+                }
+
+                trans.Commit();
+
+                return filasAfectadas > 0;
+            }
+            catch
+            {
+                trans.Rollback();
+                throw;
+            }
         }
     }
     public bool CambiarPasswordRecuperacion(int idUsuario, string nuevaPassword)
@@ -305,6 +322,11 @@ public class ClsUsuarioDatos
                     cmdNueva.Parameters.AddWithValue( "@IdUsuario", idUsuario);
 
                     int filas = cmdNueva.ExecuteNonQuery();
+
+                    if (filas > 0)
+                    {
+                        ActualizarDVHUsuario(idUsuario, con, trans);
+                    }
 
                     trans.Commit();
 
@@ -607,6 +629,66 @@ public class ClsUsuarioDatos
 
         return ClsDigitoVerificador
             .GenerarHash(cadena);
+    }
+    // Recalcula el DVH con los valores guardados en la base, dentro de la misma transacción.
+    // Se lee la fila para usar el UltimoIngreso que puso GETDATE().
+    private void ActualizarDVHUsuario(int idUsuario, SqlConnection con, SqlTransaction trans)
+    {
+        ClslUsuario usuario = null;
+
+        string sql = @"
+            SELECT
+                Estado,
+                IdPersona,
+                IdRol,
+                Username,
+                PassActual,
+                PrimerIngreso,
+                UltimoIngreso
+            FROM Usuario
+            WHERE IdUsuario = @IdUsuario";
+
+        using (SqlCommand cmd = new SqlCommand(sql, con, trans))
+        {
+            cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+
+            using (SqlDataReader dr = cmd.ExecuteReader())
+            {
+                if (dr.Read())
+                {
+                    usuario = new ClslUsuario
+                    {
+                        Estado = Convert.ToBoolean(dr["Estado"]),
+                        IdPersona = Convert.ToInt32(dr["IdPersona"]),
+                        IdRol = Convert.ToInt32(dr["IdRol"]),
+                        Username = dr["Username"].ToString(),
+                        PassActual = dr["PassActual"].ToString(),
+                        PrimerIngreso = Convert.ToBoolean(dr["PrimerIngreso"]),
+                        UltimoLogin = dr["UltimoIngreso"] == DBNull.Value
+                            ? null
+                            : Convert.ToDateTime(dr["UltimoIngreso"])
+                    };
+                }
+            }
+        }
+
+        if (usuario == null)
+        {
+            return;
+        }
+
+        string update = @"
+            UPDATE Usuario
+            SET DVH = @DVH
+            WHERE IdUsuario = @IdUsuario";
+
+        using (SqlCommand cmdUpdate = new SqlCommand(update, con, trans))
+        {
+            cmdUpdate.Parameters.AddWithValue("@DVH", GenerarDVHUsuario(usuario));
+            cmdUpdate.Parameters.AddWithValue("@IdUsuario", idUsuario);
+
+            cmdUpdate.ExecuteNonQuery();
+        }
     }
     public void RecalcularDVHUsuarios()
     {
