@@ -496,35 +496,6 @@ public class ClsUsuarioDatos
             return Convert.ToInt32(resultado);
         }
     }
-    public string ObtenerPreguntaUsuario( int idUsuario)
-    {
-        using (SqlConnection con = conexion.ObtenerConexion())
-        {
-            string sql = @"
-                SELECT TOP 1
-                    ps.Pregunta
-                FROM RespuestaSeguridad rs
-                INNER JOIN PreguntaSeguridad ps
-                    ON rs.IdPregunta = ps.IdPregunta
-                WHERE rs.IdUsuario = @IdUsuario
-                ORDER BY rs.IdPregunta";
-
-            SqlCommand cmd = new SqlCommand(sql, con);
-
-            cmd.Parameters.AddWithValue( "@IdUsuario",idUsuario);
-
-            con.Open();
-
-            object resultado =cmd.ExecuteScalar();
-
-            if (resultado == null)
-            {
-                return ""; 
-            }  
-
-            return resultado.ToString();
-        }
-    }//revisar quedo asi por el cambio de la bd
     public string ObtenerUsername(int idUsuario)
     {
         using (SqlConnection con = conexion.ObtenerConexion())
@@ -550,7 +521,7 @@ public class ClsUsuarioDatos
             return resultado.ToString();
         }
     }
-    public bool ExistePersonaDatos(string dni,string cuit,string nombre,string apellido,int idPersonaActual)
+    public bool ExistePersonaDatos(string dni,string cuit,int idPersonaActual)
     {
         using (SqlConnection con = conexion.ObtenerConexion())
         {
@@ -572,7 +543,7 @@ public class ClsUsuarioDatos
 
             return cantidad > 0;
         }
-    }//revisar quedo o la bd anterior
+    }
     public bool ExisteUsuarioPorIdPersona(int idPersona)
     {
         using (SqlConnection con = conexion.ObtenerConexion())
