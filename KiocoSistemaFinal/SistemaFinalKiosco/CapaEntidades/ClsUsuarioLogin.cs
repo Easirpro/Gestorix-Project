@@ -17,7 +17,6 @@ namespace CapaEntidades
         public string PassActual { get; set; }
         public bool PrimerIngreso { get; set; }
         public DateTime? UltimoIngreso { get; set; }
-        public int IntentosFallidos { get; set; }
         public bool PreguntasCompletadas { get; set; }
         public bool Activo { get; set; }
         public string Nombre { get; set; }

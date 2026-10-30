@@ -32,7 +32,6 @@ public class ClsUsuarioDatos
                     u.PassActual,
                     u.PrimerIngreso,
                     u.UltimoIngreso,
-                    u.IntentosFallidos,
                     CASE
                         WHEN
                         (
@@ -77,7 +76,6 @@ public class ClsUsuarioDatos
                         PassActual = reader["PassActual"].ToString(),
                         PrimerIngreso = reader["PrimerIngreso"] != DBNull.Value && Convert.ToBoolean(reader["PrimerIngreso"]),
                         UltimoIngreso = reader["UltimoIngreso"] != DBNull.Value ? Convert.ToDateTime(reader["UltimoIngreso"]) : (DateTime?)null,
-                        IntentosFallidos = reader["IntentosFallidos"] != DBNull.Value ? Convert.ToInt32(reader["IntentosFallidos"]) : 0,
                         PreguntasCompletadas = reader["PreguntasCompletadas"] != DBNull.Value && Convert.ToBoolean(reader["PreguntasCompletadas"]),
                         Activo = reader["Activo"] != DBNull.Value && Convert.ToBoolean(reader["Activo"]),
                         Nombre = reader["Nombre"].ToString(),
@@ -92,28 +90,7 @@ public class ClsUsuarioDatos
             }
         }
     }
-    // Suma un intento fallido y devuelve cuántos lleva el usuario.
-    public int RegistrarIntentoFallido(int idUsuario)
-    {
-        using (SqlConnection conn = conexion.ObtenerConexion())
-        {
-            conn.Open();
-
-            string query = @"
-                UPDATE Usuario
-                SET IntentosFallidos = IntentosFallidos + 1
-                OUTPUT inserted.IntentosFallidos
-                WHERE IdUsuario = @IdUsuario";
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
-
-                return Convert.ToInt32(cmd.ExecuteScalar());
-            }
-        }
-    }
-    // Reinicia los intentos fallidos, guarda la fecha de ingreso y recalcula el DVH.
+    // Guarda la fecha de ingreso y recalcula el DVH.
     public void RegistrarIngresoExitoso(ClsUsuarioLogin usuario, DateTime fechaIngreso)
     {
         string dvh = GenerarDVHUsuario(new ClslUsuario
@@ -134,7 +111,6 @@ public class ClsUsuarioDatos
             string query = @"
                 UPDATE Usuario
                 SET
-                    IntentosFallidos = 0,
                     UltimoIngreso = @UltimoIngreso,
                     DVH = @DVH
                 WHERE IdUsuario = @IdUsuario";
@@ -312,7 +288,6 @@ public class ClsUsuarioDatos
                     UPDATE Usuario
                     SET
                         PassActual = @NuevaPassword,
-                        IntentosFallidos = 0,
                         UltimoIngreso = GETDATE()
                     WHERE IdUsuario = @IdUsuario";
 

@@ -59,13 +59,7 @@ namespace CapaVista
 
                 if (!ingreso)
                 {
-                    if (login.BloqueadoPorIntentos)
-                    {
-                        MessageBox.Show("Usuario bloqueado por superar " + ClsLogin.MaximoIntentos + " intentos fallidos.\n" +
-                            "Use \"Olvidé mi contraseña\" para desbloquearlo.", "Acceso denegado",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                    else if (login.UsuarioBloqueado)
+                    if (login.UsuarioBloqueado)
                     {
                         MessageBox.Show("Usuario bloqueado.", "Acceso denegado",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -103,23 +97,20 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(),"ERROR",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
-                //try
-                //{
-                //    clsBitacoraLogica bitacora = new clsBitacoraLogica();
+                try
+                {
+                    clsBitacoraLogica bitacora = new clsBitacoraLogica();
 
-                //    bitacora.RegistrarBitacora(SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null, "ERROR",
-                //        "Errores", null, "Error durante el inicio de sesión: " + ex.Message);
-                //}
-                //catch
-                //{
-                //    // este carch evita que un fallo al registrar la bitácora oculte el error original.
-                //}
+                    bitacora.RegistrarError(SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null, "Login",
+                        ex.GetType().FullName ?? ex.GetType().Name, ex.Message, ex.ToString());
+                }
+                catch
+                {
+                    // Evita que un fallo al registrar la bitácora oculte el error original.
+                }
 
-                //MessageBox.Show("Ocurrió un error técnico durante el inicio de sesión. " + "Si el problema continúa, contacte al administrador.", "Error del sistema",
-                //    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ocurrió un error técnico durante el inicio de sesión.\n" + "Si el problema continúa, contacte al administrador.", "Error del sistema",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void AbrirFormularioPrincipal(Form formulario)
