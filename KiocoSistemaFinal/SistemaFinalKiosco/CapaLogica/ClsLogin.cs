@@ -14,20 +14,14 @@ namespace CapaLogica
 {
     public class ClsLogin
     {
-        public const int MaximoIntentos = 3;
-
         private ClsUsuarioDatos datos = new ClsUsuarioDatos();
 
         // Bloqueado por el administrador (Usuario.Estado) o persona inactiva.
         public bool UsuarioBloqueado { get; private set; }
 
-        // Bloqueado por superar el máximo de intentos fallidos.
-        public bool BloqueadoPorIntentos { get; private set; }
-
         public bool IniciarSesion(string usuario, string password)
         {
             UsuarioBloqueado = false;
-            BloqueadoPorIntentos = false;
 
             usuario = (usuario ?? "").Trim();
 
@@ -39,30 +33,13 @@ namespace CapaLogica
                 return false;
             }
 
-            if (encontrado.IntentosFallidos >= MaximoIntentos)
-            {
-                BloqueadoPorIntentos = true;
-                RegistrarBitacora(encontrado.IdUsuario, "LOGIN_FALLIDO", "Intento de inicio de sesión con el usuario bloqueado por intentos fallidos: " + usuario);
-                return false;
-            }
-
             // Se usa el Username guardado en la base: SQL Server no distingue mayúsculas,
             // pero el hash sí, y la contraseña se generó con ese Username.
             string pass = ClsSeguridad.SHA256(encontrado.Username + password);
 
             if (pass != encontrado.PassActual)
             {
-                int intentos = datos.RegistrarIntentoFallido(encontrado.IdUsuario);
-
-                if (intentos >= MaximoIntentos)
-                {
-                    BloqueadoPorIntentos = true;
-                    RegistrarBitacora(encontrado.IdUsuario, "USUARIO_BLOQUEADO", "Usuario bloqueado por " + intentos + " intentos fallidos: " + usuario);
-                }
-                else
-                {
-                    RegistrarBitacora(encontrado.IdUsuario, "LOGIN_FALLIDO", "Intento de inicio de sesión fallido para el usuario: " + usuario);
-                }
+                RegistrarBitacora(encontrado.IdUsuario, "LOGIN_FALLIDO", "Intento de inicio de sesión fallido para el usuario: " + usuario);
 
                 return false;
             }
