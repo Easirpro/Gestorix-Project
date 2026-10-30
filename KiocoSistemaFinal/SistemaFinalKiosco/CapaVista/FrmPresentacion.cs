@@ -43,7 +43,7 @@ namespace CapaVista
             KeyPreview = true;
 
             ActualizarFechaHora();
-            //tmrFechaHora.Start();
+            tmrFechaHora.Start();
 
             dtgPresentacion.ReadOnly = true;
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -116,10 +116,8 @@ namespace CapaVista
             // articulos
             cargarArticuloNuevoToolStripMenuItem.Text = idiomaIngles ? "Add New Product" : "Cargar artículo nuevo";
             menuitemAdmistradorarticulos.Text = idiomaIngles ? "Edit Product" : "Modificar artículo";
-            menuitemAdministradoarticulos.Text = idiomaIngles ? "Add Category" : "Agregar categoría";
+            menuitemAdministradoarticulos.Text = idiomaIngles ? "Categories and Brands" : "Categorías y marcas";
             meniitemReporapida.Text = idiomaIngles ? "Quick Stock Replenishment" : "Reposición rápida de stock";
-            cargaRapidaDePreciosToolStripMenuItem.Text = idiomaIngles ? "Quick Price Update" : "Carga rápida de precios";
-            cargarDeLasMarcasToolStripMenuItem.Text = idiomaIngles ? "Load Brands" : "Cargar de las marcas";
             menuitemImporexcel.Text = idiomaIngles ? "Import Products from Excel" : "Importar artículos desde Excel";
             menuitemExporexcel.Text = idiomaIngles ? "Export Products to Excel" : "Exportar artículos a Excel";
 
@@ -182,8 +180,7 @@ namespace CapaVista
             // datos del usuario
             label6.Text = idiomaIngles ? "User:" : "Usuario:";
             label7.Text = idiomaIngles ? "Role:" : "Rol:";
-            lblFecha.Text = idiomaIngles ? "Date:" : "Fecha:";
-            lblHora.Text = idiomaIngles ? "Time:" : "Hora:";
+            ActualizarFechaHora();
 
             // columna de las tablas
             ClnSKU.HeaderText = "SKU";
@@ -262,8 +259,7 @@ namespace CapaVista
                     lstDescripcion.BringToFront();
                 }
 
-                lblHora.Left = ancho - lblHora.Width - margen;
-                lblFecha.Left = lblHora.Left - lblFecha.Width - 20;
+                UbicarFechaHora();
             }
             finally
             {
@@ -320,14 +316,13 @@ namespace CapaVista
             // Gestión de Articulos
             menuitemAdmistradorarticulos.Enabled = SesionUsuario.Permisos.Contains(110) || SesionUsuario.Permisos.Contains(111) ||
                 SesionUsuario.Permisos.Contains(112) || SesionUsuario.Permisos.Contains(113);
-            // Gestión de Rubros
+            // Gestión de Categorías y Marcas
             menuitemAdministradoarticulos.Enabled = SesionUsuario.Permisos.Contains(120) ||
-                SesionUsuario.Permisos.Contains(121) || SesionUsuario.Permisos.Contains(122);
+                SesionUsuario.Permisos.Contains(121) || SesionUsuario.Permisos.Contains(122) ||
+                SesionUsuario.Permisos.Contains(130) || SesionUsuario.Permisos.Contains(131) ||
+                SesionUsuario.Permisos.Contains(132);
             // Reposicion rapida de stock
             meniitemReporapida.Enabled = SesionUsuario.Permisos.Contains(113);
-            // Gestión de Marcas
-            cargarDeLasMarcasToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(130) ||
-                SesionUsuario.Permisos.Contains(131) || SesionUsuario.Permisos.Contains(132);
             // Importar articulos desde Excel
             menuitemImporexcel.Enabled = SesionUsuario.Permisos.Contains(140);
             // Exportar articulos a Excel
@@ -563,8 +558,20 @@ namespace CapaVista
         }
         private void ActualizarFechaHora()
         {
-            lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy");
-            lblHora.Text = "Hora: " + DateTime.Now.ToString("HH:mm:ss");
+            DateTime ahora = DateTime.Now;
+
+            lblFecha.Text = (idiomaIngles ? "Date: " : "Fecha: ") + ahora.ToString("dd/MM/yyyy");
+            lblHora.Text = (idiomaIngles ? "Time: " : "Hora: ") + ahora.ToString("HH:mm:ss");
+
+            // El ancho de los labels cambia con el texto: se reubican para que no se corran.
+            UbicarFechaHora();
+        }
+        private void UbicarFechaHora()
+        {
+            int margen = 12;
+
+            lblHora.Left = ClientSize.Width - lblHora.Width - margen;
+            lblFecha.Left = lblHora.Left - lblFecha.Width - 20;
         }
         private void LimpiarVenta()
         {
@@ -1112,8 +1119,8 @@ namespace CapaVista
         }
         private void menuitemAdministradoarticulos_Click(object sender, EventArgs e)
         {
-            frmBuscarRubro buscarRubro = new frmBuscarRubro();
-            buscarRubro.ShowDialog();
+            frmCategoriaMarca categoriaMarca = new frmCategoriaMarca();
+            categoriaMarca.ShowDialog();
         }
         private void btnPromocion_Click(object sender, EventArgs e)
         {
@@ -1415,11 +1422,6 @@ namespace CapaVista
                 }
             }
         }
-        private void cargarDeLasMarcasToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmBuscarMarca marca = new frmBuscarMarca();
-            marca.ShowDialog();
-        }
         private void label2_Click(object sender, EventArgs e)
         {
 
@@ -1580,12 +1582,6 @@ namespace CapaVista
             CalcularYMostrarMontos();
 
             txtCodigoBarra.Focus();
-        }
-        private void cargaRapidaDePreciosToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmCargaRapidaPrecios formulario = new frmCargaRapidaPrecios();
-
-            formulario.ShowDialog();
         }
         private void administrarPromocionesToolStripMenuItem_Click(object sender, EventArgs e)
         {

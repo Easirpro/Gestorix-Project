@@ -111,6 +111,7 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column10, Column2, Column3, Column4, Column5, Column6, Column8, Column9 });
             dataGridView1.Location = new Point(12, 64);
@@ -120,6 +121,7 @@
             // 
             // btnVolver
             // 
+            btnVolver.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnVolver.Location = new Point(695, 384);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
@@ -129,6 +131,7 @@
             // 
             // btnGuardar
             // 
+            btnGuardar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnGuardar.Location = new Point(614, 384);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
@@ -206,6 +209,7 @@
             Controls.Add(label1);
             Controls.Add(btnNuevaDevolucion);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(816, 455);
             Name = "frmDevolucion";
             Text = "Devolución";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
