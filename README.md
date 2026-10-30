@@ -4,15 +4,17 @@ Practicas Profesionalizares
 Sistema de gestión para kioscos en C# (Windows Forms) con SQL Server, organizado en capas:
 CapaVista, CapaLogica, CapaDatos y CapaEntidades (`KiocoSistemaFinal/SistemaFinalKiosco`).
 
-Módulos: ventas y cobros, artículos (importación/exportación Excel), promociones, compras y recepción,
-cuenta corriente y pagos a proveedores, devoluciones, caja (apertura, cierre, movimientos e historial),
-balance, empleados, roles y permisos, login con preguntas de seguridad, bitácora, backup y dígito verificador (DVH).
+Módulos: ventas y cobros, artículos (importación/exportación Excel), categorías y marcas, promociones,
+compras y recepción, cuenta corriente y pagos a proveedores, devoluciones, caja (apertura, cierre,
+movimientos e historial), balance, empleados, roles y permisos, login con preguntas de seguridad,
+bitácora, backup y dígito verificador (DVH).
 
 ## Puesta en marcha
-1. Restaurar la base `Gestorix` en SQL Server.
-2. Ejecutar `KiocoSistemaFinal/Migracion_Login_Seguridad.sql` (se puede correr más de una vez).
-3. Ajustar la cadena de conexión en `CapaDatos/Conexion.cs` con el servidor local.
-4. Abrir `SistemaFinalKiosco.sln` en Visual Studio 2022 y compilar.
+1. Conectarse a la red de Radmin VPN del equipo: la cadena de conexión de `CapaDatos/Conexion.cs`
+   apunta al servidor SQL compartido. Para trabajar con una base local, cambiar la cadena por la del servidor local.
+2. Si se usa una base local: restaurar la base `Gestorix` y ejecutar `KiocoSistemaFinal/Migracion_Login_Seguridad.sql`
+   (convierte las respuestas de seguridad a hash; se puede correr más de una vez).
+3. Abrir `SistemaFinalKiosco.sln` en Visual Studio 2022 y compilar.
 
 ## Historial de versiones
 
@@ -69,3 +71,9 @@ balance, empleados, roles y permisos, login con preguntas de seguridad, bitácor
 0.0.0.26- 29/10 Corrección del alta de usuarios y del DVH al cambiar contraseña -Marce-
 
 0.0.0.27- 29/10 Se quitó CapaVista.csproj.user del repositorio y se limpió código sin uso en usuarios -Marce-
+
+0.0.0.28- 29/10 Cadena de conexión apuntando al servidor SQL compartido por Radmin VPN -Tobias-
+
+0.0.0.29- 29/10 Categorías y marcas unificadas en un solo formulario, formularios ajustables y mejoras en compras, devoluciones y promociones; se quitaron la búsqueda de marca/rubro y la carga rápida de precios -Cristian-
+
+0.0.0.30- 29/10 Login: se quitó el bloqueo por intentos fallidos y se oculta el detalle técnico de los errores -Tobias-
