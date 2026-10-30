@@ -40,12 +40,6 @@ namespace CapaLogica
 
             return datos.ObtenerPreguntaAleatoria(idUsuario);
         }
-        public bool ValidarRespuesta(int idUsuario, string respuesta)
-        {
-            ClsUsuarioDatos datos = new ClsUsuarioDatos();
-
-            return datos.ValidarRespuestaSeguridad(idUsuario, respuesta);
-        }
         public bool CambiarPasswordRecuperacion(int idUsuario, string nuevaPassword)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();

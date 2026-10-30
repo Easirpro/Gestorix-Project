@@ -16,12 +16,8 @@ public class ClsUsuarioDatos
 {
     Conexion conexion = new Conexion();
 
-    public bool UsuarioBloqueado { get; set; }
-    public bool ValidarUsuario(string usuario, string password)
+    public ClsUsuarioLogin ObtenerUsuarioLogin(string usuario)
     {
-
-        UsuarioBloqueado = false;
-
         using (SqlConnection conn = conexion.ObtenerConexion())
         {
             conn.Open();
@@ -33,8 +29,10 @@ public class ClsUsuarioDatos
                     u.IdPersona,
                     u.IdRol,
                     u.Username,
+                    u.PassActual,
                     u.PrimerIngreso,
                     u.UltimoIngreso,
+                    u.IntentosFallidos,
                     CASE
                         WHEN
                         (
@@ -56,57 +54,98 @@ public class ClsUsuarioDatos
                 FROM Usuario u
                 INNER JOIN Persona p
                     ON u.IdPersona = p.IdPersona
-                WHERE u.Username = @user
-                AND u.PassActual = @pass";
+                WHERE u.Username = @user";
 
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@user", usuario);
-                cmd.Parameters.AddWithValue("@pass", password);
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    if (reader.Read())
+                    if (!reader.Read())
                     {
-
-                    SesionUsuario.IdUsuario = Convert.ToInt32(reader["IdUsuario"]);
-                    SesionUsuario.Estado = reader["Estado"] != DBNull.Value && Convert.ToBoolean(reader["Estado"]);
-                    SesionUsuario.IdPersona = Convert.ToInt32(reader["IdPersona"]);
-                    SesionUsuario.IdRol = Convert.ToInt32(reader["IdRol"]);
-                    SesionUsuario.Username = reader["Username"].ToString();
-                    SesionUsuario.PrimerIngreso = reader["PrimerIngreso"] != DBNull.Value && Convert.ToBoolean(reader["PrimerIngreso"]);
-                    SesionUsuario.UltimoIngreso = reader["UltimoIngreso"] != DBNull.Value? Convert.ToDateTime(reader["UltimoIngreso"]): (DateTime?)null;
-                    SesionUsuario.Nombre = reader["Nombre"].ToString();
-                    SesionUsuario.Apellido = reader["Apellido"].ToString();
-                    SesionUsuario.DNI = reader["DNI"].ToString();
-                    SesionUsuario.CUIT = reader["CUIT"].ToString();
-                    SesionUsuario.Activo = reader["Activo"] != DBNull.Value && Convert.ToBoolean(reader["Activo"]);
-                    SesionUsuario.Sexo = reader["Sexo"] != DBNull.Value && Convert.ToBoolean(reader["Sexo"]);
-                    SesionUsuario.IdGenero = reader["IdGenero"] != DBNull.Value? Convert.ToInt32(reader["IdGenero"]): (int?)null;
-                    SesionUsuario.FeNac = reader["FeNac"] != DBNull.Value? Convert.ToDateTime(reader["FeNac"]): (DateTime?)null; SesionUsuario.PreguntasCompletadas = reader["PreguntasCompletadas"] != DBNull.Value &&Convert.ToBoolean(reader["PreguntasCompletadas"]);
-
-                    if (!SesionUsuario.Estado)
-                    {
-                        UsuarioBloqueado = true;
-                        return false;
+                        return null;
                     }
 
-                    if (!SesionUsuario.Activo)
+                    return new ClsUsuarioLogin
                     {
-                        UsuarioBloqueado = true;
-                        return false;
-                    }
-
-                    ClsRolDatos rolDatos = new ClsRolDatos();
-
-                    SesionUsuario.Permisos = rolDatos.ObtenerPermisos(SesionUsuario.IdRol);
-                    SesionUsuario.SesionActiva = true;
-
-                        return true;
-
-                    }
-                    return false;
+                        IdUsuario = Convert.ToInt32(reader["IdUsuario"]),
+                        Estado = reader["Estado"] != DBNull.Value && Convert.ToBoolean(reader["Estado"]),
+                        IdPersona = Convert.ToInt32(reader["IdPersona"]),
+                        IdRol = Convert.ToInt32(reader["IdRol"]),
+                        Username = reader["Username"].ToString(),
+                        PassActual = reader["PassActual"].ToString(),
+                        PrimerIngreso = reader["PrimerIngreso"] != DBNull.Value && Convert.ToBoolean(reader["PrimerIngreso"]),
+                        UltimoIngreso = reader["UltimoIngreso"] != DBNull.Value ? Convert.ToDateTime(reader["UltimoIngreso"]) : (DateTime?)null,
+                        IntentosFallidos = reader["IntentosFallidos"] != DBNull.Value ? Convert.ToInt32(reader["IntentosFallidos"]) : 0,
+                        PreguntasCompletadas = reader["PreguntasCompletadas"] != DBNull.Value && Convert.ToBoolean(reader["PreguntasCompletadas"]),
+                        Activo = reader["Activo"] != DBNull.Value && Convert.ToBoolean(reader["Activo"]),
+                        Nombre = reader["Nombre"].ToString(),
+                        Apellido = reader["Apellido"].ToString(),
+                        Sexo = reader["Sexo"] != DBNull.Value && Convert.ToBoolean(reader["Sexo"]),
+                        IdGenero = reader["IdGenero"] != DBNull.Value ? Convert.ToInt32(reader["IdGenero"]) : (int?)null,
+                        FeNac = reader["FeNac"] != DBNull.Value ? Convert.ToDateTime(reader["FeNac"]) : (DateTime?)null,
+                        DNI = reader["DNI"].ToString(),
+                        CUIT = reader["CUIT"].ToString()
+                    };
                 }
+            }
+        }
+    }
+    // Suma un intento fallido y devuelve cuántos lleva el usuario.
+    public int RegistrarIntentoFallido(int idUsuario)
+    {
+        using (SqlConnection conn = conexion.ObtenerConexion())
+        {
+            conn.Open();
+
+            string query = @"
+                UPDATE Usuario
+                SET IntentosFallidos = IntentosFallidos + 1
+                OUTPUT inserted.IntentosFallidos
+                WHERE IdUsuario = @IdUsuario";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+    }
+    // Reinicia los intentos fallidos, guarda la fecha de ingreso y recalcula el DVH.
+    public void RegistrarIngresoExitoso(ClsUsuarioLogin usuario, DateTime fechaIngreso)
+    {
+        string dvh = GenerarDVHUsuario(new ClslUsuario
+        {
+            Estado = usuario.Estado,
+            IdPersona = usuario.IdPersona,
+            IdRol = usuario.IdRol,
+            Username = usuario.Username,
+            PassActual = usuario.PassActual,
+            PrimerIngreso = usuario.PrimerIngreso,
+            UltimoLogin = fechaIngreso
+        });
+
+        using (SqlConnection conn = conexion.ObtenerConexion())
+        {
+            conn.Open();
+
+            string query = @"
+                UPDATE Usuario
+                SET
+                    IntentosFallidos = 0,
+                    UltimoIngreso = @UltimoIngreso,
+                    DVH = @DVH
+                WHERE IdUsuario = @IdUsuario";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@UltimoIngreso", fechaIngreso);
+                cmd.Parameters.AddWithValue("@DVH", dvh);
+                cmd.Parameters.AddWithValue("@IdUsuario", usuario.IdUsuario);
+
+                cmd.ExecuteNonQuery();
             }
         }
     }
@@ -256,6 +295,7 @@ public class ClsUsuarioDatos
                     UPDATE Usuario
                     SET
                         PassActual = @NuevaPassword,
+                        IntentosFallidos = 0,
                         UltimoIngreso = GETDATE()
                     WHERE IdUsuario = @IdUsuario";
 
@@ -463,28 +503,6 @@ public class ClsUsuarioDatos
             return resultado.ToString();
         }
     }//revisar quedo asi por el cambio de la bd
-    public bool ValidarRespuestaSeguridad(int idUsuario,string respuesta)
-    {
-        using (SqlConnection con = conexion.ObtenerConexion())
-        {
-            string sql = @"
-                SELECT COUNT(*)
-                FROM RespuestaSeguridad
-                WHERE IdUsuario = @IdUsuario
-                AND Respuesta = @Respuesta";
-
-            SqlCommand cmd = new SqlCommand(sql, con);
-
-            cmd.Parameters.AddWithValue( "@IdUsuario", idUsuario);
-            cmd.Parameters.AddWithValue( "@Respuesta", respuesta);
-
-            con.Open();
-
-            int cantidad = Convert.ToInt32( cmd.ExecuteScalar());
-
-            return cantidad > 0;
-        }
-    }
     public string ObtenerUsername(int idUsuario)
     {
         using (SqlConnection con = conexion.ObtenerConexion())
