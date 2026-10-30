@@ -10,8 +10,8 @@ namespace SistemaKiosco
     public class Conexion
     {
 
-        private  string cadena =
-    @"Server=PCALA\SQLEXPRESS;Database=Gestorix;Integrated Security=True;TrustServerCertificate=True;";
+        private  string cadena = @"Server = 26.202.1.233,1433; Database=Gestorix;User ID = gestorix_user; Password=Admin123;TrustServerCertificate=True";
+        //@"Server=PCALA\SQLEXPRESS;Database=Gestorix;Integrated Security=True;TrustServerCertificate=True;";
         //private string cadena = "Server=DESKTOP-QHDK5QJ\\SQLEXPRESS;Database=Gestorix;Trusted_Connection=True;TrustServerCertificate=True;";
         //private string cadena = "Server=tcp:gestorix.database.windows.net,1433; Initial Catalog=Gestorix; User ID=GestorAdmin; Password=Gestorix123; Encrypt=True; TrustServerCertificate=False; Connection Timeout=30;";
         public SqlConnection ObtenerConexion()
@@ -21,7 +21,7 @@ namespace SistemaKiosco
 
         public SqlConnection ObtenerConexionMaster()
         {
-            string cadenaMaster = @"Server=PCALA\SQLEXPRESS;Database=Gestorix;Integrated Security=True;TrustServerCertificate=True;";
+            string cadenaMaster = @"Server = 26.202.1.233,1433; Database=Gestorix;User ID = gestorix_user; Password=Admin123;TrustServerCertificate=True";
 
             return new SqlConnection(cadenaMaster);
 
