@@ -63,6 +63,7 @@
             // 
             // btnLimpiarBusqueda
             // 
+            btnLimpiarBusqueda.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnLimpiarBusqueda.Location = new Point(246, 281);
             btnLimpiarBusqueda.Name = "btnLimpiarBusqueda";
             btnLimpiarBusqueda.Size = new Size(127, 23);
@@ -73,6 +74,7 @@
             // 
             // btnContinuar
             // 
+            btnContinuar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnContinuar.Location = new Point(379, 281);
             btnContinuar.Name = "btnContinuar";
             btnContinuar.Size = new Size(75, 23);
@@ -83,6 +85,7 @@
             // 
             // dtgBuscarPromo
             // 
+            dtgBuscarPromo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dtgBuscarPromo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtgBuscarPromo.Columns.AddRange(new DataGridViewColumn[] { clnCodigo, clnNombre, clnEstado, clnDetalle });
             dtgBuscarPromo.Location = new Point(12, 120);
@@ -123,6 +126,7 @@
             // 
             // cmbBuscarPromo
             // 
+            cmbBuscarPromo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cmbBuscarPromo.FormattingEnabled = true;
             cmbBuscarPromo.Location = new Point(15, 80);
             cmbBuscarPromo.Name = "cmbBuscarPromo";
@@ -144,6 +148,7 @@
             Controls.Add(lblBuscarPromo);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MinimizeBox = false;
+            MinimumSize = new Size(541, 355);
             Name = "frmBuscarPromo";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Buscar Promoción";

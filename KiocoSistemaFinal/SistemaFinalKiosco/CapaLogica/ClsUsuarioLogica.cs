@@ -1,7 +1,5 @@
 ﻿using CapaDatos;
 using CapaEntidades;
-using Microsoft.Data.SqlClient;
-using SistemaKiosco;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,9 +11,6 @@ namespace CapaLogica
 {
     public class ClsUsuarioLogica
     {
-        private Conexion conexion = new Conexion();
-
-
         public DataTable ObtenerUsuarios()
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
@@ -39,12 +34,6 @@ namespace CapaLogica
             ClsPreguntaSeguridaDatos datos = new ClsPreguntaSeguridaDatos();
 
             return datos.ObtenerPreguntaAleatoria(idUsuario);
-        }
-        public bool ValidarRespuesta(int idUsuario, string respuesta)
-        {
-            ClsUsuarioDatos datos = new ClsUsuarioDatos();
-
-            return datos.ValidarRespuestaSeguridad(idUsuario, respuesta);
         }
         public bool CambiarPasswordRecuperacion(int idUsuario, string nuevaPassword)
         {
@@ -77,28 +66,10 @@ namespace CapaLogica
             );
         }
         public bool ExistePersonaDatos(string dni, string cuit, int idPersonaActual)
-        { 
-            using (SqlConnection con = conexion.ObtenerConexion())
+        {
+            ClsUsuarioDatos datos = new ClsUsuarioDatos();
 
-            {
-                string sql = @"
-                SELECT COUNT(*)
-                FROM Persona
-                WHERE (DNI = @DNI OR CUIT = @CUIT)
-                AND IdPersona <> @IdPersona";
-
-                SqlCommand cmd = new SqlCommand(sql, con);
-
-                cmd.Parameters.AddWithValue("@DNI", dni);
-                cmd.Parameters.AddWithValue("@CUIT", cuit);
-                cmd.Parameters.AddWithValue("@IdPersona", idPersonaActual);
-
-                con.Open();
-
-                int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
-
-                return cantidad > 0;
-            }
+            return datos.ExistePersonaDatos(dni, cuit, idPersonaActual);
         }
         public bool ExisteUsuarioPorIdPersona(int idPersona)
         {

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.Windows.Forms.Timer tmrFechaHora;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmmenuPres));
             btnCambiarcantidad = new Button();
             btnQuitar = new Button();
@@ -69,8 +68,6 @@
             menuitemAdmistradorarticulos = new ToolStripMenuItem();
             menuitemAdministradoarticulos = new ToolStripMenuItem();
             meniitemReporapida = new ToolStripMenuItem();
-            cargaRapidaDePreciosToolStripMenuItem = new ToolStripMenuItem();
-            cargarDeLasMarcasToolStripMenuItem = new ToolStripMenuItem();
             menuitemImporexcel = new ToolStripMenuItem();
             menuitemExporexcel = new ToolStripMenuItem();
             btnVentas = new ToolStripMenuItem();
@@ -482,7 +479,7 @@
             // 
             // btnArt
             // 
-            btnArt.DropDownItems.AddRange(new ToolStripItem[] { cargarArticuloNuevoToolStripMenuItem, menuitemAdmistradorarticulos, menuitemAdministradoarticulos, meniitemReporapida, cargaRapidaDePreciosToolStripMenuItem, cargarDeLasMarcasToolStripMenuItem, menuitemImporexcel, menuitemExporexcel });
+            btnArt.DropDownItems.AddRange(new ToolStripItem[] { cargarArticuloNuevoToolStripMenuItem, menuitemAdmistradorarticulos, menuitemAdministradoarticulos, meniitemReporapida, menuitemImporexcel, menuitemExporexcel });
             btnArt.Enabled = false;
             btnArt.Name = "btnArt";
             btnArt.Size = new Size(66, 20);
@@ -506,7 +503,7 @@
             // 
             menuitemAdministradoarticulos.Name = "menuitemAdministradoarticulos";
             menuitemAdministradoarticulos.Size = new Size(232, 22);
-            menuitemAdministradoarticulos.Text = "Agregar categoria ";
+            menuitemAdministradoarticulos.Text = "Categorías y marcas";
             menuitemAdministradoarticulos.Click += menuitemAdministradoarticulos_Click;
             // 
             // meniitemReporapida
@@ -515,20 +512,6 @@
             meniitemReporapida.Size = new Size(232, 22);
             meniitemReporapida.Text = "Reposición rápida de stock";
             meniitemReporapida.Click += meniitemReporapida_Click;
-            // 
-            // cargaRapidaDePreciosToolStripMenuItem
-            // 
-            cargaRapidaDePreciosToolStripMenuItem.Name = "cargaRapidaDePreciosToolStripMenuItem";
-            cargaRapidaDePreciosToolStripMenuItem.Size = new Size(232, 22);
-            cargaRapidaDePreciosToolStripMenuItem.Text = "Carga Rapida de Precios";
-            cargaRapidaDePreciosToolStripMenuItem.Click += cargaRapidaDePreciosToolStripMenuItem_Click;
-            // 
-            // cargarDeLasMarcasToolStripMenuItem
-            // 
-            cargarDeLasMarcasToolStripMenuItem.Name = "cargarDeLasMarcasToolStripMenuItem";
-            cargarDeLasMarcasToolStripMenuItem.Size = new Size(232, 22);
-            cargarDeLasMarcasToolStripMenuItem.Text = "Cargar de las marcas";
-            cargarDeLasMarcasToolStripMenuItem.Click += cargarDeLasMarcasToolStripMenuItem_Click;
             // 
             // menuitemImporexcel
             // 
@@ -919,7 +902,6 @@
         private ToolStripMenuItem menuitemAdmistradorarticulos;
         private ToolStripMenuItem menuitemAdministradoarticulos;
         private ToolStripMenuItem meniitemReporapida;
-        private ToolStripMenuItem cargarDeLasMarcasToolStripMenuItem;
         private ToolStripMenuItem menuitemImporexcel;
         private ToolStripMenuItem menuitemExporexcel;
         private ToolStripMenuItem btnVentas;
@@ -951,7 +933,6 @@
         private ToolStripMenuItem permisosToolStripMenuItem;
         private ToolStripMenuItem tollClosed;
         private MenuStrip btnConfig;
-        private ToolStripMenuItem cargaRapidaDePreciosToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem administrarPromocionesToolStripMenuItem;
 

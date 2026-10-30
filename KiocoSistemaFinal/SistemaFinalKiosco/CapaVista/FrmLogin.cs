@@ -11,7 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CapaVista
 {
@@ -20,7 +19,19 @@ namespace CapaVista
         public FrmLogin()
         {
             InitializeComponent();
-            this.AcceptButton = this.btnLogin;         
+            this.AcceptButton = this.btnLogin;
+            ConfigurarTransparencias();
+        }
+        private void ConfigurarTransparencias()
+        {
+            lblUsuario.Parent = panel1;
+            lblUsuario.BackColor = Color.Transparent;
+            lblContraseña.Parent = panel1;
+            lblContraseña.BackColor = Color.Transparent;
+            lkbOlvideContraseña.Parent = panel1;
+            lkbOlvideContraseña.BackColor = Color.Transparent;
+            btnMostrar.Parent = panel1;
+            btnMostrar.BackColor = Color.Transparent;
         }
         public void LimpiarCampos()
         {
@@ -44,11 +55,17 @@ namespace CapaVista
             {
                 ClsLogin login = new ClsLogin();
 
-                bool ingreso = login.IniciarSesion(txtUser.Text, txtPass.Text);
+                bool ingreso = login.IniciarSesion(txtUser.Text.Trim(), txtPass.Text);
 
                 if (!ingreso)
                 {
-                    if (login.UsuarioBloqueado)
+                    if (login.BloqueadoPorIntentos)
+                    {
+                        MessageBox.Show("Usuario bloqueado por superar " + ClsLogin.MaximoIntentos + " intentos fallidos.\n" +
+                            "Use \"Olvidé mi contraseña\" para desbloquearlo.", "Acceso denegado",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else if (login.UsuarioBloqueado)
                     {
                         MessageBox.Show("Usuario bloqueado.", "Acceso denegado",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -161,7 +178,7 @@ namespace CapaVista
         {
             Application.Exit();
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void btnMostrar_Click(object sender, EventArgs e)
         {
             txtPass.UseSystemPasswordChar = !txtPass.UseSystemPasswordChar;
 
@@ -174,22 +191,6 @@ namespace CapaVista
                 btnMostrar.Text = "🔒";
             }
         }
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            lblUsuario.Parent = panel1;
-            lblUsuario.BackColor = Color.Transparent;
-            lblContraseña.Parent = panel1;
-            lblContraseña.BackColor = Color.Transparent;
-            lkbOlvideContraseña.Parent = panel1;
-            lkbOlvideContraseña.BackColor = Color.Transparent;
-            btnMostrar.Parent = panel1;
-            btnMostrar.BackColor = Color.Transparent;
-            lkbOlvideContraseña.Parent= panel1;
-            lkbOlvideContraseña.BackColor = Color.Transparent;
-
-        }
-
-
     }
 
 }

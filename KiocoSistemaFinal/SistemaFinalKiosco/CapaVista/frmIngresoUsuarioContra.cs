@@ -31,9 +31,13 @@ namespace CapaVista
 
             idUsuario = logica.ObtenerIdUsuario(txtIngresoUsuario.Text.Trim());
 
-            if (idUsuario == 0)
+            // Mismo mensaje si el usuario no existe o no tiene preguntas cargadas,
+            // para no revelar qué usuarios existen.
+            if (idUsuario == 0 || !new ClsPreguntaSeguridadLogica().UsuarioTienePreguntas(idUsuario))
             {
-                MessageBox.Show("El usuario no existe.");
+                MessageBox.Show("No es posible recuperar la contraseña con los datos ingresados.\n" +
+                    "Verifique el usuario o contacte al administrador.", "Recuperar contraseña",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
