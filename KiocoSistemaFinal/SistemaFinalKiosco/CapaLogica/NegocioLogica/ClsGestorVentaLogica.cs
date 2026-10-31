@@ -46,6 +46,21 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.ObtenerVentas(desde, hasta);
         }
+        public DataTable ObtenerVentasListado(DateTime desde, DateTime hasta)
+        {
+            if (desde.Date > hasta.Date)
+                throw new Exception("La fecha Desde no puede ser posterior a la fecha Hasta.");
+
+            return datos.ObtenerVentasListado(desde, hasta);
+        }
+        public DataTable ObtenerProductosVenta(int idVenta)
+        {
+            return datos.ObtenerProductosVenta(idVenta);
+        }
+        public DataTable ObtenerPagosVenta(int idVenta)
+        {
+            return datos.ObtenerPagosVenta(idVenta);
+        }
         public void CambiarEstadoVenta(int idVenta, bool anulada, string motivo)
         {
             if (idVenta <= 0)
@@ -54,7 +69,7 @@ namespace CapaLogica.NegocioLogica
             if (anulada && string.IsNullOrWhiteSpace(motivo))
                 throw new Exception("Debe ingresar el motivo de anulación.");
 
-            datos.CambiarEstadoVenta(idVenta, anulada, motivo);
+            datos.CambiarEstadoVenta(idVenta, anulada, motivo, CapaEntidades.SesionUsuario.IdUsuario);
         }
         public void ActualizarObservaciones(int idVenta, string observaciones)
         {

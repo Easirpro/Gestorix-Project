@@ -10,6 +10,8 @@ namespace CapaVista
         private ClsCompraLogica logica = new ClsCompraLogica();
 
         private int idCompra;
+        // Si no hay detalle, el formulario se cierra apenas termina de abrirse.
+        private bool sinDetalle = false;
 
         public frmDetalleCompra(int idCompra)
         {
@@ -19,6 +21,15 @@ namespace CapaVista
 
             CargarDetalle();
 
+            this.Load += frmDetalleCompra_Load;
+        }
+        // Cerrar desde el constructor destruía el formulario antes del ShowDialog y daba error.
+        private void frmDetalleCompra_Load(object? sender, EventArgs e)
+        {
+            if (sinDetalle)
+            {
+                BeginInvoke(new Action(Close));
+            }
         }
 
         #region Metodos
@@ -33,7 +44,7 @@ namespace CapaVista
                     MessageBox.Show("No se encontró el detalle de la compra.", "Aviso",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    Close();
+                    sinDetalle = true;
                     return;
                 }
 

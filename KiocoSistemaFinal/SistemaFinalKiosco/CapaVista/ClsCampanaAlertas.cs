@@ -46,6 +46,21 @@ namespace CapaVista
 
         public List<ClsAlertaEntidad> Alertas { get; private set; } = new List<ClsAlertaEntidad>();
 
+        // Si se asigna, al pie de la lista aparece "Ver todas las alertas…".
+        public Action? VerTodas { get; set; }
+
+        // Si se asigna, antes de abrir la pantalla de un tipo se verifica que el usuario pueda entrar;
+        // si no, se avisa en vez de no hacer nada.
+        public Func<TipoAlerta, bool>? PuedeResolver { get; set; }
+
+        public const string MENSAJE_SIN_PERMISO = "No tenés permiso para resolver esta alerta. Avisale al administrador.";
+
+        // Nombre de cada tipo de alerta, el mismo que usa la campana (lo usa también frmAlertas).
+        public static string TituloDe(TipoAlerta tipo)
+        {
+            return Titulos.TryGetValue(tipo, out string? titulo) ? titulo : tipo.ToString();
+        }
+
         // menu: barra del menú principal; antesDe: ítem que queda a la derecha de la campana (cerrar sesión);
         // acciones: qué pantalla abrir para cada tipo de alerta.
         public ClsCampanaAlertas(Form formulario, MenuStrip menu, ToolStripItem antesDe, Dictionary<TipoAlerta, Action> acciones)
@@ -183,12 +198,28 @@ namespace CapaVista
         {
             campana.DropDownItems.Add(new ToolStripSeparator());
 
+            if (VerTodas != null)
+            {
+                ToolStripMenuItem verTodas = new ToolStripMenuItem("Ver todas las alertas…")
+                {
+                    Font = new Font(SystemFonts.MenuFont, FontStyle.Bold)
+                };
+                verTodas.Click += (sender, e) => VerTodas();
+                campana.DropDownItems.Add(verTodas);
+            }
+
             ToolStripMenuItem actualizar = new ToolStripMenuItem("Actualizar");
             actualizar.Click += (sender, e) => Actualizar();
             campana.DropDownItems.Add(actualizar);
         }
         private void Abrir(TipoAlerta tipo)
         {
+            if (PuedeResolver != null && !PuedeResolver(tipo))
+            {
+                MessageBox.Show(MENSAJE_SIN_PERMISO, "Alertas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             if (acciones.TryGetValue(tipo, out Action accion))
                 accion();
 

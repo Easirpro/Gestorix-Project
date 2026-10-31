@@ -31,7 +31,7 @@
             dateTimePicker2 = new DateTimePicker();
             lblBuscarCompra = new Label();
             txtBuscarCompra = new TextBox();
-            btnBuscar = new Button();
+            lstProveedores = new ListBox();
             btnLimpiarFiltros = new Button();
             dataGridView1 = new DataGridView();
             clnFecha = new DataGridViewTextBoxColumn();
@@ -133,6 +133,7 @@
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(115, 23);
             dateTimePicker1.TabIndex = 7;
+            dateTimePicker1.ValueChanged += dateTimePicker1_ValueChanged;
             //
             // label2
             //
@@ -151,38 +152,40 @@
             dateTimePicker2.Name = "dateTimePicker2";
             dateTimePicker2.Size = new Size(115, 23);
             dateTimePicker2.TabIndex = 9;
+            dateTimePicker2.ValueChanged += dateTimePicker2_ValueChanged;
             //
             // lblBuscarCompra
             //
             lblBuscarCompra.AutoSize = true;
-            lblBuscarCompra.Location = new Point(360, 117);
+            lblBuscarCompra.Location = new Point(445, 117);
             lblBuscarCompra.Name = "lblBuscarCompra";
-            lblBuscarCompra.Size = new Size(147, 15);
+            lblBuscarCompra.Size = new Size(64, 15);
             lblBuscarCompra.TabIndex = 10;
-            lblBuscarCompra.Text = "Proveedor o comprobante:";
+            lblBuscarCompra.Text = "Proveedor:";
             //
             // txtBuscarCompra
             //
             txtBuscarCompra.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtBuscarCompra.Location = new Point(513, 113);
             txtBuscarCompra.Name = "txtBuscarCompra";
-            txtBuscarCompra.PlaceholderText = "Nombre o número";
-            txtBuscarCompra.Size = new Size(271, 23);
+            txtBuscarCompra.PlaceholderText = "Escriba el nombre del proveedor";
+            txtBuscarCompra.Size = new Size(364, 23);
+            txtBuscarCompra.TextChanged += txtBuscarCompra_TextChanged;
+            txtBuscarCompra.KeyDown += txtBuscarCompra_KeyDown;
             txtBuscarCompra.TabIndex = 11;
             //
-            // btnBuscar
+            // lstProveedores
             //
-            btnBuscar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnBuscar.Image = (Image)resources.GetObject("btnBuscar.Image");
-            btnBuscar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnBuscar.Location = new Point(792, 109);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(85, 32);
-            btnBuscar.TabIndex = 12;
-            btnBuscar.Text = "Buscar";
-            btnBuscar.TextAlign = ContentAlignment.MiddleRight;
-            btnBuscar.UseVisualStyleBackColor = true;
-            btnBuscar.Click += btnBuscar_Click;
+            lstProveedores.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lstProveedores.FormattingEnabled = true;
+            lstProveedores.IntegralHeight = false;
+            lstProveedores.Location = new Point(513, 137);
+            lstProveedores.Name = "lstProveedores";
+            lstProveedores.Size = new Size(364, 120);
+            lstProveedores.TabIndex = 12;
+            lstProveedores.Visible = false;
+            lstProveedores.DoubleClick += lstProveedores_DoubleClick;
+            lstProveedores.KeyDown += lstProveedores_KeyDown;
             //
             // btnLimpiarFiltros
             //
@@ -273,6 +276,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1000, 650);
+            Controls.Add(lstProveedores);
             Controls.Add(lblTitulo);
             Controls.Add(lblDescripcion);
             Controls.Add(btnNuevacompra);
@@ -285,7 +289,6 @@
             Controls.Add(dateTimePicker2);
             Controls.Add(lblBuscarCompra);
             Controls.Add(txtBuscarCompra);
-            Controls.Add(btnBuscar);
             Controls.Add(btnLimpiarFiltros);
             Controls.Add(dataGridView1);
             Controls.Add(btnSalir);
@@ -313,7 +316,7 @@
         private DateTimePicker dateTimePicker2;
         private Label lblBuscarCompra;
         private TextBox txtBuscarCompra;
-        private Button btnBuscar;
+        private ListBox lstProveedores;
         private Button btnLimpiarFiltros;
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn clnFecha;

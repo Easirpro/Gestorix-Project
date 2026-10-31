@@ -40,22 +40,60 @@ namespace CapaVista
 
 
         #region Metodos
+        // Nombre que ve el usuario de cada campo obligatorio.
+        private string NombreCampo(Control control)
+        {
+            if (control == txtNombre) return "Nombre";
+            if (control == txtApellido) return "Apellido";
+            if (control == txtDNI) return "DNI";
+            if (control == txtCalle) return "Calle";
+            if (control == txtAltura) return "Altura";
+            if (control == txtPostal) return "Código Postal";
+            if (control == txtTelefono) return "Teléfono";
+            if (control == txtCorreo) return "Correo Electrónico";
+
+            return control.Name;
+        }
+        // Muestra la pestaña donde está el control y le pone el foco.
+        private void MostrarControl(Control control)
+        {
+            Control? padre = control.Parent;
+
+            while (padre != null && padre is not TabPage)
+            {
+                padre = padre.Parent;
+            }
+
+            if (padre is TabPage pestania)
+            {
+                tpgDatosUsuario.SelectedTab = pestania;
+            }
+
+            control.Focus();
+        }
         private bool ValidarCamposVacios(Control.ControlCollection controles)
 
         {
             foreach (Control control in controles)
             {
-                // Verifica si el control es un TextBox
-                if (control is TextBox)
+                // Piso y Departamento son opcionales (casas sin piso ni departamento).
+                if (control is TextBox && control != txtPiso && control != txtDepartamento)
                 {
                     if (string.IsNullOrWhiteSpace(control.Text))
                     {
-                        MessageBox.Show("El campo " + control.Name + " no puede estar vacío.",
+                        // El código postal no se escribe: sale de la localidad elegida.
+                        bool esPostal = control == txtPostal;
+
+                        string mensaje = esPostal
+                            ? "Seleccione provincia, partido y localidad para completar el Código Postal."
+                            : "El campo " + NombreCampo(control) + " no puede estar vacío.";
+
+                        MessageBox.Show(mensaje,
                                         "Validación",
                                         MessageBoxButtons.OK,
                                         MessageBoxIcon.Warning);
 
-                        control.Focus();
+                        MostrarControl(esPostal ? cmbLocalidad : control);
                         return false;
                     }
                 }
@@ -178,7 +216,8 @@ namespace CapaVista
             btnNuevo.Enabled = puedeCrear;
             btnCrear.Enabled = modoNuevo && puedeCrear;
             btnModificar.Enabled = haySeleccionado && puedeModificar;
-            btnPermisos.Enabled = PuedeCambiarRol;
+            // Solo con un empleado nuevo en carga o uno elegido del combo (no al abrir el formulario).
+            btnPermisos.Enabled = PuedeCambiarRol && (modoNuevo || haySeleccionado);
         }
         // Deja el formulario vacío y sin empleado seleccionado (los datos originales también se borran).
         private void LimpiarFormulario()
@@ -283,7 +322,7 @@ namespace CapaVista
                                 MessageBoxIcon.Warning);
 
                 e.Cancel = true;
-                txtCorreo.Focus();
+                MostrarControl(txtCorreo);
             }
         }
         private void CargarDatosUsuario(int idPersona)
@@ -624,7 +663,7 @@ namespace CapaVista
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
-                txtCorreo.Focus();
+                MostrarControl(txtCorreo);
 
                 return false;
             }
@@ -637,7 +676,7 @@ namespace CapaVista
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
-                txtCorreo.Focus();
+                MostrarControl(txtCorreo);
 
                 return false;
             }
@@ -817,7 +856,7 @@ namespace CapaVista
                 MessageBox.Show(motivoCuil, "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                mkdCuil.Focus();
+                MostrarControl(mkdCuil);
                 return;
             }
 
@@ -852,7 +891,7 @@ namespace CapaVista
                 MessageBox.Show("Seleccione un tipo de teléfono.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                cmbTipoTelefono.Focus();
+                MostrarControl(cmbTipoTelefono);
                 return;
             }
 
@@ -1159,7 +1198,7 @@ namespace CapaVista
                     MessageBox.Show("Seleccione un género.", "Validación",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    cmbGenero.Focus();
+                    MostrarControl(cmbGenero);
                     return;
                 }
 
@@ -1168,7 +1207,7 @@ namespace CapaVista
                     MessageBox.Show("Seleccione una localidad.", "Validación",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    cmbLocalidad.Focus();
+                    MostrarControl(cmbLocalidad);
                     return;
                 }
 
@@ -1177,7 +1216,7 @@ namespace CapaVista
                     MessageBox.Show("Seleccione un tipo de teléfono.", "Validación",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    cmbTipoTelefono.Focus();
+                    MostrarControl(cmbTipoTelefono);
                     return;
                 }
 
@@ -1207,7 +1246,7 @@ namespace CapaVista
                         MessageBox.Show(motivoCuil, "Validación",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                        mkdCuil.Focus();
+                        MostrarControl(mkdCuil);
                         return;
                     }
 
@@ -1218,7 +1257,7 @@ namespace CapaVista
                         MessageBox.Show("El DNI no corresponde al CUIL ingresado.", "Validación",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                        mkdCuil.Focus();
+                        MostrarControl(mkdCuil);
                         return;
                     }
                 }

@@ -29,196 +29,321 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProveedores));
+            lblTitulo = new Label();
+            lblDescripcion = new Label();
             btnNuevoProveedor = new Button();
             btnModificar = new Button();
             btnDescontinuar = new Button();
             btnActualizar = new Button();
+            lblBuscar = new Label();
             txtBuscar = new TextBox();
+            lstProveedores = new ListBox();
             chkOcultarProveedores = new CheckBox();
+            btnLimpiarFiltros = new Button();
             dtgProveedores = new DataGridView();
+            clnId = new DataGridViewTextBoxColumn();
+            clnSucursal = new DataGridViewTextBoxColumn();
+            clnRazonSocial = new DataGridViewTextBoxColumn();
+            clnCuit = new DataGridViewTextBoxColumn();
+            clnIva = new DataGridViewTextBoxColumn();
+            clnTelefono = new DataGridViewTextBoxColumn();
+            clnCorreo = new DataGridViewTextBoxColumn();
+            clnDireccion = new DataGridViewTextBoxColumn();
+            clnEstado = new DataGridViewTextBoxColumn();
+            lblObservaciones = new Label();
             txtObsevaciones = new TextBox();
-            label1 = new Label();
-            Column1 = new DataGridViewTextBoxColumn();
-            ClmSucursalProveedor = new DataGridViewTextBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column3 = new DataGridViewTextBoxColumn();
-            Column4 = new DataGridViewTextBoxColumn();
-            Column5 = new DataGridViewTextBoxColumn();
-            Column6 = new DataGridViewTextBoxColumn();
-            Column7 = new DataGridViewTextBoxColumn();
-            Column8 = new DataGridViewTextBoxColumn();
+            lblCantidad = new Label();
+            btnSalir = new Button();
             ((System.ComponentModel.ISupportInitialize)dtgProveedores).BeginInit();
             SuspendLayout();
-            // 
+            //
+            // lblTitulo
+            //
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            lblTitulo.Location = new Point(10, 8);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(230, 28);
+            lblTitulo.TabIndex = 0;
+            lblTitulo.Text = "Gestión de proveedores";
+            //
+            // lblDescripcion
+            //
+            lblDescripcion.AutoSize = true;
+            lblDescripcion.ForeColor = SystemColors.GrayText;
+            lblDescripcion.Location = new Point(13, 38);
+            lblDescripcion.Name = "lblDescripcion";
+            lblDescripcion.Size = new Size(600, 15);
+            lblDescripcion.TabIndex = 1;
+            lblDescripcion.Text = "Buscá un proveedor por nombre o CUIT y elegilo con doble clic o Enter. Doble clic en la fila para modificarlo.";
+            //
             // btnNuevoProveedor
-            // 
+            //
             btnNuevoProveedor.Image = (Image)resources.GetObject("btnNuevoProveedor.Image");
             btnNuevoProveedor.ImageAlign = ContentAlignment.MiddleLeft;
-            btnNuevoProveedor.Location = new Point(25, 6);
+            btnNuevoProveedor.Location = new Point(12, 64);
             btnNuevoProveedor.Name = "btnNuevoProveedor";
-            btnNuevoProveedor.Size = new Size(137, 36);
-            btnNuevoProveedor.TabIndex = 0;
-            btnNuevoProveedor.Text = "Nuevo Proveedor";
+            btnNuevoProveedor.Size = new Size(145, 34);
+            btnNuevoProveedor.TabIndex = 2;
+            btnNuevoProveedor.Text = "Nuevo proveedor";
             btnNuevoProveedor.TextAlign = ContentAlignment.MiddleRight;
             btnNuevoProveedor.UseVisualStyleBackColor = true;
             btnNuevoProveedor.Click += btnNuevoProveedor_Click;
-            // 
+            //
             // btnModificar
-            // 
+            //
             btnModificar.Image = (Image)resources.GetObject("btnModificar.Image");
             btnModificar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnModificar.Location = new Point(168, 6);
+            btnModificar.Location = new Point(165, 64);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(90, 36);
-            btnModificar.TabIndex = 1;
+            btnModificar.Size = new Size(110, 34);
+            btnModificar.TabIndex = 3;
             btnModificar.Text = "Modificar";
             btnModificar.TextAlign = ContentAlignment.MiddleRight;
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += BtnModificar_Click;
-            // 
+            //
             // btnDescontinuar
-            // 
-            btnDescontinuar.Location = new Point(278, 6);
+            //
+            btnDescontinuar.Location = new Point(283, 64);
             btnDescontinuar.Name = "btnDescontinuar";
-            btnDescontinuar.Size = new Size(95, 36);
-            btnDescontinuar.TabIndex = 2;
+            btnDescontinuar.Size = new Size(110, 34);
+            btnDescontinuar.TabIndex = 4;
             btnDescontinuar.Text = "Descontinuar";
             btnDescontinuar.UseVisualStyleBackColor = true;
             btnDescontinuar.Click += btnDescontinuar_Click;
-            // 
+            //
             // btnActualizar
-            // 
+            //
             btnActualizar.Image = (Image)resources.GetObject("btnActualizar.Image");
             btnActualizar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnActualizar.Location = new Point(495, 6);
+            btnActualizar.Location = new Point(401, 64);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(82, 36);
-            btnActualizar.TabIndex = 3;
+            btnActualizar.Size = new Size(110, 34);
+            btnActualizar.TabIndex = 5;
             btnActualizar.Text = "Actualizar";
             btnActualizar.TextAlign = ContentAlignment.MiddleRight;
             btnActualizar.UseVisualStyleBackColor = true;
             btnActualizar.Click += btnActualizar_Click;
-            // 
+            //
+            // lblBuscar
+            //
+            lblBuscar.AutoSize = true;
+            lblBuscar.Location = new Point(12, 117);
+            lblBuscar.Name = "lblBuscar";
+            lblBuscar.Size = new Size(64, 15);
+            lblBuscar.TabIndex = 6;
+            lblBuscar.Text = "Proveedor:";
+            //
             // txtBuscar
-            // 
-            txtBuscar.Location = new Point(379, 14);
+            //
+            txtBuscar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtBuscar.Location = new Point(82, 113);
             txtBuscar.Name = "txtBuscar";
-            txtBuscar.Size = new Size(100, 23);
-            txtBuscar.TabIndex = 5;
-            // 
+            txtBuscar.PlaceholderText = "Escriba el nombre o CUIT del proveedor";
+            txtBuscar.Size = new Size(590, 23);
+            txtBuscar.TabIndex = 7;
+            txtBuscar.TextChanged += txtBuscar_TextChanged;
+            txtBuscar.KeyDown += txtBuscar_KeyDown;
+            //
+            // lstProveedores
+            //
+            lstProveedores.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lstProveedores.FormattingEnabled = true;
+            lstProveedores.IntegralHeight = false;
+            lstProveedores.Location = new Point(82, 137);
+            lstProveedores.Name = "lstProveedores";
+            lstProveedores.Size = new Size(590, 140);
+            lstProveedores.TabIndex = 8;
+            lstProveedores.Visible = false;
+            lstProveedores.DoubleClick += lstProveedores_DoubleClick;
+            lstProveedores.KeyDown += lstProveedores_KeyDown;
+            //
             // chkOcultarProveedores
-            // 
+            //
+            chkOcultarProveedores.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             chkOcultarProveedores.AutoSize = true;
-            chkOcultarProveedores.Location = new Point(590, 17);
+            chkOcultarProveedores.Location = new Point(688, 116);
             chkOcultarProveedores.Name = "chkOcultarProveedores";
             chkOcultarProveedores.Size = new Size(183, 19);
-            chkOcultarProveedores.TabIndex = 6;
-            chkOcultarProveedores.Text = "Ocultar Proveedores Inactivos";
+            chkOcultarProveedores.TabIndex = 9;
+            chkOcultarProveedores.Text = "Ocultar proveedores inactivos";
             chkOcultarProveedores.UseVisualStyleBackColor = true;
             chkOcultarProveedores.CheckedChanged += chkOcultarProveedores_CheckedChanged;
-            // 
+            //
+            // btnLimpiarFiltros
+            //
+            btnLimpiarFiltros.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLimpiarFiltros.Location = new Point(883, 109);
+            btnLimpiarFiltros.Name = "btnLimpiarFiltros";
+            btnLimpiarFiltros.Size = new Size(105, 32);
+            btnLimpiarFiltros.TabIndex = 10;
+            btnLimpiarFiltros.Text = "Limpiar filtros";
+            btnLimpiarFiltros.UseVisualStyleBackColor = true;
+            btnLimpiarFiltros.Click += btnLimpiarFiltros_Click;
+            //
             // dtgProveedores
-            // 
+            //
+            dtgProveedores.AllowUserToAddRows = false;
+            dtgProveedores.AllowUserToDeleteRows = false;
+            dtgProveedores.AllowUserToOrderColumns = false;
+            dtgProveedores.AllowUserToResizeRows = false;
             dtgProveedores.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dtgProveedores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dtgProveedores.BackgroundColor = SystemColors.Window;
             dtgProveedores.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgProveedores.Columns.AddRange(new DataGridViewColumn[] { Column1, ClmSucursalProveedor, Column2, Column3, Column4, Column5, Column6, Column7, Column8 });
-            dtgProveedores.Location = new Point(23, 48);
+            dtgProveedores.Columns.AddRange(new DataGridViewColumn[] { clnId, clnSucursal, clnRazonSocial, clnCuit, clnIva, clnTelefono, clnCorreo, clnDireccion, clnEstado });
+            dtgProveedores.Location = new Point(12, 149);
+            dtgProveedores.MultiSelect = false;
             dtgProveedores.Name = "dtgProveedores";
-            dtgProveedores.Size = new Size(823, 275);
-            dtgProveedores.TabIndex = 7;
-            // 
+            dtgProveedores.ReadOnly = true;
+            dtgProveedores.RowHeadersVisible = false;
+            dtgProveedores.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dtgProveedores.Size = new Size(976, 340);
+            dtgProveedores.TabIndex = 11;
+            dtgProveedores.CellDoubleClick += dtgProveedores_CellDoubleClick;
+            dtgProveedores.SelectionChanged += dtgProveedores_SelectionChanged;
+            //
+            // clnId
+            //
+            clnId.FillWeight = 45F;
+            clnId.HeaderText = "N.º";
+            clnId.MinimumWidth = 45;
+            clnId.Name = "clnId";
+            clnId.ReadOnly = true;
+            //
+            // clnSucursal
+            //
+            clnSucursal.FillWeight = 90F;
+            clnSucursal.HeaderText = "Sucursal";
+            clnSucursal.MinimumWidth = 80;
+            clnSucursal.Name = "clnSucursal";
+            clnSucursal.ReadOnly = true;
+            //
+            // clnRazonSocial
+            //
+            clnRazonSocial.FillWeight = 140F;
+            clnRazonSocial.HeaderText = "Razón social";
+            clnRazonSocial.MinimumWidth = 120;
+            clnRazonSocial.Name = "clnRazonSocial";
+            clnRazonSocial.ReadOnly = true;
+            //
+            // clnCuit
+            //
+            clnCuit.FillWeight = 90F;
+            clnCuit.HeaderText = "CUIT";
+            clnCuit.MinimumWidth = 95;
+            clnCuit.Name = "clnCuit";
+            clnCuit.ReadOnly = true;
+            //
+            // clnIva
+            //
+            clnIva.FillWeight = 110F;
+            clnIva.HeaderText = "Condición IVA";
+            clnIva.MinimumWidth = 100;
+            clnIva.Name = "clnIva";
+            clnIva.ReadOnly = true;
+            //
+            // clnTelefono
+            //
+            clnTelefono.FillWeight = 85F;
+            clnTelefono.HeaderText = "Teléfono";
+            clnTelefono.MinimumWidth = 85;
+            clnTelefono.Name = "clnTelefono";
+            clnTelefono.ReadOnly = true;
+            //
+            // clnCorreo
+            //
+            clnCorreo.FillWeight = 140F;
+            clnCorreo.HeaderText = "E-mail";
+            clnCorreo.MinimumWidth = 120;
+            clnCorreo.Name = "clnCorreo";
+            clnCorreo.ReadOnly = true;
+            //
+            // clnDireccion
+            //
+            clnDireccion.FillWeight = 130F;
+            clnDireccion.HeaderText = "Dirección";
+            clnDireccion.MinimumWidth = 110;
+            clnDireccion.Name = "clnDireccion";
+            clnDireccion.ReadOnly = true;
+            //
+            // clnEstado
+            //
+            clnEstado.FillWeight = 65F;
+            clnEstado.HeaderText = "Estado";
+            clnEstado.MinimumWidth = 65;
+            clnEstado.Name = "clnEstado";
+            clnEstado.ReadOnly = true;
+            //
+            // lblObservaciones
+            //
+            lblObservaciones.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblObservaciones.AutoSize = true;
+            lblObservaciones.Location = new Point(12, 497);
+            lblObservaciones.Name = "lblObservaciones";
+            lblObservaciones.Size = new Size(213, 15);
+            lblObservaciones.TabIndex = 12;
+            lblObservaciones.Text = "Observaciones del proveedor elegido:";
+            //
             // txtObsevaciones
-            // 
-            txtObsevaciones.Location = new Point(23, 371);
+            //
+            txtObsevaciones.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtObsevaciones.BackColor = SystemColors.Window;
+            txtObsevaciones.Location = new Point(12, 515);
             txtObsevaciones.Multiline = true;
             txtObsevaciones.Name = "txtObsevaciones";
-            txtObsevaciones.Size = new Size(478, 95);
-            txtObsevaciones.TabIndex = 8;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(25, 353);
-            label1.Name = "label1";
-            label1.Size = new Size(87, 15);
-            label1.TabIndex = 9;
-            label1.Text = "Observaciones:";
-            // 
-            // Column1
-            // 
-            Column1.FillWeight = 70F;
-            Column1.HeaderText = "Nro. Proveedor";
-            Column1.Name = "Column1";
-            Column1.Width = 60;
-            // 
-            // ClmSucursalProveedor
-            // 
-            ClmSucursalProveedor.HeaderText = "Sucursal";
-            ClmSucursalProveedor.Name = "ClmSucursalProveedor";
-            // 
-            // Column2
-            // 
-            Column2.FillWeight = 150F;
-            Column2.HeaderText = "Razón Social";
-            Column2.Name = "Column2";
-            Column2.Width = 129;
-            // 
-            // Column3
-            // 
-            Column3.HeaderText = "CUIT";
-            Column3.Name = "Column3";
-            Column3.Width = 85;
-            // 
-            // Column4
-            // 
-            Column4.FillWeight = 110F;
-            Column4.HeaderText = "Condición IVA";
-            Column4.Name = "Column4";
-            Column4.Width = 95;
-            // 
-            // Column5
-            // 
-            Column5.HeaderText = "Telefono";
-            Column5.Name = "Column5";
-            Column5.Width = 85;
-            // 
-            // Column6
-            // 
-            Column6.FillWeight = 150F;
-            Column6.HeaderText = "E-mail";
-            Column6.Name = "Column6";
-            Column6.Width = 129;
-            // 
-            // Column7
-            // 
-            Column7.FillWeight = 150F;
-            Column7.HeaderText = "Direción";
-            Column7.Name = "Column7";
-            Column7.Width = 128;
-            // 
-            // Column8
-            // 
-            Column8.FillWeight = 80F;
-            Column8.HeaderText = "Estado";
-            Column8.Name = "Column8";
-            Column8.Width = 69;
-            // 
+            txtObsevaciones.ReadOnly = true;
+            txtObsevaciones.ScrollBars = ScrollBars.Vertical;
+            txtObsevaciones.Size = new Size(860, 80);
+            txtObsevaciones.TabIndex = 13;
+            //
+            // lblCantidad
+            //
+            lblCantidad.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblCantidad.AutoSize = true;
+            lblCantidad.ForeColor = SystemColors.GrayText;
+            lblCantidad.Location = new Point(12, 612);
+            lblCantidad.Name = "lblCantidad";
+            lblCantidad.Size = new Size(0, 15);
+            lblCantidad.TabIndex = 14;
+            //
+            // btnSalir
+            //
+            btnSalir.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnSalir.Location = new Point(893, 604);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(95, 34);
+            btnSalir.TabIndex = 15;
+            btnSalir.Text = "Salir";
+            btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.Click += btnSalir_Click;
+            //
             // frmProveedores
-            // 
+            //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(858, 517);
-            Controls.Add(label1);
-            Controls.Add(txtObsevaciones);
-            Controls.Add(dtgProveedores);
-            Controls.Add(chkOcultarProveedores);
-            Controls.Add(txtBuscar);
-            Controls.Add(btnActualizar);
-            Controls.Add(btnDescontinuar);
-            Controls.Add(btnModificar);
+            ClientSize = new Size(1000, 650);
+            Controls.Add(lstProveedores);
+            Controls.Add(lblTitulo);
+            Controls.Add(lblDescripcion);
             Controls.Add(btnNuevoProveedor);
+            Controls.Add(btnModificar);
+            Controls.Add(btnDescontinuar);
+            Controls.Add(btnActualizar);
+            Controls.Add(lblBuscar);
+            Controls.Add(txtBuscar);
+            Controls.Add(chkOcultarProveedores);
+            Controls.Add(btnLimpiarFiltros);
+            Controls.Add(dtgProveedores);
+            Controls.Add(lblObservaciones);
+            Controls.Add(txtObsevaciones);
+            Controls.Add(lblCantidad);
+            Controls.Add(btnSalir);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(1016, 500);
             Name = "frmProveedores";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Proveedores";
             ((System.ComponentModel.ISupportInitialize)dtgProveedores).EndInit();
             ResumeLayout(false);
@@ -227,23 +352,30 @@
 
         #endregion
 
+        private Label lblTitulo;
+        private Label lblDescripcion;
         private Button btnNuevoProveedor;
         private Button btnModificar;
         private Button btnDescontinuar;
         private Button btnActualizar;
+        private Label lblBuscar;
         private TextBox txtBuscar;
+        private ListBox lstProveedores;
         private CheckBox chkOcultarProveedores;
+        private Button btnLimpiarFiltros;
         private DataGridView dtgProveedores;
+        private DataGridViewTextBoxColumn clnId;
+        private DataGridViewTextBoxColumn clnSucursal;
+        private DataGridViewTextBoxColumn clnRazonSocial;
+        private DataGridViewTextBoxColumn clnCuit;
+        private DataGridViewTextBoxColumn clnIva;
+        private DataGridViewTextBoxColumn clnTelefono;
+        private DataGridViewTextBoxColumn clnCorreo;
+        private DataGridViewTextBoxColumn clnDireccion;
+        private DataGridViewTextBoxColumn clnEstado;
+        private Label lblObservaciones;
         private TextBox txtObsevaciones;
-        private Label label1;
-        private DataGridViewTextBoxColumn Column1;
-        private DataGridViewTextBoxColumn ClmSucursalProveedor;
-        private DataGridViewTextBoxColumn Column2;
-        private DataGridViewTextBoxColumn Column3;
-        private DataGridViewTextBoxColumn Column4;
-        private DataGridViewTextBoxColumn Column5;
-        private DataGridViewTextBoxColumn Column6;
-        private DataGridViewTextBoxColumn Column7;
-        private DataGridViewTextBoxColumn Column8;
+        private Label lblCantidad;
+        private Button btnSalir;
     }
 }

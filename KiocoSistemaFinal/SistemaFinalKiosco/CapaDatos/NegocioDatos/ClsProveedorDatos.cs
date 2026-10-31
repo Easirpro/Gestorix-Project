@@ -437,6 +437,44 @@ namespace CapaDatos.NegocioDatos
                 cmd.ExecuteNonQuery();
             }
         }
+        // true si otro proveedor (distinto de idProveedorExcluir) ya tiene ese CUIT. Se compara sin guiones.
+        public bool ExisteCuitProveedor(string cuit, int idProveedorExcluir)
+        {
+            string query = @"SELECT COUNT(*)
+                FROM Proveedor
+                WHERE REPLACE(CUIT, '-', '') = @Cuit
+                  AND IdProveedor <> @IdProveedor";
+
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(query, conexion))
+            {
+                cmd.Parameters.AddWithValue("@Cuit", cuit.Replace("-", "").Trim());
+                cmd.Parameters.AddWithValue("@IdProveedor", idProveedorExcluir);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+        // true si otro proveedor (distinto de idProveedorExcluir) ya tiene esa razón social.
+        public bool ExisteNombreProveedor(string nombre, int idProveedorExcluir)
+        {
+            string query = @"SELECT COUNT(*)
+                FROM Proveedor
+                WHERE LTRIM(RTRIM(Nombre)) = @Nombre
+                  AND IdProveedor <> @IdProveedor";
+
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(query, conexion))
+            {
+                cmd.Parameters.AddWithValue("@Nombre", nombre.Trim());
+                cmd.Parameters.AddWithValue("@IdProveedor", idProveedorExcluir);
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
         public DataTable BuscarProveedor(string texto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

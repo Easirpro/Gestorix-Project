@@ -51,7 +51,15 @@ namespace CapaVista
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
             dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dtgPresentacion.AllowUserToResizeColumns = false;
+            // Se puede cambiar el ancho de las columnas arrastrando el borde del encabezado.
+            dtgPresentacion.AllowUserToResizeColumns = true;
+            dtgPresentacion.AllowUserToResizeRows = false;
+
+            foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
+            {
+                columna.Resizable = DataGridViewTriState.True;
+                columna.MinimumWidth = 50;   // que ninguna columna se pueda achicar hasta desaparecer
+            }
             dtgPresentacion.AllowUserToOrderColumns = false;
             dtgPresentacion.RowHeadersVisible = false;
 
@@ -113,7 +121,41 @@ namespace CapaVista
                 return;
             }
 
-            Dictionary<TipoAlerta, Action> acciones = new Dictionary<TipoAlerta, Action>
+            campanaAlertas = new ClsCampanaAlertas(this, btnConfig, tollClosed, CrearAccionesAlertas());
+
+            // Quien ve la campana puede abrir la lista completa (cada uno ve solo los tipos que le corresponden).
+            campanaAlertas.VerTodas = AbrirAlertas;
+            campanaAlertas.PuedeResolver = PuedeResolverAlerta;
+
+            campanaAlertas.Iniciar(mostrarAviso: true);
+        }
+        // Si el usuario puede entrar a la pantalla donde se resuelve cada tipo de alerta
+        // (los mismos permisos que habilitan esas opciones del menú en CargarBotones).
+        private bool PuedeResolverAlerta(TipoAlerta tipo)
+        {
+            switch (tipo)
+            {
+                case TipoAlerta.Lote:
+                case TipoAlerta.Precio:
+                    return TieneAlguno(110, 111, 112, 113);         // Modificar artículo
+                case TipoAlerta.Stock:
+                    return TieneAlguno(520, 110, 111, 112, 113);    // Reposición o Modificar artículo
+                case TipoAlerta.Entrega:
+                    return SesionUsuario.Permisos.Contains(320);     // Recepción de mercadería
+                case TipoAlerta.Caja:
+                    return SesionUsuario.Permisos.Contains(740);     // Cerrar caja
+                case TipoAlerta.Pago:
+                    return SesionUsuario.Permisos.Contains(420);     // Cuenta corriente de proveedores
+                case TipoAlerta.Promocion:
+                    return TieneAlguno(230, 240);                   // Administrar promociones
+                default:
+                    return false;
+            }
+        }
+        // Qué pantalla abre cada tipo de alerta (las mismas opciones del menú: respetan los permisos).
+        private Dictionary<TipoAlerta, Action> CrearAccionesAlertas()
+        {
+            return new Dictionary<TipoAlerta, Action>
             {
                 [TipoAlerta.Lote] = () => menuitemAdmistradorarticulos.PerformClick(),
                 [TipoAlerta.Stock] = AbrirReposicion,
@@ -123,9 +165,31 @@ namespace CapaVista
                 [TipoAlerta.Promocion] = () => administrarPromocionesToolStripMenuItem.PerformClick(),
                 [TipoAlerta.Precio] = () => menuitemAdmistradorarticulos.PerformClick()
             };
+        }
+        // Ocultar alertas y configurar los días de aviso (cuando se agreguen) son solo del rol Administrador.
+        private const int ID_ROL_ADMINISTRADOR = 1;
 
-            campanaAlertas = new ClsCampanaAlertas(this, btnConfig, tollClosed, acciones);
-            campanaAlertas.Iniciar(mostrarAviso: true);
+        private static bool EsAdministrador
+        {
+            get { return SesionUsuario.IdRol == ID_ROL_ADMINISTRADOR; }
+        }
+        // Lista completa de alertas: la ve quien tiene el permiso de visualizar alarmas (1110).
+        private void AbrirAlertas()
+        {
+            if (!SesionUsuario.Permisos.Contains(1110))
+            {
+                MessageBox.Show("No tenés permiso para ver las alertas.", "Alertas",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (frmAlertas alertas = new frmAlertas(CrearAccionesAlertas(), PuedeResolverAlerta, () => campanaAlertas?.Actualizar()))
+            {
+                alertas.Icon = Icon;
+                alertas.ShowDialog(this);
+            }
+
+            campanaAlertas?.Actualizar();
         }
         private void AbrirReposicion()
         {
@@ -404,8 +468,7 @@ namespace CapaVista
             //Administración operaciones
             permisosToolStripMenuItem.Enabled = TieneAlguno(1010, 1020, 1270);
             gestioToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1280);
-            bitacoraToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1290);
-        }
+            bitacoraToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1290);        }
         //Ingreso de plata
         public enum TipoMovimiento
         {
@@ -501,6 +564,37 @@ namespace CapaVista
                 return false;
             }
 
+
+            // Si el producto ya está en la venta (fuera de promociones), se suma la cantidad
+            // a esa fila en vez de agregar otra. Las filas de promoción no se mezclan.
+            if (codigoBarra != "PROMOCION")
+            {
+                foreach (DataGridViewRow fila in dtgPresentacion.Rows)
+                {
+                    if (fila.IsNewRow || Convert.ToString(fila.Cells["ClnCodigo"].Value) == "PROMOCION")
+                        continue;
+
+                    if (int.TryParse(Convert.ToString(fila.Cells["ClnIdProducto"].Value), out int idFila) && idFila == idProducto)
+                    {
+                        decimal.TryParse(Convert.ToString(fila.Cells["ClnCantidad"].Value), out decimal cantidadFila);
+                        decimal.TryParse(Convert.ToString(fila.Cells["ClnPrecioUnitario"].Value), out decimal precioFila);
+
+                        decimal nuevaCantidad = cantidadFila + cantidad;
+
+                        fila.Cells["ClnCantidad"].Value = nuevaCantidad;
+                        fila.Cells["ClnImporte"].Value = Math.Round(nuevaCantidad * precioFila, 2);
+
+                        dtgPresentacion.ClearSelection();
+                        dtgPresentacion.CurrentCell = fila.Cells["ClnDescripcion"];
+                        fila.Selected = true;
+
+                        CalcularYMostrarMontos();
+                        dtgPresentacion.Refresh();
+
+                        return true;
+                    }
+                }
+            }
 
             DataGridViewRow filaDestino = null;
 
@@ -736,10 +830,11 @@ namespace CapaVista
             if (lstDescripcion.SelectedIndex < 0 || tablaProductosEncontrados == null)
                 return;
 
-            decimal cantidad;
+            // Sin cantidad escrita se agrega 1, igual que con el código de barras.
+            decimal cantidad = 1;
 
-            if (!decimal.TryParse(txtCantidad.Text.Trim(), out cantidad) ||
-                cantidad <= 0)
+            if (!string.IsNullOrWhiteSpace(txtCantidad.Text) &&
+                (!decimal.TryParse(txtCantidad.Text.Trim(), out cantidad) || cantidad <= 0))
             {
                 MessageBox.Show("Ingresá una cantidad válida mayor que cero.", "Cantidad inválida",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -778,6 +873,7 @@ namespace CapaVista
             lstDescripcion.Visible = false;
             lstDescripcion.Items.Clear();
             txtCodigoBarra.Clear();
+            txtCantidad.Clear();   // la próxima vuelve a ser 1 si no se escribe otra
             txtCodigoBarra.Focus();
         }
 
@@ -1413,6 +1509,7 @@ namespace CapaVista
                             descuentoRecargo = ajusteAnterior;
                             total = totalAnterior;
 
+                            RellenarFilas();
                             CalcularYMostrarMontos();
                             txtCodigoBarra.Focus();
 
@@ -1580,31 +1677,30 @@ namespace CapaVista
                     return;
                 }
 
-                foreach (DataGridViewRow filaPromo in dtgPresentacion.Rows)
+                // Se eliminan las filas (no solo se vacían), así no quedan huecos en la grilla.
+                List<DataGridViewRow> filasPromo = dtgPresentacion.Rows.Cast<DataGridViewRow>()
+                    .Where(f => !f.IsNewRow && Convert.ToString(f.Cells["ClnCodigo"].Value) == "PROMOCION")
+                    .ToList();
+
+                foreach (DataGridViewRow filaPromo in filasPromo)
                 {
-                    if (Convert.ToString(filaPromo.Cells["ClnCodigo"].Value) == "PROMOCION")
-                    {
-                        foreach (DataGridViewCell celdaPromo in filaPromo.Cells)
-                        {
-                            celdaPromo.Value = null;
-                        }
-                    }
+                    dtgPresentacion.Rows.Remove(filaPromo);
                 }
 
                 filasDePromocion.Clear();
                 promocionesAplicadas.Clear();
                 descuentoRecargo = 0m;
 
+                RellenarFilas();
                 CalcularYMostrarMontos();
                 txtCodigoBarra.Focus();
                 return;
             }
 
-            foreach (DataGridViewCell celda in fila.Cells)
-            {
-                celda.Value = null;
-            }
+            // Se elimina la fila: los productos de abajo suben y las filas vacías quedan al final.
+            dtgPresentacion.Rows.Remove(fila);
 
+            RellenarFilas();
             CalcularYMostrarMontos();
 
             txtCodigoBarra.Focus();

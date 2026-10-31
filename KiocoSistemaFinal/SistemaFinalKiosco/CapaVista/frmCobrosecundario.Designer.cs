@@ -335,6 +335,7 @@
             txtCantidad.Size = new Size(114, 23);
             txtCantidad.TabIndex = 24;
             txtCantidad.TextChanged += txtCantidad_TextChanged;
+            txtCantidad.KeyDown += txtCantidad_KeyDown;
             // 
             // txtCodigoBarra
             // 
@@ -414,6 +415,7 @@
             btnQuitar.TabIndex = 27;
             btnQuitar.Text = "Quitar";
             btnQuitar.UseVisualStyleBackColor = true;
+            btnQuitar.Click += btnQuitar_Click;
             // 
             // btnSalir
             // 

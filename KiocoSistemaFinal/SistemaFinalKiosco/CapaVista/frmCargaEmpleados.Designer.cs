@@ -79,7 +79,6 @@
             label2 = new Label();
             label1 = new Label();
             tpgDireccion = new TabPage();
-            tpgLocalidad = new TabPage();
             tpgContacto = new TabPage();
             label21 = new Label();
             cmbRol = new ComboBox();
@@ -87,7 +86,6 @@
             tpgDatosUsuario.SuspendLayout();
             tpgDatosPersonales.SuspendLayout();
             tpgDireccion.SuspendLayout();
-            tpgLocalidad.SuspendLayout();
             tpgContacto.SuspendLayout();
             SuspendLayout();
             // 
@@ -486,7 +484,6 @@
             // 
             tpgDatosUsuario.Controls.Add(tpgDatosPersonales);
             tpgDatosUsuario.Controls.Add(tpgDireccion);
-            tpgDatosUsuario.Controls.Add(tpgLocalidad);
             tpgDatosUsuario.Controls.Add(tpgContacto);
             tpgDatosUsuario.Location = new Point(31, 139);
             tpgDatosUsuario.Name = "tpgDatosUsuario";
@@ -553,6 +550,14 @@
             // 
             // tpgDireccion
             // 
+            tpgDireccion.Controls.Add(cmbProvincia);
+            tpgDireccion.Controls.Add(label9);
+            tpgDireccion.Controls.Add(label10);
+            tpgDireccion.Controls.Add(cmbPartido);
+            tpgDireccion.Controls.Add(cmbLocalidad);
+            tpgDireccion.Controls.Add(label8);
+            tpgDireccion.Controls.Add(label11);
+            tpgDireccion.Controls.Add(txtPostal);
             tpgDireccion.Controls.Add(txtCalle);
             tpgDireccion.Controls.Add(label6);
             tpgDireccion.Controls.Add(txtAltura);
@@ -566,26 +571,8 @@
             tpgDireccion.Padding = new Padding(3);
             tpgDireccion.Size = new Size(364, 289);
             tpgDireccion.TabIndex = 1;
-            tpgDireccion.Text = "Dirección";
+            tpgDireccion.Text = "Dirección y Localidad";
             tpgDireccion.UseVisualStyleBackColor = true;
-            // 
-            // tpgLocalidad
-            // 
-            tpgLocalidad.Controls.Add(cmbProvincia);
-            tpgLocalidad.Controls.Add(label9);
-            tpgLocalidad.Controls.Add(label10);
-            tpgLocalidad.Controls.Add(cmbPartido);
-            tpgLocalidad.Controls.Add(cmbLocalidad);
-            tpgLocalidad.Controls.Add(label8);
-            tpgLocalidad.Controls.Add(label11);
-            tpgLocalidad.Controls.Add(txtPostal);
-            tpgLocalidad.Location = new Point(4, 24);
-            tpgLocalidad.Name = "tpgLocalidad";
-            tpgLocalidad.Padding = new Padding(3);
-            tpgLocalidad.Size = new Size(364, 289);
-            tpgLocalidad.TabIndex = 2;
-            tpgLocalidad.Text = "Localidad";
-            tpgLocalidad.UseVisualStyleBackColor = true;
             // 
             // tpgContacto
             // 
@@ -599,7 +586,7 @@
             tpgContacto.Name = "tpgContacto";
             tpgContacto.Padding = new Padding(3);
             tpgContacto.Size = new Size(364, 289);
-            tpgContacto.TabIndex = 3;
+            tpgContacto.TabIndex = 2;
             tpgContacto.Text = "Contacto";
             tpgContacto.UseVisualStyleBackColor = true;
             // 
@@ -662,8 +649,6 @@
             tpgDatosPersonales.PerformLayout();
             tpgDireccion.ResumeLayout(false);
             tpgDireccion.PerformLayout();
-            tpgLocalidad.ResumeLayout(false);
-            tpgLocalidad.PerformLayout();
             tpgContacto.ResumeLayout(false);
             tpgContacto.PerformLayout();
             ResumeLayout(false);
@@ -723,7 +708,6 @@
         private Label label2;
         private Label label1;
         private TabPage tpgDireccion;
-        private TabPage tpgLocalidad;
         private TabPage tpgContacto;
         private Label label21;
         private ComboBox cmbRol;

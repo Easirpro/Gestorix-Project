@@ -15,206 +15,273 @@ namespace CapaVista
     {
         private readonly CapaLogica.NegocioLogica.ClsGestorVentaLogica logicaVenta = new CapaLogica.NegocioLogica.ClsGestorVentaLogica();
 
+        // Ventas del rango de fechas; los filtros de estado y búsqueda se aplican sobre esta tabla.
+        private DataTable? ventasCargadas;
+        // Evita recargar mientras se acomodan las fechas o los filtros por código.
+        private bool cargando = false;
+
         public frmVentas()
         {
             InitializeComponent();
 
+            // Los eventos se enganchan en el Designer. Antes se enganchaban también acá y
+            // Actualizar y la carga inicial se ejecutaban dos veces.
+            cargando = true;
             dtpDesde.Value = DateTime.Today;
             dtpHasta.Value = DateTime.Today;
+            cmbEstado.SelectedIndex = 0;   // Activas
+            cargando = false;
 
-            Load += frmVentas_Load;
-            btnActualizar.Click += btnActualizar_Click;
-            btnVolver.Click += btnVolver_Click;
-            btnAnuladas.Checked = false;
             CargarVentas();
-            dataGridView1.SelectionChanged += dataGridView1_SelectionChanged;
-
-         
         }
 
 
         #region Metodos
-        private void AplicarPermisos()
+        private bool PuedeAnular
         {
-            bool puedeGestionarVentas = SesionUsuario.Permisos.Contains(250);
-
-            btnAnular.Enabled = puedeGestionarVentas;
+            get { return SesionUsuario.Permisos.Contains(250); }
         }
-        private void CargarVentas()
+        // Lee de la base las ventas del rango de fechas. Si se indica, deja elegida esa venta.
+        private void CargarVentas(int? idVentaAElegir = null)
         {
-            try
+            if (cargando)
             {
-                DateTime desde = dtpDesde.Value.Date;
-                DateTime hasta = dtpHasta.Value.Date;
-
-                DataTable ventas = logicaVenta.ObtenerVentas(desde, hasta);
-                if (ventas.Columns.Contains("Anulada"))
-                {
-                    ventas.Columns.Add("EstadoVenta", typeof(string));
-
-                    foreach (DataRow fila in ventas.Rows)
-                    {
-                        bool anulada = fila["Anulada"] != DBNull.Value && Convert.ToBoolean(fila["Anulada"]);
-
-                        fila["EstadoVenta"] = anulada ? "Anulada" : "Activa";
-                    }
-                }
-
-                dataGridView1.DataSource = null;
-                dataGridView1.AutoGenerateColumns = false;
-
-                clnFecha.DataPropertyName = "Fecha";
-                clnTransaccion.DataPropertyName = "Nro. Transacción";
-                clnCajero.DataPropertyName = "Cajero";
-                clnTotal.DataPropertyName = "Total";
-                clnAnulada.DataPropertyName = "Anulada";
-
-                clnDetalle.UseColumnTextForButtonValue = true;
-                clnDetalle.Text = "Ver detalle";
-                dataGridView1.DataSource = ventas;
-
-                AplicarFiltroAnuladas();
-
-                dataGridView1.CellFormatting -= dataGridView1_CellFormatting;
-                dataGridView1.CellFormatting += dataGridView1_CellFormatting;
-                dataGridView1.ReadOnly = true;
-                dataGridView1.AllowUserToAddRows = false;
-                dataGridView1.AllowUserToDeleteRows = false;
-                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridView1.MultiSelect = false;
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-                ActualizarBotonAnular();
-                CargarObservaciones();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("No se pudieron cargar las ventas.\n\n" + ex.Message, "Error al consultar ventas",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void MostrarDetalleVenta(DataGridViewRow fila)
-        {
-            if (!(fila.DataBoundItem is DataRowView registro))
-            {
-                MessageBox.Show("No se pudieron obtener los datos de la venta.");
                 return;
             }
 
-            DataRow venta = registro.Row;
-
-            string ObtenerDato(string columna)
+            try
             {
-                if (!venta.Table.Columns.Contains(columna) || venta.IsNull(columna))
-                    return "No disponible";
+                ventasCargadas = logicaVenta.ObtenerVentasListado(dtpDesde.Value.Date, dtpHasta.Value.Date);
+            }
+            catch (Exception ex)
+            {
+                ventasCargadas = null;
 
-                return venta[columna].ToString();
+                MessageBox.Show("No se pudieron cargar las ventas.\n\n" + ex.Message, "Error al consultar ventas",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            string ObtenerMoneda(string columna)
-            {
-                if (!venta.Table.Columns.Contains(columna) || venta.IsNull(columna))
-                    return "No disponible";
-
-                return Convert.ToDecimal(venta[columna]).ToString("C2");
-            }
-
-            string detalle =
-                $"Fecha: {ObtenerDato("Fecha")}\n" +
-                $"N.º de transacción: {ObtenerDato("Nro. Transacción")}\n" +
-                $"N.º de comprobante: {ObtenerDato("Nro. Transacción")}\n" +
-                $"Cajero: {ObtenerDato("Cajero")}\n\n" +
-                $"Subtotal: {ObtenerMoneda("Subtotal")}\n" +
-                $"Descuento/Recargo: {ObtenerMoneda("Descuento/Recargo")}\n" +
-                $"TOTAL VENDIDO: {ObtenerMoneda("Total")}\n\n" +
-                $"Efectivo: {ObtenerMoneda("Efectivo")}\n" +
-                $"Tarjeta de crédito: {ObtenerMoneda("Tarjeta de Credito")}\n" +
-                $"Cuenta corriente: {ObtenerMoneda("Cta. Cte")}\n" +
-                $"Débito: {ObtenerMoneda("Debito")}\n" +
-                $"Transferencia: {ObtenerMoneda("Tranferencia")}\n\n" +
-                $"Factura activa: {(Convert.ToBoolean(venta["Anulada"]) ? "No" : "Sí")}\n" +
-                $"Factura anulada: {(Convert.ToBoolean(venta["Anulada"]) ? "Sí" : "No")}";
-
-            MessageBox.Show(detalle, "Detalle de la venta",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MostrarVentas(idVentaAElegir);
         }
-        private void ActualizarBotonAnular()
+        // Llena la grilla con las ventas que cumplen el estado y la búsqueda.
+        private void MostrarVentas(int? idVentaAElegir = null)
         {
-            if (dataGridView1.CurrentRow == null || dataGridView1.CurrentRow.IsNewRow)
+            dtgVentas.Rows.Clear();
+
+            decimal totalVendido = 0m;
+            int cantidadActivas = 0;
+
+            if (ventasCargadas != null)
             {
+                int estado = cmbEstado.SelectedIndex;   // 0 activas, 1 anuladas, 2 todas
+                string texto = txtBuscar.Text.Trim();
+
+                foreach (DataRow venta in ventasCargadas.Rows)
+                {
+                    bool anulada = venta["Anulada"] != DBNull.Value && Convert.ToBoolean(venta["Anulada"]);
+
+                    if ((estado == 0 && anulada) || (estado == 1 && !anulada))
+                    {
+                        continue;
+                    }
+
+                    string numero = venta["IdVenta"].ToString() ?? "";
+                    string cajero = venta["Cajero"]?.ToString() ?? "";
+                    string medios = venta["MediosPago"]?.ToString() ?? "";
+
+                    if (texto != "" &&
+                        !numero.Contains(texto) &&
+                        !cajero.Contains(texto, StringComparison.CurrentCultureIgnoreCase) &&
+                        !medios.Contains(texto, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    decimal total = Convert.ToDecimal(venta["Total"]);
+
+                    int indice = dtgVentas.Rows.Add(
+                        numero,
+                        Convert.ToDateTime(venta["FechaHora"]).ToString("dd/MM/yyyy HH:mm"),
+                        cajero,
+                        venta["IdSesionCaja"] == DBNull.Value ? "" : venta["IdSesionCaja"].ToString(),
+                        Convert.ToDecimal(venta["Articulos"]).ToString("0.###"),
+                        medios,
+                        total.ToString("C2"),
+                        anulada ? "Anulada" : "Activa");
+
+                    DataGridViewRow fila = dtgVentas.Rows[indice];
+                    fila.Tag = venta;
+
+                    if (anulada)
+                    {
+                        // Las anuladas en gris y con el estado en rojo, para distinguirlas.
+                        fila.DefaultCellStyle.ForeColor = SystemColors.GrayText;
+                        fila.Cells["clnEstado"].Style.ForeColor = Color.Firebrick;
+                    }
+                    else
+                    {
+                        totalVendido += total;
+                        cantidadActivas++;
+                    }
+                }
+            }
+
+            ElegirFila(idVentaAElegir);
+
+            // Total vendido: solo las ventas activas que se ven en la lista.
+            lblResumen.Text = dtgVentas.Rows.Count == 0
+                ? "No hay ventas para mostrar con estos filtros."
+                : dtgVentas.Rows.Count + (dtgVentas.Rows.Count == 1 ? " venta" : " ventas") +
+                  "   ·   Total vendido (activas): " + totalVendido.ToString("C2") +
+                  (cantidadActivas < dtgVentas.Rows.Count ? "   ·   Las anuladas no suman." : "");
+
+            MostrarDatosVentaElegida();
+        }
+        private void ElegirFila(int? idVenta)
+        {
+            dtgVentas.ClearSelection();
+
+            DataGridViewRow? fila = null;
+
+            if (idVenta.HasValue)
+            {
+                fila = dtgVentas.Rows.Cast<DataGridViewRow>()
+                    .FirstOrDefault(f => f.Cells["clnTransaccion"].Value?.ToString() == idVenta.Value.ToString());
+            }
+
+            if (fila == null && dtgVentas.Rows.Count > 0)
+            {
+                fila = dtgVentas.Rows[0];
+            }
+
+            if (fila != null)
+            {
+                dtgVentas.CurrentCell = fila.Cells["clnTransaccion"];
+                fila.Selected = true;
+            }
+        }
+        private DataRow? VentaElegida()
+        {
+            return dtgVentas.CurrentRow?.Tag as DataRow;
+        }
+        // Observaciones, motivo y estado de los botones según la venta elegida.
+        private void MostrarDatosVentaElegida()
+        {
+            DataRow? venta = VentaElegida();
+
+            btnDetalle.Enabled = venta != null;
+
+            if (venta == null)
+            {
+                txtObservaciones.Clear();
                 btnAnular.Text = "Anular";
                 btnAnular.Enabled = false;
                 return;
             }
 
-            bool anulada = false;
-
-            if (dataGridView1.CurrentRow.DataBoundItem is DataRowView registro && registro.Row.Table.Columns.Contains("Anulada") && !registro.Row.IsNull("Anulada"))
-            {
-                anulada = Convert.ToBoolean(registro.Row["Anulada"]);
-            }
+            bool anulada = venta["Anulada"] != DBNull.Value && Convert.ToBoolean(venta["Anulada"]);
 
             btnAnular.Text = anulada ? "Activar" : "Anular";
+            btnAnular.Enabled = PuedeAnular;
 
-            btnAnular.Enabled = SesionUsuario.Permisos.Contains(250);
+            StringBuilder notas = new StringBuilder();
+
+            string observaciones = venta["Observaciones"]?.ToString() ?? "";
+            string motivo = venta["MotivoAnulacion"]?.ToString() ?? "";
+
+            if (!string.IsNullOrWhiteSpace(observaciones))
+                notas.AppendLine("Observaciones: " + observaciones);
+
+            if (!string.IsNullOrWhiteSpace(motivo))
+                notas.AppendLine("Motivo de anulación: " + motivo);
+
+            txtObservaciones.Text = notas.Length > 0 ? notas.ToString().TrimEnd() : "Sin observaciones ni motivo de anulación.";
         }
-        private void CargarObservaciones()
+        private void MostrarDetalle()
         {
-            lstObservaciones.Items.Clear();
+            DataRow? venta = VentaElegida();
 
-            if (dataGridView1.CurrentRow?.DataBoundItem is not DataRowView registro)
-                return;
-
-            DataRow venta = registro.Row;
-
-            if (venta.Table.Columns.Contains("Observaciones") && !venta.IsNull("Observaciones"))
+            if (venta == null)
             {
-                string observaciones = Convert.ToString(venta["Observaciones"]);
-
-                if (!string.IsNullOrWhiteSpace(observaciones))
-                    lstObservaciones.Items.Add("Observaciones: " + observaciones);
+                MessageBox.Show("Seleccione una venta para ver el detalle.", "Ventas",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            if (venta.Table.Columns.Contains("MotivoAnulacion") && !venta.IsNull("MotivoAnulacion"))
+            using (frmDetalleVenta detalle = new frmDetalleVenta(venta))
             {
-                string motivo = Convert.ToString(venta["MotivoAnulacion"]);
-
-                if (!string.IsNullOrWhiteSpace(motivo))
-                    lstObservaciones.Items.Add("Motivo de anulación: " + motivo);
+                detalle.Icon = Icon;
+                detalle.ShowDialog(this);
             }
-
-            if (lstObservaciones.Items.Count == 0)
-                lstObservaciones.Items.Add("Sin observaciones ni motivo de anulación.");
         }
-        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        // Pide el motivo de anulación en una ventana chica. Devuelve null si se cancela.
+        private string? PedirMotivoAnulacion(int idVenta)
         {
-            ActualizarBotonAnular();
-            CargarObservaciones();
-        }
-        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (e.RowIndex < 0 || dataGridView1.Columns[e.ColumnIndex].Name != "clnAnulada")
-                return;
-
-            if (e.Value == null || e.Value == DBNull.Value)
-                return;
-
-            bool anulada = Convert.ToBoolean(e.Value);
-
-            e.Value = anulada ? "Anulada" : "Activa";
-            e.FormattingApplied = true;
-        }
-        private void AplicarFiltroAnuladas()
-        {
-            string filtro = btnAnuladas.Checked ? "Anulada = true" : "Anulada = false";
-
-            if (dataGridView1.DataSource is DataTable tabla)
+            using (Form ventana = new Form())
             {
-                tabla.DefaultView.RowFilter = filtro;
-            }
-            else if (dataGridView1.DataSource is DataView vista)
-            {
-                vista.RowFilter = filtro;
+                ventana.Text = "Anular venta N.º " + idVenta;
+                ventana.StartPosition = FormStartPosition.CenterParent;
+                ventana.FormBorderStyle = FormBorderStyle.FixedDialog;
+                ventana.ClientSize = new Size(380, 170);
+                ventana.MinimizeBox = false;
+                ventana.MaximizeBox = false;
+                ventana.ShowInTaskbar = false;
+
+                Label lblMotivo = new Label
+                {
+                    Text = "Ingrese el motivo de anulación:",
+                    Location = new Point(15, 15),
+                    AutoSize = true
+                };
+
+                TextBox txtMotivo = new TextBox
+                {
+                    Location = new Point(15, 40),
+                    Size = new Size(350, 55),
+                    Multiline = true,
+                    MaxLength = 500
+                };
+
+                Button btnAceptar = new Button
+                {
+                    Text = "Anular",
+                    Location = new Point(185, 115),
+                    Size = new Size(85, 32)
+                };
+
+                Button btnCancelar = new Button
+                {
+                    Text = "Cancelar",
+                    Location = new Point(280, 115),
+                    Size = new Size(85, 32),
+                    DialogResult = DialogResult.Cancel
+                };
+
+                btnAceptar.Click += (s, ev) =>
+                {
+                    if (string.IsNullOrWhiteSpace(txtMotivo.Text))
+                    {
+                        MessageBox.Show("Ingrese el motivo de anulación.", "Anular venta",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txtMotivo.Focus();
+                        return;
+                    }
+
+                    ventana.Tag = txtMotivo.Text.Trim();
+                    ventana.DialogResult = DialogResult.OK;
+                    ventana.Close();
+                };
+
+                ventana.Controls.Add(lblMotivo);
+                ventana.Controls.Add(txtMotivo);
+                ventana.Controls.Add(btnAceptar);
+                ventana.Controls.Add(btnCancelar);
+                ventana.CancelButton = btnCancelar;
+
+                if (ventana.ShowDialog(this) != DialogResult.OK)
+                    return null;
+
+                return ventana.Tag?.ToString();
             }
         }
 
@@ -222,98 +289,39 @@ namespace CapaVista
 
 
         #region Eventos
-        private void frmVentas_Load(object sender, EventArgs e)
+        private void btnAnular_Click(object? sender, EventArgs e)
         {
-            AplicarPermisos();
-            CargarVentas();
-        }
-        private void btnAnular_Click(object sender, EventArgs e)
-        {
-            if (dataGridView1.CurrentRow == null)
+            DataRow? venta = VentaElegida();
+
+            if (venta == null)
             {
-                MessageBox.Show("Seleccione una venta.");
+                MessageBox.Show("Seleccione una venta.", "Ventas",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DataGridViewRow fila = dataGridView1.CurrentRow;
+            if (!PuedeAnular)
+            {
+                MessageBox.Show("No tenés permiso para anular ventas.", "Ventas",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            int idVenta = Convert.ToInt32(fila.Cells["clnTransaccion"].Value);
+            int idVenta = Convert.ToInt32(venta["IdVenta"]);
+            bool anulada = venta["Anulada"] != DBNull.Value && Convert.ToBoolean(venta["Anulada"]);
 
-            bool anulada = Convert.ToBoolean(fila.Cells["clnAnulada"].Value);
-
-            string motivo = null;
+            string? motivo = null;
 
             if (!anulada)
             {
-                using (Form ventana = new Form())
-                {
-                    ventana.Text = "Anular venta";
-                    ventana.StartPosition = FormStartPosition.CenterParent;
-                    ventana.FormBorderStyle = FormBorderStyle.FixedDialog;
-                    ventana.ClientSize = new Size(380, 170);
-                    ventana.MinimizeBox = false;
-                    ventana.MaximizeBox = false;
+                motivo = PedirMotivoAnulacion(idVenta);
 
-                    Label lblMotivo = new Label
-                    {
-                        Text = "Ingrese el motivo de anulación:",
-                        Location = new Point(15, 15),
-                        AutoSize = true
-                    };
-
-                    TextBox txtMotivo = new TextBox
-                    {
-                        Location = new Point(15, 40),
-                        Size = new Size(350, 50),
-                        Multiline = true,
-                        MaxLength = 500
-                    };
-
-                    Button btnAceptar = new Button
-                    {
-                        Text = "Aceptar",
-                        Location = new Point(185, 110),
-                        Size = new Size(85, 30)
-                    };
-
-                    Button btnCancelar = new Button
-                    {
-                        Text = "Cancelar",
-                        Location = new Point(280, 110),
-                        Size = new Size(85, 30),
-                        DialogResult = DialogResult.Cancel
-                    };
-
-                    btnAceptar.Click += (s, ev) =>
-                    {
-                        if (string.IsNullOrWhiteSpace(txtMotivo.Text))
-                        {
-                            MessageBox.Show("Ingrese el motivo de anulación.");
-                            txtMotivo.Focus();
-                            return;
-                        }
-
-                        ventana.Tag = txtMotivo.Text.Trim();
-                        ventana.DialogResult = DialogResult.OK;
-                        ventana.Close();
-                    };
-
-                    ventana.Controls.Add(lblMotivo);
-                    ventana.Controls.Add(txtMotivo);
-                    ventana.Controls.Add(btnAceptar);
-                    ventana.Controls.Add(btnCancelar);
-                    ventana.AcceptButton = btnAceptar;
-                    ventana.CancelButton = btnCancelar;
-
-                    if (ventana.ShowDialog(this) != DialogResult.OK)
-                        return;
-
-                    motivo = ventana.Tag.ToString();
-                }
+                if (motivo == null)
+                    return;
             }
             else
             {
-                DialogResult respuesta = MessageBox.Show("¿Desea activar nuevamente esta venta?", "Activar venta",
+                DialogResult respuesta = MessageBox.Show("¿Desea activar nuevamente la venta N.º " + idVenta + "?", "Activar venta",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta != DialogResult.Yes)
@@ -327,8 +335,16 @@ namespace CapaVista
                 MessageBox.Show(anulada ? "La venta fue activada." : "La venta fue anulada.", "Ventas",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                CargarVentas();
-                ActualizarBotonAnular();
+                // Si la venta queda fuera del filtro de estado (por ejemplo, se anuló viendo "Activas"),
+                // se pasa a "Todas" para que siga a la vista.
+                if (cmbEstado.SelectedIndex != 2)
+                {
+                    cargando = true;
+                    cmbEstado.SelectedIndex = 2;
+                    cargando = false;
+                }
+
+                CargarVentas(idVenta);
             }
             catch (Exception ex)
             {
@@ -336,46 +352,90 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void btnBuscar_Click(object sender, EventArgs e)
+        private void btnDetalle_Click(object? sender, EventArgs e)
         {
+            MostrarDetalle();
+        }
+        private void dtgVentas_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                MostrarDetalle();
+            }
+        }
+        private void dtgVentas_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;   // si no, Enter baja a la fila siguiente
+                MostrarDetalle();
+            }
+        }
+        private void dtgVentas_SelectionChanged(object? sender, EventArgs e)
+        {
+            MostrarDatosVentaElegida();
+        }
+        private void btnActualizar_Click(object? sender, EventArgs e)
+        {
+            CargarVentas(VentaElegida() == null ? null : Convert.ToInt32(VentaElegida()!["IdVenta"]));
+        }
+        // Al cambiar una fecha se recarga sola. Si Desde queda después de Hasta, se corre la otra fecha.
+        private void dtpDesde_ValueChanged(object? sender, EventArgs e)
+        {
+            if (cargando)
+                return;
+
+            if (dtpDesde.Value.Date > dtpHasta.Value.Date)
+            {
+                dtpHasta.Value = dtpDesde.Value.Date;   // dispara su ValueChanged, que recarga
+                return;
+            }
+
             CargarVentas();
         }
-        private void btnActualizar_Click(object sender, EventArgs e)
+        private void dtpHasta_ValueChanged(object? sender, EventArgs e)
         {
+            if (cargando)
+                return;
+
+            if (dtpHasta.Value.Date < dtpDesde.Value.Date)
+            {
+                dtpDesde.Value = dtpHasta.Value.Date;
+                return;
+            }
+
             CargarVentas();
         }
-        private void btnVolver_Click(object sender, EventArgs e)
+        private void Filtros_Changed(object? sender, EventArgs e)
+        {
+            if (cargando)
+                return;
+
+            MostrarVentas();
+        }
+        private void btnLimpiarFiltros_Click(object? sender, EventArgs e)
+        {
+            cargando = true;
+
+            try
+            {
+                dtpDesde.Value = DateTime.Today;
+                dtpHasta.Value = DateTime.Today;
+                cmbEstado.SelectedIndex = 0;
+                txtBuscar.Clear();
+            }
+            finally
+            {
+                cargando = false;
+            }
+
+            CargarVentas();
+            txtBuscar.Focus();
+        }
+        private void btnVolver_Click(object? sender, EventArgs e)
         {
             Close();
         }
-        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0 || e.ColumnIndex < 0)
-                return;
-
-            if (dataGridView1.Columns[e.ColumnIndex].Name != "clnDetalle")
-                return;
-
-            MostrarDetalleVenta(dataGridView1.Rows[e.RowIndex]);
-        }
-        private void lstObservaciones_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void btnAnuladas_CheckedChanged(object sender, EventArgs e)
-        {
-            AplicarFiltroAnuladas();
-           
-        }
         #endregion
-
-
-
-
-
-
-
-
-
     }
 }

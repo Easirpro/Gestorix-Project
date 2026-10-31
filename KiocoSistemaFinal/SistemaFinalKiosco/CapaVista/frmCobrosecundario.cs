@@ -126,6 +126,37 @@ namespace CapaVista
             }
 
 
+            // Si el producto ya está en la venta (fuera de promociones), se suma la cantidad
+            // a esa fila en vez de agregar otra. Las filas de promoción no se mezclan.
+            if (codigoBarra != "PROMOCION")
+            {
+                foreach (DataGridViewRow fila in dtgPresentacion.Rows)
+                {
+                    if (fila.IsNewRow || Convert.ToString(fila.Cells["ClnCodigo"].Value) == "PROMOCION")
+                        continue;
+
+                    if (int.TryParse(Convert.ToString(fila.Cells["ClnIdProducto"].Value), out int idFila) && idFila == idProducto)
+                    {
+                        decimal.TryParse(Convert.ToString(fila.Cells["ClnCantidad"].Value), out decimal cantidadFila);
+                        decimal.TryParse(Convert.ToString(fila.Cells["ClnPrecioUnitario"].Value), out decimal precioFila);
+
+                        decimal nuevaCantidad = cantidadFila + cantidad;
+
+                        fila.Cells["ClnCantidad"].Value = nuevaCantidad;
+                        fila.Cells["ClnImporte"].Value = Math.Round(nuevaCantidad * precioFila, 2);
+
+                        dtgPresentacion.ClearSelection();
+                        dtgPresentacion.CurrentCell = fila.Cells["ClnDescripcion"];
+                        fila.Selected = true;
+
+                        CalcularYMostrarMontos();
+                        dtgPresentacion.Refresh();
+
+                        return true;
+                    }
+                }
+            }
+
             DataGridViewRow filaDestino = null;
 
             foreach (DataGridViewRow fila in dtgPresentacion.Rows)
@@ -317,9 +348,11 @@ namespace CapaVista
             if (lstDescripcion.SelectedIndex < 0 || tablaProductosEncontrados == null)
                 return;
 
-            decimal cantidad;
+            // Sin cantidad escrita se agrega 1, igual que con el código de barras.
+            decimal cantidad = 1;
 
-            if (!decimal.TryParse(txtCantidad.Text.Trim(), out cantidad) || cantidad <= 0)
+            if (!string.IsNullOrWhiteSpace(txtCantidad.Text) &&
+                (!decimal.TryParse(txtCantidad.Text.Trim(), out cantidad) || cantidad <= 0))
             {
                 MessageBox.Show("Ingresá una cantidad válida mayor que cero.", "Cantidad inválida",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -356,6 +389,7 @@ namespace CapaVista
             lstDescripcion.Visible = false;
             lstDescripcion.Items.Clear();
             txtCodigoBarra.Clear();
+            txtCantidad.Clear();   // la próxima vuelve a ser 1 si no se escribe otra
             txtCodigoBarra.Focus();
         }
 
@@ -374,8 +408,15 @@ namespace CapaVista
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
             dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dtgPresentacion.AllowUserToResizeColumns = false;
+            // Se puede cambiar el ancho de las columnas arrastrando el borde del encabezado.
+            dtgPresentacion.AllowUserToResizeColumns = true;
             dtgPresentacion.AllowUserToResizeRows = false;
+
+            foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
+            {
+                columna.Resizable = DataGridViewTriState.True;
+                columna.MinimumWidth = 50;   // que ninguna columna se pueda achicar hasta desaparecer
+            }
             dtgPresentacion.AllowUserToOrderColumns = false;
             dtgPresentacion.RowHeadersVisible = false;
             txtCantidad.Text = "1";
@@ -405,37 +446,6 @@ namespace CapaVista
                 {
                     this.Close();
                 }
-            }
-        }
-        private void btnBuscarArticulo_Click(object sender, EventArgs e)
-        {
-            using (frmBuscarArticulo buscarArticulo = new frmBuscarArticulo())
-            {
-                buscarArticulo.ShowDialog();
-
-                ClsProducto producto = buscarArticulo.ProductoSeleccionado;
-
-                if (producto == null)
-                {
-                    MessageBox.Show("No se recibió ningún producto seleccionado. " + "Revisá el botón de selección de frmBuscarArticulo.", "Producto no seleccionado",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
-
-                DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(producto.IdProducto);
-
-                decimal stockDisponible = 0m;
-
-                if (tablaStock != null && tablaStock.Rows.Count > 0 && tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
-                {
-                    stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
-                }
-
-                AgregarProductoAGrilla(producto.IdProducto, producto.SKU, producto.CodigoBarra, producto.Descripcion, producto.PrecioVenta, 1m, stockDisponible);
-
-                txtCodigoBarra.Focus();
             }
         }
         private void txtCodigoBarra_KeyDown(object sender, KeyEventArgs e)
@@ -751,6 +761,7 @@ namespace CapaVista
                             descuentoRecargo = ajusteAnterior;
                             total = totalAnterior;
 
+                            RellenarFilas();
                             CalcularYMostrarMontos();
                             txtCodigoBarra.Focus();
 
@@ -839,6 +850,68 @@ namespace CapaVista
         private void btnSalir_Click(object sender, EventArgs e)
         {
             Close();
+        }
+        // Enter en la cantidad agrega el producto del código de barras (igual que en la venta principal).
+        private void txtCantidad_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                IngresarProductoPorCodigo();
+            }
+        }
+        // Quita el producto elegido. Antes el botón no tenía ninguna función enganchada.
+        private void btnQuitar_Click(object? sender, EventArgs e)
+        {
+            if (dtgPresentacion.CurrentRow == null || dtgPresentacion.CurrentRow.Cells["ClnIdProducto"].Value == null)
+            {
+                MessageBox.Show("Seleccione un producto para quitar.", "Quitar producto",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            DataGridViewRow fila = dtgPresentacion.CurrentRow;
+
+            // [PROMO] Si el producto es de una promoción, se quitan todas las promociones
+            // juntas (si no, el descuento quedaba aplicado igual).
+            if (Convert.ToString(fila.Cells["ClnCodigo"].Value) == "PROMOCION")
+            {
+                DialogResult quitarPromos = MessageBox.Show(
+                    "Ese producto pertenece a una promoción.\n\n" +
+                    "Se van a quitar todos los productos de promociones y su descuento. ¿Continuar?",
+                    "Quitar promoción", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (quitarPromos != DialogResult.Yes)
+                {
+                    return;
+                }
+
+                List<DataGridViewRow> filasPromo = dtgPresentacion.Rows.Cast<DataGridViewRow>()
+                    .Where(f => !f.IsNewRow && Convert.ToString(f.Cells["ClnCodigo"].Value) == "PROMOCION")
+                    .ToList();
+
+                foreach (DataGridViewRow filaPromo in filasPromo)
+                {
+                    dtgPresentacion.Rows.Remove(filaPromo);
+                }
+
+                promocionesAplicadas.Clear();
+                descuentoRecargo = 0m;
+
+                RellenarFilas();
+                CalcularYMostrarMontos();
+                txtCodigoBarra.Focus();
+                return;
+            }
+
+            // Se elimina la fila: los productos de abajo suben y las filas vacías quedan al final.
+            dtgPresentacion.Rows.Remove(fila);
+
+            RellenarFilas();
+            CalcularYMostrarMontos();
+
+            txtCodigoBarra.Focus();
         }
         private void frmCobroSecundario_KeyDown(object sender, KeyEventArgs e)
         {

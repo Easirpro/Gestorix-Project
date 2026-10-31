@@ -294,6 +294,30 @@ namespace CapaVista
             decimal? precio = producto["PrecioCompra"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(producto["PrecioCompra"]);
             decimal iva = Convert.ToDecimal(producto["Alicuota"]);
 
+            // Si el producto ya está en la grilla, se suma 1 a esa fila en vez de agregar otra.
+            DataGridViewRow? filaExistente = dtgNuevaCompra.Rows.Cast<DataGridViewRow>()
+                .FirstOrDefault(f => !f.IsNewRow && f.Tag is int id && id == idProducto);
+
+            if (filaExistente != null)
+            {
+                TryLeerDecimal(filaExistente.Cells["Column2"].Value, out decimal cantidadActual);
+                filaExistente.Cells["Column2"].Value = cantidadActual + 1;
+
+                // Recalcula el total de la fila con la cantidad nueva (mismo cálculo que al editar la celda).
+                dataGridView1_CellEndEdit_1(dtgNuevaCompra, new DataGridViewCellEventArgs(filaExistente.Cells["Column2"].ColumnIndex, filaExistente.Index));
+
+                txtCodigobarra.Clear();
+                lstProductos.Items.Clear();
+                lstProductos.Visible = false;
+                productosEncontrados = null;
+
+                dtgNuevaCompra.ClearSelection();
+                filaExistente.Selected = true;
+
+                txtCodigobarra.Focus();
+                return;
+            }
+
             int indice = dtgNuevaCompra.Rows.Add();
 
             DataGridViewRow fila = dtgNuevaCompra.Rows[indice];
@@ -455,6 +479,17 @@ namespace CapaVista
 
             try
             {
+                // El número es opcional; si se cargó, no puede estar repetido para el proveedor.
+                if (logica.ExisteComprobante(idProveedor, cmbTipoComprobante.Text, txtNumeroComprobante.Text))
+                {
+                    MessageBox.Show("Ya está cargada la " + cmbTipoComprobante.Text.Trim() + " N.º " + txtNumeroComprobante.Text.Trim() +
+                        " de " + txtProveedor.Text.Trim() + ".\n\nRevise el número o anule la compra anterior si estaba mal cargada.",
+                        "Comprobante repetido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    txtNumeroComprobante.Focus();
+                    return;
+                }
+
                 ClsCompraEntidad compra = new ClsCompraEntidad();
 
                 compra.IdProveedor = idProveedor;
@@ -818,6 +853,25 @@ namespace CapaVista
         private void txtProveedor_DoubleClick(object sender, EventArgs e)
         {
             SeleccionarProveedor();
+        }
+        // Elegir el proveedor con el mouse (doble clic) o con Enter desde la lista.
+        private void lstProveedores_DoubleClick(object sender, EventArgs e)
+        {
+            SeleccionarProveedor();
+        }
+        private void lstProveedores_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                SeleccionarProveedor();
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true;
+                lstProveedores.Visible = false;
+                txtProveedor.Focus();
+            }
         }
 
 

@@ -216,6 +216,8 @@ namespace CapaVista
             lstProveedores.Size = new Size(214, 100);
             lstProveedores.TabIndex = 9;
             lstProveedores.Visible = false;
+            lstProveedores.DoubleClick += lstProveedores_DoubleClick;
+            lstProveedores.KeyDown += lstProveedores_KeyDown;
             // 
             // gpbPedido
             // 
