@@ -46,7 +46,7 @@ namespace CapaDatos
                     cmdPersona.Parameters.AddWithValue("@IdGenero",persona.IdGenero);
                     cmdPersona.Parameters.AddWithValue("@FechaNacimiento",persona.FeNac);
                     cmdPersona.Parameters.AddWithValue("@DNI",persona.DNI);
-                    cmdPersona.Parameters.AddWithValue("@CUIT",persona.CUIT);
+                    cmdPersona.Parameters.AddWithValue("@CUIT",string.IsNullOrWhiteSpace(persona.CUIT) ? DBNull.Value : persona.CUIT);
 
                     int filasPersona = cmdPersona.ExecuteNonQuery();
 
@@ -60,6 +60,17 @@ namespace CapaDatos
                     cmdUsuario.Parameters.AddWithValue("@IdRol",idRol);
                     cmdUsuario.Parameters.AddWithValue("@IdPersona",persona.IdPersona);
                     cmdUsuario.ExecuteNonQuery();
+
+                    // El rol forma parte del DVH del usuario: se recalcula en la misma transacción.
+                    SqlCommand cmdIdUsuario = new SqlCommand("SELECT IdUsuario FROM Usuario WHERE IdPersona = @IdPersona", con, trans);
+                    cmdIdUsuario.Parameters.AddWithValue("@IdPersona", persona.IdPersona);
+
+                    object idUsuario = cmdIdUsuario.ExecuteScalar();
+
+                    if (idUsuario != null && idUsuario != DBNull.Value)
+                    {
+                        new ClsUsuarioDatos().ActualizarDVHUsuario(Convert.ToInt32(idUsuario), con, trans);
+                    }
 
                     trans.Commit();
 

@@ -17,8 +17,6 @@ namespace CapaVista
         private const int PERMISO_ROLES = 1270;
         private int? idRolInicial;
         private DataTable dtPermisos;
-        public bool PermisosModificados { get; private set; }
-        private bool cerrarAlGuardar;
         private bool actualizandoArbol = false;
         private HashSet<TreeNode> nodosBloqueados = new HashSet<TreeNode>();
 
@@ -34,41 +32,14 @@ namespace CapaVista
             treePermisos.DrawMode = TreeViewDrawMode.OwnerDrawText;
             treePermisos.DrawNode += treePermisos_DrawNode;
         }
-        public frmPermisos(bool cerrarAlGuardar) : this()
-        {
-            this.cerrarAlGuardar = cerrarAlGuardar;
-        }
+        // Abre con ese rol seleccionado (por ejemplo, el del empleado que se está viendo).
         public frmPermisos(int idRol) : this()
         {
             idRolInicial = idRol;
         }
-        public frmPermisos(int idRol, bool cerrarAlGuardar) : this(idRol)
-        {
-            this.cerrarAlGuardar = cerrarAlGuardar;
-        }
 
-        public int IdRolSeleccionado
-        {
-            get
-            {
-                if (lstRoles.SelectedValue == null ||
-                    lstRoles.SelectedValue is DataRowView)
-                {
-                    return 0;
-                }
-
-                return Convert.ToInt32(lstRoles.SelectedValue);
-            }
-        }
-        public bool TienePermisosSeleccionados
-        {
-            get
-            {
-                return ObtenerPermisosSeleccionados().Count > 0;
-            }
-        }
-        // Desde la carga de empleados se abre este formulario para elegir el rol;
-        // modificar los permisos de un rol pide el permiso de Roles y Permisos.
+        // Este formulario solo edita los permisos de los roles; el rol de cada empleado se elige
+        // en la carga de empleados. Modificar permisos pide el permiso de Roles y Permisos.
         private bool PuedeEditarPermisos
         {
             get { return CapaEntidades.SesionUsuario.Permisos.Contains(PERMISO_ROLES); }
@@ -78,6 +49,7 @@ namespace CapaVista
             CargarRoles();
             CargarPermisos();
 
+            btnGuardar.Enabled = PuedeEditarPermisos;
             btnNuevoRol.Enabled = PuedeEditarPermisos;
             btnEliminarRol.Enabled = PuedeEditarPermisos;
 
@@ -558,16 +530,9 @@ namespace CapaVista
             {
                 rol.GuardarPermisos(idRol, permisos);
 
-                PermisosModificados = true;
-
-                MessageBox.Show("Los permisos del rol se guardaron correctamente.", "Permisos",
+                MessageBox.Show("Los permisos del rol se guardaron correctamente.\n\n" +
+                    "Los usuarios de ese rol los verán la próxima vez que inicien sesión.", "Permisos",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                if (cerrarAlGuardar)
-                {
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
             }
             catch (Exception ex)
             {
