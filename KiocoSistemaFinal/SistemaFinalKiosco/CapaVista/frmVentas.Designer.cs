@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVentas));
             lblTitulo = new Label();
             lblDescripcion = new Label();
@@ -362,11 +364,20 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Ventas";
             ((System.ComponentModel.ISupportInitialize)dtgVentas).EndInit();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbEstado, "Mostrá las ventas activas, las anuladas o todas.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private Label lblTitulo;
         private Label lblDescripcion;

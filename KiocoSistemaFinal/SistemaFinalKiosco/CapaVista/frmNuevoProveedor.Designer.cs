@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNuevoProveedor));
             lblTitulo = new Label();
             lblAyuda = new Label();
@@ -125,6 +127,7 @@
             txtRazonSocial.Location = new Point(110, 25);
             txtRazonSocial.MaxLength = 100;
             txtRazonSocial.Name = "txtRazonSocial";
+            txtRazonSocial.PlaceholderText = "Nombre legal del proveedor";
             txtRazonSocial.Size = new Size(190, 23);
             txtRazonSocial.TabIndex = 1;
             //
@@ -249,6 +252,7 @@
             txtEmail.Location = new Point(110, 56);
             txtEmail.MaxLength = 50;
             txtEmail.Name = "txtEmail";
+            txtEmail.PlaceholderText = "ejemplo@proveedor.com";
             txtEmail.Size = new Size(490, 23);
             txtEmail.TabIndex = 5;
             //
@@ -366,6 +370,7 @@
             txtCalle.Location = new Point(110, 87);
             txtCalle.MaxLength = 100;
             txtCalle.Name = "txtCalle";
+            txtCalle.PlaceholderText = "Nombre de la calle";
             txtCalle.Size = new Size(190, 23);
             txtCalle.TabIndex = 9;
             //
@@ -383,6 +388,7 @@
             txtNumero.Location = new Point(410, 87);
             txtNumero.MaxLength = 6;
             txtNumero.Name = "txtNumero";
+            txtNumero.PlaceholderText = "Ej.: 1234";
             txtNumero.Size = new Size(80, 23);
             txtNumero.TabIndex = 11;
             txtNumero.KeyPress += SoloNumeros_KeyPress;
@@ -401,6 +407,7 @@
             txtPiso.Location = new Point(110, 118);
             txtPiso.MaxLength = 10;
             txtPiso.Name = "txtPiso";
+            txtPiso.PlaceholderText = "Opcional";
             txtPiso.Size = new Size(80, 23);
             txtPiso.TabIndex = 13;
             //
@@ -418,6 +425,7 @@
             txtDepartamento.Location = new Point(410, 118);
             txtDepartamento.MaxLength = 10;
             txtDepartamento.Name = "txtDepartamento";
+            txtDepartamento.PlaceholderText = "Opcional";
             txtDepartamento.Size = new Size(80, 23);
             txtDepartamento.TabIndex = 15;
             //
@@ -436,6 +444,7 @@
             txtObservaciones.MaxLength = 255;
             txtObservaciones.Multiline = true;
             txtObservaciones.Name = "txtObservaciones";
+            txtObservaciones.PlaceholderText = "Notas sobre el proveedor (opcional)";
             txtObservaciones.ScrollBars = ScrollBars.Vertical;
             txtObservaciones.Size = new Size(616, 64);
             txtObservaciones.TabIndex = 6;
@@ -499,11 +508,24 @@
             grpContacto.PerformLayout();
             grpDireccion.ResumeLayout(false);
             grpDireccion.PerformLayout();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbIva, "Condición del proveedor frente al IVA.");
+            ttAyuda.SetToolTip(cmbTipoTelefono, "Elegí el tipo de teléfono (celular, fijo, etc.).");
+            ttAyuda.SetToolTip(cmbProvincia, "Elegí la provincia: después se cargan sus partidos.");
+            ttAyuda.SetToolTip(cmbPartido, "Elegí el partido (primero elegí la provincia).");
+            ttAyuda.SetToolTip(cmbLocalidad, "Elegí la localidad (primero el partido). El código postal se completa solo.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private Label lblTitulo;
         private Label lblAyuda;

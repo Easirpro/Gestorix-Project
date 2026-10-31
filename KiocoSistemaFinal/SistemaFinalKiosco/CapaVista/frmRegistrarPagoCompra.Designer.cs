@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRegistrarPagoCompra));
             lblTitulo = new Label();
             lblCompra = new Label();
@@ -159,6 +161,7 @@
             txtObservacion.MaxLength = 255;
             txtObservacion.Multiline = true;
             txtObservacion.Name = "txtObservacion";
+            txtObservacion.PlaceholderText = "Detalle del pago (opcional)";
             txtObservacion.ScrollBars = ScrollBars.Vertical;
             txtObservacion.Size = new Size(250, 55);
             txtObservacion.TabIndex = 11;
@@ -213,11 +216,20 @@
             Text = "Registrar pago";
             Load += frmRegistrarPagoCompra_Load;
             ((System.ComponentModel.ISupportInitialize)nudMonto).EndInit();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbMedioPago, "Elegí con qué se paga.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private System.Windows.Forms.Label lblTitulo;
         private System.Windows.Forms.Label lblCompra;

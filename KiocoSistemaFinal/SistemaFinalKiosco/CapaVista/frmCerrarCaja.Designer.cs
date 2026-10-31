@@ -210,6 +210,7 @@
             txtObservacion.MaxLength = 255;
             txtObservacion.Multiline = true;
             txtObservacion.Name = "txtObservacion";
+            txtObservacion.PlaceholderText = "Si lo contado no coincide con lo esperado, explicá por qué";
             txtObservacion.ScrollBars = ScrollBars.Vertical;
             txtObservacion.Size = new Size(370, 55);
             txtObservacion.TabIndex = 15;

@@ -83,6 +83,8 @@ namespace CapaVista
             this.KeyPreview = true;
 
             CargarBotones();
+            AplicarModoPantalla();
+
             try
             {
                 if (SesionUsuario.Permisos.Contains(730) && !new ClsCajaLogica().HayCajaAbierta())
@@ -109,6 +111,100 @@ namespace CapaVista
 
             RellenarFilas();
             CalcularYMostrarMontos();
+        }
+
+        // Quien no tiene el permiso de vender (210) no ve la pantalla de venta: solo el logo al centro
+        // con un mensaje de bienvenida. El menú de arriba queda igual, con las opciones de su rol.
+        private bool modoBienvenida = false;
+        private Label? lblBienvenida;
+        private Label? lblBienvenidaAyuda;
+
+        private System.Windows.Forms.Control[] ControlesDeVenta()
+        {
+            return new System.Windows.Forms.Control[]
+            {
+                label3, txtCodigoBarra, label4, txtCantidad, lstDescripcion, lblDescripcionSku,
+                dtgPresentacion, btnPromocion, btnQuitar, btnCambiarcantidad,
+                tableLayoutPanel1, btnCobrar, btnNuevaCompra
+            };
+        }
+        private void AplicarModoPantalla()
+        {
+            modoBienvenida = !SesionUsuario.Permisos.Contains(210);
+
+            foreach (System.Windows.Forms.Control control in ControlesDeVenta())
+            {
+                control.Visible = !modoBienvenida;
+            }
+
+            if (!modoBienvenida)
+            {
+                if (lblBienvenida != null) lblBienvenida.Visible = false;
+                if (lblBienvenidaAyuda != null) lblBienvenidaAyuda.Visible = false;
+
+                AjustarDiseno();
+                return;
+            }
+
+            string nombre = string.IsNullOrWhiteSpace(SesionUsuario.Nombre) ? SesionUsuario.Username : SesionUsuario.Nombre;
+
+            if (lblBienvenida == null)
+            {
+                lblBienvenida = new Label
+                {
+                    AutoSize = false,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold),
+                    Anchor = AnchorStyles.None
+                };
+
+                lblBienvenidaAyuda = new Label
+                {
+                    AutoSize = false,
+                    TextAlign = ContentAlignment.TopCenter,
+                    Font = new System.Drawing.Font("Segoe UI", 10.5F),
+                    ForeColor = SystemColors.GrayText,
+                    Anchor = AnchorStyles.None
+                };
+
+                Controls.Add(lblBienvenida);
+                Controls.Add(lblBienvenidaAyuda);
+            }
+
+            lblBienvenida.Text = "¡Hola, " + nombre + "! Te damos la bienvenida a Gestorix";
+            lblBienvenidaAyuda!.Text = "Usá el menú de arriba para trabajar con las opciones de tu rol.";
+            lblBienvenida.Visible = true;
+            lblBienvenidaAyuda.Visible = true;
+
+            AjustarDiseno();
+        }
+        // Logo grande al centro y el mensaje debajo, entre el menú y el pie con el usuario.
+        private void UbicarBienvenida(int ancho, int altoMenu, int abajo)
+        {
+            int margen = 12;
+            int disponibleAlto = Math.Max(200, abajo - altoMenu);
+
+            int anchoLogo = Math.Min(520, (int)(ancho * 0.5));
+            int altoLogo = anchoLogo * 169 / 270;   // misma proporción que el logo original
+
+            int altoTextos = 40 + 6 + 30;
+
+            if (altoLogo + altoTextos + 20 > disponibleAlto)
+            {
+                altoLogo = Math.Max(80, disponibleAlto - altoTextos - 20);
+                anchoLogo = altoLogo * 270 / 169;
+            }
+
+            int yLogo = altoMenu + (disponibleAlto - altoLogo - altoTextos) / 2;
+
+            pcbLogo.SetBounds((ancho - anchoLogo) / 2, yLogo, anchoLogo, altoLogo);
+            pcbLogo.Visible = true;
+
+            lblBienvenida?.SetBounds(margen, pcbLogo.Bottom + 10, ancho - margen * 2, 40);
+            lblBienvenidaAyuda?.SetBounds(margen, pcbLogo.Bottom + 56, ancho - margen * 2, 30);
+
+            lblBienvenida?.BringToFront();
+            lblBienvenidaAyuda?.BringToFront();
         }
 
         // Campana de alertas arriba a la derecha, al lado de cerrar sesión. Cada tipo de alerta
@@ -320,6 +416,13 @@ namespace CapaVista
                 int espacioInferior = 10;
 
                 pnlUsuario.SetBounds(0, alto - altoPie, ancho, altoPie);
+
+                if (modoBienvenida)
+                {
+                    UbicarBienvenida(ancho, altoMenu, pnlUsuario.Top);
+                    UbicarFechaHora();
+                    return;   // el finally reanuda el diseño
+                }
 
                 int anchoDerecha = Math.Clamp((int)(ancho * 0.32), 260, 360);
                 int xDerecha = ancho - margen - anchoDerecha;
@@ -954,6 +1057,10 @@ namespace CapaVista
         //Menu Item
         private void frmmenuPres_KeyDown(object sender, KeyEventArgs e)
         {
+            // Sin pantalla de venta no hay cobro (F2) ni segunda venta (F4).
+            if (modoBienvenida)
+                return;
+
             if (e.KeyCode == Keys.F2)
             {
                 e.SuppressKeyPress = true;

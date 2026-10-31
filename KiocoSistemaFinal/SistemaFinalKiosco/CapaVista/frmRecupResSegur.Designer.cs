@@ -47,6 +47,7 @@
             // 
             txtRespuesta.Location = new Point(28, 78);
             txtRespuesta.Name = "txtRespuesta";
+            txtRespuesta.PlaceholderText = "Tu respuesta a la pregunta";
             txtRespuesta.Size = new Size(161, 23);
             txtRespuesta.TabIndex = 1;
             txtRespuesta.KeyPress += txtRespuesta_KeyPress;

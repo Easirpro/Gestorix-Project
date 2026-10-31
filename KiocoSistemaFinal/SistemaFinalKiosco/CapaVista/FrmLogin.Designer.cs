@@ -59,6 +59,7 @@
             // 
             txtUser.Location = new Point(101, 56);
             txtUser.Name = "txtUser";
+            txtUser.PlaceholderText = "Tu usuario";
             txtUser.Size = new Size(171, 23);
             txtUser.TabIndex = 2;
             // 
@@ -67,6 +68,7 @@
             txtPass.Cursor = Cursors.IBeam;
             txtPass.Location = new Point(101, 110);
             txtPass.Name = "txtPass";
+            txtPass.PlaceholderText = "Tu contraseña";
             txtPass.Size = new Size(171, 23);
             txtPass.TabIndex = 3;
             txtPass.UseSystemPasswordChar = true;

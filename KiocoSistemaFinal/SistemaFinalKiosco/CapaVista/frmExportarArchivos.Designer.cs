@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmExportarArchivos));
             label1 = new Label();
             label2 = new Label();
@@ -224,11 +226,24 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Exportar Archivos";
             Load += frmExportarArchivos_Load_1;
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbProveedor, "Opcional: exportá solo los artículos de este proveedor.");
+            ttAyuda.SetToolTip(cmbSucursal, "Opcional: exportá solo los artículos de esta sucursal del proveedor.");
+            ttAyuda.SetToolTip(cmbRubro, "Opcional: exportá solo los artículos de este rubro.");
+            ttAyuda.SetToolTip(cmbMarca, "Opcional: exportá solo los artículos de esta marca.");
+            ttAyuda.SetToolTip(cmbEstado, "Elegí si se exportan los artículos activos, inactivos o todos.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private Label label1;
         private Label label2;

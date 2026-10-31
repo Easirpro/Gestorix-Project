@@ -59,6 +59,7 @@
             // 
             txtNuevoRol.Location = new Point(132, 83);
             txtNuevoRol.Name = "txtNuevoRol";
+            txtNuevoRol.PlaceholderText = "Ej.: Cajero de fin de semana";
             txtNuevoRol.Size = new Size(158, 23);
             txtNuevoRol.TabIndex = 2;
             // 

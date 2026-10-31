@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCargaEmpleados));
             label20 = new Label();
             cmbTipoTelefono = new ComboBox();
@@ -172,6 +174,7 @@
             // 
             txtDepartamento.Location = new Point(86, 223);
             txtDepartamento.Name = "txtDepartamento";
+            txtDepartamento.PlaceholderText = "Opcional";
             txtDepartamento.Size = new Size(83, 23);
             txtDepartamento.TabIndex = 17;
             // 
@@ -179,6 +182,7 @@
             // 
             txtPiso.Location = new Point(6, 223);
             txtPiso.Name = "txtPiso";
+            txtPiso.PlaceholderText = "Opcional";
             txtPiso.Size = new Size(71, 23);
             txtPiso.TabIndex = 16;
             // 
@@ -213,6 +217,7 @@
             // 
             txtAltura.Location = new Point(227, 167);
             txtAltura.Name = "txtAltura";
+            txtAltura.PlaceholderText = "Ej.: 1234";
             txtAltura.Size = new Size(100, 23);
             txtAltura.TabIndex = 15;
             // 
@@ -247,6 +252,7 @@
             // 
             txtCorreo.Location = new Point(6, 127);
             txtCorreo.Name = "txtCorreo";
+            txtCorreo.PlaceholderText = "ejemplo@correo.com";
             txtCorreo.Size = new Size(213, 23);
             txtCorreo.TabIndex = 11;
             txtCorreo.Validating += txtCorreo_Validating;
@@ -264,6 +270,7 @@
             // 
             txtCalle.Location = new Point(6, 167);
             txtCalle.Name = "txtCalle";
+            txtCalle.PlaceholderText = "Nombre de la calle";
             txtCalle.Size = new Size(215, 23);
             txtCalle.TabIndex = 14;
             // 
@@ -291,6 +298,7 @@
             // 
             txtTelefono.Location = new Point(6, 37);
             txtTelefono.Name = "txtTelefono";
+            txtTelefono.PlaceholderText = "Solo números, con característica";
             txtTelefono.Size = new Size(134, 23);
             txtTelefono.TabIndex = 18;
             txtTelefono.KeyPress += txtTelefono_KeyPress;
@@ -339,6 +347,7 @@
             // 
             txtDNI.Location = new Point(151, 239);
             txtDNI.Name = "txtDNI";
+            txtDNI.PlaceholderText = "8 números (sale del CUIL)";
             txtDNI.Size = new Size(134, 23);
             txtDNI.TabIndex = 6;
             txtDNI.KeyPress += txtDNI_KeyPress;
@@ -520,6 +529,7 @@
             // 
             txtApellido.Location = new Point(151, 45);
             txtApellido.Name = "txtApellido";
+            txtApellido.PlaceholderText = "Apellido del empleado";
             txtApellido.Size = new Size(134, 23);
             txtApellido.TabIndex = 7;
             // 
@@ -527,6 +537,7 @@
             // 
             txtNombre.Location = new Point(11, 45);
             txtNombre.Name = "txtNombre";
+            txtNombre.PlaceholderText = "Nombre del empleado";
             txtNombre.Size = new Size(134, 23);
             txtNombre.TabIndex = 6;
             // 
@@ -651,11 +662,27 @@
             tpgDireccion.PerformLayout();
             tpgContacto.ResumeLayout(false);
             tpgContacto.PerformLayout();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(lstUsuarios, "Elegí un empleado para ver o modificar sus datos.");
+            ttAyuda.SetToolTip(mkdCuil, "Ingresá el CUIL con sus 11 números: el DNI se completa solo.");
+            ttAyuda.SetToolTip(cmbGenero, "Elegí el género del empleado.");
+            ttAyuda.SetToolTip(cmbProvincia, "Elegí la provincia: después se cargan sus partidos.");
+            ttAyuda.SetToolTip(cmbPartido, "Elegí el partido (primero elegí la provincia).");
+            ttAyuda.SetToolTip(cmbLocalidad, "Elegí la localidad (primero el partido). El código postal se completa solo.");
+            ttAyuda.SetToolTip(cmbTipoTelefono, "Elegí el tipo de teléfono (celular, fijo, etc.).");
+            ttAyuda.SetToolTip(cmbRol, "Rol del empleado: define qué puede hacer en el sistema.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private GroupBox groupBox1;
         private Label label7;

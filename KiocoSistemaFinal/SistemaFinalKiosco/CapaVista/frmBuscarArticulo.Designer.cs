@@ -67,6 +67,7 @@
             // 
             txtBuscarArticulo.Location = new Point(12, 40);
             txtBuscarArticulo.Name = "txtBuscarArticulo";
+            txtBuscarArticulo.PlaceholderText = "Escribí el código o parte de la descripción";
             txtBuscarArticulo.Size = new Size(278, 23);
             txtBuscarArticulo.TabIndex = 2;
             txtBuscarArticulo.TextChanged += txtBuscarArticulo_TextChanged;

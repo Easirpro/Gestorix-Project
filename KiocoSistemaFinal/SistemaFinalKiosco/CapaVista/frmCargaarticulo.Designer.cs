@@ -18,6 +18,8 @@
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCargaarticulo));
             btnModificar = new Button();
             btnDiscontinuar = new Button();
@@ -71,6 +73,7 @@
             // 
             txtBuscarCodigoNombre.Location = new Point(11, 36);
             txtBuscarCodigoNombre.Name = "txtBuscarCodigoNombre";
+            txtBuscarCodigoNombre.PlaceholderText = "Código o nombre del artículo";
             txtBuscarCodigoNombre.Size = new Size(270, 23);
             txtBuscarCodigoNombre.TabIndex = 5;
             txtBuscarCodigoNombre.TextChanged += txtBuscarCodigoNombre_TextChanged;
@@ -264,11 +267,21 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Modificar articulo";
             ((System.ComponentModel.ISupportInitialize)dtgCargaarticulo).EndInit();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbMarca, "Filtrá los artículos por marca.");
+            ttAyuda.SetToolTip(cmbRubro, "Filtrá los artículos por rubro.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
         private Button btnModificar;
         private Button btnDiscontinuar;
         private TextBox txtBuscarCodigoNombre;

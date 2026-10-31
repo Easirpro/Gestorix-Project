@@ -213,6 +213,7 @@
             // 
             txtMontoRecibido.Location = new Point(23, 79);
             txtMontoRecibido.Name = "txtMontoRecibido";
+            txtMontoRecibido.PlaceholderText = "Monto que entrega el cliente";
             txtMontoRecibido.Size = new Size(118, 23);
             txtMontoRecibido.TabIndex = 22;
             txtMontoRecibido.TextChanged += txtMontoRecibido_TextChanged;

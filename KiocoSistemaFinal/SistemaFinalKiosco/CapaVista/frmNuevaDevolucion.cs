@@ -18,8 +18,10 @@ namespace CapaVista
         private ClsDevolucionLogica logica = new ClsDevolucionLogica();
         private ClsCajaLogica logicaCaja = new ClsCajaLogica();
 
-        private ClsSesionCajaEntidad sesionCaja;   // null = no hay caja abierta
+        private ClsSesionCajaEntidad? sesionCaja;   // null = no hay caja abierta
         private decimal precioDevolucion = 0;
+        // Cuántas devoluciones se registraron sin cerrar el formulario (se pueden cargar varias).
+        private int registradas = 0;
 
         // Motivos que, por defecto, indican que la unidad devuelta NO vuelve al stock
         private static readonly string[] MotivosSinReingreso = { "Producto fallado", "Producto vencido" };
@@ -64,15 +66,7 @@ namespace CapaVista
             cmbMotivo.Items.Add("Otro");
             cmbMotivo.SelectedIndex = -1;
 
-            try
-            {
-                sesionCaja = logicaCaja.ObtenerSesionAbierta();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("No se pudo obtener el estado de la caja.\n\n" + ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            RefrescarCaja(mostrarError: true);
 
             LimpiarDatosDevolucion();
             ActualizarInfoCaja();
@@ -88,7 +82,8 @@ namespace CapaVista
             grilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             grilla.MultiSelect = false;
             grilla.AllowUserToAddRows = false;
-            grilla.AllowUserToResizeColumns = false;
+            grilla.AllowUserToResizeColumns = true;   // se puede ajustar el ancho de las columnas
+            grilla.AllowUserToResizeRows = false;
             grilla.AllowUserToOrderColumns = false;
             grilla.RowHeadersVisible = false;
             grilla.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -180,7 +175,13 @@ namespace CapaVista
             }
 
             decimal disponible = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["CantidadDisponible"].Value);
+            decimal vendida = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["CantidadVendida"].Value);
             precioDevolucion = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["PrecioDevolucion"].Value);
+
+            // Productos vendidos con decimales (por peso): la cantidad acepta hasta 3 decimales.
+            bool conDecimales = vendida % 1 != 0 || disponible % 1 != 0;
+            nudCantidad.DecimalPlaces = conDecimales ? 3 : 0;
+            nudCantidad.Increment = conDecimales ? 0.1m : 1m;
 
             lblPrecioValor.Text = $"$ {precioDevolucion:N2}";
 
@@ -219,6 +220,24 @@ namespace CapaVista
             btnRegistrar.Enabled = false;
         }
 
+        // Vuelve a leer la caja abierta y su efectivo (puede haber cambiado desde que se abrió el formulario).
+        private void RefrescarCaja(bool mostrarError = false)
+        {
+            try
+            {
+                sesionCaja = logicaCaja.ObtenerSesionAbierta();
+            }
+            catch (Exception ex)
+            {
+                sesionCaja = null;
+
+                if (mostrarError)
+                {
+                    MessageBox.Show("No se pudo obtener el estado de la caja.\n\n" + ex.Message, "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
         private decimal ImporteADevolver()
         {
             return Math.Round(precioDevolucion * nudCantidad.Value, 2);
@@ -416,6 +435,10 @@ namespace CapaVista
 
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
+            // El efectivo de la caja se valida con el dato actual, no con el de cuando se abrió el formulario.
+            RefrescarCaja();
+            ActualizarInfoCaja();
+
             if (!ValidarCampos())
             {
                 return;
@@ -453,16 +476,18 @@ namespace CapaVista
             try
             {
                 devolucion = logica.RegistrarDevolucion(devolucion);
+                registradas++;
 
                 MessageBox.Show("La devolución se registró correctamente.\n\n" +
                                 "Devolución N.º " + devolucion.IdDevolucion +
                                 (devolucion.ReintegroEfectivo
                                     ? "\nImporte devuelto: $ " + devolucion.ImporteDevuelto.ToString("N2")
-                                    : "\nCambio por otra unidad"),
+                                    : "\nCambio por otra unidad") +
+                                "\n\nPodés devolver otro producto de la misma venta o tocar Cerrar.",
                     "Devolución registrada", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                // El formulario queda abierto en la misma venta para seguir devolviendo.
+                PrepararSiguienteDevolucion(venta);
             }
             catch (Exception ex)
             {
@@ -471,9 +496,30 @@ namespace CapaVista
             }
         }
 
+        // Después de registrar: marca la venta, recarga lo que queda por devolver y vacía los datos.
+        private void PrepararSiguienteDevolucion(DataGridViewRow venta)
+        {
+            try
+            {
+                venta.Cells["Estado"].Value = "Con devoluciones";
+            }
+            catch
+            {
+                // Es solo el texto de la grilla; si no se puede cambiar, se verá al volver a buscar.
+            }
+
+            RefrescarCaja();
+            CargarDetalle();
+
+            cmbMotivo.SelectedIndex = -1;
+            txtObservacion.Clear();
+
+            btnCancelar.Text = "Cerrar";
+            dgvDetalle.Focus();
+        }
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
+            this.DialogResult = registradas > 0 ? DialogResult.OK : DialogResult.Cancel;
             this.Close();
         }
 

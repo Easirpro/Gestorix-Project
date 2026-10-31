@@ -20,6 +20,8 @@ namespace CapaVista
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             ComponentResourceManager resources = new ComponentResourceManager(typeof(frmNuevoArticulo));
             pnlEncabezado = new Panel();
             lblTitulo = new Label();
@@ -207,6 +209,7 @@ namespace CapaVista
             // 
             txtPrecioCosto.Location = new Point(18, 54);
             txtPrecioCosto.Name = "txtPrecioCosto";
+            txtPrecioCosto.PlaceholderText = "Costo sin IVA, ej.: 1500";
             txtPrecioCosto.Size = new Size(192, 23);
             txtPrecioCosto.TabIndex = 1;
             txtPrecioCosto.TextChanged += txtPrecioCosto_TextChanged;
@@ -251,6 +254,7 @@ namespace CapaVista
             // 
             txtGanancia.Location = new Point(18, 127);
             txtGanancia.Name = "txtGanancia";
+            txtGanancia.PlaceholderText = "Ej.: 30";
             txtGanancia.Size = new Size(192, 23);
             txtGanancia.TabIndex = 6;
             txtGanancia.TextChanged += txtGanancia_TextChanged;
@@ -312,6 +316,7 @@ namespace CapaVista
             // 
             txtStockActual.Location = new Point(18, 84);
             txtStockActual.Name = "txtStockActual";
+            txtStockActual.PlaceholderText = "Cantidad que hay hoy";
             txtStockActual.Size = new Size(204, 23);
             txtStockActual.TabIndex = 2;
             // 
@@ -328,6 +333,7 @@ namespace CapaVista
             // 
             txtStockMinimo.Location = new Point(254, 84);
             txtStockMinimo.Name = "txtStockMinimo";
+            txtStockMinimo.PlaceholderText = "Avisa cuando baja de esta cantidad";
             txtStockMinimo.Size = new Size(204, 23);
             txtStockMinimo.TabIndex = 4;
             // 
@@ -344,6 +350,7 @@ namespace CapaVista
             // 
             txtStockMaximo.Location = new Point(18, 151);
             txtStockMaximo.Name = "txtStockMaximo";
+            txtStockMaximo.PlaceholderText = "Cantidad ideal al reponer";
             txtStockMaximo.Size = new Size(204, 23);
             txtStockMaximo.TabIndex = 6;
             // 
@@ -402,6 +409,7 @@ namespace CapaVista
             // 
             txtAlertaVencimiento.Location = new Point(248, 82);
             txtAlertaVencimiento.Name = "txtAlertaVencimiento";
+            txtAlertaVencimiento.PlaceholderText = "Días antes del vencimiento para avisar";
             txtAlertaVencimiento.Size = new Size(204, 23);
             txtAlertaVencimiento.TabIndex = 4;
             // 
@@ -442,6 +450,7 @@ namespace CapaVista
             // 
             txtCodigoPorLote.Location = new Point(18, 82);
             txtCodigoPorLote.Name = "txtCodigoPorLote";
+            txtCodigoPorLote.PlaceholderText = "Código del lote (opcional)";
             txtCodigoPorLote.Size = new Size(204, 23);
             txtCodigoPorLote.TabIndex = 2;
             // 
@@ -543,6 +552,7 @@ namespace CapaVista
             txtNombreProducto.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtNombreProducto.Location = new Point(18, 51);
             txtNombreProducto.Name = "txtNombreProducto";
+            txtNombreProducto.PlaceholderText = "Ej.: Coca Cola 500 ml";
             txtNombreProducto.Size = new Size(226, 23);
             txtNombreProducto.TabIndex = 1;
             // 
@@ -662,6 +672,7 @@ namespace CapaVista
             // 
             txtCodigo.Location = new Point(20, 45);
             txtCodigo.Name = "txtCodigo";
+            txtCodigo.PlaceholderText = "Código de barras o código interno";
             txtCodigo.Size = new Size(204, 23);
             txtCodigo.TabIndex = 1;
             // 
@@ -697,6 +708,7 @@ namespace CapaVista
             txtDescripcion.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtDescripcion.Location = new Point(20, 92);
             txtDescripcion.Name = "txtDescripcion";
+            txtDescripcion.PlaceholderText = "Descripción que se ve al vender";
             txtDescripcion.Size = new Size(800, 23);
             txtDescripcion.TabIndex = 5;
             // 
@@ -750,10 +762,24 @@ namespace CapaVista
             pnlPie.ResumeLayout(false);
             grpDatosPrincipales.ResumeLayout(false);
             grpDatosPrincipales.PerformLayout();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbRubro, "Rubro o categoría del producto.");
+            ttAyuda.SetToolTip(cmbMarca, "Marca del producto.");
+            ttAyuda.SetToolTip(cmbUnidadVenta, "Cómo se vende: por unidad, por kilo, etc.");
+            ttAyuda.SetToolTip(cmbProveedor, "Proveedor que vende este producto.");
+            ttAyuda.SetToolTip(cmbSucursal, "Sucursal del proveedor que lo vende.");
+            ttAyuda.SetToolTip(cmbIva, "Alícuota de IVA del producto.");
             ResumeLayout(false);
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private Panel pnlEncabezado;
         private Label lblTitulo;

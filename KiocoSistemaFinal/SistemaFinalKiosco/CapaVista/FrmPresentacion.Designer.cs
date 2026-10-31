@@ -293,6 +293,7 @@
             // 
             txtCodigoBarra.Location = new Point(12, 54);
             txtCodigoBarra.Name = "txtCodigoBarra";
+            txtCodigoBarra.PlaceholderText = "Código de barras, SKU o nombre del producto";
             txtCodigoBarra.Size = new Size(303, 23);
             txtCodigoBarra.TabIndex = 5;
             txtCodigoBarra.TextChanged += txtCodigoBarra_TextChanged;
@@ -302,6 +303,7 @@
             // 
             txtCantidad.Location = new Point(331, 54);
             txtCantidad.Name = "txtCantidad";
+            txtCantidad.PlaceholderText = "1 si lo dejás vacío";
             txtCantidad.Size = new Size(117, 23);
             txtCantidad.TabIndex = 6;
             txtCantidad.TextChanged += txtCantidad_TextChanged;

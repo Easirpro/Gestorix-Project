@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNuevaDevolucion));
             grpVenta = new GroupBox();
             lblDesde = new Label();
@@ -131,6 +133,7 @@
             // 
             txtNroVenta.Location = new Point(470, 24);
             txtNroVenta.Name = "txtNroVenta";
+            txtNroVenta.PlaceholderText = "Opcional: N.º exacto de la venta";
             txtNroVenta.Size = new Size(90, 23);
             txtNroVenta.TabIndex = 6;
             // 
@@ -303,6 +306,7 @@
             txtObservacion.MaxLength = 150;
             txtObservacion.Multiline = true;
             txtObservacion.Name = "txtObservacion";
+            txtObservacion.PlaceholderText = "Obligatorio si el motivo es «Otro»";
             txtObservacion.ScrollBars = ScrollBars.Vertical;
             txtObservacion.Size = new Size(405, 55);
             txtObservacion.TabIndex = 21;
@@ -407,10 +411,19 @@
             grpDatos.ResumeLayout(false);
             grpDatos.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).EndInit();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbMotivo, "Motivo de la devolución. Si el producto está fallado o vencido, por defecto no vuelve al stock (se puede cambiar abajo).");
             ResumeLayout(false);
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private System.Windows.Forms.GroupBox grpVenta;
         private System.Windows.Forms.Label lblDesde;

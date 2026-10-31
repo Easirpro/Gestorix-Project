@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             lblTitulo = new Label();
             lblDescripcion = new Label();
             btnTotal = new Button();
@@ -309,11 +311,21 @@
             StartPosition = FormStartPosition.CenterParent;
             Text = "Alertas";
             ((System.ComponentModel.ISupportInitialize)dtgAlertas).EndInit();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbTipo, "Elegí un tipo de alerta para ver solo esas. «Todos» muestra todas.");
+            ttAyuda.SetToolTip(cmbPrioridad, "Filtrá por prioridad: urgentes (rojo) o avisos (naranja).");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private Label lblTitulo;
         private Label lblDescripcion;

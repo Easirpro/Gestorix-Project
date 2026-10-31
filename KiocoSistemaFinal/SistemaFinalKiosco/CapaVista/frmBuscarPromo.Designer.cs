@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBuscarPromo));
             lblBuscarPromo = new Label();
             lblDescipcionPromo = new Label();
@@ -154,11 +156,20 @@
             Text = "Buscar Promoción";
             Load += frmBuscarPromo_Load_1;
             ((System.ComponentModel.ISupportInitialize)dtgBuscarPromo).EndInit();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbBuscarPromo, "Escribí el código o el nombre de la promoción y elegila de la lista.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private Label lblBuscarPromo;
         private Label lblDescipcionPromo;

@@ -52,6 +52,7 @@
             // 
             txtCorreo.Location = new Point(22, 48);
             txtCorreo.Name = "txtCorreo";
+            txtCorreo.PlaceholderText = "Tu nueva contraseña";
             txtCorreo.Size = new Size(196, 23);
             txtCorreo.TabIndex = 1;
             txtCorreo.UseSystemPasswordChar = true;
@@ -71,6 +72,7 @@
             // 
             txtIngCodigo.Location = new Point(22, 98);
             txtIngCodigo.Name = "txtIngCodigo";
+            txtIngCodigo.PlaceholderText = "Repetí la nueva contraseña";
             txtIngCodigo.Size = new Size(196, 23);
             txtIngCodigo.TabIndex = 3;
             txtIngCodigo.UseSystemPasswordChar = true;
