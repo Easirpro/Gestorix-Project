@@ -96,8 +96,9 @@ namespace CapaVista
             btnNuevoIngreso.Enabled = abierta && SesionUsuario.Permisos.Contains(710);
             btnNuevoEgreso.Enabled = abierta && SesionUsuario.Permisos.Contains(720);
             btnCerrarCaja.Enabled = abierta && SesionUsuario.Permisos.Contains(740);
-            // Anular un movimiento manual queda para quien puede cerrar la caja (encargado).
-            btnAnularMovimiento.Enabled = abierta && SesionUsuario.Permisos.Contains(740);
+            // Anular un movimiento manual queda solo para el administrador.
+            btnAnularMovimiento.Enabled = abierta && SesionUsuario.Permisos.Contains(760);
+            btnHistorial.Enabled = SesionUsuario.Permisos.Contains(750);
         }
 
         private void AbrirMovimiento(frmmenuPres.TipoMovimiento tipo)

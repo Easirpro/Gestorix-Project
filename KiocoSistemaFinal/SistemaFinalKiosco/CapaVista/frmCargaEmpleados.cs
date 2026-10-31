@@ -699,7 +699,8 @@ namespace CapaVista
 
             CargarUsuarios();
 
-
+            btnNuevo.Enabled = CapaEntidades.SesionUsuario.Permisos.Contains(1000) || CapaEntidades.SesionUsuario.Permisos.Contains(1010);
+            btnModificar.Enabled = CapaEntidades.SesionUsuario.Permisos.Contains(1000) || CapaEntidades.SesionUsuario.Permisos.Contains(1020);
         }
         //Evento Boton Crear
         private void btnCrear_Click(object sender, EventArgs e)

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CapaEntidades;
 
 namespace CapaVista
 {
@@ -27,8 +28,16 @@ namespace CapaVista
             txtBuscar.TextChanged += txtBuscar_TextChanged;
 
             CargarProveedores();
+            AplicarPermisos();
         }
         #region Metodos
+        private void AplicarPermisos()
+        {
+            btnNuevoProveedor.Enabled = SesionUsuario.Permisos.Contains(410) || SesionUsuario.Permisos.Contains(411);
+            bool puedeModificar = SesionUsuario.Permisos.Contains(410) || SesionUsuario.Permisos.Contains(412);
+            btnModificar.Enabled = puedeModificar;
+            btnDescontinuar.Enabled = puedeModificar;
+        }
         private void CargarProveedores()
         {
             tablaProveedores = logica.ObtenerProveedores();

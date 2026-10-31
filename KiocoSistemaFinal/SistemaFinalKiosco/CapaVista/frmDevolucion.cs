@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CapaEntidades;
 
 namespace CapaVista
 {
@@ -29,6 +30,8 @@ namespace CapaVista
 
             // El listado no se edita: el botón Guardar no se usa
             btnGuardar.Visible = false;
+
+            btnNuevaDevolucion.Enabled = SesionUsuario.Permisos.Contains(220) || SesionUsuario.Permisos.Contains(221);
 
             ConfigurarGrid();
         }

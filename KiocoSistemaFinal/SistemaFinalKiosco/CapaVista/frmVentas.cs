@@ -36,7 +36,7 @@ namespace CapaVista
         #region Metodos
         private void AplicarPermisos()
         {
-            bool puedeGestionarVentas = SesionUsuario.Permisos.Contains(200) || SesionUsuario.Permisos.Contains(210);
+            bool puedeGestionarVentas = SesionUsuario.Permisos.Contains(250);
 
             btnAnular.Enabled = puedeGestionarVentas;
         }
@@ -156,7 +156,7 @@ namespace CapaVista
 
             btnAnular.Text = anulada ? "Activar" : "Anular";
 
-            btnAnular.Enabled = SesionUsuario.Permisos.Contains(200) || SesionUsuario.Permisos.Contains(210);
+            btnAnular.Enabled = SesionUsuario.Permisos.Contains(250);
         }
         private void CargarObservaciones()
         {
