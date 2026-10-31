@@ -29,6 +29,8 @@ namespace CapaVista
             gpbProveedor = new GroupBox();
             btnBuscar = new Button();
             txtProveedor = new TextBox();
+            lblSucursal = new Label();
+            cmbSucursal = new ComboBox();
             lstProveedores = new ListBox();
             gpbPedido = new GroupBox();
             labelNumeroPedido = new Label();
@@ -61,13 +63,13 @@ namespace CapaVista
             btnGuardar = new Button();
             btnCacelar = new Button();
             grpCondicionPago = new GroupBox();
+            dtpVencimiento = new DateTimePicker();
+            lblVencimiento = new Label();
             chkPagaDesdeCaja = new CheckBox();
             cmbMedioPagoCompra = new ComboBox();
             lblMedioPagoCompra = new Label();
             cmbCondicionPago = new ComboBox();
             lblCondicionPago = new Label();
-            lblVencimiento = new Label();
-            dtpVencimiento = new DateTimePicker();
             gpbProveedor.SuspendLayout();
             gpbPedido.SuspendLayout();
             gpbComprobante.SuspendLayout();
@@ -80,7 +82,7 @@ namespace CapaVista
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(14, 19);
+            label1.Location = new Point(14, 20);
             label1.Name = "label1";
             label1.Size = new Size(250, 15);
             label1.TabIndex = 0;
@@ -89,7 +91,7 @@ namespace CapaVista
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(14, 19);
+            label2.Location = new Point(14, 24);
             label2.Name = "label2";
             label2.Size = new Size(121, 15);
             label2.TabIndex = 0;
@@ -98,7 +100,7 @@ namespace CapaVista
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(145, 22);
+            label3.Location = new Point(145, 20);
             label3.Name = "label3";
             label3.Size = new Size(97, 15);
             label3.TabIndex = 2;
@@ -107,7 +109,8 @@ namespace CapaVista
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 583);
+            label4.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label4.Location = new Point(12, 530);
             label4.Name = "label4";
             label4.Size = new Size(84, 15);
             label4.TabIndex = 5;
@@ -116,7 +119,7 @@ namespace CapaVista
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(445, 25);
+            label5.Location = new Point(445, 24);
             label5.Name = "label5";
             label5.Size = new Size(89, 15);
             label5.TabIndex = 4;
@@ -125,7 +128,7 @@ namespace CapaVista
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(230, 25);
+            label8.Location = new Point(230, 24);
             label8.Name = "label8";
             label8.Size = new Size(24, 15);
             label8.TabIndex = 2;
@@ -134,7 +137,7 @@ namespace CapaVista
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(14, 25);
+            label9.Location = new Point(14, 24);
             label9.Name = "label9";
             label9.Size = new Size(32, 15);
             label9.TabIndex = 0;
@@ -143,7 +146,7 @@ namespace CapaVista
             // labelNumeroComprobante
             // 
             labelNumeroComprobante.AutoSize = true;
-            labelNumeroComprobante.Location = new Point(250, 19);
+            labelNumeroComprobante.Location = new Point(360, 24);
             labelNumeroComprobante.Name = "labelNumeroComprobante";
             labelNumeroComprobante.Size = new Size(115, 15);
             labelNumeroComprobante.TabIndex = 3;
@@ -154,18 +157,20 @@ namespace CapaVista
             gpbProveedor.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             gpbProveedor.Controls.Add(btnBuscar);
             gpbProveedor.Controls.Add(txtProveedor);
-            gpbProveedor.Location = new Point(555, 10);
+            gpbProveedor.Controls.Add(lblSucursal);
+            gpbProveedor.Controls.Add(cmbSucursal);
+            gpbProveedor.Location = new Point(540, 8);
             gpbProveedor.Name = "gpbProveedor";
-            gpbProveedor.Size = new Size(353, 95);
+            gpbProveedor.Size = new Size(348, 78);
             gpbProveedor.TabIndex = 1;
             gpbProveedor.TabStop = false;
             gpbProveedor.Text = "Proveedor";
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(225, 39);
+            btnBuscar.Location = new Point(232, 19);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(110, 25);
+            btnBuscar.Size = new Size(104, 25);
             btnBuscar.TabIndex = 1;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
@@ -173,22 +178,42 @@ namespace CapaVista
             // 
             // txtProveedor
             // 
-            txtProveedor.Location = new Point(14, 40);
+            txtProveedor.Location = new Point(12, 20);
             txtProveedor.Name = "txtProveedor";
-            txtProveedor.Size = new Size(205, 23);
+            txtProveedor.Size = new Size(214, 23);
             txtProveedor.TabIndex = 0;
             txtProveedor.TextChanged += txtProveedor_TextChanged;
             txtProveedor.DoubleClick += txtProveedor_DoubleClick;
             txtProveedor.KeyDown += txtProveedor_KeyDown;
-            // 
+            //
+            // lblSucursal
+            //
+            lblSucursal.AutoSize = true;
+            lblSucursal.Location = new Point(12, 52);
+            lblSucursal.Name = "lblSucursal";
+            lblSucursal.Size = new Size(54, 15);
+            lblSucursal.TabIndex = 2;
+            lblSucursal.Text = "Sucursal:";
+            //
+            // cmbSucursal
+            //
+            cmbSucursal.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbSucursal.Enabled = false;
+            cmbSucursal.FormattingEnabled = true;
+            cmbSucursal.Location = new Point(75, 48);
+            cmbSucursal.Name = "cmbSucursal";
+            cmbSucursal.Size = new Size(261, 23);
+            cmbSucursal.TabIndex = 3;
+            //
             // lstProveedores
-            // 
+            //
             lstProveedores.FormattingEnabled = true;
             lstProveedores.IntegralHeight = false;
             lstProveedores.ItemHeight = 15;
-            lstProveedores.Location = new Point(569, 72);
+            lstProveedores.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lstProveedores.Location = new Point(552, 51);
             lstProveedores.Name = "lstProveedores";
-            lstProveedores.Size = new Size(205, 100);
+            lstProveedores.Size = new Size(214, 100);
             lstProveedores.TabIndex = 9;
             lstProveedores.Visible = false;
             // 
@@ -203,9 +228,9 @@ namespace CapaVista
             gpbPedido.Controls.Add(dtpEntrega);
             gpbPedido.Controls.Add(labelEstadoPedido);
             gpbPedido.Controls.Add(lblEstadoPedido);
-            gpbPedido.Location = new Point(12, 10);
+            gpbPedido.Location = new Point(12, 8);
             gpbPedido.Name = "gpbPedido";
-            gpbPedido.Size = new Size(535, 95);
+            gpbPedido.Size = new Size(520, 78);
             gpbPedido.TabIndex = 0;
             gpbPedido.TabStop = false;
             gpbPedido.Text = "Datos del pedido";
@@ -213,7 +238,7 @@ namespace CapaVista
             // labelNumeroPedido
             // 
             labelNumeroPedido.AutoSize = true;
-            labelNumeroPedido.Location = new Point(14, 22);
+            labelNumeroPedido.Location = new Point(14, 20);
             labelNumeroPedido.Name = "labelNumeroPedido";
             labelNumeroPedido.Size = new Size(105, 15);
             labelNumeroPedido.TabIndex = 0;
@@ -221,7 +246,7 @@ namespace CapaVista
             // 
             // txtNumeroPedidoInterno
             // 
-            txtNumeroPedidoInterno.Location = new Point(14, 43);
+            txtNumeroPedidoInterno.Location = new Point(14, 40);
             txtNumeroPedidoInterno.Name = "txtNumeroPedidoInterno";
             txtNumeroPedidoInterno.ReadOnly = true;
             txtNumeroPedidoInterno.Size = new Size(120, 23);
@@ -231,7 +256,7 @@ namespace CapaVista
             // dtpFechaPedido
             // 
             dtpFechaPedido.Format = DateTimePickerFormat.Short;
-            dtpFechaPedido.Location = new Point(145, 43);
+            dtpFechaPedido.Location = new Point(145, 40);
             dtpFechaPedido.Name = "dtpFechaPedido";
             dtpFechaPedido.Size = new Size(120, 23);
             dtpFechaPedido.TabIndex = 3;
@@ -239,7 +264,7 @@ namespace CapaVista
             // labelFechaEntrega
             // 
             labelFechaEntrega.AutoSize = true;
-            labelFechaEntrega.Location = new Point(275, 22);
+            labelFechaEntrega.Location = new Point(275, 20);
             labelFechaEntrega.Name = "labelFechaEntrega";
             labelFechaEntrega.Size = new Size(98, 15);
             labelFechaEntrega.TabIndex = 4;
@@ -249,7 +274,7 @@ namespace CapaVista
             // 
             dtpEntrega.Checked = false;
             dtpEntrega.Format = DateTimePickerFormat.Short;
-            dtpEntrega.Location = new Point(275, 43);
+            dtpEntrega.Location = new Point(275, 40);
             dtpEntrega.Name = "dtpEntrega";
             dtpEntrega.ShowCheckBox = true;
             dtpEntrega.Size = new Size(120, 23);
@@ -258,7 +283,7 @@ namespace CapaVista
             // labelEstadoPedido
             // 
             labelEstadoPedido.AutoSize = true;
-            labelEstadoPedido.Location = new Point(410, 22);
+            labelEstadoPedido.Location = new Point(410, 20);
             labelEstadoPedido.Name = "labelEstadoPedido";
             labelEstadoPedido.Size = new Size(42, 15);
             labelEstadoPedido.TabIndex = 6;
@@ -269,7 +294,7 @@ namespace CapaVista
             lblEstadoPedido.AutoSize = true;
             lblEstadoPedido.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblEstadoPedido.ForeColor = Color.DarkGoldenrod;
-            lblEstadoPedido.Location = new Point(410, 46);
+            lblEstadoPedido.Location = new Point(410, 44);
             lblEstadoPedido.Name = "lblEstadoPedido";
             lblEstadoPedido.Size = new Size(57, 15);
             lblEstadoPedido.TabIndex = 7;
@@ -282,9 +307,9 @@ namespace CapaVista
             gpbComprobante.Controls.Add(cmbTipoComprobante);
             gpbComprobante.Controls.Add(labelNumeroComprobante);
             gpbComprobante.Controls.Add(txtNumeroComprobante);
-            gpbComprobante.Location = new Point(12, 112);
+            gpbComprobante.Location = new Point(12, 92);
             gpbComprobante.Name = "gpbComprobante";
-            gpbComprobante.Size = new Size(896, 65);
+            gpbComprobante.Size = new Size(876, 56);
             gpbComprobante.TabIndex = 2;
             gpbComprobante.TabStop = false;
             gpbComprobante.Text = "Comprobante del proveedor (si corresponde)";
@@ -293,31 +318,31 @@ namespace CapaVista
             // 
             cmbTipoComprobante.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoComprobante.FormattingEnabled = true;
-            cmbTipoComprobante.Items.AddRange(new object[] { "Factura A", "Factura B", "Factura C", "Nota de Crédito A", "Nota de Crédito B", "Nota de Crédito C" });
-            cmbTipoComprobante.Location = new Point(14, 38);
+            cmbTipoComprobante.Items.AddRange(new object[] { "Factura A", "Factura B", "Factura C" });
+            cmbTipoComprobante.Location = new Point(140, 20);
             cmbTipoComprobante.Name = "cmbTipoComprobante";
-            cmbTipoComprobante.Size = new Size(220, 23);
+            cmbTipoComprobante.Size = new Size(200, 23);
             cmbTipoComprobante.TabIndex = 2;
             // 
             // txtNumeroComprobante
             // 
-            txtNumeroComprobante.Location = new Point(250, 38);
+            txtNumeroComprobante.Location = new Point(482, 20);
             txtNumeroComprobante.Name = "txtNumeroComprobante";
-            txtNumeroComprobante.Size = new Size(220, 23);
+            txtNumeroComprobante.Size = new Size(200, 23);
             txtNumeroComprobante.TabIndex = 3;
             // 
             // gpbProductos
             // 
-            gpbProductos.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gpbProductos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             gpbProductos.Controls.Add(label1);
             gpbProductos.Controls.Add(txtCodigobarra);
             gpbProductos.Controls.Add(btnCargarProducto);
             gpbProductos.Controls.Add(lstProductos);
             gpbProductos.Controls.Add(dtgNuevaCompra);
             gpbProductos.Controls.Add(btnEliminarCompra);
-            gpbProductos.Location = new Point(12, 183);
+            gpbProductos.Location = new Point(12, 154);
             gpbProductos.Name = "gpbProductos";
-            gpbProductos.Size = new Size(896, 250);
+            gpbProductos.Size = new Size(876, 250);
             gpbProductos.TabIndex = 3;
             gpbProductos.TabStop = false;
             gpbProductos.Text = "Productos del pedido";
@@ -357,18 +382,18 @@ namespace CapaVista
             // 
             dtgNuevaCompra.AllowUserToAddRows = false;
             dtgNuevaCompra.AllowUserToResizeRows = false;
-            dtgNuevaCompra.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            dtgNuevaCompra.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dtgNuevaCompra.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dtgNuevaCompra.BackgroundColor = SystemColors.Window;
             dtgNuevaCompra.BorderStyle = BorderStyle.Fixed3D;
             dtgNuevaCompra.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtgNuevaCompra.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6 });
-            dtgNuevaCompra.Location = new Point(14, 69);
+            dtgNuevaCompra.Location = new Point(14, 68);
             dtgNuevaCompra.MultiSelect = false;
             dtgNuevaCompra.Name = "dtgNuevaCompra";
             dtgNuevaCompra.RowHeadersVisible = false;
             dtgNuevaCompra.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dtgNuevaCompra.Size = new Size(868, 140);
+            dtgNuevaCompra.Size = new Size(848, 146);
             dtgNuevaCompra.TabIndex = 4;
             dtgNuevaCompra.CellContentClick += dataGridView1_CellContentClick;
             dtgNuevaCompra.CellEndEdit += dataGridView1_CellEndEdit_1;
@@ -414,7 +439,8 @@ namespace CapaVista
             // 
             // btnEliminarCompra
             // 
-            btnEliminarCompra.Location = new Point(14, 216);
+            btnEliminarCompra.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnEliminarCompra.Location = new Point(14, 220);
             btnEliminarCompra.Name = "btnEliminarCompra";
             btnEliminarCompra.Size = new Size(120, 25);
             btnEliminarCompra.TabIndex = 5;
@@ -424,23 +450,23 @@ namespace CapaVista
             // 
             // gpbTotales
             // 
-            gpbTotales.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gpbTotales.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             gpbTotales.Controls.Add(label9);
             gpbTotales.Controls.Add(txtTotal);
             gpbTotales.Controls.Add(label8);
             gpbTotales.Controls.Add(txtIva);
             gpbTotales.Controls.Add(label5);
             gpbTotales.Controls.Add(txtSubsinImpuesto);
-            gpbTotales.Location = new Point(12, 439);
+            gpbTotales.Location = new Point(12, 410);
             gpbTotales.Name = "gpbTotales";
-            gpbTotales.Size = new Size(896, 60);
+            gpbTotales.Size = new Size(876, 52);
             gpbTotales.TabIndex = 4;
             gpbTotales.TabStop = false;
             gpbTotales.Text = "Totales estimados";
             // 
             // txtTotal
             // 
-            txtTotal.Location = new Point(55, 21);
+            txtTotal.Location = new Point(55, 20);
             txtTotal.Name = "txtTotal";
             txtTotal.ReadOnly = true;
             txtTotal.Size = new Size(150, 23);
@@ -449,7 +475,7 @@ namespace CapaVista
             // 
             // txtIva
             // 
-            txtIva.Location = new Point(270, 21);
+            txtIva.Location = new Point(270, 20);
             txtIva.Name = "txtIva";
             txtIva.ReadOnly = true;
             txtIva.Size = new Size(150, 23);
@@ -458,7 +484,7 @@ namespace CapaVista
             // 
             // txtSubsinImpuesto
             // 
-            txtSubsinImpuesto.Location = new Point(545, 21);
+            txtSubsinImpuesto.Location = new Point(545, 20);
             txtSubsinImpuesto.Name = "txtSubsinImpuesto";
             txtSubsinImpuesto.ReadOnly = true;
             txtSubsinImpuesto.Size = new Size(200, 23);
@@ -467,18 +493,18 @@ namespace CapaVista
             // 
             // txtObservaciones
             // 
-            txtObservaciones.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtObservaciones.Location = new Point(12, 603);
+            txtObservaciones.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtObservaciones.Location = new Point(12, 548);
             txtObservaciones.Multiline = true;
             txtObservaciones.Name = "txtObservaciones";
             txtObservaciones.ScrollBars = ScrollBars.Vertical;
-            txtObservaciones.Size = new Size(896, 76);
+            txtObservaciones.Size = new Size(876, 50);
             txtObservaciones.TabIndex = 6;
             // 
             // btnGuardar
             // 
             btnGuardar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnGuardar.Location = new Point(650, 685);
+            btnGuardar.Location = new Point(632, 604);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(125, 30);
             btnGuardar.TabIndex = 7;
@@ -489,7 +515,7 @@ namespace CapaVista
             // btnCacelar
             // 
             btnCacelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCacelar.Location = new Point(785, 685);
+            btnCacelar.Location = new Point(765, 604);
             btnCacelar.Name = "btnCacelar";
             btnCacelar.Size = new Size(123, 30);
             btnCacelar.TabIndex = 8;
@@ -498,6 +524,7 @@ namespace CapaVista
             // 
             // grpCondicionPago
             // 
+            grpCondicionPago.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             grpCondicionPago.Controls.Add(dtpVencimiento);
             grpCondicionPago.Controls.Add(lblVencimiento);
             grpCondicionPago.Controls.Add(chkPagaDesdeCaja);
@@ -505,12 +532,29 @@ namespace CapaVista
             grpCondicionPago.Controls.Add(lblMedioPagoCompra);
             grpCondicionPago.Controls.Add(cmbCondicionPago);
             grpCondicionPago.Controls.Add(lblCondicionPago);
-            grpCondicionPago.Location = new Point(12, 505);
+            grpCondicionPago.Location = new Point(12, 468);
             grpCondicionPago.Name = "grpCondicionPago";
-            grpCondicionPago.Size = new Size(896, 75);
+            grpCondicionPago.Size = new Size(876, 56);
             grpCondicionPago.TabIndex = 10;
             grpCondicionPago.TabStop = false;
             grpCondicionPago.Text = "Condición de pago";
+            // 
+            // dtpVencimiento
+            // 
+            dtpVencimiento.Format = DateTimePickerFormat.Short;
+            dtpVencimiento.Location = new Point(621, 22);
+            dtpVencimiento.Name = "dtpVencimiento";
+            dtpVencimiento.Size = new Size(218, 23);
+            dtpVencimiento.TabIndex = 6;
+            // 
+            // lblVencimiento
+            // 
+            lblVencimiento.AutoSize = true;
+            lblVencimiento.Location = new Point(574, 26);
+            lblVencimiento.Name = "lblVencimiento";
+            lblVencimiento.Size = new Size(41, 15);
+            lblVencimiento.TabIndex = 5;
+            lblVencimiento.Text = "Vence:";
             // 
             // chkPagaDesdeCaja
             // 
@@ -559,28 +603,11 @@ namespace CapaVista
             lblCondicionPago.TabIndex = 0;
             lblCondicionPago.Text = "Condición:";
             // 
-            // lblVencimiento
-            // 
-            lblVencimiento.AutoSize = true;
-            lblVencimiento.Location = new Point(574, 26);
-            lblVencimiento.Name = "lblVencimiento";
-            lblVencimiento.Size = new Size(41, 15);
-            lblVencimiento.TabIndex = 5;
-            lblVencimiento.Text = "Vence:";
-            // 
-            // dtpVencimiento
-            // 
-            dtpVencimiento.Format = DateTimePickerFormat.Short;
-            dtpVencimiento.Location = new Point(621, 22);
-            dtpVencimiento.Name = "dtpVencimiento";
-            dtpVencimiento.Size = new Size(218, 23);
-            dtpVencimiento.TabIndex = 6;
-            // 
             // frmNuevaCompra
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(920, 720);
+            ClientSize = new Size(900, 644);
             Controls.Add(grpCondicionPago);
             Controls.Add(lstProveedores);
             Controls.Add(gpbPedido);
@@ -593,7 +620,7 @@ namespace CapaVista
             Controls.Add(btnGuardar);
             Controls.Add(btnCacelar);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MinimumSize = new Size(850, 600);
+            MinimumSize = new Size(916, 683);
             Name = "frmNuevaCompra";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Nueva compra";
@@ -628,6 +655,8 @@ namespace CapaVista
         private GroupBox gpbProveedor;
         private Button btnBuscar;
         private TextBox txtProveedor;
+        private Label lblSucursal;
+        private ComboBox cmbSucursal;
         private ListBox lstProveedores;
 
         private GroupBox gpbPedido;

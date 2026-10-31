@@ -95,5 +95,9 @@ namespace CapaVista
         }
         #endregion
 
+        private void frmCargaMecanicaVolumen_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

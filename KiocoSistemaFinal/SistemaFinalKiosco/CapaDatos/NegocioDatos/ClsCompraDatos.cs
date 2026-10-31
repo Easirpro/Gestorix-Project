@@ -27,6 +27,23 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        public DataTable BuscarProductoCompra(string texto, int idSucursal)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_BuscarProductoCompra", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@Texto", SqlDbType.NVarChar, 200).Value = texto;
+                cmd.Parameters.Add("@IdSucursal", SqlDbType.Int).Value = idSucursal;
+
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                {
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
+                }
+            }
+        }
         public int GuardarCompra(ClsCompraEntidad compra, int idUsuario)
         {
             if (compra == null)
@@ -88,6 +105,10 @@ namespace CapaDatos.NegocioDatos
                                 compra.IdMetodoPago.HasValue ? (object)compra.IdMetodoPago.Value : DBNull.Value);
                             cmd.Parameters.AddWithValue("@IdSesionCaja",
                                 compra.IdSesionCaja.HasValue ? (object)compra.IdSesionCaja.Value : DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IdSucursal",
+                                compra.IdSucursal.HasValue ? (object)compra.IdSucursal.Value : DBNull.Value);
+                            cmd.Parameters.Add("@FechaEntregaEstimada", SqlDbType.Date).Value =
+                                compra.FechaEntregaEstimada.HasValue ? (object)compra.FechaEntregaEstimada.Value.Date : DBNull.Value;
 
                             DataTable tablaDetalles = new DataTable();
                             tablaDetalles.Columns.Add("IdProducto", typeof(int));
@@ -226,6 +247,58 @@ namespace CapaDatos.NegocioDatos
                     cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
                     cmd.ExecuteNonQuery();
                 }
+            }
+        }
+        public DataTable ObtenerComprasPendientesRecepcion(string buscar, DateTime? fecha)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerComprasPendientesRecepcion", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@Buscar", SqlDbType.NVarChar, 100).Value = string.IsNullOrWhiteSpace(buscar) ? (object)DBNull.Value : buscar.Trim();
+                cmd.Parameters.Add("@Fecha", SqlDbType.Date).Value = fecha.HasValue ? (object)fecha.Value.Date : DBNull.Value;
+
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                {
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    return tabla;
+                }
+            }
+        }
+        public int ConfirmarRecepcion(ClsRecepcionCompraEntidad recepcion, int idUsuario)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ConfirmarRecepcionCompra", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@IdCompra", SqlDbType.Int).Value = recepcion.IdCompra;
+                cmd.Parameters.Add("@IdUsuario", SqlDbType.Int).Value = idUsuario;
+
+                SqlParameter parametroTotalBoleta = cmd.Parameters.Add("@TotalBoleta", SqlDbType.Decimal);
+                parametroTotalBoleta.Precision = 10;
+                parametroTotalBoleta.Scale = 2;
+                parametroTotalBoleta.Value = decimal.Round(recepcion.TotalBoleta, 2, MidpointRounding.AwayFromZero);
+
+                cmd.Parameters.Add("@Motivos", SqlDbType.NVarChar, 500).Value = string.IsNullOrWhiteSpace(recepcion.Motivos) ? (object)DBNull.Value : recepcion.Motivos;
+                cmd.Parameters.Add("@Observaciones", SqlDbType.NVarChar, 500).Value = string.IsNullOrWhiteSpace(recepcion.Observaciones) ? (object)DBNull.Value : recepcion.Observaciones;
+
+                DataTable tablaDetalles = new DataTable();
+                tablaDetalles.Columns.Add("IdProducto", typeof(int));
+                tablaDetalles.Columns.Add("CantidadRecibida", typeof(decimal));
+
+                foreach (ClsDetalleRecepcionEntidad detalle in recepcion.Detalles)
+                {
+                    tablaDetalles.Rows.Add(detalle.IdProducto, decimal.Round(detalle.CantidadRecibida, 3, MidpointRounding.AwayFromZero));
+                }
+
+                SqlParameter parametroDetalles = cmd.Parameters.AddWithValue("@Detalles", tablaDetalles);
+                parametroDetalles.SqlDbType = SqlDbType.Structured;
+                parametroDetalles.TypeName = "dbo.TipoDetalleRecepcion";
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
     }

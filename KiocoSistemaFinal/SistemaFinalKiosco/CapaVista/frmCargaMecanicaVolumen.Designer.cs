@@ -151,6 +151,7 @@
             Name = "frmCargaMecanicaVolumen";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Agregar Mecanica de Volumen";
+            Load += frmCargaMecanicaVolumen_Load;
             ResumeLayout(false);
             PerformLayout();
         }

@@ -28,36 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-            grpEstado = new System.Windows.Forms.GroupBox();
-            lblEstado = new System.Windows.Forms.Label();
-            lblAbiertaPor = new System.Windows.Forms.Label();
-            lblFechaApertura = new System.Windows.Forms.Label();
-            lblTituloFondo = new System.Windows.Forms.Label();
-            lblFondo = new System.Windows.Forms.Label();
-            lblTituloIngresos = new System.Windows.Forms.Label();
-            lblIngresos = new System.Windows.Forms.Label();
-            lblTituloEgresos = new System.Windows.Forms.Label();
-            lblEgresos = new System.Windows.Forms.Label();
-            lblTituloEsperado = new System.Windows.Forms.Label();
-            lblEsperado = new System.Windows.Forms.Label();
-            lblTituloOtros = new System.Windows.Forms.Label();
-            lblOtrosMedios = new System.Windows.Forms.Label();
-            btnAbrirCaja = new System.Windows.Forms.Button();
-            btnNuevoIngreso = new System.Windows.Forms.Button();
-            btnNuevoEgreso = new System.Windows.Forms.Button();
-            btnAnularMovimiento = new System.Windows.Forms.Button();
-            btnCerrarCaja = new System.Windows.Forms.Button();
-            btnHistorial = new System.Windows.Forms.Button();
-            btnActualizar = new System.Windows.Forms.Button();
-            lblMovimientos = new System.Windows.Forms.Label();
-            dgvMovimientos = new System.Windows.Forms.DataGridView();
-            btnSalir = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCaja));
+            grpEstado = new GroupBox();
+            lblEstado = new Label();
+            lblAbiertaPor = new Label();
+            lblFechaApertura = new Label();
+            lblTituloFondo = new Label();
+            lblFondo = new Label();
+            lblTituloIngresos = new Label();
+            lblIngresos = new Label();
+            lblTituloEgresos = new Label();
+            lblEgresos = new Label();
+            lblTituloEsperado = new Label();
+            lblEsperado = new Label();
+            lblTituloOtros = new Label();
+            lblOtrosMedios = new Label();
+            btnAbrirCaja = new Button();
+            btnNuevoIngreso = new Button();
+            btnNuevoEgreso = new Button();
+            btnAnularMovimiento = new Button();
+            btnCerrarCaja = new Button();
+            btnHistorial = new Button();
+            btnActualizar = new Button();
+            lblMovimientos = new Label();
+            dgvMovimientos = new DataGridView();
+            btnSalir = new Button();
             grpEstado.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvMovimientos).BeginInit();
             SuspendLayout();
             // 
             // grpEstado
             // 
+            grpEstado.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             grpEstado.Controls.Add(lblEstado);
             grpEstado.Controls.Add(lblAbiertaPor);
             grpEstado.Controls.Add(lblFechaApertura);
@@ -71,129 +73,141 @@
             grpEstado.Controls.Add(lblEsperado);
             grpEstado.Controls.Add(lblTituloOtros);
             grpEstado.Controls.Add(lblOtrosMedios);
-            grpEstado.Location = new System.Drawing.Point(12, 12);
+            grpEstado.Location = new Point(12, 12);
             grpEstado.Name = "grpEstado";
-            grpEstado.Size = new System.Drawing.Size(960, 120);
+            grpEstado.Size = new Size(960, 120);
             grpEstado.TabIndex = 0;
-            grpEstado.Text = "Estado de la caja";
             grpEstado.TabStop = false;
-            grpEstado.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            grpEstado.Text = "Estado de la caja";
             // 
             // lblEstado
             // 
-            lblEstado.Location = new System.Drawing.Point(15, 25);
+            lblEstado.AutoSize = true;
+            lblEstado.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblEstado.Location = new Point(15, 25);
             lblEstado.Name = "lblEstado";
+            lblEstado.Size = new Size(149, 25);
             lblEstado.TabIndex = 1;
             lblEstado.Text = "CAJA CERRADA";
-            lblEstado.AutoSize = true;
-            lblEstado.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             // 
             // lblAbiertaPor
             // 
-            lblAbiertaPor.Location = new System.Drawing.Point(15, 60);
+            lblAbiertaPor.AutoSize = true;
+            lblAbiertaPor.Location = new Point(15, 60);
             lblAbiertaPor.Name = "lblAbiertaPor";
+            lblAbiertaPor.Size = new Size(77, 15);
             lblAbiertaPor.TabIndex = 2;
             lblAbiertaPor.Text = "Abierta por: -";
-            lblAbiertaPor.AutoSize = true;
             // 
             // lblFechaApertura
             // 
-            lblFechaApertura.Location = new System.Drawing.Point(15, 85);
+            lblFechaApertura.AutoSize = true;
+            lblFechaApertura.Location = new Point(15, 85);
             lblFechaApertura.Name = "lblFechaApertura";
+            lblFechaApertura.Size = new Size(64, 15);
             lblFechaApertura.TabIndex = 3;
             lblFechaApertura.Text = "Apertura: -";
-            lblFechaApertura.AutoSize = true;
             // 
             // lblTituloFondo
             // 
-            lblTituloFondo.Location = new System.Drawing.Point(330, 25);
+            lblTituloFondo.AutoSize = true;
+            lblTituloFondo.Location = new Point(330, 25);
             lblTituloFondo.Name = "lblTituloFondo";
+            lblTituloFondo.Size = new Size(78, 15);
             lblTituloFondo.TabIndex = 4;
             lblTituloFondo.Text = "Fondo inicial:";
-            lblTituloFondo.AutoSize = true;
             // 
             // lblFondo
             // 
-            lblFondo.Location = new System.Drawing.Point(480, 25);
+            lblFondo.AutoSize = true;
+            lblFondo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblFondo.Location = new Point(480, 25);
             lblFondo.Name = "lblFondo";
+            lblFondo.Size = new Size(41, 15);
             lblFondo.TabIndex = 5;
             lblFondo.Text = "$ 0,00";
-            lblFondo.AutoSize = true;
-            lblFondo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
             // lblTituloIngresos
             // 
-            lblTituloIngresos.Location = new System.Drawing.Point(330, 50);
+            lblTituloIngresos.AutoSize = true;
+            lblTituloIngresos.Location = new Point(330, 50);
             lblTituloIngresos.Name = "lblTituloIngresos";
+            lblTituloIngresos.Size = new Size(126, 15);
             lblTituloIngresos.TabIndex = 6;
             lblTituloIngresos.Text = "+ Ingresos en efectivo:";
-            lblTituloIngresos.AutoSize = true;
             // 
             // lblIngresos
             // 
-            lblIngresos.Location = new System.Drawing.Point(480, 50);
+            lblIngresos.AutoSize = true;
+            lblIngresos.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblIngresos.Location = new Point(480, 50);
             lblIngresos.Name = "lblIngresos";
+            lblIngresos.Size = new Size(41, 15);
             lblIngresos.TabIndex = 7;
             lblIngresos.Text = "$ 0,00";
-            lblIngresos.AutoSize = true;
-            lblIngresos.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
             // lblTituloEgresos
             // 
-            lblTituloEgresos.Location = new System.Drawing.Point(330, 75);
+            lblTituloEgresos.AutoSize = true;
+            lblTituloEgresos.Location = new Point(330, 75);
             lblTituloEgresos.Name = "lblTituloEgresos";
+            lblTituloEgresos.Size = new Size(119, 15);
             lblTituloEgresos.TabIndex = 8;
             lblTituloEgresos.Text = "- Egresos en efectivo:";
-            lblTituloEgresos.AutoSize = true;
             // 
             // lblEgresos
             // 
-            lblEgresos.Location = new System.Drawing.Point(480, 75);
+            lblEgresos.AutoSize = true;
+            lblEgresos.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblEgresos.Location = new Point(480, 75);
             lblEgresos.Name = "lblEgresos";
+            lblEgresos.Size = new Size(41, 15);
             lblEgresos.TabIndex = 9;
             lblEgresos.Text = "$ 0,00";
-            lblEgresos.AutoSize = true;
-            lblEgresos.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
             // lblTituloEsperado
             // 
-            lblTituloEsperado.Location = new System.Drawing.Point(640, 25);
+            lblTituloEsperado.AutoSize = true;
+            lblTituloEsperado.Location = new Point(640, 25);
             lblTituloEsperado.Name = "lblTituloEsperado";
+            lblTituloEsperado.Size = new Size(143, 15);
             lblTituloEsperado.TabIndex = 10;
             lblTituloEsperado.Text = "Efectivo esperado en caja:";
-            lblTituloEsperado.AutoSize = true;
             // 
             // lblEsperado
             // 
-            lblEsperado.Location = new System.Drawing.Point(640, 48);
+            lblEsperado.AutoSize = true;
+            lblEsperado.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblEsperado.Location = new Point(640, 48);
             lblEsperado.Name = "lblEsperado";
+            lblEsperado.Size = new Size(66, 25);
             lblEsperado.TabIndex = 11;
             lblEsperado.Text = "$ 0,00";
-            lblEsperado.AutoSize = true;
-            lblEsperado.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             // 
             // lblTituloOtros
             // 
-            lblTituloOtros.Location = new System.Drawing.Point(640, 85);
+            lblTituloOtros.AutoSize = true;
+            lblTituloOtros.Location = new Point(640, 85);
             lblTituloOtros.Name = "lblTituloOtros";
+            lblTituloOtros.Size = new Size(164, 15);
             lblTituloOtros.TabIndex = 12;
             lblTituloOtros.Text = "Otros medios (transf./débito):";
-            lblTituloOtros.AutoSize = true;
             // 
             // lblOtrosMedios
             // 
-            lblOtrosMedios.Location = new System.Drawing.Point(830, 85);
+            lblOtrosMedios.AutoSize = true;
+            lblOtrosMedios.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblOtrosMedios.Location = new Point(830, 85);
             lblOtrosMedios.Name = "lblOtrosMedios";
+            lblOtrosMedios.Size = new Size(41, 15);
             lblOtrosMedios.TabIndex = 13;
             lblOtrosMedios.Text = "$ 0,00";
-            lblOtrosMedios.AutoSize = true;
-            lblOtrosMedios.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
             // btnAbrirCaja
             // 
-            btnAbrirCaja.Location = new System.Drawing.Point(12, 145);
+            btnAbrirCaja.Location = new Point(12, 145);
             btnAbrirCaja.Name = "btnAbrirCaja";
-            btnAbrirCaja.Size = new System.Drawing.Size(120, 35);
+            btnAbrirCaja.Size = new Size(120, 35);
             btnAbrirCaja.TabIndex = 14;
             btnAbrirCaja.Text = "Abrir caja";
             btnAbrirCaja.UseVisualStyleBackColor = true;
@@ -201,9 +215,9 @@
             // 
             // btnNuevoIngreso
             // 
-            btnNuevoIngreso.Location = new System.Drawing.Point(138, 145);
+            btnNuevoIngreso.Location = new Point(138, 145);
             btnNuevoIngreso.Name = "btnNuevoIngreso";
-            btnNuevoIngreso.Size = new System.Drawing.Size(120, 35);
+            btnNuevoIngreso.Size = new Size(120, 35);
             btnNuevoIngreso.TabIndex = 15;
             btnNuevoIngreso.Text = "Nuevo ingreso";
             btnNuevoIngreso.UseVisualStyleBackColor = true;
@@ -211,9 +225,9 @@
             // 
             // btnNuevoEgreso
             // 
-            btnNuevoEgreso.Location = new System.Drawing.Point(264, 145);
+            btnNuevoEgreso.Location = new Point(264, 145);
             btnNuevoEgreso.Name = "btnNuevoEgreso";
-            btnNuevoEgreso.Size = new System.Drawing.Size(120, 35);
+            btnNuevoEgreso.Size = new Size(120, 35);
             btnNuevoEgreso.TabIndex = 16;
             btnNuevoEgreso.Text = "Nuevo egreso";
             btnNuevoEgreso.UseVisualStyleBackColor = true;
@@ -221,9 +235,9 @@
             // 
             // btnAnularMovimiento
             // 
-            btnAnularMovimiento.Location = new System.Drawing.Point(390, 145);
+            btnAnularMovimiento.Location = new Point(390, 145);
             btnAnularMovimiento.Name = "btnAnularMovimiento";
-            btnAnularMovimiento.Size = new System.Drawing.Size(140, 35);
+            btnAnularMovimiento.Size = new Size(140, 35);
             btnAnularMovimiento.TabIndex = 17;
             btnAnularMovimiento.Text = "Anular movimiento";
             btnAnularMovimiento.UseVisualStyleBackColor = true;
@@ -231,9 +245,9 @@
             // 
             // btnCerrarCaja
             // 
-            btnCerrarCaja.Location = new System.Drawing.Point(536, 145);
+            btnCerrarCaja.Location = new Point(536, 145);
             btnCerrarCaja.Name = "btnCerrarCaja";
-            btnCerrarCaja.Size = new System.Drawing.Size(120, 35);
+            btnCerrarCaja.Size = new Size(120, 35);
             btnCerrarCaja.TabIndex = 18;
             btnCerrarCaja.Text = "Cerrar caja";
             btnCerrarCaja.UseVisualStyleBackColor = true;
@@ -241,66 +255,67 @@
             // 
             // btnHistorial
             // 
-            btnHistorial.Location = new System.Drawing.Point(726, 145);
+            btnHistorial.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnHistorial.Location = new Point(726, 145);
             btnHistorial.Name = "btnHistorial";
-            btnHistorial.Size = new System.Drawing.Size(120, 35);
+            btnHistorial.Size = new Size(120, 35);
             btnHistorial.TabIndex = 19;
             btnHistorial.Text = "Historial";
             btnHistorial.UseVisualStyleBackColor = true;
-            btnHistorial.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             btnHistorial.Click += btnHistorial_Click;
             // 
             // btnActualizar
             // 
-            btnActualizar.Location = new System.Drawing.Point(852, 145);
+            btnActualizar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnActualizar.Location = new Point(852, 145);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new System.Drawing.Size(120, 35);
+            btnActualizar.Size = new Size(120, 35);
             btnActualizar.TabIndex = 20;
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = true;
-            btnActualizar.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             btnActualizar.Click += btnActualizar_Click;
             // 
             // lblMovimientos
             // 
-            lblMovimientos.Location = new System.Drawing.Point(12, 192);
+            lblMovimientos.AutoSize = true;
+            lblMovimientos.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblMovimientos.Location = new Point(12, 192);
             lblMovimientos.Name = "lblMovimientos";
+            lblMovimientos.Size = new Size(146, 15);
             lblMovimientos.TabIndex = 21;
             lblMovimientos.Text = "Movimientos de la sesión";
-            lblMovimientos.AutoSize = true;
-            lblMovimientos.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
             // dgvMovimientos
             // 
-            dgvMovimientos.Location = new System.Drawing.Point(12, 215);
-            dgvMovimientos.Name = "dgvMovimientos";
-            dgvMovimientos.Size = new System.Drawing.Size(960, 345);
-            dgvMovimientos.TabIndex = 22;
             dgvMovimientos.AllowUserToAddRows = false;
             dgvMovimientos.AllowUserToDeleteRows = false;
-            dgvMovimientos.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvMovimientos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMovimientos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvMovimientos.BackgroundColor = SystemColors.Window;
+            dgvMovimientos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMovimientos.Location = new Point(12, 215);
+            dgvMovimientos.Name = "dgvMovimientos";
             dgvMovimientos.ReadOnly = true;
-            dgvMovimientos.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            dgvMovimientos.Size = new Size(960, 345);
+            dgvMovimientos.TabIndex = 22;
             dgvMovimientos.DataBindingComplete += dgvMovimientos_DataBindingComplete;
             // 
             // btnSalir
             // 
-            btnSalir.Location = new System.Drawing.Point(852, 570);
+            btnSalir.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnSalir.Location = new Point(852, 570);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new System.Drawing.Size(120, 30);
+            btnSalir.Size = new Size(120, 30);
             btnSalir.TabIndex = 23;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
-            btnSalir.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             btnSalir.Click += btnSalir_Click;
             // 
             // frmCaja
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnSalir;
-            ClientSize = new System.Drawing.Size(984, 612);
+            ClientSize = new Size(984, 612);
             Controls.Add(grpEstado);
             Controls.Add(btnAbrirCaja);
             Controls.Add(btnNuevoIngreso);
@@ -312,14 +327,15 @@
             Controls.Add(lblMovimientos);
             Controls.Add(dgvMovimientos);
             Controls.Add(btnSalir);
-            MinimumSize = new System.Drawing.Size(1000, 650);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(1000, 650);
             Name = "frmCaja";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Caja";
             Load += frmCaja_Load;
-            ((System.ComponentModel.ISupportInitialize)dgvMovimientos).EndInit();
             grpEstado.ResumeLayout(false);
             grpEstado.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMovimientos).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }

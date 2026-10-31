@@ -48,6 +48,26 @@ namespace CapaDatos.BitacoraDato
 
             return tabla;
         }
+        public DataTable ObtenerComprasBitacora(DateTime? fechaDesde, DateTime? fechaHasta, string buscar)
+        {
+            DataTable tabla = new DataTable();
+
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("dbo.sp_ObtenerComprasBitacora", conexion))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@FechaDesde", SqlDbType.Date).Value = (object)fechaDesde?.Date ?? DBNull.Value;
+                cmd.Parameters.Add("@FechaHasta", SqlDbType.Date).Value = (object)fechaHasta?.Date ?? DBNull.Value;
+                cmd.Parameters.Add("@Buscar", SqlDbType.NVarChar, 255).Value = string.IsNullOrWhiteSpace(buscar) ? (object)DBNull.Value : buscar.Trim();
+
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+                {
+                    adaptador.Fill(tabla);
+                }
+            }
+
+            return tabla;
+        }
         public void RegistrarError(int? idUsuario, string modulo, string tipoExcepcion, string mensaje, string detalleTecnico)
         {
             if (string.IsNullOrWhiteSpace(modulo))

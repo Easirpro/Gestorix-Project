@@ -264,6 +264,11 @@ namespace CapaLogica.NegocioLogica
             return datos.BuscarProductosConFiltrosRapida(
                 texto, idProveedor, idSucursal, idCategoria, idMarca);
         }
+        // Datos de la lista de precios y de la de reposición (precio, costo, oferta y stock).
+        public DataTable ObtenerListadoArticulos(string texto, int? idProducto, int? idProveedor, int? idSucursal, int? idCategoria, int? idMarca, bool soloOfertas, bool soloReponer)
+        {
+            return datos.ObtenerListadoArticulos(texto, idProducto, idProveedor, idSucursal, idCategoria, idMarca, soloOfertas, soloReponer);
+        }
 
 
         //Metodos para excel

@@ -19,6 +19,8 @@ namespace CapaEntidades.NegocioEntidades
         public DateTime? FechaVencimiento { get; set; }
         public int? IdMetodoPago { get; set; }
         public int? IdSesionCaja { get; set; }
+        public int? IdSucursal { get; set; }
+        public DateTime? FechaEntregaEstimada { get; set; }
         public List<ClsDetalleCompraEntidad> Detalles { get; set; }
     }
     public class ClsDetalleCompraEntidad
@@ -30,5 +32,20 @@ namespace CapaEntidades.NegocioEntidades
         public decimal PrecioSinIVA { get; set; }
         public decimal PorcentajeIVA { get; set; }
         public decimal Total { get; set; }
+    }
+    public class ClsRecepcionCompraEntidad
+    {
+        public int IdCompra { get; set; }
+        public decimal TotalCompra { get; set; }
+        public decimal TotalBoleta { get; set; }
+        public string Motivos { get; set; }
+        public string Observaciones { get; set; }
+        public List<ClsDetalleRecepcionEntidad> Detalles { get; set; }
+    }
+    public class ClsDetalleRecepcionEntidad
+    {
+        public int IdProducto { get; set; }
+        public decimal CantidadPedida { get; set; }
+        public decimal CantidadRecibida { get; set; }
     }
 }
