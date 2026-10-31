@@ -27,6 +27,26 @@ namespace CapaDatos.BitacoraDato
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
+        // Cuántas veces se registró esa acción sobre ese registro en los últimos minutos.
+        public int ContarAccionesRecientes(string accion, int idRegistroAfectado, int minutos)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(@"
+                SELECT COUNT(*)
+                FROM Bitacora
+                WHERE Accion = @Accion
+                  AND IdRegistroAfectado = @IdRegistroAfectado
+                  AND FechaHora >= DATEADD(MINUTE, -@Minutos, SYSDATETIME())", conexion))
+            {
+                cmd.Parameters.Add("@Accion", SqlDbType.NVarChar, 50).Value = accion;
+                cmd.Parameters.Add("@IdRegistroAfectado", SqlDbType.Int).Value = idRegistroAfectado;
+                cmd.Parameters.Add("@Minutos", SqlDbType.Int).Value = minutos;
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
         public DataTable ObtenerBitacora(DateTime? fechaDesde, DateTime? fechaHasta, string categoria, string buscar)
         {
             DataTable tabla = new DataTable();

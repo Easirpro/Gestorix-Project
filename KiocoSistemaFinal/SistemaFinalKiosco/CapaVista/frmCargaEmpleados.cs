@@ -882,8 +882,20 @@ namespace CapaVista
 
                 if (ok)
                 {
-                    MessageBox.Show("Empleado creado correctamente.", "Éxito",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (emp.UsuarioSinCorreo != null)
+                    {
+                        MessageBox.Show("El empleado se creó, pero no se pudo enviar el correo con la contraseña temporal.\n\n" +
+                            "Entréguele estos datos al empleado:\n\n" +
+                            "Usuario: " + emp.UsuarioSinCorreo + "\n" +
+                            "Contraseña temporal: " + emp.PasswordTemporalSinCorreo + "\n\n" +
+                            "Deberá cambiarla en el primer inicio de sesión.", "Empleado creado",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Empleado creado correctamente.", "Éxito",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
 
                     modoNuevo = false;
                     CargarUsuarios();

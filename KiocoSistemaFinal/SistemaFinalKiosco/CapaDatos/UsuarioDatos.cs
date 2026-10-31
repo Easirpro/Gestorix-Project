@@ -240,20 +240,52 @@ public class ClsUsuarioDatos
                 cmd.Parameters.AddWithValue("@PassTemporal",hashTemporal);
                 int filasAfectadas =cmd.ExecuteNonQuery();
 
-                if (filasAfectadas > 0)
+                if (filasAfectadas == 0)
                 {
-                    ActualizarDVHUsuario(idUsuario, conn, trans);
+                    // La contraseña temporal no coincide: no se cambia nada.
+                    trans.Rollback();
+                    return false;
                 }
+
+                // La temporal queda en el historial, como cualquier contraseña reemplazada.
+                using (SqlCommand cmdAntigua = new SqlCommand(@"
+                    INSERT INTO UsuarioPassAntigua (IdUsuario, PassAntigua)
+                    VALUES (@IdUsuario, @PassTemporal)", conn, trans))
+                {
+                    cmdAntigua.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    cmdAntigua.Parameters.AddWithValue("@PassTemporal", hashTemporal);
+                    cmdAntigua.ExecuteNonQuery();
+                }
+
+                ActualizarDVHUsuario(idUsuario, conn, trans);
 
                 trans.Commit();
 
-                return filasAfectadas > 0;
+                return true;
             }
             catch
             {
                 trans.Rollback();
                 throw;
             }
+        }
+    }
+    public bool EsPasswordActual(int idUsuario, string hashPassword)
+    {
+        using (SqlConnection con = conexion.ObtenerConexion())
+        {
+            SqlCommand cmd = new SqlCommand(@"
+                SELECT COUNT(*)
+                FROM Usuario
+                WHERE IdUsuario = @IdUsuario
+                  AND PassActual = @PassActual", con);
+
+            cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+            cmd.Parameters.AddWithValue("@PassActual", hashPassword);
+
+            con.Open();
+
+            return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
         }
     }
     public bool CambiarPasswordRecuperacion(int idUsuario, string nuevaPassword)

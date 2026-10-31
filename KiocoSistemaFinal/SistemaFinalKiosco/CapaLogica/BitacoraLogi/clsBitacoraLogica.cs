@@ -32,6 +32,10 @@ namespace CapaLogica.BitacoraLogi
 
             return datos.RegistrarBitacora(idUsuario, accion.Trim(),tablaAfectada, idRegistroAfectado, descripcion);
         }
+        public int ContarAccionesRecientes(string accion, int idRegistroAfectado, int minutos)
+        {
+            return datos.ContarAccionesRecientes(accion, idRegistroAfectado, minutos);
+        }
         public DataTable ObtenerBitacora(DateTime? fechaDesde, DateTime? fechaHasta, string categoria, string buscar)
         {
             if (fechaDesde.HasValue && fechaHasta.HasValue && fechaDesde.Value.Date > fechaHasta.Value.Date)

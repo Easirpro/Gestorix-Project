@@ -73,27 +73,7 @@ namespace CapaVista
                     return;
                 }
 
-                if (SesionUsuario.PrimerIngreso)
-                {
-                    FrmPrimerIngreso primerIngreso = new FrmPrimerIngreso();
-                    AbrirFormularioPrincipal(primerIngreso);
-                    return;
-                }
-
-                ClsPreguntaSeguridadLogica preguntas = new ClsPreguntaSeguridadLogica();
-
-                bool tienePreguntas = preguntas.UsuarioTienePreguntas(SesionUsuario.IdUsuario);
-
-                if (!tienePreguntas)
-                {
-                    frmPreguntasSegu frm = new frmPreguntasSegu();
-                    AbrirFormularioPrincipal(frm);
-                }
-                else
-                {
-                    frmmenuPres frm = new frmmenuPres();
-                    AbrirFormularioPrincipal(frm);
-                }
+                ContinuarIngreso();
             }
             catch (Exception ex)
             {
@@ -109,49 +89,66 @@ namespace CapaVista
                     // Evita que un fallo al registrar la bitácora oculte el error original.
                 }
 
+                // Si falló a mitad del ingreso, el login no puede quedar oculto.
+                this.Show();
+
                 MessageBox.Show("Ocurrió un error técnico durante el inicio de sesión.\n" + "Si el problema continúa, contacte al administrador.", "Error del sistema",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void AbrirFormularioPrincipal(Form formulario)
+        // Después de un login correcto: primero el cambio de la contraseña temporal y después las
+        // preguntas de seguridad, los dos obligatorios. Si se cierra alguno sin completarlo, se
+        // cierra la sesión y se vuelve al login. Al final se abre el menú principal, una sola vez.
+        private void ContinuarIngreso()
         {
-            formulario.FormClosed += (s, e) =>
+            this.Hide();
+
+            if (SesionUsuario.PrimerIngreso)
             {
-                if (formulario is frmmenuPres)
+                using (FrmPrimerIngreso primerIngreso = new FrmPrimerIngreso())
                 {
-                    this.Show();
-                    this.BringToFront();
-                    LimpiarCampos();
-                }
-                else if (formulario is FrmPrimerIngreso)
-                {
-                    ClsPreguntaSeguridadLogica preguntas = new ClsPreguntaSeguridadLogica();
-
-                    bool tienePreguntas = preguntas.UsuarioTienePreguntas(SesionUsuario.IdUsuario);
-
-                    if (!tienePreguntas)
+                    if (primerIngreso.ShowDialog() != DialogResult.OK)
                     {
-                        frmPreguntasSegu frmPreguntas = new frmPreguntasSegu();
-
-                        AbrirFormularioPrincipal(frmPreguntas);
-                    }
-                    else
-                    {
-                        frmmenuPres menu = new frmmenuPres();
-
-                        AbrirFormularioPrincipal(menu);
+                        CancelarIngreso("Para ingresar al sistema debe cambiar la contraseña temporal.");
+                        return;
                     }
                 }
-                else if (formulario is frmPreguntasSegu)
-                {
-                    frmmenuPres menu = new frmmenuPres();
+            }
 
-                    AbrirFormularioPrincipal(menu);
+            ClsPreguntaSeguridadLogica preguntas = new ClsPreguntaSeguridadLogica();
+
+            if (!preguntas.UsuarioTienePreguntas(SesionUsuario.IdUsuario))
+            {
+                using (frmPreguntasSegu frmPreguntas = new frmPreguntasSegu())
+                {
+                    if (frmPreguntas.ShowDialog() != DialogResult.OK)
+                    {
+                        CancelarIngreso("Para ingresar al sistema debe responder las preguntas de seguridad.");
+                        return;
+                    }
                 }
+            }
+
+            frmmenuPres menu = new frmmenuPres();
+
+            menu.FormClosed += (s, e) =>
+            {
+                this.Show();
+                this.BringToFront();
+                LimpiarCampos();
             };
 
-            formulario.Show();
-            this.Hide();
+            menu.Show();
+        }
+        private void CancelarIngreso(string motivo)
+        {
+            new ClsLogin().CerrarSesion();
+
+            this.Show();
+            this.BringToFront();
+            LimpiarCampos();
+
+            MessageBox.Show(motivo, "Ingreso incompleto", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {

@@ -12,7 +12,8 @@ namespace CapaLogica
         PasswordTemporalIncorrecta,
         PasswordNoCoinciden,
         PasswordIgualAnterior,
-        PasswordNoCumpleRequisitos
+        PasswordNoCumpleRequisitos,
+        PasswordUsadaRecientemente
 
     }
 }

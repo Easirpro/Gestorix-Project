@@ -33,7 +33,16 @@ namespace CapaVista
 
             ClsPreguntaSeguridadLogica logica = new ClsPreguntaSeguridadLogica();
 
-            bool ok = logica.GuardarPreguntas(SesionUsuario.IdUsuario, 1, txtNombreMascota.Text.Trim(), 2, txtLibro.Text.Trim(), 3, txtComida.Text.Trim());
+            bool ok;
+
+            try
+            {
+                ok = logica.GuardarPreguntas(SesionUsuario.IdUsuario, 1, txtNombreMascota.Text.Trim(), 2, txtLibro.Text.Trim(), 3, txtComida.Text.Trim());
+            }
+            catch
+            {
+                ok = false;
+            }
 
             if (!ok)
             {
@@ -51,9 +60,10 @@ namespace CapaVista
         {
             if (GuardarPreguntas())
             {
-                //borrar el mensaje, esto es solo prueba
                 MessageBox.Show( "Las preguntas de seguridad se guardaron correctamente.","Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                // El login sigue con el menú principal.
+                this.DialogResult = DialogResult.OK;
                 this.Close();
 
                 #endregion

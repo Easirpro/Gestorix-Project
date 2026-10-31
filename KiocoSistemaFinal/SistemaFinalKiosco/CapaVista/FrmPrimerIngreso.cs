@@ -52,7 +52,8 @@ namespace CapaVista
                 validar.ValidarCamposVacios(txtNuevaPass.Text) ||
                 validar.ValidarCamposVacios(txtConfirmarPass.Text))
             {
-                MessageBox.Show("Complete todos los campos.");
+                MessageBox.Show("Complete todos los campos.", "Datos incompletos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -64,51 +65,40 @@ namespace CapaVista
             {
                 case ResultadoCambioPassword.Correcto:
 
-                    MessageBox.Show("Contraseña modificada correctamente.");
+                    MessageBox.Show("Contraseña modificada correctamente.", "Primer ingreso",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    ClsPreguntaSeguridadLogica logica = new ClsPreguntaSeguridadLogica();
-
-                    bool tienePreguntas = logica.UsuarioTienePreguntas(SesionUsuario.IdUsuario);
-
-                    if (!tienePreguntas)
-                    {
-                        frmPreguntasSegu preguntas = new frmPreguntasSegu();
-                        preguntas.Show();
-                        this.Close();
-
-                        break;
-                    }
-
-                    frmmenuPres menu = new frmmenuPres();
-                    menu.Show();
-
+                    // El login sigue con las preguntas de seguridad o el menú principal.
+                    this.DialogResult = DialogResult.OK;
                     this.Close();
 
                     break;
 
                 case ResultadoCambioPassword.PasswordTemporalIncorrecta:
 
-                    MessageBox.Show("La contraseña temporal es incorrecta.");
+                    MessageBox.Show("La contraseña temporal es incorrecta.", "Contraseña no válida",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     break;
 
                 case ResultadoCambioPassword.PasswordNoCoinciden:
 
-                    MessageBox.Show("Las contraseñas no coinciden.");
+                    MessageBox.Show("Las contraseñas no coinciden.", "Contraseña no válida",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     break;
 
                 case ResultadoCambioPassword.PasswordIgualAnterior:
 
-                    MessageBox.Show("La nueva contraseña debe ser distinta de la temporal.");
+                    MessageBox.Show("La nueva contraseña debe ser distinta de la temporal.", "Contraseña no válida",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     break;
 
                 case ResultadoCambioPassword.PasswordNoCumpleRequisitos:
 
                     MessageBox.Show(
-                        "La contraseña debe tener como mínimo 8 caracteres, " +
-                        "una mayúscula, una minúscula y un número.",
+                        ClsReglasPassword.Requisitos,
                         "Contraseña no válida",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);

@@ -41,6 +41,13 @@ namespace CapaVista
                 return;
             }
 
+            if (new ClsPreguntaSeguridadLogica().RecuperoBloqueado(idUsuario))
+            {
+                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, "Recuperar contraseña",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             frmRecupResSegur frm = new frmRecupResSegur(idUsuario);
 
             this.Hide();

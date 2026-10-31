@@ -38,6 +38,15 @@ namespace CapaVista
         {
             ClsPreguntaSeguridadLogica logica = new ClsPreguntaSeguridadLogica();
 
+            if (logica.RecuperoBloqueado(idUsuario))
+            {
+                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, "Recuperar contraseña",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                this.Close();
+                return;
+            }
+
             bool correcta = logica.ValidarRespuesta(
                 idUsuario,
                 idPregunta,
@@ -52,9 +61,20 @@ namespace CapaVista
 
                 this.Close();
             }
+            else if (logica.RecuperoBloqueado(idUsuario))
+            {
+                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, "Recuperar contraseña",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                this.Close();
+            }
             else
             {
-                MessageBox.Show("Respuesta incorrecta.");
+                MessageBox.Show("Respuesta incorrecta.", "Recuperar contraseña",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                txtRespuesta.Clear();
+                txtRespuesta.Focus();
             }
         }
 
