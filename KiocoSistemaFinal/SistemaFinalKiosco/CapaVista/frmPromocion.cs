@@ -695,6 +695,9 @@ namespace CapaVista
             txtDescuentoPorcentual.Enabled = false;
             txtBajaPrecio.Enabled = false;
             cmbDescuentoVolumen.Enabled = false;
+
+            btnGuardarPromo.Enabled = SesionUsuario.Permisos.Contains(230);
+            btnEliminar.Enabled = SesionUsuario.Permisos.Contains(240);
         }
         private void btnAgregarProducto_Click(object sender, EventArgs e)
         {

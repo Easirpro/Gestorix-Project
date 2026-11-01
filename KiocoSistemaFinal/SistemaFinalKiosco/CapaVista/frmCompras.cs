@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CapaLogica.NegocioLogica;
+using CapaEntidades;
 
 
 namespace CapaVista
@@ -22,10 +23,17 @@ namespace CapaVista
 
             ConfigurarGrid();
             CargarCompras();
+            AplicarPermisos();
 
         }
 
         #region Metodos
+        private void AplicarPermisos()
+        {
+            btnNuevacompra.Enabled = SesionUsuario.Permisos.Contains(310);
+            // Anular una compra queda solo para el administrador.
+            btnAnular.Enabled = SesionUsuario.Permisos.Contains(330);
+        }
         private void ConfigurarGrid()
         {
             dataGridView1.AutoGenerateColumns = false;

@@ -107,6 +107,12 @@ namespace CapaVista
         // abre la pantalla donde se resuelve, usando las mismas opciones del menú (respetan los permisos).
         private void IniciarAlertas()
         {
+            // Sin permiso para visualizar alarmas no se muestra la campana.
+            if (!SesionUsuario.Permisos.Contains(1110))
+            {
+                return;
+            }
+
             Dictionary<TipoAlerta, Action> acciones = new Dictionary<TipoAlerta, Action>
             {
                 [TipoAlerta.Lote] = () => menuitemAdmistradorarticulos.PerformClick(),
@@ -297,60 +303,56 @@ namespace CapaVista
                 ResumeLayout(true);
             }
         }
+        // true si el usuario tiene al menos uno de los permisos.
+        private static bool TieneAlguno(params int[] permisos)
+        {
+            return permisos.Any(SesionUsuario.Permisos.Contains);
+        }
         private void CargarBotones()
         {
+            // Cada sección del menú se habilita si el rol tiene el Total o alguno de sus permisos.
+
             //Articulo
-            btnArt.Enabled = SesionUsuario.Permisos.Contains(100) || SesionUsuario.Permisos.Contains(110) ||
-                SesionUsuario.Permisos.Contains(111) || SesionUsuario.Permisos.Contains(112) || SesionUsuario.Permisos.Contains(113) ||
-                SesionUsuario.Permisos.Contains(120) || SesionUsuario.Permisos.Contains(121) || SesionUsuario.Permisos.Contains(122) ||
-                SesionUsuario.Permisos.Contains(130) || SesionUsuario.Permisos.Contains(131) || SesionUsuario.Permisos.Contains(132) ||
-                SesionUsuario.Permisos.Contains(140) || SesionUsuario.Permisos.Contains(150);
+            btnArt.Enabled = TieneAlguno(100, 110, 111, 112, 113, 120, 121, 122, 130, 131, 132, 140, 150);
+
+            //Promociones
+            toolStripMenuItem2.Enabled = TieneAlguno(230, 240);
 
             //Ventas
-            btnVentas.Enabled = SesionUsuario.Permisos.Contains(200) || SesionUsuario.Permisos.Contains(210) || SesionUsuario.Permisos.Contains(220) ||
-                SesionUsuario.Permisos.Contains(221) || SesionUsuario.Permisos.Contains(222) ||
-                SesionUsuario.Permisos.Contains(230) || SesionUsuario.Permisos.Contains(240);
+            btnVentas.Enabled = TieneAlguno(200, 210, 220, 221, 222, 250);
 
             //Compras
-            btnCompras.Enabled = SesionUsuario.Permisos.Contains(300);
+            btnCompras.Enabled = TieneAlguno(300, 310, 320, 330);
 
             //Proveedores
-            btnProve.Enabled = SesionUsuario.Permisos.Contains(400) ||
-                SesionUsuario.Permisos.Contains(410) || SesionUsuario.Permisos.Contains(411) ||
-                SesionUsuario.Permisos.Contains(412) || SesionUsuario.Permisos.Contains(420);
+            btnProve.Enabled = TieneAlguno(400, 410, 411, 412, 420);
 
             //Listados
-            toolStripMenuItem1.Enabled = SesionUsuario.Permisos.Contains(500) ||
-                SesionUsuario.Permisos.Contains(510) || SesionUsuario.Permisos.Contains(520);
+            toolStripMenuItem1.Enabled = TieneAlguno(500, 510, 520);
 
             //Informes
-            btnInformes.Enabled = SesionUsuario.Permisos.Contains(600) || SesionUsuario.Permisos.Contains(610) || SesionUsuario.Permisos.Contains(620) ||
-                SesionUsuario.Permisos.Contains(630) || SesionUsuario.Permisos.Contains(640) || SesionUsuario.Permisos.Contains(650);
+            btnInformes.Enabled = TieneAlguno(600, 610, 620, 630, 640, 650, 660);
 
             //Caja
-            btnCaja.Enabled = SesionUsuario.Permisos.Contains(700) || SesionUsuario.Permisos.Contains(710) ||
-                SesionUsuario.Permisos.Contains(720) || SesionUsuario.Permisos.Contains(730) || SesionUsuario.Permisos.Contains(740);
+            btnCaja.Enabled = TieneAlguno(700, 710, 720, 730, 740, 750, 760);
 
             //Ajustes
             btnIdioma.Enabled = SesionUsuario.Permisos.Contains(800);
 
-            //Empleado
-            btnEmpleado.Enabled = SesionUsuario.Permisos.Contains(1000) || SesionUsuario.Permisos.Contains(1010) || SesionUsuario.Permisos.Contains(1020) ||
-                SesionUsuario.Permisos.Contains(1030) || SesionUsuario.Permisos.Contains(1270);
+            //Administración (empleados, backup y bitácora)
+            btnEmpleado.Enabled = TieneAlguno(1000, 1010, 1020, 1270, 1280, 1290);
 
             //Listados
-            preciosYReposicionToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(510) || SesionUsuario.Permisos.Contains(520);
+            preciosYReposicionToolStripMenuItem.Enabled = TieneAlguno(510, 520);
 
             //Articulos operaciones
 
+            // Cargar artículo nuevo
+            cargarArticuloNuevoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(111);
             // Gestión de Articulos
-            menuitemAdmistradorarticulos.Enabled = SesionUsuario.Permisos.Contains(110) || SesionUsuario.Permisos.Contains(111) ||
-                SesionUsuario.Permisos.Contains(112) || SesionUsuario.Permisos.Contains(113);
+            menuitemAdmistradorarticulos.Enabled = TieneAlguno(110, 111, 112, 113);
             // Gestión de Categorías y Marcas
-            menuitemAdministradoarticulos.Enabled = SesionUsuario.Permisos.Contains(120) ||
-                SesionUsuario.Permisos.Contains(121) || SesionUsuario.Permisos.Contains(122) ||
-                SesionUsuario.Permisos.Contains(130) || SesionUsuario.Permisos.Contains(131) ||
-                SesionUsuario.Permisos.Contains(132);
+            menuitemAdministradoarticulos.Enabled = TieneAlguno(120, 121, 122, 130, 131, 132);
             // Reposicion rapida de stock
             meniitemReporapida.Enabled = SesionUsuario.Permisos.Contains(113);
             // Importar articulos desde Excel
@@ -358,33 +360,51 @@ namespace CapaVista
             // Exportar articulos a Excel
             menuitemExporexcel.Enabled = SesionUsuario.Permisos.Contains(150);
 
+            //Promociones operaciones
+            administrarPromocionesToolStripMenuItem.Enabled = TieneAlguno(230, 240);
+
             //Ventas
 
-            // Realizar ventas
-            menuitemAdministradorventas.Enabled = SesionUsuario.Permisos.Contains(210);
+            // Administrador de ventas (ver ventas; anular pide 250)
+            menuitemAdministradorventas.Enabled = TieneAlguno(210, 250);
             // Devoluciones
-            notaDeCreditoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(220) ||
-                SesionUsuario.Permisos.Contains(221) || SesionUsuario.Permisos.Contains(222);
+            notaDeCreditoToolStripMenuItem.Enabled = TieneAlguno(220, 221, 222);
+
+            // Pantalla de venta: cargar artículos, cobrar, segunda venta (F4) y aplicar promociones
+            bool puedeVender = SesionUsuario.Permisos.Contains(210);
+            txtCodigoBarra.Enabled = puedeVender;
+            txtCantidad.Enabled = puedeVender;
+            btnCambiarcantidad.Enabled = puedeVender;
+            btnQuitar.Enabled = puedeVender;
+            btnCobrar.Enabled = puedeVender;
+            btnNuevaCompra.Enabled = puedeVender;
+            btnPromocion.Enabled = puedeVender;
+
+            //Compras operaciones
+            menuitemAministradorcompras.Enabled = TieneAlguno(310, 330);
+            recepciónDeMercaderiaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(320);
 
             //Proveedores
 
             // Gestión de proveedores
-            administradorDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(410) ||
-                SesionUsuario.Permisos.Contains(411) || SesionUsuario.Permisos.Contains(412);
+            administradorDeProveedoresToolStripMenuItem.Enabled = TieneAlguno(410, 411, 412);
             // Cuenta corriente
             cuentaCorrienteDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(420);
             //Informe operaciones
             // Un solo acceso a los cinco informes de ventas; adentro cada informe respeta su permiso (610 a 650).
-            informesVentasToolStripMenuItem.Enabled = new[] { 610, 620, 630, 640, 650 }.Any(SesionUsuario.Permisos.Contains);
+            informesVentasToolStripMenuItem.Enabled = TieneAlguno(610, 620, 630, 640, 650);
+            balanceToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(660);
             //Caja operaciones
             nuevoIngresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(710);
             nuevoEgresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(720);
             abrirCajaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(730);
             cerrarSeToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(740);
-            estadoCajaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(700);
-            balanceToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(600);
+            estadoCajaToolStripMenuItem.Enabled = TieneAlguno(750, 760);
 
-            permisosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1270);
+            //Administración operaciones
+            permisosToolStripMenuItem.Enabled = TieneAlguno(1010, 1020, 1270);
+            gestioToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1280);
+            bitacoraToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1290);
         }
         //Ingreso de plata
         public enum TipoMovimiento

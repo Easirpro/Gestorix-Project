@@ -13,6 +13,8 @@ namespace CapaVista
 {
     public partial class frmPermisos : Form
     {
+        private const int ID_ROL_ADMINISTRADOR = 1;
+        private const int PERMISO_ROLES = 1270;
         private int? idRolInicial;
         private DataTable dtPermisos;
         public bool PermisosModificados { get; private set; }
@@ -65,10 +67,19 @@ namespace CapaVista
                 return ObtenerPermisosSeleccionados().Count > 0;
             }
         }
+        // Desde la carga de empleados se abre este formulario para elegir el rol;
+        // modificar los permisos de un rol pide el permiso de Roles y Permisos.
+        private bool PuedeEditarPermisos
+        {
+            get { return CapaEntidades.SesionUsuario.Permisos.Contains(PERMISO_ROLES); }
+        }
         private void frmPermisos_Load(object sender, EventArgs e)
         {
             CargarRoles();
             CargarPermisos();
+
+            btnNuevoRol.Enabled = PuedeEditarPermisos;
+            btnEliminarRol.Enabled = PuedeEditarPermisos;
 
             if (idRolInicial.HasValue)
             {
@@ -425,6 +436,11 @@ namespace CapaVista
                 TextFormatFlags.VerticalCenter
             );
         }
+        private void BloquearNodo(TreeNode nodo)
+        {
+            nodosBloqueados.Add(nodo);
+            BloquearHijos(nodo, true);
+        }
         private void AplicarBloqueoSegunEstado(TreeNode nodo, bool padreBloqueado)
         {
             bool bloqueado = padreBloqueado;
@@ -488,6 +504,24 @@ namespace CapaVista
                 foreach (TreeNode nodoSeccion in treePermisos.Nodes)
                 {
                     AplicarBloqueoSegunEstado(nodoSeccion, false);
+                }
+
+                // El Administrador tiene siempre todos los permisos (también los que se agreguen
+                // después) y no se puede editar. Sin permiso de Roles y Permisos el árbol es solo lectura.
+                bool esAdministrador = idRol == ID_ROL_ADMINISTRADOR;
+
+                foreach (TreeNode nodoSeccion in treePermisos.Nodes)
+                {
+                    if (esAdministrador)
+                    {
+                        nodoSeccion.Checked = true;
+                        MarcarRamaSinEventos(nodoSeccion, true);
+                    }
+
+                    if (esAdministrador || !PuedeEditarPermisos)
+                    {
+                        BloquearNodo(nodoSeccion);
+                    }
                 }
             }
             finally
