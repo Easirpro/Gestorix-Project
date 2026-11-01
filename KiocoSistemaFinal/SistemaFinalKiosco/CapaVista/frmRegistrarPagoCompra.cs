@@ -80,7 +80,10 @@ namespace CapaVista
             cmbMedioPago.DisplayMember = "Nombre";
             cmbMedioPago.ValueMember = "IdMetodoPago";
 
-            int indiceEfectivo = cmbMedioPago.FindStringExact("Efectivo");
+            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPago);   // solo cambia lo que se ve
+
+            // Efectivo por defecto (se busca por el dato, no por el texto que se muestra).
+            int indiceEfectivo = tabla.Rows.IndexOf(tabla.Select("Nombre = 'Efectivo'").FirstOrDefault());
             if (indiceEfectivo >= 0)
             {
                 cmbMedioPago.SelectedIndex = indiceEfectivo;
@@ -89,7 +92,8 @@ namespace CapaVista
 
         private bool EsEfectivo()
         {
-            return cmbMedioPago.Text == "Efectivo";
+            // Se mira el dato: el texto que se ve puede estar traducido.
+            return cmbMedioPago.SelectedItem is DataRowView medio && Convert.ToString(medio["Nombre"]) == "Efectivo";
         }
 
         private void ActualizarDisponible()

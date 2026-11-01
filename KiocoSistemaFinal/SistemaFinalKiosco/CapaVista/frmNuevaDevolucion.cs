@@ -66,6 +66,7 @@ namespace CapaVista
             cmbMotivo.Items.Add("El cliente se arrepintió");
             cmbMotivo.Items.Add("Otro");
             cmbMotivo.SelectedIndex = -1;
+            ClsIdioma.TraducirDatosAlMostrar(cmbMotivo);   // se ve traducido; se guarda el motivo original
 
             RefrescarCaja(mostrarError: true);
 
@@ -87,7 +88,7 @@ namespace CapaVista
             grilla.AllowUserToResizeRows = false;
             grilla.AllowUserToOrderColumns = false;
             grilla.RowHeadersVisible = false;
-            grilla.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            ClsGrilla.AjustarAlContenido(grilla);   // columnas al ancho del texto, con scroll si no entra
         }
 
         private void CargarVentas()
@@ -272,7 +273,7 @@ namespace CapaVista
 
         private string ArmarMotivo()
         {
-            string motivo = cmbMotivo.Text.Trim();
+            string motivo = MotivoElegido.Trim();
             string observacion = txtObservacion.Text.Trim();
 
             return string.IsNullOrWhiteSpace(observacion) ? motivo : motivo + " - " + observacion;
@@ -303,7 +304,7 @@ namespace CapaVista
                 return false;
             }
 
-            if (cmbMotivo.Text == "Otro" && string.IsNullOrWhiteSpace(txtObservacion.Text))
+            if (MotivoElegido == "Otro" && string.IsNullOrWhiteSpace(txtObservacion.Text))
             {
                 MessageBox.Show(ClsIdioma.T("Si el motivo es \"Otro\", explíquelo en Observaciones."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -427,11 +428,14 @@ namespace CapaVista
             ActualizarInfoCaja();
         }
 
+        // Motivo tal como está en la lista (en castellano), aunque en pantalla se vea traducido.
+        private string MotivoElegido => cmbMotivo.SelectedItem as string ?? "";
+
         private void cmbMotivo_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Si el producto está fallado o vencido, por defecto NO vuelve al stock
             // (el usuario igual puede cambiarlo).
-            chkReingresaStock.Checked = !MotivosSinReingreso.Contains(cmbMotivo.Text);
+            chkReingresaStock.Checked = !MotivosSinReingreso.Contains(MotivoElegido);
         }
 
         private void btnRegistrar_Click(object sender, EventArgs e)
@@ -513,6 +517,7 @@ namespace CapaVista
             CargarDetalle();
 
             cmbMotivo.SelectedIndex = -1;
+            ClsIdioma.TraducirDatosAlMostrar(cmbMotivo);   // se ve traducido; se guarda el motivo original
             txtObservacion.Clear();
 
             btnCancelar.Text = ClsIdioma.T("Cerrar");

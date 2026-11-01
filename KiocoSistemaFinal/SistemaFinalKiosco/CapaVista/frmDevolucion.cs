@@ -26,6 +26,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsGrilla.AjustarAlContenido(dataGridView1, "clnProducto");   // columnas al ancho del texto, con scroll si no entra
 
             btnNuevaDevolucion.Enabled = SesionUsuario.Permisos.Contains(220) || SesionUsuario.Permisos.Contains(221);
 
@@ -173,7 +174,7 @@ namespace CapaVista
             }
 
             string motivo = fila["Motivo"]?.ToString() ?? "";
-            txtMotivo.Text = string.IsNullOrWhiteSpace(motivo) ? ClsIdioma.T("Sin motivo registrado.") : motivo;
+            txtMotivo.Text = string.IsNullOrWhiteSpace(motivo) ? ClsIdioma.T("Sin motivo registrado.") : ClsIdioma.TraducirBitacora(motivo);   // el motivo se guarda en castellano
         }
         private int? IdDevolucionElegida()
         {

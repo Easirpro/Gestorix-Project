@@ -42,7 +42,7 @@ namespace CapaVista
 
             Label detalle = new Label
             {
-                Text = string.Join(Environment.NewLine, urgentes.Take(MAXIMO_RENGLONES).Select(a => "• " + a.Descripcion))
+                Text = string.Join(Environment.NewLine, urgentes.Take(MAXIMO_RENGLONES).Select(a => "• " + ClsIdioma.TraducirAlerta(a.Descripcion)))
                        + (urgentes.Count > MAXIMO_RENGLONES ? Environment.NewLine + ClsIdioma.T("• y ") + (urgentes.Count - MAXIMO_RENGLONES) + ClsIdioma.T(" más…") : ""),
                 Font = new Font("Segoe UI", 8.5F),
                 Location = new Point(14, 30),

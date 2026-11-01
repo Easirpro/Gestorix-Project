@@ -171,6 +171,7 @@ namespace CapaVista
             cmbRol.DataSource = null;
             cmbRol.DataSource = dt;
             cmbRol.DisplayMember = "Nombre";
+            ClsIdioma.TraducirDatosAlMostrar(cmbRol);   // nombres de roles traducidos solo al mostrar
             cmbRol.ValueMember = "IdRol";
 
             SeleccionarRol(idRolActual);

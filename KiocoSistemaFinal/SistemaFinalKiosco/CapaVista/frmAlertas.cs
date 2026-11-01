@@ -129,6 +129,7 @@ namespace CapaVista
                 .Where(a => prioridad != 2 || !a.Urgente)
                 .Where(a => texto == "" ||
                             (a.Descripcion ?? "").Contains(texto, StringComparison.CurrentCultureIgnoreCase) ||
+                    ClsIdioma.TraducirAlerta(a.Descripcion).Contains(texto, StringComparison.CurrentCultureIgnoreCase) ||
                             ClsCampanaAlertas.TituloDe(a.Tipo).Contains(texto, StringComparison.CurrentCultureIgnoreCase))
                 .OrderByDescending(a => a.Urgente);   // OrderBy es estable: dentro de cada prioridad queda el orden del SP
 
@@ -139,7 +140,7 @@ namespace CapaVista
                 int indice = dtgAlertas.Rows.Add(
                     alerta.Urgente ? ClsIdioma.T("● Urgente") : ClsIdioma.T("● Aviso"),
                     ClsCampanaAlertas.TituloDe(alerta.Tipo),
-                    alerta.Descripcion);
+                    ClsIdioma.TraducirAlerta(alerta.Descripcion));
 
                 DataGridViewRow fila = dtgAlertas.Rows[indice];
 

@@ -159,6 +159,7 @@ namespace CapaVista
             {
                 CargarCombo(cmbVendedor, ConTodos(logica.ObtenerVendedores(), "IdUsuario", "Username", ClsIdioma.T("Todos")), "IdUsuario");
                 CargarCombo(cmbMedioPago, ConTodos(logicaCaja.ObtenerMetodosPago(), "IdMetodoPago", "Nombre", ClsIdioma.T("Todos")), "IdMetodoPago");
+            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPago);   // solo cambia lo que se ve
                 CargarCombo(cmbCategoria, ConTodos(logicaProducto.CargarCategoriasActivas(), "IdCategoria", "Nombre", ClsIdioma.T("Todas")), "IdCategoria");
                 CargarCombo(cmbArticulo, ConTodos(logicaProducto.ObtenerListadoArticulos(null, null, null, null, null, null, false, false), "IdProducto", "Nombre", ClsIdioma.T("Todos")), "IdProducto");
             }

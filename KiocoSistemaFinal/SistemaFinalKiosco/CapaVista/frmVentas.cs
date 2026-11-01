@@ -24,6 +24,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsGrilla.AjustarAlContenido(dtgVentas);   // columnas al ancho del texto, con scroll si no entra
 
             // Los eventos se enganchan en el Designer. Antes se enganchaban también acá y
             // Actualizar y la carga inicial se ejecutaban dos veces.

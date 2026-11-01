@@ -23,6 +23,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsGrilla.AjustarAlContenido(dgvMovimientos);   // columnas al ancho del texto, con scroll si no entra
             ConfigurarGrid();
         }
 

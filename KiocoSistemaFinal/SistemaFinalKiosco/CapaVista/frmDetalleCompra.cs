@@ -17,6 +17,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsGrilla.AjustarAlContenido(dgvDetalle, "clnProducto");   // columnas al ancho del texto, con scroll si no entra
 
             this.idCompra = idCompra;
 

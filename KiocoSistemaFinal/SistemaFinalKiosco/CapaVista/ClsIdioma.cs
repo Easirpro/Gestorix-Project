@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace CapaVista
@@ -121,6 +122,208 @@ namespace CapaVista
             return Ingles ? Buscar(texto, aIngles, prefijosIngles) : texto;
         }
 
+        // Grillas: los valores fijos que vienen de la base (estados, medios de pago, conceptos...)
+        // se traducen solo AL DIBUJARLOS. El valor de la celda no cambia, así el código que lo lee
+        // o lo compara sigue viendo el dato en castellano. Solo celdas de solo lectura, para no
+        // meter texto traducido al editar. Nombres de artículos o texto libre no están en el
+        // diccionario y quedan como vienen.
+        private static void EngancharGrilla(DataGridView grilla)
+        {
+            grilla.CellFormatting -= GrillaCellFormatting;
+            grilla.CellFormatting += GrillaCellFormatting;
+            grilla.DataBindingComplete -= GrillaDataBindingComplete;
+            grilla.DataBindingComplete += GrillaDataBindingComplete;
+            grilla.Invalidate();
+        }
+
+        private static void GrillaCellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (!Ingles || sender is not DataGridView grilla || e.Value is not string texto || e.RowIndex < 0 || e.ColumnIndex < 0)
+            {
+                return;
+            }
+
+            if (!grilla.ReadOnly && !grilla.Columns[e.ColumnIndex].ReadOnly)
+            {
+                return;
+            }
+
+            string traducido = Dato(texto);
+
+            if (!ReferenceEquals(traducido, texto))
+            {
+                e.Value = traducido;
+            }
+        }
+
+        // Columnas creadas al cargar datos (DataSource): sus encabezados se traducen al terminar de cargar.
+        private static void GrillaDataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (!Ingles || sender is not DataGridView grilla)
+            {
+                return;
+            }
+
+            foreach (DataGridViewColumn columna in grilla.Columns)
+            {
+                columna.HeaderText = Convertir(columna, "Header", columna.HeaderText);
+            }
+        }
+
+        // Descripciones de la bitácora: se guardan en castellano (registro de auditoría).
+        // En inglés se traducen solo las frases fijas; nombres, importes y motivos quedan igual.
+        private static readonly (string es, string en)[] frasesBitacora =
+        {
+            ("Intento de inicio de sesión fallido para el usuario: ", "Failed login attempt for user: "),
+            ("Inicio de sesión correcto.", "Successful login."),
+            ("Cierre de sesión.", "Logout."),
+            ("Se modificó el producto: ", "Product modified: "),
+            ("Se creó el producto: ", "Product created: "),
+            ("Se eliminó el producto con ID ", "Product deleted, ID "),
+            ("Se discontinuó el producto con ID ", "Product discontinued, ID "),
+            ("Modificación de datos del usuario: ", "User data modified: "),
+            ("Alta de usuario: ", "User created: "),
+            ("Baja lógica del usuario: ", "User deactivated: "),
+            ("Reactivación del usuario: ", "User reactivated: "),
+            ("Apertura de caja #", "Cash register opening #"),
+            ("Fondo inicial: ", "Opening float: "),
+            ("Esperado: ", "Expected: "),
+            ("Contado: ", "Counted: "),
+            ("FALTANTE: ", "SHORTAGE: "),
+            ("SOBRANTE: ", "OVERAGE: "),
+            ("Sin diferencias", "No differences"),
+            ("Recepción compra #", "Purchase receipt #"),
+            ("Total compra: ", "Purchase total: "),
+            ("Total boleta: ", "Invoice total: "),
+            ("Pago compra #", "Purchase payment #"),
+            ("Saldo restante: ", "Remaining balance: "),
+            ("Compra #", "Purchase #"),
+            ("| CONTADO", "| CASH"),
+            ("| CTA_CTE", "| CURRENT ACCOUNT"),
+            ("Pagada con ", "Paid with "),
+            ("Devolución #", "Return #"),
+            ("Venta #", "Sale #"),
+            ("Cambio por otra unidad", "Exchange for another unit"),
+            ("Reintegro en efectivo", "Cash refund"),
+            ("Motivo: ", "Reason: "),
+            ("Egreso manual / gasto", "Manual withdrawal / expense"),
+            ("Ingreso manual", "Manual deposit"),
+            ("Vale / adelanto a empleado", "Employee advance"),
+            ("Pago de sueldo", "Salary payment"),
+            ("Retiro de caja", "Cash withdrawal"),
+            ("Pagos: ", "Payments: "),
+            ("Promoción: ", "Promotion: "),
+            ("Código: ", "Code: "),
+            ("Creación de la promoción", "Promotion created"),
+            ("Eliminación de la promoción", "Promotion deleted"),
+            ("Modificación de la promoción", "Promotion modified"),
+            ("Nombre anterior: ", "Previous name: "),
+            ("Nombre nuevo: ", "New name: "),
+            ("Valor anterior: ", "Previous value: "),
+            ("Valor nuevo: ", "New value: "),
+            ("Estado anterior: ", "Previous status: "),
+            ("Estado nuevo: ", "New status: "),
+            ("Vigencia anterior: ", "Previous validity: "),
+            ("Vigencia nueva: ", "New validity: "),
+            ("Horario anterior: ", "Previous schedule: "),
+            ("Horario nuevo: ", "New schedule: "),
+            ("Días anteriores: ", "Previous days: "),
+            ("Días nuevos: ", "New days: "),
+            ("Sin fecha fin", "No end date"),
+            ("No recurrente", "Not recurring"),
+            ("Sin datos", "No data"),
+            ("El cliente se arrepintió", "Customer changed their mind"),
+            ("Producto fallado", "Defective product"),
+            ("Producto vencido", "Expired product"),
+            ("Error en la venta", "Sales error"),
+            ("Reason: Otro", "Reason: Other"),
+            ("Efectivo", "Cash"),
+            ("Débito", "Debit"),
+            ("Transferencia", "Transfer"),
+            ("Cuenta Corriente", "Current account"),
+        };
+
+        public static string TraducirBitacora(string? descripcion)
+        {
+            if (!Ingles || string.IsNullOrEmpty(descripcion))
+            {
+                return descripcion ?? "";
+            }
+
+            foreach (var (es, en) in frasesBitacora)
+            {
+                descripcion = descripcion.Replace(es, en);
+            }
+
+            // Rangos "desde a hasta" de fechas y horarios (después de traducir "Sin datos" y "Sin fecha fin").
+            descripcion = Regex.Replace(descripcion, @"(\d{2}/\d{2}/\d{4}|\d{2}:\d{2}(:\d{2})?|No data) a ", "$1 to ");
+
+            return descripcion;
+        }
+
+        // Las descripciones de las alertas las arma sp_ObtenerAlertas en castellano, mezclando
+        // nombres (artículos, proveedores) con frases fijas. En inglés se traducen solo esas frases.
+        private static readonly (Regex patron, string reemplazo)[] frasesAlertas =
+        {
+            (new Regex(@" \(lote "), " (batch "),
+            (new Regex(@": venció el "), ": expired on "),
+            (new Regex(@": vence hoy"), ": expires today"),
+            (new Regex(@": vence el "), ": expires on "),
+            (new Regex(@" \(en (\d+) días\)"), " (in $1 days)"),
+            (new Regex(@": quedan (.+) \(mínimo (.+)\)$"), ": $1 left (minimum $2)"),
+            (new Regex(@"^Compra N\.º "), "Purchase No. "),
+            (new Regex(@": atrasada (\d+) día\(s\)"), ": $1 day(s) late"),
+            (new Regex(@": llega hoy"), ": arrives today"),
+            (new Regex(@"^Caja abierta desde el (.+) sin cerrar$"), "Cash register open since $1 and not closed"),
+            (new Regex(@": saldo "), ": balance "),
+            (new Regex(@", venció el "), ", was due on "),
+            (new Regex(@", vence hoy"), ", due today"),
+            (new Regex(@", vence el "), ", due on "),
+            (new Regex(@": terminó el (.+) y sigue activa$"), ": ended on $1 and is still active"),
+            (new Regex(@": se vende a (.+) y cuesta (.+) \("), ": sells for $1 and costs $2 ("),
+        };
+
+        public static string TraducirAlerta(string? descripcion)
+        {
+            if (!Ingles || string.IsNullOrEmpty(descripcion))
+            {
+                return descripcion ?? "";
+            }
+
+            foreach (var (patron, reemplazo) in frasesAlertas)
+            {
+                descripcion = patron.Replace(descripcion, reemplazo, 1);
+            }
+
+            return descripcion;
+        }
+
+        // Textos que vienen de la base solo para mostrar (nombres de permisos, roles...):
+        // se traducen si están en el diccionario y, si no, quedan como vinieron.
+        public static string Dato(object? valor)
+        {
+            string texto = Convert.ToString(valor) ?? "";
+
+            return Ingles && aIngles.TryGetValue(texto.Trim(), out string? traducido) && traducido != texto ? traducido : texto;
+        }
+
+        // Traduce al mostrar los ítems de un combo cargado desde la base (DataSource),
+        // sin tocar los datos ni el valor elegido.
+        public static void TraducirDatosAlMostrar(ListControl combo)
+        {
+            combo.FormattingEnabled = true;   // sin esto la lista no usa el evento Format
+            combo.Format -= FormatoTraducido;
+            combo.Format += FormatoTraducido;
+        }
+
+        private static void FormatoTraducido(object? sender, ListControlConvertEventArgs e)
+        {
+            if (Ingles && e.Value is string texto)
+            {
+                e.Value = Dato(texto);
+            }
+        }
+
         // Traduce las opciones de combos que el código elige por POSICIÓN (SelectedIndex), nunca por texto.
         // No usar en combos cuyo texto se guarda en la base o se compara (IVA, motivos, medios de pago...).
         // Guarda las opciones originales para poder volver a castellano.
@@ -195,6 +398,8 @@ namespace CapaVista
                         break;
 
                     case DataGridView grilla:
+                        EngancharGrilla(grilla);
+
                         foreach (DataGridViewColumn columna in grilla.Columns)
                         {
                             columna.HeaderText = Convertir(columna, "Header", columna.HeaderText);

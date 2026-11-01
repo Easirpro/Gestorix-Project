@@ -21,6 +21,8 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsGrilla.AjustarAlContenido(dgvCompras);   // columnas al ancho del texto, con scroll si no entra
+            ClsGrilla.AjustarAlContenido(dgvPagos);   // columnas al ancho del texto, con scroll si no entra
             ConfigurarGrid(dgvCompras);
             ConfigurarGrid(dgvPagos);
         }

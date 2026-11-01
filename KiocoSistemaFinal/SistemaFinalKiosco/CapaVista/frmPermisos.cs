@@ -155,6 +155,7 @@ namespace CapaVista
             lstRoles.DisplayMember = "Nombre";
             lstRoles.ValueMember = "IdRol";
             lstRoles.DataSource = dt;
+            ClsIdioma.TraducirDatosAlMostrar(lstRoles);   // nombres de roles traducidos solo al mostrar
         }
         private void CargarPermisos()
         {
@@ -221,7 +222,7 @@ namespace CapaVista
 
                 TreeNode nodoGrupo = new TreeNode();
 
-                nodoGrupo.Text = fila["Nombre"].ToString();
+                nodoGrupo.Text = ClsIdioma.Dato(fila["Nombre"]);
                 nodoGrupo.Tag = Convert.ToInt32(fila["IdPermiso"]);
 
                 secciones[seccion].Nodes.Add(nodoGrupo);
@@ -259,7 +260,7 @@ namespace CapaVista
 
                 TreeNode nodoPermiso = new TreeNode();
 
-                nodoPermiso.Text = fila["Nombre"].ToString();
+                nodoPermiso.Text = ClsIdioma.Dato(fila["Nombre"]);
                 nodoPermiso.Tag = Convert.ToInt32(fila["IdPermiso"]);
 
                 grupos[claveGrupo].Nodes.Add(nodoPermiso);
@@ -448,10 +449,10 @@ namespace CapaVista
             DataRow fila = filas[0];
 
             lblPermisoSeleccionado.Text =
-                ClsIdioma.T("Permiso seleccionado: ") + fila["Nombre"].ToString();
+                ClsIdioma.T("Permiso seleccionado: ") + ClsIdioma.Dato(fila["Nombre"]);
 
             lblDescripcion.Text =
-                ClsIdioma.T("Descripción:\r\n") + fila["Descripcion"].ToString();
+                ClsIdioma.T("Descripción:\r\n") + ClsIdioma.Dato(fila["Descripcion"]);
 
             lblEstado.Text =
                 ClsIdioma.T("Estado del permiso:\r\n") +

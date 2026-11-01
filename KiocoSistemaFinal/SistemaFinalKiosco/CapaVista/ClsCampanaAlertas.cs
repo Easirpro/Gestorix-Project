@@ -175,7 +175,7 @@ namespace CapaVista
                 bool urgente = lista.Any(a => a.Urgente);
 
                 List<string> renglones = new List<string> { TituloDe(grupo.Key) + " (" + lista.Count + ")" };
-                renglones.AddRange(lista.Take(DESCRIPCIONES_POR_GRUPO).Select(a => "    " + Recortar(a.Descripcion)));
+                renglones.AddRange(lista.Take(DESCRIPCIONES_POR_GRUPO).Select(a => "    " + Recortar(ClsIdioma.TraducirAlerta(a.Descripcion))));
 
                 if (lista.Count > DESCRIPCIONES_POR_GRUPO)
                     renglones.Add(ClsIdioma.T("    y ") + (lista.Count - DESCRIPCIONES_POR_GRUPO) + ClsIdioma.T(" más…"));
@@ -185,7 +185,7 @@ namespace CapaVista
                     Image = DibujarPunto(urgente ? ColorUrgente : ColorAviso),
                     ImageAlign = ContentAlignment.TopCenter,
                     TextAlign = ContentAlignment.MiddleLeft,
-                    ToolTipText = string.Join(Environment.NewLine, lista.Take(15).Select(a => a.Descripcion))
+                    ToolTipText = string.Join(Environment.NewLine, lista.Take(15).Select(a => ClsIdioma.TraducirAlerta(a.Descripcion)))
                         + (lista.Count > 15 ? Environment.NewLine + ClsIdioma.T("y ") + (lista.Count - 15) + ClsIdioma.T(" más…") : "")
                 };
 

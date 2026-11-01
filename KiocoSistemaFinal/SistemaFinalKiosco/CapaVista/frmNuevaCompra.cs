@@ -81,6 +81,7 @@ namespace CapaVista
                 cmbMedioPagoCompra.DataSource = medios;
                 cmbMedioPagoCompra.DisplayMember = "Nombre";
                 cmbMedioPagoCompra.ValueMember = "IdMetodoPago";
+            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPagoCompra);   // solo cambia lo que se ve
 
                 // Si no hay caja abierta, el pago no puede salir de la caja.
                 chkPagaDesdeCaja.Enabled = logicaCaja.HayCajaAbierta();
