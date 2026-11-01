@@ -31,7 +31,6 @@ namespace CapaVista
             InitializeComponent();
             ClsIdioma.Registrar(this);
 
-            this.Load += frmNuevoArticulo_Load;
 
 
         }
@@ -42,7 +41,6 @@ namespace CapaVista
 
             idProductoModificar = idProducto;
 
-            this.Load += frmNuevoArticulo_Load;
 
 
         }
@@ -706,10 +704,6 @@ namespace CapaVista
         {
             CalcularPrecioVenta();
         }
-        private void gpbCargarPrecio_Enter(object sender, EventArgs e)
-        {
-
-        }
         private void chkControlStock_CheckedChanged(object sender, EventArgs e)
         {
             txtStockActual.Enabled = true;
@@ -728,10 +722,6 @@ namespace CapaVista
         {
             dtpFechaVencimiento.Enabled = chkAlertaVencimiento.Checked;
             txtAlertaVencimiento.Enabled = chkAlertaVencimiento.Checked;
-        }
-        private void dtpFechaVencimiento_ValueChanged(object sender, EventArgs e)
-        {
-
         }
         private void chkControlLote_CheckedChanged(object sender, EventArgs e)
         {

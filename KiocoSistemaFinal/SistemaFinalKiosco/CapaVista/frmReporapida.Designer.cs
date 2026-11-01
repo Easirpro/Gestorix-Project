@@ -104,6 +104,7 @@
             btnCancelar.TabIndex = 11;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.Click += btnCancelar_Click;
             // 
             // btnGuardarCambios
             // 
@@ -228,7 +229,6 @@
             lstDescripcion.Size = new Size(550, 120);
             lstDescripcion.TabIndex = 12;
             lstDescripcion.Visible = false;
-            lstDescripcion.SelectedIndexChanged += lstDescripcion_SelectedIndexChanged;
             lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
             lstDescripcion.KeyDown += lstDescripcion_KeyDown;
             // 

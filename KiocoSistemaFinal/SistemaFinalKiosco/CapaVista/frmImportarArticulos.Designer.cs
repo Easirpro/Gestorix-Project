@@ -93,6 +93,7 @@
             btnVolver.TabIndex = 5;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
             // 
             // btnDescargarPlanilla
             // 

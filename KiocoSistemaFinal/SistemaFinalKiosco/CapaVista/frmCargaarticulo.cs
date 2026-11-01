@@ -346,10 +346,6 @@ namespace CapaVista
             if (formularioCargado)
                 FiltrarArticulos();
         }
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
-
-        }
 
 
         #endregion

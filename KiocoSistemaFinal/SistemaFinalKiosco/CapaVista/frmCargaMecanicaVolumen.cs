@@ -17,11 +17,7 @@ namespace CapaVista
             InitializeComponent();
             ClsIdioma.Registrar(this);
 
-            btnGuardarMecanica.Click += btnGuardarMecanica_Click_1;
-            btnCancelar.Click += btnCancelar_Click;
 
-            txtCantidadLleva.TextChanged += txtCantidadLleva_TextChanged;
-            txtCantidadPaga.TextChanged += txtCantidadPaga_TextChanged;
 
             ActualizarVistaPrevia();
         }
@@ -85,14 +81,6 @@ namespace CapaVista
         {
             DialogResult = DialogResult.Cancel;
             Close();
-        }
-        private void txtCantidadLleva_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void txtCantidadPaga_TextChanged(object sender, EventArgs e)
-        {
-
         }
         #endregion
 

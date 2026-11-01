@@ -991,6 +991,10 @@ namespace CapaVista
         #endregion
 
         #region Eventos
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
             OpenFileDialog abrirArchivo = new OpenFileDialog();

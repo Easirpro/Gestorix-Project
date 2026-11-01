@@ -402,7 +402,6 @@ namespace CapaVista
             dtgNuevaCompra.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgNuevaCompra.Size = new Size(848, 146);
             dtgNuevaCompra.TabIndex = 4;
-            dtgNuevaCompra.CellContentClick += dataGridView1_CellContentClick;
             dtgNuevaCompra.CellEndEdit += dataGridView1_CellEndEdit_1;
             // 
             // Column1
@@ -529,6 +528,7 @@ namespace CapaVista
             btnCacelar.TabIndex = 8;
             btnCacelar.Text = "Cancelar";
             btnCacelar.UseVisualStyleBackColor = true;
+            btnCacelar.Click += btnCacelar_Click;
             // 
             // grpCondicionPago
             // 

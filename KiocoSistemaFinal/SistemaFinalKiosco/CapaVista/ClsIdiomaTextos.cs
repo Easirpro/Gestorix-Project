@@ -1217,6 +1217,8 @@ namespace CapaVista
                 { "No se pudo registrar la devolución.\n\n", "The return could not be registered.\n\n" },
                 { "No se pudo verificar la caja.\n\n", "The cash register could not be checked.\n\n" },
                 { "No se pudo agregar el pago.\n\n", "The payment could not be added.\n\n" },
+                { "Hay productos cargados que no se guardaron.\n\n¿Querés salir igual?", "There are loaded products that were not saved.\n\nDo you want to exit anyway?" },
+                { "Salir sin guardar", "Exit without saving" },
                 { "No se puede modificar la cantidad de un producto que pertenece a una promoción.", "The quantity of a product that belongs to a promotion cannot be changed." },
                 { "No se seleccionó ningún producto.", "No product was selected." },
                 { "No tenés permiso para anular ventas.", "You don't have permission to void sales." },

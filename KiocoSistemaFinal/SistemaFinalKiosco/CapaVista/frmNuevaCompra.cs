@@ -254,9 +254,17 @@ namespace CapaVista
         #endregion
 
         #region Eventos
-        private void chkActualizarprecio_CheckedChanged(object sender, EventArgs e)
+        private void btnCacelar_Click(object sender, EventArgs e)
         {
+            bool hayProductos = dtgNuevaCompra.Rows.Cast<DataGridViewRow>().Any(f => !f.IsNewRow);
 
+            if (hayProductos && MessageBox.Show(ClsIdioma.T("Hay productos cargados que no se guardaron.\n\n¿Querés salir igual?"), ClsIdioma.T("Salir sin guardar"),
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            {
+                return;
+            }
+
+            Close();
         }
         private void btnCargarProducto_Click(object sender, EventArgs e)
         {
@@ -338,10 +346,6 @@ namespace CapaVista
 
             txtCodigobarra.Focus();
         }
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
         private void dataGridView1_CellEndEdit_1(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
@@ -380,10 +384,6 @@ namespace CapaVista
             fila.Cells["Column6"].Value = total;
 
             CalcularTotales();
-        }
-        private void txtSubsinImpuesto_TextChanged(object sender, EventArgs e)
-        {
-
         }
         private void btnEliminarCompra_Click(object sender, EventArgs e)
         {

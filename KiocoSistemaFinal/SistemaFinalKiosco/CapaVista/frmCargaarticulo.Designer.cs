@@ -42,7 +42,6 @@
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
-            btnGuardar = new Button();
             ((System.ComponentModel.ISupportInitialize)dtgCargaarticulo).BeginInit();
             SuspendLayout();
             // 
@@ -231,22 +230,11 @@
             label3.TabIndex = 14;
             label3.Text = "Seleccione Rubro o Marca para buscar el articulo.";
             // 
-            // btnGuardar
-            // 
-            btnGuardar.Location = new Point(602, 490);
-            btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(108, 35);
-            btnGuardar.TabIndex = 15;
-            btnGuardar.Text = "Guardar cambios";
-            btnGuardar.UseVisualStyleBackColor = true;
-            btnGuardar.Click += btnGuardar_Click;
-            // 
             // frmCargaarticulo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(884, 547);
-            Controls.Add(btnGuardar);
             Controls.Add(label3);
             Controls.Add(btnSalir);
             Controls.Add(dtgCargaarticulo);
@@ -302,6 +290,5 @@
         private DataGridViewTextBoxColumn clnStockActual;
         private DataGridViewButtonColumn clnDetalle;
         private Label label3;
-        private Button btnGuardar;
     }
 }

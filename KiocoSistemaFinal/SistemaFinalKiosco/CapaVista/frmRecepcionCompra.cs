@@ -602,25 +602,9 @@ namespace CapaVista
         {
             ConfirmarRecepcion();
         }
-        private void lblBuscar_Click(object sender, EventArgs e)
-        {
 
-        }
 
-        private void lblTitulo_Click(object sender, EventArgs e)
-        {
 
-        }
-
-        private void pnlObservaciones_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void lblTotalBoleta_Click(object sender, EventArgs e)
-        {
-
-        }
         #endregion
     }
 }

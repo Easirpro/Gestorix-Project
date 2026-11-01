@@ -1233,10 +1233,6 @@ namespace CapaVista
 
             }
         }
-        private void btnConfig_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
         private void permisosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmCargaEmpleados Carga = new frmCargaEmpleados();
@@ -1611,10 +1607,6 @@ namespace CapaVista
                 }
             }
         }
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
         private void btnCambiarcantidad_Click(object sender, EventArgs e)
         {
             if (dtgPresentacion.CurrentRow == null || dtgPresentacion.CurrentRow.Cells["ClnIdProducto"].Value == null)
@@ -1804,17 +1796,9 @@ namespace CapaVista
             nuevoarticulo.ShowDialog();
 
         }
-        private void lstDescripcion_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
 
         // idioma
-        private void btnIdioma_Click(object sender, EventArgs e)
-        {
-
-        }
         private void españolToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ClsIdioma.CambiarIdioma(false);
@@ -1861,15 +1845,7 @@ namespace CapaVista
 
 
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
-
-        private void txtCantidad_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void recepciónDeMercaderiaToolStripMenuItem_Click(object sender, EventArgs e)
         {

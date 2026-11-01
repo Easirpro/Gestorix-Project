@@ -933,20 +933,7 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void cmbGenero_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
         // Evento DNI
-        private void txtDNI_Leave(object sender, EventArgs e)
-        {
-            if (!ClsVerificarDNI.DniValido(txtDNI.Text))
-            {
-                MessageBox.Show(ClsIdioma.T("El DNI debe tener exactamente 8 números y no pueden ser todos iguales."));
-                txtDNI.Focus();
-                txtDNI.SelectAll();
-            }
-        }
         private void txtDNI_KeyPress(object sender, KeyPressEventArgs e)
         {
             ValidacionCampoVacio validacion = new ValidacionCampoVacio();

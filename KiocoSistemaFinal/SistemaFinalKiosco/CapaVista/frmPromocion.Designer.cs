@@ -321,7 +321,6 @@
             lblMecanicaPromo.Size = new Size(148, 15);
             lblMecanicaPromo.TabIndex = 1;
             lblMecanicaPromo.Text = "Mecánica de la promoción";
-            lblMecanicaPromo.Click += lblMecanicaPromo_Click;
             // 
             // lblDescuentoPorcentual
             // 

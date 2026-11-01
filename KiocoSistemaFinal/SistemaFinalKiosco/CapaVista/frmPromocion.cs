@@ -698,7 +698,6 @@ namespace CapaVista
             lstPromocionesEncontradas.Visible = false;
             lstPromocionesEncontradas.DrawMode = DrawMode.OwnerDrawFixed;
             lstPromocionesEncontradas.ItemHeight = 22;
-            lstPromocionesEncontradas.DrawItem += lstPromocionesEncontradas_DrawItem;
 
             txtCodigoPromocion.Text = string.Empty;
             txtCodigoPromocion.Enabled = false;
@@ -746,10 +745,6 @@ namespace CapaVista
 
                 formulario.ShowDialog();
             }
-        }
-        private void lblMecanicaPromo_Click(object sender, EventArgs e)
-        {
-
         }
         private void btnGuardarPromo_Click(object sender, EventArgs e)
         {

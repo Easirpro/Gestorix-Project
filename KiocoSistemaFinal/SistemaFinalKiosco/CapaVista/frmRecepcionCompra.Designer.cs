@@ -128,7 +128,6 @@
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Recepción de mercadería";
             lblTitulo.TextAlign = ContentAlignment.MiddleLeft;
-            lblTitulo.Click += lblTitulo_Click;
             // 
             // pnlBusqueda
             // 
@@ -567,7 +566,6 @@
             lblTotalBoleta.TabIndex = 2;
             lblTotalBoleta.Text = "Total boleta:";
             lblTotalBoleta.TextAlign = ContentAlignment.MiddleLeft;
-            lblTotalBoleta.Click += lblTotalBoleta_Click;
             // 
             // txtTotalBoleta
             // 
@@ -652,7 +650,6 @@
             pnlObservaciones.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             pnlObservaciones.Size = new Size(1030, 182);
             pnlObservaciones.TabIndex = 9;
-            pnlObservaciones.Paint += pnlObservaciones_Paint;
             // 
             // lblMotivos
             // 

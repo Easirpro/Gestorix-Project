@@ -401,10 +401,6 @@ namespace CapaVista
         {
             this.Close();
         }
-        private void lblSubtitulo_Click(object sender, EventArgs e)
-        {
-
-        }
 
 
         #endregion

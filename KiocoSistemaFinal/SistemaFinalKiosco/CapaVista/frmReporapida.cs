@@ -27,10 +27,6 @@ namespace CapaVista
 
             CargarFiltros();
 
-            txtCodigo.TextChanged += txtCodigo_TextChanged;
-            lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
-            lstDescripcion.KeyDown += lstDescripcion_KeyDown;
-            cmbProveedor.SelectedIndexChanged += cmbProveedor_SelectedIndexChanged;
 
             cmbProveedor.SelectedIndexChanged += Filtros_SelectedIndexChanged;
             cmbSucursal.SelectedIndexChanged += Filtros_SelectedIndexChanged;
@@ -317,6 +313,18 @@ namespace CapaVista
         #endregion
 
         #region Eventos
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            bool hayProductos = dgvProductos.Rows.Cast<DataGridViewRow>().Any(f => !f.IsNewRow);
+
+            if (hayProductos && MessageBox.Show(ClsIdioma.T("Hay productos cargados que no se guardaron.\n\n¿Querés salir igual?"), ClsIdioma.T("Salir sin guardar"),
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            {
+                return;
+            }
+
+            Close();
+        }
         private void btnActualizarPrecios_Click(object sender, EventArgs e)
         {
             AplicarModo("PRECIOS");
@@ -360,10 +368,6 @@ namespace CapaVista
 
 
 
-        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void txtCodigo_TextChanged(object sender, EventArgs e)
         {
@@ -402,15 +406,7 @@ namespace CapaVista
             }
         }
 
-        private void lstDescripcion_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void tlpFiltros_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void cmbProveedor_SelectedIndexChanged(object sender, EventArgs e)
         {

@@ -134,7 +134,6 @@
             cmbGenero.Name = "cmbGenero";
             cmbGenero.Size = new Size(121, 23);
             cmbGenero.TabIndex = 7;
-            cmbGenero.SelectedIndexChanged += cmbGenero_SelectedIndexChanged;
             // 
             // label18
             // 
