@@ -32,7 +32,6 @@ namespace CapaVista
             dtgNuevaCompra.Columns["Column1"].ReadOnly = true;
             dtgNuevaCompra.Columns["Column2"].ReadOnly = false;
             dtgNuevaCompra.Columns["Column3"].ReadOnly = true;
-            // El costo viene de la sucursal del proveedor, pero se puede corregir si cambió.
             dtgNuevaCompra.Columns["Column4"].ReadOnly = false;
             dtgNuevaCompra.Columns["Column4"].DefaultCellStyle.BackColor = Color.LightYellow;
             dtgNuevaCompra.Columns["Column5"].ReadOnly = true;
@@ -40,15 +39,11 @@ namespace CapaVista
 
             cmbSucursal.SelectionChangeCommitted += cmbSucursal_SelectionChangeCommitted;
 
-            // La fecha del pedido es siempre hoy; la entrega estimada (opcional) no puede ser anterior.
             dtpFechaPedido.Value = DateTime.Today;
             dtpFechaPedido.Enabled = false;
             dtpEntrega.MinDate = DateTime.Today;
             dtpEntrega.Value = DateTime.Today;
             dtpEntrega.Checked = false;
-
-            // Los eventos de la grilla, del buscador de productos y de txtProveedor ya se enganchan en el Designer;
-            // engancharlos otra vez acá hacía que cada tecla se procesara dos veces (la flecha saltaba de a dos).
 
             ConfigurarAutocompletadoProveedores();
             CargarOpcionesPago();
@@ -72,7 +67,6 @@ namespace CapaVista
             {
                 DataTable medios = logicaCaja.ObtenerMetodosPago();
 
-                // "Cuenta Corriente" se elige como condición, no como medio de pago.
                 foreach (DataRow fila in medios.Select("Nombre = 'Cuenta Corriente'"))
                 {
                     medios.Rows.Remove(fila);
@@ -81,9 +75,8 @@ namespace CapaVista
                 cmbMedioPagoCompra.DataSource = medios;
                 cmbMedioPagoCompra.DisplayMember = "Nombre";
                 cmbMedioPagoCompra.ValueMember = "IdMetodoPago";
-            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPagoCompra);   // solo cambia lo que se ve
+            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPagoCompra);
 
-                // Si no hay caja abierta, el pago no puede salir de la caja.
                 chkPagaDesdeCaja.Enabled = logicaCaja.HayCajaAbierta();
                 chkPagaDesdeCaja.Checked = chkPagaDesdeCaja.Enabled;
             }
@@ -228,7 +221,6 @@ namespace CapaVista
         {
             int idSucursal = ObtenerIdSucursal();
 
-            // Los productos se buscan dentro de la sucursal: sin sucursal no se pueden agregar.
             txtCodigobarra.Enabled = idSucursal > 0;
             btnCargarProducto.Enabled = idSucursal > 0;
 
@@ -239,7 +231,6 @@ namespace CapaVista
 
             bool hayProductos = dtgNuevaCompra.Rows.Cast<DataGridViewRow>().Any(f => !f.IsNewRow);
 
-            // Los productos y sus costos son de la sucursal anterior: no sirven para la nueva.
             if (hayProductos && idSucursalActual != 0)
             {
                 dtgNuevaCompra.Rows.Clear();
@@ -292,11 +283,9 @@ namespace CapaVista
             int idProducto = Convert.ToInt32(producto["IdProducto"]);
             string codigoBarra = producto["CodigoBarra"].ToString();
             string nombre = producto["Nombre"].ToString();
-            // Costo sin IVA de la sucursal del proveedor; puede no estar cargado todavía.
             decimal? precio = producto["PrecioCompra"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(producto["PrecioCompra"]);
             decimal iva = Convert.ToDecimal(producto["Alicuota"]);
 
-            // Si el producto ya está en la grilla, se suma 1 a esa fila en vez de agregar otra.
             DataGridViewRow? filaExistente = dtgNuevaCompra.Rows.Cast<DataGridViewRow>()
                 .FirstOrDefault(f => !f.IsNewRow && f.Tag is int id && id == idProducto);
 
@@ -305,7 +294,6 @@ namespace CapaVista
                 TryLeerDecimal(filaExistente.Cells["Column2"].Value, out decimal cantidadActual);
                 filaExistente.Cells["Column2"].Value = cantidadActual + 1;
 
-                // Recalcula el total de la fila con la cantidad nueva (mismo cálculo que al editar la celda).
                 dataGridView1_CellEndEdit_1(dtgNuevaCompra, new DataGridViewCellEventArgs(filaExistente.Cells["Column2"].ColumnIndex, filaExistente.Index));
 
                 txtCodigobarra.Clear();
@@ -383,7 +371,6 @@ namespace CapaVista
                 fila.Cells["Column2"].Value = 0;
             }
 
-            // Costo vacío o inválido: la fila queda sin total hasta que se cargue uno válido.
             if (!TryLeerDecimal(fila.Cells["Column4"].Value, out decimal precio) || precio < 0)
             {
                 fila.Cells["Column4"].Value = null;
@@ -458,7 +445,6 @@ namespace CapaVista
                 return;
             }
 
-            // Si el formulario quedó abierto de un día para otro, se vuelve a fijar en hoy.
             dtpFechaPedido.Value = DateTime.Today;
 
             if (dtpEntrega.Checked && dtpEntrega.Value.Date < DateTime.Today)
@@ -481,7 +467,6 @@ namespace CapaVista
 
             try
             {
-                // El número es opcional; si se cargó, no puede estar repetido para el proveedor.
                 if (logica.ExisteComprobante(idProveedor, cmbTipoComprobante.Text, txtNumeroComprobante.Text))
                 {
                     MessageBox.Show(ClsIdioma.T("Ya está cargada la ") + cmbTipoComprobante.Text.Trim() + " N.º " + txtNumeroComprobante.Text.Trim() +
@@ -541,9 +526,8 @@ namespace CapaVista
                         compra.IdSesionCaja = sesion != null ? sesion.IdSesionCaja : (int?)null;
                     }
                 }
-                // ===== FIN NUEVO =====
 
-                compra.Detalles = new List<ClsDetalleCompraEntidad>();   // ← esto ya lo tenías
+                compra.Detalles = new List<ClsDetalleCompraEntidad>();
                 compra.Detalles = new List<ClsDetalleCompraEntidad>();
 
                 foreach (DataGridViewRow fila in dtgNuevaCompra.Rows)
@@ -666,7 +650,6 @@ namespace CapaVista
             int idEncontrado = Convert.ToInt32(tabla.Rows[0]["IdProveedor"]);
             txtProveedor.Text = tabla.Rows[0]["Nombre"].ToString();
 
-            // Cambiar el texto dispara txtProveedor_TextChanged, que limpia el proveedor elegido.
             idProveedor = idEncontrado;
             lstProveedores.Visible = false;
             CargarSucursales();
@@ -856,7 +839,6 @@ namespace CapaVista
         {
             SeleccionarProveedor();
         }
-        // Elegir el proveedor con el mouse (doble clic) o con Enter desde la lista.
         private void lstProveedores_DoubleClick(object sender, EventArgs e)
         {
             SeleccionarProveedor();

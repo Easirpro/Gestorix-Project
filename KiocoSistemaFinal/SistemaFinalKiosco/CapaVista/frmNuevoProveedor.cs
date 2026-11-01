@@ -24,7 +24,6 @@ namespace CapaVista
         private int idSucursalModificar = 0;
         private int idTelefonoModificar = 0;
         private int idCorreoModificar = 0;
-        // Si el proveedor a modificar no se pudo cargar, el formulario se cierra al abrirse.
         private bool proveedorNoEncontrado = false;
         // sucursal a modificar (0 = la primera)
         private int idSucursalElegida = 0;
@@ -112,10 +111,9 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // Valida en el mismo orden en que aparecen los campos en pantalla.
         private bool ValidarDatos()
         {
-            // --- Datos del proveedor ---
+            // datos del proveedor
             if (string.IsNullOrWhiteSpace(txtRazonSocial.Text))
             {
                 return Aviso(ClsIdioma.T("Ingrese la razón social."), txtRazonSocial);
@@ -151,7 +149,7 @@ namespace CapaVista
                 return Aviso(ClsIdioma.T("Este proveedor ya tiene una sucursal con ese nombre."), txtSucursalProveedor);
             }
 
-            // --- Contacto ---
+            // contacto
             if (!ClsValidarNumero.ClsValidarNumeros.NumeroValido(txtCelular.Text))
             {
                 return Aviso(ClsIdioma.T("Ingrese el teléfono (solo números)."), txtCelular);
@@ -172,7 +170,7 @@ namespace CapaVista
                 return Aviso(ClsIdioma.T("Ingrese un e-mail válido."), txtEmail);
             }
 
-            // --- Dirección ---
+            // direccion
             if (cmbProvincia.SelectedIndex <= 0)
             {
                 return Aviso(ClsIdioma.T("Seleccione la provincia."), cmbProvincia);
@@ -198,7 +196,6 @@ namespace CapaVista
                 return Aviso(ClsIdioma.T("Ingrese el número de la calle (mayor que cero) o marque \"Sin número\"."), txtNumero);
             }
 
-            // Sin CUIT, la razón social es lo único que distingue al proveedor: se avisa si ya existe.
             if (!EsSoloSucursal && string.IsNullOrWhiteSpace(txtCuit.Text) &&
                 logica.ExisteNombreProveedor(txtRazonSocial.Text.Trim(), idProveedorModificar))
             {
@@ -236,7 +233,6 @@ namespace CapaVista
             control.Focus();
             return false;
         }
-        // CUIT siempre con el formato XX-XXXXXXXX-X (ya validado). Vacío queda vacío.
         private string CuitFormateado()
         {
             string numeros = txtCuit.Text.Replace("-", "").Trim();
@@ -272,7 +268,6 @@ namespace CapaVista
 
             cmbProvincia.SelectedIndex = 0;
         }
-        // Partidos de la provincia elegida (solo el "-Seleccione-" si no hay provincia).
         private void CargarPartidos(int idProvincia)
         {
             DataTable tabla;
@@ -299,7 +294,6 @@ namespace CapaVista
 
             cmbPartido.SelectedIndex = 0;
         }
-        // Localidades del partido elegido, con su código postal.
         private void CargarLocalidadesPartido(int idPartido)
         {
             DataTable tabla;
@@ -363,7 +357,6 @@ namespace CapaVista
 
                 if (tabla.Rows.Count == 0)
                 {
-                    // Pasa si al proveedor le falta la sucursal o la dirección: no se puede modificar.
                     MessageBox.Show(ClsIdioma.T("No se encontraron los datos completos del proveedor (sucursal o dirección), ") +
                         ClsIdioma.T("por eso no se puede modificar."), ClsIdioma.T("Proveedor incompleto"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -421,7 +414,6 @@ namespace CapaVista
                 proveedorNoEncontrado = true;
             }
         }
-        // Elige provincia, partido y localidad a partir de la localidad guardada.
         private void SeleccionarLocalidad(int idLocalidad)
         {
             CapaEntidades.ClsTraerPartido? partido = new ClsObtenerPartidoPer().ObtenerPartido(idLocalidad);
@@ -431,17 +423,15 @@ namespace CapaVista
                 return;
             }
 
-            // Cada SelectedValue dispara la carga del combo siguiente.
             cmbProvincia.SelectedValue = partido.IdProvincia;
             cmbPartido.SelectedValue = partido.IdPartido;
             cmbLocalidad.SelectedValue = idLocalidad;
         }
-        // Vacía el formulario dejando los combos en "-Seleccione…-" (no en blanco).
         private void LimpiarFormulario()
         {
             VaciarFormularios.LimpiarControles(this);
 
-            cmbProvincia.SelectedIndex = 0;   // recarga partido y localidad vacíos
+            cmbProvincia.SelectedIndex = 0;
             cmbTipoTelefono.SelectedIndex = 0;
             cmbIva.SelectedIndex = 0;
             chkSinNumero.Checked = false;
@@ -479,7 +469,6 @@ namespace CapaVista
                 txtPostal.Clear();
             }
         }
-        // Teléfono y número de calle: solo dígitos.
         private void SoloNumeros_KeyPress(object? sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -496,7 +485,6 @@ namespace CapaVista
                 txtNumero.Clear();
             }
         }
-        // CUIT: dígitos y guiones.
         private void txtCuit_KeyPress(object? sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '-')
@@ -598,7 +586,6 @@ namespace CapaVista
                     IdTipo = ValorCombo(cmbTipoTelefono)
                 };
 
-                // Si se está modificando un proveedor que no tenía teléfono, se crea uno nuevo.
                 if (esNuevo || idTelefonoModificar == 0)
                 {
                     int idTelefono = logica.RegistrarTelefono(telefono);
@@ -625,7 +612,6 @@ namespace CapaVista
                     Correo = txtEmail.Text.Trim()
                 };
 
-                // Igual con el correo: si no tenía, se crea.
                 if (esNuevo || idCorreoModificar == 0)
                 {
                     int idCorreo = logica.RegistrarCorreo(correo);

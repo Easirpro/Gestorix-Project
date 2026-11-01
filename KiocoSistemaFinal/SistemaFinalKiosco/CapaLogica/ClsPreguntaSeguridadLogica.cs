@@ -29,9 +29,6 @@ namespace CapaLogica
             return datos.ObtenerPreguntaAleatoria(idUsuario);
         }
 
-        // Tope de respuestas incorrectas al recuperar la contraseña: después de MAX_INTENTOS_RECUPERO
-        // fallidos, el usuario tiene que esperar MINUTOS_BLOQUEO_RECUPERO para volver a intentar.
-        // Los intentos se cuentan en la bitácora, así que no se reinician al volver a abrir la pantalla.
         public const int MAX_INTENTOS_RECUPERO = 3;
         public const int MINUTOS_BLOQUEO_RECUPERO = 15;
         private const string ACCION_RECUPERO_FALLIDO = "RECUPERO_FALLIDO";
@@ -53,7 +50,6 @@ namespace CapaLogica
                 >= MAX_INTENTOS_RECUPERO;
         }
 
-        // Una respuesta incorrecta queda en la bitácora y cuenta para el tope de intentos.
         public bool ValidarRespuesta(int idUsuario,int idPregunta,string respuesta)
         {
             bool correcta = datos.ValidarRespuesta(idUsuario,idPregunta,ClsSeguridad.HashRespuesta(idUsuario,respuesta));

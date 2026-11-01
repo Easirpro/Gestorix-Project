@@ -18,7 +18,6 @@ namespace CapaVista
         private ClsBalanceLogica logica = new ClsBalanceLogica();
         private ClsCajaLogica logicaCaja = new ClsCajaLogica();
 
-        // Resultado de la última consulta (se reutiliza para exportar).
         private DataTable tablaResumen;
         private DataTable tablaIndicadores;
         private DataTable tablaMedioPago;
@@ -30,7 +29,6 @@ namespace CapaVista
         private DateTime desdeConsultado;
         private DateTime hastaConsultado;
 
-        // Títulos de columnas: se usan en las grillas y en el Excel.
         private static readonly Dictionary<string, string> Titulos = new Dictionary<string, string>
         {
             { "Seccion", "Sección" },
@@ -63,7 +61,6 @@ namespace CapaVista
             { "ImporteCobrado", "Cobrado" }
         };
 
-        // Columnas técnicas que no se muestran.
         private static readonly string[] Ocultas = { "Orden", "IdMetodoPago", "IdUsuario", "IdProducto", "IdPromocion" };
 
         public frmBalance()
@@ -110,11 +107,10 @@ namespace CapaVista
             cmbTipoDetalle.Items.Add("Ingresos");
             cmbTipoDetalle.Items.Add("Egresos");
             cmbTipoDetalle.SelectedIndex = 0;
-            ClsIdioma.TraducirOpciones(cmbTipoDetalle);   // se elige por posición
+            ClsIdioma.TraducirOpciones(cmbTipoDetalle);   // se elige por posicion
 
             try
             {
-                // Medios de pago con la opción "Todos" (Id 0) al principio.
                 DataTable medios = new DataTable();
                 medios.Columns.Add("IdMetodoPago", typeof(int));
                 medios.Columns.Add("Nombre", typeof(string));
@@ -270,7 +266,6 @@ namespace CapaVista
             return columna.DataType == typeof(decimal) || columna.DataType == typeof(double);
         }
 
-        // Escribe una tabla en una hoja de Excel con título, período y encabezados.
         private void ExportarHoja(XLWorkbook libro, string nombreHoja, string titulo, DataTable tabla)
         {
             IXLWorksheet hoja = libro.Worksheets.Add(nombreHoja);
@@ -342,7 +337,6 @@ namespace CapaVista
 
         #region Eventos
 
-        // Formato común para las grillas (títulos, importes, fechas, columnas ocultas).
         private void grilla_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             DataGridView grilla = (DataGridView)sender;
@@ -369,7 +363,7 @@ namespace CapaVista
                 }
             }
 
-            // Importes negativos en rojo.
+            // Importes negativos en rojo
             foreach (string nombre in new[] { "Importe", "Neto", "GananciaEstimada", "DiferenciaCaja" })
             {
                 if (!grilla.Columns.Contains(nombre))
@@ -397,7 +391,6 @@ namespace CapaVista
                 dgvResumen.Columns["Seccion"].HeaderText = ClsIdioma.T("Sección");
             }
 
-            // Los totales del bloque "Resultado" se destacan en negrita.
             Font negrita = new Font(dgvResumen.Font, FontStyle.Bold);
             foreach (DataGridViewRow fila in dgvResumen.Rows)
             {

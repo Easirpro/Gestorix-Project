@@ -13,9 +13,6 @@ namespace CapaDatos.NegocioDatos
     {
         private Conexion cn = new Conexion();
 
-        // sp_BalanceResumen devuelve dos resultados:
-        //   Tables[0] = resumen (Orden, Seccion, Concepto, Importe)
-        //   Tables[1] = indicadores (una sola fila)
         public DataSet ObtenerResumen(DateTime desde, DateTime hasta)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -61,7 +58,6 @@ namespace CapaDatos.NegocioDatos
             return EjecutarConsultaPorFechas("sp_BalancePorPromocion", desde, hasta);
         }
 
-        // tipo: "I" ingresos, "E" egresos, null todos. Los null no filtran.
         public DataTable ObtenerDetalle(DateTime desde, DateTime hasta, string tipo,
                                         int? idMetodoPago, int? idUsuario)
         {
@@ -89,7 +85,6 @@ namespace CapaDatos.NegocioDatos
             }
         }
 
-        // Todos los SP del balance (salvo el detalle) reciben solo @Desde y @Hasta.
         private DataTable EjecutarConsultaPorFechas(string procedimiento, DateTime desde, DateTime hasta)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

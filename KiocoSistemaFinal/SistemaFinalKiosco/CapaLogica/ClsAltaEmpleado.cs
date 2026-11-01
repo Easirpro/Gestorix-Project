@@ -7,8 +7,6 @@ using EnviarMail;
 
 public class ClsAltaEmpleado
 {
-    // Si el usuario se creó pero el correo con la contraseña temporal no se pudo enviar, quedan acá
-    // el usuario y la contraseña para que quien hizo el alta se los entregue al empleado.
     public string UsuarioSinCorreo { get; private set; }
     public string PasswordTemporalSinCorreo { get; private set; }
 
@@ -225,8 +223,6 @@ public class ClsAltaEmpleado
         return true;
     }
 
-    // El usuario ya está creado: si el correo falla no se corta el alta, se guardan los datos
-    // para mostrarlos (si no, el empleado quedaría con una contraseña temporal que nadie conoce).
     private void EnviarCorreoAlta(string correo, string username, string passwordTemporal)
     {
         UsuarioSinCorreo = null;

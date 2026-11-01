@@ -61,7 +61,6 @@ namespace CapaDatos
                     cmdUsuario.Parameters.AddWithValue("@IdPersona",persona.IdPersona);
                     cmdUsuario.ExecuteNonQuery();
 
-                    // El rol forma parte del DVH del usuario: se recalcula en la misma transacción.
                     SqlCommand cmdIdUsuario = new SqlCommand("SELECT IdUsuario FROM Usuario WHERE IdPersona = @IdPersona", con, trans);
                     cmdIdUsuario.Parameters.AddWithValue("@IdPersona", persona.IdPersona);
 

@@ -86,10 +86,6 @@ namespace CapaLogica
 
         public const int ID_ROL_ADMINISTRADOR = 1;
 
-        // Controla un cambio de rol o de estado antes de guardarlo. Devuelve el motivo si no se
-        // puede hacer, o una cadena vacía si se puede:
-        // - nadie puede darse de baja ni cambiarse el rol a sí mismo;
-        // - siempre tiene que quedar al menos un Administrador activo.
         public string ValidarCambioRolYEstado(int idPersona, int idRolNuevo, bool activoNuevo)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();

@@ -718,7 +718,6 @@ namespace CapaVista
             txtStockMinimo.Enabled = chkControlStock.Checked;
             txtStockMaximo.Enabled = chkControlStock.Checked;
         }
-        // Días de aviso antes del vencimiento; sin alerta marcada no se guardan (avisa el día que vence).
         private int? ObtenerDiasAlertaVencimiento()
         {
             return chkAlertaVencimiento.Checked && int.TryParse(txtAlertaVencimiento.Text, out int dias) && dias >= 0

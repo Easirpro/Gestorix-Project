@@ -2,7 +2,6 @@ using System.Text.RegularExpressions;
 
 namespace CapaLogica
 {
-    // Requisitos de una contraseña nueva, iguales en el primer ingreso y en la recuperación.
     public static class ClsReglasPassword
     {
         public const string Requisitos =

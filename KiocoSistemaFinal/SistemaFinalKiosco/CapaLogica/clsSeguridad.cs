@@ -5,17 +5,6 @@ using System.Text;
 
 namespace CapaSesion
 {
-    /* 
-    Esta clase contiene funciones para encriptar/desencriptar
-    Al ser estática no es necesario instanciar un objeto para 
-    usar las funciones Encriptar y DesEncriptar
-    Contiene 3 Metodos, los dos primeros (Encriptar - Desencriptar)
-    Codifican y decodifican un texto plano en base de 64 
-    El tercer metodo ENCRIPTA utilizando Hash. Hay que tener en cuenta 
-    que todos los metodos HASH (MD5 - SHA1 - SHA256 etc) SON DE UN SOLO SENTIDO
-    es decir que no pueden desencriptarse.
-    */
-
     public static class ClsSeguridad
     {
         // Encripta una cadena
@@ -26,7 +15,6 @@ namespace CapaSesion
             return result;
         }
 
-        // Esta función desencripta la cadena que le envíamos en el parámentro de entrada.
         public static string DesEncriptar(this string _cadenaAdesencriptar)
         {
             byte[] decryted = Convert.FromBase64String(_cadenaAdesencriptar);
@@ -45,9 +33,6 @@ namespace CapaSesion
             return sb.ToString();
         }
 
-        // Hash de una respuesta de seguridad. Se normaliza (sin espacios en los extremos y en
-        // minúsculas) y se usa el IdUsuario como sal. Usa UTF-16 para coincidir con
-        // HASHBYTES('SHA2_256', nvarchar) de SQL Server, que se usó para migrar las respuestas.
         public static string HashRespuesta(int idUsuario, string respuesta)
         {
             string texto = idUsuario + "|" + (respuesta ?? "").Trim().ToLowerInvariant();

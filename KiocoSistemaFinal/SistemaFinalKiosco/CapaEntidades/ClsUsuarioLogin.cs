@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace CapaEntidades
 {
-    // Datos del usuario que necesita el login para validar y armar la sesión.
     public class ClsUsuarioLogin
     {
         public int IdUsuario { get; set; }

@@ -335,7 +335,6 @@
             txtCantidad.PlaceholderText = "1 si lo dejás vacío";
             txtCantidad.Size = new Size(114, 23);
             txtCantidad.TabIndex = 24;
-            txtCantidad.TextChanged += txtCantidad_TextChanged;
             txtCantidad.KeyDown += txtCantidad_KeyDown;
             // 
             // txtCodigoBarra
@@ -438,7 +437,6 @@
             lstDescripcion.Size = new Size(327, 94);
             lstDescripcion.TabIndex = 37;
             lstDescripcion.Visible = false;
-            lstDescripcion.SelectedIndexChanged += lstDescripcion_SelectedIndexChanged;
             lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
             lstDescripcion.KeyDown += lstDescripcion_KeyDown;
             // 

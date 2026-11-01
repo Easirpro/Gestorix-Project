@@ -28,7 +28,6 @@ namespace CapaVista
 
         private void frmCerrarCaja_Load(object sender, EventArgs e)
         {
-            // Se vuelve a leer la sesión para tener el esperado al momento del cierre.
             try
             {
                 ClsSesionCajaEntidad sesion = logica.ObtenerSesionAbierta();

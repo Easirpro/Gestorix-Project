@@ -10,14 +10,13 @@ namespace CapaVista
         private ClsCompraLogica logica = new ClsCompraLogica();
 
         private int idCompra;
-        // Si no hay detalle, el formulario se cierra apenas termina de abrirse.
         private bool sinDetalle = false;
 
         public frmDetalleCompra(int idCompra)
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
-            ClsGrilla.AjustarAlContenido(dgvDetalle, "clnProducto");   // columnas al ancho del texto, con scroll si no entra
+            ClsGrilla.AjustarAlContenido(dgvDetalle, "clnProducto");
 
             this.idCompra = idCompra;
 
@@ -25,7 +24,6 @@ namespace CapaVista
 
             this.Load += frmDetalleCompra_Load;
         }
-        // Cerrar desde el constructor destruía el formulario antes del ShowDialog y daba error.
         private void frmDetalleCompra_Load(object? sender, EventArgs e)
         {
             if (sinDetalle)

@@ -7,8 +7,6 @@ using System.Windows.Forms;
 
 namespace CapaVista
 {
-    // Aviso chico que aparece al iniciar sesión si hay alertas urgentes: abajo a la derecha de la ventana,
-    // sin quitarle el foco a la pantalla de ventas y se cierra solo. "Ver alertas" abre la campana.
     public class frmAvisoAlertas : Form
     {
         private const int SEGUNDOS_VISIBLE = 10;
@@ -67,13 +65,12 @@ namespace CapaVista
             borde.Controls.AddRange(new Control[] { titulo, detalle, ver, cerrar });
             Controls.Add(borde);
             Controls.Add(franja);
-            BackColor = Color.Silver;   // el Padding de 1 px queda como borde gris
+            BackColor = Color.Silver;
 
             cierre.Interval = SEGUNDOS_VISIBLE * 1000;
             cierre.Tick += (sender, e) => Close();
         }
 
-        // No le quita el foco a la ventana principal al aparecer.
         protected override bool ShowWithoutActivation => true;
 
         public void Mostrar(Form duenio)

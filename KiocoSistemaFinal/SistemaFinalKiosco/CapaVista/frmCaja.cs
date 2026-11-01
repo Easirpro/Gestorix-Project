@@ -16,14 +16,13 @@ namespace CapaVista
     {
         private ClsCajaLogica logica = new ClsCajaLogica();
 
-        // Sesión abierta actual (null = caja cerrada).
         private ClsSesionCajaEntidad sesionActual;
 
         public frmCaja()
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
-            ClsGrilla.AjustarAlContenido(dgvMovimientos);   // columnas al ancho del texto, con scroll si no entra
+            ClsGrilla.AjustarAlContenido(dgvMovimientos);
             ConfigurarGrid();
         }
 
@@ -98,7 +97,6 @@ namespace CapaVista
             btnNuevoIngreso.Enabled = abierta && SesionUsuario.Permisos.Contains(710);
             btnNuevoEgreso.Enabled = abierta && SesionUsuario.Permisos.Contains(720);
             btnCerrarCaja.Enabled = abierta && SesionUsuario.Permisos.Contains(740);
-            // Anular un movimiento manual queda solo para el administrador.
             btnAnularMovimiento.Enabled = abierta && SesionUsuario.Permisos.Contains(760);
             btnHistorial.Enabled = SesionUsuario.Permisos.Contains(750);
         }
@@ -125,7 +123,6 @@ namespace CapaVista
 
         private void dgvMovimientos_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            // Columnas técnicas que no se muestran.
             string[] ocultas = { "Origen", "IdOrigen", "Anulable" };
             foreach (string nombre in ocultas)
             {
@@ -158,7 +155,6 @@ namespace CapaVista
                 dgvMovimientos.Columns["Importe"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             }
 
-            // Egresos en rojo para leer rápido la grilla.
             foreach (DataGridViewRow fila in dgvMovimientos.Rows)
             {
                 if (fila.Cells["Tipo"].Value?.ToString() == "Egreso")

@@ -21,8 +21,8 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
-            ClsGrilla.AjustarAlContenido(dgvCompras);   // columnas al ancho del texto, con scroll si no entra
-            ClsGrilla.AjustarAlContenido(dgvPagos);   // columnas al ancho del texto, con scroll si no entra
+            ClsGrilla.AjustarAlContenido(dgvCompras);
+            ClsGrilla.AjustarAlContenido(dgvPagos);
             ConfigurarGrid(dgvCompras);
             ConfigurarGrid(dgvPagos);
         }
@@ -52,7 +52,6 @@ namespace CapaVista
 
         private void CargarBotones()
         {
-            // 420 = Cuenta corriente de proveedores
             bool permiso = SesionUsuario.Permisos.Contains(420);
             btnRegistrarPago.Enabled = permiso;
             btnAnularPago.Enabled = permiso;

@@ -34,7 +34,6 @@ namespace CapaDatos.NegocioDatos
             }
         }
 
-        // idVenta null = todas las ventas del período.
         public DataTable ObtenerVentasParaDevolucion(DateTime desde, DateTime hasta, int? idVenta)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -76,7 +75,6 @@ namespace CapaDatos.NegocioDatos
             }
         }
 
-        // Registra la devolución y completa en la entidad el Id y el importe devuelto.
         public ClsDevolucionEntidad RegistrarDevolucion(ClsDevolucionEntidad devolucion)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

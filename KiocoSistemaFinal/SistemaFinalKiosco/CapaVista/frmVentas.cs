@@ -15,24 +15,20 @@ namespace CapaVista
     {
         private readonly CapaLogica.NegocioLogica.ClsGestorVentaLogica logicaVenta = new CapaLogica.NegocioLogica.ClsGestorVentaLogica();
 
-        // Ventas del rango de fechas; los filtros de estado y búsqueda se aplican sobre esta tabla.
         private DataTable? ventasCargadas;
-        // Evita recargar mientras se acomodan las fechas o los filtros por código.
         private bool cargando = false;
 
         public frmVentas()
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
-            ClsGrilla.AjustarAlContenido(dtgVentas);   // columnas al ancho del texto, con scroll si no entra
+            ClsGrilla.AjustarAlContenido(dtgVentas);
 
-            // Los eventos se enganchan en el Designer. Antes se enganchaban también acá y
-            // Actualizar y la carga inicial se ejecutaban dos veces.
             cargando = true;
             dtpDesde.Value = DateTime.Today;
             dtpHasta.Value = DateTime.Today;
             cmbEstado.SelectedIndex = 0;   // Activas
-            ClsIdioma.TraducirOpciones(cmbEstado);   // se elige por posición
+            ClsIdioma.TraducirOpciones(cmbEstado);   // se elige por posicion
             cargando = false;
 
             CargarVentas();
@@ -44,7 +40,6 @@ namespace CapaVista
         {
             get { return SesionUsuario.Permisos.Contains(250); }
         }
-        // Lee de la base las ventas del rango de fechas. Si se indica, deja elegida esa venta.
         private void CargarVentas(int? idVentaAElegir = null)
         {
             if (cargando)
@@ -66,7 +61,6 @@ namespace CapaVista
 
             MostrarVentas(idVentaAElegir);
         }
-        // Llena la grilla con las ventas que cumplen el estado y la búsqueda.
         private void MostrarVentas(int? idVentaAElegir = null)
         {
             dtgVentas.Rows.Clear();
@@ -76,7 +70,7 @@ namespace CapaVista
 
             if (ventasCargadas != null)
             {
-                int estado = cmbEstado.SelectedIndex;   // 0 activas, 1 anuladas, 2 todas
+                int estado = cmbEstado.SelectedIndex;
                 string texto = txtBuscar.Text.Trim();
 
                 foreach (DataRow venta in ventasCargadas.Rows)
@@ -117,7 +111,6 @@ namespace CapaVista
 
                     if (anulada)
                     {
-                        // Las anuladas en gris y con el estado en rojo, para distinguirlas.
                         fila.DefaultCellStyle.ForeColor = SystemColors.GrayText;
                         fila.Cells["clnEstado"].Style.ForeColor = Color.Firebrick;
                     }
@@ -131,7 +124,6 @@ namespace CapaVista
 
             ElegirFila(idVentaAElegir);
 
-            // Total vendido: solo las ventas activas que se ven en la lista.
             lblResumen.Text = dtgVentas.Rows.Count == 0
                 ? ClsIdioma.T("No hay ventas para mostrar con estos filtros.")
                 : dtgVentas.Rows.Count + (dtgVentas.Rows.Count == 1 ? ClsIdioma.T(" venta") : ClsIdioma.T(" ventas")) +
@@ -167,7 +159,6 @@ namespace CapaVista
         {
             return dtgVentas.CurrentRow?.Tag as DataRow;
         }
-        // Observaciones, motivo y estado de los botones según la venta elegida.
         private void MostrarDatosVentaElegida()
         {
             DataRow? venta = VentaElegida();
@@ -217,7 +208,6 @@ namespace CapaVista
                 detalle.ShowDialog(this);
             }
         }
-        // Pide el motivo de anulación en una ventana chica. Devuelve null si se cancela.
         private string? PedirMotivoAnulacion(int idVenta)
         {
             using (Form ventana = new Form())
@@ -338,8 +328,6 @@ namespace CapaVista
                 MessageBox.Show(anulada ? ClsIdioma.T("La venta fue activada.") : ClsIdioma.T("La venta fue anulada."), ClsIdioma.T("Ventas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Si la venta queda fuera del filtro de estado (por ejemplo, se anuló viendo "Activas"),
-                // se pasa a "Todas" para que siga a la vista.
                 if (cmbEstado.SelectedIndex != 2)
                 {
                     cargando = true;
@@ -370,7 +358,7 @@ namespace CapaVista
         {
             if (e.KeyCode == Keys.Enter)
             {
-                e.SuppressKeyPress = true;   // si no, Enter baja a la fila siguiente
+                e.SuppressKeyPress = true;
                 MostrarDetalle();
             }
         }
@@ -382,7 +370,6 @@ namespace CapaVista
         {
             CargarVentas(VentaElegida() == null ? null : Convert.ToInt32(VentaElegida()!["IdVenta"]));
         }
-        // Al cambiar una fecha se recarga sola. Si Desde queda después de Hasta, se corre la otra fecha.
         private void dtpDesde_ValueChanged(object? sender, EventArgs e)
         {
             if (cargando)
@@ -390,7 +377,7 @@ namespace CapaVista
 
             if (dtpDesde.Value.Date > dtpHasta.Value.Date)
             {
-                dtpHasta.Value = dtpDesde.Value.Date;   // dispara su ValueChanged, que recarga
+                dtpHasta.Value = dtpDesde.Value.Date;
                 return;
             }
 

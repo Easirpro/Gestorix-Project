@@ -58,7 +58,6 @@ namespace CapaDatos
 
             return permisos;
         }
-        // Cantidad de usuarios activos con ese rol (a quiénes afecta cambiar sus permisos).
         public int ContarUsuariosPorRol(int idRol)
         {
             using (SqlConnection conn = conexion.ObtenerConexion())

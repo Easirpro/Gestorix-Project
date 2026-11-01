@@ -1,35 +1,11 @@
--- Migración: anular una venta devuelve el stock (y reactivarla lo vuelve a descontar).
--- Reemplaza sp_CambiarEstadoVenta. Ver el comentario del procedimiento para el detalle.
--- La aplicación envía @IdUsuario solo si el procedimiento ya lo tiene, así que funciona antes y después de ejecutarlo.
--- Para volver atrás: Respaldo_sp_CambiarEstadoVenta_original.sql.
 USE Gestorix;
 GO
 
-/* =====================================================================
-   sp_CambiarEstadoVenta: anular / reactivar una venta  (cambio marcado con [STOCK])
-
-   Antes solo cambiaba la marca Anulada: la plata salía de la caja, pero los
-   productos seguían descontados del stock.
-
-   Ahora:
-   - Al ANULAR, devuelve al stock las cantidades vendidas y registra un
-     movimiento INGRESO "Anulación venta N.º X".
-   - Al REACTIVAR, las vuelve a descontar (EGRESO "Reactivación venta N.º X").
-     Si no hay stock suficiente, no deja reactivar.
-   - No deja anular una venta ya anulada ni reactivar una activa (así el stock
-     no se mueve dos veces).
-   - Todo en una transacción: si algo falla, no cambia nada.
-   - @IdUsuario (opcional): quién anula o reactiva. Si no se envía, se usa el
-     usuario que hizo la venta (MovimientoStock exige un usuario).
-
-   Se mantienen las validaciones anteriores: caja cerrada (50003),
-   devoluciones (50004) y motivo obligatorio (50002).
-   ===================================================================== */
 ALTER PROCEDURE dbo.sp_CambiarEstadoVenta
     @IdVenta INT,
     @Anulada BIT,
     @MotivoAnulacion VARCHAR(500) = NULL,
-    @IdUsuario INT = NULL                    -- [STOCK] quién anula o reactiva
+    @IdUsuario INT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -52,8 +28,6 @@ BEGIN
             THROW 50001, 'La venta no existe.', 1;
         END;
 
-        -- [CAJA] Una venta de una caja ya cerrada no se puede anular ni reactivar:
-        -- cambiaría un arqueo que ya fue controlado.
         IF EXISTS
         (
             SELECT 1
@@ -67,8 +41,6 @@ BEGIN
             THROW 50003, 'La venta pertenece a una caja cerrada y no se puede modificar.', 1;
         END;
 
-        -- [DEVOLUCION] Una venta con devoluciones no se puede anular:
-        -- el dinero o la mercadería ya se reintegraron por la devolución.
         IF @Anulada = 1
            AND EXISTS (SELECT 1 FROM dbo.Devolucion WHERE IdVenta = @IdVenta)
         BEGIN
@@ -81,7 +53,6 @@ BEGIN
             THROW 50002, 'Debe ingresar el motivo de anulacion.', 1;
         END;
 
-        -- [STOCK] Sin cambio de estado no se toca nada (si no, el stock se movería dos veces).
         IF @AnuladaActual = @Anulada
         BEGIN
             IF @Anulada = 1
@@ -97,7 +68,6 @@ BEGIN
             THROW 50007, 'No se pudo determinar el usuario para registrar el movimiento de stock.', 1;
         END;
 
-        -- [STOCK] Cantidades vendidas por producto.
         DECLARE @Cantidades TABLE
         (
             IdProducto INT PRIMARY KEY,
@@ -112,7 +82,6 @@ BEGIN
 
         IF @Anulada = 1
         BEGIN
-            -- Anular: devolver al stock.
             UPDATE s
             SET s.CantidadActual = s.CantidadActual + c.Cantidad
             FROM dbo.Stock AS s WITH (UPDLOCK, HOLDLOCK)
@@ -136,7 +105,6 @@ BEGIN
         END
         ELSE
         BEGIN
-            -- Reactivar: volver a descontar, solo si alcanza el stock.
             IF EXISTS
             (
                 SELECT 1

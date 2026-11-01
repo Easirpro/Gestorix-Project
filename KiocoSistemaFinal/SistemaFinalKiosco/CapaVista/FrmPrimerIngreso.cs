@@ -69,7 +69,6 @@ namespace CapaVista
                     MessageBox.Show(ClsIdioma.T("Contraseña modificada correctamente."), ClsIdioma.T("Primer ingreso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // El login sigue con las preguntas de seguridad o el menú principal.
                     this.DialogResult = DialogResult.OK;
                     this.Close();
 

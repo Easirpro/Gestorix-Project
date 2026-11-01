@@ -20,7 +20,7 @@ namespace CapaVista
         private readonly int idCompra;
         private readonly string proveedor;
         private readonly decimal saldo;
-        private ClsSesionCajaEntidad sesionCaja;   // null = no hay caja abierta
+        private ClsSesionCajaEntidad sesionCaja;
 
         public frmRegistrarPagoCompra(int idCompra, string proveedor, decimal saldo)
         {
@@ -70,7 +70,6 @@ namespace CapaVista
         {
             DataTable tabla = logicaCaja.ObtenerMetodosPago();
 
-            // "Cuenta Corriente" es la condición de la deuda, no una forma de pagarla.
             foreach (DataRow fila in tabla.Select("Nombre = 'Cuenta Corriente'"))
             {
                 tabla.Rows.Remove(fila);
@@ -80,9 +79,8 @@ namespace CapaVista
             cmbMedioPago.DisplayMember = "Nombre";
             cmbMedioPago.ValueMember = "IdMetodoPago";
 
-            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPago);   // solo cambia lo que se ve
+            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPago);
 
-            // Efectivo por defecto (se busca por el dato, no por el texto que se muestra).
             int indiceEfectivo = tabla.Rows.IndexOf(tabla.Select("Nombre = 'Efectivo'").FirstOrDefault());
             if (indiceEfectivo >= 0)
             {
@@ -92,7 +90,6 @@ namespace CapaVista
 
         private bool EsEfectivo()
         {
-            // Se mira el dato: el texto que se ve puede estar traducido.
             return cmbMedioPago.SelectedItem is DataRowView medio && Convert.ToString(medio["Nombre"]) == "Efectivo";
         }
 

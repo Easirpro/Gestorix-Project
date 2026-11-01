@@ -1,25 +1,6 @@
--- Migración: listados de precios y reposición (formulario frmListados).
--- sp_ListadoArticulos devuelve los datos de los dos listados; el formulario muestra las columnas de cada uno.
--- Se puede ejecutar más de una vez sin problemas.
 USE Gestorix;
 GO
 
-/* ---------------------------------------------------------------------
-   sp_ListadoArticulos: artículos activos con precio, costo, oferta
-   vigente y stock, para la lista de precios y la de reposición.
-   - @Texto: código de barras o SKU que empiezan así, o nombre que lo contiene.
-   - @IdProducto: un artículo puntual (al agregarlo desde el buscador).
-   - @IdProveedor: solo artículos de alguna sucursal de ese proveedor.
-   - @IdSucursal: solo artículos de esa sucursal de proveedor (y su costo).
-     Sin sucursal se toma la sucursal (del proveedor, si se indicó) con el costo más reciente.
-   - @SoloOfertas: solo con una promoción vigente.
-   - @SoloReponer: solo con stock en el mínimo o por debajo.
-   - @Fecha: día para el que se calculan las ofertas (por defecto, hoy).
-   Una oferta está vigente si la promoción está activa y vale ese día:
-   por su rango de fechas y, si es recurrente, por sus días de la semana
-   (DiaVigenciaPromocion usa 0 = domingo ... 6 = sábado, como DayOfWeek).
-   El horario no filtra: se muestra junto al nombre de la oferta.
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_ListadoArticulos
     @Texto       NVARCHAR(100) = NULL,
     @IdProducto  INT           = NULL,
@@ -37,7 +18,6 @@ BEGIN
     SET @Texto = NULLIF(LTRIM(RTRIM(@Texto)), N'');
 
     DECLARE @Hoy DATE = ISNULL(@Fecha, CONVERT(DATE, GETDATE()));
-    -- 0 = domingo ... 6 = sábado, sin depender de SET DATEFIRST (el 07/01/1900 fue domingo).
     DECLARE @DiaSemana TINYINT = DATEDIFF(DAY, '19000107', @Hoy) % 7;
 
     SELECT
@@ -94,7 +74,6 @@ BEGIN
     ) AS prov
     OUTER APPLY
     (
-        -- Todas las promociones que valen ese día, separadas por " / ".
         SELECT STRING_AGG(
             pm.Nombre +
             CASE
@@ -110,14 +89,12 @@ BEGIN
         WHERE dp.IdProducto = p.IdProducto
           AND pm.Activo = 1
           AND (
-                -- Sin vigencia detallada: el rango de fechas de la promoción.
                 (
                     v.IdPromocion IS NULL
                     AND CONVERT(DATE, pm.FechaInicio) <= @Hoy
                     AND (pm.FechaFin IS NULL OR CONVERT(DATE, pm.FechaFin) >= @Hoy)
                 )
                 OR
-                -- Con vigencia: su rango de fechas y, si es recurrente, que hoy sea uno de sus días.
                 (
                     v.IdPromocion IS NOT NULL
                     AND v.FechaInicio <= @Hoy

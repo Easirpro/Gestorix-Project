@@ -7,13 +7,10 @@ using System.Windows.Forms;
 
 namespace CapaVista
 {
-    // Detalle de una venta: datos generales, productos vendidos, pagos y observaciones.
-    // Reemplaza al cuadro de mensaje anterior, que no mostraba los productos y mostraba los pagos en cero.
     public partial class frmDetalleVenta : Form
     {
         private readonly ClsGestorVentaLogica logica = new ClsGestorVentaLogica();
 
-        // venta: la fila del listado de frmVentas (ObtenerVentasListado).
         public frmDetalleVenta(DataRow venta)
         {
             InitializeComponent();

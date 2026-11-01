@@ -16,7 +16,6 @@ namespace CapaLogica
     {
         private ClsUsuarioDatos datos = new ClsUsuarioDatos();
 
-        // Bloqueado por el administrador (Usuario.Estado) o persona inactiva.
         public bool UsuarioBloqueado { get; private set; }
 
         // Registros con DVH inválido encontrados al iniciar sesión (vacía si la base está íntegra).
@@ -36,8 +35,6 @@ namespace CapaLogica
                 return false;
             }
 
-            // Se usa el Username guardado en la base: SQL Server no distingue mayúsculas,
-            // pero el hash sí, y la contraseña se generó con ese Username.
             string pass = ClsSeguridad.SHA256(encontrado.Username + password);
 
             if (pass != encontrado.PassActual)
@@ -98,7 +95,6 @@ namespace CapaLogica
             SesionUsuario.Permisos = rolDatos.ObtenerPermisos(SesionUsuario.IdRol);
             SesionUsuario.SesionActiva = true;
         }
-        // Un fallo al registrar la bitácora no debe cortar el inicio ni el cierre de sesión.
         private void RegistrarBitacora(int? idUsuario, string accion, string detalle)
         {
             try

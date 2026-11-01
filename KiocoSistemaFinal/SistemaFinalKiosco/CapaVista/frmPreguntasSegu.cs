@@ -63,7 +63,6 @@ namespace CapaVista
             {
                 MessageBox.Show( ClsIdioma.T("Las preguntas de seguridad se guardaron correctamente."),ClsIdioma.T("Información"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // El login sigue con el menú principal.
                 this.DialogResult = DialogResult.OK;
                 this.Close();
 

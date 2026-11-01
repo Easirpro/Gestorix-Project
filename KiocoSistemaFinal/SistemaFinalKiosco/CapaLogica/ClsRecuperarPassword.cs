@@ -2,8 +2,6 @@ using CapaSesion;
 
 namespace CapaLogica
 {
-    // Cambio de contraseña después de responder la pregunta de seguridad.
-    // Pide los mismos requisitos que el primer ingreso.
     public class ClsRecuperarPassword
     {
         public ResultadoCambioPassword CambiarPassword(int idUsuario, string nuevaPass, string confirmarPass)

@@ -35,7 +35,7 @@ namespace CapaDatos.NegocioDatos
             }
         }
         public int RegistrarVenta(decimal total, int idUsuario, string observaciones, List<DetalleVentaEntidad> detalles, List<PagoVentaEntidad> pagos,
-                                  List<ClsPromocionVentaEntidad> promociones = null)   // [PROMO] opcional
+                                  List<ClsPromocionVentaEntidad> promociones = null)
         {
             string dvh = GenerarDVHVenta(total, idUsuario);
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -88,7 +88,6 @@ namespace CapaDatos.NegocioDatos
                 parametroPagos.SqlDbType = SqlDbType.Structured;
                 parametroPagos.TypeName = "dbo.TipoPagoVenta";
 
-                // [PROMO] Promociones aplicadas (si no hay, no se envía el parámetro)
                 ClsPromocionVentaDatos.AgregarParametroPromociones(cmd, promociones);
 
                 conexion.Open();
@@ -113,8 +112,6 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-        // Listado de ventas con los datos reales (sp_ObtenerVentas devuelve el cajero y los pagos vacíos):
-        // cajero, caja, cantidad de artículos y medios de pago de cada venta.
         public DataTable ObtenerVentasListado(DateTime desde, DateTime hasta)
         {
             string query = @"
@@ -155,7 +152,6 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-        // Productos vendidos en una venta.
         public DataTable ObtenerProductosVenta(int idVenta)
         {
             string query = @"
@@ -183,7 +179,6 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-        // Cómo se pagó una venta. Las ventas viejas sin VentaPago usan el medio guardado en la venta.
         public DataTable ObtenerPagosVenta(int idVenta)
         {
             string query = @"
@@ -213,9 +208,6 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-        // idUsuario: quién anula o reactiva (para el movimiento de stock). Solo se envía si el
-        // procedimiento ya tiene el parámetro @IdUsuario (script alter_sp_CambiarEstadoVenta);
-        // así funciona igual antes y después de aplicar ese script en la base.
         public void CambiarEstadoVenta(int idVenta, bool anulada, string motivo, int idUsuario)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

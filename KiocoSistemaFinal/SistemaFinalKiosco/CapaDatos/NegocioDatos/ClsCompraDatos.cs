@@ -44,7 +44,6 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
-        // true si ya hay una compra no anulada del proveedor con ese tipo y número de comprobante.
         public bool ExisteComprobante(int idProveedor, string tipoComprobante, string numeroComprobante)
         {
             string query = @"SELECT COUNT(*)

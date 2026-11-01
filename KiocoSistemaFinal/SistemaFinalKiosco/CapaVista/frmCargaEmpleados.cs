@@ -19,7 +19,6 @@ namespace CapaVista
         private int idRolOriginal;
         private bool cargandoDatosUsuario = false;
         private bool cargandoUsuarios = false;
-        // true después de tocar Nuevo: se puede Crear pero no Modificar.
         private bool modoNuevo = false;
 
         public frmCargaEmpleados()
@@ -41,7 +40,6 @@ namespace CapaVista
 
 
         #region Metodos
-        // Nombre que ve el usuario de cada campo obligatorio.
         private string NombreCampo(Control control)
         {
             if (control == txtNombre) return ClsIdioma.T("Nombre");
@@ -55,7 +53,6 @@ namespace CapaVista
 
             return control.Name;
         }
-        // Muestra la pestaña donde está el control y le pone el foco.
         private void MostrarControl(Control control)
         {
             Control? padre = control.Parent;
@@ -77,12 +74,10 @@ namespace CapaVista
         {
             foreach (Control control in controles)
             {
-                // Piso y Departamento son opcionales (casas sin piso ni departamento).
                 if (control is TextBox && control != txtPiso && control != txtDepartamento)
                 {
                     if (string.IsNullOrWhiteSpace(control.Text))
                     {
-                        // El código postal no se escribe: sale de la localidad elegida.
                         bool esPostal = control == txtPostal;
 
                         string mensaje = esPostal
@@ -171,7 +166,7 @@ namespace CapaVista
             cmbRol.DataSource = null;
             cmbRol.DataSource = dt;
             cmbRol.DisplayMember = "Nombre";
-            ClsIdioma.TraducirDatosAlMostrar(cmbRol);   // nombres de roles traducidos solo al mostrar
+            ClsIdioma.TraducirDatosAlMostrar(cmbRol);
             cmbRol.ValueMember = "IdRol";
 
             SeleccionarRol(idRolActual);
@@ -199,7 +194,6 @@ namespace CapaVista
                 cmbRol.SelectedIndex = 0;
             }
         }
-        // Cambiar el rol de un empleado pide el permiso de Roles y Permisos (1270).
         private bool PuedeCambiarRol
         {
             get { return SesionUsuario.Permisos.Contains(1270); }
@@ -208,7 +202,6 @@ namespace CapaVista
         {
             get { return !modoNuevo && personaOriginal != null && personaOriginal.IdPersona == SesionUsuario.IdPersona; }
         }
-        // Con un empleado seleccionado se puede Modificar; después de Nuevo, solo Crear.
         private void ActualizarBotones()
         {
             bool puedeCrear = SesionUsuario.Permisos.Contains(1000) || SesionUsuario.Permisos.Contains(1010);
@@ -216,16 +209,11 @@ namespace CapaVista
             bool haySeleccionado = !modoNuevo && personaOriginal != null;
 
             btnNuevo.Enabled = puedeCrear;
-            // Crear empleado y Guardar cambios quedan habilitados según el permiso; si se tocan en el
-            // momento equivocado, explican qué hacer en vez de no responder.
             btnCrear.Enabled = puedeCrear;
             btnModificar.Enabled = puedeModificar;
-            // Con NUEVO, "Habilitar Edición" queda tildado y bloqueado (no se pueden bloquear los campos a mitad de la carga).
             chkHabilitarEdicion.Enabled = !modoNuevo && haySeleccionado;
-            // Solo con un empleado nuevo en carga o uno elegido del combo (no al abrir el formulario).
             btnPermisos.Enabled = PuedeCambiarRol && (modoNuevo || haySeleccionado);
         }
-        // Deja el formulario vacío y sin empleado seleccionado (los datos originales también se borran).
         private void LimpiarFormulario()
         {
             VaciarFormularios.LimpiarControles(this);
@@ -259,7 +247,6 @@ namespace CapaVista
                 cargandoUsuarios = false;
             }
         }
-        // CUIL tal como se guarda: vacío si el campo no tiene números.
         private string CuilIngresado()
         {
             ClsValidarCUIL validarCUIL = new ClsValidarCUIL();
@@ -801,7 +788,6 @@ namespace CapaVista
             cmbTipoTelefono.Enabled = habilitar;
             txtCorreo.Enabled = habilitar;
 
-            // Nadie se da de baja ni se cambia el rol a sí mismo.
             chkActivo.Enabled = habilitar && !EsUnoMismo;
             cmbRol.Enabled = habilitar && PuedeCambiarRol && !EsUnoMismo;
         }
@@ -809,7 +795,7 @@ namespace CapaVista
 
 
         #region Eventos
-        //Evento Formulario
+        // Evento Formulario
         private void frmCargaEmpleados_Load(object sender, EventArgs e)
         {
             CargarGeneros();
@@ -850,10 +836,9 @@ namespace CapaVista
             HabilitarEdicion(false);
             ActualizarBotones();
         }
-        //Evento Boton Crear
+        // Evento Boton Crear
         private void btnCrear_Click(object sender, EventArgs e)
         {
-            // CREAR EMPLEADO solo sirve después de NUEVO: si no, se explica qué hacer.
             if (!modoNuevo)
             {
                 MessageBox.Show(personaOriginal != null
@@ -978,7 +963,7 @@ namespace CapaVista
         {
 
         }
-        //Evento DNI
+        // Evento DNI
         private void txtDNI_Leave(object sender, EventArgs e)
         {
             if (!ClsVerificarDNI.DniValido(txtDNI.Text))
@@ -1005,7 +990,7 @@ namespace CapaVista
 
             txtDNI.MaxLength = 8;
         }
-        //Evento CUIL
+        // Evento CUIL
         private void mkdCuil_KeyPress(object sender, KeyPressEventArgs e)
         {
             ValidacionCampoVacio validacion = new ValidacionCampoVacio();
@@ -1033,7 +1018,6 @@ namespace CapaVista
         }
         private void mkdCuil_Leave(object sender, EventArgs e)
         {
-            // Con la máscara el texto nunca queda vacío (quedan los guiones): se mira si tiene números.
             if (new ClsValidarCUIL().CuilVacio(mkdCuil.Text))
             {
                 txtDNI.Clear();
@@ -1041,7 +1025,6 @@ namespace CapaVista
                 return;
             }
 
-            // El CUIL guardado del empleado no se vuelve a validar si no se cambió.
             if (!modoNuevo && personaOriginal != null && CuilIngresado() == (personaOriginal.CUIT ?? "").Trim())
             {
                 return;
@@ -1049,7 +1032,7 @@ namespace CapaVista
 
             CargarDNIDesdeCUIL();
         }
-        //Evento Telefono
+        // Evento Telefono
         private void txtTelefono_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!ClsValidarNumeros.SoloNumeros(e.KeyChar))
@@ -1059,7 +1042,7 @@ namespace CapaVista
 
             txtTelefono.MaxLength = 10;
         }
-        //Evento Partido
+        // Evento Partido
         private void cmbPartido_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cargandoDatosUsuario)
@@ -1095,7 +1078,7 @@ namespace CapaVista
 
 
         }
-        //Evento Provincia
+        // Evento Provincia
         private void cmbProvincia_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cargandoDatosUsuario)
@@ -1126,7 +1109,7 @@ namespace CapaVista
                 cmbPartido.ValueMember = "IdPartido";
             }
         }
-        //Evento localidad
+        // Evento localidad
         private void cmbLocalidad_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (cargandoDatosUsuario)
@@ -1153,7 +1136,7 @@ namespace CapaVista
                 }
             }
         }
-        //Evento lista buscar usuario
+        // Evento lista buscar usuario
         private void lstUsuarios_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (cargandoUsuarios)
@@ -1169,7 +1152,6 @@ namespace CapaVista
 
             modoNuevo = false;
 
-            // "-Seleccione un Usuario-": formulario vacío, sin nada para modificar.
             if (idPersona <= 0)
             {
                 LimpiarFormulario();
@@ -1192,7 +1174,6 @@ namespace CapaVista
 
             LimpiarFormulario();
 
-            // Al crear, la edición queda habilitada (tildado y bloqueado por ActualizarBotones).
             chkHabilitarEdicion.Checked = true;
             chkActivo.Checked = true;
             HabilitarEdicion(true);
@@ -1202,7 +1183,6 @@ namespace CapaVista
         }
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            // GUARDAR CAMBIOS: explica qué falta en vez de no responder.
             if (modoNuevo)
             {
                 MessageBox.Show(ClsIdioma.T("Estás cargando un empleado nuevo: para guardarlo tocá CREAR EMPLEADO."), ClsIdioma.T("Guardar cambios"),
@@ -1278,8 +1258,6 @@ namespace CapaVista
 
                 string cuil = CuilIngresado();
 
-                // El CUIL y el DNI se validan solo si se cambiaron: así se puede modificar a un
-                // empleado con datos viejos (CUIL vacío o mal cargado) sin tocar esos campos.
                 bool cuilCambio = cuil != (personaOriginal.CUIT ?? "").Trim();
                 bool dniCambio = txtDNI.Text.Trim() != (personaOriginal.DNI ?? "").Trim();
 
@@ -1308,7 +1286,6 @@ namespace CapaVista
                     }
                 }
 
-                // Sin permiso de Roles y Permisos el rol no se puede cambiar (el combo está bloqueado).
                 int idRol = PuedeCambiarRol ? RolSeleccionado() : idRolOriginal;
 
                 if (idRol <= 0)
@@ -1370,7 +1347,6 @@ namespace CapaVista
                     return;
                 }
 
-                // Nadie se da de baja ni se cambia el rol a sí mismo, y siempre queda un Administrador activo.
                 string motivoRol = logica.ValidarCambioRolYEstado(idPersona, idRol, estadoNuevo);
 
                 if (motivoRol != string.Empty)
@@ -1457,7 +1433,6 @@ namespace CapaVista
                 MessageBox.Show(ClsIdioma.T("Los datos se modificaron correctamente."),
                     ClsIdioma.T("Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Se recargan los datos para que la próxima modificación compare contra lo guardado.
                 CargarUsuarios(idPersona);
                 CargarDatosUsuario(idPersona);
 
@@ -1478,8 +1453,6 @@ namespace CapaVista
         {
             CargarUsuarios();
         }
-        // Abre los permisos del rol elegido en el combo. Con un rol elegido, se edita solo ese rol
-        // (afecta a todos los empleados con ese rol). No cambia el rol del empleado: eso es el combo Rol.
         private void btnPermisos_Click(object sender, EventArgs e)
         {
             int idRol = RolSeleccionado();
@@ -1490,14 +1463,12 @@ namespace CapaVista
                 permiso.ShowDialog(this);
             }
 
-            // Sin rol elegido se pueden crear o eliminar roles: se recarga el combo sin perder la selección.
             CargarRoles();
         }
         private void chkHabilitarEdicion_CheckedChanged(object sender, EventArgs e)
         {
             HabilitarEdicion(chkHabilitarEdicion.Checked);
         }
-        // VOLVER: cierra la pantalla. Si se estaba cargando o editando un empleado, pregunta antes.
         private void btnVolver_Click(object? sender, EventArgs e)
         {
             if (modoNuevo || chkHabilitarEdicion.Checked)

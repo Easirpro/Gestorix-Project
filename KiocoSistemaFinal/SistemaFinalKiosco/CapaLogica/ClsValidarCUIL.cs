@@ -45,13 +45,11 @@ namespace CapaLogica
             }
             else if (digito == 10)
             {
-                // AFIP no emite CUIL con ese resultado: le cambia el prefijo (23 o 24) y el número es otro.
                 return false;
             }
 
             return digito == (cuil[10] - '0');
         }
-        // Explica por qué el CUIL no es válido; cadena vacía si es válido.
         public string MotivoCuilInvalido(string cuil)
         {
             string digitos = new string((cuil ?? "").Where(char.IsDigit).ToArray());
@@ -73,7 +71,6 @@ namespace CapaLogica
 
             return string.Empty;
         }
-        // true si el campo no tiene ningún número (la máscara deja los guiones aunque esté vacío).
         public bool CuilVacio(string cuil)
         {
             return !(cuil ?? "").Any(char.IsDigit);

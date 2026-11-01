@@ -45,14 +45,12 @@ namespace CapaVista
             DateTime ahora = DateTime.Now;
             DateTime hoy = ahora.Date;
 
-            // Las fechas empiezan en el día actual.
             dtpFechaInicio.MinDate = hoy;
             dtpFechaInicio.Value = hoy;
 
             dtpFechaFin.MinDate = hoy;
             dtpFechaFin.Value = hoy;
 
-            // Los horarios empiezan con la hora actual.
             dtpHoraInicio.Value = ahora;
             dtpHoraFin.Value = ahora.AddHours(1);
 

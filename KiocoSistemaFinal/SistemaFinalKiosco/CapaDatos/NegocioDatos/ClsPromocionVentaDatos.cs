@@ -9,15 +9,10 @@ using System.Threading.Tasks;
 
 namespace CapaDatos.NegocioDatos
 {
-    // Arma el parámetro @Promociones (dbo.TipoPromocionVenta) de sp_RegistrarVenta.
-    // Se usa desde el RegistrarVenta de la capa de datos de ventas, justo antes
-    // de ejecutar el comando:
-    //     ClsPromocionVentaDatos.AgregarParametroPromociones(cmd, promociones);
     public static class ClsPromocionVentaDatos
     {
         public static void AgregarParametroPromociones(SqlCommand cmd, List<ClsPromocionVentaEntidad> promociones)
         {
-            // Sin promociones no se envía el parámetro: el SP lo toma como tabla vacía.
             if (promociones == null || promociones.Count == 0)
             {
                 return;

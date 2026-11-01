@@ -2,17 +2,13 @@
 
 namespace CapaVista
 {
-    // Textos de pantalla en castellano y su traducción al inglés (los usa ClsIdioma).
-    // Para traducir un texto nuevo: agregar una línea { "texto en castellano", "English text" }.
-    // Las claves que terminan en ": " o en un espacio se usan también como prefijo
-    // (por ejemplo "Fecha: " traduce "Fecha: 01/11/2026").
     internal static class ClsIdiomaTextos
     {
         public static Dictionary<string, string> Crear()
         {
             return new Dictionary<string, string>
             {
-                // --- Menú principal y pantalla de venta ---
+                // menu principal
                 { "Artículos", "Products" },
                 { "Promociones", "Promotions" },
                 { "Promociónes", "Promotions" },
@@ -85,7 +81,7 @@ namespace CapaVista
                 { "Hora: ", "Time: " },
                 { "Fecha: ", "Date: " },
 
-                // --- Botones y acciones comunes ---
+                // botones
                 { "Aceptar", "OK" },
                 { "Cancelar", "Cancel" },
                 { "CANCELAR", "CANCEL" },
@@ -139,7 +135,7 @@ namespace CapaVista
                 { "Acción: ", "Action: " },
                 { "Acción: -", "Action: -" },
 
-                // --- Campos y etiquetas comunes ---
+                // etiquetas
                 { "Fecha", "Date" },
                 { "Fecha:", "Date:" },
                 { "Fecha: -", "Date: -" },
@@ -269,7 +265,7 @@ namespace CapaVista
                 { "Solo números", "Numbers only" },
                 { "Excepción: ", "Exception: " },
 
-                // --- Días ---
+                // dias
                 { "Lunes", "Monday" },
                 { "Martes", "Tuesday" },
                 { "Miércoles", "Wednesday" },
@@ -278,7 +274,7 @@ namespace CapaVista
                 { "Sábado", "Saturday" },
                 { "Domingo", "Sunday" },
 
-                // --- Login, primer ingreso y recuperación ---
+                // login
                 { "Olvide mi contraseña", "I forgot my password" },
                 { "Tu usuario", "Your username" },
                 { "Tu contraseña", "Your password" },
@@ -307,7 +303,7 @@ namespace CapaVista
                 { "Tu respuesta", "Your answer" },
                 { "Tu respuesta a la pregunta", "Your answer to the question" },
 
-                // --- Alertas ---
+                // alertas
                 { "Alertas", "Alerts" },
                 { "Revisá lo pendiente. Doble clic en una alerta (o Enter) para ir a resolverla.", "Review what is pending. Double-click an alert (or press Enter) to go fix it." },
                 { "0 en total", "0 in total" },
@@ -320,7 +316,7 @@ namespace CapaVista
                 { "Elegí un tipo de alerta para ver solo esas. «Todos» muestra todas.", "Choose an alert type to see only those. \"All\" shows them all." },
                 { "Filtrá por prioridad: urgentes (rojo) o avisos (naranja).", "Filter by priority: urgent (red) or warnings (orange)." },
 
-                // --- Empleados y permisos ---
+                // empleados
                 { "Datos Personales", "Personal data" },
                 { "Dirección y Localidad", "Address and city" },
                 { "Contacto", "Contact" },
@@ -373,7 +369,7 @@ namespace CapaVista
                 { "Nombre del nuevo Rol: ", "Name of the new role: " },
                 { "Ej.: Cajero de fin de semana", "E.g.: Weekend cashier" },
 
-                // --- Proveedores ---
+                // proveedores
                 { "Gestión de proveedores", "Supplier management" },
                 { "Se ven todos los proveedores. Buscá uno por nombre o CUIT para ver solo ese. Doble clic en la fila para modificar esa sucursal.", "All suppliers are listed. Search one by name or tax ID to see only that one. Double-click the row to edit that branch." },
                 { "Nuevo proveedor", "New supplier" },
@@ -419,7 +415,7 @@ namespace CapaVista
                 { "Escriba el nombre del proveedor", "Type the supplier's name" },
                 { "Nombre del proveedor", "Supplier name" },
 
-                // --- Compras y recepción ---
+                // compras
                 { "Gestión de compras", "Purchase management" },
                 { "Registrá, consultá y anulá las compras a proveedores.", "Register, review and void purchases from suppliers." },
                 { "Nueva compra", "New purchase" },
@@ -446,6 +442,7 @@ namespace CapaVista
                 { "Total con IVA", "Total incl. VAT" },
                 { "Totales estimados", "Estimated totals" },
                 { "CONFIRMAR COMPRA", "CONFIRM PURCHASE" },
+                { "CONFIRMAR VENTA", "CONFIRM SALE" },
                 { "Escribí el nombre o CUIT y elegilo de la lista", "Type the name or tax ID and pick it from the list" },
                 { "Ej.: 0001-00001234", "E.g.: 0001-00001234" },
                 { "Notas de la compra (opcional)", "Purchase notes (optional)" },
@@ -493,7 +490,7 @@ namespace CapaVista
                 { "Elegí con qué se paga.", "Choose how it is paid." },
                 { "Detalle del pago (opcional)", "Payment details (optional)" },
 
-                // --- Ventas, cobro y devoluciones ---
+                // ventas
                 { "Gestión de ventas", "Sales management" },
                 { "Consultá las ventas, mirá su detalle y anulá las que correspondan. Doble clic en una venta para ver el detalle.", "Review sales, see their details and void them when needed. Double-click a sale to see its details." },
                 { "N.º de venta, cajero o medio de pago", "Sale No., cashier or payment method" },
@@ -545,7 +542,7 @@ namespace CapaVista
                 { "No hay caja abierta: no se puede devolver dinero.", "No cash register is open: money cannot be refunded." },
                 { "Se entrega otra unidad: no se mueve dinero de la caja.", "Another unit is given: no money leaves the cash register." },
 
-                // --- Caja ---
+                // caja
                 { "Apertura de caja", "Cash register opening" },
                 { "Fondo inicial:", "Opening float:" },
                 { "Fondo inicial (efectivo):", "Opening float (cash):" },
@@ -577,7 +574,7 @@ namespace CapaVista
                 { "Detalle del movimiento (opcional)", "Movement details (optional)" },
                 { "Según el sistema", "According to the system" },
 
-                // --- Artículos, categorías, marcas y reposición ---
+                // articulos
                 { "Completá los datos necesarios para registrar el producto", "Fill in the data needed to register the product" },
                 { "Datos principales", "Main data" },
                 { "Nombre del producto *", "Product name *" },
@@ -652,7 +649,7 @@ namespace CapaVista
                 { "Opcional: exportá solo los artículos de esta marca.", "Optional: export only the products of this brand." },
                 { "Elegí si se exportan los artículos activos, inactivos o todos.", "Choose whether active, inactive or all products are exported." },
 
-                // --- Promociones ---
+                // promociones
                 { "Gestión de promociones\r\nCrear, editar y administrar promociones del kiosco", "Promotion management\r\nCreate, edit and manage the store's promotions" },
                 { "Datos Generales", "General data" },
                 { "Nombre de la Promoción", "Promotion name" },
@@ -702,7 +699,7 @@ namespace CapaVista
                 { "Elegí la mecánica de volumen, por ejemplo 3x2.", "Choose the volume mechanic, for example 3x2." },
                 { "Tipo de promoción: por volumen (3x2, 2x1), descuento porcentual o precio especial.", "Promotion type: by volume (3x2, 2x1), percentage discount or special price." },
 
-                // --- Listados, informes, balance y bitácora ---
+                // listados
                 { "Listados de precios y reposición", "Price and restocking lists" },
                 { "¿Qué listado querés ver?", "Choose a list:" },
                 { "Lista de precios", "Price list" },
@@ -744,7 +741,7 @@ namespace CapaVista
                 { "Errores técnicos", "Technical errors" },
                 { "Usuario, acción o descripción", "User, action or description" },
                 { "¿Qué querés hacer?", "What do you want to do?" },
-                // --- Títulos de ventanas y otros ---
+                // titulos
                 { "Carga de Empleados", "Employee management" },
                 { "Gestión de Roles y Permisos", "Roles and permissions" },
                 { "Login", "Login" },
@@ -774,7 +771,7 @@ namespace CapaVista
                 { "Restaurar Backup", "Restore backup" },
                 { "Actualizar Lista", "Refresh list" },
                 { "N.º", "No." },
-                // --- Mensajes y textos que arma el código (ClsIdioma.T) ---
+                // mensajes
                 { "   ·   Las anuladas no suman.", "   ·   Voided ones are not added." },
                 { "   ·   Total reintegrado en efectivo: ", "   ·   Total refunded in cash: " },
                 { "   ·   Total vendido (activas): ", "   ·   Total sold (active): " },
@@ -1219,8 +1216,8 @@ namespace CapaVista
                 { "No se pudo registrar el proveedor.", "The supplier could not be registered." },
                 { "No se pudo registrar la devolución.\n\n", "The return could not be registered.\n\n" },
                 { "No se pudo verificar la caja.\n\n", "The cash register could not be checked.\n\n" },
+                { "No se pudo agregar el pago.\n\n", "The payment could not be added.\n\n" },
                 { "No se puede modificar la cantidad de un producto que pertenece a una promoción.", "The quantity of a product that belongs to a promotion cannot be changed." },
-                { "No se recibió ningún producto seleccionado. ", "No selected product was received. " },
                 { "No se seleccionó ningún producto.", "No product was selected." },
                 { "No tenés permiso para anular ventas.", "You don't have permission to void sales." },
                 { "No tenés permiso para ver las alertas.", "You don't have permission to see the alerts." },
@@ -1263,7 +1260,6 @@ namespace CapaVista
                 { "Recuperar contraseña", "Recover password" },
                 { "Registro", "Registration" },
                 { "Respuesta incorrecta.", "Incorrect answer." },
-                { "Revisá el botón de selección de frmBuscarArticulo.", "Check the selection button of frmBuscarArticulo." },
                 { "Revise los datos ingresados. Hay campos vacíos o valores inválidos.", "Check the data entered. There are empty fields or invalid values." },
                 { "Complete los campos obligatorios (nombre, marca, unidad de venta y rubro) y revise los valores ingresados.", "Fill in the required fields (name, brand, sale unit and category) and check the values entered." },
                 { "Revise los valores de stock ingresados.", "Check the stock values entered." },
@@ -1383,7 +1379,7 @@ namespace CapaVista
                 { "Ya existe un proveedor llamado \"", "There is already a supplier named \"" },
                 { "Ya existe un rol con ese nombre.", "A role with that name already exists." },
                 { "Ya hay una sesión abierta. Debe cerrar la sesión actual antes de iniciar otra.", "A session is already open. You must close the current session before starting another one." },
-                // --- Alertas, encabezados de informes, avisos y valores que solo se muestran ---
+                // avisos
                 { " | Cantidad: ", " | Quantity: " },
                 { " al ", " to " },
                 { " alertas urgentes", " urgent alerts" },
@@ -1621,7 +1617,6 @@ namespace CapaVista
                 { "Seleccionar plantilla de artículos", "Select products template" },
                 { "No se pudo generar el backup automático: ", "The automatic backup could not be created: " },
                 { "Backup generado correctamente en ", "Backup created successfully in " },
-                // Nombres y descripciones de permisos y nombres de roles (vienen de la base; solo se muestran)
                 { "Permite usar todas las funciones de la sección Artículos.", "Allows using every function in the Products section." },
                 { "Gestión de Artículos", "Product management" },
                 { "Permite gestionar el Alta, Baja, Modificación y Carga de Artículos.", "Allows adding, removing, editing and loading Products." },
@@ -1738,7 +1733,6 @@ namespace CapaVista
                 { "Empleado Compras", "Purchasing employee" },
                 { "Empleado General", "General employee" },
                 { "Empleado Ventas", "Sales employee" },
-                // Valores de catálogo que vienen de la base (solo se traducen al mostrarse)
                 { "Cuenta Corriente", "Current account" },
                 { "Débito", "Debit" },
                 { "Crédito", "Credit" },

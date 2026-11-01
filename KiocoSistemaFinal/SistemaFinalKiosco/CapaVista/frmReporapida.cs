@@ -60,27 +60,23 @@ namespace CapaVista
         }
         private void AplicarModo(string modo)
         {
-            // Si se vuelve a pulsar el mismo botón, desactivar el modo.
             if (modoActual == modo && modo != "")
                 modo = "";
 
             modoActual = modo;
 
-            // Determinar si hay un modo activo.
             bool modoActivo = modo != "";
 
-            // Limpiar el formulario al cambiar o desactivar el modo.
             txtCodigo.Clear();
             lstDescripcion.DataSource = null;
             lstDescripcion.Visible = false;
             dgvProductos.Rows.Clear();
 
-            // Habilitar o deshabilitar los controles.
             HabilitarComboBox(this, modoActivo);
 
             txtCodigo.Enabled = modoActivo;
 
-            // Estilo de los botones.
+            // Estilo de los botones
             btnActualizarPrecios.FlatStyle = FlatStyle.Flat;
             btnReponerStock.FlatStyle = FlatStyle.Flat;
 
@@ -99,14 +95,13 @@ namespace CapaVista
             btnReponerStock.ForeColor =
                 modo == "STOCK" ? Color.White : Color.Black;
 
-            // Columnas editables según el modo.
             clnNuevoPrecio.Visible = modo == "PRECIOS";
             clnNuevoPrecio.ReadOnly = modo != "PRECIOS";
 
             clnCantidadReponer.Visible = modo == "STOCK";
             clnCantidadReponer.ReadOnly = modo != "STOCK";
 
-            // Colores de la grilla.
+            // Colores de la grilla
             if (modo == "PRECIOS")
             {
                 dgvProductos.BackgroundColor = Color.AliceBlue;
@@ -177,10 +172,8 @@ namespace CapaVista
             int indice = dgvProductos.Rows.Add();
             DataGridViewRow nuevaFila = dgvProductos.Rows[indice];
 
-            // Guardar el ID real del producto
             nuevaFila.Tag = idProducto;
 
-            // Código de barras; si no tiene, mostrar SKU
             string codigoBarra = producto["CodigoBarra"] == DBNull.Value
                 ? ""
                 : producto["CodigoBarra"].ToString();
@@ -210,11 +203,10 @@ namespace CapaVista
                     ? 0
                     : Convert.ToInt32(producto["CantidadActual"]);
 
-            // Campos editables, vacíos al agregar
             nuevaFila.Cells["clnNuevoPrecio"].Value = null;
             nuevaFila.Cells["clnCantidadReponer"].Value = null;
 
-            // Limpiar la búsqueda
+            // Limpiar la busqueda
             lstDescripcion.DataSource = null;
             lstDescripcion.Visible = false;
 
@@ -251,7 +243,7 @@ namespace CapaVista
             cmbProveedor.DataSource = proveedores;
             cmbProveedor.SelectedIndex = 0;
 
-            // Categorías
+            // Categorias
             DataTable categorias = logica.CargarCategoriasActivas();
 
             DataRow filaCategoria = categorias.NewRow();
@@ -277,7 +269,6 @@ namespace CapaVista
             cmbMarca.DataSource = marcas;
             cmbMarca.SelectedIndex = 0;
 
-            // Sucursales: opción inicial
             DataTable sucursales = new DataTable();
             sucursales.Columns.Add("IdSucursal", typeof(int));
             sucursales.Columns.Add("Sucursal", typeof(string));

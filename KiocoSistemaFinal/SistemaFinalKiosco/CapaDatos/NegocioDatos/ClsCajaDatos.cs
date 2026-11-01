@@ -14,7 +14,6 @@ namespace CapaDatos.NegocioDatos
     {
         private Conexion cn = new Conexion();
 
-        // Devuelve la sesión abierta de la caja, o null si la caja está cerrada.
         public ClsSesionCajaEntidad ObtenerSesionAbierta(int idCaja)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -68,7 +67,6 @@ namespace CapaDatos.NegocioDatos
             }
         }
 
-        // tipo: "I" ingresos, "E" egresos, null todos.
         public DataTable ObtenerConceptos(string tipo)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -130,7 +128,6 @@ namespace CapaDatos.NegocioDatos
             }
         }
 
-        // Cierra la caja y completa en la entidad el esperado y la diferencia.
         public ClsCierreCajaEntidad CerrarCaja(ClsCierreCajaEntidad cierre)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

@@ -50,7 +50,7 @@ namespace CapaVista
 
             this.Load += frmCargaarticulo_Load;
         }
-        //Metodos
+        // Metodos
         #region Metodos
         private void CargarArticulos()
         {
@@ -86,10 +86,8 @@ namespace CapaVista
         }
         private void AplicarPermisos()
         {
-            bool puedeCrear = SesionUsuario.Permisos.Contains(100) || SesionUsuario.Permisos.Contains(111);
             bool puedeModificar = SesionUsuario.Permisos.Contains(100) || SesionUsuario.Permisos.Contains(112);
 
-            //btnNuevoArticulo.Enabled = puedeCrear;
             btnModificar.Enabled = puedeModificar;
             btnEliminar.Enabled = puedeModificar;
         }
@@ -147,15 +145,8 @@ namespace CapaVista
         #endregion
 
 
-        //Evevnto
+        // Evevnto
         #region Evento
-        private void btnNuevoArticulo_Click(object sender, EventArgs e)
-        {
-            frmNuevoArticulo nuevoArticulo = new frmNuevoArticulo();
-            nuevoArticulo.ShowDialog();
-
-            CargarArticulos();
-        }
         private void btnModificar_Click(object sender, EventArgs e)
         {
             if (dtgCargaarticulo.CurrentRow == null)

@@ -17,13 +17,9 @@ namespace CapaVista
     {
         private ClsCompraLogica logica = new ClsCompraLogica();
         private ClsLogicaProveedor logicaProveedor = new ClsLogicaProveedor();
-        // Nombres de todos los proveedores, para la lista de sugerencias (no depende de las fechas).
         private List<string> nombresProveedores = new List<string>();
-        // Compras del rango de fechas; el filtro por proveedor se aplica sobre esta tabla.
         private DataTable? comprasCargadas;
-        // Proveedor elegido de la lista (null = todos).
         private string? proveedorSeleccionado = null;
-        // Evita que poner el nombre elegido en el cuadro vuelva a abrir la lista.
         private bool cambiandoTexto = false;
 
         public frmCompras()
@@ -42,7 +38,6 @@ namespace CapaVista
         private void AplicarPermisos()
         {
             btnNuevacompra.Enabled = SesionUsuario.Permisos.Contains(310);
-            // Anular una compra queda solo para el administrador.
             btnAnular.Enabled = SesionUsuario.Permisos.Contains(330);
         }
         private void ConfigurarGrid()
@@ -84,7 +79,6 @@ namespace CapaVista
 
             MostrarCompras();
         }
-        // Llena la grilla con las compras cargadas, solo las del proveedor elegido si hay uno.
         private void MostrarCompras()
         {
             dataGridView1.Rows.Clear();
@@ -120,7 +114,6 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // Carga los nombres de todos los proveedores (activos e inactivos: los inactivos pueden tener compras viejas).
         private void CargarNombresProveedores()
         {
             try
@@ -140,7 +133,6 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // Muestra en la lista los proveedores cuyo nombre empieza con lo escrito.
         private void MostrarSugerencias(string texto)
         {
             lstProveedores.Items.Clear();
@@ -158,7 +150,6 @@ namespace CapaVista
                 lstProveedores.BringToFront();
             }
         }
-        // Toma el proveedor marcado en la lista y filtra la grilla con sus compras.
         private void SeleccionarProveedor()
         {
             if (!lstProveedores.Visible || lstProveedores.SelectedItem == null)
@@ -248,12 +239,11 @@ namespace CapaVista
             CargarNombresProveedores();
             CargarCompras();
         }
-        // Al cambiar una fecha se recarga sola. Si Desde queda después de Hasta, se corre la otra fecha.
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             if (dateTimePicker1.Value.Date > dateTimePicker2.Value.Date)
             {
-                dateTimePicker2.Value = dateTimePicker1.Value.Date;   // dispara su ValueChanged, que recarga
+                dateTimePicker2.Value = dateTimePicker1.Value.Date;
                 return;
             }
 
@@ -278,7 +268,6 @@ namespace CapaVista
 
             string texto = txtBuscarCompra.Text.Trim();
 
-            // Al escribir se vuelven a ver todas hasta elegir un proveedor de la lista.
             if (proveedorSeleccionado != null)
             {
                 proveedorSeleccionado = null;
@@ -351,7 +340,6 @@ namespace CapaVista
         }
         private void btnLimpiarFiltros_Click(object sender, EventArgs e)
         {
-            // Vuelve los filtros al estado con el que abre el formulario (hoy - hoy, todos los proveedores).
             proveedorSeleccionado = null;
 
             cambiandoTexto = true;

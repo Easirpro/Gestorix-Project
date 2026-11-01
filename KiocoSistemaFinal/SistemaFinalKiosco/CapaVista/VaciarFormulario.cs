@@ -5,7 +5,6 @@ namespace CapaVista
 {
     public static class VaciarFormularios
     {
-        //este metodo esta trabajando directamente con los controles de windows forms
         public static void LimpiarControles(Control contenedor)
         {
             foreach (Control control in contenedor.Controls)

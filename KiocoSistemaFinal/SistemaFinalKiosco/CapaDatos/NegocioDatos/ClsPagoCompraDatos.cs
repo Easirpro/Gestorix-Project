@@ -14,8 +14,6 @@ namespace CapaDatos.NegocioDatos
     {
         private Conexion cn = new Conexion();
 
-        // idProveedor null = todos los proveedores.
-        // incluirPagadas = true muestra también las compras con saldo 0.
         public DataTable ObtenerComprasPendientes(int? idProveedor, bool incluirPagadas)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -56,7 +54,6 @@ namespace CapaDatos.NegocioDatos
             }
         }
 
-        // Registra el pago y completa en la entidad el Id y el saldo que queda.
         public ClsPagoCompraEntidad RegistrarPago(ClsPagoCompraEntidad pago)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

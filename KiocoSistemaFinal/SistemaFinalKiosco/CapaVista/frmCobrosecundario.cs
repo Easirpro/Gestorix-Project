@@ -24,7 +24,6 @@ namespace CapaVista
 
         private DataGridView grillaPrincipal;
 
-        // [PROMO] Promociones aplicadas en esta venta (se guardan al cobrar)
         private readonly List<ClsPromocionVentaEntidad> promocionesAplicadas = new List<ClsPromocionVentaEntidad>();
 
         public frmCobroSecundario()
@@ -42,8 +41,6 @@ namespace CapaVista
 
 
         #region Metodos
-        // [PROMO] Anota una promoción aplicada. Si la misma promo se aplica de nuevo
-        // en la misma venta, suma una vez más.
         private void RegistrarPromocionAplicada(int idPromocion, string nombre, decimal importeLista, decimal importeCobrado)
         {
             ClsPromocionVentaEntidad existente = promocionesAplicadas.FirstOrDefault(p => p.IdPromocion == idPromocion);
@@ -136,8 +133,6 @@ namespace CapaVista
             }
 
 
-            // Si el producto ya está en la venta (fuera de promociones), se suma la cantidad
-            // a esa fila en vez de agregar otra. Las filas de promoción no se mezclan.
             if (codigoBarra != "PROMOCION")
             {
                 foreach (DataGridViewRow fila in dtgPresentacion.Rows)
@@ -295,7 +290,7 @@ namespace CapaVista
             subtotal = 0m;
             descuentoRecargo = 0m;
             total = 0m;
-            promocionesAplicadas.Clear();   // [PROMO]
+            promocionesAplicadas.Clear();
 
             CalcularYMostrarMontos();
             RellenarFilas();
@@ -358,7 +353,6 @@ namespace CapaVista
             if (lstDescripcion.SelectedIndex < 0 || tablaProductosEncontrados == null)
                 return;
 
-            // Sin cantidad escrita se agrega 1, igual que con el código de barras.
             decimal cantidad = 1;
 
             if (!string.IsNullOrWhiteSpace(txtCantidad.Text) &&
@@ -399,7 +393,7 @@ namespace CapaVista
             lstDescripcion.Visible = false;
             lstDescripcion.Items.Clear();
             txtCodigoBarra.Clear();
-            txtCantidad.Clear();   // la próxima vuelve a ser 1 si no se escribe otra
+            txtCantidad.Clear();
             txtCodigoBarra.Focus();
         }
 
@@ -418,14 +412,13 @@ namespace CapaVista
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
             dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            // Se puede cambiar el ancho de las columnas arrastrando el borde del encabezado.
             dtgPresentacion.AllowUserToResizeColumns = true;
             dtgPresentacion.AllowUserToResizeRows = false;
 
             foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
             {
                 columna.Resizable = DataGridViewTriState.True;
-                columna.MinimumWidth = 50;   // que ninguna columna se pueda achicar hasta desaparecer
+                columna.MinimumWidth = 50;
             }
             dtgPresentacion.AllowUserToOrderColumns = false;
             dtgPresentacion.RowHeadersVisible = false;
@@ -450,7 +443,12 @@ namespace CapaVista
                 return;
             }
 
-            using (frmInformeCobro formularioCobro = new frmInformeCobro(total, dtgPresentacion, promocionesAplicadas))   // [PROMO]
+            if (!frmmenuPres.VerificarCajaAbierta())
+            {
+                return;
+            }
+
+            using (frmInformeCobro formularioCobro = new frmInformeCobro(total, dtgPresentacion, promocionesAplicadas))
             {
                 if (formularioCobro.ShowDialog() == DialogResult.OK)
                 {
@@ -787,7 +785,6 @@ namespace CapaVista
 
                     descuentoRecargo = ajusteAnterior - descuentoPromocion;
 
-                    // [PROMO] Anotar la promoción para guardarla al cobrar
                     RegistrarPromocionAplicada(
                         idPromocion,
                         promo.Table.Columns.Contains("Nombre") ? Convert.ToString(promo["Nombre"]) : "",
@@ -802,10 +799,6 @@ namespace CapaVista
                     MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }
-        private void lstDescripcion_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
         private void txtCodigoBarra_TextChanged(object sender, EventArgs e)
         {
@@ -861,7 +854,6 @@ namespace CapaVista
         {
             Close();
         }
-        // Enter en la cantidad agrega el producto del código de barras (igual que en la venta principal).
         private void txtCantidad_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -870,7 +862,6 @@ namespace CapaVista
                 IngresarProductoPorCodigo();
             }
         }
-        // Quita el producto elegido. Antes el botón no tenía ninguna función enganchada.
         private void btnQuitar_Click(object? sender, EventArgs e)
         {
             if (dtgPresentacion.CurrentRow == null || dtgPresentacion.CurrentRow.Cells["ClnIdProducto"].Value == null)
@@ -883,8 +874,6 @@ namespace CapaVista
 
             DataGridViewRow fila = dtgPresentacion.CurrentRow;
 
-            // [PROMO] Si el producto es de una promoción, se quitan todas las promociones
-            // juntas (si no, el descuento quedaba aplicado igual).
             if (Convert.ToString(fila.Cells["ClnCodigo"].Value) == "PROMOCION")
             {
                 DialogResult quitarPromos = MessageBox.Show(
@@ -915,7 +904,6 @@ namespace CapaVista
                 return;
             }
 
-            // Se elimina la fila: los productos de abajo suben y las filas vacías quedan al final.
             dtgPresentacion.Rows.Remove(fila);
 
             RellenarFilas();
@@ -934,27 +922,5 @@ namespace CapaVista
 
 
         #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private void txtCantidad_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
     }
 }

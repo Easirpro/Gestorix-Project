@@ -1,6 +1,5 @@
 namespace CapaEntidades.NegocioEntidades
 {
-    // Tipos de alerta que devuelve sp_ObtenerAlertas (columna Tipo).
     public enum TipoAlerta
     {
         Lote,

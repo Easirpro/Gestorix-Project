@@ -20,13 +20,9 @@ namespace CapaVista
         private bool actualizandoArbol = false;
         private HashSet<TreeNode> nodosBloqueados = new HashSet<TreeNode>();
 
-        // Abierto desde Carga de empleados con el rol del empleado: no se puede cambiar de rol ni crear o borrar roles.
         private bool soloEseRol = false;
-        // Hay tildes cambiados que todavía no se guardaron.
         private bool hayCambios = false;
-        // Rol que se está mostrando (para volver a él si el usuario no quiere perder los cambios).
         private int idRolActual = 0;
-        // Evita preguntar mientras se vuelve a elegir el rol anterior por código.
         private bool cambiandoRol = false;
 
         public frmPermisos()
@@ -37,9 +33,8 @@ namespace CapaVista
             this.Load += frmPermisos_Load;
             this.FormClosing += frmPermisos_FormClosing;
 
-            // Un solo botón para salir: Cancelar pregunta si hay cambios sin guardar. Guardar guarda y vuelve.
             btnSalir.Visible = false;
-            btnCancelar.Bounds = btnSalir.Bounds;   // Cancelar ocupa el lugar de Salir (a la derecha)
+            btnCancelar.Bounds = btnSalir.Bounds;
             btnGuardar.Text = ClsIdioma.T("Guardar y volver");
             btnGuardar.SetBounds(btnCancelar.Left - 148, btnCancelar.Top, 140, btnCancelar.Height);
 
@@ -49,16 +44,12 @@ namespace CapaVista
             treePermisos.DrawMode = TreeViewDrawMode.OwnerDrawText;
             treePermisos.DrawNode += treePermisos_DrawNode;
         }
-        // Abre con ese rol seleccionado (por ejemplo, el del empleado que se está viendo).
-        // soloEseRol: no deja cambiar de rol (se edita el rol del empleado, no otro por error).
         public frmPermisos(int idRol, bool soloEseRol = false) : this()
         {
             idRolInicial = idRol;
             this.soloEseRol = soloEseRol;
         }
 
-        // Este formulario solo edita los permisos de los roles; el rol de cada empleado se elige
-        // en la carga de empleados. Modificar permisos pide el permiso de Roles y Permisos.
         private bool PuedeEditarPermisos
         {
             get { return CapaEntidades.SesionUsuario.Permisos.Contains(PERMISO_ROLES); }
@@ -80,7 +71,6 @@ namespace CapaVista
 
             if (soloEseRol && idRolInicial.HasValue)
             {
-                // Se ve la lista de roles, pero no se puede cambiar: se edita el rol del empleado.
                 lstRoles.Enabled = false;
                 btnNuevoRol.Enabled = false;
                 btnEliminarRol.Enabled = false;
@@ -88,7 +78,6 @@ namespace CapaVista
 
             ActualizarTitulo();
         }
-        // Título con el rol que se edita y a cuántos empleados activos afecta.
         private void ActualizarTitulo()
         {
             if (lstRoles.SelectedIndex == -1 || !int.TryParse(lstRoles.SelectedValue?.ToString(), out int idRol))
@@ -106,7 +95,6 @@ namespace CapaVista
             }
             catch
             {
-                // Si no se puede contar, el título queda sin la cantidad.
                 cantidad = -1;
             }
 
@@ -122,7 +110,6 @@ namespace CapaVista
             gpbPermisos.Text = (ingles ? "PERMISSIONS OF ROLE " : "PERMISOS DEL ROL ") + nombre.ToUpper() +
                 (cantidad < 0 ? "" : (ingles ? "  (affects " : "  (afecta a ") + empleados + ")");
         }
-        // Pregunta si se pueden descartar los cambios sin guardar. true = seguir.
         private bool ConfirmarDescartarCambios()
         {
             if (!hayCambios)
@@ -138,7 +125,6 @@ namespace CapaVista
         }
         private void frmPermisos_FormClosing(object? sender, FormClosingEventArgs e)
         {
-            // Guardar y volver ya guardó; cualquier otra forma de cerrar pregunta si hay cambios.
             if (DialogResult != DialogResult.OK && !ConfirmarDescartarCambios())
             {
                 e.Cancel = true;
@@ -155,7 +141,7 @@ namespace CapaVista
             lstRoles.DisplayMember = "Nombre";
             lstRoles.ValueMember = "IdRol";
             lstRoles.DataSource = dt;
-            ClsIdioma.TraducirDatosAlMostrar(lstRoles);   // nombres de roles traducidos solo al mostrar
+            ClsIdioma.TraducirDatosAlMostrar(lstRoles);
         }
         private void CargarPermisos()
         {
@@ -407,7 +393,6 @@ namespace CapaVista
                 return;
             }
 
-            // Tilde cambiado por el usuario: queda pendiente de guardar.
             hayCambios = true;
 
             actualizandoArbol = true;
@@ -550,7 +535,6 @@ namespace CapaVista
                 return;
             }
 
-            // Si se cambia de rol con tildes sin guardar, se pregunta; si no se quieren perder, se vuelve al rol anterior.
             if (idRol != idRolActual && idRolActual != 0 && !ConfirmarDescartarCambios())
             {
                 cambiandoRol = true;
@@ -569,20 +553,16 @@ namespace CapaVista
             {
                 nodosBloqueados.Clear();
 
-                // Primero cargamos los permisos guardados
                 foreach (TreeNode nodoSeccion in treePermisos.Nodes)
                 {
                     MarcarPermisos(nodoSeccion, permisos);
                 }
 
-                // Despues aplicamos los bloqueos segun la jerarquia
                 foreach (TreeNode nodoSeccion in treePermisos.Nodes)
                 {
                     AplicarBloqueoSegunEstado(nodoSeccion, false);
                 }
 
-                // El Administrador tiene siempre todos los permisos (también los que se agreguen
-                // después) y no se puede editar. Sin permiso de Roles y Permisos el árbol es solo lectura.
                 bool esAdministrador = idRol == ID_ROL_ADMINISTRADOR;
 
                 foreach (TreeNode nodoSeccion in treePermisos.Nodes)
@@ -643,7 +623,6 @@ namespace CapaVista
                     ClsIdioma.T("Los empleados con ese rol los verán la próxima vez que inicien sesión."), ClsIdioma.T("Permisos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Guardar y volver: se cierra y vuelve a la pantalla anterior.
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -693,7 +672,6 @@ namespace CapaVista
                 return;
             }
 
-            // Los 4 roles principales no se pueden eliminar
             if (idRol >= 1 && idRol <= 4)
             {
                 MessageBox.Show(ClsIdioma.T("Los roles principales del sistema no se pueden eliminar."), ClsIdioma.T("Rol protegido"),

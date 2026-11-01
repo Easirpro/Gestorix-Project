@@ -36,7 +36,6 @@ namespace CapaLogica.NegocioLogica
 
             return datos.GuardarCompra(compra, idUsuario);
         }
-        // El número es opcional: sin número no hay nada que comparar.
         public bool ExisteComprobante(int idProveedor, string tipoComprobante, string? numeroComprobante)
         {
             if (string.IsNullOrWhiteSpace(numeroComprobante))
