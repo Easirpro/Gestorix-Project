@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using CapaLogica;
 using System.ComponentModel;
@@ -99,12 +99,10 @@ namespace CapaVista
             }
 
             bool ingles = ClsIdioma.Ingles;
-            string empleados = ingles
-                ? cantidad + (cantidad == 1 ? " employee" : " employees")
+            string empleados = ingles ? cantidad + (cantidad == 1 ? " employee" : " employees")
                 : cantidad + (cantidad == 1 ? " empleado" : " empleados");
 
-            Text = cantidad < 0
-                ? (ingles ? "Permissions of role " : "Permisos del rol ") + nombre
+            Text = cantidad < 0 ? (ingles ? "Permissions of role " : "Permisos del rol ") + nombre
                 : (ingles ? "Permissions of role " + nombre + ": affects " : "Permisos del rol " + nombre + ": afecta a ") + empleados;
 
             gpbPermisos.Text = (ingles ? "PERMISSIONS OF ROLE " : "PERMISOS DEL ROL ") + nombre.ToUpper() +

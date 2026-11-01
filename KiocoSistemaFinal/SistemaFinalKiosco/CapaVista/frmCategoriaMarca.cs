@@ -102,12 +102,8 @@ namespace CapaVista
             }
 
             dgvItems.EnableHeadersVisualStyles = false;
-
-            dgvItems.DefaultCellStyle.SelectionForeColor =
-                modoActivo ? Color.Black : SystemColors.HighlightText;
-
-            dgvItems.ColumnHeadersDefaultCellStyle.ForeColor =
-                modoActivo ? Color.White : SystemColors.ControlText;
+            dgvItems.DefaultCellStyle.SelectionForeColor = modoActivo ? Color.Black : SystemColors.HighlightText;
+            dgvItems.ColumnHeadersDefaultCellStyle.ForeColor = modoActivo ? Color.White : SystemColors.ControlText;
 
             AplicarPermisos();
 

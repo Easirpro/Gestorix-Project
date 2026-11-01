@@ -102,11 +102,9 @@ namespace CapaLogica.NegocioLogica
                                         }
                                     }
 
-                                    if (!fechaVencimiento.HasValue && DateTime.TryParse(fechaTexto,
-                                            System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out DateTime fechaConvertida))
+                                    if (!fechaVencimiento.HasValue && DateTime.TryParse(fechaTexto, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out DateTime fechaConvertida))
                                     {
-                                        fechaVencimiento =
-                                            fechaConvertida.Date;
+                                        fechaVencimiento = fechaConvertida.Date;
                                     }
 
                                     if (!fechaVencimiento.HasValue)

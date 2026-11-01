@@ -17,7 +17,7 @@ namespace CapaVista
         private ClsCajaLogica logica = new ClsCajaLogica();
 
         private readonly string tipo;
-        private ClsSesionCajaEntidad sesion;               // caja abierta
+        private ClsSesionCajaEntidad sesion;             
         private DataTable tablaConceptos;
         private bool cargando = true;
 

@@ -30,8 +30,7 @@ namespace CapaLogica.NegocioLogica
 
             if (idUsuario <= 0)
             {
-                throw new InvalidOperationException(
-                    "No hay una sesión de usuario válida. Volvé a iniciar sesión.");
+                throw new InvalidOperationException("No hay una sesión de usuario válida. Volvé a iniciar sesión.");
             }
 
             return datos.GuardarCompra(compra, idUsuario);
@@ -102,8 +101,7 @@ namespace CapaLogica.NegocioLogica
                 throw new InvalidOperationException("El total de la boleta no puede ser negativo.");
             }
 
-            bool hayDiferencias = recepcion.TotalBoleta != recepcion.TotalCompra
-                || recepcion.Detalles.Any(d => d.CantidadRecibida != d.CantidadPedida);
+            bool hayDiferencias = recepcion.TotalBoleta != recepcion.TotalCompra || recepcion.Detalles.Any(d => d.CantidadRecibida != d.CantidadPedida);
 
             if (hayDiferencias && string.IsNullOrWhiteSpace(recepcion.Motivos))
             {

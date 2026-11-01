@@ -137,8 +137,7 @@ namespace CapaVista
         {
             Rectangle original = limitesDiseno[seccion];
 
-            seccion.SetBounds(original.Left + corrimiento, original.Top,
-                original.Width + extraAncho, original.Height + extraAlto);
+            seccion.SetBounds(original.Left + corrimiento, original.Top, original.Width + extraAncho, original.Height + extraAlto);
         }
 
         #region Metodos

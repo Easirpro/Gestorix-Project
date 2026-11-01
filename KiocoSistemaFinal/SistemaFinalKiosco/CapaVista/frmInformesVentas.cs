@@ -351,8 +351,7 @@ namespace CapaVista
 
             DataGridViewColumn flexible = dgvInforme.Columns[nombreFlexible];
 
-            bool barraVertical = dgvInforme.ColumnHeadersHeight + dgvInforme.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
-                > dgvInforme.ClientSize.Height;
+            bool barraVertical = dgvInforme.ColumnHeadersHeight + dgvInforme.Rows.GetRowsHeight(DataGridViewElementStates.Visible) > dgvInforme.ClientSize.Height;
             int disponible = dgvInforme.ClientSize.Width - 4 - (barraVertical ? SystemInformation.VerticalScrollBarWidth : 0);
             int otras = dgvInforme.Columns.Cast<DataGridViewColumn>().Where(c => c.Visible && c != flexible).Sum(c => c.Width);
             int minimo = Math.Min(140, flexible.Width);

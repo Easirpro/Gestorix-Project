@@ -273,17 +273,14 @@ namespace CapaVista
             hoja.Cell(1, 1).Value = titulo;
             hoja.Cell(1, 1).Style.Font.Bold = true;
             hoja.Cell(1, 1).Style.Font.FontSize = 14;
-            hoja.Cell(2, 1).Value = "Período: " + desdeConsultado.ToString("dd/MM/yyyy") +
-                                    " al " + hastaConsultado.ToString("dd/MM/yyyy");
+            hoja.Cell(2, 1).Value = "Período: " + desdeConsultado.ToString("dd/MM/yyyy") + " al " + hastaConsultado.ToString("dd/MM/yyyy");
 
             if (tabla == null)
             {
                 return;
             }
 
-            List<DataColumn> columnas = tabla.Columns.Cast<DataColumn>()
-                .Where(c => !Ocultas.Contains(c.ColumnName))
-                .ToList();
+            List<DataColumn> columnas = tabla.Columns.Cast<DataColumn>().Where(c => !Ocultas.Contains(c.ColumnName)).ToList();
 
             int filaEncabezado = 4;
             for (int i = 0; i < columnas.Count; i++)
@@ -315,8 +312,7 @@ namespace CapaVista
                     else if (columnas[i].DataType == typeof(DateTime))
                     {
                         celda.Value = Convert.ToDateTime(valor);
-                        celda.Style.DateFormat.Format =
-                            columnas[i].ColumnName == "Fecha" ? "dd/MM/yyyy" : "dd/MM/yyyy HH:mm";
+                        celda.Style.DateFormat.Format = columnas[i].ColumnName == "Fecha" ? "dd/MM/yyyy" : "dd/MM/yyyy HH:mm";
                     }
                     else if (columnas[i].DataType == typeof(int) || columnas[i].DataType == typeof(long))
                     {
@@ -437,8 +433,7 @@ namespace CapaVista
                 guardar.Title = ClsIdioma.T("Exportar balance");
                 guardar.Filter = "Archivo Excel (*.xlsx)|*.xlsx";
                 guardar.DefaultExt = "xlsx";
-                guardar.FileName = "Balance_" + desdeConsultado.ToString("yyyyMMdd") + "_" +
-                                   hastaConsultado.ToString("yyyyMMdd") + ".xlsx";
+                guardar.FileName = "Balance_" + desdeConsultado.ToString("yyyyMMdd") + "_" + hastaConsultado.ToString("yyyyMMdd") + ".xlsx";
 
                 if (guardar.ShowDialog() != DialogResult.OK)
                 {

@@ -50,10 +50,7 @@ namespace CapaVista
             ActualizarSucursalSeleccionada();
         }
 
-
-
-        
-
+       
         #region Metodos
 
         private void CargarOpcionesPago()
@@ -254,13 +251,7 @@ namespace CapaVista
             return decimal.TryParse(Convert.ToString(valor), NumberStyles.Number, CultureInfo.CurrentCulture, out numero);
         }
 
-
-
-
-
         #endregion
-
-
 
         #region Eventos
         private void chkActualizarprecio_CheckedChanged(object sender, EventArgs e)

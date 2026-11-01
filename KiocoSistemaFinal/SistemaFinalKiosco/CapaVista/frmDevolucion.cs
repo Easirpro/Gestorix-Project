@@ -84,9 +84,7 @@ namespace CapaVista
                         continue;
                     }
 
-                    if (texto != "" &&
-                        !venta.Contains(texto) &&
-                        !producto.Contains(texto, StringComparison.CurrentCultureIgnoreCase) &&
+                    if (texto != "" && !venta.Contains(texto) && !producto.Contains(texto, StringComparison.CurrentCultureIgnoreCase) &&
                         !cajero.Contains(texto, StringComparison.CurrentCultureIgnoreCase))
                     {
                         continue;
@@ -144,8 +142,7 @@ namespace CapaVista
 
             if (idDevolucion.HasValue)
             {
-                fila = dataGridView1.Rows.Cast<DataGridViewRow>()
-                    .FirstOrDefault(f => f.Cells["clnId"].Value?.ToString() == idDevolucion.Value.ToString());
+                fila = dataGridView1.Rows.Cast<DataGridViewRow>().FirstOrDefault(f => f.Cells["clnId"].Value?.ToString() == idDevolucion.Value.ToString());
             }
 
             if (fila == null && dataGridView1.Rows.Count > 0)

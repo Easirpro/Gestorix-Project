@@ -80,14 +80,10 @@ namespace CapaVista
                     {
                         bool esPostal = control == txtPostal;
 
-                        string mensaje = esPostal
-                            ? ClsIdioma.T("Seleccione provincia, partido y localidad para completar el Código Postal.")
+                        string mensaje = esPostal ? ClsIdioma.T("Seleccione provincia, partido y localidad para completar el Código Postal.")
                             : ClsIdioma.T("El campo ") + NombreCampo(control) + ClsIdioma.T(" no puede estar vacío.");
 
-                        MessageBox.Show(mensaje,
-                                        ClsIdioma.T("Validación"),
-                                        MessageBoxButtons.OK,
-                                        MessageBoxIcon.Warning);
+                        MessageBox.Show(mensaje, ClsIdioma.T("Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         MostrarControl(esPostal ? cmbLocalidad : control);
                         return false;
@@ -309,10 +305,8 @@ namespace CapaVista
 
             if (!ClsValidarCorreo.EsEmailValido(txtCorreo.Text))
             {
-                MessageBox.Show(ClsIdioma.T("Ingrese un correo electrónico válido."),
-                                ClsIdioma.T("Validación"),
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T("Ingrese un correo electrónico válido."), ClsIdioma.T("Validación"),
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 e.Cancel = true;
                 MostrarControl(txtCorreo);
@@ -415,8 +409,7 @@ namespace CapaVista
 
                         if (telefonoActual.IdTipo > 0)
                         {
-                            cmbTipoTelefono.SelectedValue =
-                                telefonoActual.IdTipo;
+                            cmbTipoTelefono.SelectedValue = telefonoActual.IdTipo;
                         }
                         else
                         {
@@ -650,11 +643,8 @@ namespace CapaVista
 
             if (string.IsNullOrWhiteSpace(correoNuevo))
             {
-                MessageBox.Show(
-                    ClsIdioma.T("El correo electrónico no puede estar vacío."),
-                    ClsIdioma.T("Validación"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T("El correo electrónico no puede estar vacío."),
+                    ClsIdioma.T("Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 MostrarControl(txtCorreo);
 
@@ -663,11 +653,8 @@ namespace CapaVista
 
             if (!ClsValidarCorreo.EsEmailValido(correoNuevo))
             {
-                MessageBox.Show(
-                    ClsIdioma.T("Ingrese un correo electrónico válido."),
-                    ClsIdioma.T("Validación"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T("Ingrese un correo electrónico válido."), ClsIdioma.T("Validación"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 MostrarControl(txtCorreo);
 
@@ -680,11 +667,8 @@ namespace CapaVista
 
             if (!resultado)
             {
-                MessageBox.Show(
-                    ClsIdioma.T("No se pudo actualizar el correo."),
-                    ClsIdioma.T("Error"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ClsIdioma.T("No se pudo actualizar el correo."), ClsIdioma.T("Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return false;
             }
@@ -706,11 +690,7 @@ namespace CapaVista
 
             if (motivo != string.Empty)
             {
-                MessageBox.Show(
-                    motivo,
-                    ClsIdioma.T("Validación"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show(motivo, ClsIdioma.T("Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtDNI.Clear();
                 txtDNI.ReadOnly = false;
@@ -722,11 +702,8 @@ namespace CapaVista
 
             if (string.IsNullOrWhiteSpace(dni))
             {
-                MessageBox.Show(
-                    ClsIdioma.T("No se pudo obtener el DNI correspondiente al CUIL."),
-                    ClsIdioma.T("Validación"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el DNI correspondiente al CUIL."),
+                    ClsIdioma.T("Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtDNI.Clear();
                 txtDNI.ReadOnly = false;
@@ -755,11 +732,8 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ClsIdioma.T("Error al cargar los tipos de teléfono: ") + ex.Message,
-                    ClsIdioma.T("Error"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ClsIdioma.T("Error al cargar los tipos de teléfono: ") + ex.Message,
+                    ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void HabilitarEdicion(bool habilitar)
@@ -1096,7 +1070,6 @@ namespace CapaVista
             {
                 return;
             }
-
 
             if (int.TryParse(cmbProvincia.SelectedValue.ToString(), out int idProvincia))
             {
@@ -1473,9 +1446,7 @@ namespace CapaVista
         {
             if (modoNuevo || chkHabilitarEdicion.Checked)
             {
-                DialogResult respuesta = MessageBox.Show(
-                    modoNuevo
-                        ? ClsIdioma.T("Estás cargando un empleado nuevo y todavía no lo creaste.\n\n¿Salir sin guardar?")
+                DialogResult respuesta = MessageBox.Show( modoNuevo ? ClsIdioma.T("Estás cargando un empleado nuevo y todavía no lo creaste.\n\n¿Salir sin guardar?")
                         : ClsIdioma.T("La edición del empleado está habilitada. Si cambiaste datos y no tocaste GUARDAR CAMBIOS, se pierden.\n\n¿Salir igual?"),
                     ClsIdioma.T("Volver"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 

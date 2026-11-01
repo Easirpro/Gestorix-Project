@@ -39,7 +39,7 @@ namespace CapaVista
 
             cargando = true;
             cmbPrioridad.SelectedIndex = 0;
-            ClsIdioma.TraducirOpciones(cmbPrioridad);   // se elige por posicion
+            ClsIdioma.TraducirOpciones(cmbPrioridad);   
             cargando = false;
 
             CargarAlertas();
@@ -116,11 +116,8 @@ namespace CapaVista
                 .Where(a => tipo == null || a.Tipo == tipo)
                 .Where(a => prioridad != 1 || a.Urgente)
                 .Where(a => prioridad != 2 || !a.Urgente)
-                .Where(a => texto == "" ||
-                            (a.Descripcion ?? "").Contains(texto, StringComparison.CurrentCultureIgnoreCase) ||
-                    ClsIdioma.TraducirAlerta(a.Descripcion).Contains(texto, StringComparison.CurrentCultureIgnoreCase) ||
-                            ClsCampanaAlertas.TituloDe(a.Tipo).Contains(texto, StringComparison.CurrentCultureIgnoreCase))
-                .OrderByDescending(a => a.Urgente);
+                .Where(a => texto == "" || (a.Descripcion ?? "").Contains(texto, StringComparison.CurrentCultureIgnoreCase) ||
+                    ClsIdioma.TraducirAlerta(a.Descripcion).Contains(texto, StringComparison.CurrentCultureIgnoreCase) || ClsCampanaAlertas.TituloDe(a.Tipo).Contains(texto, StringComparison.CurrentCultureIgnoreCase)) .OrderByDescending(a => a.Urgente);
 
             dtgAlertas.Rows.Clear();
 

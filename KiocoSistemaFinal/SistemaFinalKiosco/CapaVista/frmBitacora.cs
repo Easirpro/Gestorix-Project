@@ -116,11 +116,8 @@ namespace CapaVista
                     }
                 }
 
-                MessageBox.Show(
-                    ClsIdioma.T("No se pudieron cargar los registros.\n\n") + ex.Message,
-                    ClsIdioma.T("Error"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los registros.\n\n") + ex.Message,
+                    ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void ConfigurarColumnas()
@@ -202,24 +199,17 @@ namespace CapaVista
 
             this.dgvBitacora.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
 
-            DataGridViewColumn flexible = ColumnasFlexibles
-                .Where(nombre => this.dgvBitacora.Columns.Contains(nombre) && this.dgvBitacora.Columns[nombre].Visible)
-                .Select(nombre => this.dgvBitacora.Columns[nombre])
-                .FirstOrDefault();
+            DataGridViewColumn flexible = ColumnasFlexibles.Where(nombre => this.dgvBitacora.Columns.Contains(nombre) && this.dgvBitacora.Columns[nombre].Visible)
+                .Select(nombre => this.dgvBitacora.Columns[nombre]).FirstOrDefault();
 
             if (flexible == null)
             {
                 return;
             }
 
-            bool barraVertical = this.dgvBitacora.ColumnHeadersHeight + this.dgvBitacora.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
-                > this.dgvBitacora.ClientSize.Height;
-            int disponible = this.dgvBitacora.ClientSize.Width - 4
-                - (barraVertical ? SystemInformation.VerticalScrollBarWidth : 0)
-                - (this.dgvBitacora.RowHeadersVisible ? this.dgvBitacora.RowHeadersWidth : 0);
-            int otras = this.dgvBitacora.Columns.Cast<DataGridViewColumn>()
-                .Where(c => c.Visible && c != flexible)
-                .Sum(c => c.Width);
+            bool barraVertical = this.dgvBitacora.ColumnHeadersHeight + this.dgvBitacora.Rows.GetRowsHeight(DataGridViewElementStates.Visible) > this.dgvBitacora.ClientSize.Height;
+            int disponible = this.dgvBitacora.ClientSize.Width - 4 - (barraVertical ? SystemInformation.VerticalScrollBarWidth : 0) - (this.dgvBitacora.RowHeadersVisible ? this.dgvBitacora.RowHeadersWidth : 0);
+            int otras = this.dgvBitacora.Columns.Cast<DataGridViewColumn>().Where(c => c.Visible && c != flexible).Sum(c => c.Width);
 
             flexible.Width = Math.Max(flexible.Width, disponible - otras);
         }
@@ -236,9 +226,7 @@ namespace CapaVista
         }
         private void MostrarDetalles()
         {
-            DataGridViewRow fila = this.dgvBitacora.SelectedRows.Count > 0
-                ? this.dgvBitacora.SelectedRows[0]
-                : this.dgvBitacora.CurrentRow;
+            DataGridViewRow fila = this.dgvBitacora.SelectedRows.Count > 0 ? this.dgvBitacora.SelectedRows[0] : this.dgvBitacora.CurrentRow;
 
             if (fila == null || fila.IsNewRow)
             {
@@ -255,25 +243,17 @@ namespace CapaVista
                 }
 
                 this.lblDetalleFecha.Text = ClsIdioma.T("Compra: ") + ClsIdioma.Dato(ObtenerValor(fila, "FechaCompra"));
-
-                this.lblDetalleUsuario.Text =
-                    ClsIdioma.T("Cargó: ") + ClsIdioma.Dato(ObtenerValor(fila, "CargadoPor")) +
+                this.lblDetalleUsuario.Text = ClsIdioma.T("Cargó: ") + ClsIdioma.Dato(ObtenerValor(fila, "CargadoPor")) +
                     ClsIdioma.T("  |  Recibió: ") + ClsIdioma.Dato(ObtenerValor(fila, "RecibidoPor"));
-
-                this.lblDetalleAccion.Text =
-                    ClsIdioma.T("Proveedor: ") + ClsIdioma.Dato(ObtenerValor(fila, "Proveedor")) +
+                this.lblDetalleAccion.Text = ClsIdioma.T("Proveedor: ") + ClsIdioma.Dato(ObtenerValor(fila, "Proveedor")) +
                     ClsIdioma.T(" (CUIT ") + ClsIdioma.Dato(ObtenerValor(fila, "CUIT")) + ClsIdioma.T(") - Sucursal: ") + ClsIdioma.Dato(ObtenerValor(fila, "Sucursal"));
-
                 bool recibida = ObtenerValor(fila, "IdRecepcion") != "Sin datos";
-
                 this.lblDetalleDescripcion.Text =
                     ClsIdioma.T("Estado: ") + ClsIdioma.Dato(ObtenerValor(fila, "Estado")) +
                     ClsIdioma.T("  |  Entrega estimada: ") + ClsIdioma.Dato(ObtenerValor(fila, "FechaEntregaEstimada")) +
                     Environment.NewLine +
                     ClsIdioma.T("Pago: ") + (ClsIdioma.Ingles && ObtenerValor(fila, "CondicionPago") == "Contado" ? "Cash" : ClsIdioma.Dato(ObtenerValor(fila, "CondicionPago"))) + ClsIdioma.T(", saldo ") + ClsIdioma.Dato(ObtenerValor(fila, "Saldo")) +
-                    (recibida
-                        ? ClsIdioma.T("  |  Boleta: ") + ClsIdioma.Dato(ObtenerValor(fila, "TotalBoleta")) + " (" + ClsIdioma.Dato(ObtenerValor(fila, "Resultado")).ToLower() + ")"
-                        : ClsIdioma.T("  |  Sin recibir")) +
+                    (recibida ? ClsIdioma.T("  |  Boleta: ") + ClsIdioma.Dato(ObtenerValor(fila, "TotalBoleta")) + " (" + ClsIdioma.Dato(ObtenerValor(fila, "Resultado")).ToLower() + ")" : ClsIdioma.T("  |  Sin recibir")) +
                     Environment.NewLine +
                     ClsIdioma.T("Motivos: ") + ClsIdioma.Dato(ObtenerValor(fila, "Motivos")) +
                     ClsIdioma.T("  |  Observaciones: ") + ClsIdioma.Dato(ObtenerValor(fila, "Observaciones"));
@@ -331,9 +311,7 @@ namespace CapaVista
 
             if (valor is DateTime fechaCompra)
             {
-                return fechaCompra.TimeOfDay == TimeSpan.Zero
-                    ? fechaCompra.ToString("dd/MM/yyyy")
-                    : fechaCompra.ToString("dd/MM/yyyy HH:mm");
+                return fechaCompra.TimeOfDay == TimeSpan.Zero ? fechaCompra.ToString("dd/MM/yyyy") : fechaCompra.ToString("dd/MM/yyyy HH:mm");
             }
 
             if (valor is decimal importe)

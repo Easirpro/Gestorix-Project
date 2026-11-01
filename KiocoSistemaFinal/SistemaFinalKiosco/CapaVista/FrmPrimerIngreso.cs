@@ -49,9 +49,7 @@ namespace CapaVista
 
             ValidacionCampoVacio validar = new ValidacionCampoVacio();
 
-            if (validar.ValidarCamposVacios(txtPassTemporal.Text) ||
-                validar.ValidarCamposVacios(txtNuevaPass.Text) ||
-                validar.ValidarCamposVacios(txtConfirmarPass.Text))
+            if (validar.ValidarCamposVacios(txtPassTemporal.Text) || validar.ValidarCamposVacios(txtNuevaPass.Text) || validar.ValidarCamposVacios(txtConfirmarPass.Text))
             {
                 MessageBox.Show(ClsIdioma.T("Complete todos los campos."), ClsIdioma.T("Datos incompletos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);

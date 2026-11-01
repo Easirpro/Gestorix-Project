@@ -241,9 +241,7 @@ namespace CapaVista
 
         private void ActualizarImporte()
         {
-            lblImporteValor.Text = rbEfectivo.Checked
-                ? $"$ {ImporteADevolver():N2}"
-                : ClsIdioma.T("Sin reintegro de dinero");
+            lblImporteValor.Text = rbEfectivo.Checked ? $"$ {ImporteADevolver():N2}" : ClsIdioma.T("Sin reintegro de dinero");
         }
 
         private void ActualizarInfoCaja()
@@ -454,8 +452,7 @@ namespace CapaVista
             string resumen = ClsIdioma.T("Venta N.º ") + devolucion.IdVenta +
                              ClsIdioma.T("\nProducto: ") + producto.Cells["Producto"].Value +
                              ClsIdioma.T("\nCantidad: ") + devolucion.Cantidad +
-                             (devolucion.ReintegroEfectivo
-                                 ? ClsIdioma.T("\nSe devuelven $ ") + ImporteADevolver().ToString("N2") + ClsIdioma.T(" en efectivo")
+                             (devolucion.ReintegroEfectivo ? ClsIdioma.T("\nSe devuelven $ ") + ImporteADevolver().ToString("N2") + ClsIdioma.T(" en efectivo")
                                  : ClsIdioma.T("\nSe entrega otra unidad del producto")) +
                              ClsIdioma.T("\nVuelve al stock: ") + (devolucion.ReingresaStock ? ClsIdioma.T("Sí") : ClsIdioma.T("No")) +
                              ClsIdioma.T("\nMotivo: ") + devolucion.Motivo;
@@ -475,8 +472,7 @@ namespace CapaVista
 
                 MessageBox.Show(ClsIdioma.T("La devolución se registró correctamente.\n\n") +
                                 ClsIdioma.T("Devolución N.º ") + devolucion.IdDevolucion +
-                                (devolucion.ReintegroEfectivo
-                                    ? ClsIdioma.T("\nImporte devuelto: $ ") + devolucion.ImporteDevuelto.ToString("N2")
+                                (devolucion.ReintegroEfectivo ? ClsIdioma.T("\nImporte devuelto: $ ") + devolucion.ImporteDevuelto.ToString("N2")
                                     : ClsIdioma.T("\nCambio por otra unidad")) +
                                 ClsIdioma.T("\n\nPodés devolver otro producto de la misma venta o tocar Cerrar."),
                     ClsIdioma.T("Devolución registrada"), MessageBoxButtons.OK, MessageBoxIcon.Information);

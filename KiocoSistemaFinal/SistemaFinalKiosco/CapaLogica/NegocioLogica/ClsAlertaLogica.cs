@@ -18,7 +18,7 @@ namespace CapaLogica.NegocioLogica
             [TipoAlerta.Stock] = new[] { 110, 111, 112, 113, 520 },
             [TipoAlerta.Entrega] = new[] { 300, 320 },
             [TipoAlerta.Caja] = new[] { 700, 740 },
-            [TipoAlerta.Pago] = new[] { 420 },                            // cuenta corriente de proveedores
+            [TipoAlerta.Pago] = new[] { 420 },                        
             [TipoAlerta.Promocion] = new[] { 110, 111, 112, 113 },
             [TipoAlerta.Precio] = new[] { 110, 111, 112, 113 }
         };

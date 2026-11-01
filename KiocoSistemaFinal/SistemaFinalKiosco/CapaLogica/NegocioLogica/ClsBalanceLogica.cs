@@ -43,8 +43,7 @@ namespace CapaLogica.NegocioLogica
             return datos.ObtenerPorPromocion(desde, hasta);
         }
 
-        public DataTable ObtenerDetalle(DateTime desde, DateTime hasta, string tipo,
-                                        int? idMetodoPago, int? idUsuario)
+        public DataTable ObtenerDetalle(DateTime desde, DateTime hasta, string tipo, int? idMetodoPago, int? idUsuario)
         {
             return datos.ObtenerDetalle(desde, hasta, tipo, idMetodoPago, idUsuario);
         }
