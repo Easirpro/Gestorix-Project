@@ -16,10 +16,11 @@ namespace CapaVista
         private ClsDomicilio domicilioOriginal;
         private ClsCorreo correoOriginal;
         private ClsTelefono telefonoOriginal;
-        private int idRolSeleccionado;
+        private int idRolOriginal;
         private bool cargandoDatosUsuario = false;
         private bool cargandoUsuarios = false;
-        private bool permisosModificados = false;
+        // true después de tocar Nuevo: se puede Crear pero no Modificar.
+        private bool modoNuevo = false;
 
         public frmCargaEmpleados()
         {
@@ -114,6 +115,112 @@ namespace CapaVista
 
             cmbProvincia.SelectedIndex = 0;
         }
+        private void CargarRoles()
+        {
+            int idRolActual = RolSeleccionado();
+
+            CapaLogica.ClsRol rol = new CapaLogica.ClsRol();
+
+            DataTable dt = rol.ObtenerRoles();
+
+            DataRow fila = dt.NewRow();
+            fila["IdRol"] = 0;
+            fila["Nombre"] = "-Seleccione un rol-";
+
+            dt.Rows.InsertAt(fila, 0);
+
+            cmbRol.DataSource = null;
+            cmbRol.DataSource = dt;
+            cmbRol.DisplayMember = "Nombre";
+            cmbRol.ValueMember = "IdRol";
+
+            SeleccionarRol(idRolActual);
+        }
+        private int RolSeleccionado()
+        {
+            if (cmbRol.SelectedValue == null || cmbRol.SelectedValue is DataRowView)
+            {
+                return 0;
+            }
+
+            return Convert.ToInt32(cmbRol.SelectedValue);
+        }
+        private void SeleccionarRol(int idRol)
+        {
+            if (cmbRol.Items.Count == 0)
+            {
+                return;
+            }
+
+            cmbRol.SelectedValue = idRol;
+
+            if (cmbRol.SelectedIndex == -1)
+            {
+                cmbRol.SelectedIndex = 0;
+            }
+        }
+        // Cambiar el rol de un empleado pide el permiso de Roles y Permisos (1270).
+        private bool PuedeCambiarRol
+        {
+            get { return SesionUsuario.Permisos.Contains(1270); }
+        }
+        private bool EsUnoMismo
+        {
+            get { return !modoNuevo && personaOriginal != null && personaOriginal.IdPersona == SesionUsuario.IdPersona; }
+        }
+        // Con un empleado seleccionado se puede Modificar; después de Nuevo, solo Crear.
+        private void ActualizarBotones()
+        {
+            bool puedeCrear = SesionUsuario.Permisos.Contains(1000) || SesionUsuario.Permisos.Contains(1010);
+            bool puedeModificar = SesionUsuario.Permisos.Contains(1000) || SesionUsuario.Permisos.Contains(1020);
+            bool haySeleccionado = !modoNuevo && personaOriginal != null;
+
+            btnNuevo.Enabled = puedeCrear;
+            btnCrear.Enabled = modoNuevo && puedeCrear;
+            btnModificar.Enabled = haySeleccionado && puedeModificar;
+            btnPermisos.Enabled = PuedeCambiarRol;
+        }
+        // Deja el formulario vacío y sin empleado seleccionado (los datos originales también se borran).
+        private void LimpiarFormulario()
+        {
+            VaciarFormularios.LimpiarControles(this);
+
+            personaOriginal = null;
+            domicilioOriginal = null;
+            correoOriginal = null;
+            telefonoOriginal = null;
+            idRolOriginal = 0;
+
+            SeleccionarRol(0);
+
+            if (cmbGenero.Items.Count > 0)
+            {
+                cmbGenero.SelectedIndex = 0;
+            }
+
+            txtDNI.ReadOnly = false;
+
+            cargandoUsuarios = true;
+
+            try
+            {
+                if (lstUsuarios.Items.Count > 0)
+                {
+                    lstUsuarios.SelectedIndex = 0;
+                }
+            }
+            finally
+            {
+                cargandoUsuarios = false;
+            }
+        }
+        // CUIL tal como se guarda: vacío si el campo no tiene números.
+        private string CuilIngresado()
+        {
+            ClsValidarCUIL validarCUIL = new ClsValidarCUIL();
+
+            return validarCUIL.CuilVacio(mkdCuil.Text) ? string.Empty : mkdCuil.Text.Trim();
+        }
         private void CargarUsuarios(int? idPersonaSeleccionado = null)
         {
             try
@@ -195,15 +302,8 @@ namespace CapaVista
 
                 int idRol = logica.ObtenerIdRolPorPersona(idPersona);
 
-                if (idRol > 0)
-                {
-                    CapaLogica.ClsRol rol = new CapaLogica.ClsRol();
-                    txtRolActual.Text = rol.ObtenerNombreRol(idRol);
-                }
-                else
-                {
-                    txtRolActual.Clear();
-                }
+                idRolOriginal = idRol;
+                SeleccionarRol(idRol);
 
                 if (persona == null)
                 {
@@ -434,7 +534,7 @@ namespace CapaVista
             persona.Nombre = txtNombre.Text.Trim();
             persona.Apellido = txtApellido.Text.Trim();
             persona.DNI = txtDNI.Text.Trim();
-            persona.CUIT = mkdCuil.Text.Trim();
+            persona.CUIT = CuilIngresado();
             persona.IdGenero = Convert.ToInt32(cmbGenero.SelectedValue);
             persona.Sexo = rdbMasculino.Checked;
             persona.FeNac = dtpFechaNacimiento.Value;
@@ -565,15 +665,17 @@ namespace CapaVista
 
             string cuil = mkdCuil.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(cuil))
+            if (validarCUIL.CuilVacio(cuil))
             {
                 return false;
             }
 
-            if (!validarCUIL.CuilValido(cuil))
+            string motivo = validarCUIL.MotivoCuilInvalido(cuil);
+
+            if (motivo != string.Empty)
             {
                 MessageBox.Show(
-                    "El CUIL ingresado no es válido.",
+                    motivo,
                     "Validación",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -654,9 +756,9 @@ namespace CapaVista
             cmbTipoTelefono.Enabled = habilitar;
             txtCorreo.Enabled = habilitar;
 
-            chkActivo.Enabled = habilitar;
-
-            btnPermisos.Enabled = habilitar;
+            // Nadie se da de baja ni se cambia el rol a sí mismo.
+            chkActivo.Enabled = habilitar && !EsUnoMismo;
+            cmbRol.Enabled = habilitar && PuedeCambiarRol && !EsUnoMismo;
         }
         #endregion
 
@@ -697,19 +799,22 @@ namespace CapaVista
 
             txtPostal.Clear();
 
+            CargarRoles();
             CargarUsuarios();
 
-            btnNuevo.Enabled = CapaEntidades.SesionUsuario.Permisos.Contains(1000) || CapaEntidades.SesionUsuario.Permisos.Contains(1010);
-            btnModificar.Enabled = CapaEntidades.SesionUsuario.Permisos.Contains(1000) || CapaEntidades.SesionUsuario.Permisos.Contains(1020);
+            HabilitarEdicion(false);
+            ActualizarBotones();
         }
         //Evento Boton Crear
         private void btnCrear_Click(object sender, EventArgs e)
         {
             ClsValidarCUIL validarCUIL = new ClsValidarCUIL();
 
-            if (!validarCUIL.CuilValido(mkdCuil.Text))
+            string motivoCuil = validarCUIL.MotivoCuilInvalido(mkdCuil.Text);
+
+            if (motivoCuil != string.Empty)
             {
-                MessageBox.Show("El CUIL ingresado no es válido.", "Validación",
+                MessageBox.Show(motivoCuil, "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 mkdCuil.Focus();
@@ -723,6 +828,17 @@ namespace CapaVista
                 MessageBox.Show("El DNI no corresponde al CUIL ingresado.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
+                return;
+            }
+
+            int idRol = RolSeleccionado();
+
+            if (idRol <= 0)
+            {
+                MessageBox.Show("Seleccione el rol del empleado.", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                cmbRol.Focus();
                 return;
             }
 
@@ -742,27 +858,6 @@ namespace CapaVista
 
             try
             {
-                frmPermisos permisos = new frmPermisos(true);
-                permisos.ShowDialog();
-
-                int idRol = permisos.IdRolSeleccionado;
-
-                if (idRol <= 0)
-                {
-                    MessageBox.Show("Debe seleccionar un rol para el empleado.", "Validación",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                    return;
-                }
-
-                if (!permisos.TienePermisosSeleccionados)
-                {
-                    MessageBox.Show("Debe seleccionar al menos un permiso para el empleado.", "Validación",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                    return;
-                }
-
                 ClsAltaEmpleado emp = new ClsAltaEmpleado();
 
                 bool ok = emp.CrearEmpleado(
@@ -789,6 +884,12 @@ namespace CapaVista
                 {
                     MessageBox.Show("Empleado creado correctamente.", "Éxito",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    modoNuevo = false;
+                    CargarUsuarios();
+                    LimpiarFormulario();
+                    HabilitarEdicion(false);
+                    ActualizarBotones();
                 }
             }
             catch (Exception ex)
@@ -864,10 +965,17 @@ namespace CapaVista
         }
         private void mkdCuil_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(mkdCuil.Text))
+            // Con la máscara el texto nunca queda vacío (quedan los guiones): se mira si tiene números.
+            if (new ClsValidarCUIL().CuilVacio(mkdCuil.Text))
             {
                 txtDNI.Clear();
                 txtDNI.ReadOnly = false;
+                return;
+            }
+
+            // El CUIL guardado del empleado no se vuelve a validar si no se cambió.
+            if (!modoNuevo && personaOriginal != null && CuilIngresado() == (personaOriginal.CUIT ?? "").Trim())
+            {
                 return;
             }
 
@@ -991,24 +1099,34 @@ namespace CapaVista
 
             int idPersona = Convert.ToInt32(lstUsuarios.SelectedValue);
 
+            modoNuevo = false;
+
+            // "-Seleccione un Usuario-": formulario vacío, sin nada para modificar.
             if (idPersona <= 0)
+            {
+                LimpiarFormulario();
+                HabilitarEdicion(false);
+                ActualizarBotones();
                 return;
+            }
 
             CargarDatosUsuario(idPersona);
 
             chkHabilitarEdicion.Checked = false;
             HabilitarEdicion(false);
+            ActualizarBotones();
         }
         // evento para limpiar
         private void btnNuevo_Click(object sender, EventArgs e)
         {
-            VaciarFormularios.LimpiarControles(this);
-            txtRolActual.Clear();
+            modoNuevo = true;
+
+            LimpiarFormulario();
 
             chkHabilitarEdicion.Checked = false;
+            chkActivo.Checked = true;
             HabilitarEdicion(true);
-
-            txtDNI.ReadOnly = false;
+            ActualizarBotones();
         }
         private void btnModificar_Click(object sender, EventArgs e)
         {
@@ -1061,27 +1179,51 @@ namespace CapaVista
 
                 ClsValidarCUIL validarCUIL = new ClsValidarCUIL();
 
-                string cuil = mkdCuil.Text.Trim();
+                string cuil = CuilIngresado();
 
-                if (!validarCUIL.CuilValido(cuil))
+                // El CUIL y el DNI se validan solo si se cambiaron: así se puede modificar a un
+                // empleado con datos viejos (CUIL vacío o mal cargado) sin tocar esos campos.
+                bool cuilCambio = cuil != (personaOriginal.CUIT ?? "").Trim();
+                bool dniCambio = txtDNI.Text.Trim() != (personaOriginal.DNI ?? "").Trim();
+
+                if (cuilCambio || dniCambio)
                 {
-                    MessageBox.Show("El CUIL ingresado no es válido.", "Validación",
+                    string motivoCuil = validarCUIL.MotivoCuilInvalido(cuil);
+
+                    if (motivoCuil != string.Empty)
+                    {
+                        MessageBox.Show(motivoCuil, "Validación",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        mkdCuil.Focus();
+                        return;
+                    }
+
+                    string dniDelCUIL = validarCUIL.ObtenerDNI(cuil);
+
+                    if (dniDelCUIL != txtDNI.Text.Trim())
+                    {
+                        MessageBox.Show("El DNI no corresponde al CUIL ingresado.", "Validación",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        mkdCuil.Focus();
+                        return;
+                    }
+                }
+
+                // Sin permiso de Roles y Permisos el rol no se puede cambiar (el combo está bloqueado).
+                int idRol = PuedeCambiarRol ? RolSeleccionado() : idRolOriginal;
+
+                if (idRol <= 0)
+                {
+                    MessageBox.Show("Seleccione el rol del empleado.", "Validación",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    mkdCuil.Focus();
+                    cmbRol.Focus();
                     return;
                 }
 
-                string dniDelCUIL = validarCUIL.ObtenerDNI(cuil);
-
-                if (dniDelCUIL != txtDNI.Text.Trim())
-                {
-                    MessageBox.Show("El DNI no corresponde al CUIL ingresado.", "Validación",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                    mkdCuil.Focus();
-                    return;
-                }
+                bool rolCambio = idRol != idRolOriginal;
 
                 ClsUsuarioLogica logica = new ClsUsuarioLogica();
 
@@ -1098,8 +1240,9 @@ namespace CapaVista
                 bool huboCambios =
                     personaOriginal.Nombre != txtNombre.Text.Trim() ||
                     personaOriginal.Apellido != txtApellido.Text.Trim() ||
-                    personaOriginal.DNI != txtDNI.Text.Trim() ||
-                    personaOriginal.CUIT != cuil ||
+                    dniCambio ||
+                    cuilCambio ||
+                    rolCambio ||
                     personaOriginal.Activo != chkActivo.Checked ||
                     personaOriginal.IdGenero != idGenero ||
                     personaOriginal.Sexo != rdbMasculino.Checked ||
@@ -1117,8 +1260,6 @@ namespace CapaVista
                     huboCambios = huboCambios || telefonoOriginal.NumTelefono != txtTelefono.Text.Trim() || telefonoOriginal.IdTipo != idTipoTelefono;
                 }
 
-                huboCambios = huboCambios || permisosModificados;
-
                 bool estadoAnterior = personaOriginal.Activo;
                 bool estadoNuevo = chkActivo.Checked;
 
@@ -1131,21 +1272,13 @@ namespace CapaVista
                     return;
                 }
 
-                int idRol;
+                // Nadie se da de baja ni se cambia el rol a sí mismo, y siempre queda un Administrador activo.
+                string motivoRol = logica.ValidarCambioRolYEstado(idPersona, idRol, estadoNuevo);
 
-                if (permisosModificados)
+                if (motivoRol != string.Empty)
                 {
-                    idRol = idRolSeleccionado;
-                }
-                else
-                {
-                    idRol = logica.ObtenerIdRolPorPersona(idPersona);
-                }
-
-                if (idRol <= 0)
-                {
-                    MessageBox.Show("No se pudo determinar el rol del empleado.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(motivoRol, "Cambio no permitido",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
                 }
@@ -1214,13 +1347,25 @@ namespace CapaVista
                 bitacora.RegistrarBitacora(SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null, accionBitacora,
                     "Usuario", idUsuarioAfectado, descripcionBitacora);
 
-                MessageBox.Show(permisosModificados ? "Los cambios se guardaron correctamente." : "Los datos se modificaron correctamente.",
+                if (rolCambio)
+                {
+                    CapaLogica.ClsRol rol = new CapaLogica.ClsRol();
+
+                    bitacora.RegistrarBitacora(SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null, "CAMBIO_ROL",
+                        "Usuario", idUsuarioAfectado, "Cambio de rol del usuario " + usernameAfectado + ": " +
+                        rol.ObtenerNombreRol(idRolOriginal) + " → " + rol.ObtenerNombreRol(idRol));
+                }
+
+                MessageBox.Show("Los datos se modificaron correctamente.",
                     "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                permisosModificados = false;
-                idRolSeleccionado = 0;
-
+                // Se recargan los datos para que la próxima modificación compare contra lo guardado.
                 CargarUsuarios(idPersona);
+                CargarDatosUsuario(idPersona);
+
+                chkHabilitarEdicion.Checked = false;
+                HabilitarEdicion(false);
+                ActualizarBotones();
             }
             catch (FormatException)
             {
@@ -1235,45 +1380,19 @@ namespace CapaVista
         {
             CargarUsuarios();
         }
+        // Abre la edición de permisos de los roles (con el rol del combo seleccionado).
+        // No cambia el rol del empleado: eso se hace con el combo Rol y Modificar.
         private void btnPermisos_Click(object sender, EventArgs e)
         {
+            int idRol = RolSeleccionado();
 
-            if (string.IsNullOrWhiteSpace(txtDNI.Text) || lstUsuarios.SelectedValue == null || lstUsuarios.SelectedValue is DataRowView || Convert.ToInt32(lstUsuarios.SelectedValue) <= 0)
-            {
-                using (frmPermisos permiso = new frmPermisos(true))
-                {
-                    permiso.ShowDialog();
-
-                    if (permiso.IdRolSeleccionado > 0)
-                    {
-                        idRolSeleccionado = permiso.IdRolSeleccionado;
-                        permisosModificados = permiso.PermisosModificados;
-                        txtRolActual.Text = permiso.IdRolSeleccionado.ToString();
-                    }
-                }
-
-                return;
-            }
-
-            int idPersona = Convert.ToInt32(lstUsuarios.SelectedValue);
-
-            ClsUsuarioLogica usuario = new ClsUsuarioLogica();
-            int idRol = usuario.ObtenerIdRolPorPersona(idPersona);
-
-            if (idRol <= 0)
-            {
-                MessageBox.Show("El empleado no tiene un rol asignado.", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            using (frmPermisos permiso = new frmPermisos(idRol))
+            using (frmPermisos permiso = idRol > 0 ? new frmPermisos(idRol) : new frmPermisos())
             {
                 permiso.ShowDialog();
-
-                permisosModificados = permiso.PermisosModificados;
-                idRolSeleccionado = permiso.IdRolSeleccionado;
             }
+
+            // Desde ahí se pueden crear o eliminar roles: se recarga el combo sin perder la selección.
+            CargarRoles();
         }
         private void chkHabilitarEdicion_CheckedChanged(object sender, EventArgs e)
         {

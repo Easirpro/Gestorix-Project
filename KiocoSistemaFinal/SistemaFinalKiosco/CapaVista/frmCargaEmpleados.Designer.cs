@@ -82,7 +82,7 @@
             tpgLocalidad = new TabPage();
             tpgContacto = new TabPage();
             label21 = new Label();
-            txtRolActual = new TextBox();
+            cmbRol = new ComboBox();
             chkHabilitarEdicion = new CheckBox();
             tpgDatosUsuario.SuspendLayout();
             tpgDatosPersonales.SuspendLayout();
@@ -610,17 +610,17 @@
             label21.Name = "label21";
             label21.Size = new Size(64, 15);
             label21.TabIndex = 36;
-            label21.Text = "Rol Actual:";
+            label21.Text = "Rol:";
             // 
-            // txtRolActual
+            // cmbRol
             // 
-            txtRolActual.Enabled = false;
-            txtRolActual.Location = new Point(405, 294);
-            txtRolActual.Name = "txtRolActual";
-            txtRolActual.ReadOnly = true;
-            txtRolActual.Size = new Size(124, 23);
-            txtRolActual.TabIndex = 37;
-            txtRolActual.TabStop = false;
+            cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRol.Enabled = false;
+            cmbRol.FormattingEnabled = true;
+            cmbRol.Location = new Point(405, 294);
+            cmbRol.Name = "cmbRol";
+            cmbRol.Size = new Size(124, 23);
+            cmbRol.TabIndex = 37;
             // 
             // chkHabilitarEdicion
             // 
@@ -639,7 +639,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(536, 550);
             Controls.Add(chkHabilitarEdicion);
-            Controls.Add(txtRolActual);
+            Controls.Add(cmbRol);
             Controls.Add(label21);
             Controls.Add(tpgDatosUsuario);
             Controls.Add(btnPermisos);
@@ -726,7 +726,7 @@
         private TabPage tpgLocalidad;
         private TabPage tpgContacto;
         private Label label21;
-        private TextBox txtRolActual;
+        private ComboBox cmbRol;
         private CheckBox chkHabilitarEdicion;
     }
 }

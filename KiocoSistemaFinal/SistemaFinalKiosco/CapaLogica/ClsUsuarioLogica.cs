@@ -83,5 +83,44 @@ namespace CapaLogica
 
             return datos.ObtenerIdRolPorPersona(idPersona);
         }
+
+        public const int ID_ROL_ADMINISTRADOR = 1;
+
+        // Controla un cambio de rol o de estado antes de guardarlo. Devuelve el motivo si no se
+        // puede hacer, o una cadena vacía si se puede:
+        // - nadie puede darse de baja ni cambiarse el rol a sí mismo;
+        // - siempre tiene que quedar al menos un Administrador activo.
+        public string ValidarCambioRolYEstado(int idPersona, int idRolNuevo, bool activoNuevo)
+        {
+            ClsUsuarioDatos datos = new ClsUsuarioDatos();
+
+            int idRolActual = datos.ObtenerIdRolPorPersona(idPersona);
+            ClsPersona persona = datos.ObtenerPersonaPorId(idPersona);
+            bool activoActual = persona != null && persona.Activo;
+
+            if (idPersona == SesionUsuario.IdPersona)
+            {
+                if (activoActual && !activoNuevo)
+                {
+                    return "No puede darse de baja a sí mismo.";
+                }
+
+                if (idRolNuevo != idRolActual)
+                {
+                    return "No puede cambiar su propio rol.";
+                }
+            }
+
+            bool eraAdministradorActivo = idRolActual == ID_ROL_ADMINISTRADOR && activoActual;
+            bool sigueAdministradorActivo = idRolNuevo == ID_ROL_ADMINISTRADOR && activoNuevo;
+
+            if (eraAdministradorActivo && !sigueAdministradorActivo &&
+                datos.ContarAdministradoresActivos(ID_ROL_ADMINISTRADOR, idPersona) == 0)
+            {
+                return "Es el único Administrador activo: el sistema no puede quedar sin administradores.";
+            }
+
+            return string.Empty;
+        }
     }
 }

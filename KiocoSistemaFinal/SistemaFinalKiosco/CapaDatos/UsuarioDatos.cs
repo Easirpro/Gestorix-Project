@@ -540,6 +540,29 @@ public class ClsUsuarioDatos
             }
         }
     }
+    // Administradores habilitados (usuario sin bloquear y persona activa), sin contar a idPersonaExcluida.
+    public int ContarAdministradoresActivos(int idRolAdministrador, int idPersonaExcluida)
+    {
+        using (SqlConnection con = conexion.ObtenerConexion())
+        {
+            string consulta = @"
+                SELECT COUNT(*)
+                FROM Usuario AS U
+                INNER JOIN Persona AS P ON P.IdPersona = U.IdPersona
+                WHERE U.IdRol = @IdRol
+                  AND U.Estado = 1
+                  AND P.Activo = 1
+                  AND U.IdPersona <> @IdPersona";
+
+            SqlCommand cmd = new SqlCommand(consulta, con);
+            cmd.Parameters.AddWithValue("@IdRol", idRolAdministrador);
+            cmd.Parameters.AddWithValue("@IdPersona", idPersonaExcluida);
+
+            con.Open();
+
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+    }
     public int ObtenerIdRolPorPersona(int idPersona)
     {
         using (SqlConnection con = conexion.ObtenerConexion())
@@ -578,7 +601,7 @@ public class ClsUsuarioDatos
     }
     // Recalcula el DVH con los valores guardados en la base, dentro de la misma transacción.
     // Se lee la fila para usar el UltimoIngreso que puso GETDATE().
-    private void ActualizarDVHUsuario(int idUsuario, SqlConnection con, SqlTransaction trans)
+    internal void ActualizarDVHUsuario(int idUsuario, SqlConnection con, SqlTransaction trans)
     {
         ClslUsuario usuario = null;
 

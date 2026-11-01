@@ -22,7 +22,7 @@ namespace CapaDatos
             {
                 conn.Open();
 
-                string query = "SELECT IdRol, Nombre FROM Rol ";
+                string query = "SELECT IdRol, Nombre FROM Rol ORDER BY Nombre";
 
                 SqlDataAdapter da = new SqlDataAdapter(query, conn);
 
