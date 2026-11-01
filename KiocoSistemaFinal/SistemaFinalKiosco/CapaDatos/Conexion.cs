@@ -19,12 +19,14 @@ namespace SistemaKiosco
             return new SqlConnection(cadena);
         }
 
+        // Misma cadena pero conectada a master: backup y restore no pueden depender de que
+        // la base Gestorix esté accesible. Así solo hay que cambiar el servidor en un lugar.
         public SqlConnection ObtenerConexionMaster()
         {
-            string cadenaMaster = @"Server = 26.202.1.233,1433; Database=Gestorix;User ID = gestorix_user; Password=Admin123;TrustServerCertificate=True";
+            SqlConnectionStringBuilder cadenaMaster = new SqlConnectionStringBuilder(cadena);
+            cadenaMaster.InitialCatalog = "master";
 
-            return new SqlConnection(cadenaMaster);
-
+            return new SqlConnection(cadenaMaster.ConnectionString);
         }
     }
 }

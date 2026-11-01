@@ -1571,6 +1571,9 @@ namespace CapaVista
                 { "Guardar archivo de artículos", "Save products file" },
                 { "Guardar plantilla de importación", "Save import template" },
                 { "Seleccionar plantilla de artículos", "Select products template" },
+                { "No se pudo generar el backup automático: ", "The automatic backup could not be created: " },
+                { "Backup generado correctamente en ", "Backup created successfully in " },
+                { "La base de datos está en otra PC. Por ahora el backup solo se puede restaurar desde la PC donde está la base.", "The database is on another PC. For now the backup can only be restored from the PC where the database is." },
             };
         }
     }
