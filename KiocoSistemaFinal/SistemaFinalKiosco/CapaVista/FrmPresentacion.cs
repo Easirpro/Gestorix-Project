@@ -21,7 +21,8 @@ namespace CapaVista
     public partial class frmmenuPres : Form
     {
 
-        private bool idiomaIngles = false;
+        // El idioma es el de todo el sistema (ClsIdioma): se guarda en esta PC y traduce todos los formularios.
+        private bool idiomaIngles => ClsIdioma.Ingles;
         private ClsCampanaAlertas campanaAlertas;
         private decimal subtotal = 0.00m;
         private decimal descuentoRecargo = 0.00m;
@@ -39,6 +40,7 @@ namespace CapaVista
         public frmmenuPres()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             MinimumSize = new Size(900, 620);
             StartPosition = FormStartPosition.CenterScreen;
@@ -51,7 +53,15 @@ namespace CapaVista
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
             dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dtgPresentacion.AllowUserToResizeColumns = false;
+            // Se puede cambiar el ancho de las columnas arrastrando el borde del encabezado.
+            dtgPresentacion.AllowUserToResizeColumns = true;
+            dtgPresentacion.AllowUserToResizeRows = false;
+
+            foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
+            {
+                columna.Resizable = DataGridViewTriState.True;
+                columna.MinimumWidth = 50;   // que ninguna columna se pueda achicar hasta desaparecer
+            }
             dtgPresentacion.AllowUserToOrderColumns = false;
             dtgPresentacion.RowHeadersVisible = false;
 
@@ -75,12 +85,14 @@ namespace CapaVista
             this.KeyPreview = true;
 
             CargarBotones();
+            AplicarModoPantalla();
+
             try
             {
                 if (SesionUsuario.Permisos.Contains(730) && !new ClsCajaLogica().HayCajaAbierta())
                 {
-                    DialogResult abrir = MessageBox.Show("La caja está cerrada.\n\n¿Desea abrirla ahora?",
-                        "Caja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult abrir = MessageBox.Show(ClsIdioma.T("La caja está cerrada.\n\n¿Desea abrirla ahora?"),
+                        ClsIdioma.T("Caja"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (abrir == DialogResult.Yes)
                     {
@@ -93,7 +105,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo verificar la caja.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -101,6 +113,113 @@ namespace CapaVista
 
             RellenarFilas();
             CalcularYMostrarMontos();
+
+            // Si la última vez se eligió inglés en esta PC, el menú principal arranca en inglés.
+            if (ClsIdioma.Ingles)
+            {
+                AplicarIdioma();
+            }
+        }
+
+        // Quien no tiene el permiso de vender (210) no ve la pantalla de venta: solo el logo al centro
+        // con un mensaje de bienvenida. El menú de arriba queda igual, con las opciones de su rol.
+        private bool modoBienvenida = false;
+        private Label? lblBienvenida;
+        private Label? lblBienvenidaAyuda;
+
+        private System.Windows.Forms.Control[] ControlesDeVenta()
+        {
+            return new System.Windows.Forms.Control[]
+            {
+                label3, txtCodigoBarra, label4, txtCantidad, lstDescripcion, lblDescripcionSku,
+                dtgPresentacion, btnPromocion, btnQuitar, btnCambiarcantidad,
+                tableLayoutPanel1, btnCobrar, btnNuevaCompra
+            };
+        }
+        private void AplicarModoPantalla()
+        {
+            modoBienvenida = !SesionUsuario.Permisos.Contains(210);
+
+            foreach (System.Windows.Forms.Control control in ControlesDeVenta())
+            {
+                control.Visible = !modoBienvenida;
+            }
+
+            // La lista de sugerencias arranca oculta: solo aparece al escribir en el buscador de productos.
+            lstDescripcion.Visible = false;
+
+            if (!modoBienvenida)
+            {
+                if (lblBienvenida != null) lblBienvenida.Visible = false;
+                if (lblBienvenidaAyuda != null) lblBienvenidaAyuda.Visible = false;
+
+                AjustarDiseno();
+                return;
+            }
+
+            string nombre = string.IsNullOrWhiteSpace(SesionUsuario.Nombre) ? SesionUsuario.Username : SesionUsuario.Nombre;
+
+            if (lblBienvenida == null)
+            {
+                lblBienvenida = new Label
+                {
+                    AutoSize = false,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold),
+                    Anchor = AnchorStyles.None
+                };
+
+                lblBienvenidaAyuda = new Label
+                {
+                    AutoSize = false,
+                    TextAlign = ContentAlignment.TopCenter,
+                    Font = new System.Drawing.Font("Segoe UI", 10.5F),
+                    ForeColor = SystemColors.GrayText,
+                    Anchor = AnchorStyles.None
+                };
+
+                Controls.Add(lblBienvenida);
+                Controls.Add(lblBienvenidaAyuda);
+            }
+
+            lblBienvenida.Text = ClsIdioma.Ingles
+                ? "Hello, " + nombre + "! Welcome to Gestorix"
+                : "¡Hola, " + nombre + "! Te damos la bienvenida a Gestorix";
+            lblBienvenidaAyuda!.Text = ClsIdioma.Ingles
+                ? "Use the menu above to work with the options of your role."
+                : "Usá el menú de arriba para trabajar con las opciones de tu rol.";
+            lblBienvenida.Visible = true;
+            lblBienvenidaAyuda.Visible = true;
+
+            AjustarDiseno();
+        }
+        // Logo grande al centro y el mensaje debajo, entre el menú y el pie con el usuario.
+        private void UbicarBienvenida(int ancho, int altoMenu, int abajo)
+        {
+            int margen = 12;
+            int disponibleAlto = Math.Max(200, abajo - altoMenu);
+
+            int anchoLogo = Math.Min(520, (int)(ancho * 0.5));
+            int altoLogo = anchoLogo * 169 / 270;   // misma proporción que el logo original
+
+            int altoTextos = 40 + 6 + 30;
+
+            if (altoLogo + altoTextos + 20 > disponibleAlto)
+            {
+                altoLogo = Math.Max(80, disponibleAlto - altoTextos - 20);
+                anchoLogo = altoLogo * 270 / 169;
+            }
+
+            int yLogo = altoMenu + (disponibleAlto - altoLogo - altoTextos) / 2;
+
+            pcbLogo.SetBounds((ancho - anchoLogo) / 2, yLogo, anchoLogo, altoLogo);
+            pcbLogo.Visible = true;
+
+            lblBienvenida?.SetBounds(margen, pcbLogo.Bottom + 10, ancho - margen * 2, 40);
+            lblBienvenidaAyuda?.SetBounds(margen, pcbLogo.Bottom + 56, ancho - margen * 2, 30);
+
+            lblBienvenida?.BringToFront();
+            lblBienvenidaAyuda?.BringToFront();
         }
 
         // Campana de alertas arriba a la derecha, al lado de cerrar sesión. Cada tipo de alerta
@@ -113,7 +232,41 @@ namespace CapaVista
                 return;
             }
 
-            Dictionary<TipoAlerta, Action> acciones = new Dictionary<TipoAlerta, Action>
+            campanaAlertas = new ClsCampanaAlertas(this, btnConfig, tollClosed, CrearAccionesAlertas());
+
+            // Quien ve la campana puede abrir la lista completa (cada uno ve solo los tipos que le corresponden).
+            campanaAlertas.VerTodas = AbrirAlertas;
+            campanaAlertas.PuedeResolver = PuedeResolverAlerta;
+
+            campanaAlertas.Iniciar(mostrarAviso: true);
+        }
+        // Si el usuario puede entrar a la pantalla donde se resuelve cada tipo de alerta
+        // (los mismos permisos que habilitan esas opciones del menú en CargarBotones).
+        private bool PuedeResolverAlerta(TipoAlerta tipo)
+        {
+            switch (tipo)
+            {
+                case TipoAlerta.Lote:
+                case TipoAlerta.Precio:
+                    return TieneAlguno(110, 111, 112, 113);         // Modificar artículo
+                case TipoAlerta.Stock:
+                    return TieneAlguno(520, 110, 111, 112, 113);    // Reposición o Modificar artículo
+                case TipoAlerta.Entrega:
+                    return SesionUsuario.Permisos.Contains(320);     // Recepción de mercadería
+                case TipoAlerta.Caja:
+                    return SesionUsuario.Permisos.Contains(740);     // Cerrar caja
+                case TipoAlerta.Pago:
+                    return SesionUsuario.Permisos.Contains(420);     // Cuenta corriente de proveedores
+                case TipoAlerta.Promocion:
+                    return TieneAlguno(230, 240);                   // Administrar promociones
+                default:
+                    return false;
+            }
+        }
+        // Qué pantalla abre cada tipo de alerta (las mismas opciones del menú: respetan los permisos).
+        private Dictionary<TipoAlerta, Action> CrearAccionesAlertas()
+        {
+            return new Dictionary<TipoAlerta, Action>
             {
                 [TipoAlerta.Lote] = () => menuitemAdmistradorarticulos.PerformClick(),
                 [TipoAlerta.Stock] = AbrirReposicion,
@@ -123,9 +276,31 @@ namespace CapaVista
                 [TipoAlerta.Promocion] = () => administrarPromocionesToolStripMenuItem.PerformClick(),
                 [TipoAlerta.Precio] = () => menuitemAdmistradorarticulos.PerformClick()
             };
+        }
+        // Ocultar alertas y configurar los días de aviso (cuando se agreguen) son solo del rol Administrador.
+        private const int ID_ROL_ADMINISTRADOR = 1;
 
-            campanaAlertas = new ClsCampanaAlertas(this, btnConfig, tollClosed, acciones);
-            campanaAlertas.Iniciar(mostrarAviso: true);
+        private static bool EsAdministrador
+        {
+            get { return SesionUsuario.IdRol == ID_ROL_ADMINISTRADOR; }
+        }
+        // Lista completa de alertas: la ve quien tiene el permiso de visualizar alarmas (1110).
+        private void AbrirAlertas()
+        {
+            if (!SesionUsuario.Permisos.Contains(1110))
+            {
+                MessageBox.Show(ClsIdioma.T("No tenés permiso para ver las alertas."), ClsIdioma.T("Alertas"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (frmAlertas alertas = new frmAlertas(CrearAccionesAlertas(), PuedeResolverAlerta, () => campanaAlertas?.Actualizar()))
+            {
+                alertas.Icon = Icon;
+                alertas.ShowDialog(this);
+            }
+
+            campanaAlertas?.Actualizar();
         }
         private void AbrirReposicion()
         {
@@ -145,96 +320,104 @@ namespace CapaVista
         private void AplicarIdioma()
         {
             // menu principal
-            btnArt.Text = idiomaIngles ? "Products" : "Artículos";
-            btnVentas.Text = idiomaIngles ? "Sales" : "Ventas";
-            btnCompras.Text = idiomaIngles ? "Purchases" : "Compras";
-            btnProve.Text = idiomaIngles ? "Suppliers" : "Proveedores";
-            toolStripMenuItem1.Text = idiomaIngles ? "Lists" : "Listados";
-            btnInformes.Text = idiomaIngles ? "Reports" : "Informes";
-            btnCaja.Text = idiomaIngles ? "Cash Register" : "Caja";
-            btnIdioma.Text = idiomaIngles ? "Language" : "Idioma";
-            btnEmpleado.Text = idiomaIngles ? "Employees" : "Empleado";
-            toolStripMenuItem2.Text = idiomaIngles ? "Promotions" : "Promociones";
+            btnArt.Text = idiomaIngles ? "Products" : ClsIdioma.T("Artículos");
+            btnVentas.Text = idiomaIngles ? "Sales" : ClsIdioma.T("Ventas");
+            btnCompras.Text = idiomaIngles ? "Purchases" : ClsIdioma.T("Compras");
+            btnProve.Text = idiomaIngles ? "Suppliers" : ClsIdioma.T("Proveedores");
+            toolStripMenuItem1.Text = idiomaIngles ? "Lists" : ClsIdioma.T("Listados");
+            btnInformes.Text = idiomaIngles ? "Reports" : ClsIdioma.T("Informes");
+            btnCaja.Text = idiomaIngles ? "Cash Register" : ClsIdioma.T("Caja");
+            btnIdioma.Text = idiomaIngles ? "Language" : ClsIdioma.T("Idioma");
+            btnEmpleado.Text = idiomaIngles ? "Employees" : ClsIdioma.T("Empleado");
+            toolStripMenuItem2.Text = idiomaIngles ? "Promotions" : ClsIdioma.T("Promociones");
 
             // articulos
-            cargarArticuloNuevoToolStripMenuItem.Text = idiomaIngles ? "Add New Product" : "Cargar artículo nuevo";
-            menuitemAdmistradorarticulos.Text = idiomaIngles ? "Edit Product" : "Modificar artículo";
-            menuitemAdministradoarticulos.Text = idiomaIngles ? "Categories and Brands" : "Categorías y marcas";
-            meniitemReporapida.Text = idiomaIngles ? "Quick Stock Replenishment" : "Reposición rápida de stock";
-            menuitemImporexcel.Text = idiomaIngles ? "Import Products from Excel" : "Importar artículos desde Excel";
-            menuitemExporexcel.Text = idiomaIngles ? "Export Products to Excel" : "Exportar artículos a Excel";
+            cargarArticuloNuevoToolStripMenuItem.Text = idiomaIngles ? "Add New Product" : ClsIdioma.T("Cargar artículo nuevo");
+            menuitemAdmistradorarticulos.Text = idiomaIngles ? "Edit Product" : ClsIdioma.T("Modificar artículo");
+            menuitemAdministradoarticulos.Text = idiomaIngles ? "Categories and Brands" : ClsIdioma.T("Categorías y marcas");
+            meniitemReporapida.Text = idiomaIngles ? "Quick Stock Replenishment" : ClsIdioma.T("Reposición rápida de stock");
+            menuitemImporexcel.Text = idiomaIngles ? "Import Products from Excel" : ClsIdioma.T("Importar artículos desde Excel");
+            menuitemExporexcel.Text = idiomaIngles ? "Export Products to Excel" : ClsIdioma.T("Exportar artículos a Excel");
 
             // ventas
-            menuitemAdministradorventas.Text = idiomaIngles ? "Sales Management" : "Administrador de ventas";
-            notaDeCreditoToolStripMenuItem.Text = idiomaIngles ? "Returns" : "Devolución";
+            menuitemAdministradorventas.Text = idiomaIngles ? "Sales Management" : ClsIdioma.T("Administrador de ventas");
+            notaDeCreditoToolStripMenuItem.Text = idiomaIngles ? "Returns" : ClsIdioma.T("Devolución");
 
             // compras
-            menuitemAministradorcompras.Text = idiomaIngles ? "Purchase Management" : "Administrador de compras";
+            menuitemAministradorcompras.Text = idiomaIngles ? "Purchase Management" : ClsIdioma.T("Administrador de compras");
 
             // proveedores
-            administradorDeProveedoresToolStripMenuItem.Text = idiomaIngles ? "Supplier Management" : "Administrador de proveedores";
-            cuentaCorrienteDeProveedoresToolStripMenuItem.Text = idiomaIngles ? "Supplier Account" : "Cuenta corriente de proveedores";
+            administradorDeProveedoresToolStripMenuItem.Text = idiomaIngles ? "Supplier Management" : ClsIdioma.T("Administrador de proveedores");
+            cuentaCorrienteDeProveedoresToolStripMenuItem.Text = idiomaIngles ? "Supplier Account" : ClsIdioma.T("Cuenta corriente de proveedores");
 
             // listados
-            preciosYReposicionToolStripMenuItem.Text = idiomaIngles ? "Prices and Restocking" : "Precios y reposición";
+            preciosYReposicionToolStripMenuItem.Text = idiomaIngles ? "Prices and Restocking" : ClsIdioma.T("Precios y reposición");
 
             // informes
-            informesVentasToolStripMenuItem.Text = idiomaIngles ? "Sales" : "Ventas";
+            informesVentasToolStripMenuItem.Text = idiomaIngles ? "Sales" : ClsIdioma.T("Ventas");
 
             // caja
-            nuevoIngresoToolStripMenuItem.Text = idiomaIngles ? "New Deposit" : "Nuevo ingreso";
-            nuevoEgresoToolStripMenuItem.Text = idiomaIngles ? "New Withdrawal" : "Nuevo egreso";
-            cerrarSeToolStripMenuItem.Text = idiomaIngles ? "Close Cash Register" : "Cerrar caja";
-            abrirCajaToolStripMenuItem.Text = idiomaIngles ? "Open Cash Register" : "Abrir caja";
+            nuevoIngresoToolStripMenuItem.Text = idiomaIngles ? "New Deposit" : ClsIdioma.T("Nuevo ingreso");
+            nuevoEgresoToolStripMenuItem.Text = idiomaIngles ? "New Withdrawal" : ClsIdioma.T("Nuevo egreso");
+            cerrarSeToolStripMenuItem.Text = idiomaIngles ? "Close Cash Register" : ClsIdioma.T("Cerrar caja");
+            abrirCajaToolStripMenuItem.Text = idiomaIngles ? "Open Cash Register" : ClsIdioma.T("Abrir caja");
 
             // idioma
-            idiomaToolStripMenuItem.Text = idiomaIngles ? "Language" : "Idioma";
-            inglesToolStripMenuItem.Text = idiomaIngles ? "Ingles" : "English";
+            idiomaToolStripMenuItem.Text = idiomaIngles ? "Language" : ClsIdioma.T("Idioma");
+            inglesToolStripMenuItem.Text = "English";
 
             // empleados
-            permisosToolStripMenuItem.Text = idiomaIngles ? "Employees" : "Empleado";
-            gestioToolStripMenuItem.Text = idiomaIngles ? "Backup Management" : "Gestión de Backup";
-            bitacoraToolStripMenuItem.Text = idiomaIngles ? "Activity Log" : "Bitácora";
+            permisosToolStripMenuItem.Text = idiomaIngles ? "Employees" : ClsIdioma.T("Empleado");
+            gestioToolStripMenuItem.Text = idiomaIngles ? "Backup Management" : ClsIdioma.T("Gestión de Backup");
+            bitacoraToolStripMenuItem.Text = idiomaIngles ? "Activity Log" : ClsIdioma.T("Bitácora");
 
             // promociones
-            administrarPromocionesToolStripMenuItem.Text = idiomaIngles ? "Manage Promotions" : "Administrar promociones";
-            btnPromocion.Text = idiomaIngles ? "Promotions" : "Promociones";
+            administrarPromocionesToolStripMenuItem.Text = idiomaIngles ? "Manage Promotions" : ClsIdioma.T("Administrar promociones");
+            btnPromocion.Text = idiomaIngles ? "Promotions" : ClsIdioma.T("Promociones");
 
             // botones de vernta
-            btnCobrar.Text = idiomaIngles ? "F2 - Pay" : "F2 - Cobrar";
-            btnNuevaCompra.Text = idiomaIngles ? "F4 - New Purchase" : "F4 - Nueva Compra";
-            btnCambiarcantidad.Text = idiomaIngles ? "Change Quantity" : "Cambiar cantidad";
-            btnQuitar.Text = idiomaIngles ? "Remove" : "Quitar";
+            btnCobrar.Text = idiomaIngles ? "F2 - Pay" : ClsIdioma.T("F2 - Cobrar");
+            btnNuevaCompra.Text = idiomaIngles ? "F4 - New Purchase" : ClsIdioma.T("F4 - Nueva Compra");
+            btnCambiarcantidad.Text = idiomaIngles ? "Change Quantity" : ClsIdioma.T("Cambiar cantidad");
+            btnQuitar.Text = idiomaIngles ? "Remove" : ClsIdioma.T("Quitar");
 
             // etiqueta de productos
-            label3.Text = idiomaIngles ? "Scan a code or type part of the SKU or name." : "Escaneá un código o escribí parte del SKU o del nombre."; label4.Text = idiomaIngles ? "Quantity" : "Cantidad";
+            label3.Text = idiomaIngles ? "Scan a code or type part of the SKU or name." : ClsIdioma.T("Escaneá un código o escribí parte del SKU o del nombre."); label4.Text = idiomaIngles ? "Quantity" : ClsIdioma.T("Cantidad");
 
             // totales
-            label1.Text = idiomaIngles ? "Subtotal" : "Subtotal";
-            label2.Text = idiomaIngles ? "Discount/Surcharge" : "Descuento/Recargo";
-            label5.Text = idiomaIngles ? "Total" : "Total";
+            label1.Text = idiomaIngles ? ClsIdioma.T("Subtotal") : ClsIdioma.T("Subtotal");
+            label2.Text = idiomaIngles ? "Discount/Surcharge" : ClsIdioma.T("Descuento/Recargo");
+            label5.Text = idiomaIngles ? ClsIdioma.T("Total") : ClsIdioma.T("Total");
 
             // datos del usuario
-            label6.Text = idiomaIngles ? "User:" : "Usuario:";
-            label7.Text = idiomaIngles ? "Role:" : "Rol:";
+            label6.Text = idiomaIngles ? "User:" : ClsIdioma.T("Usuario:");
+            label7.Text = idiomaIngles ? "Role:" : ClsIdioma.T("Rol:");
             ActualizarFechaHora();
 
             // columna de las tablas
             ClnSKU.HeaderText = "SKU";
             ClnIdProducto.HeaderText = idiomaIngles ? "Product ID" : "IdProducto";
-            ClnCodigo.HeaderText = idiomaIngles ? "Code" : "Código";
-            ClnDescripcion.HeaderText = idiomaIngles ? "Description" : "Descripción";
-            ClnCantidad.HeaderText = idiomaIngles ? "Quantity" : "Cantidad";
-            ClnPrecioUnitario.HeaderText = idiomaIngles ? "Unit Price" : "Precio Unitario";
-            ClnImporte.HeaderText = idiomaIngles ? "Amount" : "Importe";
+            ClnCodigo.HeaderText = idiomaIngles ? "Code" : ClsIdioma.T("Código");
+            ClnDescripcion.HeaderText = idiomaIngles ? "Description" : ClsIdioma.T("Descripción");
+            ClnCantidad.HeaderText = idiomaIngles ? "Quantity" : ClsIdioma.T("Cantidad");
+            ClnPrecioUnitario.HeaderText = idiomaIngles ? "Unit Price" : ClsIdioma.T("Precio Unitario");
+            ClnImporte.HeaderText = idiomaIngles ? "Amount" : ClsIdioma.T("Importe");
 
             // Tabla de importes
-            label1.Text = idiomaIngles ? "Subtotal" : "Subtotal";
-            label2.Text = idiomaIngles ? "Discount/Surcharge" : "Descuento/Recargo";
-            label5.Text = idiomaIngles ? "Total" : "Total";
+            label1.Text = idiomaIngles ? ClsIdioma.T("Subtotal") : ClsIdioma.T("Subtotal");
+            label2.Text = idiomaIngles ? "Discount/Surcharge" : ClsIdioma.T("Descuento/Recargo");
+            label5.Text = idiomaIngles ? ClsIdioma.T("Total") : ClsIdioma.T("Total");
 
             // fromulario
-            this.Text = idiomaIngles ? "Sales Terminal" : "Presentación";
+            this.Text = idiomaIngles ? "Sales Terminal" : ClsIdioma.T("Presentación");
+
+            // Fecha, hora y mensaje de bienvenida se arman por código: se vuelven a armar en el idioma nuevo.
+            ActualizarFechaHora();
+
+            if (modoBienvenida)
+            {
+                AplicarModoPantalla();
+            }
         }
 
         #region Metodo
@@ -256,6 +439,13 @@ namespace CapaVista
                 int espacioInferior = 10;
 
                 pnlUsuario.SetBounds(0, alto - altoPie, ancho, altoPie);
+
+                if (modoBienvenida)
+                {
+                    UbicarBienvenida(ancho, altoMenu, pnlUsuario.Top);
+                    UbicarFechaHora();
+                    return;   // el finally reanuda el diseño
+                }
 
                 int anchoDerecha = Math.Clamp((int)(ancho * 0.32), 260, 360);
                 int xDerecha = ancho - margen - anchoDerecha;
@@ -404,8 +594,7 @@ namespace CapaVista
             //Administración operaciones
             permisosToolStripMenuItem.Enabled = TieneAlguno(1010, 1020, 1270);
             gestioToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1280);
-            bitacoraToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1290);
-        }
+            bitacoraToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1290);        }
         //Ingreso de plata
         public enum TipoMovimiento
         {
@@ -453,14 +642,14 @@ namespace CapaVista
         {
             if (cantidad <= 0)
             {
-                MessageBox.Show("La cantidad debe ser mayor a cero.", "Cantidad inválida",
+                MessageBox.Show(ClsIdioma.T("La cantidad debe ser mayor a cero."), ClsIdioma.T("Cantidad inválida"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
             if (precio < 0)
             {
-                MessageBox.Show("El precio no puede ser negativo.", "Precio inválido",
+                MessageBox.Show(ClsIdioma.T("El precio no puede ser negativo."), ClsIdioma.T("Precio inválido"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
@@ -494,13 +683,44 @@ namespace CapaVista
             {
                 decimal stockRestante = Math.Max(0m, stockDisponible - cantidadYaCargada - cantidadEnGrillaSecundaria);
 
-                MessageBox.Show($"Stock insuficiente.\n" + $"Stock en sistema: {stockDisponible}\n" + $"Cantidad en venta principal: {cantidadYaCargada}\n" +
-                    $"Cantidad en venta secundaria: {cantidadEnGrillaSecundaria}\n" + $"Stock disponible para agregar: {stockRestante}\n" + $"Cantidad a agregar: {cantidad}",
-                    "Stock insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show((ClsIdioma.Ingles ? $"Insufficient stock.\n" : $"Stock insuficiente.\n") + (ClsIdioma.Ingles ? $"Stock in system: {stockDisponible}\n" : $"Stock en sistema: {stockDisponible}\n") + (ClsIdioma.Ingles ? $"Quantity in main sale: {cantidadYaCargada}\n" : $"Cantidad en venta principal: {cantidadYaCargada}\n") +
+                    (ClsIdioma.Ingles ? $"Quantity in secondary sale: {cantidadEnGrillaSecundaria}\n" : $"Cantidad en venta secundaria: {cantidadEnGrillaSecundaria}\n") + (ClsIdioma.Ingles ? $"Stock available to add: {stockRestante}\n" : $"Stock disponible para agregar: {stockRestante}\n") + (ClsIdioma.Ingles ? $"Quantity to add: {cantidad}" : $"Cantidad a agregar: {cantidad}"),
+                    ClsIdioma.T("Stock insuficiente"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
             }
 
+
+            // Si el producto ya está en la venta (fuera de promociones), se suma la cantidad
+            // a esa fila en vez de agregar otra. Las filas de promoción no se mezclan.
+            if (codigoBarra != "PROMOCION")
+            {
+                foreach (DataGridViewRow fila in dtgPresentacion.Rows)
+                {
+                    if (fila.IsNewRow || Convert.ToString(fila.Cells["ClnCodigo"].Value) == "PROMOCION")
+                        continue;
+
+                    if (int.TryParse(Convert.ToString(fila.Cells["ClnIdProducto"].Value), out int idFila) && idFila == idProducto)
+                    {
+                        decimal.TryParse(Convert.ToString(fila.Cells["ClnCantidad"].Value), out decimal cantidadFila);
+                        decimal.TryParse(Convert.ToString(fila.Cells["ClnPrecioUnitario"].Value), out decimal precioFila);
+
+                        decimal nuevaCantidad = cantidadFila + cantidad;
+
+                        fila.Cells["ClnCantidad"].Value = nuevaCantidad;
+                        fila.Cells["ClnImporte"].Value = Math.Round(nuevaCantidad * precioFila, 2);
+
+                        dtgPresentacion.ClearSelection();
+                        dtgPresentacion.CurrentCell = fila.Cells["ClnDescripcion"];
+                        fila.Selected = true;
+
+                        CalcularYMostrarMontos();
+                        dtgPresentacion.Refresh();
+
+                        return true;
+                    }
+                }
+            }
 
             DataGridViewRow filaDestino = null;
 
@@ -551,7 +771,7 @@ namespace CapaVista
             {
                 if (!decimal.TryParse(txtCantidad.Text, out cantidad) || cantidad <= 0)
                 {
-                    MessageBox.Show("Ingrese una cantidad válida mayor a 0.", "Cantidad inválida",
+                    MessageBox.Show(ClsIdioma.T("Ingrese una cantidad válida mayor a 0."), ClsIdioma.T("Cantidad inválida"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtCantidad.SelectAll();
@@ -566,7 +786,7 @@ namespace CapaVista
 
             if (tablaProducto.Rows.Count == 0)
             {
-                MessageBox.Show("No se encontró un producto con ese código de barras.", "Producto no encontrado",
+                MessageBox.Show(ClsIdioma.T("No se encontró un producto con ese código de barras."), ClsIdioma.T("Producto no encontrado"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigoBarra.SelectAll();
@@ -599,8 +819,8 @@ namespace CapaVista
         {
             DateTime ahora = DateTime.Now;
 
-            lblFecha.Text = (idiomaIngles ? "Date: " : "Fecha: ") + ahora.ToString("dd/MM/yyyy");
-            lblHora.Text = (idiomaIngles ? "Time: " : "Hora: ") + ahora.ToString("HH:mm:ss");
+            lblFecha.Text = (idiomaIngles ? "Date: " : ClsIdioma.T("Fecha: ")) + ahora.ToString("dd/MM/yyyy");
+            lblHora.Text = (idiomaIngles ? "Time: " : ClsIdioma.T("Hora: ")) + ahora.ToString("HH:mm:ss");
 
             // El ancho de los labels cambia con el texto: se reubican para que no se corran.
             UbicarFechaHora();
@@ -706,13 +926,13 @@ namespace CapaVista
 
                 if (!SesionUsuario.Permisos.Contains(730))
                 {
-                    MessageBox.Show("No hay una caja abierta. Pida a un encargado que abra la caja para poder vender.",
-                        "Caja cerrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ClsIdioma.T("No hay una caja abierta. Pida a un encargado que abra la caja para poder vender."),
+                        ClsIdioma.T("Caja cerrada"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
 
-                DialogResult respuesta = MessageBox.Show("No hay una caja abierta.\n\n¿Desea abrirla ahora?",
-                    "Caja cerrada", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult respuesta = MessageBox.Show(ClsIdioma.T("No hay una caja abierta.\n\n¿Desea abrirla ahora?"),
+                    ClsIdioma.T("Caja cerrada"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta != DialogResult.Yes)
                 {
@@ -726,7 +946,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo verificar la caja.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -736,12 +956,13 @@ namespace CapaVista
             if (lstDescripcion.SelectedIndex < 0 || tablaProductosEncontrados == null)
                 return;
 
-            decimal cantidad;
+            // Sin cantidad escrita se agrega 1, igual que con el código de barras.
+            decimal cantidad = 1;
 
-            if (!decimal.TryParse(txtCantidad.Text.Trim(), out cantidad) ||
-                cantidad <= 0)
+            if (!string.IsNullOrWhiteSpace(txtCantidad.Text) &&
+                (!decimal.TryParse(txtCantidad.Text.Trim(), out cantidad) || cantidad <= 0))
             {
-                MessageBox.Show("Ingresá una cantidad válida mayor que cero.", "Cantidad inválida",
+                MessageBox.Show(ClsIdioma.T("Ingresá una cantidad válida mayor que cero."), ClsIdioma.T("Cantidad inválida"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCantidad.Focus();
@@ -778,6 +999,7 @@ namespace CapaVista
             lstDescripcion.Visible = false;
             lstDescripcion.Items.Clear();
             txtCodigoBarra.Clear();
+            txtCantidad.Clear();   // la próxima vuelve a ser 1 si no se escribe otra
             txtCodigoBarra.Focus();
         }
 
@@ -831,7 +1053,7 @@ namespace CapaVista
             {
                 lstDescripcion.Visible = false;
 
-                MessageBox.Show("Error al buscar artículos: " + ex.Message, "Búsqueda de artículos",
+                MessageBox.Show(ClsIdioma.T("Error al buscar artículos: ") + ex.Message, ClsIdioma.T("Búsqueda de artículos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -858,6 +1080,10 @@ namespace CapaVista
         //Menu Item
         private void frmmenuPres_KeyDown(object sender, KeyEventArgs e)
         {
+            // Sin pantalla de venta no hay cobro (F2) ni segunda venta (F4).
+            if (modoBienvenida)
+                return;
+
             if (e.KeyCode == Keys.F2)
             {
                 e.SuppressKeyPress = true;
@@ -964,10 +1190,10 @@ namespace CapaVista
                 if (sesionCaja != null)
                 {
                     DialogResult arqueo = MessageBox.Show(
-                        "¿Desea hacer el arqueo y cerrar la caja?\n\n" +
-                        "Sí: cuenta el efectivo y cierra la caja.\n" +
-                        "No: cierra solo su sesión y la caja sigue abierta para el próximo turno.",
-                        "Cerrar caja", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                        ClsIdioma.T("¿Desea hacer el arqueo y cerrar la caja?\n\n") +
+                        ClsIdioma.T("Sí: cuenta el efectivo y cierra la caja.\n") +
+                        ClsIdioma.T("No: cierra solo su sesión y la caja sigue abierta para el próximo turno."),
+                        ClsIdioma.T("Cerrar caja"), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
                     if (arqueo == DialogResult.Cancel)
                     {
@@ -989,13 +1215,13 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo verificar la caja.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
 
-            DialogResult resultado = MessageBox.Show("Estas seguro de cerrar la sesión?", "Cerrar sesión", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult resultado = MessageBox.Show(ClsIdioma.T("Estas seguro de cerrar la sesión?"), ClsIdioma.T("Cerrar sesión"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (resultado == DialogResult.Yes)
             {
@@ -1010,8 +1236,8 @@ namespace CapaVista
             if (SesionUsuario.SesionActiva)
             {
                 MessageBox.Show(
-                    "Ya hay una sesión abierta. Debe cerrar la sesión actual antes de iniciar otra.",
-                    "Sesión abierta",
+                    ClsIdioma.T("Ya hay una sesión abierta. Debe cerrar la sesión actual antes de iniciar otra."),
+                    ClsIdioma.T("Sesión abierta"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
                 );
@@ -1030,7 +1256,7 @@ namespace CapaVista
         }
         private void tollClosed_Click(object sender, EventArgs e)
         {
-            DialogResult resultado = MessageBox.Show("Estas seguro de cerrar la sesión?", "Cerrar sesión", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult resultado = MessageBox.Show(ClsIdioma.T("Estas seguro de cerrar la sesión?"), ClsIdioma.T("Cerrar sesión"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (resultado == DialogResult.Yes)
             {
                 Application.Exit();
@@ -1064,7 +1290,7 @@ namespace CapaVista
 
             if (!hayProductos)
             {
-                MessageBox.Show("Primero debe cargar al menos un producto en la venta principal.", "Venta sin productos",
+                MessageBox.Show(ClsIdioma.T("Primero debe cargar al menos un producto en la venta principal."), ClsIdioma.T("Venta sin productos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigoBarra.Focus();
@@ -1098,7 +1324,7 @@ namespace CapaVista
 
                 if (producto == null)
                 {
-                    MessageBox.Show("No se recibió ningún producto seleccionado. " + "Revisá el botón de selección de frmBuscarArticulo.", "Producto no seleccionado",
+                    MessageBox.Show(ClsIdioma.T("No se recibió ningún producto seleccionado. ") + ClsIdioma.T("Revisá el botón de selección de frmBuscarArticulo."), ClsIdioma.T("Producto no seleccionado"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -1123,7 +1349,7 @@ namespace CapaVista
         {
             if (total <= 0)
             {
-                MessageBox.Show("Debe agregar al menos un producto para realizar el cobro.", "Cobrar venta",
+                MessageBox.Show(ClsIdioma.T("Debe agregar al menos un producto para realizar el cobro."), ClsIdioma.T("Cobrar venta"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigoBarra.Focus();
@@ -1166,7 +1392,7 @@ namespace CapaVista
 
                     if (datos == null || datos.Tables.Count < 2 || datos.Tables[0].Rows.Count == 0)
                     {
-                        MessageBox.Show("No se encontraron los datos de la promoción.");
+                        MessageBox.Show(ClsIdioma.T("No se encontraron los datos de la promoción."));
                         return;
                     }
 
@@ -1174,7 +1400,7 @@ namespace CapaVista
 
                     if (promo["Activo"] == DBNull.Value || !Convert.ToBoolean(promo["Activo"]))
                     {
-                        MessageBox.Show("La promoción seleccionada está inactiva.");
+                        MessageBox.Show(ClsIdioma.T("La promoción seleccionada está inactiva."));
                         return;
                     }
 
@@ -1182,7 +1408,7 @@ namespace CapaVista
 
                     if (detalles.Rows.Count == 0)
                     {
-                        MessageBox.Show("La promoción no tiene productos asociados.");
+                        MessageBox.Show(ClsIdioma.T("La promoción no tiene productos asociados."));
                         return;
                     }
 
@@ -1195,7 +1421,7 @@ namespace CapaVista
 
                     if (tiposEncontrados.Length == 0)
                     {
-                        MessageBox.Show("No se encontró el tipo de promoción.");
+                        MessageBox.Show(ClsIdioma.T("No se encontró el tipo de promoción."));
                         return;
                     }
 
@@ -1213,7 +1439,7 @@ namespace CapaVista
 
                         if (cantidadLleva <= 0 || cantidadPaga <= 0 || cantidadPaga >= cantidadLleva)
                         {
-                            MessageBox.Show("La mecánica de volumen no es válida.");
+                            MessageBox.Show(ClsIdioma.T("La mecánica de volumen no es válida."));
                             return;
                         }
                     }
@@ -1221,7 +1447,7 @@ namespace CapaVista
                     {
                         if (valor <= 0 || valor > 100)
                         {
-                            MessageBox.Show("El porcentaje de descuento no es válido.");
+                            MessageBox.Show(ClsIdioma.T("El porcentaje de descuento no es válido."));
                             return;
                         }
                     }
@@ -1229,13 +1455,13 @@ namespace CapaVista
                     {
                         if (valor <= 0)
                         {
-                            MessageBox.Show("El precio especial no es válido.");
+                            MessageBox.Show(ClsIdioma.T("El precio especial no es válido."));
                             return;
                         }
                     }
                     else
                     {
-                        MessageBox.Show("El tipo de promoción no es válido.");
+                        MessageBox.Show(ClsIdioma.T("El tipo de promoción no es válido."));
                         return;
                     }
 
@@ -1274,7 +1500,7 @@ namespace CapaVista
 
                         if (cantidadConfigurada <= 0 || precioUnitario < 0)
                         {
-                            MessageBox.Show("La cantidad o el precio de un producto no son válidos.");
+                            MessageBox.Show(ClsIdioma.T("La cantidad o el precio de un producto no son válidos."));
                             return;
                         }
 
@@ -1354,10 +1580,10 @@ namespace CapaVista
 
                         if (cantidadEnPrincipal + cantidadEnSecundaria + cantidadAgregar > stockDisponible)
                         {
-                            MessageBox.Show("Stock insuficiente para un producto de la promoción.\n\n" + $"ID del producto: {idProducto}\n" +
-                                $"Stock en sistema: {stockDisponible}\n" + $"En venta principal: {cantidadEnPrincipal}\n" + $"En venta secundaria: {cantidadEnSecundaria}\n" +
-                                $"Cantidad requerida por la promoción: {cantidadAgregar}",
-                                "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show(ClsIdioma.T("Stock insuficiente para un producto de la promoción.\n\n") + (ClsIdioma.Ingles ? $"Product ID: {idProducto}\n" : $"ID del producto: {idProducto}\n") +
+                                (ClsIdioma.Ingles ? $"Stock in system: {stockDisponible}\n" : $"Stock en sistema: {stockDisponible}\n") + (ClsIdioma.Ingles ? $"In main sale: {cantidadEnPrincipal}\n" : $"En venta principal: {cantidadEnPrincipal}\n") + (ClsIdioma.Ingles ? $"In secondary sale: {cantidadEnSecundaria}\n" : $"En venta secundaria: {cantidadEnSecundaria}\n") +
+                                (ClsIdioma.Ingles ? $"Quantity required by the promotion: {cantidadAgregar}" : $"Cantidad requerida por la promoción: {cantidadAgregar}"),
+                                ClsIdioma.T("Promociones"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                             return;
                         }
@@ -1413,10 +1639,11 @@ namespace CapaVista
                             descuentoRecargo = ajusteAnterior;
                             total = totalAnterior;
 
+                            RellenarFilas();
                             CalcularYMostrarMontos();
                             txtCodigoBarra.Focus();
 
-                            MessageBox.Show("No se pudo cargar toda la promoción. Se restauró la venta anterior.", "Promociones",
+                            MessageBox.Show(ClsIdioma.T("No se pudo cargar toda la promoción. Se restauró la venta anterior."), ClsIdioma.T("Promociones"),
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                             return;
@@ -1443,7 +1670,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al cargar la promoción: " + ex.Message, "Promociones",
+                    MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -1456,7 +1683,7 @@ namespace CapaVista
         {
             if (dtgPresentacion.CurrentRow == null || dtgPresentacion.CurrentRow.Cells["ClnIdProducto"].Value == null)
             {
-                MessageBox.Show("Seleccione un producto para cambiar la cantidad.", "Cambiar cantidad",
+                MessageBox.Show(ClsIdioma.T("Seleccione un producto para cambiar la cantidad."), ClsIdioma.T("Cambiar cantidad"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -1469,8 +1696,8 @@ namespace CapaVista
             if (codigoFila == "PROMOCION")
             {
                 MessageBox.Show(
-                    "No se puede modificar la cantidad de un producto que pertenece a una promoción.",
-                    "Cambiar cantidad",
+                    ClsIdioma.T("No se puede modificar la cantidad de un producto que pertenece a una promoción."),
+                    ClsIdioma.T("Cambiar cantidad"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
@@ -1481,7 +1708,7 @@ namespace CapaVista
 
             int idProducto = Convert.ToInt32(fila.Cells["ClnIdProducto"].Value);
             decimal cantidadActual = Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
-            string entrada = Microsoft.VisualBasic.Interaction.InputBox("Ingrese la nueva cantidad:", "Cambiar cantidad", cantidadActual.ToString());
+            string entrada = Microsoft.VisualBasic.Interaction.InputBox(ClsIdioma.T("Ingrese la nueva cantidad:"), ClsIdioma.T("Cambiar cantidad"), cantidadActual.ToString());
 
             if (string.IsNullOrWhiteSpace(entrada))
             {
@@ -1490,7 +1717,7 @@ namespace CapaVista
 
             if (!decimal.TryParse(entrada, out decimal nuevaCantidad) || nuevaCantidad <= 0)
             {
-                MessageBox.Show("Ingrese una cantidad válida mayor a 0.", "Cantidad inválida",
+                MessageBox.Show(ClsIdioma.T("Ingrese una cantidad válida mayor a 0."), ClsIdioma.T("Cantidad inválida"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -1536,10 +1763,10 @@ namespace CapaVista
             {
                 decimal stockRestante = Math.Max(0m, stockDisponible - cantidadEnGrillaPrincipalSinFila - cantidadEnGrillaSecundaria);
 
-                MessageBox.Show($"Stock insuficiente.\n\n" + $"Stock en sistema: {stockDisponible}\n" +
-                    $"Otras unidades en venta principal: {cantidadEnGrillaPrincipalSinFila}\n" + $"Unidades en venta secundaria: {cantidadEnGrillaSecundaria}\n" +
-                    $"Disponible para esta fila: {stockRestante}\n" + $"Cantidad solicitada: {nuevaCantidad}",
-                    "Stock insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show((ClsIdioma.Ingles ? $"Insufficient stock.\n\n" : $"Stock insuficiente.\n\n") + (ClsIdioma.Ingles ? $"Stock in system: {stockDisponible}\n" : $"Stock en sistema: {stockDisponible}\n") +
+                    (ClsIdioma.Ingles ? $"Other units in main sale: {cantidadEnGrillaPrincipalSinFila}\n" : $"Otras unidades en venta principal: {cantidadEnGrillaPrincipalSinFila}\n") + (ClsIdioma.Ingles ? $"Units in secondary sale: {cantidadEnGrillaSecundaria}\n" : $"Unidades en venta secundaria: {cantidadEnGrillaSecundaria}\n") +
+                    (ClsIdioma.Ingles ? $"Available for this row: {stockRestante}\n" : $"Disponible para esta fila: {stockRestante}\n") + (ClsIdioma.Ingles ? $"Requested quantity: {nuevaCantidad}" : $"Cantidad solicitada: {nuevaCantidad}"),
+                    ClsIdioma.T("Stock insuficiente"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
@@ -1558,7 +1785,7 @@ namespace CapaVista
         {
             if (dtgPresentacion.CurrentRow == null || dtgPresentacion.CurrentRow.Cells["ClnIdProducto"].Value == null)
             {
-                MessageBox.Show("Seleccione un producto para quitar.", "Quitar producto",
+                MessageBox.Show(ClsIdioma.T("Seleccione un producto para quitar."), ClsIdioma.T("Quitar producto"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -1571,40 +1798,39 @@ namespace CapaVista
             if (Convert.ToString(fila.Cells["ClnCodigo"].Value) == "PROMOCION")
             {
                 DialogResult quitarPromos = MessageBox.Show(
-                    "Ese producto pertenece a una promoción.\n\n" +
-                    "Se van a quitar todos los productos de promociones y su descuento. ¿Continuar?",
-                    "Quitar promoción", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    ClsIdioma.T("Ese producto pertenece a una promoción.\n\n") +
+                    ClsIdioma.T("Se van a quitar todos los productos de promociones y su descuento. ¿Continuar?"),
+                    ClsIdioma.T("Quitar promoción"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (quitarPromos != DialogResult.Yes)
                 {
                     return;
                 }
 
-                foreach (DataGridViewRow filaPromo in dtgPresentacion.Rows)
+                // Se eliminan las filas (no solo se vacían), así no quedan huecos en la grilla.
+                List<DataGridViewRow> filasPromo = dtgPresentacion.Rows.Cast<DataGridViewRow>()
+                    .Where(f => !f.IsNewRow && Convert.ToString(f.Cells["ClnCodigo"].Value) == "PROMOCION")
+                    .ToList();
+
+                foreach (DataGridViewRow filaPromo in filasPromo)
                 {
-                    if (Convert.ToString(filaPromo.Cells["ClnCodigo"].Value) == "PROMOCION")
-                    {
-                        foreach (DataGridViewCell celdaPromo in filaPromo.Cells)
-                        {
-                            celdaPromo.Value = null;
-                        }
-                    }
+                    dtgPresentacion.Rows.Remove(filaPromo);
                 }
 
                 filasDePromocion.Clear();
                 promocionesAplicadas.Clear();
                 descuentoRecargo = 0m;
 
+                RellenarFilas();
                 CalcularYMostrarMontos();
                 txtCodigoBarra.Focus();
                 return;
             }
 
-            foreach (DataGridViewCell celda in fila.Cells)
-            {
-                celda.Value = null;
-            }
+            // Se elimina la fila: los productos de abajo suben y las filas vacías quedan al final.
+            dtgPresentacion.Rows.Remove(fila);
 
+            RellenarFilas();
             CalcularYMostrarMontos();
 
             txtCodigoBarra.Focus();
@@ -1619,20 +1845,21 @@ namespace CapaVista
             frmGestionBackup frm = new frmGestionBackup();
             frm.ShowDialog();
         }
-        private void FrmPresentacion_Load(object sender, EventArgs e)
+        private async void FrmPresentacion_Load(object sender, EventArgs e)
         {
 
-            // backup automatico
+            // backup automatico: con la base remota se descarga por la red, así que se hace
+            // en segundo plano para no congelar la pantalla al iniciar.
 
             try
             {
                 ClsBackupLogica backup = new ClsBackupLogica();
-                backup.BackupAutomatico();
+                await Task.Run(() => backup.BackupAutomatico());
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClsIdioma.T("No se pudo generar el backup automático: ") + ex.Message, ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void cargarArticuloNuevoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1654,12 +1881,12 @@ namespace CapaVista
         }
         private void españolToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            idiomaIngles = false;
+            ClsIdioma.CambiarIdioma(false);
             AplicarIdioma();
         }
         private void inglesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            idiomaIngles = true;
+            ClsIdioma.CambiarIdioma(true);
             AplicarIdioma();
         }
 

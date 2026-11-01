@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCargaEmpleados));
             label20 = new Label();
             cmbTipoTelefono = new ComboBox();
@@ -79,15 +81,14 @@
             label2 = new Label();
             label1 = new Label();
             tpgDireccion = new TabPage();
-            tpgLocalidad = new TabPage();
             tpgContacto = new TabPage();
             label21 = new Label();
             cmbRol = new ComboBox();
+            lblAyudaRol = new Label();
             chkHabilitarEdicion = new CheckBox();
             tpgDatosUsuario.SuspendLayout();
             tpgDatosPersonales.SuspendLayout();
             tpgDireccion.SuspendLayout();
-            tpgLocalidad.SuspendLayout();
             tpgContacto.SuspendLayout();
             SuspendLayout();
             // 
@@ -174,6 +175,7 @@
             // 
             txtDepartamento.Location = new Point(86, 223);
             txtDepartamento.Name = "txtDepartamento";
+            txtDepartamento.PlaceholderText = "Opcional";
             txtDepartamento.Size = new Size(83, 23);
             txtDepartamento.TabIndex = 17;
             // 
@@ -181,6 +183,7 @@
             // 
             txtPiso.Location = new Point(6, 223);
             txtPiso.Name = "txtPiso";
+            txtPiso.PlaceholderText = "Opcional";
             txtPiso.Size = new Size(71, 23);
             txtPiso.TabIndex = 16;
             // 
@@ -215,6 +218,7 @@
             // 
             txtAltura.Location = new Point(227, 167);
             txtAltura.Name = "txtAltura";
+            txtAltura.PlaceholderText = "Ej.: 1234";
             txtAltura.Size = new Size(100, 23);
             txtAltura.TabIndex = 15;
             // 
@@ -249,6 +253,7 @@
             // 
             txtCorreo.Location = new Point(6, 127);
             txtCorreo.Name = "txtCorreo";
+            txtCorreo.PlaceholderText = "ejemplo@correo.com";
             txtCorreo.Size = new Size(213, 23);
             txtCorreo.TabIndex = 11;
             txtCorreo.Validating += txtCorreo_Validating;
@@ -266,6 +271,7 @@
             // 
             txtCalle.Location = new Point(6, 167);
             txtCalle.Name = "txtCalle";
+            txtCalle.PlaceholderText = "Nombre de la calle";
             txtCalle.Size = new Size(215, 23);
             txtCalle.TabIndex = 14;
             // 
@@ -293,6 +299,7 @@
             // 
             txtTelefono.Location = new Point(6, 37);
             txtTelefono.Name = "txtTelefono";
+            txtTelefono.PlaceholderText = "Solo números, con característica";
             txtTelefono.Size = new Size(134, 23);
             txtTelefono.TabIndex = 18;
             txtTelefono.KeyPress += txtTelefono_KeyPress;
@@ -341,6 +348,7 @@
             // 
             txtDNI.Location = new Point(151, 239);
             txtDNI.Name = "txtDNI";
+            txtDNI.PlaceholderText = "8 números (sale del CUIL)";
             txtDNI.Size = new Size(134, 23);
             txtDNI.TabIndex = 6;
             txtDNI.KeyPress += txtDNI_KeyPress;
@@ -402,22 +410,23 @@
             // 
             // btnCrear
             // 
-            btnCrear.Location = new Point(325, 498);
+            btnCrear.Location = new Point(266, 498);
             btnCrear.Name = "btnCrear";
-            btnCrear.Size = new Size(75, 23);
+            btnCrear.Size = new Size(125, 30);
             btnCrear.TabIndex = 21;
-            btnCrear.Text = "GUARDAR";
+            btnCrear.Text = "CREAR EMPLEADO";
             btnCrear.UseVisualStyleBackColor = true;
             btnCrear.Click += btnCrear_Click;
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(167, 498);
+            btnVolver.Location = new Point(12, 498);
             btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(75, 23);
+            btnVolver.Size = new Size(80, 30);
             btnVolver.TabIndex = 19;
             btnVolver.Text = "VOLVER";
             btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
             // 
             // label19
             // 
@@ -439,9 +448,9 @@
             // 
             // btnNuevo
             // 
-            btnNuevo.Location = new Point(248, 498);
+            btnNuevo.Location = new Point(180, 498);
             btnNuevo.Name = "btnNuevo";
-            btnNuevo.Size = new Size(71, 23);
+            btnNuevo.Size = new Size(80, 30);
             btnNuevo.TabIndex = 20;
             btnNuevo.Text = "NUEVO";
             btnNuevo.UseVisualStyleBackColor = true;
@@ -449,11 +458,11 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(68, 498);
+            btnModificar.Location = new Point(397, 498);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(93, 23);
+            btnModificar.Size = new Size(127, 30);
             btnModificar.TabIndex = 18;
-            btnModificar.Text = "MODIFICAR";
+            btnModificar.Text = "GUARDAR CAMBIOS";
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
             // 
@@ -470,14 +479,14 @@
             // btnPermisos
             // 
             btnPermisos.BackColor = Color.Transparent;
-            btnPermisos.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnPermisos.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnPermisos.Image = (Image)resources.GetObject("btnPermisos.Image");
             btnPermisos.ImageAlign = ContentAlignment.TopCenter;
             btnPermisos.Location = new Point(405, 163);
             btnPermisos.Name = "btnPermisos";
             btnPermisos.Size = new Size(124, 102);
             btnPermisos.TabIndex = 34;
-            btnPermisos.Text = "Permisos";
+            btnPermisos.Text = "Permisos del rol";
             btnPermisos.TextAlign = ContentAlignment.BottomCenter;
             btnPermisos.UseVisualStyleBackColor = false;
             btnPermisos.Click += btnPermisos_Click;
@@ -486,7 +495,6 @@
             // 
             tpgDatosUsuario.Controls.Add(tpgDatosPersonales);
             tpgDatosUsuario.Controls.Add(tpgDireccion);
-            tpgDatosUsuario.Controls.Add(tpgLocalidad);
             tpgDatosUsuario.Controls.Add(tpgContacto);
             tpgDatosUsuario.Location = new Point(31, 139);
             tpgDatosUsuario.Name = "tpgDatosUsuario";
@@ -523,6 +531,7 @@
             // 
             txtApellido.Location = new Point(151, 45);
             txtApellido.Name = "txtApellido";
+            txtApellido.PlaceholderText = "Apellido del empleado";
             txtApellido.Size = new Size(134, 23);
             txtApellido.TabIndex = 7;
             // 
@@ -530,6 +539,7 @@
             // 
             txtNombre.Location = new Point(11, 45);
             txtNombre.Name = "txtNombre";
+            txtNombre.PlaceholderText = "Nombre del empleado";
             txtNombre.Size = new Size(134, 23);
             txtNombre.TabIndex = 6;
             // 
@@ -553,6 +563,14 @@
             // 
             // tpgDireccion
             // 
+            tpgDireccion.Controls.Add(cmbProvincia);
+            tpgDireccion.Controls.Add(label9);
+            tpgDireccion.Controls.Add(label10);
+            tpgDireccion.Controls.Add(cmbPartido);
+            tpgDireccion.Controls.Add(cmbLocalidad);
+            tpgDireccion.Controls.Add(label8);
+            tpgDireccion.Controls.Add(label11);
+            tpgDireccion.Controls.Add(txtPostal);
             tpgDireccion.Controls.Add(txtCalle);
             tpgDireccion.Controls.Add(label6);
             tpgDireccion.Controls.Add(txtAltura);
@@ -566,26 +584,8 @@
             tpgDireccion.Padding = new Padding(3);
             tpgDireccion.Size = new Size(364, 289);
             tpgDireccion.TabIndex = 1;
-            tpgDireccion.Text = "Dirección";
+            tpgDireccion.Text = "Dirección y Localidad";
             tpgDireccion.UseVisualStyleBackColor = true;
-            // 
-            // tpgLocalidad
-            // 
-            tpgLocalidad.Controls.Add(cmbProvincia);
-            tpgLocalidad.Controls.Add(label9);
-            tpgLocalidad.Controls.Add(label10);
-            tpgLocalidad.Controls.Add(cmbPartido);
-            tpgLocalidad.Controls.Add(cmbLocalidad);
-            tpgLocalidad.Controls.Add(label8);
-            tpgLocalidad.Controls.Add(label11);
-            tpgLocalidad.Controls.Add(txtPostal);
-            tpgLocalidad.Location = new Point(4, 24);
-            tpgLocalidad.Name = "tpgLocalidad";
-            tpgLocalidad.Padding = new Padding(3);
-            tpgLocalidad.Size = new Size(364, 289);
-            tpgLocalidad.TabIndex = 2;
-            tpgLocalidad.Text = "Localidad";
-            tpgLocalidad.UseVisualStyleBackColor = true;
             // 
             // tpgContacto
             // 
@@ -599,7 +599,7 @@
             tpgContacto.Name = "tpgContacto";
             tpgContacto.Padding = new Padding(3);
             tpgContacto.Size = new Size(364, 289);
-            tpgContacto.TabIndex = 3;
+            tpgContacto.TabIndex = 2;
             tpgContacto.Text = "Contacto";
             tpgContacto.UseVisualStyleBackColor = true;
             // 
@@ -622,6 +622,16 @@
             cmbRol.Size = new Size(124, 23);
             cmbRol.TabIndex = 37;
             // 
+            // 
+            // lblAyudaRol
+            // 
+            lblAyudaRol.Font = new Font("Segoe UI", 8F);
+            lblAyudaRol.ForeColor = SystemColors.GrayText;
+            lblAyudaRol.Location = new Point(405, 322);
+            lblAyudaRol.Name = "lblAyudaRol";
+            lblAyudaRol.Size = new Size(124, 80);
+            lblAyudaRol.TabIndex = 39;
+            lblAyudaRol.Text = "Los permisos dependen del rol: cambiarlos afecta a todos los empleados con ese rol.";
             // chkHabilitarEdicion
             // 
             chkHabilitarEdicion.AutoSize = true;
@@ -640,6 +650,7 @@
             ClientSize = new Size(536, 550);
             Controls.Add(chkHabilitarEdicion);
             Controls.Add(cmbRol);
+            Controls.Add(lblAyudaRol);
             Controls.Add(label21);
             Controls.Add(tpgDatosUsuario);
             Controls.Add(btnPermisos);
@@ -662,15 +673,29 @@
             tpgDatosPersonales.PerformLayout();
             tpgDireccion.ResumeLayout(false);
             tpgDireccion.PerformLayout();
-            tpgLocalidad.ResumeLayout(false);
-            tpgLocalidad.PerformLayout();
             tpgContacto.ResumeLayout(false);
             tpgContacto.PerformLayout();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(lstUsuarios, "Elegí un empleado para ver o modificar sus datos.");
+            ttAyuda.SetToolTip(mkdCuil, "Ingresá el CUIL con sus 11 números: el DNI se completa solo.");
+            ttAyuda.SetToolTip(cmbGenero, "Elegí el género del empleado.");
+            ttAyuda.SetToolTip(cmbProvincia, "Elegí la provincia: después se cargan sus partidos.");
+            ttAyuda.SetToolTip(cmbPartido, "Elegí el partido (primero elegí la provincia).");
+            ttAyuda.SetToolTip(cmbLocalidad, "Elegí la localidad (primero el partido). El código postal se completa solo.");
+            ttAyuda.SetToolTip(cmbTipoTelefono, "Elegí el tipo de teléfono (celular, fijo, etc.).");
+            ttAyuda.SetToolTip(cmbRol, "Rol del empleado: define qué puede hacer en el sistema.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private GroupBox groupBox1;
         private Label label7;
@@ -723,10 +748,10 @@
         private Label label2;
         private Label label1;
         private TabPage tpgDireccion;
-        private TabPage tpgLocalidad;
         private TabPage tpgContacto;
         private Label label21;
         private ComboBox cmbRol;
+        private Label lblAyudaRol;
         private CheckBox chkHabilitarEdicion;
     }
 }

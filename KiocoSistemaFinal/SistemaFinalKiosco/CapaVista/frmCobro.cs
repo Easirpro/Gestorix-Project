@@ -23,6 +23,7 @@ namespace CapaVista
         public frmCobro(decimal total, int usuario, List<DetalleVentaEntidad> detalles)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             totalVenta = total;
             idUsuario = usuario;

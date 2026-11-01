@@ -93,6 +93,7 @@ namespace CapaVista
         public frmInformesVentas(Informe informeInicial)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             botones = new Dictionary<Informe, Button>
             {
@@ -156,14 +157,15 @@ namespace CapaVista
 
             try
             {
-                CargarCombo(cmbVendedor, ConTodos(logica.ObtenerVendedores(), "IdUsuario", "Username", "Todos"), "IdUsuario");
-                CargarCombo(cmbMedioPago, ConTodos(logicaCaja.ObtenerMetodosPago(), "IdMetodoPago", "Nombre", "Todos"), "IdMetodoPago");
-                CargarCombo(cmbCategoria, ConTodos(logicaProducto.CargarCategoriasActivas(), "IdCategoria", "Nombre", "Todas"), "IdCategoria");
-                CargarCombo(cmbArticulo, ConTodos(logicaProducto.ObtenerListadoArticulos(null, null, null, null, null, null, false, false), "IdProducto", "Nombre", "Todos"), "IdProducto");
+                CargarCombo(cmbVendedor, ConTodos(logica.ObtenerVendedores(), "IdUsuario", "Username", ClsIdioma.T("Todos")), "IdUsuario");
+                CargarCombo(cmbMedioPago, ConTodos(logicaCaja.ObtenerMetodosPago(), "IdMetodoPago", "Nombre", ClsIdioma.T("Todos")), "IdMetodoPago");
+            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPago);   // solo cambia lo que se ve
+                CargarCombo(cmbCategoria, ConTodos(logicaProducto.CargarCategoriasActivas(), "IdCategoria", "Nombre", ClsIdioma.T("Todas")), "IdCategoria");
+                CargarCombo(cmbArticulo, ConTodos(logicaProducto.ObtenerListadoArticulos(null, null, null, null, null, null, false, false), "IdProducto", "Nombre", ClsIdioma.T("Todos")), "IdProducto");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar los filtros.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los filtros.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -212,7 +214,7 @@ namespace CapaVista
                 control.Enabled = activo;
 
             btnExportar.Enabled = activo;
-            lblTitulo.Text = activo ? Informes[informe].Titulo : "Informes de ventas";
+            lblTitulo.Text = activo ? ClsIdioma.T(Informes[informe].Titulo) : ClsIdioma.T("Informes de ventas");
 
             // Estilo de los botones, igual que en categorías y marcas.
             foreach (var boton in botones)
@@ -238,7 +240,7 @@ namespace CapaVista
             }
             else
             {
-                lblTotales.Text = "Elegí un informe para empezar.";
+                lblTotales.Text = ClsIdioma.T("Elegí un informe para empezar.");
             }
         }
         private void CrearColumnas((string Campo, string Encabezado, string Formato)[] columnas)
@@ -249,7 +251,7 @@ namespace CapaVista
                 {
                     Name = definicion.Campo,
                     DataPropertyName = definicion.Campo,
-                    HeaderText = definicion.Encabezado,
+                    HeaderText = ClsIdioma.T(definicion.Encabezado),
                     SortMode = DataGridViewColumnSortMode.Automatic
                 };
 
@@ -272,7 +274,7 @@ namespace CapaVista
 
             if (dtpDesde.Value.Date > dtpHasta.Value.Date)
             {
-                MessageBox.Show("La fecha desde no puede ser posterior a la fecha hasta.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La fecha desde no puede ser posterior a la fecha hasta."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 dtpDesde.Focus();
                 return;
@@ -295,7 +297,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo generar el informe.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo generar el informe.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -318,7 +320,7 @@ namespace CapaVista
 
             if (datos.Rows.Count == 0)
             {
-                lblTotales.Text = "No hay ventas con estos filtros.";
+                lblTotales.Text = ClsIdioma.T("No hay ventas con estos filtros.");
                 return;
             }
 
@@ -327,20 +329,20 @@ namespace CapaVista
             switch (informeActual)
             {
                 case Informe.PorFecha:
-                    lblTotales.Text = $"{Sumar("Ventas"):0} ventas   |   {Sumar("Unidades"):0.###} unidades   |   " + importes;
+                    lblTotales.Text = (ClsIdioma.Ingles ? $"{Sumar("Ventas"):0} sales   |   {Sumar("Unidades"):0.###} units   |" : $"{Sumar("Ventas"):0} ventas   |   {Sumar("Unidades"):0.###} unidades   |   ") + importes;
                     break;
                 case Informe.Detalle:
                     List<DataRow> ventas = datos.Rows.Cast<DataRow>().Where(f => f["Movimiento"].ToString() == "Venta").ToList();
                     List<DataRow> devoluciones = datos.Rows.Cast<DataRow>().Where(f => f["Movimiento"].ToString() != "Venta").ToList();
                     lblTotales.Text =
-                        $"{ventas.Select(f => Convert.ToInt32(f["IdVenta"])).Distinct().Count()} ventas: {ventas.Sum(f => Convert.ToDecimal(f["Importe"])):C2}   |   " +
-                        $"{devoluciones.Count} devoluciones: {-devoluciones.Sum(f => Convert.ToDecimal(f["Importe"])):C2}   |   Total: {Sumar("Importe"):C2}";
+                        (ClsIdioma.Ingles ? $"{ventas.Select(f => Convert.ToInt32(f["IdVenta"])).Distinct().Count()} sales: {ventas.Sum(f => Convert.ToDecimal(f["Importe"])):C2}   |" : $"{ventas.Select(f => Convert.ToInt32(f["IdVenta"])).Distinct().Count()} ventas: {ventas.Sum(f => Convert.ToDecimal(f["Importe"])):C2}   |   ") +
+                        (ClsIdioma.Ingles ? $"{devoluciones.Count} returns: {-devoluciones.Sum(f => Convert.ToDecimal(f["Importe"])):C2}   |   Total: {Sumar("Importe"):C2}" : $"{devoluciones.Count} devoluciones: {-devoluciones.Sum(f => Convert.ToDecimal(f["Importe"])):C2}   |   Total: {Sumar("Importe"):C2}");
                     break;
                 case Informe.PorMedioPago:
-                    lblTotales.Text = $"{Sumar("Pagos"):0} pagos   |   Cobrado: {Sumar("Cobrado"):C2}   |   Devuelto: {Sumar("Devuelto"):C2}   |   Total: {Sumar("Total"):C2}";
+                    lblTotales.Text = (ClsIdioma.Ingles ? $"{Sumar("Pagos"):0} payments   |   Collected: {Sumar("Cobrado"):C2}   |   Refunded: {Sumar("Devuelto"):C2}   |   Total: {Sumar("Total"):C2}" : $"{Sumar("Pagos"):0} pagos   |   Cobrado: {Sumar("Cobrado"):C2}   |   Devuelto: {Sumar("Devuelto"):C2}   |   Total: {Sumar("Total"):C2}");
                     break;
                 default:
-                    lblTotales.Text = $"{datos.Rows.Count} {(informeActual == Informe.PorRubro ? "rubros" : "artículos")}   |   {Sumar("Unidades"):0.###} unidades   |   " + importes;
+                    lblTotales.Text = (ClsIdioma.Ingles ? $"{datos.Rows.Count} {(informeActual == Informe.PorRubro ? "categories" : "products")}   |   {Sumar("Unidades"):0.###} units   |" : $"{datos.Rows.Count} {(informeActual == Informe.PorRubro ? "rubros" : "artículos")}   |   {Sumar("Unidades"):0.###} unidades   |   ") + importes;
                     break;
             }
         }
@@ -372,7 +374,7 @@ namespace CapaVista
         {
             if (informeActual == Informe.Ninguno || dgvInforme.Rows.Count == 0)
             {
-                MessageBox.Show("No hay datos para exportar.", "Exportar",
+                MessageBox.Show(ClsIdioma.T("No hay datos para exportar."), ClsIdioma.T("Exportar"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -382,7 +384,7 @@ namespace CapaVista
             using (SaveFileDialog guardar = new SaveFileDialog())
             {
                 guardar.Filter = "Archivo Excel (*.xlsx)|*.xlsx";
-                guardar.Title = "Guardar informe";
+                guardar.Title = ClsIdioma.T("Guardar informe");
                 guardar.FileName = titulo + " " + dtpDesde.Value.ToString("dd-MM-yyyy") + " al " + dtpHasta.Value.ToString("dd-MM-yyyy") + ".xlsx";
 
                 if (guardar.ShowDialog() != DialogResult.OK)
@@ -392,12 +394,12 @@ namespace CapaVista
                 {
                     GenerarExcel(guardar.FileName, titulo);
 
-                    MessageBox.Show("El informe se exportó correctamente.", "Exportar",
+                    MessageBox.Show(ClsIdioma.T("El informe se exportó correctamente."), ClsIdioma.T("Exportar"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("No se pudo exportar.\n\n" + ex.Message, "Error",
+                    MessageBox.Show(ClsIdioma.T("No se pudo exportar.\n\n") + ex.Message, ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

@@ -59,6 +59,7 @@
             // 
             txtNombre.Location = new Point(71, 84);
             txtNombre.Name = "txtNombre";
+            txtNombre.PlaceholderText = "Nombre de la marca";
             txtNombre.Size = new Size(170, 23);
             txtNombre.TabIndex = 2;
             // 

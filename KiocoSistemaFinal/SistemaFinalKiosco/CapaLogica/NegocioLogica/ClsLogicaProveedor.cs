@@ -86,6 +86,14 @@ namespace CapaLogica.NegocioLogica
         {
             datos.ModificarCorreo(correo);
         }
+        public bool ExisteCuitProveedor(string cuit, int idProveedorExcluir)
+        {
+            return datos.ExisteCuitProveedor(cuit, idProveedorExcluir);
+        }
+        public bool ExisteNombreProveedor(string nombre, int idProveedorExcluir)
+        {
+            return datos.ExisteNombreProveedor(nombre, idProveedorExcluir);
+        }
         public DataTable BuscarProveedor(string texto)
         {
             return datos.BuscarProveedor(texto);

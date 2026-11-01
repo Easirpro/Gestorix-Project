@@ -18,6 +18,7 @@ namespace CapaVista
         public frmBuscarArticulo()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.ReadOnly = false;
@@ -40,7 +41,7 @@ namespace CapaVista
         {
             if (dataGridView1.CurrentRow == null || dataGridView1.CurrentRow.IsNewRow)
             {
-                MessageBox.Show("Seleccione un artículo.");
+                MessageBox.Show(ClsIdioma.T("Seleccione un artículo."));
                 return;
             }
 
@@ -48,7 +49,7 @@ namespace CapaVista
 
             if (fila == null)
             {
-                MessageBox.Show("No se pudo obtener el artículo seleccionado.");
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el artículo seleccionado."));
                 return;
             }
 

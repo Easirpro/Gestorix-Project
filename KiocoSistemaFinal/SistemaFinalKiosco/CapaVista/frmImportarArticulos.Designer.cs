@@ -61,6 +61,7 @@
             // 
             txtTraerArchivo.Location = new Point(64, 219);
             txtTraerArchivo.Name = "txtTraerArchivo";
+            txtTraerArchivo.PlaceholderText = "Elegí el archivo de Excel a importar";
             txtTraerArchivo.Size = new Size(170, 23);
             txtTraerArchivo.TabIndex = 2;
             // 

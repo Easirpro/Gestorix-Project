@@ -47,6 +47,7 @@
             // 
             txtIngresoUsuario.Location = new Point(33, 77);
             txtIngresoUsuario.Name = "txtIngresoUsuario";
+            txtIngresoUsuario.PlaceholderText = "Tu nombre de usuario";
             txtIngresoUsuario.Size = new Size(173, 23);
             txtIngresoUsuario.TabIndex = 1;
             txtIngresoUsuario.KeyPress += txtIngresoUsuario_KeyPress;

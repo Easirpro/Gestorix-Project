@@ -19,8 +19,19 @@ namespace CapaVista
         public frmBitacora()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             ConfigurarFormulario();
             ConfigurarEventos();
+
+            // La descripción se guarda en castellano; en inglés se traducen sus frases fijas al mostrarla.
+            dgvBitacora.CellFormatting += (sender, e) =>
+            {
+                if (ClsIdioma.Ingles && e.RowIndex >= 0 && e.Value is string texto && dgvBitacora.Columns[e.ColumnIndex].Name == "Descripcion")
+                {
+                    e.Value = ClsIdioma.TraducirBitacora(texto);
+                }
+            };
+
             CargarBitacora();
 
         }
@@ -43,7 +54,7 @@ namespace CapaVista
             this.dgvBitacora.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             this.dtpFechaDesde.Value = DateTime.Today.AddDays(-30);
             this.dtpFechaHasta.Value = DateTime.Today;
-            this.lblCategoriaActual.Text = "Todos los registros";
+            this.lblCategoriaActual.Text = ClsIdioma.T("Todos los registros");
         }
         private void ConfigurarEventos()
         {
@@ -52,6 +63,14 @@ namespace CapaVista
             this.dgvBitacora.SelectionChanged += dgvBitacora_SelectionChanged;
             this.dgvBitacora.CellFormatting += dgvBitacora_CellFormatting;
             this.dgvBitacora.SizeChanged += (sender, e) => AjustarAnchoColumnas();
+
+            // La primera carga se hace antes de que la grilla esté en pantalla: al mostrarse se vuelve a medir.
+            this.Shown += (sender, e) => AjustarAnchoColumnas();
+
+            // Al cambiar de idioma cambian los encabezados: se vuelven a medir las columnas.
+            Action idioma = () => BeginInvoke(new Action(AjustarAnchoColumnas));
+            ClsIdioma.IdiomaCambiado += idioma;
+            this.Disposed += (sender, e) => ClsIdioma.IdiomaCambiado -= idioma;
         }
         private void CargarBitacora()
         {
@@ -104,8 +123,8 @@ namespace CapaVista
                 }
 
                 MessageBox.Show(
-                    "No se pudieron cargar los registros.\n\n" + ex.Message,
-                    "Error",
+                    ClsIdioma.T("No se pudieron cargar los registros.\n\n") + ex.Message,
+                    ClsIdioma.T("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -175,7 +194,7 @@ namespace CapaVista
 
             DataGridViewColumn columna = this.dgvBitacora.Columns[nombre];
 
-            columna.HeaderText = encabezado;
+            columna.HeaderText = ClsIdioma.T(encabezado);
 
             if (formato != null)
             {
@@ -184,8 +203,6 @@ namespace CapaVista
         }
         // Columna que se estira o se achica para ocupar justo el ancho disponible (la primera que exista y esté visible).
         private static readonly string[] ColumnasFlexibles = { "Descripcion", "Mensaje", "Proveedor" };
-        // Si el texto no entra, se corta con "…": el contenido completo se ve en el panel de detalle.
-        private const int AnchoMinimoFlexible = 200;
 
         private void AjustarAnchoColumnas()
         {
@@ -207,7 +224,7 @@ namespace CapaVista
                 return;
             }
 
-            // La columna flexible ocupa justo lo que dejan las demás: no queda espacio gris ni barra horizontal.
+            // La columna flexible ocupa lo que dejan las demás (sin espacio gris); si su texto no entra, hay barra horizontal.
             // Se calcula si las filas van a necesitar barra vertical: recién cargada la grilla todavía no se ve.
             bool barraVertical = this.dgvBitacora.ColumnHeadersHeight + this.dgvBitacora.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
                 > this.dgvBitacora.ClientSize.Height;
@@ -218,10 +235,8 @@ namespace CapaVista
                 .Where(c => c.Visible && c != flexible)
                 .Sum(c => c.Width);
 
-            // Nunca más angosta que su contenido, salvo que este supere el mínimo (ahí se corta con "…").
-            int minimo = Math.Min(AnchoMinimoFlexible, flexible.Width);
-
-            flexible.Width = Math.Max(minimo, disponible - otras);
+            // Nunca más angosta que su contenido: si no entra, aparece la barra horizontal.
+            flexible.Width = Math.Max(flexible.Width, disponible - otras);
         }
         private void AplicarFiltros()
         {
@@ -230,7 +245,7 @@ namespace CapaVista
         private void SeleccionarCategoria(string categoria, string titulo)
         {
             this.categoriaActual = categoria;
-            this.lblCategoriaActual.Text = titulo;
+            this.lblCategoriaActual.Text = ClsIdioma.T(titulo);
 
             this.AplicarFiltros();
         }
@@ -256,61 +271,61 @@ namespace CapaVista
                     return;
                 }
 
-                this.lblDetalleFecha.Text = "Compra: " + ObtenerValor(fila, "FechaCompra");
+                this.lblDetalleFecha.Text = ClsIdioma.T("Compra: ") + ClsIdioma.Dato(ObtenerValor(fila, "FechaCompra"));
 
                 this.lblDetalleUsuario.Text =
-                    "Cargó: " + ObtenerValor(fila, "CargadoPor") +
-                    "  |  Recibió: " + ObtenerValor(fila, "RecibidoPor");
+                    ClsIdioma.T("Cargó: ") + ClsIdioma.Dato(ObtenerValor(fila, "CargadoPor")) +
+                    ClsIdioma.T("  |  Recibió: ") + ClsIdioma.Dato(ObtenerValor(fila, "RecibidoPor"));
 
                 this.lblDetalleAccion.Text =
-                    "Proveedor: " + ObtenerValor(fila, "Proveedor") +
-                    " (CUIT " + ObtenerValor(fila, "CUIT") + ") - Sucursal: " + ObtenerValor(fila, "Sucursal");
+                    ClsIdioma.T("Proveedor: ") + ClsIdioma.Dato(ObtenerValor(fila, "Proveedor")) +
+                    ClsIdioma.T(" (CUIT ") + ClsIdioma.Dato(ObtenerValor(fila, "CUIT")) + ClsIdioma.T(") - Sucursal: ") + ClsIdioma.Dato(ObtenerValor(fila, "Sucursal"));
 
                 bool recibida = ObtenerValor(fila, "IdRecepcion") != "Sin datos";
 
                 // Tres renglones cortos para que entren en el panel sin cortarse.
                 this.lblDetalleDescripcion.Text =
-                    "Estado: " + ObtenerValor(fila, "Estado") +
-                    "  |  Entrega estimada: " + ObtenerValor(fila, "FechaEntregaEstimada") +
+                    ClsIdioma.T("Estado: ") + ClsIdioma.Dato(ObtenerValor(fila, "Estado")) +
+                    ClsIdioma.T("  |  Entrega estimada: ") + ClsIdioma.Dato(ObtenerValor(fila, "FechaEntregaEstimada")) +
                     Environment.NewLine +
-                    "Pago: " + ObtenerValor(fila, "CondicionPago") + ", saldo " + ObtenerValor(fila, "Saldo") +
+                    ClsIdioma.T("Pago: ") + (ClsIdioma.Ingles && ObtenerValor(fila, "CondicionPago") == "Contado" ? "Cash" : ClsIdioma.Dato(ObtenerValor(fila, "CondicionPago"))) + ClsIdioma.T(", saldo ") + ClsIdioma.Dato(ObtenerValor(fila, "Saldo")) +
                     (recibida
-                        ? "  |  Boleta: " + ObtenerValor(fila, "TotalBoleta") + " (" + ObtenerValor(fila, "Resultado").ToLower() + ")"
-                        : "  |  Sin recibir") +
+                        ? ClsIdioma.T("  |  Boleta: ") + ClsIdioma.Dato(ObtenerValor(fila, "TotalBoleta")) + " (" + ClsIdioma.Dato(ObtenerValor(fila, "Resultado")).ToLower() + ")"
+                        : ClsIdioma.T("  |  Sin recibir")) +
                     Environment.NewLine +
-                    "Motivos: " + ObtenerValor(fila, "Motivos") +
-                    "  |  Observaciones: " + ObtenerValor(fila, "Observaciones");
+                    ClsIdioma.T("Motivos: ") + ClsIdioma.Dato(ObtenerValor(fila, "Motivos")) +
+                    ClsIdioma.T("  |  Observaciones: ") + ClsIdioma.Dato(ObtenerValor(fila, "Observaciones"));
 
                 return;
             }
 
-            this.lblDetalleFecha.Text = "Fecha: " + ObtenerValor(fila, "FechaHora");
+            this.lblDetalleFecha.Text = ClsIdioma.T("Fecha: ") + ClsIdioma.Dato(ObtenerValor(fila, "FechaHora"));
 
             if (this.categoriaActual == "Errores")
             {
-                this.lblDetalleUsuario.Text = "ID usuario: " + ObtenerValor(fila, "IdUsuario");
+                this.lblDetalleUsuario.Text = ClsIdioma.T("ID usuario: ") + ClsIdioma.Dato(ObtenerValor(fila, "IdUsuario"));
 
-                this.lblDetalleAccion.Text = "Excepción: " + ObtenerValor(fila, "TipoExcepcion");
+                this.lblDetalleAccion.Text = ClsIdioma.T("Excepción: ") + ClsIdioma.Dato(ObtenerValor(fila, "TipoExcepcion"));
 
                 string mensaje = ObtenerValor(fila, "Mensaje");
                 string detalle = ObtenerValor(fila, "DetalleTecnico");
-                string estado = ObtenerValor(fila, "Estado");
-                string modulo = ObtenerValor(fila, "Modulo");
+                string estado = ClsIdioma.Dato(ObtenerValor(fila, "Estado"));
+                string modulo = ClsIdioma.Dato(ObtenerValor(fila, "Modulo"));
 
                 this.lblDetalleDescripcion.Text =
-                    "Módulo: " + modulo +
+                    ClsIdioma.T("Módulo: ") + modulo +
                     Environment.NewLine +
-                    "Estado: " + estado +
+                    ClsIdioma.T("Estado: ") + estado +
                     Environment.NewLine +
-                    "Mensaje: " + mensaje +
+                    ClsIdioma.T("Mensaje: ") + mensaje +
                     Environment.NewLine +
-                    "Detalle técnico: " + detalle;
+                    ClsIdioma.T("Detalle técnico: ") + detalle;
             }
             else
             {
-                this.lblDetalleUsuario.Text = "Usuario: " + ObtenerValor(fila, "Username");
-                this.lblDetalleAccion.Text = "Acción: " + ObtenerValor(fila, "Accion");
-                this.lblDetalleDescripcion.Text = "Descripción: " + ObtenerValor(fila, "Descripcion");
+                this.lblDetalleUsuario.Text = ClsIdioma.T("Usuario: ") + ClsIdioma.Dato(ObtenerValor(fila, "Username"));
+                this.lblDetalleAccion.Text = ClsIdioma.T("Acción: ") + ClsIdioma.Dato(ObtenerValor(fila, "Accion"));
+                this.lblDetalleDescripcion.Text = ClsIdioma.T("Descripción: ") + ClsIdioma.TraducirBitacora(ObtenerValor(fila, "Descripcion"));
             }
         }
         private string ObtenerValor(DataGridViewRow fila, string columna)
@@ -348,7 +363,7 @@ namespace CapaVista
         }
         private void LimpiarDetalles()
         {
-            this.lblDetalleFecha.Text = "Fecha: "; this.lblDetalleUsuario.Text = "Usuario: "; this.lblDetalleAccion.Text = "Acción: "; this.lblDetalleDescripcion.Text = "Descripción: ";
+            this.lblDetalleFecha.Text = ClsIdioma.T("Fecha: "); this.lblDetalleUsuario.Text = ClsIdioma.T("Usuario: "); this.lblDetalleAccion.Text = ClsIdioma.T("Acción: "); this.lblDetalleDescripcion.Text = ClsIdioma.T("Descripción: ");
         }
         private void dgvBitacora_SelectionChanged(object sender, EventArgs e)
         {
@@ -411,7 +426,7 @@ namespace CapaVista
             this.dtpFechaDesde.Value = DateTime.Today.AddDays(-30);
             this.dtpFechaHasta.Value = DateTime.Today;
             this.txtBuscar.Clear();
-            this.lblCategoriaActual.Text = "Todos los registros";
+            this.lblCategoriaActual.Text = ClsIdioma.T("Todos los registros");
 
             this.AplicarFiltros();
         }

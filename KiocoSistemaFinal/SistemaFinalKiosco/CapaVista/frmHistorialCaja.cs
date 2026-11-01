@@ -18,6 +18,8 @@ namespace CapaVista
         public frmHistorialCaja()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
+            ClsGrilla.AjustarAlContenido(dgvSesiones);   // columnas al ancho del texto, con scroll si no entra
             ConfigurarGrid();
         }
 
@@ -47,7 +49,7 @@ namespace CapaVista
         {
             if (dtpDesde.Value.Date > dtpHasta.Value.Date)
             {
-                MessageBox.Show("La fecha desde no puede ser mayor a la fecha hasta.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La fecha desde no puede ser mayor a la fecha hasta."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -71,11 +73,11 @@ namespace CapaVista
                     if (diferencia > 0) sobrantes += diferencia;
                 }
 
-                lblTotales.Text = $"Cajas: {tabla.Rows.Count}    Faltantes: $ {faltantes:N2}    Sobrantes: $ {sobrantes:N2}";
+                lblTotales.Text = (ClsIdioma.Ingles ? $"Cash registers: {tabla.Rows.Count}    Shortages: $ {faltantes:N2}    Overages: $ {sobrantes:N2}" : $"Cajas: {tabla.Rows.Count}    Faltantes: $ {faltantes:N2}    Sobrantes: $ {sobrantes:N2}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo obtener el historial de cajas.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el historial de cajas.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -103,7 +105,7 @@ namespace CapaVista
             {
                 if (dgvSesiones.Columns.Contains(titulo.Key))
                 {
-                    dgvSesiones.Columns[titulo.Key].HeaderText = titulo.Value;
+                    dgvSesiones.Columns[titulo.Key].HeaderText = ClsIdioma.T(titulo.Value);
                 }
             }
 

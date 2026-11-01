@@ -17,6 +17,8 @@ namespace CapaVista
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNuevaCompra));
             label1 = new Label();
             label2 = new Label();
@@ -180,6 +182,7 @@ namespace CapaVista
             // 
             txtProveedor.Location = new Point(12, 20);
             txtProveedor.Name = "txtProveedor";
+            txtProveedor.PlaceholderText = "Escribí el nombre o CUIT y elegilo de la lista";
             txtProveedor.Size = new Size(214, 23);
             txtProveedor.TabIndex = 0;
             txtProveedor.TextChanged += txtProveedor_TextChanged;
@@ -216,6 +219,8 @@ namespace CapaVista
             lstProveedores.Size = new Size(214, 100);
             lstProveedores.TabIndex = 9;
             lstProveedores.Visible = false;
+            lstProveedores.DoubleClick += lstProveedores_DoubleClick;
+            lstProveedores.KeyDown += lstProveedores_KeyDown;
             // 
             // gpbPedido
             // 
@@ -328,6 +333,7 @@ namespace CapaVista
             // 
             txtNumeroComprobante.Location = new Point(482, 20);
             txtNumeroComprobante.Name = "txtNumeroComprobante";
+            txtNumeroComprobante.PlaceholderText = "Ej.: 0001-00001234";
             txtNumeroComprobante.Size = new Size(200, 23);
             txtNumeroComprobante.TabIndex = 3;
             // 
@@ -351,6 +357,7 @@ namespace CapaVista
             // 
             txtCodigobarra.Location = new Point(14, 38);
             txtCodigobarra.Name = "txtCodigobarra";
+            txtCodigobarra.PlaceholderText = "Código de barras, SKU o nombre del producto";
             txtCodigobarra.Size = new Size(270, 23);
             txtCodigobarra.TabIndex = 1;
             txtCodigobarra.TextChanged += txtCodigobarra_TextChanged;
@@ -497,6 +504,7 @@ namespace CapaVista
             txtObservaciones.Location = new Point(12, 548);
             txtObservaciones.Multiline = true;
             txtObservaciones.Name = "txtObservaciones";
+            txtObservaciones.PlaceholderText = "Notas de la compra (opcional)";
             txtObservaciones.ScrollBars = ScrollBars.Vertical;
             txtObservaciones.Size = new Size(876, 50);
             txtObservaciones.TabIndex = 6;
@@ -637,11 +645,23 @@ namespace CapaVista
             gpbTotales.PerformLayout();
             grpCondicionPago.ResumeLayout(false);
             grpCondicionPago.PerformLayout();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbSucursal, "Sucursal del proveedor a la que le comprás: los productos y sus costos dependen de ella.");
+            ttAyuda.SetToolTip(cmbTipoComprobante, "Tipo de factura del proveedor: A, B o C.");
+            ttAyuda.SetToolTip(cmbCondicionPago, "Contado: se paga ahora. Cuenta corriente: queda como deuda con fecha de vencimiento.");
+            ttAyuda.SetToolTip(cmbMedioPagoCompra, "Con qué se paga la compra de contado.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private Label label1;
         private Label label2;

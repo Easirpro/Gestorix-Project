@@ -64,6 +64,7 @@ namespace CapaVista
         public frmListados(Modo modoInicial)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             ConfigurarGrilla();
             ConfigurarEventos();
@@ -108,7 +109,7 @@ namespace CapaVista
                 DataTable proveedores = new DataTable();
                 proveedores.Columns.Add("IdProveedor", typeof(int));
                 proveedores.Columns.Add("Nombre", typeof(string));
-                proveedores.Rows.Add(0, "Todos");
+                proveedores.Rows.Add(0, ClsIdioma.T("Todos"));
 
                 foreach (var proveedor in logicaProveedor.ObtenerProveedores().Rows
                     .Cast<DataRow>()
@@ -120,13 +121,13 @@ namespace CapaVista
                 }
 
                 CargarCombo(cmbProveedor, proveedores, "IdProveedor");
-                CargarCombo(cmbCategoria, ConTodos(logica.CargarCategoriasActivas(), "IdCategoria", "Todas"), "IdCategoria");
-                CargarCombo(cmbMarca, ConTodos(logica.CargarMarcasActivas(), "IdMarca", "Todas"), "IdMarca");
+                CargarCombo(cmbCategoria, ConTodos(logica.CargarCategoriasActivas(), "IdCategoria", ClsIdioma.T("Todas")), "IdCategoria");
+                CargarCombo(cmbMarca, ConTodos(logica.CargarMarcasActivas(), "IdMarca", ClsIdioma.T("Todas")), "IdMarca");
                 CargarSucursales();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar los filtros.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los filtros.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -137,7 +138,7 @@ namespace CapaVista
             DataTable sucursales = new DataTable();
             sucursales.Columns.Add("IdSucursal", typeof(int));
             sucursales.Columns.Add("Nombre", typeof(string));
-            sucursales.Rows.Add(0, "Todas");
+            sucursales.Rows.Add(0, ClsIdioma.T("Todas"));
 
             if (idProveedor.HasValue)
             {
@@ -150,7 +151,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("No se pudieron cargar las sucursales del proveedor.\n\n" + ex.Message, "Error",
+                    MessageBox.Show(ClsIdioma.T("No se pudieron cargar las sucursales del proveedor.\n\n") + ex.Message, ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -220,10 +221,10 @@ namespace CapaVista
             btnExportar.Enabled = modoActivo;
 
             // Textos según el modo.
-            chkFiltro.Text = precios ? "Solo con oferta" : "Solo para reponer";
-            lblTitulo.Text = precios ? "Lista de precios"
-                           : modo == Modo.Reposicion ? "Listado de reposición"
-                           : "Listados de precios y reposición";
+            chkFiltro.Text = precios ? ClsIdioma.T("Solo con oferta") : ClsIdioma.T("Solo para reponer");
+            lblTitulo.Text = precios ? ClsIdioma.T("Lista de precios")
+                           : modo == Modo.Reposicion ? ClsIdioma.T("Listado de reposición")
+                           : ClsIdioma.T("Listados de precios y reposición");
 
             // Estilo de los botones y la grilla, igual que categorías y marcas.
             Color colorPrecios = Color.DodgerBlue;
@@ -266,7 +267,7 @@ namespace CapaVista
                 {
                     Name = definicion.Campo,
                     DataPropertyName = definicion.Campo,
-                    HeaderText = definicion.Encabezado,
+                    HeaderText = ClsIdioma.T(definicion.Encabezado),
                     SortMode = DataGridViewColumnSortMode.Automatic
                 };
 
@@ -307,7 +308,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo cargar el listado.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo cargar el listado.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -328,7 +329,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 OcultarSugerencias();
-                MessageBox.Show("No se pudieron buscar los artículos.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron buscar los artículos.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -410,8 +411,8 @@ namespace CapaVista
         private void ActualizarCantidad()
         {
             lblCantidad.Text = modoActual == Modo.Ninguno
-                ? "Elegí un listado para empezar."
-                : (dgvListado.Rows.Count == 1 ? "1 artículo" : dgvListado.Rows.Count + " artículos");
+                ? ClsIdioma.T("Elegí un listado para empezar.")
+                : (dgvListado.Rows.Count == 1 ? ClsIdioma.T("1 artículo") : dgvListado.Rows.Count + ClsIdioma.T(" artículos"));
         }
         // Cada columna toma el ancho de su contenido y "Artículo" ocupa lo que sobra.
         private void AjustarAnchoColumnas()
@@ -436,7 +437,7 @@ namespace CapaVista
         {
             if (modoActual == Modo.Ninguno || dgvListado.Rows.Count == 0)
             {
-                MessageBox.Show("No hay artículos para exportar.", "Exportar",
+                MessageBox.Show(ClsIdioma.T("No hay artículos para exportar."), ClsIdioma.T("Exportar"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -446,7 +447,7 @@ namespace CapaVista
             using (SaveFileDialog guardar = new SaveFileDialog())
             {
                 guardar.Filter = "Archivo Excel (*.xlsx)|*.xlsx";
-                guardar.Title = "Guardar " + titulo.ToLower();
+                guardar.Title = ClsIdioma.Ingles ? "Save " + ClsIdioma.T(titulo).ToLower() : "Guardar " + titulo.ToLower();
                 guardar.FileName = titulo + " " + DateTime.Now.ToString("dd-MM-yyyy") + ".xlsx";
 
                 if (guardar.ShowDialog() != DialogResult.OK)
@@ -456,12 +457,12 @@ namespace CapaVista
                 {
                     GenerarExcel(guardar.FileName, titulo);
 
-                    MessageBox.Show("El archivo se exportó correctamente.", "Exportar",
+                    MessageBox.Show(ClsIdioma.T("El archivo se exportó correctamente."), ClsIdioma.T("Exportar"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("No se pudo exportar.\n\n" + ex.Message, "Error",
+                    MessageBox.Show(ClsIdioma.T("No se pudo exportar.\n\n") + ex.Message, ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

@@ -12,104 +12,173 @@ using CapaEntidades;
 
 namespace CapaVista
 {
-    // Listado de devoluciones. Usa el diseño (frmDevolucion.Designer.cs) que ya
-    // tiene el proyecto: solo se reemplaza este archivo de código.
+    // Listado de devoluciones: filtros por fecha, tipo y búsqueda; el motivo de la elegida se ve abajo.
     public partial class frmDevolucion : Form
     {
         private ClsDevolucionLogica logica = new ClsDevolucionLogica();
 
+        // Devoluciones del rango de fechas; el tipo y la búsqueda se filtran sobre esta tabla.
+        private DataTable? devolucionesCargadas;
+        // Evita recargar mientras se acomodan las fechas o los filtros por código.
+        private bool cargando = false;
+
         public frmDevolucion()
         {
             InitializeComponent();
-
-            // Eventos que el diseño todavía no tenía conectados
-            btnBuscar.Click += btnBuscar_Click;
-            btnActualizar.Click += btnActualizar_Click;
-            btnVolver.Click += btnVolver_Click;
-            this.Load += frmDevolucion_Load;
-
-            // El listado no se edita: el botón Guardar no se usa
-            btnGuardar.Visible = false;
+            ClsIdioma.Registrar(this);
+            ClsGrilla.AjustarAlContenido(dataGridView1, "clnProducto");   // columnas al ancho del texto, con scroll si no entra
 
             btnNuevaDevolucion.Enabled = SesionUsuario.Permisos.Contains(220) || SesionUsuario.Permisos.Contains(221);
 
-            ConfigurarGrid();
-        }
-
-        private void frmDevolucion_Load(object sender, EventArgs e)
-        {
+            cargando = true;
             dateTimePicker1.Value = DateTime.Today.AddDays(-30);
             dateTimePicker2.Value = DateTime.Today;
+            cmbTipo.SelectedIndex = 0;
+            ClsIdioma.TraducirOpciones(cmbTipo);   // se elige por posición
+            cargando = false;
+
             CargarDevoluciones();
         }
 
         #region Metodos
 
-        private void ConfigurarGrid()
+        // Lee de la base las devoluciones del rango de fechas. Si se indica, deja elegida esa devolución.
+        private void CargarDevoluciones(int? idAElegir = null)
         {
-            dataGridView1.AutoGenerateColumns = false;
-            dataGridView1.ReadOnly = true;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.MultiSelect = false;
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToResizeColumns = false;
-            dataGridView1.AllowUserToOrderColumns = false;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        }
-
-        private void CargarDevoluciones()
-        {
-            DateTime desde = dateTimePicker1.Value.Date;
-            DateTime hasta = dateTimePicker2.Value.Date;
-
-            if (desde > hasta)
+            if (cargando)
             {
-                MessageBox.Show("La fecha desde no puede ser mayor a la fecha hasta.", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             try
             {
-                DataTable tabla = logica.ObtenerDevoluciones(desde, hasta);
-
-                dataGridView1.Rows.Clear();
-
-                foreach (DataRow fila in tabla.Rows)
-                {
-                    int indice = dataGridView1.Rows.Add();
-                    DataGridViewRow renglon = dataGridView1.Rows[indice];
-
-                    // Columnas del diseño:
-                    // Column1 Fecha | Column10 Estado | Column2 Nro. Transacción | Column3 Nro. Caja
-                    // Column4 Cajero | Column5 Tipo de Comprobante | Column6 Nro. Comprobante
-                    // Column8 Total | Column9 Producto/Servicio
-                    renglon.Cells["Column1"].Value = Convert.ToDateTime(fila["FechaHora"]).ToString("dd/MM/yyyy HH:mm");
-                    renglon.Cells["Column10"].Value = fila["Estado"].ToString();
-                    renglon.Cells["Column2"].Value = fila["IdDevolucion"].ToString();
-                    renglon.Cells["Column3"].Value = fila["IdSesionCaja"] == DBNull.Value ? "-" : fila["IdSesionCaja"].ToString();
-                    renglon.Cells["Column4"].Value = fila["Cajero"].ToString();
-                    renglon.Cells["Column5"].Value = "Venta";
-                    renglon.Cells["Column6"].Value = fila["IdVenta"] == DBNull.Value ? "-" : fila["IdVenta"].ToString();
-                    renglon.Cells["Column8"].Value = Convert.ToDecimal(fila["ImporteDevuelto"]).ToString("N2");
-                    renglon.Cells["Column9"].Value = fila["Producto"].ToString() + " x " +
-                                                     Convert.ToDecimal(fila["Cantidad"]).ToString("0.###");
-
-                    renglon.Cells["Column9"].ToolTipText = "Motivo: " + fila["Motivo"];
-                    renglon.Tag = Convert.ToInt32(fila["IdDevolucion"]);
-
-                    if (fila["Estado"].ToString() == "Cambio de unidad")
-                    {
-                        renglon.DefaultCellStyle.ForeColor = SystemColors.GrayText;
-                    }
-                }
+                devolucionesCargadas = logica.ObtenerDevoluciones(dateTimePicker1.Value.Date, dateTimePicker2.Value.Date);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron obtener las devoluciones.\n\n" + ex.Message, "Error",
+                devolucionesCargadas = null;
+
+                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las devoluciones.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            MostrarDevoluciones(idAElegir);
+        }
+        // Llena la grilla con las devoluciones que cumplen el tipo y la búsqueda.
+        private void MostrarDevoluciones(int? idAElegir = null)
+        {
+            dataGridView1.Rows.Clear();
+
+            decimal totalReintegrado = 0m;
+
+            if (devolucionesCargadas != null)
+            {
+                string[] tiposDato = { "", "Reintegro en efectivo", "Cambio de unidad" };   // así vienen de la base
+                string tipoElegido = cmbTipo.SelectedIndex > 0 && cmbTipo.SelectedIndex < tiposDato.Length ? tiposDato[cmbTipo.SelectedIndex] : "";
+                string texto = txtBuscar.Text.Trim();
+
+                foreach (DataRow fila in devolucionesCargadas.Rows)
+                {
+                    string tipo = fila["Estado"]?.ToString() ?? "";
+                    string venta = fila["IdVenta"] == DBNull.Value ? "" : fila["IdVenta"].ToString() ?? "";
+                    string producto = fila["Producto"]?.ToString() ?? "";
+                    string cajero = fila["Cajero"]?.ToString() ?? "";
+
+                    if (tipoElegido != "" && tipo != tipoElegido)
+                    {
+                        continue;
+                    }
+
+                    if (texto != "" &&
+                        !venta.Contains(texto) &&
+                        !producto.Contains(texto, StringComparison.CurrentCultureIgnoreCase) &&
+                        !cajero.Contains(texto, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    bool esEfectivo = tipo == "Reintegro en efectivo";
+                    bool reingresa = fila["ReingresaStock"] != DBNull.Value && Convert.ToBoolean(fila["ReingresaStock"]);
+                    decimal importe = fila["ImporteDevuelto"] == DBNull.Value ? 0m : Convert.ToDecimal(fila["ImporteDevuelto"]);
+
+                    int indice = dataGridView1.Rows.Add(
+                        fila["IdDevolucion"].ToString(),
+                        Convert.ToDateTime(fila["FechaHora"]).ToString("dd/MM/yyyy HH:mm"),
+                        venta == "" ? "-" : venta,
+                        producto,
+                        Convert.ToDecimal(fila["Cantidad"]).ToString("0.###"),
+                        tipo,
+                        esEfectivo ? importe.ToString("C2") : ClsIdioma.T("Sin reintegro"),
+                        reingresa ? ClsIdioma.T("Sí") : ClsIdioma.T("No (descartada)"),
+                        cajero,
+                        fila["IdSesionCaja"] == DBNull.Value ? "-" : fila["IdSesionCaja"].ToString());
+
+                    DataGridViewRow renglon = dataGridView1.Rows[indice];
+                    renglon.Tag = fila;
+
+                    if (!esEfectivo)
+                    {
+                        // Los cambios de unidad no mueven plata: en gris para distinguirlos.
+                        renglon.DefaultCellStyle.ForeColor = SystemColors.GrayText;
+                    }
+                    else
+                    {
+                        totalReintegrado += importe;
+                    }
+
+                    if (!reingresa)
+                    {
+                        renglon.Cells["clnStock"].Style.ForeColor = Color.Firebrick;
+                    }
+                }
+            }
+
+            ElegirFila(idAElegir);
+
+            lblResumen.Text = dataGridView1.Rows.Count == 0
+                ? ClsIdioma.T("No hay devoluciones para mostrar con estos filtros.")
+                : dataGridView1.Rows.Count + (dataGridView1.Rows.Count == 1 ? ClsIdioma.T(" devolución") : ClsIdioma.T(" devoluciones")) +
+                  ClsIdioma.T("   ·   Total reintegrado en efectivo: ") + totalReintegrado.ToString("C2");
+
+            MostrarMotivo();
+        }
+        private void ElegirFila(int? idDevolucion)
+        {
+            dataGridView1.ClearSelection();
+
+            DataGridViewRow? fila = null;
+
+            if (idDevolucion.HasValue)
+            {
+                fila = dataGridView1.Rows.Cast<DataGridViewRow>()
+                    .FirstOrDefault(f => f.Cells["clnId"].Value?.ToString() == idDevolucion.Value.ToString());
+            }
+
+            if (fila == null && dataGridView1.Rows.Count > 0)
+            {
+                fila = dataGridView1.Rows[0];
+            }
+
+            if (fila != null)
+            {
+                dataGridView1.CurrentCell = fila.Cells["clnId"];
+                fila.Selected = true;
+            }
+        }
+        private void MostrarMotivo()
+        {
+            if (dataGridView1.CurrentRow?.Tag is not DataRow fila)
+            {
+                txtMotivo.Clear();
+                return;
+            }
+
+            string motivo = fila["Motivo"]?.ToString() ?? "";
+            txtMotivo.Text = string.IsNullOrWhiteSpace(motivo) ? ClsIdioma.T("Sin motivo registrado.") : ClsIdioma.TraducirBitacora(motivo);   // el motivo se guarda en castellano
+        }
+        private int? IdDevolucionElegida()
+        {
+            return dataGridView1.CurrentRow?.Tag is DataRow fila ? Convert.ToInt32(fila["IdDevolucion"]) : null;
         }
 
         #endregion
@@ -120,26 +189,75 @@ namespace CapaVista
         {
             using (frmNuevaDevolucion devolucion = new frmNuevaDevolucion())
             {
-                if (devolucion.ShowDialog() == DialogResult.OK)
-                {
-                    CargarDevoluciones();
-                }
+                devolucion.ShowDialog(this);
             }
-        }
 
-        private void btnBuscar_Click(object sender, EventArgs e)
-        {
+            // Se recarga siempre: en Nueva devolución se pueden registrar varias antes de cerrar.
             CargarDevoluciones();
         }
-
-        private void btnActualizar_Click(object sender, EventArgs e)
+        private void btnActualizar_Click(object? sender, EventArgs e)
         {
-            dateTimePicker1.Value = DateTime.Today.AddDays(-30);
-            dateTimePicker2.Value = DateTime.Today;
+            // Vuelve a leer la base manteniendo las fechas y los filtros elegidos.
+            CargarDevoluciones(IdDevolucionElegida());
+        }
+        private void dataGridView1_SelectionChanged(object? sender, EventArgs e)
+        {
+            MostrarMotivo();
+        }
+        // Al cambiar una fecha se recarga sola. Si Desde queda después de Hasta, se corre la otra fecha.
+        private void dateTimePicker1_ValueChanged(object? sender, EventArgs e)
+        {
+            if (cargando)
+                return;
+
+            if (dateTimePicker1.Value.Date > dateTimePicker2.Value.Date)
+            {
+                dateTimePicker2.Value = dateTimePicker1.Value.Date;   // dispara su ValueChanged, que recarga
+                return;
+            }
+
             CargarDevoluciones();
         }
+        private void dateTimePicker2_ValueChanged(object? sender, EventArgs e)
+        {
+            if (cargando)
+                return;
 
-        private void btnVolver_Click(object sender, EventArgs e)
+            if (dateTimePicker2.Value.Date < dateTimePicker1.Value.Date)
+            {
+                dateTimePicker1.Value = dateTimePicker2.Value.Date;
+                return;
+            }
+
+            CargarDevoluciones();
+        }
+        private void Filtros_Changed(object? sender, EventArgs e)
+        {
+            if (cargando)
+                return;
+
+            MostrarDevoluciones();
+        }
+        private void btnLimpiarFiltros_Click(object? sender, EventArgs e)
+        {
+            cargando = true;
+
+            try
+            {
+                dateTimePicker1.Value = DateTime.Today.AddDays(-30);
+                dateTimePicker2.Value = DateTime.Today;
+                cmbTipo.SelectedIndex = 0;
+                txtBuscar.Clear();
+            }
+            finally
+            {
+                cargando = false;
+            }
+
+            CargarDevoluciones();
+            txtBuscar.Focus();
+        }
+        private void btnVolver_Click(object? sender, EventArgs e)
         {
             this.Close();
         }

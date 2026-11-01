@@ -7,6 +7,11 @@ using EnviarMail;
 
 public class ClsAltaEmpleado
 {
+    // Si el usuario se creó pero el correo con la contraseña temporal no se pudo enviar, quedan acá
+    // el usuario y la contraseña para que quien hizo el alta se los entregue al empleado.
+    public string UsuarioSinCorreo { get; private set; }
+    public string PasswordTemporalSinCorreo { get; private set; }
+
     public bool CrearEmpleado( string nombre, string apellido, DateTime fechaNacimiento,
          string dni, string cuit, bool sexo, int idGenero, int idRol,
          string correo, string telefono, int idTipoTelefono, string calle,
@@ -98,23 +103,7 @@ public class ClsAltaEmpleado
                 "Alta de usuario: " + usernameExistente
             );
 
-            string asuntoExistente = "Alta de Usuario - Gestorix";
-
-            string cuerpoExistente =
-                $@"<h2>Bienvenido a Gestorix</h2>
-
-                    <p>Su usuario ha sido creado correctamente.</p>
-
-                    <p><b>Usuario:</b> {usernameExistente}</p>
-
-                    <p><b>Contraseña Temporal:</b> {passwordTemporalExistente}</p>
-
-                    <p>
-                        Por razones de seguridad, deberá cambiar su contraseña
-                        en el primer inicio de sesión.
-                    </p>";
-
-            MailHelper.Enviar(correoExistente, asuntoExistente, cuerpoExistente);
+            EnviarCorreoAlta(correoExistente, usernameExistente, passwordTemporalExistente);
 
             return true;
         }
@@ -231,6 +220,18 @@ public class ClsAltaEmpleado
             "Alta de usuario: " + username
         );
 
+        EnviarCorreoAlta(correo, username, passwordTemporal);
+
+        return true;
+    }
+
+    // El usuario ya está creado: si el correo falla no se corta el alta, se guardan los datos
+    // para mostrarlos (si no, el empleado quedaría con una contraseña temporal que nadie conoce).
+    private void EnviarCorreoAlta(string correo, string username, string passwordTemporal)
+    {
+        UsuarioSinCorreo = null;
+        PasswordTemporalSinCorreo = null;
+
         string asunto = "Alta de Usuario - Gestorix";
 
         string cuerpo =
@@ -247,8 +248,14 @@ public class ClsAltaEmpleado
                     en el primer inicio de sesión.
                 </p>";
 
-        MailHelper.Enviar(correo, asunto, cuerpo);
-
-        return true;
+        try
+        {
+            MailHelper.Enviar(correo, asunto, cuerpo);
+        }
+        catch
+        {
+            UsuarioSinCorreo = username;
+            PasswordTemporalSinCorreo = passwordTemporal;
+        }
     }
 }

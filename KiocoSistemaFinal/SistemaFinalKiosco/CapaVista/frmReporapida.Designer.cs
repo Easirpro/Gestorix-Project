@@ -45,6 +45,8 @@
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReporapida));
@@ -202,6 +204,7 @@
             txtCodigo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtCodigo.Location = new Point(179, 13);
             txtCodigo.Name = "txtCodigo";
+            txtCodigo.PlaceholderText = "Código, SKU o nombre del producto";
             txtCodigo.Size = new Size(550, 23);
             txtCodigo.TabIndex = 1;
             txtCodigo.TextChanged += txtCodigo_TextChanged;
@@ -408,10 +411,22 @@
             tlpFiltros.PerformLayout();
             pnlModo.ResumeLayout(false);
             pnlModo.PerformLayout();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbProveedor, "Filtrá los productos por proveedor.");
+            ttAyuda.SetToolTip(cmbSucursal, "Filtrá los productos por sucursal del proveedor.");
+            ttAyuda.SetToolTip(cmbCategoria, "Filtrá los productos por categoría.");
+            ttAyuda.SetToolTip(cmbMarca, "Filtrá los productos por marca.");
             ResumeLayout(false);
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private ComboBox cmbSucursal;
         private Label lblSucursal;

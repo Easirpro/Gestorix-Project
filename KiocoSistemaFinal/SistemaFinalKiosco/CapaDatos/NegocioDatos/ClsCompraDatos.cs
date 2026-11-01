@@ -44,6 +44,28 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        // true si ya hay una compra no anulada del proveedor con ese tipo y número de comprobante.
+        public bool ExisteComprobante(int idProveedor, string tipoComprobante, string numeroComprobante)
+        {
+            string query = @"SELECT COUNT(*)
+                FROM dbo.Compra
+                WHERE IdProveedor = @IdProveedor
+                  AND TipoComprobante = @TipoComprobante
+                  AND LTRIM(RTRIM(NumeroComprobante)) = @NumeroComprobante
+                  AND Anulada = 0";
+
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(query, conexion))
+            {
+                cmd.Parameters.Add("@IdProveedor", SqlDbType.Int).Value = idProveedor;
+                cmd.Parameters.Add("@TipoComprobante", SqlDbType.NVarChar, 50).Value = tipoComprobante.Trim();
+                cmd.Parameters.Add("@NumeroComprobante", SqlDbType.NVarChar, 50).Value = numeroComprobante.Trim();
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
         public int GuardarCompra(ClsCompraEntidad compra, int idUsuario)
         {
             if (compra == null)

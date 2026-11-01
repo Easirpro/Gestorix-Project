@@ -20,12 +20,13 @@ namespace CapaVista
         public frmAbrirCaja()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
 
         private void frmAbrirCaja_Load(object sender, EventArgs e)
         {
-            lblUsuario.Text = "Usuario: " + SesionUsuario.Username;
-            lblFecha.Text = "Fecha: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            lblUsuario.Text = ClsIdioma.T("Usuario: ") + SesionUsuario.Username;
+            lblFecha.Text = ClsIdioma.T("Fecha: ") + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
             nudMontoInicial.Value = 0;
             nudMontoInicial.Select(0, nudMontoInicial.Text.Length);
         }
@@ -38,8 +39,8 @@ namespace CapaVista
 
             if (montoInicial == 0)
             {
-                DialogResult respuesta = MessageBox.Show("Va a abrir la caja sin fondo inicial. ¿Desea continuar?",
-                    "Confirmar apertura", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult respuesta = MessageBox.Show(ClsIdioma.T("Va a abrir la caja sin fondo inicial. ¿Desea continuar?"),
+                    ClsIdioma.T("Confirmar apertura"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta != DialogResult.Yes)
                 {
@@ -51,16 +52,16 @@ namespace CapaVista
             {
                 int idSesion = logica.AbrirCaja(SesionUsuario.IdUsuario, montoInicial);
 
-                MessageBox.Show("La caja se abrió correctamente.\n\nSesión N.º " + idSesion +
-                                "\nFondo inicial: $ " + montoInicial.ToString("N2"),
-                    "Caja abierta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("La caja se abrió correctamente.\n\nSesión N.º ") + idSesion +
+                                ClsIdioma.T("\nFondo inicial: $ ") + montoInicial.ToString("N2"),
+                    ClsIdioma.T("Caja abierta"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo abrir la caja.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo abrir la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

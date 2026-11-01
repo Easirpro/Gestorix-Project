@@ -60,6 +60,7 @@
             // 
             txtNombre.Location = new Point(65, 102);
             txtNombre.Name = "txtNombre";
+            txtNombre.PlaceholderText = "Nombre del rubro";
             txtNombre.Size = new Size(170, 23);
             txtNombre.TabIndex = 7;
             // 

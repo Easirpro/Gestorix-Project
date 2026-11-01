@@ -22,6 +22,7 @@ namespace CapaVista
         public frmCerrarCaja(int idSesionCaja)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             this.idSesionCaja = idSesionCaja;
         }
 
@@ -34,7 +35,7 @@ namespace CapaVista
 
                 if (sesion == null || sesion.IdSesionCaja != idSesionCaja)
                 {
-                    MessageBox.Show("La caja ya no está abierta.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("La caja ya no está abierta."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -52,7 +53,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo obtener la caja.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
@@ -66,17 +67,17 @@ namespace CapaVista
 
             if (diferencia < 0)
             {
-                lblDiferencia.Text = $"$ {diferencia:N2}  (faltante)";
+                lblDiferencia.Text = (ClsIdioma.Ingles ? $"$ {diferencia:N2}  (short)" : $"$ {diferencia:N2}  (faltante)");
                 lblDiferencia.ForeColor = Color.Firebrick;
             }
             else if (diferencia > 0)
             {
-                lblDiferencia.Text = $"$ {diferencia:N2}  (sobrante)";
+                lblDiferencia.Text = (ClsIdioma.Ingles ? $"$ {diferencia:N2}  (over)" : $"$ {diferencia:N2}  (sobrante)");
                 lblDiferencia.ForeColor = Color.DarkOrange;
             }
             else
             {
-                lblDiferencia.Text = "$ 0,00  (correcta)";
+                lblDiferencia.Text = ClsIdioma.T("$ 0,00  (correcta)");
                 lblDiferencia.ForeColor = Color.SeaGreen;
             }
         }
@@ -96,18 +97,18 @@ namespace CapaVista
 
             if (diferencia != 0 && string.IsNullOrWhiteSpace(txtObservacion.Text))
             {
-                MessageBox.Show("Hay una diferencia en la caja. Ingrese una observación que la explique.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T("Hay una diferencia en la caja. Ingrese una observación que la explique."),
+                    ClsIdioma.T("Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtObservacion.Focus();
                 return;
             }
 
-            DialogResult respuesta = MessageBox.Show("¿Confirma el cierre de la caja?\n\n" +
-                "Esperado: $ " + efectivoEsperado.ToString("N2") +
-                "\nContado: $ " + nudEfectivoContado.Value.ToString("N2") +
-                "\nDiferencia: $ " + diferencia.ToString("N2") +
-                "\n\nUna vez cerrada no se podrán modificar sus movimientos.",
-                "Confirmar cierre", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Confirma el cierre de la caja?\n\n") +
+                ClsIdioma.T("Esperado: $ ") + efectivoEsperado.ToString("N2") +
+                ClsIdioma.T("\nContado: $ ") + nudEfectivoContado.Value.ToString("N2") +
+                ClsIdioma.T("\nDiferencia: $ ") + diferencia.ToString("N2") +
+                ClsIdioma.T("\n\nUna vez cerrada no se podrán modificar sus movimientos."),
+                ClsIdioma.T("Confirmar cierre"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes)
             {
@@ -124,22 +125,22 @@ namespace CapaVista
             {
                 cierre = logica.CerrarCaja(cierre);
 
-                string resultado = cierre.Diferencia < 0 ? "Faltante"
-                                 : cierre.Diferencia > 0 ? "Sobrante"
-                                 : "Sin diferencias";
+                string resultado = cierre.Diferencia < 0 ? ClsIdioma.T("Faltante")
+                                 : cierre.Diferencia > 0 ? ClsIdioma.T("Sobrante")
+                                 : ClsIdioma.T("Sin diferencias");
 
-                MessageBox.Show("La caja se cerró correctamente.\n\n" +
-                                "Esperado: $ " + cierre.EfectivoEsperado.ToString("N2") +
-                                "\nContado: $ " + cierre.EfectivoContado.ToString("N2") +
-                                "\nDiferencia: $ " + cierre.Diferencia.ToString("N2") + "  (" + resultado + ")",
-                    "Caja cerrada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("La caja se cerró correctamente.\n\n") +
+                                ClsIdioma.T("Esperado: $ ") + cierre.EfectivoEsperado.ToString("N2") +
+                                ClsIdioma.T("\nContado: $ ") + cierre.EfectivoContado.ToString("N2") +
+                                ClsIdioma.T("\nDiferencia: $ ") + cierre.Diferencia.ToString("N2") + "  (" + resultado + ")",
+                    ClsIdioma.T("Caja cerrada"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo cerrar la caja.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo cerrar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -16,6 +16,8 @@ namespace CapaVista
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmInformesVentas));
             lblTitulo = new Label();
             pnlModo = new Panel();
@@ -340,11 +342,23 @@ namespace CapaVista
             pnlFiltros.ResumeLayout(false);
             pnlFiltros.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvInforme).EndInit();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbVendedor, "Filtrá el informe por vendedor.");
+            ttAyuda.SetToolTip(cmbMedioPago, "Filtrá el informe por medio de pago.");
+            ttAyuda.SetToolTip(cmbCategoria, "Filtrá el informe por categoría de artículo.");
+            ttAyuda.SetToolTip(cmbArticulo, "Filtrá el informe por un artículo en particular.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private Label lblTitulo;
         private Panel pnlModo;

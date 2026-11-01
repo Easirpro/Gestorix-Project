@@ -23,6 +23,7 @@ namespace CapaVista
         public frmTiempoPromocion()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.Load += frmTiempoPromocion_Load;
 
@@ -165,7 +166,7 @@ namespace CapaVista
         {
             if (dtpFechaFin.Value.Date == dtpFechaInicio.Value.Date && dtpHoraFin.Value.TimeOfDay <= dtpHoraInicio.Value.TimeOfDay)
             {
-                MessageBox.Show("La hora de fin no puede ser igual a la hora de inicio.", "Horario inválido",
+                MessageBox.Show(ClsIdioma.T("La hora de fin no puede ser igual a la hora de inicio."), ClsIdioma.T("Horario inválido"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -174,7 +175,7 @@ namespace CapaVista
             {
                 if (dtpFechaFin.Value.Date < dtpFechaInicio.Value.Date)
                 {
-                    MessageBox.Show("La fecha de fin no puede ser anterior a la fecha de inicio.", "Fechas inválidas",
+                    MessageBox.Show(ClsIdioma.T("La fecha de fin no puede ser anterior a la fecha de inicio."), ClsIdioma.T("Fechas inválidas"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
@@ -186,7 +187,7 @@ namespace CapaVista
 
                 if (!hayDiaSeleccionado)
                 {
-                    MessageBox.Show("Seleccioná al menos un día de la semana.", "Falta seleccionar días",
+                    MessageBox.Show(ClsIdioma.T("Seleccioná al menos un día de la semana."), ClsIdioma.T("Falta seleccionar días"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;

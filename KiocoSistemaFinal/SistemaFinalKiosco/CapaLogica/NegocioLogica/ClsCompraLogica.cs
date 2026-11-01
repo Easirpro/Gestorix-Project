@@ -36,6 +36,16 @@ namespace CapaLogica.NegocioLogica
 
             return datos.GuardarCompra(compra, idUsuario);
         }
+        // El número es opcional: sin número no hay nada que comparar.
+        public bool ExisteComprobante(int idProveedor, string tipoComprobante, string? numeroComprobante)
+        {
+            if (string.IsNullOrWhiteSpace(numeroComprobante))
+            {
+                return false;
+            }
+
+            return datos.ExisteComprobante(idProveedor, tipoComprobante, numeroComprobante);
+        }
         public DataTable ObtenerCompras(DateTime desde, DateTime hasta)
         {
             return datos.ObtenerCompras(desde, hasta);

@@ -16,16 +16,12 @@ namespace CapaVista
     public partial class FrmRecuperarPass : Form
     {
         private int idUsuario = 0;
-        private string username = "";
         public FrmRecuperarPass(int idUsuario)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.idUsuario = idUsuario;
-
-            ClsUsuarioLogica logica = new ClsUsuarioLogica();
-
-            username = logica.ObtenerUsername(idUsuario);
         }
         private void btnVolver_Click(object sender, EventArgs e)
         {
@@ -66,49 +62,45 @@ namespace CapaVista
         {
             if (string.IsNullOrWhiteSpace(txtCorreo.Text) || string.IsNullOrWhiteSpace(txtIngCodigo.Text))
             {
-                MessageBox.Show(" Complete ambos campos. ", " Campos incompletos ",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T(" Complete ambos campos. "), ClsIdioma.T(" Campos incompletos "),MessageBoxButtons.OK,MessageBoxIcon.Warning);
                 return;
             }
 
-            if (txtCorreo.Text != txtIngCodigo.Text)
+            // txtCorreo es la contraseña nueva y txtIngCodigo su confirmación (nombres de un diseño anterior).
+            ClsRecuperarPassword recuperar = new ClsRecuperarPassword();
+
+            ResultadoCambioPassword resultado = recuperar.CambiarPassword(idUsuario, txtCorreo.Text, txtIngCodigo.Text);
+
+            switch (resultado)
             {
-                MessageBox.Show(" Las contraseñas no coinciden. ", " Error ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                case ResultadoCambioPassword.Correcto:
+                    MessageBox.Show(ClsIdioma.T("La contraseña se cambió correctamente."), ClsIdioma.T("Contraseña actualizada"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            ClsUsuarioLogica logica = new ClsUsuarioLogica();
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                    break;
 
-            string nuevaPasswordHash = ClsSeguridad.SHA256(username + txtCorreo.Text);
+                case ResultadoCambioPassword.PasswordNoCoinciden:
+                    MessageBox.Show(ClsIdioma.T("Las contraseñas no coinciden."), ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    break;
 
-            string passAnterior = logica.ObtenerUltimaPasswordAntigua(idUsuario);
+                case ResultadoCambioPassword.PasswordNoCumpleRequisitos:
+                    MessageBox.Show(ClsReglasPassword.Requisitos, ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtCorreo.Focus();
+                    txtCorreo.SelectAll();
+                    break;
 
-            if (passAnterior == nuevaPasswordHash)
-            {
-                MessageBox.Show("No puede utilizar la contraseña anterior.", "Contraseña no válida",MessageBoxButtons.OK,MessageBoxIcon.Warning);
-                return;
-            }
-            bool usada = logica.PasswordUsadaUltimasTres(idUsuario, nuevaPasswordHash);
+                case ResultadoCambioPassword.PasswordIgualAnterior:
+                    MessageBox.Show(ClsIdioma.T("La contraseña nueva debe ser distinta de la actual."), ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    break;
 
-            if (usada)
-            {
-                MessageBox.Show("No puede utilizar ninguna de sus últimas 3 contraseñas.","Contraseña no válida",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                case ResultadoCambioPassword.PasswordUsadaRecientemente:
+                    MessageBox.Show(ClsIdioma.T("No puede utilizar ninguna de sus últimas 3 contraseñas."), ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    break;
 
-                return;
-            }
-            bool cambio = logica.CambiarPasswordRecuperacion(idUsuario, nuevaPasswordHash);
-
-            if (cambio)
-            {
-                MessageBox.Show("La contraseña se cambió correctamente.", "Contraseña actualizada",MessageBoxButtons.OK,MessageBoxIcon.Information);
-
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("No se pudo cambiar la contraseña.","Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                default:
+                    MessageBox.Show(ClsIdioma.T("No se pudo cambiar la contraseña."), ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
             }
         }
 

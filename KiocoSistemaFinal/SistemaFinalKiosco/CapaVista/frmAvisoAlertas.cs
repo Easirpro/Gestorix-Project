@@ -33,7 +33,7 @@ namespace CapaVista
 
             Label titulo = new Label
             {
-                Text = urgentes.Count == 1 ? "Tenés 1 alerta urgente" : "Tenés " + urgentes.Count + " alertas urgentes",
+                Text = urgentes.Count == 1 ? ClsIdioma.T("Tenés 1 alerta urgente") : ClsIdioma.T("Tenés ") + urgentes.Count + ClsIdioma.T(" alertas urgentes"),
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 ForeColor = Color.Firebrick,
                 Location = new Point(14, 8),
@@ -42,15 +42,15 @@ namespace CapaVista
 
             Label detalle = new Label
             {
-                Text = string.Join(Environment.NewLine, urgentes.Take(MAXIMO_RENGLONES).Select(a => "• " + a.Descripcion))
-                       + (urgentes.Count > MAXIMO_RENGLONES ? Environment.NewLine + "• y " + (urgentes.Count - MAXIMO_RENGLONES) + " más…" : ""),
+                Text = string.Join(Environment.NewLine, urgentes.Take(MAXIMO_RENGLONES).Select(a => "• " + ClsIdioma.TraducirAlerta(a.Descripcion)))
+                       + (urgentes.Count > MAXIMO_RENGLONES ? Environment.NewLine + ClsIdioma.T("• y ") + (urgentes.Count - MAXIMO_RENGLONES) + ClsIdioma.T(" más…") : ""),
                 Font = new Font("Segoe UI", 8.5F),
                 Location = new Point(14, 30),
                 Size = new Size(316, 52),
                 AutoEllipsis = true
             };
 
-            LinkLabel ver = new LinkLabel { Text = "Ver alertas", AutoSize = true, Location = new Point(14, 86) };
+            LinkLabel ver = new LinkLabel { Text = ClsIdioma.T("Ver alertas"), AutoSize = true, Location = new Point(14, 86) };
             ver.LinkClicked += (sender, e) => { Close(); this.verAlertas(); };
 
             Label cerrar = new Label

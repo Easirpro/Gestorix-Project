@@ -69,6 +69,7 @@ namespace CapaVista
         public frmBalance()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             foreach (DataGridView grilla in new[] { dgvResumen, dgvMedioPago, dgvPorDia,
                                                     dgvEmpleados, dgvProductos, dgvPromociones, dgvDetalle })
@@ -109,6 +110,7 @@ namespace CapaVista
             cmbTipoDetalle.Items.Add("Ingresos");
             cmbTipoDetalle.Items.Add("Egresos");
             cmbTipoDetalle.SelectedIndex = 0;
+            ClsIdioma.TraducirOpciones(cmbTipoDetalle);   // se elige por posición
 
             try
             {
@@ -116,7 +118,7 @@ namespace CapaVista
                 DataTable medios = new DataTable();
                 medios.Columns.Add("IdMetodoPago", typeof(int));
                 medios.Columns.Add("Nombre", typeof(string));
-                medios.Rows.Add(0, "Todos");
+                medios.Rows.Add(0, ClsIdioma.T("Todos"));
                 foreach (DataRow fila in logicaCaja.ObtenerMetodosPago().Rows)
                 {
                     medios.Rows.Add(Convert.ToInt32(fila["IdMetodoPago"]), fila["Nombre"].ToString());
@@ -128,7 +130,7 @@ namespace CapaVista
                 DataTable usuarios = new DataTable();
                 usuarios.Columns.Add("IdUsuario", typeof(int));
                 usuarios.Columns.Add("Empleado", typeof(string));
-                usuarios.Rows.Add(0, "Todos");
+                usuarios.Rows.Add(0, ClsIdioma.T("Todos"));
                 foreach (DataRow fila in logicaCaja.ObtenerEmpleadosActivos().Rows)
                 {
                     usuarios.Rows.Add(Convert.ToInt32(fila["IdUsuario"]), fila["Empleado"].ToString());
@@ -139,7 +141,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar los filtros del detalle.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los filtros del detalle.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -151,7 +153,7 @@ namespace CapaVista
 
             if (desde > hasta)
             {
-                MessageBox.Show("La fecha desde no puede ser mayor a la fecha hasta.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La fecha desde no puede ser mayor a la fecha hasta."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -187,7 +189,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo obtener el balance.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el balance.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -229,13 +231,13 @@ namespace CapaVista
                     else egresos += importe;
                 }
 
-                lblTotalDetalle.Text = $"Movimientos: {tablaDetalle.Rows.Count}    " +
-                                       $"Ingresos: $ {ingresos:N2}    Egresos: $ {egresos:N2}    " +
-                                       $"Neto: $ {ingresos + egresos:N2}";
+                lblTotalDetalle.Text = (ClsIdioma.Ingles ? $"Movements: {tablaDetalle.Rows.Count}" : $"Movimientos: {tablaDetalle.Rows.Count}    ") +
+                                       (ClsIdioma.Ingles ? $"Deposits: $ {ingresos:N2}    Withdrawals: $ {egresos:N2}" : $"Ingresos: $ {ingresos:N2}    Egresos: $ {egresos:N2}    ") +
+                                       (ClsIdioma.Ingles ? $"Net: $ {ingresos + egresos:N2}" : $"Neto: $ {ingresos + egresos:N2}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo obtener el detalle de movimientos.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el detalle de movimientos.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -353,7 +355,7 @@ namespace CapaVista
                     continue;
                 }
 
-                columna.HeaderText = TituloColumna(columna.DataPropertyName);
+                columna.HeaderText = ClsIdioma.T(TituloColumna(columna.DataPropertyName));
 
                 if (columna.ValueType == typeof(decimal) || columna.ValueType == typeof(double))
                 {
@@ -392,7 +394,7 @@ namespace CapaVista
 
             if (dgvResumen.Columns.Contains("Seccion"))
             {
-                dgvResumen.Columns["Seccion"].HeaderText = "Sección";
+                dgvResumen.Columns["Seccion"].HeaderText = ClsIdioma.T("Sección");
             }
 
             // Los totales del bloque "Resultado" se destacan en negrita.
@@ -439,7 +441,7 @@ namespace CapaVista
         {
             using (SaveFileDialog guardar = new SaveFileDialog())
             {
-                guardar.Title = "Exportar balance";
+                guardar.Title = ClsIdioma.T("Exportar balance");
                 guardar.Filter = "Archivo Excel (*.xlsx)|*.xlsx";
                 guardar.DefaultExt = "xlsx";
                 guardar.FileName = "Balance_" + desdeConsultado.ToString("yyyyMMdd") + "_" +
@@ -465,12 +467,12 @@ namespace CapaVista
                         libro.SaveAs(guardar.FileName);
                     }
 
-                    MessageBox.Show("El balance se exportó correctamente.\n\n" + Path.GetFileName(guardar.FileName),
-                        "Exportación completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(ClsIdioma.T("El balance se exportó correctamente.\n\n") + Path.GetFileName(guardar.FileName),
+                        ClsIdioma.T("Exportación completa"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("No se pudo exportar el balance.\n\n" + ex.Message, "Error",
+                    MessageBox.Show(ClsIdioma.T("No se pudo exportar el balance.\n\n") + ex.Message, ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

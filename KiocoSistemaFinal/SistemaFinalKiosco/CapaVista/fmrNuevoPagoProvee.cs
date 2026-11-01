@@ -15,6 +15,7 @@ namespace CapaVista
         public fmrNuevoPagoProvee()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
 
         private void fmrNuevoPagoProvee_Load(object sender, EventArgs e)

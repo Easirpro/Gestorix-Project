@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.Data.SqlClient;
-using SistemaKiosco;
+﻿using CapaDatos;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -8,47 +6,28 @@ namespace CapaLogica
 {
     public class ClsBackupLogica
     {
+        // Genera el backup en el servidor SQL y lo guarda en la carpeta indicada de esta PC.
         public bool GenerarBackup(string ruta)
         {
-            Conexion conexion = new Conexion();
-
             try
             {
                 if (!Directory.Exists(ruta))
                 {
                     Directory.CreateDirectory(ruta);
                 }
-                
+
                 string fecha =
                     DateTime.Now.ToString("dd-MM-yyyy_HHmmss");
 
                 string archivo = Path.Combine(ruta,$"Gestorix_{fecha}.bak");
 
-                string sql =
-                $@"BACKUP DATABASE Gestorix
-                   TO DISK='{archivo}'
-                   WITH FORMAT";
+                ClsBackupDatos datos = new ClsBackupDatos();
 
-                using (SqlConnection cn =
-                       conexion.ObtenerConexionMaster())
-                {
-                    cn.Open();
+                datos.GenerarBackupLocal(archivo);
 
-                    using (SqlCommand cmd =
-                           new SqlCommand(sql, cn))
-                    {
-                        cmd.ExecuteNonQuery();
+                string hash = CalcularHashArchivo(archivo);
 
-                        // Con un servidor remoto el .bak queda en el disco del servidor,
-                        // así que el hash solo se puede calcular si el archivo es visible desde esta PC.
-                        if (File.Exists(archivo))
-                        {
-                            string hash = CalcularHashArchivo(archivo);
-
-                            File.WriteAllText(archivo + ".hash", hash);
-                        }
-                    }
-                }
+                File.WriteAllText(archivo + ".hash",hash);
 
                 return true;
             }
@@ -85,27 +64,26 @@ namespace CapaLogica
 
             return hashGuardado == hashActual;
         }
+        // RESTORE lee el archivo desde el disco del servidor SQL, así que por ahora solo se
+        // puede restaurar desde la PC donde está la base.
+        public bool ServidorEsEstaPc()
+        {
+            ClsBackupDatos datos = new ClsBackupDatos();
+
+            return string.Equals(datos.ObtenerNombreServidor(), Environment.MachineName, StringComparison.OrdinalIgnoreCase);
+        }
         public bool RestaurarBackup(string archivoBackup)
         {
-            Conexion conexion = new Conexion();
-
             try
             {
-                using (SqlConnection cn =
-                    conexion.ObtenerConexionMaster())
+                if (!ServidorEsEstaPc())
                 {
-                    cn.Open();
-
-                    string sql = $@"USE master;ALTER DATABASE Gestorix SET SINGLE_USER WITH ROLLBACK IMMEDIATE; RESTORE DATABASE Gestorix 
-                    FROM DISK = '{archivoBackup}'WITH REPLACE;
-                    ALTER DATABASE Gestorix SET MULTI_USER;";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, cn))
-                    {
-                        cmd.CommandTimeout = 0;
-                        cmd.ExecuteNonQuery();
-                    }
+                    throw new Exception("La base de datos está en otra PC. Por ahora el backup solo se puede restaurar desde la PC donde está la base.");
                 }
+
+                ClsBackupDatos datos = new ClsBackupDatos();
+
+                datos.RestaurarBackup(archivoBackup);
 
                 return true;
             }
@@ -129,6 +107,12 @@ namespace CapaLogica
                 if (info.CreationTime < DateTime.Now.AddDays(-7))
                 {
                     File.Delete(archivo);
+
+                    // Borrar también la firma del backup para que no quede suelta.
+                    if (File.Exists(archivo + ".hash"))
+                    {
+                        File.Delete(archivo + ".hash");
+                    }
                 }
             }
         }
@@ -150,30 +134,16 @@ namespace CapaLogica
         }
         public bool ExisteBackupHoy(string ruta)
         {
-            // Primero se consulta el historial del servidor: sirve tanto para un servidor local
-            // como para el compartido, donde los .bak no quedan en esta PC.
-            try
+            // Primero se consulta el historial del servidor: con la base compartida alcanza con un
+            // backup automático por día entre todas las PCs (no uno por cada PC que abre el sistema).
+            bool? enServidor = new ClsBackupDatos().ExisteBackupHoyEnServidor();
+
+            if (enServidor.HasValue)
             {
-                Conexion conexion = new Conexion();
-
-                using (SqlConnection cn = conexion.ObtenerConexionMaster())
-                {
-                    cn.Open();
-
-                    string sql = @"SELECT COUNT(*) FROM msdb.dbo.backupset
-                                   WHERE database_name = 'Gestorix'
-                                   AND backup_finish_date >= CAST(GETDATE() AS date)";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, cn))
-                    {
-                        return (int)cmd.ExecuteScalar() > 0;
-                    }
-                }
+                return enServidor.Value;
             }
-            catch (SqlException)
-            {
-                // Sin acceso a msdb: se revisa la carpeta local como antes.
-            }
+
+            // Sin acceso a msdb: se revisa la carpeta local como antes.
 
             if (!Directory.Exists(ruta))
                 return false;

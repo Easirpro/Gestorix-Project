@@ -332,14 +332,17 @@
             // 
             txtCantidad.Location = new Point(369, 32);
             txtCantidad.Name = "txtCantidad";
+            txtCantidad.PlaceholderText = "1 si lo dejás vacío";
             txtCantidad.Size = new Size(114, 23);
             txtCantidad.TabIndex = 24;
             txtCantidad.TextChanged += txtCantidad_TextChanged;
+            txtCantidad.KeyDown += txtCantidad_KeyDown;
             // 
             // txtCodigoBarra
             // 
             txtCodigoBarra.Location = new Point(23, 32);
             txtCodigoBarra.Name = "txtCodigoBarra";
+            txtCodigoBarra.PlaceholderText = "Código de barras, SKU o nombre del producto";
             txtCodigoBarra.Size = new Size(327, 23);
             txtCodigoBarra.TabIndex = 23;
             txtCodigoBarra.TextChanged += txtCodigoBarra_TextChanged;
@@ -414,6 +417,7 @@
             btnQuitar.TabIndex = 27;
             btnQuitar.Text = "Quitar";
             btnQuitar.UseVisualStyleBackColor = true;
+            btnQuitar.Click += btnQuitar_Click;
             // 
             // btnSalir
             // 

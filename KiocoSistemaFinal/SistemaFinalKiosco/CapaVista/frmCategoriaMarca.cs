@@ -25,6 +25,7 @@ namespace CapaVista
         public frmCategoriaMarca()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             AplicarModo("");
         }
@@ -58,18 +59,18 @@ namespace CapaVista
             // Textos según el modo.
             if (EsCategorias)
             {
-                lblTitulo.Text = "Categorías";
-                btnNuevo.Text = "Nueva categoría";
+                lblTitulo.Text = ClsIdioma.T("Categorías");
+                btnNuevo.Text = ClsIdioma.T("Nueva categoría");
             }
             else if (modo == MODO_MARCAS)
             {
-                lblTitulo.Text = "Marcas";
-                btnNuevo.Text = "Nueva marca";
+                lblTitulo.Text = ClsIdioma.T("Marcas");
+                btnNuevo.Text = ClsIdioma.T("Nueva marca");
             }
             else
             {
-                lblTitulo.Text = "Categorías y marcas";
-                btnNuevo.Text = "Nuevo";
+                lblTitulo.Text = ClsIdioma.T("Categorías y marcas");
+                btnNuevo.Text = ClsIdioma.T("Nuevo");
             }
 
             // Estilo de los botones.
@@ -178,7 +179,7 @@ namespace CapaVista
             foreach (DataRow fila in tabla.Rows)
             {
                 bool activo = Convert.ToBoolean(fila["Activo"]);
-                int indice = dgvItems.Rows.Add(fila["Nombre"], activo ? "Activo" : "Inactivo");
+                int indice = dgvItems.Rows.Add(fila["Nombre"], activo ? ClsIdioma.T("Activo") : ClsIdioma.T("Inactivo"));
 
                 dgvItems.Rows[indice].Tag = fila["IdCategoria"];
             }
@@ -225,7 +226,7 @@ namespace CapaVista
             foreach (DataRow fila in marcas.Rows)
             {
                 bool activo = Convert.ToBoolean(fila["Activo"]);
-                int indice = dgvItems.Rows.Add(fila["Nombre"], activo ? "Activo" : "Discontinuado");
+                int indice = dgvItems.Rows.Add(fila["Nombre"], activo ? ClsIdioma.T("Activo") : ClsIdioma.T("Discontinuado"));
 
                 dgvItems.Rows[indice].Tag = fila["IdMarca"];
             }
@@ -235,9 +236,9 @@ namespace CapaVista
         {
             if (dgvItems.SelectedRows.Count == 0)
             {
-                string elemento = EsCategorias ? "una categoría" : "una marca";
+                string elemento = EsCategorias ? ClsIdioma.T("una categoría") : ClsIdioma.T("una marca");
 
-                MessageBox.Show("Seleccione " + elemento + " para " + accion + ".", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione ") + elemento + ClsIdioma.T(" para ") + accion + ".", ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return null;
@@ -250,7 +251,7 @@ namespace CapaVista
         {
             if (idCategoria >= 1002 && idCategoria <= 1012)
             {
-                MessageBox.Show(mensaje, "Categoría protegida",
+                MessageBox.Show(mensaje, ClsIdioma.T("Categoría protegida"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return true;
@@ -316,7 +317,7 @@ namespace CapaVista
         }
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            DataGridViewRow fila = ObtenerFilaSeleccionada("modificar");
+            DataGridViewRow fila = ObtenerFilaSeleccionada(ClsIdioma.T("modificar"));
 
             if (fila == null)
             {
@@ -328,7 +329,7 @@ namespace CapaVista
 
             if (EsCategorias)
             {
-                if (EsCategoriaProtegida(id, "Las categorías predeterminadas del sistema no se pueden modificar."))
+                if (EsCategoriaProtegida(id, ClsIdioma.T("Las categorías predeterminadas del sistema no se pueden modificar.")))
                 {
                     return;
                 }
@@ -345,7 +346,7 @@ namespace CapaVista
             {
                 using (frmNuevaMarca formulario = new frmNuevaMarca())
                 {
-                    formulario.Text = "Modificar Marca";
+                    formulario.Text = ClsIdioma.T("Modificar Marca");
                     formulario.IdMarca = id;
                     formulario.NombreMarca = nombre;
 
@@ -357,7 +358,7 @@ namespace CapaVista
         }
         private void btnDiscontinuar_Click(object sender, EventArgs e)
         {
-            DataGridViewRow fila = ObtenerFilaSeleccionada("discontinuar");
+            DataGridViewRow fila = ObtenerFilaSeleccionada(ClsIdioma.T("discontinuar"));
 
             if (fila == null)
             {
@@ -369,12 +370,12 @@ namespace CapaVista
 
             if (EsCategorias)
             {
-                if (EsCategoriaProtegida(id, "Las categorías predeterminadas del sistema no se pueden desactivar."))
+                if (EsCategoriaProtegida(id, ClsIdioma.T("Las categorías predeterminadas del sistema no se pueden desactivar.")))
                 {
                     return;
                 }
 
-                DialogResult respuesta = MessageBox.Show("¿Está seguro de desactivar la categoría \"" + nombre + "\"?", "Confirmar",
+                DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de desactivar la categoría \"") + nombre + "\"?", ClsIdioma.T("Confirmar"),
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta != DialogResult.Yes)
@@ -391,13 +392,13 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("No se pudo desactivar la categoría.\n\n" + ex.Message,
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ClsIdioma.T("No se pudo desactivar la categoría.\n\n") + ex.Message,
+                        ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                DialogResult respuesta = MessageBox.Show("¿Está seguro de discontinuar la marca \"" + nombre + "\"?", "Discontinuar marca",
+                DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de discontinuar la marca \"") + nombre + "\"?", ClsIdioma.T("Discontinuar marca"),
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta != DialogResult.Yes)
@@ -407,7 +408,7 @@ namespace CapaVista
 
                 if (logica.DesactivarMarca(id))
                 {
-                    MessageBox.Show("La marca fue discontinuada correctamente.", "Discontinuar marca",
+                    MessageBox.Show(ClsIdioma.T("La marca fue discontinuada correctamente."), ClsIdioma.T("Discontinuar marca"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     CargarMarcas();
@@ -416,7 +417,7 @@ namespace CapaVista
         }
         private void btnHabilitar_Click(object sender, EventArgs e)
         {
-            DataGridViewRow fila = ObtenerFilaSeleccionada("habilitar");
+            DataGridViewRow fila = ObtenerFilaSeleccionada(ClsIdioma.T("habilitar"));
 
             if (fila == null)
             {
@@ -428,12 +429,12 @@ namespace CapaVista
 
             if (EsCategorias)
             {
-                if (EsCategoriaProtegida(id, "Las categorías predeterminadas del sistema no necesitan ser habilitadas."))
+                if (EsCategoriaProtegida(id, ClsIdioma.T("Las categorías predeterminadas del sistema no necesitan ser habilitadas.")))
                 {
                     return;
                 }
 
-                DialogResult respuesta = MessageBox.Show("¿Está seguro de habilitar la categoría \"" + nombre + "\"?", "Confirmar",
+                DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de habilitar la categoría \"") + nombre + "\"?", ClsIdioma.T("Confirmar"),
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta != DialogResult.Yes)
@@ -450,13 +451,13 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("No se pudo habilitar la categoría.\n\n" + ex.Message, "Error",
+                    MessageBox.Show(ClsIdioma.T("No se pudo habilitar la categoría.\n\n") + ex.Message, ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                DialogResult respuesta = MessageBox.Show("¿Está seguro de habilitar la marca \"" + nombre + "\"?", "Habilitar marca",
+                DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de habilitar la marca \"") + nombre + "\"?", ClsIdioma.T("Habilitar marca"),
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta != DialogResult.Yes)
@@ -466,7 +467,7 @@ namespace CapaVista
 
                 if (logica.HabilitarMarca(id))
                 {
-                    MessageBox.Show("La marca fue habilitada correctamente.", "Habilitar marca",
+                    MessageBox.Show(ClsIdioma.T("La marca fue habilitada correctamente."), ClsIdioma.T("Habilitar marca"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     CargarMarcas();
@@ -481,7 +482,7 @@ namespace CapaVista
                 return;
             }
 
-            DataGridViewRow fila = ObtenerFilaSeleccionada("eliminar");
+            DataGridViewRow fila = ObtenerFilaSeleccionada(ClsIdioma.T("eliminar"));
 
             if (fila == null)
             {
@@ -491,12 +492,12 @@ namespace CapaVista
             int idCategoria = Convert.ToInt32(fila.Tag);
             string nombre = fila.Cells["dgvNombre"].Value?.ToString();
 
-            if (EsCategoriaProtegida(idCategoria, "Las categorías predeterminadas del sistema no se pueden eliminar."))
+            if (EsCategoriaProtegida(idCategoria, ClsIdioma.T("Las categorías predeterminadas del sistema no se pueden eliminar.")))
             {
                 return;
             }
 
-            DialogResult respuesta = MessageBox.Show($"¿Está seguro de eliminar la categoría \"{nombre}\"?", "Confirmar eliminación",
+            DialogResult respuesta = MessageBox.Show((ClsIdioma.Ingles ? $"Are you sure you want to delete the category \"{nombre}\"?" : $"¿Está seguro de eliminar la categoría \"{nombre}\"?"), ClsIdioma.T("Confirmar eliminación"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (respuesta != DialogResult.Yes)
@@ -512,13 +513,13 @@ namespace CapaVista
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo eliminar la categoría.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("No se pudo eliminar la categoría."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar la categoría.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo eliminar la categoría.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

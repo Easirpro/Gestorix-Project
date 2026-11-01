@@ -16,12 +16,23 @@ namespace CapaVista
     public partial class frmCompras : Form
     {
         private ClsCompraLogica logica = new ClsCompraLogica();
+        private ClsLogicaProveedor logicaProveedor = new ClsLogicaProveedor();
+        // Nombres de todos los proveedores, para la lista de sugerencias (no depende de las fechas).
+        private List<string> nombresProveedores = new List<string>();
+        // Compras del rango de fechas; el filtro por proveedor se aplica sobre esta tabla.
+        private DataTable? comprasCargadas;
+        // Proveedor elegido de la lista (null = todos).
+        private string? proveedorSeleccionado = null;
+        // Evita que poner el nombre elegido en el cuadro vuelva a abrir la lista.
+        private bool cambiandoTexto = false;
 
         public frmCompras()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             ConfigurarGrid();
+            CargarNombresProveedores();
             CargarCompras();
             AplicarPermisos();
 
@@ -61,12 +72,38 @@ namespace CapaVista
                 DateTime desde = dateTimePicker1.Value.Date;
                 DateTime hasta = dateTimePicker2.Value.Date;
 
-                DataTable tabla = logica.ObtenerCompras(desde, hasta);
+                comprasCargadas = logica.ObtenerCompras(desde, hasta);
+            }
+            catch (Exception ex)
+            {
+                comprasCargadas = null;
 
-                dataGridView1.Rows.Clear();
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las compras.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
-                foreach (DataRow fila in tabla.Rows)
+            MostrarCompras();
+        }
+        // Llena la grilla con las compras cargadas, solo las del proveedor elegido si hay uno.
+        private void MostrarCompras()
+        {
+            dataGridView1.Rows.Clear();
+
+            if (comprasCargadas == null)
+            {
+                return;
+            }
+
+            try
+            {
+                foreach (DataRow fila in comprasCargadas.Rows)
                 {
+                    if (proveedorSeleccionado != null &&
+                        !string.Equals(fila["Proveedor"].ToString(), proveedorSeleccionado, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+
                     int indice = dataGridView1.Rows.Add();
 
                     dataGridView1.Rows[indice].Cells["clnFecha"].Value = Convert.ToDateTime(fila["Fecha"]).ToString("dd/MM/yyyy");
@@ -79,9 +116,90 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar las compras.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron mostrar las compras.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        // Carga los nombres de todos los proveedores (activos e inactivos: los inactivos pueden tener compras viejas).
+        private void CargarNombresProveedores()
+        {
+            try
+            {
+                nombresProveedores = logicaProveedor.ObtenerProveedores().AsEnumerable()
+                    .Select(f => f["RazonSocial"].ToString() ?? "")
+                    .Where(n => n != "")
+                    .Distinct(StringComparer.CurrentCultureIgnoreCase)
+                    .OrderBy(n => n)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                nombresProveedores = new List<string>();
+
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores para el buscador.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        // Muestra en la lista los proveedores cuyo nombre empieza con lo escrito.
+        private void MostrarSugerencias(string texto)
+        {
+            lstProveedores.Items.Clear();
+
+            foreach (string nombre in nombresProveedores.Where(n => n.StartsWith(texto, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                lstProveedores.Items.Add(nombre);
+            }
+
+            lstProveedores.Visible = lstProveedores.Items.Count > 0;
+
+            if (lstProveedores.Visible)
+            {
+                lstProveedores.SelectedIndex = 0;
+                lstProveedores.BringToFront();
+            }
+        }
+        // Toma el proveedor marcado en la lista y filtra la grilla con sus compras.
+        private void SeleccionarProveedor()
+        {
+            if (!lstProveedores.Visible || lstProveedores.SelectedItem == null)
+            {
+                return;
+            }
+
+            proveedorSeleccionado = lstProveedores.SelectedItem.ToString() ?? "";
+
+            cambiandoTexto = true;
+
+            try
+            {
+                txtBuscarCompra.Text = proveedorSeleccionado;
+                txtBuscarCompra.SelectionStart = txtBuscarCompra.Text.Length;
+            }
+            finally
+            {
+                cambiandoTexto = false;
+            }
+
+            lstProveedores.Visible = false;
+            MostrarCompras();
+
+            if (dataGridView1.Rows.Count == 0)
+            {
+                MessageBox.Show("\"" + proveedorSeleccionado + ClsIdioma.T("\" no tiene compras entre el ") +
+                    dateTimePicker1.Value.ToString("dd/MM/yyyy") + ClsIdioma.T(" y el ") + dateTimePicker2.Value.ToString("dd/MM/yyyy") +
+                    ClsIdioma.T(".\n\nAmplíe las fechas Desde y Hasta para ver sus compras."), ClsIdioma.T("Sin compras"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                dateTimePicker1.Focus();
+                return;
+            }
+
+            dataGridView1.Focus();
+        }
+        private void OcultarSugerencias()
+        {
+            lstProveedores.Items.Clear();
+            lstProveedores.Visible = false;
         }
 
 
@@ -101,7 +219,7 @@ namespace CapaVista
         {
             if (dataGridView1.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Seleccione una compra para ver el detalle.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione una compra para ver el detalle."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -111,7 +229,7 @@ namespace CapaVista
 
             if (fila.Tag == null)
             {
-                MessageBox.Show("No se pudo obtener el identificador de la compra.", "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el identificador de la compra."), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
@@ -127,26 +245,130 @@ namespace CapaVista
         }
         private void button5_Click(object sender, EventArgs e)
         {
+            CargarNombresProveedores();
             CargarCompras();
         }
-        private void btnBuscar_Click(object sender, EventArgs e)
+        // Al cambiar una fecha se recarga sola. Si Desde queda después de Hasta, se corre la otra fecha.
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             if (dateTimePicker1.Value.Date > dateTimePicker2.Value.Date)
             {
-                MessageBox.Show("La fecha Desde no puede ser posterior a la fecha Hasta.", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                dateTimePicker2.Value = dateTimePicker1.Value.Date;   // dispara su ValueChanged, que recarga
                 return;
             }
 
             CargarCompras();
         }
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            if (dateTimePicker2.Value.Date < dateTimePicker1.Value.Date)
+            {
+                dateTimePicker1.Value = dateTimePicker2.Value.Date;
+                return;
+            }
+
+            CargarCompras();
+        }
+        private void txtBuscarCompra_TextChanged(object sender, EventArgs e)
+        {
+            if (cambiandoTexto)
+            {
+                return;
+            }
+
+            string texto = txtBuscarCompra.Text.Trim();
+
+            // Al escribir se vuelven a ver todas hasta elegir un proveedor de la lista.
+            if (proveedorSeleccionado != null)
+            {
+                proveedorSeleccionado = null;
+                MostrarCompras();
+            }
+
+            if (texto == string.Empty)
+            {
+                OcultarSugerencias();
+                return;
+            }
+
+            MostrarSugerencias(texto);
+        }
+        private void txtBuscarCompra_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                SeleccionarProveedor();
+                return;
+            }
+
+            if (!lstProveedores.Visible || lstProveedores.Items.Count == 0)
+            {
+                return;
+            }
+
+            if (e.KeyCode == Keys.Down)
+            {
+                e.SuppressKeyPress = true;
+
+                if (lstProveedores.SelectedIndex < lstProveedores.Items.Count - 1)
+                {
+                    lstProveedores.SelectedIndex++;
+                }
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                e.SuppressKeyPress = true;
+
+                if (lstProveedores.SelectedIndex > 0)
+                {
+                    lstProveedores.SelectedIndex--;
+                }
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true;
+                OcultarSugerencias();
+            }
+        }
+        private void lstProveedores_DoubleClick(object sender, EventArgs e)
+        {
+            SeleccionarProveedor();
+        }
+        private void lstProveedores_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                SeleccionarProveedor();
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true;
+                OcultarSugerencias();
+                txtBuscarCompra.Focus();
+            }
+        }
         private void btnLimpiarFiltros_Click(object sender, EventArgs e)
         {
-            // Vuelve los filtros al estado con el que abre el formulario (hoy - hoy).
+            // Vuelve los filtros al estado con el que abre el formulario (hoy - hoy, todos los proveedores).
+            proveedorSeleccionado = null;
+
+            cambiandoTexto = true;
+
+            try
+            {
+                txtBuscarCompra.Clear();
+            }
+            finally
+            {
+                cambiandoTexto = false;
+            }
+
+            OcultarSugerencias();
+
             dateTimePicker1.Value = DateTime.Today;
             dateTimePicker2.Value = DateTime.Today;
-            txtBuscarCompra.Clear();
 
             CargarCompras();
 
@@ -156,7 +378,7 @@ namespace CapaVista
         {
             if (dataGridView1.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Seleccione una compra para anular.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione una compra para anular."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -166,7 +388,7 @@ namespace CapaVista
 
             if (fila.Tag == null)
             {
-                MessageBox.Show("No se pudo obtener el identificador de la compra.", "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el identificador de la compra."), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
@@ -176,7 +398,7 @@ namespace CapaVista
 
             if (estado == "Anulada")
             {
-                MessageBox.Show("La compra seleccionada ya se encuentra anulada.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La compra seleccionada ya se encuentra anulada."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return;
@@ -184,17 +406,17 @@ namespace CapaVista
 
             int idCompra = Convert.ToInt32(fila.Tag);
 
-            string motivo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese el motivo de la anulación:", "Anular compra", "");
+            string motivo = Microsoft.VisualBasic.Interaction.InputBox(ClsIdioma.T("Ingrese el motivo de la anulación:"), ClsIdioma.T("Anular compra"), "");
 
             if (string.IsNullOrWhiteSpace(motivo))
             {
-                MessageBox.Show("Debe ingresar un motivo para anular la compra.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Debe ingresar un motivo para anular la compra."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
 
-            DialogResult respuesta = MessageBox.Show("¿Está seguro de anular esta compra?\n\nMotivo: " + motivo, "Confirmar anulación",
+            DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de anular esta compra?\n\nMotivo: ") + motivo, ClsIdioma.T("Confirmar anulación"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes)
@@ -206,14 +428,14 @@ namespace CapaVista
             {
                 logica.AnularCompra(idCompra, motivo);
 
-                MessageBox.Show("La compra fue anulada correctamente.", "Compra anulada",
+                MessageBox.Show(ClsIdioma.T("La compra fue anulada correctamente."), ClsIdioma.T("Compra anulada"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarCompras();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo anular la compra.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo anular la compra.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

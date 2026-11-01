@@ -18,6 +18,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPromocion));
             lblNombrePromo = new Label();
             txtNombrePromocion = new TextBox();
@@ -87,6 +88,7 @@
             // 
             txtNombrePromocion.Location = new Point(9, 36);
             txtNombrePromocion.Name = "txtNombrePromocion";
+            txtNombrePromocion.PlaceholderText = "Ej.: 2x1 en gaseosas";
             txtNombrePromocion.Size = new Size(218, 23);
             txtNombrePromocion.TabIndex = 5;
             // 
@@ -269,6 +271,7 @@
             // 
             txtBajaPrecio.Location = new Point(185, 40);
             txtBajaPrecio.Name = "txtBajaPrecio";
+            txtBajaPrecio.PlaceholderText = "Precio final de la promoción";
             txtBajaPrecio.Size = new Size(118, 23);
             txtBajaPrecio.TabIndex = 6;
             txtBajaPrecio.TextChanged += txtBajaPrecio_TextChanged;
@@ -305,6 +308,7 @@
             // 
             txtDescuentoPorcentual.Location = new Point(332, 40);
             txtDescuentoPorcentual.Name = "txtDescuentoPorcentual";
+            txtDescuentoPorcentual.PlaceholderText = "Ej.: 15";
             txtDescuentoPorcentual.Size = new Size(65, 23);
             txtDescuentoPorcentual.TabIndex = 2;
             txtDescuentoPorcentual.TextChanged += txtDescuentoPorcentual_TextChanged;
@@ -509,6 +513,7 @@
             txtBuscarPromo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtBuscarPromo.Location = new Point(113, 26);
             txtBuscarPromo.Name = "txtBuscarPromo";
+            txtBuscarPromo.PlaceholderText = "Nombre o código de la promoción";
             txtBuscarPromo.Size = new Size(244, 23);
             txtBuscarPromo.TabIndex = 20;
             txtBuscarPromo.TextChanged += txtBuscarPromo_TextChanged;
@@ -579,11 +584,21 @@
             gpbVistaPrevia.PerformLayout();
             gpbModificar.ResumeLayout(false);
             gpbModificar.PerformLayout();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbMecanicaPromocional, "Tipo de promoción: por volumen (3x2, 2x1), descuento porcentual o precio especial.");
+            ttAyuda.SetToolTip(cmbDescuentoVolumen, "Elegí la mecánica de volumen, por ejemplo 3x2.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
         private Label lblNombrePromo;
         private TextBox txtNombrePromocion;
         private Label lblCodigoPromo;

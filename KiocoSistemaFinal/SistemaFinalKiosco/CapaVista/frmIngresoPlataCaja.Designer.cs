@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmIngresoPlataCaja));
             lblTitulo = new Label();
             lblConcepto = new Label();
@@ -156,6 +158,7 @@
             txtObservacion.MaxLength = 255;
             txtObservacion.Multiline = true;
             txtObservacion.Name = "txtObservacion";
+            txtObservacion.PlaceholderText = "Detalle del movimiento (opcional)";
             txtObservacion.ScrollBars = ScrollBars.Vertical;
             txtObservacion.Size = new Size(250, 60);
             txtObservacion.TabIndex = 11;
@@ -210,11 +213,22 @@
             Text = "Movimiento de caja";
             Load += frmIngresoPlataCaja_Load;
             ((System.ComponentModel.ISupportInitialize)nudImporte).EndInit();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbConcepto, "Elegí el motivo del movimiento de caja.");
+            ttAyuda.SetToolTip(cmbMedioPago, "Elegí cómo entra o sale la plata (efectivo, transferencia, etc.).");
+            ttAyuda.SetToolTip(cmbEmpleado, "Elegí el empleado relacionado con el movimiento, si corresponde.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private System.Windows.Forms.Label lblTitulo;
         private System.Windows.Forms.Label lblConcepto;

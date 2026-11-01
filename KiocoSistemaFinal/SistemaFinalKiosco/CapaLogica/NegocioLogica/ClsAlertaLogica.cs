@@ -18,7 +18,7 @@ namespace CapaLogica.NegocioLogica
         {
             [TipoAlerta.Lote] = new[] { 110, 111, 112, 113, 520 },       // administración de artículos o reposición
             [TipoAlerta.Stock] = new[] { 110, 111, 112, 113, 520 },
-            [TipoAlerta.Entrega] = new[] { 300 },                         // compras
+            [TipoAlerta.Entrega] = new[] { 300, 320 },                    // compras o recepción de mercadería
             [TipoAlerta.Caja] = new[] { 700, 740 },                       // estado o cierre de caja
             [TipoAlerta.Pago] = new[] { 420 },                            // cuenta corriente de proveedores
             [TipoAlerta.Promocion] = new[] { 110, 111, 112, 113 },        // las promociones no tienen permiso propio

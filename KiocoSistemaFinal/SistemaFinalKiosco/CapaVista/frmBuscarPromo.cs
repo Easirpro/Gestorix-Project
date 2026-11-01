@@ -22,6 +22,7 @@ namespace CapaVista
         public frmBuscarPromo()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
 
         private void frmBuscarPromo_Load_1(object sender, EventArgs e)
@@ -104,7 +105,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar las promociones: " + ex.Message, "Buscar promociones",
+                MessageBox.Show(ClsIdioma.T("Error al cargar las promociones: ") + ex.Message, ClsIdioma.T("Buscar promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -196,13 +197,13 @@ namespace CapaVista
 
                 dtgBuscarPromo.Rows[indice].Cells["clnCodigo"].Value = promo["CodigoPromocion"];
                 dtgBuscarPromo.Rows[indice].Cells["clnNombre"].Value = nombresProductos;
-                dtgBuscarPromo.Rows[indice].Cells["clnEstado"].Value = Convert.ToBoolean(promo["Activo"]) ? "Activa" : "Inactiva";
+                dtgBuscarPromo.Rows[indice].Cells["clnEstado"].Value = Convert.ToBoolean(promo["Activo"]) ? ClsIdioma.T("Activa") : ClsIdioma.T("Inactiva");
                 dtgBuscarPromo.Rows[indice].Tag = idPromocion;
                 dtgBuscarPromo.ClearSelection();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar el detalle de la promoción: " + ex.Message, "Buscar promociones",
+                MessageBox.Show(ClsIdioma.T("Error al cargar el detalle de la promoción: ") + ex.Message, ClsIdioma.T("Buscar promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -251,7 +252,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al filtrar las promociones: " + ex.Message, "Buscar promociones",
+                MessageBox.Show(ClsIdioma.T("Error al filtrar las promociones: ") + ex.Message, ClsIdioma.T("Buscar promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -263,7 +264,7 @@ namespace CapaVista
         {
             if (dtgBuscarPromo.CurrentRow == null || dtgBuscarPromo.CurrentRow.Tag == null)
             {
-                MessageBox.Show("Seleccioná una promoción antes de continuar.", "Promociones",
+                MessageBox.Show(ClsIdioma.T("Seleccioná una promoción antes de continuar."), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -296,7 +297,7 @@ namespace CapaVista
 
                 if (coincidencias.Length == 0)
                 {
-                    MessageBox.Show("No se encontró la promoción seleccionada.", "Detalle de la promoción",
+                    MessageBox.Show(ClsIdioma.T("No se encontró la promoción seleccionada."), ClsIdioma.T("Detalle de la promoción"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -307,7 +308,7 @@ namespace CapaVista
 
                 if (datos.Tables.Count < 2 || datos.Tables[0].Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron los datos de la promoción.", "Detalle de la promoción",
+                    MessageBox.Show(ClsIdioma.T("No se encontraron los datos de la promoción."), ClsIdioma.T("Detalle de la promoción"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -317,34 +318,34 @@ namespace CapaVista
 
                 StringBuilder mensaje = new StringBuilder();
 
-                mensaje.AppendLine("PROMOCIÓN");
+                mensaje.AppendLine(ClsIdioma.T("PROMOCIÓN"));
                 mensaje.AppendLine("--------------------------------");
-                mensaje.AppendLine("Código: " + promo["CodigoPromocion"]);
-                mensaje.AppendLine("Nombre: " + promo["Nombre"]);
+                mensaje.AppendLine(ClsIdioma.T("Código: ") + promo["CodigoPromocion"]);
+                mensaje.AppendLine(ClsIdioma.T("Nombre: ") + promo["Nombre"]);
 
                 if (promo["Descripcion"] != DBNull.Value)
-                    mensaje.AppendLine("Descripción: " + promo["Descripcion"]);
+                    mensaje.AppendLine(ClsIdioma.T("Descripción: ") + promo["Descripcion"]);
 
-                mensaje.AppendLine("Tipo: " + promo["NombreTipoPromocion"]);
+                mensaje.AppendLine(ClsIdioma.T("Tipo: ") + promo["NombreTipoPromocion"]);
                 mensaje.AppendLine();
 
-                mensaje.AppendLine("PRODUCTOS INCLUIDOS");
+                mensaje.AppendLine(ClsIdioma.T("PRODUCTOS INCLUIDOS"));
                 mensaje.AppendLine("--------------------------------");
 
                 if (detalles.Rows.Count == 0)
                 {
-                    mensaje.AppendLine("No hay productos asociados.");
+                    mensaje.AppendLine(ClsIdioma.T("No hay productos asociados."));
                 }
                 else
                 {
                     foreach (DataRow detalle in detalles.Rows)
                     {
-                        mensaje.AppendLine("- " + detalle["NombreProducto"] + " | Cantidad: " + detalle["Cantidad"]);
+                        mensaje.AppendLine("- " + detalle["NombreProducto"] + ClsIdioma.T(" | Cantidad: ") + detalle["Cantidad"]);
                     }
                 }
 
                 mensaje.AppendLine();
-                mensaje.AppendLine("VALOR CONFIGURADO");
+                mensaje.AppendLine(ClsIdioma.T("VALOR CONFIGURADO"));
                 mensaje.AppendLine("--------------------------------");
 
                 string nombreTipo = Convert.ToString(promo["NombreTipoPromocion"]).ToLowerInvariant();
@@ -353,22 +354,22 @@ namespace CapaVista
 
                 if (nombreTipo.Contains("porcent"))
                 {
-                    mensaje.AppendLine("Descuento: " + valor + "%");
+                    mensaje.AppendLine(ClsIdioma.T("Descuento: ") + valor + "%");
                 }
                 else if (nombreTipo.Contains("precio"))
                 {
-                    mensaje.AppendLine("Precio especial: " + valor.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR")));
+                    mensaje.AppendLine(ClsIdioma.T("Precio especial: ") + valor.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR")));
                 }
                 else if (promo["CantidadLleva"] != DBNull.Value && promo["CantidadPaga"] != DBNull.Value)
                 {
                     int lleva = Convert.ToInt32(promo["CantidadLleva"]);
                     int paga = Convert.ToInt32(promo["CantidadPaga"]);
 
-                    mensaje.AppendLine("Promoción por cantidad: llevás " + lleva + " y pagás " + paga + ".");
+                    mensaje.AppendLine(ClsIdioma.T("Promoción por cantidad: llevás ") + lleva + ClsIdioma.T(" y pagás ") + paga + ".");
                 }
                 else
                 {
-                    mensaje.AppendLine("Promoción por cantidad o condición especial.");
+                    mensaje.AppendLine(ClsIdioma.T("Promoción por cantidad o condición especial."));
                 }
 
                 mensaje.AppendLine();
@@ -377,37 +378,37 @@ namespace CapaVista
 
                 if (promo["FechaInicio"] != DBNull.Value)
                 {
-                    mensaje.AppendLine("Fecha de inicio: " + Convert.ToDateTime(promo["FechaInicio"]).ToShortDateString());
+                    mensaje.AppendLine(ClsIdioma.T("Fecha de inicio: ") + Convert.ToDateTime(promo["FechaInicio"]).ToShortDateString());
                 }
 
                 if (promo["FechaFin"] != DBNull.Value)
                 {
-                    mensaje.AppendLine("Fecha de fin: " + Convert.ToDateTime(promo["FechaFin"]).ToShortDateString());
+                    mensaje.AppendLine(ClsIdioma.T("Fecha de fin: ") + Convert.ToDateTime(promo["FechaFin"]).ToShortDateString());
                 }
 
                 if (promo["EsRecurrente"] != DBNull.Value && Convert.ToBoolean(promo["EsRecurrente"]))
                 {
-                    mensaje.AppendLine("Vigencia recurrente: Sí");
+                    mensaje.AppendLine(ClsIdioma.T("Vigencia recurrente: Sí"));
 
                     if (promo["HoraInicio"] != DBNull.Value && promo["HoraFin"] != DBNull.Value)
                     {
-                        mensaje.AppendLine("Horario: " + promo["HoraInicio"] + " a " + promo["HoraFin"]);
+                        mensaje.AppendLine(ClsIdioma.T("Horario: ") + promo["HoraInicio"] + " a " + promo["HoraFin"]);
                     }
 
                     if (datos.Tables.Count >= 3 && datos.Tables[2].Rows.Count > 0)
                     {
                         string[] dias = datos.Tables[2].AsEnumerable().Select(f => Convert.ToString(f["DiaSemana"])).ToArray();
 
-                        mensaje.AppendLine("Días: " + string.Join(", ", dias));
+                        mensaje.AppendLine(ClsIdioma.T("Días: ") + string.Join(", ", dias));
                     }
                 }
 
-                MessageBox.Show(mensaje.ToString(), "Detalle de la promoción",
+                MessageBox.Show(mensaje.ToString(), ClsIdioma.T("Detalle de la promoción"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al mostrar el detalle: " + ex.Message, "Detalle de la promoción",
+                MessageBox.Show(ClsIdioma.T("Error al mostrar el detalle: ") + ex.Message, ClsIdioma.T("Detalle de la promoción"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

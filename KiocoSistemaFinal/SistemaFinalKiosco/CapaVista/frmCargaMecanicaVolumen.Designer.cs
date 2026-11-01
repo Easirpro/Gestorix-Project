@@ -100,6 +100,7 @@
             // 
             txtCantidadLleva.Location = new Point(24, 93);
             txtCantidadLleva.Name = "txtCantidadLleva";
+            txtCantidadLleva.PlaceholderText = "Ej.: 3 (lleva 3)";
             txtCantidadLleva.Size = new Size(107, 23);
             txtCantidadLleva.TabIndex = 6;
             txtCantidadLleva.TextChanged += txtCantidadLleva_TextChanged;
@@ -108,6 +109,7 @@
             // 
             txtCantidadPaga.Location = new Point(216, 93);
             txtCantidadPaga.Name = "txtCantidadPaga";
+            txtCantidadPaga.PlaceholderText = "Ej.: 2 (paga 2)";
             txtCantidadPaga.Size = new Size(107, 23);
             txtCantidadPaga.TabIndex = 7;
             txtCantidadPaga.TextChanged += txtCantidadPaga_TextChanged;

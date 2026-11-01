@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            ttAyuda = new ToolTip(components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBalance));
             lblDesde = new Label();
             dtpDesde = new DateTimePicker();
@@ -630,11 +632,22 @@
             tabDetalle.ResumeLayout(false);
             tabDetalle.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDetalle).EndInit();
+            // 
+            // ttAyuda: explicación de cada combo al pasar el mouse
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            ttAyuda.SetToolTip(cmbTipoDetalle, "Filtrá el detalle por tipo de movimiento.");
+            ttAyuda.SetToolTip(cmbMedioDetalle, "Filtrá el detalle por medio de pago.");
+            ttAyuda.SetToolTip(cmbUsuarioDetalle, "Filtrá el detalle por el usuario que registró el movimiento.");
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolTip ttAyuda;
 
         private System.Windows.Forms.Label lblDesde;
         private System.Windows.Forms.DateTimePicker dtpDesde;

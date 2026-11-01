@@ -46,6 +46,21 @@ namespace CapaVista
 
         public List<ClsAlertaEntidad> Alertas { get; private set; } = new List<ClsAlertaEntidad>();
 
+        // Si se asigna, al pie de la lista aparece "Ver todas las alertas…".
+        public Action? VerTodas { get; set; }
+
+        // Si se asigna, antes de abrir la pantalla de un tipo se verifica que el usuario pueda entrar;
+        // si no, se avisa en vez de no hacer nada.
+        public Func<TipoAlerta, bool>? PuedeResolver { get; set; }
+
+        public const string MENSAJE_SIN_PERMISO = "No tenés permiso para resolver esta alerta. Avisale al administrador.";
+
+        // Nombre de cada tipo de alerta, el mismo que usa la campana (lo usa también frmAlertas).
+        public static string TituloDe(TipoAlerta tipo)
+        {
+            return ClsIdioma.T(Titulos.TryGetValue(tipo, out string? titulo) ? titulo : tipo.ToString());
+        }
+
         // menu: barra del menú principal; antesDe: ítem que queda a la derecha de la campana (cerrar sesión);
         // acciones: qué pantalla abrir para cada tipo de alerta.
         public ClsCampanaAlertas(Form formulario, MenuStrip menu, ToolStripItem antesDe, Dictionary<TipoAlerta, Action> acciones)
@@ -73,6 +88,9 @@ namespace CapaVista
 
             temporizador = new System.Windows.Forms.Timer { Interval = MINUTOS_ACTUALIZACION * 60 * 1000 };
             temporizador.Tick += (sender, e) => Actualizar();
+
+            // Al cambiar de idioma se vuelve a armar la lista con los textos en el idioma nuevo.
+            ClsIdioma.IdiomaCambiado += Actualizar;
 
             // Al volver de otra pantalla (por ejemplo, después de recibir una compra) se refresca.
             formulario.Activated += (sender, e) =>
@@ -110,10 +128,10 @@ namespace CapaVista
                 // No se interrumpe el trabajo con un cartel: la campana muestra que no se pudo cargar.
                 Alertas = new List<ClsAlertaEntidad>();
                 campana.DropDownItems.Clear();
-                campana.DropDownItems.Add(new ToolStripMenuItem("No se pudieron cargar las alertas") { Enabled = false, ToolTipText = ex.Message });
+                campana.DropDownItems.Add(new ToolStripMenuItem(ClsIdioma.T("No se pudieron cargar las alertas")) { Enabled = false, ToolTipText = ex.Message });
                 AgregarActualizar();
                 campana.Image = DibujarCampana(0, false);
-                campana.ToolTipText = "No se pudieron cargar las alertas";
+                campana.ToolTipText = ClsIdioma.T("No se pudieron cargar las alertas");
                 return;
             }
 
@@ -121,14 +139,14 @@ namespace CapaVista
 
             campana.Image = DibujarCampana(Alertas.Count, urgentes > 0);
             campana.ToolTipText = Alertas.Count == 0
-                ? "No hay alertas"
-                : Alertas.Count + (Alertas.Count == 1 ? " alerta" : " alertas") + (urgentes > 0 ? " (" + urgentes + (urgentes == 1 ? " urgente)" : " urgentes)") : "");
+                ? ClsIdioma.T("No hay alertas")
+                : Alertas.Count + (Alertas.Count == 1 ? ClsIdioma.T(" alerta") : ClsIdioma.T(" alertas")) + (urgentes > 0 ? " (" + urgentes + (urgentes == 1 ? ClsIdioma.T(" urgente)") : ClsIdioma.T(" urgentes)")) : "");
         }
         private void ConstruirLista()
         {
             campana.DropDownItems.Clear();
 
-            ToolStripLabel titulo = new ToolStripLabel("Alertas")
+            ToolStripLabel titulo = new ToolStripLabel(ClsIdioma.T("Alertas"))
             {
                 Font = new Font(SystemFonts.MenuFont, FontStyle.Bold),
                 Padding = new Padding(4, 4, 4, 2)
@@ -138,7 +156,7 @@ namespace CapaVista
 
             if (Alertas.Count == 0)
             {
-                campana.DropDownItems.Add(new ToolStripMenuItem("No hay alertas. Todo en orden.")
+                campana.DropDownItems.Add(new ToolStripMenuItem(ClsIdioma.T("No hay alertas. Todo en orden."))
                 {
                     Enabled = false,
                     Image = DibujarPunto(Color.SeaGreen)
@@ -156,19 +174,19 @@ namespace CapaVista
                 List<ClsAlertaEntidad> lista = grupo.OrderByDescending(a => a.Urgente).ToList();
                 bool urgente = lista.Any(a => a.Urgente);
 
-                List<string> renglones = new List<string> { Titulos[grupo.Key] + " (" + lista.Count + ")" };
-                renglones.AddRange(lista.Take(DESCRIPCIONES_POR_GRUPO).Select(a => "    " + Recortar(a.Descripcion)));
+                List<string> renglones = new List<string> { TituloDe(grupo.Key) + " (" + lista.Count + ")" };
+                renglones.AddRange(lista.Take(DESCRIPCIONES_POR_GRUPO).Select(a => "    " + Recortar(ClsIdioma.TraducirAlerta(a.Descripcion))));
 
                 if (lista.Count > DESCRIPCIONES_POR_GRUPO)
-                    renglones.Add("    y " + (lista.Count - DESCRIPCIONES_POR_GRUPO) + " más…");
+                    renglones.Add(ClsIdioma.T("    y ") + (lista.Count - DESCRIPCIONES_POR_GRUPO) + ClsIdioma.T(" más…"));
 
                 ToolStripMenuItem item = new ToolStripMenuItem(string.Join(Environment.NewLine, renglones))
                 {
                     Image = DibujarPunto(urgente ? ColorUrgente : ColorAviso),
                     ImageAlign = ContentAlignment.TopCenter,
                     TextAlign = ContentAlignment.MiddleLeft,
-                    ToolTipText = string.Join(Environment.NewLine, lista.Take(15).Select(a => a.Descripcion))
-                        + (lista.Count > 15 ? Environment.NewLine + "y " + (lista.Count - 15) + " más…" : "")
+                    ToolTipText = string.Join(Environment.NewLine, lista.Take(15).Select(a => ClsIdioma.TraducirAlerta(a.Descripcion)))
+                        + (lista.Count > 15 ? Environment.NewLine + ClsIdioma.T("y ") + (lista.Count - 15) + ClsIdioma.T(" más…") : "")
                 };
 
                 TipoAlerta tipo = grupo.Key;
@@ -183,12 +201,28 @@ namespace CapaVista
         {
             campana.DropDownItems.Add(new ToolStripSeparator());
 
-            ToolStripMenuItem actualizar = new ToolStripMenuItem("Actualizar");
+            if (VerTodas != null)
+            {
+                ToolStripMenuItem verTodas = new ToolStripMenuItem(ClsIdioma.T("Ver todas las alertas…"))
+                {
+                    Font = new Font(SystemFonts.MenuFont, FontStyle.Bold)
+                };
+                verTodas.Click += (sender, e) => VerTodas();
+                campana.DropDownItems.Add(verTodas);
+            }
+
+            ToolStripMenuItem actualizar = new ToolStripMenuItem(ClsIdioma.T("Actualizar"));
             actualizar.Click += (sender, e) => Actualizar();
             campana.DropDownItems.Add(actualizar);
         }
         private void Abrir(TipoAlerta tipo)
         {
+            if (PuedeResolver != null && !PuedeResolver(tipo))
+            {
+                MessageBox.Show(ClsIdioma.T(MENSAJE_SIN_PERMISO), ClsIdioma.T("Alertas"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             if (acciones.TryGetValue(tipo, out Action accion))
                 accion();
 
@@ -264,6 +298,7 @@ namespace CapaVista
         }
         public void Dispose()
         {
+            ClsIdioma.IdiomaCambiado -= Actualizar;
             temporizador.Dispose();
         }
     }

@@ -16,7 +16,7 @@ namespace CapaLogica
             if (nuevaPass != confirmarPass)
                 return ResultadoCambioPassword.PasswordNoCoinciden;
 
-            if (!Regex.IsMatch(nuevaPass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"))
+            if (!ClsReglasPassword.CumpleRequisitos(nuevaPass))
                 return ResultadoCambioPassword.PasswordNoCumpleRequisitos;
 
             if (passTemporal == nuevaPass)
@@ -39,6 +39,9 @@ namespace CapaLogica
             SesionUsuario.PrimerIngreso = false;
             SesionUsuario.ContadorLogin++;
             SesionUsuario.UltimoIngreso = DateTime.Now;
+
+            ClsRegistroSeguridad.Registrar(SesionUsuario.IdUsuario, "CAMBIO_PASSWORD",
+                "Cambio de la contraseña temporal en el primer ingreso.");
 
             return ResultadoCambioPassword.Correcto;
         }

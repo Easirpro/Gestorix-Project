@@ -170,6 +170,7 @@
             txtBuscar.Location = new Point(82, 5);
             txtBuscar.Margin = new Padding(3, 5, 8, 5);
             txtBuscar.Name = "txtBuscar";
+            txtBuscar.PlaceholderText = "Nombre del proveedor";
             txtBuscar.Size = new Size(560, 23);
             txtBuscar.TabIndex = 1;
             // 
@@ -574,6 +575,7 @@
             txtTotalBoleta.Location = new Point(427, 4);
             txtTotalBoleta.Margin = new Padding(2, 4, 6, 4);
             txtTotalBoleta.Name = "txtTotalBoleta";
+            txtTotalBoleta.PlaceholderText = "Total que figura en la boleta";
             txtTotalBoleta.Size = new Size(217, 23);
             txtTotalBoleta.TabIndex = 3;
             txtTotalBoleta.TextAlign = HorizontalAlignment.Right;
@@ -695,6 +697,7 @@
             txtObservaciones.Margin = new Padding(0, 2, 0, 0);
             txtObservaciones.Multiline = true;
             txtObservaciones.Name = "txtObservaciones";
+            txtObservaciones.PlaceholderText = "Detalle de faltantes, sobrantes u otras observaciones";
             txtObservaciones.ScrollBars = ScrollBars.Vertical;
             txtObservaciones.Size = new Size(598, 96);
             txtObservaciones.TabIndex = 3;

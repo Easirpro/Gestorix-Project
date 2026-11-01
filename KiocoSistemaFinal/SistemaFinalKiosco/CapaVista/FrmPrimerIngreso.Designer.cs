@@ -84,6 +84,7 @@
             // 
             txtPassTemporal.Location = new Point(84, 64);
             txtPassTemporal.Name = "txtPassTemporal";
+            txtPassTemporal.PlaceholderText = "La que te llegó por correo";
             txtPassTemporal.Size = new Size(120, 23);
             txtPassTemporal.TabIndex = 4;
             // 
@@ -91,6 +92,7 @@
             // 
             txtNuevaPass.Location = new Point(84, 127);
             txtNuevaPass.Name = "txtNuevaPass";
+            txtNuevaPass.PlaceholderText = "Tu nueva contraseña";
             txtNuevaPass.Size = new Size(120, 23);
             txtNuevaPass.TabIndex = 5;
             txtNuevaPass.TextChanged += txtNuevaPass_TextChanged;
@@ -99,6 +101,7 @@
             // 
             txtConfirmarPass.Location = new Point(84, 253);
             txtConfirmarPass.Name = "txtConfirmarPass";
+            txtConfirmarPass.PlaceholderText = "Repetí la nueva contraseña";
             txtConfirmarPass.Size = new Size(120, 23);
             txtConfirmarPass.TabIndex = 6;
             txtConfirmarPass.TextChanged += txtConfirmarPass_TextChanged;

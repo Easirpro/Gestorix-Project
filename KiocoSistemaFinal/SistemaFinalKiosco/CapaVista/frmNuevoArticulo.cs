@@ -24,6 +24,7 @@ namespace CapaVista
         public frmNuevoArticulo()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.Load += frmNuevoArticulo_Load;
 
@@ -32,6 +33,7 @@ namespace CapaVista
         public frmNuevoArticulo(int idProducto)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             idProductoModificar = idProducto;
 
@@ -87,14 +89,14 @@ namespace CapaVista
                     errorRegistro = exRegistro.Message;
                 }
 
-                string mensaje = "Ocurrió un error al cargar el formulario de artículos.\n\n" + ex.Message;
+                string mensaje = ClsIdioma.T("Ocurrió un error al cargar el formulario de artículos.\n\n") + ex.Message;
 
                 if (errorRegistro != null)
                 {
-                    mensaje += "\n\nNo se pudo registrar el error técnico:\n" + errorRegistro;
+                    mensaje += ClsIdioma.T("\n\nNo se pudo registrar el error técnico:\n") + errorRegistro;
                 }
 
-                MessageBox.Show(mensaje, "Error al cargar artículos",
+                MessageBox.Show(mensaje, ClsIdioma.T("Error al cargar artículos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 this.Close();
@@ -108,7 +110,7 @@ namespace CapaVista
 
             if (tabla.Rows.Count == 0)
             {
-                MessageBox.Show("No se encontró el artículo.", "Modificar artículo",
+                MessageBox.Show(ClsIdioma.T("No se encontró el artículo."), ClsIdioma.T("Modificar artículo"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -471,7 +473,7 @@ namespace CapaVista
 
             DataRow fila = tabla.NewRow();
             fila["IdProveedor"] = 0;
-            fila["RazonSocial"] = "-Seleccione Proveedor-";
+            fila["RazonSocial"] = ClsIdioma.T("-Seleccione Proveedor-");
             tabla.Rows.InsertAt(fila, 0);
 
             cmbProveedor.DataSource = tabla;
@@ -493,14 +495,14 @@ namespace CapaVista
             {
                 if (!ValidarDatos())
                 {
-                    MessageBox.Show("Revise los datos ingresados. Hay campos vacíos o valores inválidos.", "Validación",
+                    MessageBox.Show(ClsIdioma.T("Revise los datos ingresados. Hay campos vacíos o valores inválidos."), ClsIdioma.T("Validación"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 if (cmbProveedor.SelectedValue == null || !int.TryParse(cmbProveedor.SelectedValue.ToString(), out int idProveedor) || idProveedor == 0)
                 {
-                    MessageBox.Show("Seleccione un proveedor.");
+                    MessageBox.Show(ClsIdioma.T("Seleccione un proveedor."));
                     cmbProveedor.Focus();
                     return;
                 }
@@ -508,14 +510,14 @@ namespace CapaVista
                 if (cmbSucursal.SelectedValue == null || !int.TryParse(cmbSucursal.SelectedValue.ToString(), out int idSucursal) ||
                     idSucursal == 0)
                 {
-                    MessageBox.Show("Seleccione una sucursal.");
+                    MessageBox.Show(ClsIdioma.T("Seleccione una sucursal."));
                     cmbSucursal.Focus();
                     return;
                 }
 
                 if (!decimal.TryParse(txtPrecioVenta.Text, out decimal precioVenta))
                 {
-                    MessageBox.Show("Ingrese un precio de venta válido.");
+                    MessageBox.Show(ClsIdioma.T("Ingrese un precio de venta válido."));
                     txtPrecioVenta.Focus();
                     return;
                 }
@@ -528,7 +530,7 @@ namespace CapaVista
                 {
                     if (!decimal.TryParse(txtStockActual.Text, out stockActual) || !decimal.TryParse(txtStockMinimo.Text, out stockMinimo) || !decimal.TryParse(txtStockMaximo.Text, out stockIdeal))
                     {
-                        MessageBox.Show("Revise los valores de stock ingresados.");
+                        MessageBox.Show(ClsIdioma.T("Revise los valores de stock ingresados."));
                         return;
                     }
                 }
@@ -554,7 +556,7 @@ namespace CapaVista
 
                     if (!modificado)
                     {
-                        MessageBox.Show("No se pudo modificar el artículo.", "Modificar artículo",
+                        MessageBox.Show(ClsIdioma.T("No se pudo modificar el artículo."), ClsIdioma.T("Modificar artículo"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
@@ -563,7 +565,7 @@ namespace CapaVista
 
                     if (!stockModificado)
                     {
-                        MessageBox.Show("El artículo se modificó, pero no se pudo actualizar el stock.", "Modificar artículo",
+                        MessageBox.Show(ClsIdioma.T("El artículo se modificó, pero no se pudo actualizar el stock."), ClsIdioma.T("Modificar artículo"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
@@ -579,11 +581,11 @@ namespace CapaVista
                     if (!relacionModificada)
                     {
                         MessageBox.Show(
-                            "No se pudo actualizar la relación con la sucursal.\n\n" +
-                            "IdProducto: " + relacion.IdProducto + "\n" +
-                            "IdSucursal: " + relacion.IdSucursal + "\n\n" +
-                            "La operación de modificación devolvió false.",
-                            "Error al actualizar sucursal",
+                            ClsIdioma.T("No se pudo actualizar la relación con la sucursal.\n\n") +
+                            ClsIdioma.T("IdProducto: ") + relacion.IdProducto + "\n" +
+                            ClsIdioma.T("IdSucursal: ") + relacion.IdSucursal + "\n\n" +
+                            ClsIdioma.T("La operación de modificación devolvió false."),
+                            ClsIdioma.T("Error al actualizar sucursal"),
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Warning);
 
@@ -607,13 +609,13 @@ namespace CapaVista
 
                         if (!loteModificado)
                         {
-                            MessageBox.Show("El artículo, el stock y la sucursal se actualizaron, pero no se pudo modificar el lote.", "Modificar artículo",
+                            MessageBox.Show(ClsIdioma.T("El artículo, el stock y la sucursal se actualizaron, pero no se pudo modificar el lote."), ClsIdioma.T("Modificar artículo"),
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                     }
 
-                    MessageBox.Show("Artículo modificado correctamente.", "Modificar artículo",
+                    MessageBox.Show(ClsIdioma.T("Artículo modificado correctamente."), ClsIdioma.T("Modificar artículo"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.DialogResult = DialogResult.OK;
@@ -625,7 +627,7 @@ namespace CapaVista
 
                 if (idProducto <= 0)
                 {
-                    MessageBox.Show("No se pudo registrar el artículo.", "Nuevo artículo",
+                    MessageBox.Show(ClsIdioma.T("No se pudo registrar el artículo."), ClsIdioma.T("Nuevo artículo"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -658,13 +660,13 @@ namespace CapaVista
 
                     if (!loteRegistrado)
                     {
-                        MessageBox.Show("El artículo se registró, pero no se pudo registrar el lote.", "Nuevo artículo",
+                        MessageBox.Show(ClsIdioma.T("El artículo se registró, pero no se pudo registrar el lote."), ClsIdioma.T("Nuevo artículo"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
                 }
 
-                MessageBox.Show("Artículo registrado correctamente.", "Nuevo artículo",
+                MessageBox.Show(ClsIdioma.T("Artículo registrado correctamente."), ClsIdioma.T("Nuevo artículo"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
@@ -684,15 +686,15 @@ namespace CapaVista
                     errorRegistro = exRegistro.Message;
                 }
 
-                string mensaje = "Ocurrió un error al guardar el artículo.\n\n" + ex.Message;
+                string mensaje = ClsIdioma.T("Ocurrió un error al guardar el artículo.\n\n") + ex.Message;
 
                 if (errorRegistro != null)
                 {
-                    mensaje += "\n\nAdemás, no se pudo guardar el error técnico en la bitácora:\n" +
+                    mensaje += ClsIdioma.T("\n\nAdemás, no se pudo guardar el error técnico en la bitácora:\n") +
                                errorRegistro;
                 }
 
-                MessageBox.Show(mensaje, "Guardar artículo",
+                MessageBox.Show(mensaje, ClsIdioma.T("Guardar artículo"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -765,13 +767,13 @@ namespace CapaVista
                 if (tabla == null || tabla.Rows.Count == 0)
                 {
                     cmbSucursal.DataSource = null;
-                    MessageBox.Show("El proveedor seleccionado no tiene sucursales activas.");
+                    MessageBox.Show(ClsIdioma.T("El proveedor seleccionado no tiene sucursales activas."));
                     return;
                 }
 
                 DataRow fila = tabla.NewRow();
                 fila["IdSucursal"] = 0;
-                fila["Sucursal"] = "-Seleccione Sucursal-";
+                fila["Sucursal"] = ClsIdioma.T("-Seleccione Sucursal-");
                 tabla.Rows.InsertAt(fila, 0);
 
                 cmbSucursal.DataSource = tabla;
@@ -790,7 +792,7 @@ namespace CapaVista
                     System.Diagnostics.Debug.WriteLine(exRegistro.ToString());
                 }
 
-                MessageBox.Show("Ocurrió un error al cargar las sucursales del proveedor.\n\n" + ex.Message,"Error",
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error al cargar las sucursales del proveedor.\n\n") + ex.Message,ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
