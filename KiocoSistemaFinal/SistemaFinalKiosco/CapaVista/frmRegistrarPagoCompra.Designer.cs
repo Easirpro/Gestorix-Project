@@ -28,91 +28,97 @@
         /// </summary>
         private void InitializeComponent()
         {
-            lblTitulo = new System.Windows.Forms.Label();
-            lblCompra = new System.Windows.Forms.Label();
-            lblSaldo = new System.Windows.Forms.Label();
-            lblMedioPago = new System.Windows.Forms.Label();
-            cmbMedioPago = new System.Windows.Forms.ComboBox();
-            lblMonto = new System.Windows.Forms.Label();
-            nudMonto = new System.Windows.Forms.NumericUpDown();
-            btnTotal = new System.Windows.Forms.Button();
-            chkDesdeCaja = new System.Windows.Forms.CheckBox();
-            lblDisponible = new System.Windows.Forms.Label();
-            lblObservacion = new System.Windows.Forms.Label();
-            txtObservacion = new System.Windows.Forms.TextBox();
-            btnGuardar = new System.Windows.Forms.Button();
-            btnCancelar = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRegistrarPagoCompra));
+            lblTitulo = new Label();
+            lblCompra = new Label();
+            lblSaldo = new Label();
+            lblMedioPago = new Label();
+            cmbMedioPago = new ComboBox();
+            lblMonto = new Label();
+            nudMonto = new NumericUpDown();
+            btnTotal = new Button();
+            chkDesdeCaja = new CheckBox();
+            lblDisponible = new Label();
+            lblObservacion = new Label();
+            txtObservacion = new TextBox();
+            btnGuardar = new Button();
+            btnCancelar = new Button();
             ((System.ComponentModel.ISupportInitialize)nudMonto).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
             // 
-            lblTitulo.Location = new System.Drawing.Point(15, 15);
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblTitulo.Location = new Point(15, 15);
             lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(122, 20);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Pago de compra";
-            lblTitulo.AutoSize = true;
-            lblTitulo.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
             // lblCompra
             // 
-            lblCompra.Location = new System.Drawing.Point(15, 45);
+            lblCompra.AutoSize = true;
+            lblCompra.Location = new Point(15, 45);
             lblCompra.Name = "lblCompra";
+            lblCompra.Size = new Size(78, 15);
             lblCompra.TabIndex = 1;
             lblCompra.Text = "Compra N.º -";
-            lblCompra.AutoSize = true;
             // 
             // lblSaldo
             // 
-            lblSaldo.Location = new System.Drawing.Point(15, 68);
+            lblSaldo.AutoSize = true;
+            lblSaldo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblSaldo.Location = new Point(15, 68);
             lblSaldo.Name = "lblSaldo";
+            lblSaldo.Size = new Size(137, 15);
             lblSaldo.TabIndex = 2;
             lblSaldo.Text = "Saldo pendiente: $ 0,00";
-            lblSaldo.AutoSize = true;
-            lblSaldo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
             // lblMedioPago
             // 
-            lblMedioPago.Location = new System.Drawing.Point(15, 105);
+            lblMedioPago.AutoSize = true;
+            lblMedioPago.Location = new Point(15, 105);
             lblMedioPago.Name = "lblMedioPago";
+            lblMedioPago.Size = new Size(90, 15);
             lblMedioPago.TabIndex = 3;
             lblMedioPago.Text = "Medio de pago:";
-            lblMedioPago.AutoSize = true;
             // 
             // cmbMedioPago
             // 
-            cmbMedioPago.Location = new System.Drawing.Point(130, 101);
-            cmbMedioPago.Name = "cmbMedioPago";
-            cmbMedioPago.Size = new System.Drawing.Size(250, 23);
-            cmbMedioPago.TabIndex = 4;
-            cmbMedioPago.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbMedioPago.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMedioPago.FormattingEnabled = true;
+            cmbMedioPago.Location = new Point(130, 101);
+            cmbMedioPago.Name = "cmbMedioPago";
+            cmbMedioPago.Size = new Size(250, 23);
+            cmbMedioPago.TabIndex = 4;
             cmbMedioPago.SelectedIndexChanged += cmbMedioPago_SelectedIndexChanged;
             // 
             // lblMonto
             // 
-            lblMonto.Location = new System.Drawing.Point(15, 140);
+            lblMonto.AutoSize = true;
+            lblMonto.Location = new Point(15, 140);
             lblMonto.Name = "lblMonto";
+            lblMonto.Size = new Size(46, 15);
             lblMonto.TabIndex = 5;
             lblMonto.Text = "Monto:";
-            lblMonto.AutoSize = true;
             // 
             // nudMonto
             // 
-            nudMonto.Location = new System.Drawing.Point(130, 136);
-            nudMonto.Name = "nudMonto";
-            nudMonto.Size = new System.Drawing.Size(140, 23);
-            nudMonto.TabIndex = 6;
             nudMonto.DecimalPlaces = 2;
+            nudMonto.Location = new Point(130, 136);
             nudMonto.Maximum = new decimal(new int[] { 99999999, 0, 0, 131072 });
+            nudMonto.Name = "nudMonto";
+            nudMonto.Size = new Size(140, 23);
+            nudMonto.TabIndex = 6;
+            nudMonto.TextAlign = HorizontalAlignment.Right;
             nudMonto.ThousandsSeparator = true;
-            nudMonto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // btnTotal
             // 
-            btnTotal.Location = new System.Drawing.Point(280, 135);
+            btnTotal.Location = new Point(280, 135);
             btnTotal.Name = "btnTotal";
-            btnTotal.Size = new System.Drawing.Size(100, 25);
+            btnTotal.Size = new Size(100, 25);
             btnTotal.TabIndex = 7;
             btnTotal.Text = "Pagar todo";
             btnTotal.UseVisualStyleBackColor = true;
@@ -120,46 +126,48 @@
             // 
             // chkDesdeCaja
             // 
-            chkDesdeCaja.Location = new System.Drawing.Point(15, 172);
+            chkDesdeCaja.AutoSize = true;
+            chkDesdeCaja.Location = new Point(15, 172);
             chkDesdeCaja.Name = "chkDesdeCaja";
+            chkDesdeCaja.Size = new Size(186, 19);
             chkDesdeCaja.TabIndex = 8;
             chkDesdeCaja.Text = "El dinero sale de la caja abierta";
-            chkDesdeCaja.AutoSize = true;
             chkDesdeCaja.UseVisualStyleBackColor = true;
             chkDesdeCaja.CheckedChanged += chkDesdeCaja_CheckedChanged;
             // 
             // lblDisponible
             // 
-            lblDisponible.Location = new System.Drawing.Point(35, 195);
-            lblDisponible.Name = "lblDisponible";
-            lblDisponible.TabIndex = 9;
-            lblDisponible.Text = "";
             lblDisponible.AutoSize = true;
-            lblDisponible.ForeColor = System.Drawing.SystemColors.GrayText;
+            lblDisponible.ForeColor = SystemColors.GrayText;
+            lblDisponible.Location = new Point(35, 195);
+            lblDisponible.Name = "lblDisponible";
+            lblDisponible.Size = new Size(0, 15);
+            lblDisponible.TabIndex = 9;
             // 
             // lblObservacion
             // 
-            lblObservacion.Location = new System.Drawing.Point(15, 225);
+            lblObservacion.AutoSize = true;
+            lblObservacion.Location = new Point(15, 225);
             lblObservacion.Name = "lblObservacion";
+            lblObservacion.Size = new Size(76, 15);
             lblObservacion.TabIndex = 10;
             lblObservacion.Text = "Observación:";
-            lblObservacion.AutoSize = true;
             // 
             // txtObservacion
             // 
-            txtObservacion.Location = new System.Drawing.Point(130, 222);
-            txtObservacion.Name = "txtObservacion";
-            txtObservacion.Size = new System.Drawing.Size(250, 55);
-            txtObservacion.TabIndex = 11;
-            txtObservacion.Multiline = true;
-            txtObservacion.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtObservacion.Location = new Point(130, 222);
             txtObservacion.MaxLength = 255;
+            txtObservacion.Multiline = true;
+            txtObservacion.Name = "txtObservacion";
+            txtObservacion.ScrollBars = ScrollBars.Vertical;
+            txtObservacion.Size = new Size(250, 55);
+            txtObservacion.TabIndex = 11;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new System.Drawing.Point(160, 295);
+            btnGuardar.Location = new Point(160, 295);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new System.Drawing.Size(105, 32);
+            btnGuardar.Size = new Size(105, 32);
             btnGuardar.TabIndex = 12;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
@@ -167,9 +175,9 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new System.Drawing.Point(275, 295);
+            btnCancelar.Location = new Point(275, 295);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new System.Drawing.Size(105, 32);
+            btnCancelar.Size = new Size(105, 32);
             btnCancelar.TabIndex = 13;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
@@ -178,10 +186,10 @@
             // frmRegistrarPagoCompra
             // 
             AcceptButton = btnGuardar;
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancelar;
-            ClientSize = new System.Drawing.Size(400, 342);
+            ClientSize = new Size(400, 342);
             Controls.Add(lblTitulo);
             Controls.Add(lblCompra);
             Controls.Add(lblSaldo);
@@ -196,11 +204,12 @@
             Controls.Add(txtObservacion);
             Controls.Add(btnGuardar);
             Controls.Add(btnCancelar);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmRegistrarPagoCompra";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Registrar pago";
             Load += frmRegistrarPagoCompra_Load;
             ((System.ComponentModel.ISupportInitialize)nudMonto).EndInit();

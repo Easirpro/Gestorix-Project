@@ -28,106 +28,109 @@
         /// </summary>
         private void InitializeComponent()
         {
-            lblDesde = new System.Windows.Forms.Label();
-            dtpDesde = new System.Windows.Forms.DateTimePicker();
-            lblHasta = new System.Windows.Forms.Label();
-            dtpHasta = new System.Windows.Forms.DateTimePicker();
-            btnHoy = new System.Windows.Forms.Button();
-            btnEsteMes = new System.Windows.Forms.Button();
-            btnConsultar = new System.Windows.Forms.Button();
-            btnExportar = new System.Windows.Forms.Button();
-            tabBalance = new System.Windows.Forms.TabControl();
-            tabResumen = new System.Windows.Forms.TabPage();
-            tabMedioPago = new System.Windows.Forms.TabPage();
-            tabPorDia = new System.Windows.Forms.TabPage();
-            tabEmpleados = new System.Windows.Forms.TabPage();
-            tabProductos = new System.Windows.Forms.TabPage();
-            tabPromociones = new System.Windows.Forms.TabPage();
-            tabDetalle = new System.Windows.Forms.TabPage();
-            grpIndicadores = new System.Windows.Forms.GroupBox();
-            lblTitVentas = new System.Windows.Forms.Label();
-            lblIndVentas = new System.Windows.Forms.Label();
-            lblTitTicket = new System.Windows.Forms.Label();
-            lblIndTicket = new System.Windows.Forms.Label();
-            lblTitAnuladas = new System.Windows.Forms.Label();
-            lblIndAnuladas = new System.Windows.Forms.Label();
-            lblTitDevoluciones = new System.Windows.Forms.Label();
-            lblIndDevoluciones = new System.Windows.Forms.Label();
-            lblTitCajas = new System.Windows.Forms.Label();
-            lblIndCajas = new System.Windows.Forms.Label();
-            lblTitFaltantes = new System.Windows.Forms.Label();
-            lblIndFaltantes = new System.Windows.Forms.Label();
-            dgvResumen = new System.Windows.Forms.DataGridView();
-            dgvMedioPago = new System.Windows.Forms.DataGridView();
-            dgvPorDia = new System.Windows.Forms.DataGridView();
-            dgvEmpleados = new System.Windows.Forms.DataGridView();
-            dgvProductos = new System.Windows.Forms.DataGridView();
-            dgvPromociones = new System.Windows.Forms.DataGridView();
-            lblTipoDetalle = new System.Windows.Forms.Label();
-            cmbTipoDetalle = new System.Windows.Forms.ComboBox();
-            lblMedioDetalle = new System.Windows.Forms.Label();
-            cmbMedioDetalle = new System.Windows.Forms.ComboBox();
-            lblUsuarioDetalle = new System.Windows.Forms.Label();
-            cmbUsuarioDetalle = new System.Windows.Forms.ComboBox();
-            btnFiltrarDetalle = new System.Windows.Forms.Button();
-            dgvDetalle = new System.Windows.Forms.DataGridView();
-            lblTotalDetalle = new System.Windows.Forms.Label();
-            btnSalir = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBalance));
+            lblDesde = new Label();
+            dtpDesde = new DateTimePicker();
+            lblHasta = new Label();
+            dtpHasta = new DateTimePicker();
+            btnHoy = new Button();
+            btnEsteMes = new Button();
+            btnConsultar = new Button();
+            btnExportar = new Button();
+            tabBalance = new TabControl();
+            tabResumen = new TabPage();
+            grpIndicadores = new GroupBox();
+            lblTitVentas = new Label();
+            lblIndVentas = new Label();
+            lblTitTicket = new Label();
+            lblIndTicket = new Label();
+            lblTitAnuladas = new Label();
+            lblIndAnuladas = new Label();
+            lblTitDevoluciones = new Label();
+            lblIndDevoluciones = new Label();
+            lblTitCajas = new Label();
+            lblIndCajas = new Label();
+            lblTitFaltantes = new Label();
+            lblIndFaltantes = new Label();
+            dgvResumen = new DataGridView();
+            tabMedioPago = new TabPage();
+            dgvMedioPago = new DataGridView();
+            tabPorDia = new TabPage();
+            dgvPorDia = new DataGridView();
+            tabEmpleados = new TabPage();
+            dgvEmpleados = new DataGridView();
+            tabProductos = new TabPage();
+            dgvProductos = new DataGridView();
+            tabPromociones = new TabPage();
+            dgvPromociones = new DataGridView();
+            tabDetalle = new TabPage();
+            lblTipoDetalle = new Label();
+            cmbTipoDetalle = new ComboBox();
+            lblMedioDetalle = new Label();
+            cmbMedioDetalle = new ComboBox();
+            lblUsuarioDetalle = new Label();
+            cmbUsuarioDetalle = new ComboBox();
+            btnFiltrarDetalle = new Button();
+            dgvDetalle = new DataGridView();
+            lblTotalDetalle = new Label();
+            btnSalir = new Button();
             tabBalance.SuspendLayout();
             tabResumen.SuspendLayout();
-            tabMedioPago.SuspendLayout();
-            tabPorDia.SuspendLayout();
-            tabEmpleados.SuspendLayout();
-            tabProductos.SuspendLayout();
-            tabPromociones.SuspendLayout();
-            tabDetalle.SuspendLayout();
             grpIndicadores.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvResumen).BeginInit();
+            tabMedioPago.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvMedioPago).BeginInit();
+            tabPorDia.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPorDia).BeginInit();
+            tabEmpleados.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvEmpleados).BeginInit();
+            tabProductos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
+            tabPromociones.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPromociones).BeginInit();
+            tabDetalle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDetalle).BeginInit();
             SuspendLayout();
             // 
             // lblDesde
             // 
-            lblDesde.Location = new System.Drawing.Point(12, 18);
+            lblDesde.AutoSize = true;
+            lblDesde.Location = new Point(12, 18);
             lblDesde.Name = "lblDesde";
+            lblDesde.Size = new Size(42, 15);
             lblDesde.TabIndex = 0;
             lblDesde.Text = "Desde:";
-            lblDesde.AutoSize = true;
             // 
             // dtpDesde
             // 
-            dtpDesde.Location = new System.Drawing.Point(60, 14);
+            dtpDesde.Format = DateTimePickerFormat.Short;
+            dtpDesde.Location = new Point(60, 14);
             dtpDesde.Name = "dtpDesde";
-            dtpDesde.Size = new System.Drawing.Size(120, 23);
+            dtpDesde.Size = new Size(120, 23);
             dtpDesde.TabIndex = 1;
-            dtpDesde.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             // 
             // lblHasta
             // 
-            lblHasta.Location = new System.Drawing.Point(195, 18);
+            lblHasta.AutoSize = true;
+            lblHasta.Location = new Point(195, 18);
             lblHasta.Name = "lblHasta";
+            lblHasta.Size = new Size(40, 15);
             lblHasta.TabIndex = 2;
             lblHasta.Text = "Hasta:";
-            lblHasta.AutoSize = true;
             // 
             // dtpHasta
             // 
-            dtpHasta.Location = new System.Drawing.Point(240, 14);
+            dtpHasta.Format = DateTimePickerFormat.Short;
+            dtpHasta.Location = new Point(240, 14);
             dtpHasta.Name = "dtpHasta";
-            dtpHasta.Size = new System.Drawing.Size(120, 23);
+            dtpHasta.Size = new Size(120, 23);
             dtpHasta.TabIndex = 3;
-            dtpHasta.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             // 
             // btnHoy
             // 
-            btnHoy.Location = new System.Drawing.Point(375, 12);
+            btnHoy.Location = new Point(375, 12);
             btnHoy.Name = "btnHoy";
-            btnHoy.Size = new System.Drawing.Size(80, 28);
+            btnHoy.Size = new Size(80, 28);
             btnHoy.TabIndex = 4;
             btnHoy.Text = "Hoy";
             btnHoy.UseVisualStyleBackColor = true;
@@ -135,9 +138,9 @@
             // 
             // btnEsteMes
             // 
-            btnEsteMes.Location = new System.Drawing.Point(460, 12);
+            btnEsteMes.Location = new Point(460, 12);
             btnEsteMes.Name = "btnEsteMes";
-            btnEsteMes.Size = new System.Drawing.Size(90, 28);
+            btnEsteMes.Size = new Size(90, 28);
             btnEsteMes.TabIndex = 5;
             btnEsteMes.Text = "Este mes";
             btnEsteMes.UseVisualStyleBackColor = true;
@@ -145,9 +148,9 @@
             // 
             // btnConsultar
             // 
-            btnConsultar.Location = new System.Drawing.Point(560, 12);
+            btnConsultar.Location = new Point(560, 12);
             btnConsultar.Name = "btnConsultar";
-            btnConsultar.Size = new System.Drawing.Size(110, 28);
+            btnConsultar.Size = new Size(110, 28);
             btnConsultar.TabIndex = 6;
             btnConsultar.Text = "Consultar";
             btnConsultar.UseVisualStyleBackColor = true;
@@ -155,17 +158,18 @@
             // 
             // btnExportar
             // 
-            btnExportar.Location = new System.Drawing.Point(958, 12);
+            btnExportar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnExportar.Location = new Point(958, 12);
             btnExportar.Name = "btnExportar";
-            btnExportar.Size = new System.Drawing.Size(130, 28);
+            btnExportar.Size = new Size(130, 28);
             btnExportar.TabIndex = 7;
             btnExportar.Text = "Exportar a Excel";
             btnExportar.UseVisualStyleBackColor = true;
-            btnExportar.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             btnExportar.Click += btnExportar_Click;
             // 
             // tabBalance
             // 
+            tabBalance.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tabBalance.Controls.Add(tabResumen);
             tabBalance.Controls.Add(tabMedioPago);
             tabBalance.Controls.Add(tabPorDia);
@@ -173,100 +177,27 @@
             tabBalance.Controls.Add(tabProductos);
             tabBalance.Controls.Add(tabPromociones);
             tabBalance.Controls.Add(tabDetalle);
-            tabBalance.Location = new System.Drawing.Point(12, 50);
+            tabBalance.Location = new Point(12, 50);
             tabBalance.Name = "tabBalance";
-            tabBalance.Size = new System.Drawing.Size(1076, 576);
+            tabBalance.SelectedIndex = 0;
+            tabBalance.Size = new Size(1076, 576);
             tabBalance.TabIndex = 8;
-            tabBalance.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             // 
             // tabResumen
             // 
             tabResumen.Controls.Add(grpIndicadores);
             tabResumen.Controls.Add(dgvResumen);
-            tabResumen.Location = new System.Drawing.Point(4, 24);
+            tabResumen.Location = new Point(4, 24);
             tabResumen.Name = "tabResumen";
-            tabResumen.Size = new System.Drawing.Size(1068, 548);
+            tabResumen.Padding = new Padding(3);
+            tabResumen.Size = new Size(1068, 548);
             tabResumen.TabIndex = 0;
             tabResumen.Text = "Resumen";
-            tabResumen.Padding = new System.Windows.Forms.Padding(3);
             tabResumen.UseVisualStyleBackColor = true;
-            // 
-            // tabMedioPago
-            // 
-            tabMedioPago.Controls.Add(dgvMedioPago);
-            tabMedioPago.Location = new System.Drawing.Point(4, 24);
-            tabMedioPago.Name = "tabMedioPago";
-            tabMedioPago.Size = new System.Drawing.Size(1068, 548);
-            tabMedioPago.TabIndex = 1;
-            tabMedioPago.Text = "Por medio de pago";
-            tabMedioPago.Padding = new System.Windows.Forms.Padding(3);
-            tabMedioPago.UseVisualStyleBackColor = true;
-            // 
-            // tabPorDia
-            // 
-            tabPorDia.Controls.Add(dgvPorDia);
-            tabPorDia.Location = new System.Drawing.Point(4, 24);
-            tabPorDia.Name = "tabPorDia";
-            tabPorDia.Size = new System.Drawing.Size(1068, 548);
-            tabPorDia.TabIndex = 2;
-            tabPorDia.Text = "Por día";
-            tabPorDia.Padding = new System.Windows.Forms.Padding(3);
-            tabPorDia.UseVisualStyleBackColor = true;
-            // 
-            // tabEmpleados
-            // 
-            tabEmpleados.Controls.Add(dgvEmpleados);
-            tabEmpleados.Location = new System.Drawing.Point(4, 24);
-            tabEmpleados.Name = "tabEmpleados";
-            tabEmpleados.Size = new System.Drawing.Size(1068, 548);
-            tabEmpleados.TabIndex = 3;
-            tabEmpleados.Text = "Por empleado";
-            tabEmpleados.Padding = new System.Windows.Forms.Padding(3);
-            tabEmpleados.UseVisualStyleBackColor = true;
-            // 
-            // tabProductos
-            // 
-            tabProductos.Controls.Add(dgvProductos);
-            tabProductos.Location = new System.Drawing.Point(4, 24);
-            tabProductos.Name = "tabProductos";
-            tabProductos.Size = new System.Drawing.Size(1068, 548);
-            tabProductos.TabIndex = 4;
-            tabProductos.Text = "Por producto";
-            tabProductos.Padding = new System.Windows.Forms.Padding(3);
-            tabProductos.UseVisualStyleBackColor = true;
-            // 
-            // tabPromociones
-            // 
-            tabPromociones.Controls.Add(dgvPromociones);
-            tabPromociones.Location = new System.Drawing.Point(4, 24);
-            tabPromociones.Name = "tabPromociones";
-            tabPromociones.Size = new System.Drawing.Size(1068, 548);
-            tabPromociones.TabIndex = 5;
-            tabPromociones.Text = "Por promoción";
-            tabPromociones.Padding = new System.Windows.Forms.Padding(3);
-            tabPromociones.UseVisualStyleBackColor = true;
-            // 
-            // tabDetalle
-            // 
-            tabDetalle.Controls.Add(lblTipoDetalle);
-            tabDetalle.Controls.Add(cmbTipoDetalle);
-            tabDetalle.Controls.Add(lblMedioDetalle);
-            tabDetalle.Controls.Add(cmbMedioDetalle);
-            tabDetalle.Controls.Add(lblUsuarioDetalle);
-            tabDetalle.Controls.Add(cmbUsuarioDetalle);
-            tabDetalle.Controls.Add(btnFiltrarDetalle);
-            tabDetalle.Controls.Add(dgvDetalle);
-            tabDetalle.Controls.Add(lblTotalDetalle);
-            tabDetalle.Location = new System.Drawing.Point(4, 24);
-            tabDetalle.Name = "tabDetalle";
-            tabDetalle.Size = new System.Drawing.Size(1068, 548);
-            tabDetalle.TabIndex = 6;
-            tabDetalle.Text = "Detalle de movimientos";
-            tabDetalle.Padding = new System.Windows.Forms.Padding(3);
-            tabDetalle.UseVisualStyleBackColor = true;
             // 
             // grpIndicadores
             // 
+            grpIndicadores.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             grpIndicadores.Controls.Add(lblTitVentas);
             grpIndicadores.Controls.Add(lblIndVentas);
             grpIndicadores.Controls.Add(lblTitTicket);
@@ -279,257 +210,345 @@
             grpIndicadores.Controls.Add(lblIndCajas);
             grpIndicadores.Controls.Add(lblTitFaltantes);
             grpIndicadores.Controls.Add(lblIndFaltantes);
-            grpIndicadores.Location = new System.Drawing.Point(6, 6);
+            grpIndicadores.Location = new Point(6, 6);
             grpIndicadores.Name = "grpIndicadores";
-            grpIndicadores.Size = new System.Drawing.Size(1056, 80);
+            grpIndicadores.Size = new Size(1056, 80);
             grpIndicadores.TabIndex = 9;
-            grpIndicadores.Text = "Indicadores del período";
             grpIndicadores.TabStop = false;
-            grpIndicadores.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            grpIndicadores.Text = "Indicadores del período";
             // 
             // lblTitVentas
             // 
-            lblTitVentas.Location = new System.Drawing.Point(15, 22);
+            lblTitVentas.AutoSize = true;
+            lblTitVentas.Location = new Point(15, 22);
             lblTitVentas.Name = "lblTitVentas";
+            lblTitVentas.Size = new Size(41, 15);
             lblTitVentas.TabIndex = 10;
             lblTitVentas.Text = "Ventas";
-            lblTitVentas.AutoSize = true;
             // 
             // lblIndVentas
             // 
-            lblIndVentas.Location = new System.Drawing.Point(15, 42);
+            lblIndVentas.AutoSize = true;
+            lblIndVentas.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblIndVentas.Location = new Point(15, 42);
             lblIndVentas.Name = "lblIndVentas";
+            lblIndVentas.Size = new Size(18, 20);
             lblIndVentas.TabIndex = 11;
             lblIndVentas.Text = "0";
-            lblIndVentas.AutoSize = true;
-            lblIndVentas.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
             // lblTitTicket
             // 
-            lblTitTicket.Location = new System.Drawing.Point(180, 22);
+            lblTitTicket.AutoSize = true;
+            lblTitTicket.Location = new Point(180, 22);
             lblTitTicket.Name = "lblTitTicket";
+            lblTitTicket.Size = new Size(93, 15);
             lblTitTicket.TabIndex = 12;
             lblTitTicket.Text = "Ticket promedio";
-            lblTitTicket.AutoSize = true;
             // 
             // lblIndTicket
             // 
-            lblIndTicket.Location = new System.Drawing.Point(180, 42);
+            lblIndTicket.AutoSize = true;
+            lblIndTicket.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblIndTicket.Location = new Point(180, 42);
             lblIndTicket.Name = "lblIndTicket";
+            lblIndTicket.Size = new Size(53, 20);
             lblIndTicket.TabIndex = 13;
             lblIndTicket.Text = "$ 0,00";
-            lblIndTicket.AutoSize = true;
-            lblIndTicket.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
             // lblTitAnuladas
             // 
-            lblTitAnuladas.Location = new System.Drawing.Point(360, 22);
+            lblTitAnuladas.AutoSize = true;
+            lblTitAnuladas.Location = new Point(360, 22);
             lblTitAnuladas.Name = "lblTitAnuladas";
+            lblTitAnuladas.Size = new Size(91, 15);
             lblTitAnuladas.TabIndex = 14;
             lblTitAnuladas.Text = "Ventas anuladas";
-            lblTitAnuladas.AutoSize = true;
             // 
             // lblIndAnuladas
             // 
-            lblIndAnuladas.Location = new System.Drawing.Point(360, 42);
+            lblIndAnuladas.AutoSize = true;
+            lblIndAnuladas.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblIndAnuladas.Location = new Point(360, 42);
             lblIndAnuladas.Name = "lblIndAnuladas";
+            lblIndAnuladas.Size = new Size(18, 20);
             lblIndAnuladas.TabIndex = 15;
             lblIndAnuladas.Text = "0";
-            lblIndAnuladas.AutoSize = true;
-            lblIndAnuladas.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
             // lblTitDevoluciones
             // 
-            lblTitDevoluciones.Location = new System.Drawing.Point(580, 22);
+            lblTitDevoluciones.AutoSize = true;
+            lblTitDevoluciones.Location = new Point(580, 22);
             lblTitDevoluciones.Name = "lblTitDevoluciones";
+            lblTitDevoluciones.Size = new Size(78, 15);
             lblTitDevoluciones.TabIndex = 16;
             lblTitDevoluciones.Text = "Devoluciones";
-            lblTitDevoluciones.AutoSize = true;
             // 
             // lblIndDevoluciones
             // 
-            lblIndDevoluciones.Location = new System.Drawing.Point(580, 42);
+            lblIndDevoluciones.AutoSize = true;
+            lblIndDevoluciones.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblIndDevoluciones.Location = new Point(580, 42);
             lblIndDevoluciones.Name = "lblIndDevoluciones";
+            lblIndDevoluciones.Size = new Size(18, 20);
             lblIndDevoluciones.TabIndex = 17;
             lblIndDevoluciones.Text = "0";
-            lblIndDevoluciones.AutoSize = true;
-            lblIndDevoluciones.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
             // lblTitCajas
             // 
-            lblTitCajas.Location = new System.Drawing.Point(740, 22);
+            lblTitCajas.AutoSize = true;
+            lblTitCajas.Location = new Point(740, 22);
             lblTitCajas.Name = "lblTitCajas";
+            lblTitCajas.Size = new Size(82, 15);
             lblTitCajas.TabIndex = 18;
             lblTitCajas.Text = "Cajas cerradas";
-            lblTitCajas.AutoSize = true;
             // 
             // lblIndCajas
             // 
-            lblIndCajas.Location = new System.Drawing.Point(740, 42);
+            lblIndCajas.AutoSize = true;
+            lblIndCajas.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblIndCajas.Location = new Point(740, 42);
             lblIndCajas.Name = "lblIndCajas";
+            lblIndCajas.Size = new Size(18, 20);
             lblIndCajas.TabIndex = 19;
             lblIndCajas.Text = "0";
-            lblIndCajas.AutoSize = true;
-            lblIndCajas.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
             // lblTitFaltantes
             // 
-            lblTitFaltantes.Location = new System.Drawing.Point(900, 22);
+            lblTitFaltantes.AutoSize = true;
+            lblTitFaltantes.Location = new Point(900, 22);
             lblTitFaltantes.Name = "lblTitFaltantes";
+            lblTitFaltantes.Size = new Size(101, 15);
             lblTitFaltantes.TabIndex = 20;
             lblTitFaltantes.Text = "Cajas con faltante";
-            lblTitFaltantes.AutoSize = true;
             // 
             // lblIndFaltantes
             // 
-            lblIndFaltantes.Location = new System.Drawing.Point(900, 42);
+            lblIndFaltantes.AutoSize = true;
+            lblIndFaltantes.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblIndFaltantes.ForeColor = Color.Firebrick;
+            lblIndFaltantes.Location = new Point(900, 42);
             lblIndFaltantes.Name = "lblIndFaltantes";
+            lblIndFaltantes.Size = new Size(18, 20);
             lblIndFaltantes.TabIndex = 21;
             lblIndFaltantes.Text = "0";
-            lblIndFaltantes.AutoSize = true;
-            lblIndFaltantes.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            lblIndFaltantes.ForeColor = System.Drawing.Color.Firebrick;
             // 
             // dgvResumen
             // 
-            dgvResumen.Location = new System.Drawing.Point(6, 92);
-            dgvResumen.Name = "dgvResumen";
-            dgvResumen.Size = new System.Drawing.Size(1056, 450);
-            dgvResumen.TabIndex = 22;
             dgvResumen.AllowUserToAddRows = false;
             dgvResumen.AllowUserToDeleteRows = false;
-            dgvResumen.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvResumen.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvResumen.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvResumen.BackgroundColor = SystemColors.Window;
+            dgvResumen.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvResumen.Location = new Point(6, 92);
+            dgvResumen.Name = "dgvResumen";
             dgvResumen.ReadOnly = true;
-            dgvResumen.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            dgvResumen.Size = new Size(1056, 450);
+            dgvResumen.TabIndex = 22;
             dgvResumen.DataBindingComplete += dgvResumen_DataBindingComplete;
+            // 
+            // tabMedioPago
+            // 
+            tabMedioPago.Controls.Add(dgvMedioPago);
+            tabMedioPago.Location = new Point(4, 24);
+            tabMedioPago.Name = "tabMedioPago";
+            tabMedioPago.Padding = new Padding(3);
+            tabMedioPago.Size = new Size(1068, 548);
+            tabMedioPago.TabIndex = 1;
+            tabMedioPago.Text = "Por medio de pago";
+            tabMedioPago.UseVisualStyleBackColor = true;
             // 
             // dgvMedioPago
             // 
-            dgvMedioPago.Location = new System.Drawing.Point(3, 3);
-            dgvMedioPago.Name = "dgvMedioPago";
-            dgvMedioPago.Size = new System.Drawing.Size(1062, 542);
-            dgvMedioPago.TabIndex = 23;
             dgvMedioPago.AllowUserToAddRows = false;
             dgvMedioPago.AllowUserToDeleteRows = false;
-            dgvMedioPago.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvMedioPago.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMedioPago.BackgroundColor = SystemColors.Window;
+            dgvMedioPago.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMedioPago.Dock = DockStyle.Fill;
+            dgvMedioPago.Location = new Point(3, 3);
+            dgvMedioPago.Name = "dgvMedioPago";
             dgvMedioPago.ReadOnly = true;
-            dgvMedioPago.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgvMedioPago.Size = new Size(1062, 542);
+            dgvMedioPago.TabIndex = 23;
             dgvMedioPago.DataBindingComplete += grilla_DataBindingComplete;
+            // 
+            // tabPorDia
+            // 
+            tabPorDia.Controls.Add(dgvPorDia);
+            tabPorDia.Location = new Point(4, 24);
+            tabPorDia.Name = "tabPorDia";
+            tabPorDia.Padding = new Padding(3);
+            tabPorDia.Size = new Size(1068, 548);
+            tabPorDia.TabIndex = 2;
+            tabPorDia.Text = "Por día";
+            tabPorDia.UseVisualStyleBackColor = true;
             // 
             // dgvPorDia
             // 
-            dgvPorDia.Location = new System.Drawing.Point(3, 3);
-            dgvPorDia.Name = "dgvPorDia";
-            dgvPorDia.Size = new System.Drawing.Size(1062, 542);
-            dgvPorDia.TabIndex = 24;
             dgvPorDia.AllowUserToAddRows = false;
             dgvPorDia.AllowUserToDeleteRows = false;
-            dgvPorDia.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvPorDia.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPorDia.BackgroundColor = SystemColors.Window;
+            dgvPorDia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPorDia.Dock = DockStyle.Fill;
+            dgvPorDia.Location = new Point(3, 3);
+            dgvPorDia.Name = "dgvPorDia";
             dgvPorDia.ReadOnly = true;
-            dgvPorDia.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgvPorDia.Size = new Size(1062, 542);
+            dgvPorDia.TabIndex = 24;
             dgvPorDia.DataBindingComplete += grilla_DataBindingComplete;
+            // 
+            // tabEmpleados
+            // 
+            tabEmpleados.Controls.Add(dgvEmpleados);
+            tabEmpleados.Location = new Point(4, 24);
+            tabEmpleados.Name = "tabEmpleados";
+            tabEmpleados.Padding = new Padding(3);
+            tabEmpleados.Size = new Size(1068, 548);
+            tabEmpleados.TabIndex = 3;
+            tabEmpleados.Text = "Por empleado";
+            tabEmpleados.UseVisualStyleBackColor = true;
             // 
             // dgvEmpleados
             // 
-            dgvEmpleados.Location = new System.Drawing.Point(3, 3);
-            dgvEmpleados.Name = "dgvEmpleados";
-            dgvEmpleados.Size = new System.Drawing.Size(1062, 542);
-            dgvEmpleados.TabIndex = 25;
             dgvEmpleados.AllowUserToAddRows = false;
             dgvEmpleados.AllowUserToDeleteRows = false;
-            dgvEmpleados.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvEmpleados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvEmpleados.BackgroundColor = SystemColors.Window;
+            dgvEmpleados.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvEmpleados.Dock = DockStyle.Fill;
+            dgvEmpleados.Location = new Point(3, 3);
+            dgvEmpleados.Name = "dgvEmpleados";
             dgvEmpleados.ReadOnly = true;
-            dgvEmpleados.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgvEmpleados.Size = new Size(1062, 542);
+            dgvEmpleados.TabIndex = 25;
             dgvEmpleados.DataBindingComplete += grilla_DataBindingComplete;
+            // 
+            // tabProductos
+            // 
+            tabProductos.Controls.Add(dgvProductos);
+            tabProductos.Location = new Point(4, 24);
+            tabProductos.Name = "tabProductos";
+            tabProductos.Padding = new Padding(3);
+            tabProductos.Size = new Size(1068, 548);
+            tabProductos.TabIndex = 4;
+            tabProductos.Text = "Por producto";
+            tabProductos.UseVisualStyleBackColor = true;
             // 
             // dgvProductos
             // 
-            dgvProductos.Location = new System.Drawing.Point(3, 3);
-            dgvProductos.Name = "dgvProductos";
-            dgvProductos.Size = new System.Drawing.Size(1062, 542);
-            dgvProductos.TabIndex = 26;
             dgvProductos.AllowUserToAddRows = false;
             dgvProductos.AllowUserToDeleteRows = false;
-            dgvProductos.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvProductos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvProductos.BackgroundColor = SystemColors.Window;
+            dgvProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvProductos.Dock = DockStyle.Fill;
+            dgvProductos.Location = new Point(3, 3);
+            dgvProductos.Name = "dgvProductos";
             dgvProductos.ReadOnly = true;
-            dgvProductos.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgvProductos.Size = new Size(1062, 542);
+            dgvProductos.TabIndex = 26;
             dgvProductos.DataBindingComplete += grilla_DataBindingComplete;
+            // 
+            // tabPromociones
+            // 
+            tabPromociones.Controls.Add(dgvPromociones);
+            tabPromociones.Location = new Point(4, 24);
+            tabPromociones.Name = "tabPromociones";
+            tabPromociones.Padding = new Padding(3);
+            tabPromociones.Size = new Size(1068, 548);
+            tabPromociones.TabIndex = 5;
+            tabPromociones.Text = "Por promoción";
+            tabPromociones.UseVisualStyleBackColor = true;
             // 
             // dgvPromociones
             // 
-            dgvPromociones.Location = new System.Drawing.Point(3, 3);
-            dgvPromociones.Name = "dgvPromociones";
-            dgvPromociones.Size = new System.Drawing.Size(1062, 542);
-            dgvPromociones.TabIndex = 27;
             dgvPromociones.AllowUserToAddRows = false;
             dgvPromociones.AllowUserToDeleteRows = false;
-            dgvPromociones.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvPromociones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPromociones.BackgroundColor = SystemColors.Window;
+            dgvPromociones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPromociones.Dock = DockStyle.Fill;
+            dgvPromociones.Location = new Point(3, 3);
+            dgvPromociones.Name = "dgvPromociones";
             dgvPromociones.ReadOnly = true;
-            dgvPromociones.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgvPromociones.Size = new Size(1062, 542);
+            dgvPromociones.TabIndex = 27;
             dgvPromociones.DataBindingComplete += grilla_DataBindingComplete;
+            // 
+            // tabDetalle
+            // 
+            tabDetalle.Controls.Add(lblTipoDetalle);
+            tabDetalle.Controls.Add(cmbTipoDetalle);
+            tabDetalle.Controls.Add(lblMedioDetalle);
+            tabDetalle.Controls.Add(cmbMedioDetalle);
+            tabDetalle.Controls.Add(lblUsuarioDetalle);
+            tabDetalle.Controls.Add(cmbUsuarioDetalle);
+            tabDetalle.Controls.Add(btnFiltrarDetalle);
+            tabDetalle.Controls.Add(dgvDetalle);
+            tabDetalle.Controls.Add(lblTotalDetalle);
+            tabDetalle.Location = new Point(4, 24);
+            tabDetalle.Name = "tabDetalle";
+            tabDetalle.Padding = new Padding(3);
+            tabDetalle.Size = new Size(1068, 548);
+            tabDetalle.TabIndex = 6;
+            tabDetalle.Text = "Detalle de movimientos";
+            tabDetalle.UseVisualStyleBackColor = true;
             // 
             // lblTipoDetalle
             // 
-            lblTipoDetalle.Location = new System.Drawing.Point(6, 13);
+            lblTipoDetalle.AutoSize = true;
+            lblTipoDetalle.Location = new Point(6, 13);
             lblTipoDetalle.Name = "lblTipoDetalle";
+            lblTipoDetalle.Size = new Size(33, 15);
             lblTipoDetalle.TabIndex = 28;
             lblTipoDetalle.Text = "Tipo:";
-            lblTipoDetalle.AutoSize = true;
             // 
             // cmbTipoDetalle
             // 
-            cmbTipoDetalle.Location = new System.Drawing.Point(45, 9);
-            cmbTipoDetalle.Name = "cmbTipoDetalle";
-            cmbTipoDetalle.Size = new System.Drawing.Size(120, 23);
-            cmbTipoDetalle.TabIndex = 29;
-            cmbTipoDetalle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbTipoDetalle.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoDetalle.FormattingEnabled = true;
+            cmbTipoDetalle.Location = new Point(45, 9);
+            cmbTipoDetalle.Name = "cmbTipoDetalle";
+            cmbTipoDetalle.Size = new Size(120, 23);
+            cmbTipoDetalle.TabIndex = 29;
             // 
             // lblMedioDetalle
             // 
-            lblMedioDetalle.Location = new System.Drawing.Point(180, 13);
+            lblMedioDetalle.AutoSize = true;
+            lblMedioDetalle.Location = new Point(180, 13);
             lblMedioDetalle.Name = "lblMedioDetalle";
+            lblMedioDetalle.Size = new Size(90, 15);
             lblMedioDetalle.TabIndex = 30;
             lblMedioDetalle.Text = "Medio de pago:";
-            lblMedioDetalle.AutoSize = true;
             // 
             // cmbMedioDetalle
             // 
-            cmbMedioDetalle.Location = new System.Drawing.Point(275, 9);
-            cmbMedioDetalle.Name = "cmbMedioDetalle";
-            cmbMedioDetalle.Size = new System.Drawing.Size(160, 23);
-            cmbMedioDetalle.TabIndex = 31;
-            cmbMedioDetalle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbMedioDetalle.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMedioDetalle.FormattingEnabled = true;
+            cmbMedioDetalle.Location = new Point(275, 9);
+            cmbMedioDetalle.Name = "cmbMedioDetalle";
+            cmbMedioDetalle.Size = new Size(160, 23);
+            cmbMedioDetalle.TabIndex = 31;
             // 
             // lblUsuarioDetalle
             // 
-            lblUsuarioDetalle.Location = new System.Drawing.Point(450, 13);
+            lblUsuarioDetalle.AutoSize = true;
+            lblUsuarioDetalle.Location = new Point(450, 13);
             lblUsuarioDetalle.Name = "lblUsuarioDetalle";
+            lblUsuarioDetalle.Size = new Size(87, 15);
             lblUsuarioDetalle.TabIndex = 32;
             lblUsuarioDetalle.Text = "Registrado por:";
-            lblUsuarioDetalle.AutoSize = true;
             // 
             // cmbUsuarioDetalle
             // 
-            cmbUsuarioDetalle.Location = new System.Drawing.Point(550, 9);
-            cmbUsuarioDetalle.Name = "cmbUsuarioDetalle";
-            cmbUsuarioDetalle.Size = new System.Drawing.Size(200, 23);
-            cmbUsuarioDetalle.TabIndex = 33;
-            cmbUsuarioDetalle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbUsuarioDetalle.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbUsuarioDetalle.FormattingEnabled = true;
+            cmbUsuarioDetalle.Location = new Point(550, 9);
+            cmbUsuarioDetalle.Name = "cmbUsuarioDetalle";
+            cmbUsuarioDetalle.Size = new Size(200, 23);
+            cmbUsuarioDetalle.TabIndex = 33;
             // 
             // btnFiltrarDetalle
             // 
-            btnFiltrarDetalle.Location = new System.Drawing.Point(765, 7);
+            btnFiltrarDetalle.Location = new Point(765, 7);
             btnFiltrarDetalle.Name = "btnFiltrarDetalle";
-            btnFiltrarDetalle.Size = new System.Drawing.Size(100, 28);
+            btnFiltrarDetalle.Size = new Size(100, 28);
             btnFiltrarDetalle.TabIndex = 34;
             btnFiltrarDetalle.Text = "Filtrar";
             btnFiltrarDetalle.UseVisualStyleBackColor = true;
@@ -537,46 +556,46 @@
             // 
             // dgvDetalle
             // 
-            dgvDetalle.Location = new System.Drawing.Point(6, 42);
-            dgvDetalle.Name = "dgvDetalle";
-            dgvDetalle.Size = new System.Drawing.Size(1056, 470);
-            dgvDetalle.TabIndex = 35;
             dgvDetalle.AllowUserToAddRows = false;
             dgvDetalle.AllowUserToDeleteRows = false;
-            dgvDetalle.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDetalle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvDetalle.BackgroundColor = SystemColors.Window;
+            dgvDetalle.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDetalle.Location = new Point(6, 42);
+            dgvDetalle.Name = "dgvDetalle";
             dgvDetalle.ReadOnly = true;
-            dgvDetalle.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            dgvDetalle.Size = new Size(1056, 470);
+            dgvDetalle.TabIndex = 35;
             dgvDetalle.DataBindingComplete += grilla_DataBindingComplete;
             // 
             // lblTotalDetalle
             // 
-            lblTotalDetalle.Location = new System.Drawing.Point(6, 520);
-            lblTotalDetalle.Name = "lblTotalDetalle";
-            lblTotalDetalle.TabIndex = 36;
-            lblTotalDetalle.Text = "";
+            lblTotalDetalle.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblTotalDetalle.AutoSize = true;
-            lblTotalDetalle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            lblTotalDetalle.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            lblTotalDetalle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblTotalDetalle.Location = new Point(6, 520);
+            lblTotalDetalle.Name = "lblTotalDetalle";
+            lblTotalDetalle.Size = new Size(0, 15);
+            lblTotalDetalle.TabIndex = 36;
             // 
             // btnSalir
             // 
-            btnSalir.Location = new System.Drawing.Point(968, 634);
+            btnSalir.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnSalir.Location = new Point(968, 634);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new System.Drawing.Size(120, 30);
+            btnSalir.Size = new Size(120, 30);
             btnSalir.TabIndex = 37;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
-            btnSalir.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             btnSalir.Click += btnSalir_Click;
             // 
             // frmBalance
             // 
             AcceptButton = btnConsultar;
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnSalir;
-            ClientSize = new System.Drawing.Size(1100, 676);
+            ClientSize = new Size(1100, 676);
             Controls.Add(lblDesde);
             Controls.Add(dtpDesde);
             Controls.Add(lblHasta);
@@ -587,35 +606,30 @@
             Controls.Add(btnExportar);
             Controls.Add(tabBalance);
             Controls.Add(btnSalir);
-            MinimumSize = new System.Drawing.Size(1116, 715);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(1116, 715);
             Name = "frmBalance";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Balance";
             Load += frmBalance_Load;
-            ((System.ComponentModel.ISupportInitialize)dgvResumen).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvMedioPago).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvPorDia).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvEmpleados).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvProductos).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvPromociones).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvDetalle).EndInit();
+            tabBalance.ResumeLayout(false);
+            tabResumen.ResumeLayout(false);
             grpIndicadores.ResumeLayout(false);
             grpIndicadores.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvResumen).EndInit();
+            tabMedioPago.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvMedioPago).EndInit();
+            tabPorDia.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvPorDia).EndInit();
+            tabEmpleados.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvEmpleados).EndInit();
+            tabProductos.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvProductos).EndInit();
+            tabPromociones.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvPromociones).EndInit();
             tabDetalle.ResumeLayout(false);
             tabDetalle.PerformLayout();
-            tabPromociones.ResumeLayout(false);
-            tabPromociones.PerformLayout();
-            tabProductos.ResumeLayout(false);
-            tabProductos.PerformLayout();
-            tabEmpleados.ResumeLayout(false);
-            tabEmpleados.PerformLayout();
-            tabPorDia.ResumeLayout(false);
-            tabPorDia.PerformLayout();
-            tabMedioPago.ResumeLayout(false);
-            tabMedioPago.PerformLayout();
-            tabResumen.ResumeLayout(false);
-            tabResumen.PerformLayout();
-            tabBalance.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvDetalle).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace CapaVista
         private ClsCompraLogica logica = new ClsCompraLogica();
         private ClsLogicaProveedor logicaProveedor = new ClsLogicaProveedor();
         private int idProveedor = 0;
+        private int idSucursalActual = 0;
         private DataTable productosEncontrados;
         private DataTable proveedoresEncontrados;
         private ClsCajaLogica logicaCaja = new ClsCajaLogica();
@@ -29,22 +31,27 @@ namespace CapaVista
             dtgNuevaCompra.Columns["Column1"].ReadOnly = true;
             dtgNuevaCompra.Columns["Column2"].ReadOnly = false;
             dtgNuevaCompra.Columns["Column3"].ReadOnly = true;
-            dtgNuevaCompra.Columns["Column4"].ReadOnly = true;
+            // El costo viene de la sucursal del proveedor, pero se puede corregir si cambió.
+            dtgNuevaCompra.Columns["Column4"].ReadOnly = false;
+            dtgNuevaCompra.Columns["Column4"].DefaultCellStyle.BackColor = Color.LightYellow;
             dtgNuevaCompra.Columns["Column5"].ReadOnly = true;
             dtgNuevaCompra.Columns["Column6"].ReadOnly = true;
 
-            dtgNuevaCompra.CellEndEdit += dataGridView1_CellEndEdit_1;
-            txtCodigobarra.TextChanged += txtCodigobarra_TextChanged;
-            txtCodigobarra.KeyDown += txtCodigobarra_KeyDown;
+            cmbSucursal.SelectionChangeCommitted += cmbSucursal_SelectionChangeCommitted;
 
-            txtProveedor.KeyDown -= txtProveedor_KeyDown;
-            txtProveedor.KeyDown += txtProveedor_KeyDown;
+            // La fecha del pedido es siempre hoy; la entrega estimada (opcional) no puede ser anterior.
+            dtpFechaPedido.Value = DateTime.Today;
+            dtpFechaPedido.Enabled = false;
+            dtpEntrega.MinDate = DateTime.Today;
+            dtpEntrega.Value = DateTime.Today;
+            dtpEntrega.Checked = false;
 
-            txtProveedor.DoubleClick -= txtProveedor_DoubleClick;
-            txtProveedor.DoubleClick += txtProveedor_DoubleClick;
+            // Los eventos de la grilla, del buscador de productos y de txtProveedor ya se enganchan en el Designer;
+            // engancharlos otra vez acá hacía que cada tecla se procesara dos veces (la flecha saltaba de a dos).
 
             ConfigurarAutocompletadoProveedores();
             CargarOpcionesPago();
+            ActualizarSucursalSeleccionada();
         }
 
 
@@ -174,7 +181,84 @@ namespace CapaVista
             proveedoresEncontrados = null;
 
             txtProveedor.SelectionStart = txtProveedor.Text.Length;
+            CargarSucursales();
             txtCodigobarra.Focus();
+        }
+        private void CargarSucursales()
+        {
+            cmbSucursal.DataSource = null;
+            cmbSucursal.Enabled = false;
+
+            if (idProveedor == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                DataTable sucursales = logicaProveedor.ObtenerSucursalesPorProveedor(idProveedor);
+
+                cmbSucursal.DisplayMember = "Sucursal";
+                cmbSucursal.ValueMember = "IdSucursal";
+                cmbSucursal.DataSource = sucursales;
+                cmbSucursal.Enabled = sucursales.Rows.Count > 1;
+                cmbSucursal.SelectedIndex = sucursales.Rows.Count > 0 ? 0 : -1;
+
+                if (sucursales.Rows.Count == 0)
+                {
+                    MessageBox.Show("El proveedor no tiene sucursales activas. Cargue una sucursal para poder comprarle.", "Aviso",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudieron cargar las sucursales del proveedor.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            ActualizarSucursalSeleccionada();
+        }
+        private int ObtenerIdSucursal()
+        {
+            return cmbSucursal.SelectedValue is int idSucursal ? idSucursal : 0;
+        }
+        private void ActualizarSucursalSeleccionada()
+        {
+            int idSucursal = ObtenerIdSucursal();
+
+            // Los productos se buscan dentro de la sucursal: sin sucursal no se pueden agregar.
+            txtCodigobarra.Enabled = idSucursal > 0;
+            btnCargarProducto.Enabled = idSucursal > 0;
+
+            if (idSucursal == 0 || idSucursal == idSucursalActual)
+            {
+                return;
+            }
+
+            bool hayProductos = dtgNuevaCompra.Rows.Cast<DataGridViewRow>().Any(f => !f.IsNewRow);
+
+            // Los productos y sus costos son de la sucursal anterior: no sirven para la nueva.
+            if (hayProductos && idSucursalActual != 0)
+            {
+                dtgNuevaCompra.Rows.Clear();
+                CalcularTotales();
+
+                MessageBox.Show("Cambió el proveedor o la sucursal: se quitaron los productos cargados, porque sus costos dependen de la sucursal.",
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            idSucursalActual = idSucursal;
+            txtCodigobarra.Clear();
+        }
+        private static bool TryLeerDecimal(object valor, out decimal numero)
+        {
+            if (valor is decimal valorDecimal)
+            {
+                numero = valorDecimal;
+                return true;
+            }
+
+            return decimal.TryParse(Convert.ToString(valor), NumberStyles.Number, CultureInfo.CurrentCulture, out numero);
         }
 
 
@@ -206,7 +290,8 @@ namespace CapaVista
             int idProducto = Convert.ToInt32(producto["IdProducto"]);
             string codigoBarra = producto["CodigoBarra"].ToString();
             string nombre = producto["Nombre"].ToString();
-            decimal precio = Convert.ToDecimal(producto["PrecioVenta"]);
+            // Costo sin IVA de la sucursal del proveedor; puede no estar cargado todavía.
+            decimal? precio = producto["PrecioCompra"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(producto["PrecioCompra"]);
             decimal iva = Convert.ToDecimal(producto["Alicuota"]);
 
             int indice = dtgNuevaCompra.Rows.Add();
@@ -218,9 +303,13 @@ namespace CapaVista
             fila.Cells["Column3"].Value = nombre;
             fila.Cells["Column4"].Value = precio;
             fila.Cells["Column5"].Value = iva;
-            decimal subtotal = Math.Round(precio, 2, MidpointRounding.AwayFromZero);
-            decimal ivaCalculado = Math.Round(subtotal * iva / 100, 2, MidpointRounding.AwayFromZero);
-            fila.Cells["Column6"].Value = subtotal + ivaCalculado;
+
+            if (precio.HasValue)
+            {
+                decimal subtotal = Math.Round(precio.Value, 2, MidpointRounding.AwayFromZero);
+                decimal ivaCalculado = Math.Round(subtotal * iva / 100, 2, MidpointRounding.AwayFromZero);
+                fila.Cells["Column6"].Value = subtotal + ivaCalculado;
+            }
 
             fila.Tag = idProducto;
 
@@ -230,6 +319,17 @@ namespace CapaVista
             lstProductos.Items.Clear();
             lstProductos.Visible = false;
             productosEncontrados = null;
+
+            if (!precio.HasValue)
+            {
+                MessageBox.Show("\"" + nombre + "\" no tiene costo cargado para esta sucursal.\n\nIngréselo en la columna \"Costo unitario sin IVA\"; al guardar la compra quedará registrado en la sucursal.",
+                    "Costo pendiente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                dtgNuevaCompra.Focus();
+                dtgNuevaCompra.CurrentCell = fila.Cells["Column4"];
+                dtgNuevaCompra.BeginEdit(true);
+                return;
+            }
 
             txtCodigobarra.Focus();
         }
@@ -246,18 +346,27 @@ namespace CapaVista
 
             DataGridViewRow fila = dtgNuevaCompra.Rows[e.RowIndex];
 
-            if (fila.Cells["Column2"].Value == null || fila.Cells["Column4"].Value == null || fila.Cells["Column5"].Value == null)
+            if (fila.Cells["Column5"].Value == null)
             {
                 return;
             }
 
-            if (!decimal.TryParse(fila.Cells["Column2"].Value.ToString(), out decimal cantidad))
+            if (!TryLeerDecimal(fila.Cells["Column2"].Value, out decimal cantidad))
             {
                 cantidad = 0;
                 fila.Cells["Column2"].Value = 0;
             }
 
-            decimal precio = Convert.ToDecimal(fila.Cells["Column4"].Value);
+            // Costo vacío o inválido: la fila queda sin total hasta que se cargue uno válido.
+            if (!TryLeerDecimal(fila.Cells["Column4"].Value, out decimal precio) || precio < 0)
+            {
+                fila.Cells["Column4"].Value = null;
+                fila.Cells["Column6"].Value = null;
+                CalcularTotales();
+                return;
+            }
+
+            fila.Cells["Column4"].Value = precio;
             decimal iva = Convert.ToDecimal(fila.Cells["Column5"].Value);
 
             decimal subtotal = Math.Round(cantidad * precio, 2, MidpointRounding.AwayFromZero);
@@ -305,6 +414,15 @@ namespace CapaVista
                 return;
             }
 
+            if (ObtenerIdSucursal() == 0 || ObtenerIdSucursal() != idSucursalActual)
+            {
+                MessageBox.Show("Debe seleccionar la sucursal del proveedor.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                cmbSucursal.Focus();
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(cmbTipoComprobante.Text))
             {
                 MessageBox.Show("Debe seleccionar un tipo de comprobante.", "Aviso",
@@ -314,12 +432,15 @@ namespace CapaVista
                 return;
             }
 
-            if (dtpFechaPedido.Value.Date > DateTime.Today)
+            // Si el formulario quedó abierto de un día para otro, se vuelve a fijar en hoy.
+            dtpFechaPedido.Value = DateTime.Today;
+
+            if (dtpEntrega.Checked && dtpEntrega.Value.Date < DateTime.Today)
             {
-                MessageBox.Show("La fecha de compra no puede ser futura.", "Aviso",
+                MessageBox.Show("La entrega estimada no puede ser anterior a hoy.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                dtpFechaPedido.Focus();
+                dtpEntrega.Focus();
                 return;
             }
 
@@ -337,7 +458,9 @@ namespace CapaVista
                 ClsCompraEntidad compra = new ClsCompraEntidad();
 
                 compra.IdProveedor = idProveedor;
-                compra.Fecha = dtpFechaPedido.Value;
+                compra.IdSucursal = ObtenerIdSucursal();
+                compra.Fecha = DateTime.Now;
+                compra.FechaEntregaEstimada = dtpEntrega.Checked ? dtpEntrega.Value.Date : (DateTime?)null;
                 compra.TipoComprobante = cmbTipoComprobante.Text.Trim();
                 compra.NumeroComprobante = string.IsNullOrWhiteSpace(txtNumeroComprobante.Text) ? null : txtNumeroComprobante.Text.Trim();
                 compra.SubtotalSinIVA = Convert.ToDecimal(txtSubsinImpuesto.Text);
@@ -350,7 +473,7 @@ namespace CapaVista
 
                 if (EsCuentaCorriente())
                 {
-                    if (dtpVencimiento.Value.Date < dtpVencimiento.Value.Date)
+                    if (dtpVencimiento.Value.Date < DateTime.Today)
                     {
                         MessageBox.Show("La fecha de vencimiento no puede ser anterior a la fecha de la compra.",
                             "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -401,7 +524,16 @@ namespace CapaVista
                         return;
                     }
 
-                    if (fila.Cells["Column2"].Value == null || fila.Cells["Column4"].Value == null || fila.Cells["Column5"].Value == null)
+                    if (fila.Cells["Column4"].Value == null)
+                    {
+                        MessageBox.Show("Ingrese el costo de \"" + fila.Cells["Column3"].Value + "\".", "Aviso",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        dtgNuevaCompra.CurrentCell = fila.Cells["Column4"];
+                        return;
+                    }
+
+                    if (fila.Cells["Column2"].Value == null || fila.Cells["Column5"].Value == null)
                     {
                         MessageBox.Show("Complete la cantidad, el precio y el IVA del producto.", "Aviso",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -494,9 +626,13 @@ namespace CapaVista
                 return;
             }
 
-            idProveedor = Convert.ToInt32(tabla.Rows[0]["IdProveedor"]);
+            int idEncontrado = Convert.ToInt32(tabla.Rows[0]["IdProveedor"]);
             txtProveedor.Text = tabla.Rows[0]["Nombre"].ToString();
 
+            // Cambiar el texto dispara txtProveedor_TextChanged, que limpia el proveedor elegido.
+            idProveedor = idEncontrado;
+            lstProveedores.Visible = false;
+            CargarSucursales();
 
         }
         private void txtCodigobarra_TextChanged(object sender, EventArgs e)
@@ -512,7 +648,23 @@ namespace CapaVista
                 return;
             }
 
-            productosEncontrados = logica.BuscarProducto(texto);
+            if (ObtenerIdSucursal() == 0)
+            {
+                productosEncontrados = null;
+                return;
+            }
+
+            try
+            {
+                productosEncontrados = logica.BuscarProductoCompra(texto, ObtenerIdSucursal());
+            }
+            catch (Exception ex)
+            {
+                productosEncontrados = null;
+                MessageBox.Show("No se pudieron buscar los productos.\n\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             if (productosEncontrados.Rows.Count == 0)
             {
@@ -583,6 +735,9 @@ namespace CapaVista
             string texto = txtProveedor.Text.Trim();
 
             idProveedor = 0;
+            cmbSucursal.DataSource = null;
+            cmbSucursal.Enabled = false;
+            ActualizarSucursalSeleccionada();
             lstProveedores.Items.Clear();
             lstProveedores.Visible = false;
 
@@ -683,6 +838,10 @@ namespace CapaVista
 
 
 
+        private void cmbSucursal_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ActualizarSucursalSeleccionada();
+        }
         private void cmbCondicionPago_SelectedIndexChanged(object sender, EventArgs e)
         {
             ActualizarOpcionesPago();

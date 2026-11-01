@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CapaEntidades.NegocioEntidad.ClsGestorEntidadProducto;
 using CapaEntidades.NegocioEntidad;
+using CapaEntidades.NegocioEntidades;
 
 namespace CapaVista
 {
@@ -21,6 +22,7 @@ namespace CapaVista
     {
 
         private bool idiomaIngles = false;
+        private ClsCampanaAlertas campanaAlertas;
         private decimal subtotal = 0.00m;
         private decimal descuentoRecargo = 0.00m;
         private decimal total;
@@ -95,8 +97,43 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            IniciarAlertas();
+
             RellenarFilas();
             CalcularYMostrarMontos();
+        }
+
+        // Campana de alertas arriba a la derecha, al lado de cerrar sesión. Cada tipo de alerta
+        // abre la pantalla donde se resuelve, usando las mismas opciones del menú (respetan los permisos).
+        private void IniciarAlertas()
+        {
+            Dictionary<TipoAlerta, Action> acciones = new Dictionary<TipoAlerta, Action>
+            {
+                [TipoAlerta.Lote] = () => menuitemAdmistradorarticulos.PerformClick(),
+                [TipoAlerta.Stock] = AbrirReposicion,
+                [TipoAlerta.Entrega] = () => recepciónDeMercaderiaToolStripMenuItem.PerformClick(),
+                [TipoAlerta.Caja] = () => cerrarSeToolStripMenuItem.PerformClick(),
+                [TipoAlerta.Pago] = () => cuentaCorrienteDeProveedoresToolStripMenuItem.PerformClick(),
+                [TipoAlerta.Promocion] = () => administrarPromocionesToolStripMenuItem.PerformClick(),
+                [TipoAlerta.Precio] = () => menuitemAdmistradorarticulos.PerformClick()
+            };
+
+            campanaAlertas = new ClsCampanaAlertas(this, btnConfig, tollClosed, acciones);
+            campanaAlertas.Iniciar(mostrarAviso: true);
+        }
+        private void AbrirReposicion()
+        {
+            // Con permiso de reposición abre ese listado; si no, la administración de artículos.
+            if (!SesionUsuario.Permisos.Contains(520))
+            {
+                menuitemAdmistradorarticulos.PerformClick();
+                return;
+            }
+
+            using (frmListados listados = new frmListados(frmListados.Modo.Reposicion))
+            {
+                listados.ShowDialog();
+            }
         }
 
         private void AplicarIdioma()
@@ -133,16 +170,10 @@ namespace CapaVista
             cuentaCorrienteDeProveedoresToolStripMenuItem.Text = idiomaIngles ? "Supplier Account" : "Cuenta corriente de proveedores";
 
             // listados
-            listaDePreciosToolStripMenuItem.Text = idiomaIngles ? "Price List" : "Lista de precios";
-            listadoDeReposiciónToolStripMenuItem.Text = idiomaIngles ? "Restocking List" : "Listado de reposición";
+            preciosYReposicionToolStripMenuItem.Text = idiomaIngles ? "Prices and Restocking" : "Precios y reposición";
 
             // informes
-            ventasPorDiaToolStripMenuItem.Text = idiomaIngles ? "Sales by Date" : "Ventas por fecha";
-            ventaToolStripMenuItem.Text = idiomaIngles ? "Sales Details by Date" : "Venta con detalle de fecha";
-            ventaPorRubroToolStripMenuItem.Text = idiomaIngles ? "Sales by Category" : "Venta por rubro";
-            ventaPorArticulosToolStripMenuItem.Text = idiomaIngles ? "Sales by Product" : "Venta por artículos";
-            ventaPorMedioDePagoToolStripMenuItem.Text = idiomaIngles ? "Sales by Payment Method" : "Venta por medio de pago";
-            ajustesToolStripMenuItem.Text = idiomaIngles ? "Settings" : "Ajustes";
+            informesVentasToolStripMenuItem.Text = idiomaIngles ? "Sales" : "Ventas";
 
             // caja
             nuevoIngresoToolStripMenuItem.Text = idiomaIngles ? "New Deposit" : "Nuevo ingreso";
@@ -308,8 +339,7 @@ namespace CapaVista
                 SesionUsuario.Permisos.Contains(1030) || SesionUsuario.Permisos.Contains(1270);
 
             //Listados
-            listaDePreciosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(510);
-            listadoDeReposiciónToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(520);
+            preciosYReposicionToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(510) || SesionUsuario.Permisos.Contains(520);
 
             //Articulos operaciones
 
@@ -344,11 +374,8 @@ namespace CapaVista
             // Cuenta corriente
             cuentaCorrienteDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(420);
             //Informe operaciones
-            ventasPorDiaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(610);
-            ventaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(620);
-            ventaPorRubroToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(630);
-            ventaPorArticulosToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(640);
-            ventaPorMedioDePagoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(650);
+            // Un solo acceso a los cinco informes de ventas; adentro cada informe respeta su permiso (610 a 650).
+            informesVentasToolStripMenuItem.Enabled = new[] { 610, 620, 630, 640, 650 }.Any(SesionUsuario.Permisos.Contains);
             //Caja operaciones
             nuevoIngresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(710);
             nuevoEgresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(720);
@@ -364,14 +391,6 @@ namespace CapaVista
         {
             Ingreso,
             Egreso
-        }
-        public enum TipoInforme
-        {
-            VentasPorFecha,
-            VentasConDetallePorFecha,
-            VentasPorRubro,
-            VentasPorArticulo,
-            VentaPorMedioPago
         }
         //bloqueo menu
         private void BloquearMenu()
@@ -847,30 +866,12 @@ namespace CapaVista
             cuentacorr.ShowDialog();
         }
         //Informes
-        private void ventasPorDiaToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void informesVentasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmVentaFecha ventaFecha = new frmVentaFecha(TipoInforme.VentasPorFecha);
-            ventaFecha.ShowDialog();
-        }
-        private void ventaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmVentaFecha ventaFecha = new frmVentaFecha(TipoInforme.VentasConDetallePorFecha);
-            ventaFecha.ShowDialog();
-        }
-        private void ventaPorRubroToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmVentaFecha ventaRubro = new frmVentaFecha(TipoInforme.VentasPorRubro);
-            ventaRubro.ShowDialog();
-        }
-        private void ventaPorArticulosToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmVentaFecha ventaArticulo = new frmVentaFecha(TipoInforme.VentasPorArticulo);
-            ventaArticulo.ShowDialog();
-        }
-        private void ventaPorMedioDePagoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmVentaFecha ventraPago = new frmVentaFecha(TipoInforme.VentaPorMedioPago);
-            ventraPago.ShowDialog();
+            using (frmInformesVentas informes = new frmInformesVentas(frmInformesVentas.InformeInicialSegunPermisos()))
+            {
+                informes.ShowDialog();
+            }
         }
         //Caja
         private void nuevoIngresoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -885,15 +886,20 @@ namespace CapaVista
 
             egresoPlata.ShowDialog();
         }
-        private void listaDePreciosToolStripMenuItem_Click(object sender, EventArgs e)
+        private void preciosYReposicionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmListadoPrecios listaprecio = new frmListadoPrecios();
-            listaprecio.ShowDialog();
-        }
-        private void listadoDeReposiciónToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmListadoReposicion listarepo = new frmListadoReposicion();
-            listarepo.ShowDialog();
+            // Con un solo permiso se abre directo en ese listado; con los dos, se elige adentro.
+            bool precios = SesionUsuario.Permisos.Contains(510);
+            bool reposicion = SesionUsuario.Permisos.Contains(520);
+
+            frmListados.Modo modo = precios && reposicion ? frmListados.Modo.Ninguno
+                                  : precios ? frmListados.Modo.Precios
+                                  : frmListados.Modo.Reposicion;
+
+            using (frmListados listados = new frmListados(modo))
+            {
+                listados.ShowDialog();
+            }
         }
         private void menuitemAministradorcompras_Click(object sender, EventArgs e)
         {

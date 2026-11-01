@@ -41,6 +41,15 @@ namespace CapaLogica.BitacoraLogi
 
             return datos.ObtenerBitacora(fechaDesde, fechaHasta, categoria, buscar);
         }
+        public DataTable ObtenerComprasBitacora(DateTime? fechaDesde, DateTime? fechaHasta, string buscar)
+        {
+            if (fechaDesde.HasValue && fechaHasta.HasValue && fechaDesde.Value.Date > fechaHasta.Value.Date)
+            {
+                throw new ArgumentException("La fecha desde no puede ser posterior a la fecha hasta.");
+            }
+
+            return datos.ObtenerComprasBitacora(fechaDesde, fechaHasta, buscar);
+        }
         public void RegistrarError( int? idUsuario, string modulo, string tipoExcepcion, string mensaje, string detalleTecnico)
         {
             if (string.IsNullOrWhiteSpace(modulo))

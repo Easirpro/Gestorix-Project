@@ -28,45 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            grpVenta = new System.Windows.Forms.GroupBox();
-            lblDesde = new System.Windows.Forms.Label();
-            dtpDesde = new System.Windows.Forms.DateTimePicker();
-            lblHasta = new System.Windows.Forms.Label();
-            dtpHasta = new System.Windows.Forms.DateTimePicker();
-            lblNroVenta = new System.Windows.Forms.Label();
-            txtNroVenta = new System.Windows.Forms.TextBox();
-            btnBuscarVentas = new System.Windows.Forms.Button();
-            dgvVentas = new System.Windows.Forms.DataGridView();
-            grpProducto = new System.Windows.Forms.GroupBox();
-            dgvDetalle = new System.Windows.Forms.DataGridView();
-            grpDatos = new System.Windows.Forms.GroupBox();
-            lblCantidad = new System.Windows.Forms.Label();
-            nudCantidad = new System.Windows.Forms.NumericUpDown();
-            lblPrecio = new System.Windows.Forms.Label();
-            lblPrecioValor = new System.Windows.Forms.Label();
-            lblImporte = new System.Windows.Forms.Label();
-            lblImporteValor = new System.Windows.Forms.Label();
-            lblMotivo = new System.Windows.Forms.Label();
-            cmbMotivo = new System.Windows.Forms.ComboBox();
-            lblObservacion = new System.Windows.Forms.Label();
-            txtObservacion = new System.Windows.Forms.TextBox();
-            lblReintegro = new System.Windows.Forms.Label();
-            rbEfectivo = new System.Windows.Forms.RadioButton();
-            rbCambio = new System.Windows.Forms.RadioButton();
-            chkReingresaStock = new System.Windows.Forms.CheckBox();
-            lblCaja = new System.Windows.Forms.Label();
-            btnRegistrar = new System.Windows.Forms.Button();
-            btnCancelar = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNuevaDevolucion));
+            grpVenta = new GroupBox();
+            lblDesde = new Label();
+            dtpDesde = new DateTimePicker();
+            lblHasta = new Label();
+            dtpHasta = new DateTimePicker();
+            lblNroVenta = new Label();
+            txtNroVenta = new TextBox();
+            btnBuscarVentas = new Button();
+            dgvVentas = new DataGridView();
+            grpProducto = new GroupBox();
+            dgvDetalle = new DataGridView();
+            grpDatos = new GroupBox();
+            lblCantidad = new Label();
+            nudCantidad = new NumericUpDown();
+            lblPrecio = new Label();
+            lblPrecioValor = new Label();
+            lblImporte = new Label();
+            lblImporteValor = new Label();
+            lblMotivo = new Label();
+            cmbMotivo = new ComboBox();
+            lblObservacion = new Label();
+            txtObservacion = new TextBox();
+            lblReintegro = new Label();
+            rbEfectivo = new RadioButton();
+            rbCambio = new RadioButton();
+            chkReingresaStock = new CheckBox();
+            lblCaja = new Label();
+            btnRegistrar = new Button();
+            btnCancelar = new Button();
             grpVenta.SuspendLayout();
-            grpProducto.SuspendLayout();
-            grpDatos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVentas).BeginInit();
+            grpProducto.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDetalle).BeginInit();
+            grpDatos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).BeginInit();
             SuspendLayout();
             // 
             // grpVenta
             // 
+            grpVenta.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             grpVenta.Controls.Add(lblDesde);
             grpVenta.Controls.Add(dtpDesde);
             grpVenta.Controls.Add(lblHasta);
@@ -75,66 +77,68 @@
             grpVenta.Controls.Add(txtNroVenta);
             grpVenta.Controls.Add(btnBuscarVentas);
             grpVenta.Controls.Add(dgvVentas);
-            grpVenta.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            grpVenta.Location = new System.Drawing.Point(12, 8);
+            grpVenta.Location = new Point(12, 8);
             grpVenta.Name = "grpVenta";
-            grpVenta.Size = new System.Drawing.Size(796, 205);
+            grpVenta.Size = new Size(796, 205);
             grpVenta.TabIndex = 0;
-            grpVenta.Text = "1. Venta de la que se devuelve";
             grpVenta.TabStop = false;
+            grpVenta.Text = "1. Venta de la que se devuelve";
             // 
             // lblDesde
             // 
-            lblDesde.Location = new System.Drawing.Point(12, 28);
+            lblDesde.AutoSize = true;
+            lblDesde.Location = new Point(12, 28);
             lblDesde.Name = "lblDesde";
+            lblDesde.Size = new Size(42, 15);
             lblDesde.TabIndex = 1;
             lblDesde.Text = "Desde:";
-            lblDesde.AutoSize = true;
             // 
             // dtpDesde
             // 
-            dtpDesde.Location = new System.Drawing.Point(60, 24);
+            dtpDesde.Format = DateTimePickerFormat.Short;
+            dtpDesde.Location = new Point(60, 24);
             dtpDesde.Name = "dtpDesde";
-            dtpDesde.Size = new System.Drawing.Size(115, 23);
+            dtpDesde.Size = new Size(115, 23);
             dtpDesde.TabIndex = 2;
-            dtpDesde.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             // 
             // lblHasta
             // 
-            lblHasta.Location = new System.Drawing.Point(185, 28);
+            lblHasta.AutoSize = true;
+            lblHasta.Location = new Point(185, 28);
             lblHasta.Name = "lblHasta";
+            lblHasta.Size = new Size(40, 15);
             lblHasta.TabIndex = 3;
             lblHasta.Text = "Hasta:";
-            lblHasta.AutoSize = true;
             // 
             // dtpHasta
             // 
-            dtpHasta.Location = new System.Drawing.Point(230, 24);
+            dtpHasta.Format = DateTimePickerFormat.Short;
+            dtpHasta.Location = new Point(230, 24);
             dtpHasta.Name = "dtpHasta";
-            dtpHasta.Size = new System.Drawing.Size(115, 23);
+            dtpHasta.Size = new Size(115, 23);
             dtpHasta.TabIndex = 4;
-            dtpHasta.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             // 
             // lblNroVenta
             // 
-            lblNroVenta.Location = new System.Drawing.Point(370, 28);
+            lblNroVenta.AutoSize = true;
+            lblNroVenta.Location = new Point(370, 28);
             lblNroVenta.Name = "lblNroVenta";
+            lblNroVenta.Size = new Size(85, 15);
             lblNroVenta.TabIndex = 5;
             lblNroVenta.Text = "o N.º de venta:";
-            lblNroVenta.AutoSize = true;
             // 
             // txtNroVenta
             // 
-            txtNroVenta.Location = new System.Drawing.Point(470, 24);
+            txtNroVenta.Location = new Point(470, 24);
             txtNroVenta.Name = "txtNroVenta";
-            txtNroVenta.Size = new System.Drawing.Size(90, 23);
+            txtNroVenta.Size = new Size(90, 23);
             txtNroVenta.TabIndex = 6;
             // 
             // btnBuscarVentas
             // 
-            btnBuscarVentas.Location = new System.Drawing.Point(575, 22);
+            btnBuscarVentas.Location = new Point(575, 22);
             btnBuscarVentas.Name = "btnBuscarVentas";
-            btnBuscarVentas.Size = new System.Drawing.Size(100, 27);
+            btnBuscarVentas.Size = new Size(100, 27);
             btnBuscarVentas.TabIndex = 7;
             btnBuscarVentas.Text = "Buscar";
             btnBuscarVentas.UseVisualStyleBackColor = true;
@@ -142,47 +146,48 @@
             // 
             // dgvVentas
             // 
-            dgvVentas.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            dgvVentas.Location = new System.Drawing.Point(12, 58);
-            dgvVentas.Name = "dgvVentas";
-            dgvVentas.Size = new System.Drawing.Size(772, 135);
-            dgvVentas.TabIndex = 8;
             dgvVentas.AllowUserToAddRows = false;
             dgvVentas.AllowUserToDeleteRows = false;
-            dgvVentas.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvVentas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvVentas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvVentas.BackgroundColor = SystemColors.Window;
+            dgvVentas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvVentas.Location = new Point(12, 58);
+            dgvVentas.Name = "dgvVentas";
             dgvVentas.ReadOnly = true;
-            dgvVentas.SelectionChanged += dgvVentas_SelectionChanged;
+            dgvVentas.Size = new Size(772, 135);
+            dgvVentas.TabIndex = 8;
             dgvVentas.DataBindingComplete += dgvVentas_DataBindingComplete;
+            dgvVentas.SelectionChanged += dgvVentas_SelectionChanged;
             // 
             // grpProducto
             // 
+            grpProducto.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             grpProducto.Controls.Add(dgvDetalle);
-            grpProducto.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            grpProducto.Location = new System.Drawing.Point(12, 218);
+            grpProducto.Location = new Point(12, 218);
             grpProducto.Name = "grpProducto";
-            grpProducto.Size = new System.Drawing.Size(796, 155);
+            grpProducto.Size = new Size(796, 155);
             grpProducto.TabIndex = 9;
-            grpProducto.Text = "2. Producto a devolver";
             grpProducto.TabStop = false;
+            grpProducto.Text = "2. Producto a devolver";
             // 
             // dgvDetalle
             // 
-            dgvDetalle.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            dgvDetalle.Location = new System.Drawing.Point(12, 22);
-            dgvDetalle.Name = "dgvDetalle";
-            dgvDetalle.Size = new System.Drawing.Size(772, 122);
-            dgvDetalle.TabIndex = 10;
             dgvDetalle.AllowUserToAddRows = false;
             dgvDetalle.AllowUserToDeleteRows = false;
-            dgvDetalle.BackgroundColor = System.Drawing.SystemColors.Window;
-            dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDetalle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvDetalle.BackgroundColor = SystemColors.Window;
+            dgvDetalle.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDetalle.Location = new Point(12, 22);
+            dgvDetalle.Name = "dgvDetalle";
             dgvDetalle.ReadOnly = true;
-            dgvDetalle.SelectionChanged += dgvDetalle_SelectionChanged;
+            dgvDetalle.Size = new Size(772, 122);
+            dgvDetalle.TabIndex = 10;
             dgvDetalle.DataBindingComplete += dgvDetalle_DataBindingComplete;
+            dgvDetalle.SelectionChanged += dgvDetalle_SelectionChanged;
             // 
             // grpDatos
             // 
+            grpDatos.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             grpDatos.Controls.Add(lblCantidad);
             grpDatos.Controls.Add(nudCantidad);
             grpDatos.Controls.Add(lblPrecio);
@@ -198,159 +203,168 @@
             grpDatos.Controls.Add(rbCambio);
             grpDatos.Controls.Add(chkReingresaStock);
             grpDatos.Controls.Add(lblCaja);
-            grpDatos.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            grpDatos.Location = new System.Drawing.Point(12, 378);
+            grpDatos.Location = new Point(12, 378);
             grpDatos.Name = "grpDatos";
-            grpDatos.Size = new System.Drawing.Size(796, 195);
+            grpDatos.Size = new Size(796, 195);
             grpDatos.TabIndex = 11;
-            grpDatos.Text = "3. Datos de la devolución";
             grpDatos.TabStop = false;
+            grpDatos.Text = "3. Datos de la devolución";
             // 
             // lblCantidad
             // 
-            lblCantidad.Location = new System.Drawing.Point(15, 30);
+            lblCantidad.AutoSize = true;
+            lblCantidad.Location = new Point(15, 30);
             lblCantidad.Name = "lblCantidad";
+            lblCantidad.Size = new Size(58, 15);
             lblCantidad.TabIndex = 12;
             lblCantidad.Text = "Cantidad:";
-            lblCantidad.AutoSize = true;
             // 
             // nudCantidad
             // 
-            nudCantidad.Location = new System.Drawing.Point(105, 26);
-            nudCantidad.Name = "nudCantidad";
-            nudCantidad.Size = new System.Drawing.Size(100, 23);
-            nudCantidad.TabIndex = 13;
-            nudCantidad.DecimalPlaces = 2;
+            nudCantidad.Location = new Point(105, 26);
             nudCantidad.Maximum = new decimal(new int[] { 99999999, 0, 0, 131072 });
+            nudCantidad.Name = "nudCantidad";
+            nudCantidad.Size = new Size(100, 23);
+            nudCantidad.TabIndex = 13;
+            nudCantidad.TextAlign = HorizontalAlignment.Right;
             nudCantidad.ThousandsSeparator = true;
-            nudCantidad.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            nudCantidad.DecimalPlaces = 0;
             nudCantidad.ValueChanged += nudCantidad_ValueChanged;
             // 
             // lblPrecio
             // 
-            lblPrecio.Location = new System.Drawing.Point(225, 30);
+            lblPrecio.AutoSize = true;
+            lblPrecio.Location = new Point(225, 30);
             lblPrecio.Name = "lblPrecio";
+            lblPrecio.Size = new Size(104, 15);
             lblPrecio.TabIndex = 14;
             lblPrecio.Text = "Precio por unidad:";
-            lblPrecio.AutoSize = true;
             // 
             // lblPrecioValor
             // 
-            lblPrecioValor.Location = new System.Drawing.Point(340, 30);
+            lblPrecioValor.AutoSize = true;
+            lblPrecioValor.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblPrecioValor.Location = new Point(340, 30);
             lblPrecioValor.Name = "lblPrecioValor";
+            lblPrecioValor.Size = new Size(41, 15);
             lblPrecioValor.TabIndex = 15;
             lblPrecioValor.Text = "$ 0,00";
-            lblPrecioValor.AutoSize = true;
-            lblPrecioValor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             // 
             // lblImporte
             // 
-            lblImporte.Location = new System.Drawing.Point(470, 30);
+            lblImporte.AutoSize = true;
+            lblImporte.Location = new Point(470, 30);
             lblImporte.Name = "lblImporte";
+            lblImporte.Size = new Size(52, 15);
             lblImporte.TabIndex = 16;
             lblImporte.Text = "Importe:";
-            lblImporte.AutoSize = true;
             // 
             // lblImporteValor
             // 
-            lblImporteValor.Location = new System.Drawing.Point(535, 26);
+            lblImporteValor.AutoSize = true;
+            lblImporteValor.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblImporteValor.Location = new Point(535, 26);
             lblImporteValor.Name = "lblImporteValor";
+            lblImporteValor.Size = new Size(53, 20);
             lblImporteValor.TabIndex = 17;
             lblImporteValor.Text = "$ 0,00";
-            lblImporteValor.AutoSize = true;
-            lblImporteValor.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
             // lblMotivo
             // 
-            lblMotivo.Location = new System.Drawing.Point(15, 66);
+            lblMotivo.AutoSize = true;
+            lblMotivo.Location = new Point(15, 66);
             lblMotivo.Name = "lblMotivo";
+            lblMotivo.Size = new Size(48, 15);
             lblMotivo.TabIndex = 18;
             lblMotivo.Text = "Motivo:";
-            lblMotivo.AutoSize = true;
             // 
             // cmbMotivo
             // 
-            cmbMotivo.Location = new System.Drawing.Point(105, 62);
-            cmbMotivo.Name = "cmbMotivo";
-            cmbMotivo.Size = new System.Drawing.Size(245, 23);
-            cmbMotivo.TabIndex = 19;
-            cmbMotivo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbMotivo.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMotivo.FormattingEnabled = true;
+            cmbMotivo.Location = new Point(105, 62);
+            cmbMotivo.Name = "cmbMotivo";
+            cmbMotivo.Size = new Size(245, 23);
+            cmbMotivo.TabIndex = 19;
             cmbMotivo.SelectedIndexChanged += cmbMotivo_SelectedIndexChanged;
             // 
             // lblObservacion
             // 
-            lblObservacion.Location = new System.Drawing.Point(375, 66);
+            lblObservacion.AutoSize = true;
+            lblObservacion.Location = new Point(375, 66);
             lblObservacion.Name = "lblObservacion";
+            lblObservacion.Size = new Size(144, 15);
             lblObservacion.TabIndex = 20;
             lblObservacion.Text = "Observaciones (opcional):";
-            lblObservacion.AutoSize = true;
             // 
             // txtObservacion
             // 
-            txtObservacion.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            txtObservacion.Location = new System.Drawing.Point(375, 86);
-            txtObservacion.Name = "txtObservacion";
-            txtObservacion.Size = new System.Drawing.Size(405, 55);
-            txtObservacion.TabIndex = 21;
-            txtObservacion.Multiline = true;
-            txtObservacion.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtObservacion.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtObservacion.Location = new Point(375, 86);
             txtObservacion.MaxLength = 150;
+            txtObservacion.Multiline = true;
+            txtObservacion.Name = "txtObservacion";
+            txtObservacion.ScrollBars = ScrollBars.Vertical;
+            txtObservacion.Size = new Size(405, 55);
+            txtObservacion.TabIndex = 21;
             // 
             // lblReintegro
             // 
-            lblReintegro.Location = new System.Drawing.Point(15, 100);
+            lblReintegro.AutoSize = true;
+            lblReintegro.Location = new Point(15, 100);
             lblReintegro.Name = "lblReintegro";
+            lblReintegro.Size = new Size(61, 15);
             lblReintegro.TabIndex = 22;
             lblReintegro.Text = "Reintegro:";
-            lblReintegro.AutoSize = true;
             // 
             // rbEfectivo
             // 
-            rbEfectivo.Location = new System.Drawing.Point(105, 98);
-            rbEfectivo.Name = "rbEfectivo";
-            rbEfectivo.TabIndex = 23;
-            rbEfectivo.Text = "Devolver el dinero en efectivo";
             rbEfectivo.AutoSize = true;
-            rbEfectivo.UseVisualStyleBackColor = true;
             rbEfectivo.Checked = true;
+            rbEfectivo.Location = new Point(105, 98);
+            rbEfectivo.Name = "rbEfectivo";
+            rbEfectivo.Size = new Size(181, 19);
+            rbEfectivo.TabIndex = 23;
+            rbEfectivo.TabStop = true;
+            rbEfectivo.Text = "Devolver el dinero en efectivo";
+            rbEfectivo.UseVisualStyleBackColor = true;
             rbEfectivo.CheckedChanged += rbReintegro_CheckedChanged;
             // 
             // rbCambio
             // 
-            rbCambio.Location = new System.Drawing.Point(105, 121);
+            rbCambio.AutoSize = true;
+            rbCambio.Location = new Point(105, 121);
             rbCambio.Name = "rbCambio";
+            rbCambio.Size = new Size(244, 19);
             rbCambio.TabIndex = 24;
             rbCambio.Text = "Entregar otra unidad del mismo producto";
-            rbCambio.AutoSize = true;
             rbCambio.UseVisualStyleBackColor = true;
             rbCambio.CheckedChanged += rbReintegro_CheckedChanged;
             // 
             // chkReingresaStock
             // 
-            chkReingresaStock.Location = new System.Drawing.Point(15, 155);
+            chkReingresaStock.AutoSize = true;
+            chkReingresaStock.Location = new Point(15, 155);
             chkReingresaStock.Name = "chkReingresaStock";
+            chkReingresaStock.Size = new Size(322, 19);
             chkReingresaStock.TabIndex = 25;
             chkReingresaStock.Text = "La unidad devuelta está en condiciones y vuelve al stock";
-            chkReingresaStock.AutoSize = true;
             chkReingresaStock.UseVisualStyleBackColor = true;
             // 
             // lblCaja
             // 
-            lblCaja.Location = new System.Drawing.Point(375, 155);
-            lblCaja.Name = "lblCaja";
-            lblCaja.TabIndex = 26;
-            lblCaja.Text = "";
             lblCaja.AutoSize = true;
-            lblCaja.ForeColor = System.Drawing.SystemColors.GrayText;
+            lblCaja.ForeColor = SystemColors.GrayText;
+            lblCaja.Location = new Point(375, 155);
+            lblCaja.Name = "lblCaja";
+            lblCaja.Size = new Size(0, 15);
+            lblCaja.TabIndex = 26;
             // 
             // btnRegistrar
             // 
-            btnRegistrar.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            btnRegistrar.Location = new System.Drawing.Point(582, 582);
+            btnRegistrar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnRegistrar.Location = new Point(582, 582);
             btnRegistrar.Name = "btnRegistrar";
-            btnRegistrar.Size = new System.Drawing.Size(110, 32);
+            btnRegistrar.Size = new Size(110, 32);
             btnRegistrar.TabIndex = 27;
             btnRegistrar.Text = "Registrar";
             btnRegistrar.UseVisualStyleBackColor = true;
@@ -358,10 +372,10 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            btnCancelar.Location = new System.Drawing.Point(698, 582);
+            btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnCancelar.Location = new Point(698, 582);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new System.Drawing.Size(110, 32);
+            btnCancelar.Size = new Size(110, 32);
             btnCancelar.TabIndex = 28;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
@@ -369,34 +383,31 @@
             // 
             // frmNuevaDevolucion
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancelar;
-            ClientSize = new System.Drawing.Size(820, 626);
+            ClientSize = new Size(820, 626);
             Controls.Add(grpVenta);
             Controls.Add(grpProducto);
             Controls.Add(grpDatos);
             Controls.Add(btnRegistrar);
             Controls.Add(btnCancelar);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-            MaximizeBox = true;
-            MinimumSize = new System.Drawing.Size(836, 665);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimizeBox = false;
+            MinimumSize = new Size(836, 665);
             Name = "frmNuevaDevolucion";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Nueva devolución";
             Load += frmNuevaDevolucion_Load;
-            ((System.ComponentModel.ISupportInitialize)dgvVentas).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvDetalle).EndInit();
-            ((System.ComponentModel.ISupportInitialize)nudCantidad).EndInit();
-            grpDatos.ResumeLayout(false);
-            grpDatos.PerformLayout();
-            grpProducto.ResumeLayout(false);
-            grpProducto.PerformLayout();
             grpVenta.ResumeLayout(false);
             grpVenta.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvVentas).EndInit();
+            grpProducto.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvDetalle).EndInit();
+            grpDatos.ResumeLayout(false);
+            grpDatos.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudCantidad).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion

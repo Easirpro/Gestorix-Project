@@ -38,9 +38,15 @@ namespace CapaLogica
                            new SqlCommand(sql, cn))
                     {
                         cmd.ExecuteNonQuery();
-                        string hash = CalcularHashArchivo(archivo);
 
-                        File.WriteAllText(archivo + ".hash",hash);
+                        // Con un servidor remoto el .bak queda en el disco del servidor,
+                        // así que el hash solo se puede calcular si el archivo es visible desde esta PC.
+                        if (File.Exists(archivo))
+                        {
+                            string hash = CalcularHashArchivo(archivo);
+
+                            File.WriteAllText(archivo + ".hash", hash);
+                        }
                     }
                 }
 
@@ -144,6 +150,31 @@ namespace CapaLogica
         }
         public bool ExisteBackupHoy(string ruta)
         {
+            // Primero se consulta el historial del servidor: sirve tanto para un servidor local
+            // como para el compartido, donde los .bak no quedan en esta PC.
+            try
+            {
+                Conexion conexion = new Conexion();
+
+                using (SqlConnection cn = conexion.ObtenerConexionMaster())
+                {
+                    cn.Open();
+
+                    string sql = @"SELECT COUNT(*) FROM msdb.dbo.backupset
+                                   WHERE database_name = 'Gestorix'
+                                   AND backup_finish_date >= CAST(GETDATE() AS date)";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, cn))
+                    {
+                        return (int)cmd.ExecuteScalar() > 0;
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                // Sin acceso a msdb: se revisa la carpeta local como antes.
+            }
+
             if (!Directory.Exists(ruta))
                 return false;
 

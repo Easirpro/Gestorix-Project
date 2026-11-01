@@ -1,0 +1,96 @@
+using CapaEntidades.NegocioEntidades;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace CapaVista
+{
+    // Aviso chico que aparece al iniciar sesión si hay alertas urgentes: abajo a la derecha de la ventana,
+    // sin quitarle el foco a la pantalla de ventas y se cierra solo. "Ver alertas" abre la campana.
+    public class frmAvisoAlertas : Form
+    {
+        private const int SEGUNDOS_VISIBLE = 10;
+        private const int MAXIMO_RENGLONES = 3;
+
+        private readonly Action verAlertas;
+        private readonly System.Windows.Forms.Timer cierre = new System.Windows.Forms.Timer();
+
+        public frmAvisoAlertas(List<ClsAlertaEntidad> urgentes, Action verAlertas)
+        {
+            this.verAlertas = verAlertas;
+
+            FormBorderStyle = FormBorderStyle.None;
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.Manual;
+            BackColor = Color.White;
+            Padding = new Padding(1);
+            Size = new Size(340, 110);
+
+            Panel borde = new Panel { Dock = DockStyle.Fill, BackColor = Color.White };
+            Panel franja = new Panel { Dock = DockStyle.Left, Width = 5, BackColor = Color.Firebrick };
+
+            Label titulo = new Label
+            {
+                Text = urgentes.Count == 1 ? "Tenés 1 alerta urgente" : "Tenés " + urgentes.Count + " alertas urgentes",
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = Color.Firebrick,
+                Location = new Point(14, 8),
+                AutoSize = true
+            };
+
+            Label detalle = new Label
+            {
+                Text = string.Join(Environment.NewLine, urgentes.Take(MAXIMO_RENGLONES).Select(a => "• " + a.Descripcion))
+                       + (urgentes.Count > MAXIMO_RENGLONES ? Environment.NewLine + "• y " + (urgentes.Count - MAXIMO_RENGLONES) + " más…" : ""),
+                Font = new Font("Segoe UI", 8.5F),
+                Location = new Point(14, 30),
+                Size = new Size(316, 52),
+                AutoEllipsis = true
+            };
+
+            LinkLabel ver = new LinkLabel { Text = "Ver alertas", AutoSize = true, Location = new Point(14, 86) };
+            ver.LinkClicked += (sender, e) => { Close(); this.verAlertas(); };
+
+            Label cerrar = new Label
+            {
+                Text = "✕",
+                Font = new Font("Segoe UI", 9F),
+                ForeColor = Color.Gray,
+                AutoSize = true,
+                Location = new Point(318, 6),
+                Cursor = Cursors.Hand
+            };
+            cerrar.Click += (sender, e) => Close();
+
+            borde.Controls.AddRange(new Control[] { titulo, detalle, ver, cerrar });
+            Controls.Add(borde);
+            Controls.Add(franja);
+            BackColor = Color.Silver;   // el Padding de 1 px queda como borde gris
+
+            cierre.Interval = SEGUNDOS_VISIBLE * 1000;
+            cierre.Tick += (sender, e) => Close();
+        }
+
+        // No le quita el foco a la ventana principal al aparecer.
+        protected override bool ShowWithoutActivation => true;
+
+        public void Mostrar(Form duenio)
+        {
+            Rectangle area = duenio.RectangleToScreen(duenio.ClientRectangle);
+            Location = new Point(area.Right - Width - 12, area.Bottom - Height - 12);
+            Owner = duenio;
+            Show();
+            cierre.Start();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                cierre.Dispose();
+
+            base.Dispose(disposing);
+        }
+    }
+}

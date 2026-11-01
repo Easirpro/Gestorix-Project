@@ -20,6 +20,7 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRecepcionCompra));
             pnlPrincipal = new TableLayoutPanel();
             lblTitulo = new Label();
             pnlBusqueda = new TableLayoutPanel();
@@ -752,6 +753,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1050, 666);
             Controls.Add(pnlPrincipal);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(950, 650);
             Name = "frmRecepcionCompra";
             StartPosition = FormStartPosition.CenterScreen;

@@ -601,6 +601,7 @@ namespace CapaVista
                         lote.IdSucursal = idSucursal;
                         lote.Stock = 0;
                         lote.Activo = true;
+                        lote.DiasAlertaVencimiento = ObtenerDiasAlertaVencimiento();
 
                         bool loteModificado = logica.ModificarLote(lote);
 
@@ -651,6 +652,7 @@ namespace CapaVista
                     lote.Stock = 0;
                     lote.Activo = true;
                     lote.IdSucursal = idSucursal;
+                    lote.DiasAlertaVencimiento = ObtenerDiasAlertaVencimiento();
 
                     bool loteRegistrado = logica.RegistrarLote(lote);
 
@@ -718,6 +720,13 @@ namespace CapaVista
 
             txtStockMinimo.Enabled = chkControlStock.Checked;
             txtStockMaximo.Enabled = chkControlStock.Checked;
+        }
+        // Días de aviso antes del vencimiento; sin alerta marcada no se guardan (avisa el día que vence).
+        private int? ObtenerDiasAlertaVencimiento()
+        {
+            return chkAlertaVencimiento.Checked && int.TryParse(txtAlertaVencimiento.Text, out int dias) && dias >= 0
+                ? dias
+                : (int?)null;
         }
         private void chkAlertaVencimiento_CheckedChanged(object sender, EventArgs e)
         {

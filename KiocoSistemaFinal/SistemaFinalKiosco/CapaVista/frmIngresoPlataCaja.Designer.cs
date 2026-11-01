@@ -28,136 +28,143 @@
         /// </summary>
         private void InitializeComponent()
         {
-            lblTitulo = new System.Windows.Forms.Label();
-            lblConcepto = new System.Windows.Forms.Label();
-            cmbConcepto = new System.Windows.Forms.ComboBox();
-            lblMedioPago = new System.Windows.Forms.Label();
-            cmbMedioPago = new System.Windows.Forms.ComboBox();
-            lblImporte = new System.Windows.Forms.Label();
-            nudImporte = new System.Windows.Forms.NumericUpDown();
-            lblDisponible = new System.Windows.Forms.Label();
-            lblEmpleado = new System.Windows.Forms.Label();
-            cmbEmpleado = new System.Windows.Forms.ComboBox();
-            lblObservacion = new System.Windows.Forms.Label();
-            txtObservacion = new System.Windows.Forms.TextBox();
-            btnGuardar = new System.Windows.Forms.Button();
-            btnCancelar = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmIngresoPlataCaja));
+            lblTitulo = new Label();
+            lblConcepto = new Label();
+            cmbConcepto = new ComboBox();
+            lblMedioPago = new Label();
+            cmbMedioPago = new ComboBox();
+            lblImporte = new Label();
+            nudImporte = new NumericUpDown();
+            lblDisponible = new Label();
+            lblEmpleado = new Label();
+            cmbEmpleado = new ComboBox();
+            lblObservacion = new Label();
+            txtObservacion = new TextBox();
+            btnGuardar = new Button();
+            btnCancelar = new Button();
             ((System.ComponentModel.ISupportInitialize)nudImporte).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
             // 
-            lblTitulo.Location = new System.Drawing.Point(15, 15);
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblTitulo.Location = new Point(15, 15);
             lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(144, 20);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Nuevo movimiento";
-            lblTitulo.AutoSize = true;
-            lblTitulo.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             // 
             // lblConcepto
             // 
-            lblConcepto.Location = new System.Drawing.Point(15, 55);
+            lblConcepto.AutoSize = true;
+            lblConcepto.Location = new Point(15, 55);
             lblConcepto.Name = "lblConcepto";
+            lblConcepto.Size = new Size(62, 15);
             lblConcepto.TabIndex = 1;
             lblConcepto.Text = "Concepto:";
-            lblConcepto.AutoSize = true;
             // 
             // cmbConcepto
             // 
-            cmbConcepto.Location = new System.Drawing.Point(130, 51);
-            cmbConcepto.Name = "cmbConcepto";
-            cmbConcepto.Size = new System.Drawing.Size(250, 23);
-            cmbConcepto.TabIndex = 2;
-            cmbConcepto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbConcepto.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbConcepto.FormattingEnabled = true;
+            cmbConcepto.Location = new Point(130, 51);
+            cmbConcepto.Name = "cmbConcepto";
+            cmbConcepto.Size = new Size(250, 23);
+            cmbConcepto.TabIndex = 2;
             cmbConcepto.SelectedIndexChanged += cmbConcepto_SelectedIndexChanged;
             // 
             // lblMedioPago
             // 
-            lblMedioPago.Location = new System.Drawing.Point(15, 90);
+            lblMedioPago.AutoSize = true;
+            lblMedioPago.Location = new Point(15, 90);
             lblMedioPago.Name = "lblMedioPago";
+            lblMedioPago.Size = new Size(90, 15);
             lblMedioPago.TabIndex = 3;
             lblMedioPago.Text = "Medio de pago:";
-            lblMedioPago.AutoSize = true;
             // 
             // cmbMedioPago
             // 
-            cmbMedioPago.Location = new System.Drawing.Point(130, 86);
-            cmbMedioPago.Name = "cmbMedioPago";
-            cmbMedioPago.Size = new System.Drawing.Size(250, 23);
-            cmbMedioPago.TabIndex = 4;
-            cmbMedioPago.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbMedioPago.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMedioPago.FormattingEnabled = true;
+            cmbMedioPago.Location = new Point(130, 86);
+            cmbMedioPago.Name = "cmbMedioPago";
+            cmbMedioPago.Size = new Size(250, 23);
+            cmbMedioPago.TabIndex = 4;
             cmbMedioPago.SelectedIndexChanged += cmbMedioPago_SelectedIndexChanged;
             // 
             // lblImporte
             // 
-            lblImporte.Location = new System.Drawing.Point(15, 125);
+            lblImporte.AutoSize = true;
+            lblImporte.Location = new Point(15, 125);
             lblImporte.Name = "lblImporte";
+            lblImporte.Size = new Size(52, 15);
             lblImporte.TabIndex = 5;
             lblImporte.Text = "Importe:";
-            lblImporte.AutoSize = true;
             // 
             // nudImporte
             // 
-            nudImporte.Location = new System.Drawing.Point(130, 121);
-            nudImporte.Name = "nudImporte";
-            nudImporte.Size = new System.Drawing.Size(140, 23);
-            nudImporte.TabIndex = 6;
             nudImporte.DecimalPlaces = 2;
+            nudImporte.Location = new Point(130, 121);
             nudImporte.Maximum = new decimal(new int[] { 99999999, 0, 0, 131072 });
+            nudImporte.Name = "nudImporte";
+            nudImporte.Size = new Size(140, 23);
+            nudImporte.TabIndex = 6;
+            nudImporte.TextAlign = HorizontalAlignment.Right;
             nudImporte.ThousandsSeparator = true;
-            nudImporte.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblDisponible
             // 
-            lblDisponible.Location = new System.Drawing.Point(280, 125);
-            lblDisponible.Name = "lblDisponible";
-            lblDisponible.TabIndex = 7;
-            lblDisponible.Text = "";
             lblDisponible.AutoSize = true;
-            lblDisponible.ForeColor = System.Drawing.SystemColors.GrayText;
+            lblDisponible.ForeColor = SystemColors.GrayText;
+            lblDisponible.Location = new Point(280, 125);
+            lblDisponible.Name = "lblDisponible";
+            lblDisponible.Size = new Size(0, 15);
+            lblDisponible.TabIndex = 7;
             // 
             // lblEmpleado
             // 
-            lblEmpleado.Location = new System.Drawing.Point(15, 160);
+            lblEmpleado.AutoSize = true;
+            lblEmpleado.Location = new Point(15, 160);
             lblEmpleado.Name = "lblEmpleado";
+            lblEmpleado.Size = new Size(63, 15);
             lblEmpleado.TabIndex = 8;
             lblEmpleado.Text = "Empleado:";
-            lblEmpleado.AutoSize = true;
             // 
             // cmbEmpleado
             // 
-            cmbEmpleado.Location = new System.Drawing.Point(130, 156);
-            cmbEmpleado.Name = "cmbEmpleado";
-            cmbEmpleado.Size = new System.Drawing.Size(250, 23);
-            cmbEmpleado.TabIndex = 9;
-            cmbEmpleado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbEmpleado.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEmpleado.FormattingEnabled = true;
+            cmbEmpleado.Location = new Point(130, 156);
+            cmbEmpleado.Name = "cmbEmpleado";
+            cmbEmpleado.Size = new Size(250, 23);
+            cmbEmpleado.TabIndex = 9;
             // 
             // lblObservacion
             // 
-            lblObservacion.Location = new System.Drawing.Point(15, 195);
+            lblObservacion.AutoSize = true;
+            lblObservacion.Location = new Point(15, 195);
             lblObservacion.Name = "lblObservacion";
+            lblObservacion.Size = new Size(76, 15);
             lblObservacion.TabIndex = 10;
             lblObservacion.Text = "Observación:";
-            lblObservacion.AutoSize = true;
             // 
             // txtObservacion
             // 
-            txtObservacion.Location = new System.Drawing.Point(130, 192);
-            txtObservacion.Name = "txtObservacion";
-            txtObservacion.Size = new System.Drawing.Size(250, 60);
-            txtObservacion.TabIndex = 11;
-            txtObservacion.Multiline = true;
-            txtObservacion.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtObservacion.Location = new Point(130, 192);
             txtObservacion.MaxLength = 255;
+            txtObservacion.Multiline = true;
+            txtObservacion.Name = "txtObservacion";
+            txtObservacion.ScrollBars = ScrollBars.Vertical;
+            txtObservacion.Size = new Size(250, 60);
+            txtObservacion.TabIndex = 11;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new System.Drawing.Point(160, 270);
+            btnGuardar.Location = new Point(160, 270);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new System.Drawing.Size(105, 32);
+            btnGuardar.Size = new Size(105, 32);
             btnGuardar.TabIndex = 12;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
@@ -165,9 +172,9 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new System.Drawing.Point(275, 270);
+            btnCancelar.Location = new Point(275, 270);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new System.Drawing.Size(105, 32);
+            btnCancelar.Size = new Size(105, 32);
             btnCancelar.TabIndex = 13;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
@@ -176,10 +183,10 @@
             // frmIngresoPlataCaja
             // 
             AcceptButton = btnGuardar;
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancelar;
-            ClientSize = new System.Drawing.Size(400, 316);
+            ClientSize = new Size(400, 316);
             Controls.Add(lblTitulo);
             Controls.Add(lblConcepto);
             Controls.Add(cmbConcepto);
@@ -194,11 +201,12 @@
             Controls.Add(txtObservacion);
             Controls.Add(btnGuardar);
             Controls.Add(btnCancelar);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmIngresoPlataCaja";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Movimiento de caja";
             Load += frmIngresoPlataCaja_Load;
             ((System.ComponentModel.ISupportInitialize)nudImporte).EndInit();
