@@ -23,6 +23,7 @@ namespace CapaVista
         public frmVentas()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             // Los eventos se enganchan en el Designer. Antes se enganchaban también acá y
             // Actualizar y la carga inicial se ejecutaban dos veces.
@@ -30,6 +31,7 @@ namespace CapaVista
             dtpDesde.Value = DateTime.Today;
             dtpHasta.Value = DateTime.Today;
             cmbEstado.SelectedIndex = 0;   // Activas
+            ClsIdioma.TraducirOpciones(cmbEstado);   // se elige por posición
             cargando = false;
 
             CargarVentas();
@@ -57,7 +59,7 @@ namespace CapaVista
             {
                 ventasCargadas = null;
 
-                MessageBox.Show("No se pudieron cargar las ventas.\n\n" + ex.Message, "Error al consultar ventas",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las ventas.\n\n") + ex.Message, ClsIdioma.T("Error al consultar ventas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -107,7 +109,7 @@ namespace CapaVista
                         Convert.ToDecimal(venta["Articulos"]).ToString("0.###"),
                         medios,
                         total.ToString("C2"),
-                        anulada ? "Anulada" : "Activa");
+                        anulada ? ClsIdioma.T("Anulada") : ClsIdioma.T("Activa"));
 
                     DataGridViewRow fila = dtgVentas.Rows[indice];
                     fila.Tag = venta;
@@ -130,10 +132,10 @@ namespace CapaVista
 
             // Total vendido: solo las ventas activas que se ven en la lista.
             lblResumen.Text = dtgVentas.Rows.Count == 0
-                ? "No hay ventas para mostrar con estos filtros."
-                : dtgVentas.Rows.Count + (dtgVentas.Rows.Count == 1 ? " venta" : " ventas") +
-                  "   ·   Total vendido (activas): " + totalVendido.ToString("C2") +
-                  (cantidadActivas < dtgVentas.Rows.Count ? "   ·   Las anuladas no suman." : "");
+                ? ClsIdioma.T("No hay ventas para mostrar con estos filtros.")
+                : dtgVentas.Rows.Count + (dtgVentas.Rows.Count == 1 ? ClsIdioma.T(" venta") : ClsIdioma.T(" ventas")) +
+                  ClsIdioma.T("   ·   Total vendido (activas): ") + totalVendido.ToString("C2") +
+                  (cantidadActivas < dtgVentas.Rows.Count ? ClsIdioma.T("   ·   Las anuladas no suman.") : "");
 
             MostrarDatosVentaElegida();
         }
@@ -174,14 +176,14 @@ namespace CapaVista
             if (venta == null)
             {
                 txtObservaciones.Clear();
-                btnAnular.Text = "Anular";
+                btnAnular.Text = ClsIdioma.T("Anular");
                 btnAnular.Enabled = false;
                 return;
             }
 
             bool anulada = venta["Anulada"] != DBNull.Value && Convert.ToBoolean(venta["Anulada"]);
 
-            btnAnular.Text = anulada ? "Activar" : "Anular";
+            btnAnular.Text = anulada ? ClsIdioma.T("Activar") : ClsIdioma.T("Anular");
             btnAnular.Enabled = PuedeAnular;
 
             StringBuilder notas = new StringBuilder();
@@ -190,12 +192,12 @@ namespace CapaVista
             string motivo = venta["MotivoAnulacion"]?.ToString() ?? "";
 
             if (!string.IsNullOrWhiteSpace(observaciones))
-                notas.AppendLine("Observaciones: " + observaciones);
+                notas.AppendLine(ClsIdioma.T("Observaciones: ") + observaciones);
 
             if (!string.IsNullOrWhiteSpace(motivo))
-                notas.AppendLine("Motivo de anulación: " + motivo);
+                notas.AppendLine(ClsIdioma.T("Motivo de anulación: ") + motivo);
 
-            txtObservaciones.Text = notas.Length > 0 ? notas.ToString().TrimEnd() : "Sin observaciones ni motivo de anulación.";
+            txtObservaciones.Text = notas.Length > 0 ? notas.ToString().TrimEnd() : ClsIdioma.T("Sin observaciones ni motivo de anulación.");
         }
         private void MostrarDetalle()
         {
@@ -203,7 +205,7 @@ namespace CapaVista
 
             if (venta == null)
             {
-                MessageBox.Show("Seleccione una venta para ver el detalle.", "Ventas",
+                MessageBox.Show(ClsIdioma.T("Seleccione una venta para ver el detalle."), ClsIdioma.T("Ventas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -219,7 +221,7 @@ namespace CapaVista
         {
             using (Form ventana = new Form())
             {
-                ventana.Text = "Anular venta N.º " + idVenta;
+                ventana.Text = ClsIdioma.T("Anular venta N.º ") + idVenta;
                 ventana.StartPosition = FormStartPosition.CenterParent;
                 ventana.FormBorderStyle = FormBorderStyle.FixedDialog;
                 ventana.ClientSize = new Size(380, 170);
@@ -229,7 +231,7 @@ namespace CapaVista
 
                 Label lblMotivo = new Label
                 {
-                    Text = "Ingrese el motivo de anulación:",
+                    Text = ClsIdioma.T("Ingrese el motivo de anulación:"),
                     Location = new Point(15, 15),
                     AutoSize = true
                 };
@@ -244,14 +246,14 @@ namespace CapaVista
 
                 Button btnAceptar = new Button
                 {
-                    Text = "Anular",
+                    Text = ClsIdioma.T("Anular"),
                     Location = new Point(185, 115),
                     Size = new Size(85, 32)
                 };
 
                 Button btnCancelar = new Button
                 {
-                    Text = "Cancelar",
+                    Text = ClsIdioma.T("Cancelar"),
                     Location = new Point(280, 115),
                     Size = new Size(85, 32),
                     DialogResult = DialogResult.Cancel
@@ -261,7 +263,7 @@ namespace CapaVista
                 {
                     if (string.IsNullOrWhiteSpace(txtMotivo.Text))
                     {
-                        MessageBox.Show("Ingrese el motivo de anulación.", "Anular venta",
+                        MessageBox.Show(ClsIdioma.T("Ingrese el motivo de anulación."), ClsIdioma.T("Anular venta"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         txtMotivo.Focus();
                         return;
@@ -295,14 +297,14 @@ namespace CapaVista
 
             if (venta == null)
             {
-                MessageBox.Show("Seleccione una venta.", "Ventas",
+                MessageBox.Show(ClsIdioma.T("Seleccione una venta."), ClsIdioma.T("Ventas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (!PuedeAnular)
             {
-                MessageBox.Show("No tenés permiso para anular ventas.", "Ventas",
+                MessageBox.Show(ClsIdioma.T("No tenés permiso para anular ventas."), ClsIdioma.T("Ventas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -321,7 +323,7 @@ namespace CapaVista
             }
             else
             {
-                DialogResult respuesta = MessageBox.Show("¿Desea activar nuevamente la venta N.º " + idVenta + "?", "Activar venta",
+                DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Desea activar nuevamente la venta N.º ") + idVenta + "?", ClsIdioma.T("Activar venta"),
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta != DialogResult.Yes)
@@ -332,7 +334,7 @@ namespace CapaVista
             {
                 logicaVenta.CambiarEstadoVenta(idVenta, !anulada, motivo);
 
-                MessageBox.Show(anulada ? "La venta fue activada." : "La venta fue anulada.", "Ventas",
+                MessageBox.Show(anulada ? ClsIdioma.T("La venta fue activada.") : ClsIdioma.T("La venta fue anulada."), ClsIdioma.T("Ventas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Si la venta queda fuera del filtro de estado (por ejemplo, se anuló viendo "Activas"),
@@ -348,7 +350,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo cambiar el estado de la venta.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo cambiar el estado de la venta.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

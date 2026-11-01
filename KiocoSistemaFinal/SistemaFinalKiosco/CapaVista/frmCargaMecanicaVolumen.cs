@@ -15,6 +15,7 @@ namespace CapaVista
         public frmCargaMecanicaVolumen()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             btnGuardarMecanica.Click += btnGuardarMecanica_Click_1;
             btnCancelar.Click += btnCancelar_Click;
@@ -38,13 +39,13 @@ namespace CapaVista
 
             if (!llevaValido || !pagaValida || lleva <= 0 || paga <= 0)
             {
-                lblLoQueLleva.Text = "Llevás: —";
-                lblLoQueRecibe.Text = "Pagás: —";
+                lblLoQueLleva.Text = ClsIdioma.T("Llevás: —");
+                lblLoQueRecibe.Text = ClsIdioma.T("Pagás: —");
                 return;
             }
 
-            lblLoQueLleva.Text = $"Llevás {lleva} unidades";
-            lblLoQueRecibe.Text = $"Pagás {paga} unidades";
+            lblLoQueLleva.Text = (ClsIdioma.Ingles ? $"You take {lleva} units" : $"Llevás {lleva} unidades");
+            lblLoQueRecibe.Text = (ClsIdioma.Ingles ? $"You pay {paga} units" : $"Pagás {paga} unidades");
         }
 
 
@@ -55,21 +56,21 @@ namespace CapaVista
         {
             if (!int.TryParse(txtCantidadLleva.Text.Trim(), out int lleva) || lleva <= 0)
             {
-                MessageBox.Show("Ingresá una cantidad válida para lo que lleva.");
+                MessageBox.Show(ClsIdioma.T("Ingresá una cantidad válida para lo que lleva."));
                 txtCantidadLleva.Focus();
                 return;
             }
 
             if (!int.TryParse(txtCantidadPaga.Text.Trim(), out int paga) || paga <= 0)
             {
-                MessageBox.Show("Ingresá una cantidad válida para lo que paga.");
+                MessageBox.Show(ClsIdioma.T("Ingresá una cantidad válida para lo que paga."));
                 txtCantidadPaga.Focus();
                 return;
             }
 
             if (paga >= lleva)
             {
-                MessageBox.Show("La cantidad que paga debe ser menor que la cantidad que lleva.");
+                MessageBox.Show(ClsIdioma.T("La cantidad que paga debe ser menor que la cantidad que lleva."));
                 txtCantidadPaga.Focus();
                 return;
             }

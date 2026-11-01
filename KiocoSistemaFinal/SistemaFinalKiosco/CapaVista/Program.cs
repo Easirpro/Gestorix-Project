@@ -14,6 +14,8 @@ namespace CapaVista
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += Application_ThreadException;
             AppDomain.CurrentDomain.UnhandledException +=CurrentDomain_UnhandledException;
+            // Idioma de las pantallas elegido la última vez en esta PC.
+            ClsIdioma.Cargar();
             Application.Run(new FrmLogin());
         }
 

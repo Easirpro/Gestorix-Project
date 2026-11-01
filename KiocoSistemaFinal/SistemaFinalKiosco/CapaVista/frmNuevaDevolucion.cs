@@ -29,6 +29,7 @@ namespace CapaVista
         public frmNuevaDevolucion()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             ConfigurarGrid(dgvVentas);
             ConfigurarGrid(dgvDetalle);
 
@@ -97,7 +98,7 @@ namespace CapaVista
             {
                 if (!int.TryParse(txtNroVenta.Text.Trim(), out int numero) || numero <= 0)
                 {
-                    MessageBox.Show("Ingrese un número de venta válido.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("Ingrese un número de venta válido."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtNroVenta.Focus();
                     return;
@@ -106,7 +107,7 @@ namespace CapaVista
             }
             else if (dtpDesde.Value.Date > dtpHasta.Value.Date)
             {
-                MessageBox.Show("La fecha desde no puede ser mayor a la fecha hasta.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La fecha desde no puede ser mayor a la fecha hasta."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -123,14 +124,14 @@ namespace CapaVista
 
                     if (idVenta.HasValue)
                     {
-                        MessageBox.Show("No se encontró la venta N.º " + idVenta + ".", "Aviso",
+                        MessageBox.Show(ClsIdioma.T("No se encontró la venta N.º ") + idVenta + ".", ClsIdioma.T("Aviso"),
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron obtener las ventas.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las ventas.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -148,7 +149,7 @@ namespace CapaVista
             if (dgvVentas.CurrentRow.Cells["Estado"].Value?.ToString() == "Anulada")
             {
                 dgvDetalle.DataSource = null;
-                lblCaja.Text = "La venta está anulada: no admite devoluciones.";
+                lblCaja.Text = ClsIdioma.T("La venta está anulada: no admite devoluciones.");
                 lblCaja.ForeColor = Color.Firebrick;
                 return;
             }
@@ -161,7 +162,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo obtener el detalle de la venta.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el detalle de la venta.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -192,7 +193,7 @@ namespace CapaVista
                 nudCantidad.Value = 0;
                 nudCantidad.Enabled = false;
                 btnRegistrar.Enabled = false;
-                lblCaja.Text = "Ese producto ya se devolvió completo.";
+                lblCaja.Text = ClsIdioma.T("Ese producto ya se devolvió completo.");
                 lblCaja.ForeColor = Color.Firebrick;
             }
             else
@@ -233,7 +234,7 @@ namespace CapaVista
 
                 if (mostrarError)
                 {
-                    MessageBox.Show("No se pudo obtener el estado de la caja.\n\n" + ex.Message, "Error",
+                    MessageBox.Show(ClsIdioma.T("No se pudo obtener el estado de la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -247,24 +248,24 @@ namespace CapaVista
         {
             lblImporteValor.Text = rbEfectivo.Checked
                 ? $"$ {ImporteADevolver():N2}"
-                : "Sin reintegro de dinero";
+                : ClsIdioma.T("Sin reintegro de dinero");
         }
 
         private void ActualizarInfoCaja()
         {
             if (rbCambio.Checked)
             {
-                lblCaja.Text = "Se entrega otra unidad: no se mueve dinero de la caja.";
+                lblCaja.Text = ClsIdioma.T("Se entrega otra unidad: no se mueve dinero de la caja.");
                 lblCaja.ForeColor = SystemColors.GrayText;
             }
             else if (sesionCaja == null)
             {
-                lblCaja.Text = "No hay caja abierta: no se puede devolver dinero.";
+                lblCaja.Text = ClsIdioma.T("No hay caja abierta: no se puede devolver dinero.");
                 lblCaja.ForeColor = Color.Firebrick;
             }
             else
             {
-                lblCaja.Text = $"Efectivo disponible en caja: $ {sesionCaja.EfectivoEsperado:N2}";
+                lblCaja.Text = (ClsIdioma.Ingles ? $"Cash available in register: $ {sesionCaja.EfectivoEsperado:N2}" : $"Efectivo disponible en caja: $ {sesionCaja.EfectivoEsperado:N2}");
                 lblCaja.ForeColor = SystemColors.GrayText;
             }
         }
@@ -281,14 +282,14 @@ namespace CapaVista
         {
             if (dgvVentas.CurrentRow == null || dgvDetalle.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione la venta y el producto a devolver.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione la venta y el producto a devolver."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
             if (nudCantidad.Value <= 0)
             {
-                MessageBox.Show("La cantidad a devolver debe ser mayor a cero.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La cantidad a devolver debe ser mayor a cero."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 nudCantidad.Focus();
                 return false;
@@ -296,7 +297,7 @@ namespace CapaVista
 
             if (cmbMotivo.SelectedIndex < 0)
             {
-                MessageBox.Show("Seleccione el motivo de la devolución.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione el motivo de la devolución."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbMotivo.Focus();
                 return false;
@@ -304,7 +305,7 @@ namespace CapaVista
 
             if (cmbMotivo.Text == "Otro" && string.IsNullOrWhiteSpace(txtObservacion.Text))
             {
-                MessageBox.Show("Si el motivo es \"Otro\", explíquelo en Observaciones.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Si el motivo es \"Otro\", explíquelo en Observaciones."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtObservacion.Focus();
                 return false;
@@ -314,16 +315,16 @@ namespace CapaVista
             {
                 if (sesionCaja == null)
                 {
-                    MessageBox.Show("No hay una caja abierta. Abra la caja para devolver dinero, " +
-                                    "o elija entregar otra unidad del producto.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("No hay una caja abierta. Abra la caja para devolver dinero, ") +
+                                    ClsIdioma.T("o elija entregar otra unidad del producto."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
 
                 if (ImporteADevolver() > sesionCaja.EfectivoEsperado)
                 {
-                    MessageBox.Show("No hay efectivo suficiente en la caja ($ " +
-                                    sesionCaja.EfectivoEsperado.ToString("N2") + ").", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("No hay efectivo suficiente en la caja ($ ") +
+                                    sesionCaja.EfectivoEsperado.ToString("N2") + ").", ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
@@ -355,11 +356,11 @@ namespace CapaVista
         {
             if (dgvVentas.Columns.Contains("IdVenta"))
             {
-                dgvVentas.Columns["IdVenta"].HeaderText = "N.º venta";
+                dgvVentas.Columns["IdVenta"].HeaderText = ClsIdioma.T("N.º venta");
             }
             if (dgvVentas.Columns.Contains("FechaHora"))
             {
-                dgvVentas.Columns["FechaHora"].HeaderText = "Fecha y hora";
+                dgvVentas.Columns["FechaHora"].HeaderText = ClsIdioma.T("Fecha y hora");
                 dgvVentas.Columns["FechaHora"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
             }
             if (dgvVentas.Columns.Contains("Total"))
@@ -396,7 +397,7 @@ namespace CapaVista
             {
                 if (dgvDetalle.Columns.Contains(titulo.Key))
                 {
-                    dgvDetalle.Columns[titulo.Key].HeaderText = titulo.Value;
+                    dgvDetalle.Columns[titulo.Key].HeaderText = ClsIdioma.T(titulo.Value);
                     dgvDetalle.Columns[titulo.Key].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 }
             }
@@ -456,17 +457,17 @@ namespace CapaVista
             devolucion.ReingresaStock = chkReingresaStock.Checked;
             devolucion.IdUsuario = SesionUsuario.IdUsuario;
 
-            string resumen = "Venta N.º " + devolucion.IdVenta +
-                             "\nProducto: " + producto.Cells["Producto"].Value +
-                             "\nCantidad: " + devolucion.Cantidad +
+            string resumen = ClsIdioma.T("Venta N.º ") + devolucion.IdVenta +
+                             ClsIdioma.T("\nProducto: ") + producto.Cells["Producto"].Value +
+                             ClsIdioma.T("\nCantidad: ") + devolucion.Cantidad +
                              (devolucion.ReintegroEfectivo
-                                 ? "\nSe devuelven $ " + ImporteADevolver().ToString("N2") + " en efectivo"
-                                 : "\nSe entrega otra unidad del producto") +
-                             "\nVuelve al stock: " + (devolucion.ReingresaStock ? "Sí" : "No") +
-                             "\nMotivo: " + devolucion.Motivo;
+                                 ? ClsIdioma.T("\nSe devuelven $ ") + ImporteADevolver().ToString("N2") + ClsIdioma.T(" en efectivo")
+                                 : ClsIdioma.T("\nSe entrega otra unidad del producto")) +
+                             ClsIdioma.T("\nVuelve al stock: ") + (devolucion.ReingresaStock ? ClsIdioma.T("Sí") : ClsIdioma.T("No")) +
+                             ClsIdioma.T("\nMotivo: ") + devolucion.Motivo;
 
-            DialogResult respuesta = MessageBox.Show("¿Confirma la devolución?\n\n" + resumen,
-                "Confirmar devolución", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Confirma la devolución?\n\n") + resumen,
+                ClsIdioma.T("Confirmar devolución"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes)
             {
@@ -478,20 +479,20 @@ namespace CapaVista
                 devolucion = logica.RegistrarDevolucion(devolucion);
                 registradas++;
 
-                MessageBox.Show("La devolución se registró correctamente.\n\n" +
-                                "Devolución N.º " + devolucion.IdDevolucion +
+                MessageBox.Show(ClsIdioma.T("La devolución se registró correctamente.\n\n") +
+                                ClsIdioma.T("Devolución N.º ") + devolucion.IdDevolucion +
                                 (devolucion.ReintegroEfectivo
-                                    ? "\nImporte devuelto: $ " + devolucion.ImporteDevuelto.ToString("N2")
-                                    : "\nCambio por otra unidad") +
-                                "\n\nPodés devolver otro producto de la misma venta o tocar Cerrar.",
-                    "Devolución registrada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    ? ClsIdioma.T("\nImporte devuelto: $ ") + devolucion.ImporteDevuelto.ToString("N2")
+                                    : ClsIdioma.T("\nCambio por otra unidad")) +
+                                ClsIdioma.T("\n\nPodés devolver otro producto de la misma venta o tocar Cerrar."),
+                    ClsIdioma.T("Devolución registrada"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // El formulario queda abierto en la misma venta para seguir devolviendo.
                 PrepararSiguienteDevolucion(venta);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo registrar la devolución.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo registrar la devolución.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -514,7 +515,7 @@ namespace CapaVista
             cmbMotivo.SelectedIndex = -1;
             txtObservacion.Clear();
 
-            btnCancelar.Text = "Cerrar";
+            btnCancelar.Text = ClsIdioma.T("Cerrar");
             dgvDetalle.Focus();
         }
         private void btnCancelar_Click(object sender, EventArgs e)

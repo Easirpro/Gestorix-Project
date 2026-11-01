@@ -22,6 +22,7 @@ namespace CapaVista
         public frmCargaarticulo()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             dtgCargaarticulo.AutoGenerateColumns = false;
             dtgCargaarticulo.ReadOnly = true;
@@ -122,7 +123,7 @@ namespace CapaVista
 
             DataRow fila = tabla.NewRow();
             fila["IdCategoria"] = 0;
-            fila["Nombre"] = "-Seleccione Rubro-";
+            fila["Nombre"] = ClsIdioma.T("-Seleccione Rubro-");
             tabla.Rows.InsertAt(fila, 0);
 
             cmbRubro.DataSource = tabla;
@@ -135,7 +136,7 @@ namespace CapaVista
 
             DataRow fila = tabla.NewRow();
             fila["IdMarca"] = 0;
-            fila["Nombre"] = "-Seleccione Marca-";
+            fila["Nombre"] = ClsIdioma.T("-Seleccione Marca-");
             tabla.Rows.InsertAt(fila, 0);
 
             cmbMarca.DataSource = tabla;
@@ -159,14 +160,14 @@ namespace CapaVista
         {
             if (dtgCargaarticulo.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione un artículo.");
+                MessageBox.Show(ClsIdioma.T("Seleccione un artículo."));
                 return;
             }
             int idProducto = Convert.ToInt32(dtgCargaarticulo.CurrentRow.Tag);
 
             frmNuevoArticulo modificararticulo = new frmNuevoArticulo(idProducto);
 
-            modificararticulo.Text = "Modificar Articulo";
+            modificararticulo.Text = ClsIdioma.T("Modificar Articulo");
             modificararticulo.ShowDialog(this);
 
             CargarArticulos();
@@ -194,7 +195,7 @@ namespace CapaVista
             if (valorId == null || !int.TryParse(valorId.ToString(), out int idProducto))
             {
                 MessageBox.Show(
-                    "No se pudo identificar el artículo seleccionado.", "Gestorix",
+                    ClsIdioma.T("No se pudo identificar el artículo seleccionado."), "Gestorix",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -213,49 +214,49 @@ namespace CapaVista
 
             if (detalle == null)
             {
-                MessageBox.Show("No se encontró el artículo.", "Gestorix");
+                MessageBox.Show(ClsIdioma.T("No se encontró el artículo."), "Gestorix");
                 return;
             }
 
             string ObtenerTexto(string columna)
             {
                 if (!tabla.Columns.Contains(columna) || detalle[columna] == DBNull.Value)
-                    return "No disponible";
+                    return ClsIdioma.T("No disponible");
 
                 return detalle[columna].ToString();
             }
 
             string mensaje =
-                $"Código: {ObtenerTexto("CodigoBarra")}\n" +
-                $"Descripción: {ObtenerTexto("Descripcion")}\n" +
-                $"Rubro: {ObtenerTexto("Rubro")}\n" +
-                $"Marca: {ObtenerTexto("Marca")}\n" +
-                $"Proveedor: {ObtenerTexto("Proveedor")}\n" +
-                $"Sucursal: {ObtenerTexto("Sucursal")}\n" +
-                $"Precio de costo: {ObtenerTexto("PrecioCosto")}\n" +
-                $"Precio de venta: {ObtenerTexto("PrecioVenta")}\n" +
-                $"IVA: {ObtenerTexto("IVA")}\n" +
-                $"Alícuota: {ObtenerTexto("Alicuota")}\n" +
-                $"Stock actual: {ObtenerTexto("CantidadActual")}\n" +
-                $"Stock mínimo: {ObtenerTexto("StockMinimo")}\n" +
-                $"Stock ideal: {ObtenerTexto("StockIdeal")}\n" +
-                $"Vencimiento: {ObtenerTexto("FechaVencimiento")}\n" +
-                $"Estado: {(Convert.ToBoolean(detalle["Activo"]) ? "Activo" : "Discontinuado")}";
+                (ClsIdioma.Ingles ? $"Code: {ObtenerTexto("CodigoBarra")}\n" : $"Código: {ObtenerTexto("CodigoBarra")}\n") +
+                (ClsIdioma.Ingles ? $"Description: {ObtenerTexto("Descripcion")}\n" : $"Descripción: {ObtenerTexto("Descripcion")}\n") +
+                (ClsIdioma.Ingles ? $"Category: {ObtenerTexto("Rubro")}\n" : $"Rubro: {ObtenerTexto("Rubro")}\n") +
+                (ClsIdioma.Ingles ? $"Brand: {ObtenerTexto("Marca")}\n" : $"Marca: {ObtenerTexto("Marca")}\n") +
+                (ClsIdioma.Ingles ? $"Supplier: {ObtenerTexto("Proveedor")}\n" : $"Proveedor: {ObtenerTexto("Proveedor")}\n") +
+                (ClsIdioma.Ingles ? $"Branch: {ObtenerTexto("Sucursal")}\n" : $"Sucursal: {ObtenerTexto("Sucursal")}\n") +
+                (ClsIdioma.Ingles ? $"Cost price: {ObtenerTexto("PrecioCosto")}\n" : $"Precio de costo: {ObtenerTexto("PrecioCosto")}\n") +
+                (ClsIdioma.Ingles ? $"Sale price: {ObtenerTexto("PrecioVenta")}\n" : $"Precio de venta: {ObtenerTexto("PrecioVenta")}\n") +
+                (ClsIdioma.Ingles ? $"VAT: {ObtenerTexto("IVA")}\n" : $"IVA: {ObtenerTexto("IVA")}\n") +
+                (ClsIdioma.Ingles ? $"VAT rate: {ObtenerTexto("Alicuota")}\n" : $"Alícuota: {ObtenerTexto("Alicuota")}\n") +
+                (ClsIdioma.Ingles ? $"Current stock: {ObtenerTexto("CantidadActual")}\n" : $"Stock actual: {ObtenerTexto("CantidadActual")}\n") +
+                (ClsIdioma.Ingles ? $"Minimum stock: {ObtenerTexto("StockMinimo")}\n" : $"Stock mínimo: {ObtenerTexto("StockMinimo")}\n") +
+                (ClsIdioma.Ingles ? $"Ideal stock: {ObtenerTexto("StockIdeal")}\n" : $"Stock ideal: {ObtenerTexto("StockIdeal")}\n") +
+                (ClsIdioma.Ingles ? $"Expiration: {ObtenerTexto("FechaVencimiento")}\n" : $"Vencimiento: {ObtenerTexto("FechaVencimiento")}\n") +
+                (ClsIdioma.Ingles ? $"Status: {(Convert.ToBoolean(detalle["Activo"]) ? "Active" : "Discontinued")}" : $"Estado: {(Convert.ToBoolean(detalle["Activo"]) ? "Activo" : "Discontinuado")}");
 
-            MessageBox.Show(mensaje, "Detalle del artículo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(mensaje, ClsIdioma.T("Detalle del artículo"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (dtgCargaarticulo.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione un artículo.");
+                MessageBox.Show(ClsIdioma.T("Seleccione un artículo."));
                 return;
             }
 
             int idProducto = Convert.ToInt32(dtgCargaarticulo.CurrentRow.Tag);
 
-            DialogResult respuesta = MessageBox.Show("¿Está seguro de que desea eliminar el artículo seleccionado?",
-                "Eliminar artículo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de que desea eliminar el artículo seleccionado?"),
+                ClsIdioma.T("Eliminar artículo"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (respuesta != DialogResult.Yes)
             {
@@ -266,14 +267,14 @@ namespace CapaVista
 
             if (eliminado)
             {
-                MessageBox.Show("El artículo fue eliminado correctamente.", "Artículo eliminado",
+                MessageBox.Show(ClsIdioma.T("El artículo fue eliminado correctamente."), ClsIdioma.T("Artículo eliminado"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarArticulos();
             }
             else
             {
-                MessageBox.Show("No se pudo eliminar el artículo.", "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo eliminar el artículo."), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -281,7 +282,7 @@ namespace CapaVista
         {
             if (dtgCargaarticulo.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione un artículo.");
+                MessageBox.Show(ClsIdioma.T("Seleccione un artículo."));
                 return;
             }
 
@@ -289,16 +290,16 @@ namespace CapaVista
 
             if (valorId == null || !int.TryParse(valorId.ToString(), out int idProducto))
             {
-                MessageBox.Show("No se pudo identificar el artículo seleccionado.", "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo identificar el artículo seleccionado."), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             bool estaDiscontinuado = chkArticulodiscontinaudo.Checked;
 
-            string mensaje = estaDiscontinuado ? "¿Desea volver a activar este artículo?" : "¿Desea discontinuar este artículo?";
+            string mensaje = estaDiscontinuado ? ClsIdioma.T("¿Desea volver a activar este artículo?") : ClsIdioma.T("¿Desea discontinuar este artículo?");
 
-            DialogResult respuesta = MessageBox.Show(mensaje, estaDiscontinuado ? "Activar artículo" : "Descontinuar artículo",
+            DialogResult respuesta = MessageBox.Show(mensaje, estaDiscontinuado ? ClsIdioma.T("Activar artículo") : ClsIdioma.T("Descontinuar artículo"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes)
@@ -310,26 +311,26 @@ namespace CapaVista
 
                 if (resultado)
                 {
-                    MessageBox.Show(estaDiscontinuado ? "El artículo fue activado correctamente." : "El artículo fue discontinuado correctamente.", "Operación exitosa",
+                    MessageBox.Show(estaDiscontinuado ? ClsIdioma.T("El artículo fue activado correctamente.") : ClsIdioma.T("El artículo fue discontinuado correctamente."), ClsIdioma.T("Operación exitosa"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     CargarArticulos();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo actualizar el estado del artículo.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("No se pudo actualizar el estado del artículo."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ocurrió un error al cambiar el estado del artículo.\n\nDetalle: " + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error al cambiar el estado del artículo.\n\nDetalle: ") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void chkArticulodiscontinaudo_CheckedChanged(object sender, EventArgs e)
         {
-            btnDiscontinuar.Text = chkArticulodiscontinaudo.Checked ? "Activar" : "Descontinuar";
+            btnDiscontinuar.Text = chkArticulodiscontinaudo.Checked ? ClsIdioma.T("Activar") : ClsIdioma.T("Descontinuar");
         }
         private void txtBuscarCodigoNombre_TextChanged(object sender, EventArgs e)
         {

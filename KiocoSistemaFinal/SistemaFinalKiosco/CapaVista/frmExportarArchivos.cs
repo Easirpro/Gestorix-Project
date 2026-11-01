@@ -22,6 +22,7 @@ namespace CapaVista
         public frmExportarArchivos()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             logicaProducto = new ClsGestorProductoLogica();
             logicaProveedor = new ClsLogicaProveedor();
@@ -62,7 +63,7 @@ namespace CapaVista
 
             DataRow filaTodos = tablaMarcas.NewRow();
             filaTodos["IdMarca"] = 0;
-            filaTodos["Nombre"] = "Todos";
+            filaTodos["Nombre"] = ClsIdioma.T("Todos");
 
             tablaMarcas.Rows.InsertAt(filaTodos, 0);
 
@@ -235,15 +236,15 @@ namespace CapaVista
 
             if (tabla.Rows.Count == 0)
             {
-                MessageBox.Show("No se encontraron artículos con los filtros seleccionados.",
-                    "Exportar artículos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("No se encontraron artículos con los filtros seleccionados."),
+                    ClsIdioma.T("Exportar artículos"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return;
             }
 
             using (SaveFileDialog guardar = new SaveFileDialog())
             {
-                guardar.Title = "Guardar archivo de artículos";
+                guardar.Title = ClsIdioma.T("Guardar archivo de artículos");
                 guardar.Filter = "Archivo Excel (*.xlsx)|*.xlsx";
                 guardar.DefaultExt = "xlsx";
                 guardar.AddExtension = true;
@@ -257,8 +258,8 @@ namespace CapaVista
 
                 CrearExcel(tabla, guardar.FileName);
 
-                MessageBox.Show($"El archivo se exportó correctamente.\n\nArtículos exportados: {tabla.Rows.Count}",
-                    "Exportación completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show((ClsIdioma.Ingles ? $"The file was exported successfully.\n\nExported products: {tabla.Rows.Count}" : $"El archivo se exportó correctamente.\n\nArtículos exportados: {tabla.Rows.Count}"),
+                    ClsIdioma.T("Exportación completa"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
          
         }

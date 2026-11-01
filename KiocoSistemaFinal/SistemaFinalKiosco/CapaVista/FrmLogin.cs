@@ -19,6 +19,7 @@ namespace CapaVista
         public FrmLogin()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             this.AcceptButton = this.btnLogin;
             ConfigurarTransparencias();
         }
@@ -45,7 +46,7 @@ namespace CapaVista
 
             if (validoCV.ValidarCamposVacios(txtUser.Text) || validoCV.ValidarCamposVacios(txtPass.Text))
             {
-                MessageBox.Show("Complete todos los campos antes de continuar", "Datos incompletos",
+                MessageBox.Show(ClsIdioma.T("Complete todos los campos antes de continuar"), ClsIdioma.T("Datos incompletos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -61,12 +62,12 @@ namespace CapaVista
                 {
                     if (login.UsuarioBloqueado)
                     {
-                        MessageBox.Show("Usuario bloqueado.", "Acceso denegado",
+                        MessageBox.Show(ClsIdioma.T("Usuario bloqueado."), ClsIdioma.T("Acceso denegado"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
-                        MessageBox.Show("Usuario o contraseña incorrectos.", "Error",
+                        MessageBox.Show(ClsIdioma.T("Usuario o contraseña incorrectos."), ClsIdioma.T("Error"),
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
@@ -92,7 +93,7 @@ namespace CapaVista
                 // Si falló a mitad del ingreso, el login no puede quedar oculto.
                 this.Show();
 
-                MessageBox.Show("Ocurrió un error técnico durante el inicio de sesión.\n" + "Si el problema continúa, contacte al administrador.", "Error del sistema",
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error técnico durante el inicio de sesión.\n") + ClsIdioma.T("Si el problema continúa, contacte al administrador."), ClsIdioma.T("Error del sistema"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -109,7 +110,7 @@ namespace CapaVista
                 {
                     if (primerIngreso.ShowDialog() != DialogResult.OK)
                     {
-                        CancelarIngreso("Para ingresar al sistema debe cambiar la contraseña temporal.");
+                        CancelarIngreso(ClsIdioma.T("Para ingresar al sistema debe cambiar la contraseña temporal."));
                         return;
                     }
                 }
@@ -123,7 +124,7 @@ namespace CapaVista
                 {
                     if (frmPreguntas.ShowDialog() != DialogResult.OK)
                     {
-                        CancelarIngreso("Para ingresar al sistema debe responder las preguntas de seguridad.");
+                        CancelarIngreso(ClsIdioma.T("Para ingresar al sistema debe responder las preguntas de seguridad."));
                         return;
                     }
                 }
@@ -148,7 +149,7 @@ namespace CapaVista
             this.BringToFront();
             LimpiarCampos();
 
-            MessageBox.Show(motivo, "Ingreso incompleto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(motivo, ClsIdioma.T("Ingreso incompleto"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {

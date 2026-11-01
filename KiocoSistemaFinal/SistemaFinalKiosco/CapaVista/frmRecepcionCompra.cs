@@ -24,6 +24,7 @@ namespace CapaVista
         public frmRecepcionCompra()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             ConfigurarFormulario();
             ConfigurarEventos();
             CargarComprasPendientes();
@@ -96,13 +97,13 @@ namespace CapaVista
                 dgvCompras.ClearSelection();
                 cargando = false;
 
-                lblComprasPendientes.Text = "Compras pendientes de recepción (" + comprasPendientes.Rows.Count + ")";
+                lblComprasPendientes.Text = ClsIdioma.T("Compras pendientes de recepción (") + comprasPendientes.Rows.Count + ")";
                 LimpiarCompra();
             }
             catch (Exception ex)
             {
                 cargando = false;
-                MessageBox.Show("No se pudieron cargar las compras pendientes.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las compras pendientes.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -113,7 +114,7 @@ namespace CapaVista
 
             if (compra["FechaEntregaEstimada"] == DBNull.Value)
             {
-                return "Pendiente";
+                return ClsIdioma.T("Pendiente");
             }
 
             DateTime entrega = Convert.ToDateTime(compra["FechaEntregaEstimada"]).Date;
@@ -122,16 +123,16 @@ namespace CapaVista
             if (diasAtraso > 0)
             {
                 color = Color.Firebrick;
-                return "Atrasada (" + diasAtraso + (diasAtraso == 1 ? " día)" : " días)");
+                return ClsIdioma.T("Atrasada (") + diasAtraso + (diasAtraso == 1 ? ClsIdioma.T(" día)") : ClsIdioma.T(" días)"));
             }
 
             if (diasAtraso == 0)
             {
                 color = Color.DarkOrange;
-                return "Llega hoy";
+                return ClsIdioma.T("Llega hoy");
             }
 
-            return "Llega el " + entrega.ToString("dd/MM");
+            return ClsIdioma.T("Llega el ") + entrega.ToString("dd/MM");
         }
         private void CargarCompraSeleccionada()
         {
@@ -205,7 +206,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo cargar el detalle de la compra.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo cargar el detalle de la compra.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -233,7 +234,7 @@ namespace CapaVista
 
             HabilitarRecepcion(false);
             lblEstadoRecepcion.ForeColor = SystemColors.ControlText;
-            lblEstadoRecepcion.Text = "Seleccione una compra pendiente.";
+            lblEstadoRecepcion.Text = ClsIdioma.T("Seleccione una compra pendiente.");
         }
         private void HabilitarRecepcion(bool habilitar)
         {
@@ -259,7 +260,7 @@ namespace CapaVista
         {
             if (!TryObtenerImporte(txtTotalBoleta.Text, out decimal totalBoleta))
             {
-                lblDiferenciaTotalValor.Text = "Importe inválido";
+                lblDiferenciaTotalValor.Text = ClsIdioma.T("Importe inválido");
                 lblDiferenciaTotalValor.ForeColor = Color.Firebrick;
                 return;
             }
@@ -290,12 +291,12 @@ namespace CapaVista
             if (HayDiferencias())
             {
                 lblEstadoRecepcion.ForeColor = Color.Firebrick;
-                lblEstadoRecepcion.Text = "Hay diferencias con la compra: indique el motivo antes de confirmar.";
+                lblEstadoRecepcion.Text = ClsIdioma.T("Hay diferencias con la compra: indique el motivo antes de confirmar.");
             }
             else
             {
                 lblEstadoRecepcion.ForeColor = Color.DarkGreen;
-                lblEstadoRecepcion.Text = "La mercadería coincide con la compra.";
+                lblEstadoRecepcion.Text = ClsIdioma.T("La mercadería coincide con la compra.");
             }
         }
         private void ConfirmarRecepcion()
@@ -304,14 +305,14 @@ namespace CapaVista
 
             if (idCompraSeleccionada == 0)
             {
-                MessageBox.Show("Seleccione una compra pendiente.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione una compra pendiente."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (!TryObtenerImporte(txtTotalBoleta.Text, out decimal totalBoleta) || totalBoleta < 0)
             {
-                MessageBox.Show("Ingrese un total de boleta válido.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Ingrese un total de boleta válido."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtTotalBoleta.Focus();
                 return;
@@ -336,10 +337,10 @@ namespace CapaVista
             }
 
             string mensaje = HayDiferencias()
-                ? "La recepción tiene diferencias con la compra. El stock se ajustará según lo recibido.\n\n¿Confirma la recepción?"
-                : "¿Confirma la recepción de la compra N.º " + idCompraSeleccionada + "?";
+                ? ClsIdioma.T("La recepción tiene diferencias con la compra. El stock se ajustará según lo recibido.\n\n¿Confirma la recepción?")
+                : ClsIdioma.T("¿Confirma la recepción de la compra N.º ") + idCompraSeleccionada + "?";
 
-            if (MessageBox.Show(mensaje, "Confirmar recepción", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (MessageBox.Show(mensaje, ClsIdioma.T("Confirmar recepción"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
             {
                 return;
             }
@@ -348,14 +349,14 @@ namespace CapaVista
             {
                 logica.ConfirmarRecepcion(recepcion);
 
-                MessageBox.Show("La recepción de la compra N.º " + idCompraSeleccionada + " se confirmó correctamente.",
-                    "Recepción confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("La recepción de la compra N.º ") + idCompraSeleccionada + ClsIdioma.T(" se confirmó correctamente."),
+                    ClsIdioma.T("Recepción confirmada"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarComprasPendientes();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo confirmar la recepción.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo confirmar la recepción.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -370,7 +371,7 @@ namespace CapaVista
             {
                 if (Convert.ToInt32(fila.Cells[clnIdProducto.Name].Value) == idProducto)
                 {
-                    MessageBox.Show("El producto ya está en la lista. Modifique su cantidad recibida.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("El producto ya está en la lista. Modifique su cantidad recibida."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     dgvProductos.CurrentCell = fila.Cells[clnCantidadRecibida.Name];
@@ -395,15 +396,15 @@ namespace CapaVista
         {
             if (dgvProductos.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione un producto.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un producto."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (ObtenerDecimal(dgvProductos.CurrentRow.Cells[clnCantidadPedida.Name].Value) > 0)
             {
-                MessageBox.Show("Este producto es parte de la compra y no se puede quitar.\n\nSi no llegó, indique 0 en la cantidad recibida.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("Este producto es parte de la compra y no se puede quitar.\n\nSi no llegó, indique 0 en la cantidad recibida."),
+                    ClsIdioma.T("Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -423,7 +424,7 @@ namespace CapaVista
             using (Button btnAceptar = new Button())
             using (Button btnCancelarDialogo = new Button())
             {
-                dialogo.Text = "Agregar producto recibido";
+                dialogo.Text = ClsIdioma.T("Agregar producto recibido");
                 dialogo.FormBorderStyle = FormBorderStyle.FixedDialog;
                 dialogo.StartPosition = FormStartPosition.CenterParent;
                 dialogo.MinimizeBox = false;
@@ -431,7 +432,7 @@ namespace CapaVista
                 dialogo.ShowInTaskbar = false;
                 dialogo.ClientSize = new Size(420, 260);
 
-                Label lblTexto = new Label { Text = "Código de barras / nombre / SKU:", Location = new Point(12, 12), AutoSize = true };
+                Label lblTexto = new Label { Text = ClsIdioma.T("Código de barras / nombre / SKU:"), Location = new Point(12, 12), AutoSize = true };
 
                 txtTexto.Location = new Point(12, 32);
                 txtTexto.Size = new Size(396, 23);
@@ -440,12 +441,12 @@ namespace CapaVista
                 lstResultados.Size = new Size(396, 150);
                 lstResultados.IntegralHeight = false;
 
-                btnAceptar.Text = "Agregar";
+                btnAceptar.Text = ClsIdioma.T("Agregar");
                 btnAceptar.Location = new Point(222, 222);
                 btnAceptar.Size = new Size(90, 28);
                 btnAceptar.DialogResult = DialogResult.OK;
 
-                btnCancelarDialogo.Text = "Cancelar";
+                btnCancelarDialogo.Text = ClsIdioma.T("Cancelar");
                 btnCancelarDialogo.Location = new Point(318, 222);
                 btnCancelarDialogo.Size = new Size(90, 28);
                 btnCancelarDialogo.DialogResult = DialogResult.Cancel;
@@ -480,7 +481,7 @@ namespace CapaVista
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("No se pudieron buscar los productos.\n\n" + ex.Message, "Error",
+                        MessageBox.Show(ClsIdioma.T("No se pudieron buscar los productos.\n\n") + ex.Message, ClsIdioma.T("Error"),
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 };
@@ -494,7 +495,7 @@ namespace CapaVista
 
                 if (encontrados == null || lstResultados.SelectedIndex < 0 || lstResultados.SelectedIndex >= encontrados.Rows.Count)
                 {
-                    MessageBox.Show("No se seleccionó ningún producto.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("No se seleccionó ningún producto."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
@@ -568,7 +569,7 @@ namespace CapaVista
 
             if (!decimal.TryParse(texto, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal cantidad) || cantidad < 0)
             {
-                MessageBox.Show("Ingrese una cantidad recibida válida (0 o mayor).", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Ingrese una cantidad recibida válida (0 o mayor)."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
             }

@@ -27,6 +27,7 @@ namespace CapaVista
         public frmNuevaCompra(bool mostrarChk)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             dtgNuevaCompra.Columns["Column1"].ReadOnly = true;
             dtgNuevaCompra.Columns["Column2"].ReadOnly = false;
@@ -87,7 +88,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar los medios de pago.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los medios de pago.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -206,13 +207,13 @@ namespace CapaVista
 
                 if (sucursales.Rows.Count == 0)
                 {
-                    MessageBox.Show("El proveedor no tiene sucursales activas. Cargue una sucursal para poder comprarle.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("El proveedor no tiene sucursales activas. Cargue una sucursal para poder comprarle."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar las sucursales del proveedor.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las sucursales del proveedor.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -243,8 +244,8 @@ namespace CapaVista
                 dtgNuevaCompra.Rows.Clear();
                 CalcularTotales();
 
-                MessageBox.Show("Cambió el proveedor o la sucursal: se quitaron los productos cargados, porque sus costos dependen de la sucursal.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("Cambió el proveedor o la sucursal: se quitaron los productos cargados, porque sus costos dependen de la sucursal."),
+                    ClsIdioma.T("Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             idSucursalActual = idSucursal;
@@ -278,7 +279,7 @@ namespace CapaVista
         {
             if (productosEncontrados == null || lstProductos.SelectedIndex < 0 || lstProductos.SelectedIndex >= productosEncontrados.Rows.Count)
             {
-                MessageBox.Show("Seleccione un producto de la lista.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un producto de la lista."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigobarra.Focus();
@@ -346,8 +347,8 @@ namespace CapaVista
 
             if (!precio.HasValue)
             {
-                MessageBox.Show("\"" + nombre + "\" no tiene costo cargado para esta sucursal.\n\nIngréselo en la columna \"Costo unitario sin IVA\"; al guardar la compra quedará registrado en la sucursal.",
-                    "Costo pendiente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("\"" + nombre + ClsIdioma.T("\" no tiene costo cargado para esta sucursal.\n\nIngréselo en la columna \"Costo unitario sin IVA\"; al guardar la compra quedará registrado en la sucursal."),
+                    ClsIdioma.T("Costo pendiente"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 dtgNuevaCompra.Focus();
                 dtgNuevaCompra.CurrentCell = fila.Cells["Column4"];
@@ -409,13 +410,13 @@ namespace CapaVista
         {
             if (dtgNuevaCompra.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Seleccione un producto para eliminar.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un producto para eliminar."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
 
-            DialogResult respuesta = MessageBox.Show("¿Está seguro de eliminar el producto seleccionado?", "Confirmar eliminación",
+            DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de eliminar el producto seleccionado?"), ClsIdioma.T("Confirmar eliminación"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes)
@@ -431,7 +432,7 @@ namespace CapaVista
         {
             if (idProveedor == 0)
             {
-                MessageBox.Show("Debe seleccionar un proveedor.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Debe seleccionar un proveedor."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtProveedor.Focus();
@@ -440,7 +441,7 @@ namespace CapaVista
 
             if (ObtenerIdSucursal() == 0 || ObtenerIdSucursal() != idSucursalActual)
             {
-                MessageBox.Show("Debe seleccionar la sucursal del proveedor.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Debe seleccionar la sucursal del proveedor."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 cmbSucursal.Focus();
@@ -449,7 +450,7 @@ namespace CapaVista
 
             if (string.IsNullOrWhiteSpace(cmbTipoComprobante.Text))
             {
-                MessageBox.Show("Debe seleccionar un tipo de comprobante.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Debe seleccionar un tipo de comprobante."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 cmbTipoComprobante.Focus();
@@ -461,7 +462,7 @@ namespace CapaVista
 
             if (dtpEntrega.Checked && dtpEntrega.Value.Date < DateTime.Today)
             {
-                MessageBox.Show("La entrega estimada no puede ser anterior a hoy.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La entrega estimada no puede ser anterior a hoy."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 dtpEntrega.Focus();
@@ -470,7 +471,7 @@ namespace CapaVista
 
             if (dtgNuevaCompra.Rows.Cast<DataGridViewRow>().All(fila => fila.IsNewRow))
             {
-                MessageBox.Show("Debe agregar al menos un producto a la compra.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Debe agregar al menos un producto a la compra."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtCodigobarra.Focus();
@@ -482,9 +483,9 @@ namespace CapaVista
                 // El número es opcional; si se cargó, no puede estar repetido para el proveedor.
                 if (logica.ExisteComprobante(idProveedor, cmbTipoComprobante.Text, txtNumeroComprobante.Text))
                 {
-                    MessageBox.Show("Ya está cargada la " + cmbTipoComprobante.Text.Trim() + " N.º " + txtNumeroComprobante.Text.Trim() +
-                        " de " + txtProveedor.Text.Trim() + ".\n\nRevise el número o anule la compra anterior si estaba mal cargada.",
-                        "Comprobante repetido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ClsIdioma.T("Ya está cargada la ") + cmbTipoComprobante.Text.Trim() + " N.º " + txtNumeroComprobante.Text.Trim() +
+                        ClsIdioma.T(" de ") + txtProveedor.Text.Trim() + ClsIdioma.T(".\n\nRevise el número o anule la compra anterior si estaba mal cargada."),
+                        ClsIdioma.T("Comprobante repetido"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtNumeroComprobante.Focus();
                     return;
@@ -510,8 +511,8 @@ namespace CapaVista
                 {
                     if (dtpVencimiento.Value.Date < DateTime.Today)
                     {
-                        MessageBox.Show("La fecha de vencimiento no puede ser anterior a la fecha de la compra.",
-                            "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(ClsIdioma.T("La fecha de vencimiento no puede ser anterior a la fecha de la compra."),
+                            ClsIdioma.T("Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -524,7 +525,7 @@ namespace CapaVista
                 {
                     if (cmbMedioPagoCompra.SelectedValue == null)
                     {
-                        MessageBox.Show("Seleccione el medio de pago de la compra.", "Aviso",
+                        MessageBox.Show(ClsIdioma.T("Seleccione el medio de pago de la compra."), ClsIdioma.T("Aviso"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
@@ -553,7 +554,7 @@ namespace CapaVista
 
                     if (fila.Tag == null)
                     {
-                        MessageBox.Show("Uno de los productos no tiene un identificador válido.", "Error",
+                        MessageBox.Show(ClsIdioma.T("Uno de los productos no tiene un identificador válido."), ClsIdioma.T("Error"),
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         return;
@@ -561,7 +562,7 @@ namespace CapaVista
 
                     if (fila.Cells["Column4"].Value == null)
                     {
-                        MessageBox.Show("Ingrese el costo de \"" + fila.Cells["Column3"].Value + "\".", "Aviso",
+                        MessageBox.Show(ClsIdioma.T("Ingrese el costo de \"") + fila.Cells["Column3"].Value + "\".", ClsIdioma.T("Aviso"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         dtgNuevaCompra.CurrentCell = fila.Cells["Column4"];
@@ -570,7 +571,7 @@ namespace CapaVista
 
                     if (fila.Cells["Column2"].Value == null || fila.Cells["Column5"].Value == null)
                     {
-                        MessageBox.Show("Complete la cantidad, el precio y el IVA del producto.", "Aviso",
+                        MessageBox.Show(ClsIdioma.T("Complete la cantidad, el precio y el IVA del producto."), ClsIdioma.T("Aviso"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         return;
@@ -578,7 +579,7 @@ namespace CapaVista
 
                     if (!decimal.TryParse(fila.Cells["Column2"].Value.ToString(), out decimal cantidad) || cantidad <= 0)
                     {
-                        MessageBox.Show("La cantidad debe ser mayor que cero.", "Aviso",
+                        MessageBox.Show(ClsIdioma.T("La cantidad debe ser mayor que cero."), ClsIdioma.T("Aviso"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         return;
@@ -586,7 +587,7 @@ namespace CapaVista
 
                     if (!decimal.TryParse(fila.Cells["Column4"].Value.ToString(), out decimal precio) || precio < 0)
                     {
-                        MessageBox.Show("El precio sin IVA no puede ser negativo.", "Aviso",
+                        MessageBox.Show(ClsIdioma.T("El precio sin IVA no puede ser negativo."), ClsIdioma.T("Aviso"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         return;
@@ -594,7 +595,7 @@ namespace CapaVista
 
                     if (!decimal.TryParse(fila.Cells["Column5"].Value.ToString(), out decimal porcentajeIVA) || porcentajeIVA < 0 || porcentajeIVA > 100)
                     {
-                        MessageBox.Show("El porcentaje de IVA debe estar entre 0 y 100.", "Aviso",
+                        MessageBox.Show(ClsIdioma.T("El porcentaje de IVA debe estar entre 0 y 100."), ClsIdioma.T("Aviso"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         return;
@@ -617,15 +618,15 @@ namespace CapaVista
 
                 int idCompra = logica.GuardarCompra(compra);
 
-                MessageBox.Show("La compra se guardó correctamente.\n\nN.º de compra: " + idCompra,
-                    "Compra guardada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("La compra se guardó correctamente.\n\nN.º de compra: ") + idCompra,
+                    ClsIdioma.T("Compra guardada"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo guardar la compra.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo guardar la compra.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -635,7 +636,7 @@ namespace CapaVista
 
             if (string.IsNullOrWhiteSpace(texto))
             {
-                MessageBox.Show("Ingrese el nombre o CUIT del proveedor.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Ingrese el nombre o CUIT del proveedor."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtProveedor.Focus();
@@ -646,7 +647,7 @@ namespace CapaVista
 
             if (tabla.Rows.Count == 0)
             {
-                MessageBox.Show("No se encontró ningún proveedor activo.", "Proveedor no encontrado",
+                MessageBox.Show(ClsIdioma.T("No se encontró ningún proveedor activo."), ClsIdioma.T("Proveedor no encontrado"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtProveedor.Focus();
@@ -655,8 +656,8 @@ namespace CapaVista
 
             if (tabla.Rows.Count > 1)
             {
-                MessageBox.Show("Se encontraron varios proveedores. Ingrese un nombre o CUIT más específico.",
-                    "Varios proveedores", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("Se encontraron varios proveedores. Ingrese un nombre o CUIT más específico."),
+                    ClsIdioma.T("Varios proveedores"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return;
             }
@@ -696,7 +697,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 productosEncontrados = null;
-                MessageBox.Show("No se pudieron buscar los productos.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron buscar los productos.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }

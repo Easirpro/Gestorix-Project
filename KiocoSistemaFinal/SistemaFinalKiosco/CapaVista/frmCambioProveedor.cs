@@ -15,6 +15,7 @@ namespace CapaVista
         public frmCambioProveedor()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
     }
 }

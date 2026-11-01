@@ -40,6 +40,7 @@ namespace CapaVista
         public frmAlertas(Dictionary<TipoAlerta, Action> acciones, Func<TipoAlerta, bool>? puedeResolver = null, Action? alCambiar = null)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.acciones = acciones;
             this.puedeResolver = puedeResolver;
@@ -47,6 +48,7 @@ namespace CapaVista
 
             cargando = true;
             cmbPrioridad.SelectedIndex = 0;
+            ClsIdioma.TraducirOpciones(cmbPrioridad);   // se elige por posición
             cargando = false;
 
             CargarAlertas();
@@ -63,7 +65,7 @@ namespace CapaVista
             {
                 alertas = new List<ClsAlertaEntidad>();
 
-                MessageBox.Show("No se pudieron cargar las alertas.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las alertas.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -76,9 +78,9 @@ namespace CapaVista
             int urgentes = alertas.Count(a => a.Urgente);
             int avisos = alertas.Count - urgentes;
 
-            btnTotal.Text = alertas.Count + " en total";
-            btnUrgentes.Text = urgentes + (urgentes == 1 ? " urgente" : " urgentes");
-            btnAvisos.Text = avisos + (avisos == 1 ? " aviso" : " avisos");
+            btnTotal.Text = alertas.Count + ClsIdioma.T(" en total");
+            btnUrgentes.Text = urgentes + (urgentes == 1 ? ClsIdioma.T(" urgente") : ClsIdioma.T(" urgentes"));
+            btnAvisos.Text = avisos + (avisos == 1 ? ClsIdioma.T(" aviso") : ClsIdioma.T(" avisos"));
         }
         // Solo los tipos que tienen alertas, con su cantidad. Mantiene el tipo elegido si sigue habiendo.
         private void CargarTipos()
@@ -90,7 +92,7 @@ namespace CapaVista
             try
             {
                 cmbTipo.Items.Clear();
-                cmbTipo.Items.Add(new ItemTipo { Tipo = null, Texto = "Todos" });
+                cmbTipo.Items.Add(new ItemTipo { Tipo = null, Texto = ClsIdioma.T("Todos") });
 
                 foreach (var grupo in alertas.GroupBy(a => a.Tipo).OrderBy(g => ClsCampanaAlertas.TituloDe(g.Key)))
                 {
@@ -135,7 +137,7 @@ namespace CapaVista
             foreach (ClsAlertaEntidad alerta in filtradas)
             {
                 int indice = dtgAlertas.Rows.Add(
-                    alerta.Urgente ? "● Urgente" : "● Aviso",
+                    alerta.Urgente ? ClsIdioma.T("● Urgente") : ClsIdioma.T("● Aviso"),
                     ClsCampanaAlertas.TituloDe(alerta.Tipo),
                     alerta.Descripcion);
 
@@ -149,16 +151,16 @@ namespace CapaVista
 
             if (alertas.Count == 0)
             {
-                lblCantidad.Text = "No hay alertas. Todo en orden.";
+                lblCantidad.Text = ClsIdioma.T("No hay alertas. Todo en orden.");
             }
             else if (dtgAlertas.Rows.Count == 0)
             {
-                lblCantidad.Text = "Ninguna alerta coincide con los filtros.";
+                lblCantidad.Text = ClsIdioma.T("Ninguna alerta coincide con los filtros.");
             }
             else
             {
-                lblCantidad.Text = "Mostrando " + dtgAlertas.Rows.Count + " de " + alertas.Count +
-                    (alertas.Count == 1 ? " alerta" : " alertas");
+                lblCantidad.Text = ClsIdioma.T("Mostrando ") + dtgAlertas.Rows.Count + ClsIdioma.T(" de ") + alertas.Count +
+                    (alertas.Count == 1 ? ClsIdioma.T(" alerta") : ClsIdioma.T(" alertas"));
             }
 
             MarcarResumen(prioridad);
@@ -195,21 +197,21 @@ namespace CapaVista
 
             if (alerta == null)
             {
-                MessageBox.Show("Seleccione una alerta.", "Alertas",
+                MessageBox.Show(ClsIdioma.T("Seleccione una alerta."), ClsIdioma.T("Alertas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (!PuedeResolver(alerta.Tipo))
             {
-                MessageBox.Show(ClsCampanaAlertas.MENSAJE_SIN_PERMISO, "Alertas",
+                MessageBox.Show(ClsIdioma.T(ClsCampanaAlertas.MENSAJE_SIN_PERMISO), ClsIdioma.T("Alertas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             if (!acciones.TryGetValue(alerta.Tipo, out Action? accion))
             {
-                MessageBox.Show("Esta alerta no tiene una pantalla asociada para resolverla.", "Alertas",
+                MessageBox.Show(ClsIdioma.T("Esta alerta no tiene una pantalla asociada para resolverla."), ClsIdioma.T("Alertas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }

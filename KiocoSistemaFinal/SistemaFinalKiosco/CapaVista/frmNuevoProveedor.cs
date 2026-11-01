@@ -30,17 +30,19 @@ namespace CapaVista
         public frmNuevoProveedor()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             CargarCombos();
         }
         public frmNuevoProveedor(int idProveedor)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             idProveedorModificar = idProveedor;
 
-            lblTitulo.Text = "Modificar proveedor";
-            Text = "Modificar proveedor";
+            lblTitulo.Text = ClsIdioma.T("Modificar proveedor");
+            Text = ClsIdioma.T("Modificar proveedor");
 
             CargarCombos();
             CargarProveedorModificar();
@@ -59,7 +61,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar las listas del formulario.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las listas del formulario.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -69,12 +71,12 @@ namespace CapaVista
             // --- Datos del proveedor ---
             if (string.IsNullOrWhiteSpace(txtRazonSocial.Text))
             {
-                return Aviso("Ingrese la razón social.", txtRazonSocial);
+                return Aviso(ClsIdioma.T("Ingrese la razón social."), txtRazonSocial);
             }
 
             if (string.IsNullOrWhiteSpace(txtSucursalProveedor.Text))
             {
-                return Aviso("Ingrese la sucursal (por ejemplo, \"Casa central\").", txtSucursalProveedor);
+                return Aviso(ClsIdioma.T("Ingrese la sucursal (por ejemplo, \"Casa central\")."), txtSucursalProveedor);
             }
 
             if (!string.IsNullOrWhiteSpace(txtCuit.Text))
@@ -83,73 +85,73 @@ namespace CapaVista
 
                 if (!validar.CuitValido(txtCuit.Text.Trim()))
                 {
-                    return Aviso("El CUIT no es válido. Debe tener 11 números (con o sin guiones) y el dígito verificador correcto.", txtCuit);
+                    return Aviso(ClsIdioma.T("El CUIT no es válido. Debe tener 11 números (con o sin guiones) y el dígito verificador correcto."), txtCuit);
                 }
 
                 if (logica.ExisteCuitProveedor(txtCuit.Text.Trim(), idProveedorModificar))
                 {
-                    return Aviso("Ya existe otro proveedor registrado con ese CUIT.", txtCuit);
+                    return Aviso(ClsIdioma.T("Ya existe otro proveedor registrado con ese CUIT."), txtCuit);
                 }
             }
 
             if (cmbIva.SelectedIndex <= 0)
             {
-                return Aviso("Seleccione la condición de IVA.", cmbIva);
+                return Aviso(ClsIdioma.T("Seleccione la condición de IVA."), cmbIva);
             }
 
             // --- Contacto ---
             if (!ClsValidarNumero.ClsValidarNumeros.NumeroValido(txtCelular.Text))
             {
-                return Aviso("Ingrese el teléfono (solo números).", txtCelular);
+                return Aviso(ClsIdioma.T("Ingrese el teléfono (solo números)."), txtCelular);
             }
 
             if (txtCelular.Text.Trim().Length < 6)
             {
-                return Aviso("El teléfono es muy corto. Ingréselo con la característica.", txtCelular);
+                return Aviso(ClsIdioma.T("El teléfono es muy corto. Ingréselo con la característica."), txtCelular);
             }
 
             if (cmbTipoTelefono.SelectedIndex <= 0)
             {
-                return Aviso("Seleccione el tipo de teléfono.", cmbTipoTelefono);
+                return Aviso(ClsIdioma.T("Seleccione el tipo de teléfono."), cmbTipoTelefono);
             }
 
             if (!ClsValidarCorreo.EsEmailValido(txtEmail.Text.Trim()))
             {
-                return Aviso("Ingrese un e-mail válido.", txtEmail);
+                return Aviso(ClsIdioma.T("Ingrese un e-mail válido."), txtEmail);
             }
 
             // --- Dirección ---
             if (cmbProvincia.SelectedIndex <= 0)
             {
-                return Aviso("Seleccione la provincia.", cmbProvincia);
+                return Aviso(ClsIdioma.T("Seleccione la provincia."), cmbProvincia);
             }
 
             if (cmbPartido.SelectedIndex <= 0)
             {
-                return Aviso("Seleccione el partido.", cmbPartido);
+                return Aviso(ClsIdioma.T("Seleccione el partido."), cmbPartido);
             }
 
             if (cmbLocalidad.SelectedIndex <= 0)
             {
-                return Aviso("Seleccione la localidad.", cmbLocalidad);
+                return Aviso(ClsIdioma.T("Seleccione la localidad."), cmbLocalidad);
             }
 
             if (string.IsNullOrWhiteSpace(txtCalle.Text))
             {
-                return Aviso("Ingrese la calle.", txtCalle);
+                return Aviso(ClsIdioma.T("Ingrese la calle."), txtCalle);
             }
 
             if (!int.TryParse(txtNumero.Text.Trim(), out int altura) || altura <= 0)
             {
-                return Aviso("Ingrese el número de la calle (mayor que cero).", txtNumero);
+                return Aviso(ClsIdioma.T("Ingrese el número de la calle (mayor que cero)."), txtNumero);
             }
 
             // Sin CUIT, la razón social es lo único que distingue al proveedor: se avisa si ya existe.
             if (string.IsNullOrWhiteSpace(txtCuit.Text) &&
                 logica.ExisteNombreProveedor(txtRazonSocial.Text.Trim(), idProveedorModificar))
             {
-                DialogResult respuesta = MessageBox.Show("Ya existe un proveedor llamado \"" + txtRazonSocial.Text.Trim() + "\".\n\n" +
-                    "¿Desea guardarlo igual?", "Razón social repetida", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult respuesta = MessageBox.Show(ClsIdioma.T("Ya existe un proveedor llamado \"") + txtRazonSocial.Text.Trim() + "\".\n\n" +
+                    ClsIdioma.T("¿Desea guardarlo igual?"), ClsIdioma.T("Razón social repetida"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta != DialogResult.Yes)
                 {
@@ -162,7 +164,7 @@ namespace CapaVista
         }
         private bool Aviso(string mensaje, Control control)
         {
-            MessageBox.Show(mensaje, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(mensaje, ClsIdioma.T("Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             control.Focus();
             return false;
         }
@@ -193,7 +195,7 @@ namespace CapaVista
 
             DataRow fila = tabla.NewRow();
             fila["IdProvincia"] = 0;
-            fila["NomProvincia"] = "-Seleccione provincia-";
+            fila["NomProvincia"] = ClsIdioma.T("-Seleccione provincia-");
             tabla.Rows.InsertAt(fila, 0);
 
             cmbProvincia.DisplayMember = "NomProvincia";
@@ -220,7 +222,7 @@ namespace CapaVista
 
             DataRow fila = tabla.NewRow();
             fila["IdPartido"] = 0;
-            fila["NomPartido"] = idProvincia > 0 ? "-Seleccione partido-" : "-Elija primero la provincia-";
+            fila["NomPartido"] = idProvincia > 0 ? ClsIdioma.T("-Seleccione partido-") : ClsIdioma.T("-Elija primero la provincia-");
             tabla.Rows.InsertAt(fila, 0);
 
             cmbPartido.DisplayMember = "NomPartido";
@@ -248,7 +250,7 @@ namespace CapaVista
 
             DataRow fila = tabla.NewRow();
             fila["IdLocalidad"] = 0;
-            fila["NomLocalidad"] = idPartido > 0 ? "-Seleccione localidad-" : "-Elija primero el partido-";
+            fila["NomLocalidad"] = idPartido > 0 ? ClsIdioma.T("-Seleccione localidad-") : ClsIdioma.T("-Elija primero el partido-");
             tabla.Rows.InsertAt(fila, 0);
 
             cmbLocalidad.DisplayMember = "NomLocalidad";
@@ -263,7 +265,7 @@ namespace CapaVista
 
             DataRow fila = tabla.NewRow();
             fila["IdTipo"] = 0;
-            fila["Tipo"] = "-Seleccione tipo-";
+            fila["Tipo"] = ClsIdioma.T("-Seleccione tipo-");
             tabla.Rows.InsertAt(fila, 0);
 
             cmbTipoTelefono.DisplayMember = "Tipo";
@@ -294,8 +296,8 @@ namespace CapaVista
                 if (tabla.Rows.Count == 0)
                 {
                     // Pasa si al proveedor le falta la sucursal o la dirección: no se puede modificar.
-                    MessageBox.Show("No se encontraron los datos completos del proveedor (sucursal o dirección), " +
-                        "por eso no se puede modificar.", "Proveedor incompleto",
+                    MessageBox.Show(ClsIdioma.T("No se encontraron los datos completos del proveedor (sucursal o dirección), ") +
+                        ClsIdioma.T("por eso no se puede modificar."), ClsIdioma.T("Proveedor incompleto"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     proveedorNoEncontrado = true;
@@ -343,7 +345,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar los datos del proveedor.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos del proveedor.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 proveedorNoEncontrado = true;
@@ -564,14 +566,14 @@ namespace CapaVista
 
                 if (esNuevo)
                 {
-                    MessageBox.Show("Proveedor registrado correctamente.\n\nPuede cargar otro o tocar Cancelar para volver.", "Proveedores",
+                    MessageBox.Show(ClsIdioma.T("Proveedor registrado correctamente.\n\nPuede cargar otro o tocar Cancelar para volver."), ClsIdioma.T("Proveedores"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     LimpiarFormulario();
                 }
                 else
                 {
-                    MessageBox.Show("Proveedor modificado correctamente.", "Proveedores",
+                    MessageBox.Show(ClsIdioma.T("Proveedor modificado correctamente."), ClsIdioma.T("Proveedores"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.Close();
@@ -579,8 +581,8 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show((esNuevo ? "No se pudo registrar el proveedor." : "No se pudo modificar el proveedor.") +
-                    "\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show((esNuevo ? ClsIdioma.T("No se pudo registrar el proveedor.") : ClsIdioma.T("No se pudo modificar el proveedor.")) +
+                    "\n\n" + ex.Message, ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnCancelar_Click(object sender, EventArgs e)

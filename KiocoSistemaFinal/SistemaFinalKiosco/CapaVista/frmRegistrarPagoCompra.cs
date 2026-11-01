@@ -25,6 +25,7 @@ namespace CapaVista
         public frmRegistrarPagoCompra(int idCompra, string proveedor, decimal saldo)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             this.idCompra = idCompra;
             this.proveedor = proveedor;
             this.saldo = saldo;
@@ -32,8 +33,8 @@ namespace CapaVista
 
         private void frmRegistrarPagoCompra_Load(object sender, EventArgs e)
         {
-            lblCompra.Text = "Compra N.º " + idCompra + "  -  " + proveedor;
-            lblSaldo.Text = $"Saldo pendiente: $ {saldo:N2}";
+            lblCompra.Text = ClsIdioma.T("Compra N.º ") + idCompra + "  -  " + proveedor;
+            lblSaldo.Text = (ClsIdioma.Ingles ? $"Outstanding balance: $ {saldo:N2}" : $"Saldo pendiente: $ {saldo:N2}");
 
             nudMonto.Maximum = saldo;
             nudMonto.Value = saldo;
@@ -45,7 +46,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar los datos.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -53,7 +54,7 @@ namespace CapaVista
             {
                 chkDesdeCaja.Checked = false;
                 chkDesdeCaja.Enabled = false;
-                chkDesdeCaja.Text = "El dinero sale de la caja (no hay caja abierta)";
+                chkDesdeCaja.Text = ClsIdioma.T("El dinero sale de la caja (no hay caja abierta)");
             }
             else
             {
@@ -95,7 +96,7 @@ namespace CapaVista
         {
             if (sesionCaja != null && chkDesdeCaja.Checked && EsEfectivo())
             {
-                lblDisponible.Text = $"Efectivo disponible en caja: $ {sesionCaja.EfectivoEsperado:N2}";
+                lblDisponible.Text = (ClsIdioma.Ingles ? $"Cash available in register: $ {sesionCaja.EfectivoEsperado:N2}" : $"Efectivo disponible en caja: $ {sesionCaja.EfectivoEsperado:N2}");
             }
             else
             {
@@ -107,7 +108,7 @@ namespace CapaVista
         {
             if (cmbMedioPago.SelectedValue == null)
             {
-                MessageBox.Show("Seleccione un medio de pago.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un medio de pago."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbMedioPago.Focus();
                 return false;
@@ -115,7 +116,7 @@ namespace CapaVista
 
             if (nudMonto.Value <= 0)
             {
-                MessageBox.Show("El monto debe ser mayor a cero.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("El monto debe ser mayor a cero."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 nudMonto.Focus();
                 return false;
@@ -123,7 +124,7 @@ namespace CapaVista
 
             if (nudMonto.Value > saldo)
             {
-                MessageBox.Show("El monto no puede superar el saldo pendiente.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("El monto no puede superar el saldo pendiente."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 nudMonto.Focus();
                 return false;
@@ -132,8 +133,8 @@ namespace CapaVista
             if (sesionCaja != null && chkDesdeCaja.Checked && EsEfectivo()
                 && nudMonto.Value > sesionCaja.EfectivoEsperado)
             {
-                MessageBox.Show("El monto supera el efectivo disponible en la caja ($ " +
-                                sesionCaja.EfectivoEsperado.ToString("N2") + ").", "Aviso",
+                MessageBox.Show(ClsIdioma.T("El monto supera el efectivo disponible en la caja ($ ") +
+                                sesionCaja.EfectivoEsperado.ToString("N2") + ").", ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 nudMonto.Focus();
                 return false;
@@ -182,24 +183,24 @@ namespace CapaVista
             {
                 pago = logica.RegistrarPago(pago);
 
-                string mensaje = "El pago se registró correctamente.\n\n" +
-                                 "Pago N.º " + pago.IdPagoCompra +
-                                 "\nMonto: $ " + pago.Monto.ToString("N2") +
-                                 "\nSaldo restante: $ " + pago.SaldoRestante.ToString("N2");
+                string mensaje = ClsIdioma.T("El pago se registró correctamente.\n\n") +
+                                 ClsIdioma.T("Pago N.º ") + pago.IdPagoCompra +
+                                 ClsIdioma.T("\nMonto: $ ") + pago.Monto.ToString("N2") +
+                                 ClsIdioma.T("\nSaldo restante: $ ") + pago.SaldoRestante.ToString("N2");
 
                 if (pago.SaldoRestante == 0)
                 {
-                    mensaje += "\n\nLa compra quedó totalmente pagada.";
+                    mensaje += ClsIdioma.T("\n\nLa compra quedó totalmente pagada.");
                 }
 
-                MessageBox.Show(mensaje, "Pago registrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(mensaje, ClsIdioma.T("Pago registrado"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo registrar el pago.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo registrar el pago.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -15,6 +15,7 @@ namespace CapaVista
         public frmAgregarArticuloCompra()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
 
         private void frmAgregarArticuloCompra_Load(object sender, EventArgs e)

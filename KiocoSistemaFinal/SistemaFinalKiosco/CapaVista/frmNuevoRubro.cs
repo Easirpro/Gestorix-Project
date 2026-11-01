@@ -19,18 +19,20 @@ namespace CapaVista
         public frmNuevoRubro()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
-            this.Text = "Nuevo Rubro";
-            lblNuevoRubro.Text = "Nuevo Rubro";
+            this.Text = ClsIdioma.T("Nuevo Rubro");
+            lblNuevoRubro.Text = ClsIdioma.T("Nuevo Rubro");
         }
         public frmNuevoRubro(int idCategoria, string nombre)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.idCategoria = idCategoria;
 
-            this.Text = "Modificar Rubro";
-            lblNuevoRubro.Text = "Modificar Rubro";
+            this.Text = ClsIdioma.T("Modificar Rubro");
+            lblNuevoRubro.Text = ClsIdioma.T("Modificar Rubro");
 
             txtNombre.Text = nombre;
         }
@@ -46,7 +48,7 @@ namespace CapaVista
 
             if (string.IsNullOrWhiteSpace(nombre))
             {
-                MessageBox.Show("Ingrese el nombre del rubro.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Ingrese el nombre del rubro."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtNombre.Focus();
@@ -61,7 +63,7 @@ namespace CapaVista
 
                     if (nuevoId > 0)
                     {
-                        MessageBox.Show("Rubro registrado correctamente.", "Éxito",
+                        MessageBox.Show(ClsIdioma.T("Rubro registrado correctamente."), ClsIdioma.T("Éxito"),
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         DialogResult = DialogResult.OK;
@@ -74,7 +76,7 @@ namespace CapaVista
 
                     if (modificado)
                     {
-                        MessageBox.Show("Rubro modificado correctamente.", "Éxito",
+                        MessageBox.Show(ClsIdioma.T("Rubro modificado correctamente."), ClsIdioma.T("Éxito"),
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         DialogResult = DialogResult.OK;
@@ -84,7 +86,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo guardar el rubro.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo guardar el rubro.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

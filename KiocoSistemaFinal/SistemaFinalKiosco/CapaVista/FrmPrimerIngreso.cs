@@ -17,6 +17,7 @@ namespace CapaVista
         public FrmPrimerIngreso()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
         private void ValidarRequisitosPassword()
         {
@@ -30,11 +31,11 @@ namespace CapaVista
             bool coincide = password == confirmar && confirmar.Length > 0;
 
             // Cambia el texto
-            lblMinimo.Text = (minimo ? "✔" : "❌") + " Mínimo 8 caracteres";
-            lblMayuscula.Text = (mayuscula ? "✔" : "❌") + " Una mayúscula";
-            lblMinuscula.Text = (minuscula ? "✔" : "❌") + " Una minúscula";
-            lblNumero.Text = (numero ? "✔" : "❌") + " Un número";
-            lblCoincide.Text = (coincide ? "✔" : "❌") + " Las contraseñas coinciden";
+            lblMinimo.Text = (minimo ? "✔" : "❌") + ClsIdioma.T(" Mínimo 8 caracteres");
+            lblMayuscula.Text = (mayuscula ? "✔" : "❌") + ClsIdioma.T(" Una mayúscula");
+            lblMinuscula.Text = (minuscula ? "✔" : "❌") + ClsIdioma.T(" Una minúscula");
+            lblNumero.Text = (numero ? "✔" : "❌") + ClsIdioma.T(" Un número");
+            lblCoincide.Text = (coincide ? "✔" : "❌") + ClsIdioma.T(" Las contraseñas coinciden");
 
             // Cambia el color
             lblMinimo.ForeColor = minimo ? Color.Green : Color.Red;
@@ -52,7 +53,7 @@ namespace CapaVista
                 validar.ValidarCamposVacios(txtNuevaPass.Text) ||
                 validar.ValidarCamposVacios(txtConfirmarPass.Text))
             {
-                MessageBox.Show("Complete todos los campos.", "Datos incompletos",
+                MessageBox.Show(ClsIdioma.T("Complete todos los campos."), ClsIdioma.T("Datos incompletos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -65,7 +66,7 @@ namespace CapaVista
             {
                 case ResultadoCambioPassword.Correcto:
 
-                    MessageBox.Show("Contraseña modificada correctamente.", "Primer ingreso",
+                    MessageBox.Show(ClsIdioma.T("Contraseña modificada correctamente."), ClsIdioma.T("Primer ingreso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // El login sigue con las preguntas de seguridad o el menú principal.
@@ -76,21 +77,21 @@ namespace CapaVista
 
                 case ResultadoCambioPassword.PasswordTemporalIncorrecta:
 
-                    MessageBox.Show("La contraseña temporal es incorrecta.", "Contraseña no válida",
+                    MessageBox.Show(ClsIdioma.T("La contraseña temporal es incorrecta."), ClsIdioma.T("Contraseña no válida"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     break;
 
                 case ResultadoCambioPassword.PasswordNoCoinciden:
 
-                    MessageBox.Show("Las contraseñas no coinciden.", "Contraseña no válida",
+                    MessageBox.Show(ClsIdioma.T("Las contraseñas no coinciden."), ClsIdioma.T("Contraseña no válida"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     break;
 
                 case ResultadoCambioPassword.PasswordIgualAnterior:
 
-                    MessageBox.Show("La nueva contraseña debe ser distinta de la temporal.", "Contraseña no válida",
+                    MessageBox.Show(ClsIdioma.T("La nueva contraseña debe ser distinta de la temporal."), ClsIdioma.T("Contraseña no válida"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     break;
@@ -99,7 +100,7 @@ namespace CapaVista
 
                     MessageBox.Show(
                         ClsReglasPassword.Requisitos,
-                        "Contraseña no válida",
+                        ClsIdioma.T("Contraseña no válida"),
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
 

@@ -15,6 +15,7 @@ namespace CapaVista
         public frmActualizacionmasiva()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
     }
 }

@@ -22,6 +22,7 @@ namespace CapaVista
         public frmCaja()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             ConfigurarGrid();
         }
 
@@ -53,10 +54,10 @@ namespace CapaVista
 
                 if (sesionActual == null)
                 {
-                    lblEstado.Text = "CAJA CERRADA";
+                    lblEstado.Text = ClsIdioma.T("CAJA CERRADA");
                     lblEstado.ForeColor = Color.Firebrick;
-                    lblAbiertaPor.Text = "Abierta por: -";
-                    lblFechaApertura.Text = "Apertura: -";
+                    lblAbiertaPor.Text = ClsIdioma.T("Abierta por: -");
+                    lblFechaApertura.Text = ClsIdioma.T("Apertura: -");
                     lblFondo.Text = "$ 0,00";
                     lblIngresos.Text = "$ 0,00";
                     lblEgresos.Text = "$ 0,00";
@@ -66,10 +67,10 @@ namespace CapaVista
                 }
                 else
                 {
-                    lblEstado.Text = "CAJA ABIERTA";
+                    lblEstado.Text = ClsIdioma.T("CAJA ABIERTA");
                     lblEstado.ForeColor = Color.SeaGreen;
-                    lblAbiertaPor.Text = "Sesión N.º " + sesionActual.IdSesionCaja + "  -  Abierta por: " + sesionActual.UsuarioApertura;
-                    lblFechaApertura.Text = "Apertura: " + sesionActual.FechaApertura.ToString("dd/MM/yyyy HH:mm");
+                    lblAbiertaPor.Text = ClsIdioma.T("Sesión N.º ") + sesionActual.IdSesionCaja + ClsIdioma.T("  -  Abierta por: ") + sesionActual.UsuarioApertura;
+                    lblFechaApertura.Text = ClsIdioma.T("Apertura: ") + sesionActual.FechaApertura.ToString("dd/MM/yyyy HH:mm");
                     lblFondo.Text = $"$ {sesionActual.MontoInicial:N2}";
                     lblIngresos.Text = $"$ {sesionActual.IngresosEfectivo:N2}";
                     lblEgresos.Text = $"$ {sesionActual.EgresosEfectivo:N2}";
@@ -83,7 +84,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo obtener el estado de la caja.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el estado de la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -135,20 +136,20 @@ namespace CapaVista
 
             if (dgvMovimientos.Columns.Contains("FechaHora"))
             {
-                dgvMovimientos.Columns["FechaHora"].HeaderText = "Fecha y hora";
+                dgvMovimientos.Columns["FechaHora"].HeaderText = ClsIdioma.T("Fecha y hora");
                 dgvMovimientos.Columns["FechaHora"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
             }
             if (dgvMovimientos.Columns.Contains("MedioPago"))
             {
-                dgvMovimientos.Columns["MedioPago"].HeaderText = "Medio de pago";
+                dgvMovimientos.Columns["MedioPago"].HeaderText = ClsIdioma.T("Medio de pago");
             }
             if (dgvMovimientos.Columns.Contains("RegistradoPor"))
             {
-                dgvMovimientos.Columns["RegistradoPor"].HeaderText = "Registrado por";
+                dgvMovimientos.Columns["RegistradoPor"].HeaderText = ClsIdioma.T("Registrado por");
             }
             if (dgvMovimientos.Columns.Contains("Observacion"))
             {
-                dgvMovimientos.Columns["Observacion"].HeaderText = "Observación";
+                dgvMovimientos.Columns["Observacion"].HeaderText = ClsIdioma.T("Observación");
             }
             if (dgvMovimientos.Columns.Contains("Importe"))
             {
@@ -191,7 +192,7 @@ namespace CapaVista
         {
             if (dgvMovimientos.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione un movimiento.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un movimiento."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -200,27 +201,27 @@ namespace CapaVista
 
             if (!Convert.ToBoolean(fila.Cells["Anulable"].Value))
             {
-                MessageBox.Show("Solo se pueden anular desde acá los ingresos y egresos manuales.\n\n" +
-                                "Las ventas, devoluciones y pagos a proveedores se anulan desde su propio módulo.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("Solo se pueden anular desde acá los ingresos y egresos manuales.\n\n") +
+                                ClsIdioma.T("Las ventas, devoluciones y pagos a proveedores se anulan desde su propio módulo."),
+                    ClsIdioma.T("Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             int idMovimiento = Convert.ToInt32(fila.Cells["IdOrigen"].Value);
 
-            string motivo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese el motivo de la anulación:",
-                "Anular movimiento", "");
+            string motivo = Microsoft.VisualBasic.Interaction.InputBox(ClsIdioma.T("Ingrese el motivo de la anulación:"),
+                ClsIdioma.T("Anular movimiento"), "");
 
             if (string.IsNullOrWhiteSpace(motivo))
             {
-                MessageBox.Show("Debe ingresar un motivo para anular el movimiento.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Debe ingresar un motivo para anular el movimiento."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DialogResult respuesta = MessageBox.Show("¿Está seguro de anular este movimiento?\n\n" +
+            DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de anular este movimiento?\n\n") +
                 fila.Cells["Concepto"].Value + "  $ " + Convert.ToDecimal(fila.Cells["Importe"].Value).ToString("N2") +
-                "\nMotivo: " + motivo, "Confirmar anulación",
+                ClsIdioma.T("\nMotivo: ") + motivo, ClsIdioma.T("Confirmar anulación"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes)
@@ -232,14 +233,14 @@ namespace CapaVista
             {
                 logica.AnularMovimiento(idMovimiento, motivo.Trim(), SesionUsuario.IdUsuario);
 
-                MessageBox.Show("El movimiento fue anulado correctamente.", "Movimiento anulado",
+                MessageBox.Show(ClsIdioma.T("El movimiento fue anulado correctamente."), ClsIdioma.T("Movimiento anulado"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarEstado();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo anular el movimiento.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo anular el movimiento.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

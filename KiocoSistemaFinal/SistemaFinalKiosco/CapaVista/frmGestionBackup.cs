@@ -17,6 +17,7 @@ namespace CapaVista
         public frmGestionBackup()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             txtRutabk.Text = @"C:\Gestorix\Backups";
             this.CancelButton = btnCancelar;
             CargarBackups();
@@ -37,7 +38,7 @@ namespace CapaVista
                 ClsBackupLogica backup = new ClsBackupLogica();
                 
                 bool resultado = backup.GenerarBackup(txtRutabk.Text);
-                MessageBox.Show("Backup generado correctamente");
+                MessageBox.Show(ClsIdioma.T("Backup generado correctamente"));
             }
             catch (Exception ex)
             {
@@ -68,15 +69,15 @@ namespace CapaVista
             if (lstBackup.SelectedItem == null)
             {
                 MessageBox.Show(
-                    "Seleccione un backup para restaurar.", "Gestión de Backup", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ClsIdioma.T("Seleccione un backup para restaurar."), ClsIdioma.T("Gestión de Backup"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
             DialogResult resultado = MessageBox.Show(
-                "La restauración reemplazará completamente la información actual de la base de datos.\n" +
-                "Todos los cambios realizados después de la fecha del backup seleccionado se perderán.\n" +
-                "¿Desea continuar?",
-                "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                ClsIdioma.T("La restauración reemplazará completamente la información actual de la base de datos.\n") +
+                ClsIdioma.T("Todos los cambios realizados después de la fecha del backup seleccionado se perderán.\n") +
+                ClsIdioma.T("¿Desea continuar?"),
+                ClsIdioma.T("Advertencia"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             
             if (resultado == DialogResult.Yes)
@@ -90,10 +91,10 @@ namespace CapaVista
                     if (!backupLogica.ValidarHashBackup(archivoBackup))
                     {
                         DialogResult respuesta =
-                            MessageBox.Show(@"ADVERTENCIA
+                            MessageBox.Show(ClsIdioma.Ingles ? "WARNING\n\nThis backup does not have a valid Gestorix signature or was modified after it was created.\nThis can happen if the file was received from another team member.\n\nDo you want to continue with the restore?" : @"ADVERTENCIA
                            Este respaldo no posee una firma válida de Gestorix o fue modificado después de ser generado.
                            Esto puede ocurrir si el archivo fue recibido de otro integrante del equipo.
-                           ¿Desea continuar con la restauración?","Advertencia",
+                           ¿Desea continuar con la restauración?",ClsIdioma.T("Advertencia"),
 
                             MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -106,7 +107,7 @@ namespace CapaVista
 
                     if (exito)
                     {
-                        MessageBox.Show("Backup restaurado correctamente, el sistema se reiniciará.","Gestión de Backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(ClsIdioma.T("Backup restaurado correctamente, el sistema se reiniciará."),ClsIdioma.T("Gestión de Backup"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Application.Restart();
                         Environment.Exit(5);
                     }
@@ -115,7 +116,7 @@ namespace CapaVista
                 catch (Exception ex)
                 {
                 
-                MessageBox.Show(ex.Message,"ERROR AL RESTAURAR",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message,ClsIdioma.T("ERROR AL RESTAURAR"),MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 }
 

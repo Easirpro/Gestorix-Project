@@ -58,6 +58,26 @@ namespace CapaDatos
 
             return permisos;
         }
+        // Cantidad de usuarios activos con ese rol (a quiénes afecta cambiar sus permisos).
+        public int ContarUsuariosPorRol(int idRol)
+        {
+            using (SqlConnection conn = conexion.ObtenerConexion())
+            {
+                conn.Open();
+
+                string query = @"
+                SELECT COUNT(*)
+                FROM Usuario
+                WHERE IdRol = @IdRol
+                  AND Estado = 1";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@IdRol", idRol);
+
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
         public string ObtenerNombreRol(int idRol)
         {
             using (SqlConnection conn = conexion.ObtenerConexion())

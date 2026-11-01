@@ -19,6 +19,7 @@ namespace CapaVista
         public frmBitacora()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             ConfigurarFormulario();
             ConfigurarEventos();
             CargarBitacora();
@@ -43,7 +44,7 @@ namespace CapaVista
             this.dgvBitacora.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             this.dtpFechaDesde.Value = DateTime.Today.AddDays(-30);
             this.dtpFechaHasta.Value = DateTime.Today;
-            this.lblCategoriaActual.Text = "Todos los registros";
+            this.lblCategoriaActual.Text = ClsIdioma.T("Todos los registros");
         }
         private void ConfigurarEventos()
         {
@@ -104,8 +105,8 @@ namespace CapaVista
                 }
 
                 MessageBox.Show(
-                    "No se pudieron cargar los registros.\n\n" + ex.Message,
-                    "Error",
+                    ClsIdioma.T("No se pudieron cargar los registros.\n\n") + ex.Message,
+                    ClsIdioma.T("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -175,7 +176,7 @@ namespace CapaVista
 
             DataGridViewColumn columna = this.dgvBitacora.Columns[nombre];
 
-            columna.HeaderText = encabezado;
+            columna.HeaderText = ClsIdioma.T(encabezado);
 
             if (formato != null)
             {
@@ -230,7 +231,7 @@ namespace CapaVista
         private void SeleccionarCategoria(string categoria, string titulo)
         {
             this.categoriaActual = categoria;
-            this.lblCategoriaActual.Text = titulo;
+            this.lblCategoriaActual.Text = ClsIdioma.T(titulo);
 
             this.AplicarFiltros();
         }
@@ -256,41 +257,41 @@ namespace CapaVista
                     return;
                 }
 
-                this.lblDetalleFecha.Text = "Compra: " + ObtenerValor(fila, "FechaCompra");
+                this.lblDetalleFecha.Text = ClsIdioma.T("Compra: ") + ObtenerValor(fila, "FechaCompra");
 
                 this.lblDetalleUsuario.Text =
-                    "Cargó: " + ObtenerValor(fila, "CargadoPor") +
-                    "  |  Recibió: " + ObtenerValor(fila, "RecibidoPor");
+                    ClsIdioma.T("Cargó: ") + ObtenerValor(fila, "CargadoPor") +
+                    ClsIdioma.T("  |  Recibió: ") + ObtenerValor(fila, "RecibidoPor");
 
                 this.lblDetalleAccion.Text =
-                    "Proveedor: " + ObtenerValor(fila, "Proveedor") +
-                    " (CUIT " + ObtenerValor(fila, "CUIT") + ") - Sucursal: " + ObtenerValor(fila, "Sucursal");
+                    ClsIdioma.T("Proveedor: ") + ObtenerValor(fila, "Proveedor") +
+                    ClsIdioma.T(" (CUIT ") + ObtenerValor(fila, "CUIT") + ClsIdioma.T(") - Sucursal: ") + ObtenerValor(fila, "Sucursal");
 
                 bool recibida = ObtenerValor(fila, "IdRecepcion") != "Sin datos";
 
                 // Tres renglones cortos para que entren en el panel sin cortarse.
                 this.lblDetalleDescripcion.Text =
-                    "Estado: " + ObtenerValor(fila, "Estado") +
-                    "  |  Entrega estimada: " + ObtenerValor(fila, "FechaEntregaEstimada") +
+                    ClsIdioma.T("Estado: ") + ObtenerValor(fila, "Estado") +
+                    ClsIdioma.T("  |  Entrega estimada: ") + ObtenerValor(fila, "FechaEntregaEstimada") +
                     Environment.NewLine +
-                    "Pago: " + ObtenerValor(fila, "CondicionPago") + ", saldo " + ObtenerValor(fila, "Saldo") +
+                    ClsIdioma.T("Pago: ") + ObtenerValor(fila, "CondicionPago") + ClsIdioma.T(", saldo ") + ObtenerValor(fila, "Saldo") +
                     (recibida
-                        ? "  |  Boleta: " + ObtenerValor(fila, "TotalBoleta") + " (" + ObtenerValor(fila, "Resultado").ToLower() + ")"
-                        : "  |  Sin recibir") +
+                        ? ClsIdioma.T("  |  Boleta: ") + ObtenerValor(fila, "TotalBoleta") + " (" + ObtenerValor(fila, "Resultado").ToLower() + ")"
+                        : ClsIdioma.T("  |  Sin recibir")) +
                     Environment.NewLine +
-                    "Motivos: " + ObtenerValor(fila, "Motivos") +
-                    "  |  Observaciones: " + ObtenerValor(fila, "Observaciones");
+                    ClsIdioma.T("Motivos: ") + ObtenerValor(fila, "Motivos") +
+                    ClsIdioma.T("  |  Observaciones: ") + ObtenerValor(fila, "Observaciones");
 
                 return;
             }
 
-            this.lblDetalleFecha.Text = "Fecha: " + ObtenerValor(fila, "FechaHora");
+            this.lblDetalleFecha.Text = ClsIdioma.T("Fecha: ") + ObtenerValor(fila, "FechaHora");
 
             if (this.categoriaActual == "Errores")
             {
-                this.lblDetalleUsuario.Text = "ID usuario: " + ObtenerValor(fila, "IdUsuario");
+                this.lblDetalleUsuario.Text = ClsIdioma.T("ID usuario: ") + ObtenerValor(fila, "IdUsuario");
 
-                this.lblDetalleAccion.Text = "Excepción: " + ObtenerValor(fila, "TipoExcepcion");
+                this.lblDetalleAccion.Text = ClsIdioma.T("Excepción: ") + ObtenerValor(fila, "TipoExcepcion");
 
                 string mensaje = ObtenerValor(fila, "Mensaje");
                 string detalle = ObtenerValor(fila, "DetalleTecnico");
@@ -298,19 +299,19 @@ namespace CapaVista
                 string modulo = ObtenerValor(fila, "Modulo");
 
                 this.lblDetalleDescripcion.Text =
-                    "Módulo: " + modulo +
+                    ClsIdioma.T("Módulo: ") + modulo +
                     Environment.NewLine +
-                    "Estado: " + estado +
+                    ClsIdioma.T("Estado: ") + estado +
                     Environment.NewLine +
-                    "Mensaje: " + mensaje +
+                    ClsIdioma.T("Mensaje: ") + mensaje +
                     Environment.NewLine +
-                    "Detalle técnico: " + detalle;
+                    ClsIdioma.T("Detalle técnico: ") + detalle;
             }
             else
             {
-                this.lblDetalleUsuario.Text = "Usuario: " + ObtenerValor(fila, "Username");
-                this.lblDetalleAccion.Text = "Acción: " + ObtenerValor(fila, "Accion");
-                this.lblDetalleDescripcion.Text = "Descripción: " + ObtenerValor(fila, "Descripcion");
+                this.lblDetalleUsuario.Text = ClsIdioma.T("Usuario: ") + ObtenerValor(fila, "Username");
+                this.lblDetalleAccion.Text = ClsIdioma.T("Acción: ") + ObtenerValor(fila, "Accion");
+                this.lblDetalleDescripcion.Text = ClsIdioma.T("Descripción: ") + ObtenerValor(fila, "Descripcion");
             }
         }
         private string ObtenerValor(DataGridViewRow fila, string columna)
@@ -348,7 +349,7 @@ namespace CapaVista
         }
         private void LimpiarDetalles()
         {
-            this.lblDetalleFecha.Text = "Fecha: "; this.lblDetalleUsuario.Text = "Usuario: "; this.lblDetalleAccion.Text = "Acción: "; this.lblDetalleDescripcion.Text = "Descripción: ";
+            this.lblDetalleFecha.Text = ClsIdioma.T("Fecha: "); this.lblDetalleUsuario.Text = ClsIdioma.T("Usuario: "); this.lblDetalleAccion.Text = ClsIdioma.T("Acción: "); this.lblDetalleDescripcion.Text = ClsIdioma.T("Descripción: ");
         }
         private void dgvBitacora_SelectionChanged(object sender, EventArgs e)
         {
@@ -411,7 +412,7 @@ namespace CapaVista
             this.dtpFechaDesde.Value = DateTime.Today.AddDays(-30);
             this.dtpFechaHasta.Value = DateTime.Today;
             this.txtBuscar.Clear();
-            this.lblCategoriaActual.Text = "Todos los registros";
+            this.lblCategoriaActual.Text = ClsIdioma.T("Todos los registros");
 
             this.AplicarFiltros();
         }

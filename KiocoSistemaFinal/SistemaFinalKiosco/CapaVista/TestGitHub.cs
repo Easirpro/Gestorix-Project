@@ -15,6 +15,7 @@ namespace CapaVista
         public TestGitHub()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
 
         private void button1_Click(object sender, EventArgs e)

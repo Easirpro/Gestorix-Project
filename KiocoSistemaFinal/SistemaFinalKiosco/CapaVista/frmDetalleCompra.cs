@@ -16,6 +16,7 @@ namespace CapaVista
         public frmDetalleCompra(int idCompra)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.idCompra = idCompra;
 
@@ -41,7 +42,7 @@ namespace CapaVista
 
                 if (tabla.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontró el detalle de la compra.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("No se encontró el detalle de la compra."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     sinDetalle = true;
@@ -74,7 +75,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo cargar el detalle de la compra.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo cargar el detalle de la compra.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

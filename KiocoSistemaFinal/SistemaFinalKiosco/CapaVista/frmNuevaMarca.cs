@@ -23,6 +23,7 @@ namespace CapaVista
         public frmNuevaMarca()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.Load += frmNuevaMarca_Load;
         }
@@ -47,7 +48,7 @@ namespace CapaVista
             {
                 if (string.IsNullOrWhiteSpace(txtNombre.Text))
                 {
-                    MessageBox.Show("Ingrese el nombre de la marca.","Validación",
+                    MessageBox.Show(ClsIdioma.T("Ingrese el nombre de la marca."),ClsIdioma.T("Validación"),
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
 
@@ -70,7 +71,7 @@ namespace CapaVista
 
                     if (idMarca > 0)
                     {
-                        MessageBox.Show("Marca registrada correctamente.","Registro",
+                        MessageBox.Show(ClsIdioma.T("Marca registrada correctamente."),ClsIdioma.T("Registro"),
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
 
@@ -83,7 +84,7 @@ namespace CapaVista
 
                     if (resultado)
                     {
-                        MessageBox.Show("Marca modificada correctamente.","Modificación",
+                        MessageBox.Show(ClsIdioma.T("Marca modificada correctamente."),ClsIdioma.T("Modificación"),
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
 
@@ -93,7 +94,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ocurrió un error al registrar la marca.\n\n" + ex.Message,"Error",
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error al registrar la marca.\n\n") + ex.Message,ClsIdioma.T("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }

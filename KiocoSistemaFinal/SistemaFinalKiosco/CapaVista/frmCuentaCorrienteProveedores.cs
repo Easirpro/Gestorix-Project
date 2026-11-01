@@ -20,6 +20,7 @@ namespace CapaVista
         public frmCuentaCorrienteProveedores()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             ConfigurarGrid(dgvCompras);
             ConfigurarGrid(dgvPagos);
         }
@@ -67,7 +68,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar los proveedores.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -80,7 +81,7 @@ namespace CapaVista
             {
                 if (cmbProveedor.SelectedValue == null)
                 {
-                    MessageBox.Show("Seleccione un proveedor o marque \"Todos los proveedores\".", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("Seleccione un proveedor o marque \"Todos los proveedores\"."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -104,14 +105,14 @@ namespace CapaVista
                     }
                 }
 
-                lblTotalDeuda.Text = $"Deuda total: $ {deuda:N2}";
-                lblVencido.Text = $"Vencido: $ {vencido:N2}";
+                lblTotalDeuda.Text = (ClsIdioma.Ingles ? $"Total debt: $ {deuda:N2}" : $"Deuda total: $ {deuda:N2}");
+                lblVencido.Text = (ClsIdioma.Ingles ? $"Overdue: $ {vencido:N2}" : $"Vencido: $ {vencido:N2}");
 
                 CargarPagos();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron obtener las compras.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las compras.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -121,7 +122,7 @@ namespace CapaVista
             if (dgvCompras.CurrentRow == null)
             {
                 dgvPagos.DataSource = null;
-                lblPagos.Text = "Pagos de la compra seleccionada";
+                lblPagos.Text = ClsIdioma.T("Pagos de la compra seleccionada");
                 return;
             }
 
@@ -129,11 +130,11 @@ namespace CapaVista
             {
                 int idCompra = Convert.ToInt32(dgvCompras.CurrentRow.Cells["IdCompra"].Value);
                 dgvPagos.DataSource = logica.ObtenerPagosCompra(idCompra);
-                lblPagos.Text = "Pagos de la compra N.º " + idCompra;
+                lblPagos.Text = ClsIdioma.T("Pagos de la compra N.º ") + idCompra;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron obtener los pagos.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron obtener los pagos.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -177,15 +178,15 @@ namespace CapaVista
             }
             if (dgvCompras.Columns.Contains("IdCompra"))
             {
-                dgvCompras.Columns["IdCompra"].HeaderText = "N.º compra";
+                dgvCompras.Columns["IdCompra"].HeaderText = ClsIdioma.T("N.º compra");
             }
             if (dgvCompras.Columns.Contains("CondicionPago"))
             {
-                dgvCompras.Columns["CondicionPago"].HeaderText = "Condición";
+                dgvCompras.Columns["CondicionPago"].HeaderText = ClsIdioma.T("Condición");
             }
             if (dgvCompras.Columns.Contains("FechaVencimiento"))
             {
-                dgvCompras.Columns["FechaVencimiento"].HeaderText = "Vencimiento";
+                dgvCompras.Columns["FechaVencimiento"].HeaderText = ClsIdioma.T("Vencimiento");
                 dgvCompras.Columns["FechaVencimiento"].DefaultCellStyle.Format = "dd/MM/yyyy";
             }
             if (dgvCompras.Columns.Contains("Fecha"))
@@ -194,7 +195,7 @@ namespace CapaVista
             }
             if (dgvCompras.Columns.Contains("EstadoPago"))
             {
-                dgvCompras.Columns["EstadoPago"].HeaderText = "Estado";
+                dgvCompras.Columns["EstadoPago"].HeaderText = ClsIdioma.T("Estado");
             }
             FormatearImportes(dgvCompras, "Total", "Pagado", "Saldo");
 
@@ -215,32 +216,32 @@ namespace CapaVista
         {
             if (dgvPagos.Columns.Contains("IdPagoCompra"))
             {
-                dgvPagos.Columns["IdPagoCompra"].HeaderText = "N.º pago";
+                dgvPagos.Columns["IdPagoCompra"].HeaderText = ClsIdioma.T("N.º pago");
             }
             if (dgvPagos.Columns.Contains("FechaPago"))
             {
-                dgvPagos.Columns["FechaPago"].HeaderText = "Fecha";
+                dgvPagos.Columns["FechaPago"].HeaderText = ClsIdioma.T("Fecha");
                 dgvPagos.Columns["FechaPago"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
             }
             if (dgvPagos.Columns.Contains("MedioPago"))
             {
-                dgvPagos.Columns["MedioPago"].HeaderText = "Medio de pago";
+                dgvPagos.Columns["MedioPago"].HeaderText = ClsIdioma.T("Medio de pago");
             }
             if (dgvPagos.Columns.Contains("RegistradoPor"))
             {
-                dgvPagos.Columns["RegistradoPor"].HeaderText = "Registrado por";
+                dgvPagos.Columns["RegistradoPor"].HeaderText = ClsIdioma.T("Registrado por");
             }
             if (dgvPagos.Columns.Contains("SalioDeCaja"))
             {
-                dgvPagos.Columns["SalioDeCaja"].HeaderText = "Salió de caja";
+                dgvPagos.Columns["SalioDeCaja"].HeaderText = ClsIdioma.T("Salió de caja");
             }
             if (dgvPagos.Columns.Contains("Observacion"))
             {
-                dgvPagos.Columns["Observacion"].HeaderText = "Observación";
+                dgvPagos.Columns["Observacion"].HeaderText = ClsIdioma.T("Observación");
             }
             if (dgvPagos.Columns.Contains("MotivoAnulacion"))
             {
-                dgvPagos.Columns["MotivoAnulacion"].HeaderText = "Motivo anulación";
+                dgvPagos.Columns["MotivoAnulacion"].HeaderText = ClsIdioma.T("Motivo anulación");
             }
             FormatearImportes(dgvPagos, "Monto");
 
@@ -258,7 +259,7 @@ namespace CapaVista
         {
             if (dgvCompras.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione una compra.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione una compra."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -270,7 +271,7 @@ namespace CapaVista
 
             if (saldo <= 0)
             {
-                MessageBox.Show("La compra seleccionada ya está pagada.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La compra seleccionada ya está pagada."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -288,7 +289,7 @@ namespace CapaVista
         {
             if (dgvPagos.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione el pago a anular.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione el pago a anular."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -297,7 +298,7 @@ namespace CapaVista
 
             if (fila.Cells["Estado"].Value?.ToString() == "Anulado")
             {
-                MessageBox.Show("El pago seleccionado ya se encuentra anulado.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("El pago seleccionado ya se encuentra anulado."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -305,19 +306,19 @@ namespace CapaVista
             int idPago = Convert.ToInt32(fila.Cells["IdPagoCompra"].Value);
             decimal monto = Convert.ToDecimal(fila.Cells["Monto"].Value);
 
-            string motivo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese el motivo de la anulación:",
-                "Anular pago", "");
+            string motivo = Microsoft.VisualBasic.Interaction.InputBox(ClsIdioma.T("Ingrese el motivo de la anulación:"),
+                ClsIdioma.T("Anular pago"), "");
 
             if (string.IsNullOrWhiteSpace(motivo))
             {
-                MessageBox.Show("Debe ingresar un motivo para anular el pago.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Debe ingresar un motivo para anular el pago."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DialogResult respuesta = MessageBox.Show("¿Está seguro de anular este pago?\n\n" +
-                "Pago N.º " + idPago + "  $ " + monto.ToString("N2") + "\nMotivo: " + motivo,
-                "Confirmar anulación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de anular este pago?\n\n") +
+                ClsIdioma.T("Pago N.º ") + idPago + "  $ " + monto.ToString("N2") + ClsIdioma.T("\nMotivo: ") + motivo,
+                ClsIdioma.T("Confirmar anulación"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes)
             {
@@ -328,14 +329,14 @@ namespace CapaVista
             {
                 logica.AnularPago(idPago, motivo.Trim(), SesionUsuario.IdUsuario);
 
-                MessageBox.Show("El pago fue anulado correctamente.", "Pago anulado",
+                MessageBox.Show(ClsIdioma.T("El pago fue anulado correctamente."), ClsIdioma.T("Pago anulado"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarCompras();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo anular el pago.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo anular el pago.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

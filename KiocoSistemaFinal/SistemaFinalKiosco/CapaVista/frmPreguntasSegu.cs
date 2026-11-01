@@ -17,6 +17,7 @@ namespace CapaVista
         public frmPreguntasSegu()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
 
         #region Metodos
@@ -26,7 +27,7 @@ namespace CapaVista
                 string.IsNullOrWhiteSpace(txtLibro.Text) ||
                 string.IsNullOrWhiteSpace(txtComida.Text))
             {
-                MessageBox.Show("Debe responder las tres preguntas.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T("Debe responder las tres preguntas."), ClsIdioma.T("Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
             }
@@ -46,7 +47,7 @@ namespace CapaVista
 
             if (!ok)
             {
-                MessageBox.Show("No se pudieron guardar las preguntas.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ClsIdioma.T("No se pudieron guardar las preguntas."), ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return false;
             }
@@ -60,7 +61,7 @@ namespace CapaVista
         {
             if (GuardarPreguntas())
             {
-                MessageBox.Show( "Las preguntas de seguridad se guardaron correctamente.","Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show( ClsIdioma.T("Las preguntas de seguridad se guardaron correctamente."),ClsIdioma.T("Información"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // El login sigue con el menú principal.
                 this.DialogResult = DialogResult.OK;

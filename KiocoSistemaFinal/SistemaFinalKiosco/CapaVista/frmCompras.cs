@@ -29,6 +29,7 @@ namespace CapaVista
         public frmCompras()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             ConfigurarGrid();
             CargarNombresProveedores();
@@ -77,7 +78,7 @@ namespace CapaVista
             {
                 comprasCargadas = null;
 
-                MessageBox.Show("No se pudieron cargar las compras.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las compras.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -115,7 +116,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron mostrar las compras.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron mostrar las compras.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -135,7 +136,7 @@ namespace CapaVista
             {
                 nombresProveedores = new List<string>();
 
-                MessageBox.Show("No se pudieron cargar los proveedores para el buscador.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores para el buscador.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -184,9 +185,9 @@ namespace CapaVista
 
             if (dataGridView1.Rows.Count == 0)
             {
-                MessageBox.Show("\"" + proveedorSeleccionado + "\" no tiene compras entre el " +
-                    dateTimePicker1.Value.ToString("dd/MM/yyyy") + " y el " + dateTimePicker2.Value.ToString("dd/MM/yyyy") +
-                    ".\n\nAmplíe las fechas Desde y Hasta para ver sus compras.", "Sin compras",
+                MessageBox.Show("\"" + proveedorSeleccionado + ClsIdioma.T("\" no tiene compras entre el ") +
+                    dateTimePicker1.Value.ToString("dd/MM/yyyy") + ClsIdioma.T(" y el ") + dateTimePicker2.Value.ToString("dd/MM/yyyy") +
+                    ClsIdioma.T(".\n\nAmplíe las fechas Desde y Hasta para ver sus compras."), ClsIdioma.T("Sin compras"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 dateTimePicker1.Focus();
@@ -218,7 +219,7 @@ namespace CapaVista
         {
             if (dataGridView1.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Seleccione una compra para ver el detalle.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione una compra para ver el detalle."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -228,7 +229,7 @@ namespace CapaVista
 
             if (fila.Tag == null)
             {
-                MessageBox.Show("No se pudo obtener el identificador de la compra.", "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el identificador de la compra."), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
@@ -377,7 +378,7 @@ namespace CapaVista
         {
             if (dataGridView1.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Seleccione una compra para anular.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione una compra para anular."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -387,7 +388,7 @@ namespace CapaVista
 
             if (fila.Tag == null)
             {
-                MessageBox.Show("No se pudo obtener el identificador de la compra.", "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el identificador de la compra."), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
@@ -397,7 +398,7 @@ namespace CapaVista
 
             if (estado == "Anulada")
             {
-                MessageBox.Show("La compra seleccionada ya se encuentra anulada.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La compra seleccionada ya se encuentra anulada."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return;
@@ -405,17 +406,17 @@ namespace CapaVista
 
             int idCompra = Convert.ToInt32(fila.Tag);
 
-            string motivo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese el motivo de la anulación:", "Anular compra", "");
+            string motivo = Microsoft.VisualBasic.Interaction.InputBox(ClsIdioma.T("Ingrese el motivo de la anulación:"), ClsIdioma.T("Anular compra"), "");
 
             if (string.IsNullOrWhiteSpace(motivo))
             {
-                MessageBox.Show("Debe ingresar un motivo para anular la compra.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Debe ingresar un motivo para anular la compra."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
 
-            DialogResult respuesta = MessageBox.Show("¿Está seguro de anular esta compra?\n\nMotivo: " + motivo, "Confirmar anulación",
+            DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de anular esta compra?\n\nMotivo: ") + motivo, ClsIdioma.T("Confirmar anulación"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes)
@@ -427,14 +428,14 @@ namespace CapaVista
             {
                 logica.AnularCompra(idCompra, motivo);
 
-                MessageBox.Show("La compra fue anulada correctamente.", "Compra anulada",
+                MessageBox.Show(ClsIdioma.T("La compra fue anulada correctamente."), ClsIdioma.T("Compra anulada"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarCompras();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo anular la compra.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo anular la compra.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

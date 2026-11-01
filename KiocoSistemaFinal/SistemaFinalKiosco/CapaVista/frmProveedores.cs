@@ -37,6 +37,7 @@ namespace CapaVista
         public frmProveedores()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             AplicarPermisos();
             CargarProveedores();
@@ -69,7 +70,7 @@ namespace CapaVista
             {
                 tablaProveedores = null;
 
-                MessageBox.Show("No se pudieron cargar los proveedores.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -145,15 +146,15 @@ namespace CapaVista
 
             if (!idProveedorSeleccionado.HasValue)
             {
-                lblCantidad.Text = "Busque un proveedor arriba para ver sus datos.";
+                lblCantidad.Text = ClsIdioma.T("Busque un proveedor arriba para ver sus datos.");
             }
             else if (dtgProveedores.Rows.Count == 0)
             {
-                lblCantidad.Text = "El proveedor elegido está inactivo y oculto por el filtro.";
+                lblCantidad.Text = ClsIdioma.T("El proveedor elegido está inactivo y oculto por el filtro.");
             }
             else
             {
-                lblCantidad.Text = dtgProveedores.Rows.Count == 1 ? "1 sucursal" : dtgProveedores.Rows.Count + " sucursales";
+                lblCantidad.Text = dtgProveedores.Rows.Count == 1 ? ClsIdioma.T("1 sucursal") : dtgProveedores.Rows.Count + ClsIdioma.T(" sucursales");
             }
 
             MostrarDatosFilaActual();
@@ -166,7 +167,7 @@ namespace CapaVista
             if (fila == null)
             {
                 txtObsevaciones.Clear();
-                btnDescontinuar.Text = "Descontinuar";
+                btnDescontinuar.Text = ClsIdioma.T("Descontinuar");
                 ActualizarBotones();
                 return;
             }
@@ -175,7 +176,7 @@ namespace CapaVista
 
             string estado = fila.Cells["clnEstado"].Value?.ToString() ?? "";
 
-            btnDescontinuar.Text = estado == "Inactivo" ? "Activar" : "Descontinuar";
+            btnDescontinuar.Text = estado == "Inactivo" ? ClsIdioma.T("Activar") : ClsIdioma.T("Descontinuar");
 
             ActualizarBotones();
         }
@@ -285,7 +286,7 @@ namespace CapaVista
 
             if (!idProveedor.HasValue)
             {
-                MessageBox.Show("Seleccione un proveedor para modificar.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un proveedor para modificar."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -432,7 +433,7 @@ namespace CapaVista
 
             if (!idProveedor.HasValue || dtgProveedores.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione un proveedor.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un proveedor."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -442,11 +443,11 @@ namespace CapaVista
             bool activar = estado == "Inactivo";
 
             string pregunta = activar
-                ? "¿Desea volver a activar al proveedor " + razonSocial + "?"
-                : "¿Está seguro de descontinuar al proveedor " + razonSocial + "?\n\nNo va a aparecer al cargar compras nuevas.";
+                ? ClsIdioma.T("¿Desea volver a activar al proveedor ") + razonSocial + "?"
+                : ClsIdioma.T("¿Está seguro de descontinuar al proveedor ") + razonSocial + ClsIdioma.T("?\n\nNo va a aparecer al cargar compras nuevas.");
 
             DialogResult resultado = MessageBox.Show(pregunta,
-                activar ? "Activar proveedor" : "Descontinuar proveedor",
+                activar ? ClsIdioma.T("Activar proveedor") : ClsIdioma.T("Descontinuar proveedor"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (resultado != DialogResult.Yes)
@@ -467,8 +468,8 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show((activar ? "No se pudo activar el proveedor." : "No se pudo descontinuar el proveedor.") +
-                    "\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show((activar ? ClsIdioma.T("No se pudo activar el proveedor.") : ClsIdioma.T("No se pudo descontinuar el proveedor.")) +
+                    "\n\n" + ex.Message, ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             CargarProveedores(idProveedor.Value);

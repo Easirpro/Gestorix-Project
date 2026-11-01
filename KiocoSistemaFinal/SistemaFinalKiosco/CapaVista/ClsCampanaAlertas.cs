@@ -58,7 +58,7 @@ namespace CapaVista
         // Nombre de cada tipo de alerta, el mismo que usa la campana (lo usa también frmAlertas).
         public static string TituloDe(TipoAlerta tipo)
         {
-            return Titulos.TryGetValue(tipo, out string? titulo) ? titulo : tipo.ToString();
+            return ClsIdioma.T(Titulos.TryGetValue(tipo, out string? titulo) ? titulo : tipo.ToString());
         }
 
         // menu: barra del menú principal; antesDe: ítem que queda a la derecha de la campana (cerrar sesión);
@@ -88,6 +88,9 @@ namespace CapaVista
 
             temporizador = new System.Windows.Forms.Timer { Interval = MINUTOS_ACTUALIZACION * 60 * 1000 };
             temporizador.Tick += (sender, e) => Actualizar();
+
+            // Al cambiar de idioma se vuelve a armar la lista con los textos en el idioma nuevo.
+            ClsIdioma.IdiomaCambiado += Actualizar;
 
             // Al volver de otra pantalla (por ejemplo, después de recibir una compra) se refresca.
             formulario.Activated += (sender, e) =>
@@ -125,10 +128,10 @@ namespace CapaVista
                 // No se interrumpe el trabajo con un cartel: la campana muestra que no se pudo cargar.
                 Alertas = new List<ClsAlertaEntidad>();
                 campana.DropDownItems.Clear();
-                campana.DropDownItems.Add(new ToolStripMenuItem("No se pudieron cargar las alertas") { Enabled = false, ToolTipText = ex.Message });
+                campana.DropDownItems.Add(new ToolStripMenuItem(ClsIdioma.T("No se pudieron cargar las alertas")) { Enabled = false, ToolTipText = ex.Message });
                 AgregarActualizar();
                 campana.Image = DibujarCampana(0, false);
-                campana.ToolTipText = "No se pudieron cargar las alertas";
+                campana.ToolTipText = ClsIdioma.T("No se pudieron cargar las alertas");
                 return;
             }
 
@@ -136,14 +139,14 @@ namespace CapaVista
 
             campana.Image = DibujarCampana(Alertas.Count, urgentes > 0);
             campana.ToolTipText = Alertas.Count == 0
-                ? "No hay alertas"
-                : Alertas.Count + (Alertas.Count == 1 ? " alerta" : " alertas") + (urgentes > 0 ? " (" + urgentes + (urgentes == 1 ? " urgente)" : " urgentes)") : "");
+                ? ClsIdioma.T("No hay alertas")
+                : Alertas.Count + (Alertas.Count == 1 ? ClsIdioma.T(" alerta") : ClsIdioma.T(" alertas")) + (urgentes > 0 ? " (" + urgentes + (urgentes == 1 ? ClsIdioma.T(" urgente)") : ClsIdioma.T(" urgentes)")) : "");
         }
         private void ConstruirLista()
         {
             campana.DropDownItems.Clear();
 
-            ToolStripLabel titulo = new ToolStripLabel("Alertas")
+            ToolStripLabel titulo = new ToolStripLabel(ClsIdioma.T("Alertas"))
             {
                 Font = new Font(SystemFonts.MenuFont, FontStyle.Bold),
                 Padding = new Padding(4, 4, 4, 2)
@@ -153,7 +156,7 @@ namespace CapaVista
 
             if (Alertas.Count == 0)
             {
-                campana.DropDownItems.Add(new ToolStripMenuItem("No hay alertas. Todo en orden.")
+                campana.DropDownItems.Add(new ToolStripMenuItem(ClsIdioma.T("No hay alertas. Todo en orden."))
                 {
                     Enabled = false,
                     Image = DibujarPunto(Color.SeaGreen)
@@ -171,11 +174,11 @@ namespace CapaVista
                 List<ClsAlertaEntidad> lista = grupo.OrderByDescending(a => a.Urgente).ToList();
                 bool urgente = lista.Any(a => a.Urgente);
 
-                List<string> renglones = new List<string> { Titulos[grupo.Key] + " (" + lista.Count + ")" };
+                List<string> renglones = new List<string> { TituloDe(grupo.Key) + " (" + lista.Count + ")" };
                 renglones.AddRange(lista.Take(DESCRIPCIONES_POR_GRUPO).Select(a => "    " + Recortar(a.Descripcion)));
 
                 if (lista.Count > DESCRIPCIONES_POR_GRUPO)
-                    renglones.Add("    y " + (lista.Count - DESCRIPCIONES_POR_GRUPO) + " más…");
+                    renglones.Add(ClsIdioma.T("    y ") + (lista.Count - DESCRIPCIONES_POR_GRUPO) + ClsIdioma.T(" más…"));
 
                 ToolStripMenuItem item = new ToolStripMenuItem(string.Join(Environment.NewLine, renglones))
                 {
@@ -183,7 +186,7 @@ namespace CapaVista
                     ImageAlign = ContentAlignment.TopCenter,
                     TextAlign = ContentAlignment.MiddleLeft,
                     ToolTipText = string.Join(Environment.NewLine, lista.Take(15).Select(a => a.Descripcion))
-                        + (lista.Count > 15 ? Environment.NewLine + "y " + (lista.Count - 15) + " más…" : "")
+                        + (lista.Count > 15 ? Environment.NewLine + ClsIdioma.T("y ") + (lista.Count - 15) + ClsIdioma.T(" más…") : "")
                 };
 
                 TipoAlerta tipo = grupo.Key;
@@ -200,7 +203,7 @@ namespace CapaVista
 
             if (VerTodas != null)
             {
-                ToolStripMenuItem verTodas = new ToolStripMenuItem("Ver todas las alertas…")
+                ToolStripMenuItem verTodas = new ToolStripMenuItem(ClsIdioma.T("Ver todas las alertas…"))
                 {
                     Font = new Font(SystemFonts.MenuFont, FontStyle.Bold)
                 };
@@ -208,7 +211,7 @@ namespace CapaVista
                 campana.DropDownItems.Add(verTodas);
             }
 
-            ToolStripMenuItem actualizar = new ToolStripMenuItem("Actualizar");
+            ToolStripMenuItem actualizar = new ToolStripMenuItem(ClsIdioma.T("Actualizar"));
             actualizar.Click += (sender, e) => Actualizar();
             campana.DropDownItems.Add(actualizar);
         }
@@ -216,7 +219,7 @@ namespace CapaVista
         {
             if (PuedeResolver != null && !PuedeResolver(tipo))
             {
-                MessageBox.Show(MENSAJE_SIN_PERMISO, "Alertas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T(MENSAJE_SIN_PERMISO), ClsIdioma.T("Alertas"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -295,6 +298,7 @@ namespace CapaVista
         }
         public void Dispose()
         {
+            ClsIdioma.IdiomaCambiado -= Actualizar;
             temporizador.Dispose();
         }
     }

@@ -19,6 +19,7 @@ namespace CapaVista
         public FrmRecuperarPass(int idUsuario)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.idUsuario = idUsuario;
         }
@@ -61,7 +62,7 @@ namespace CapaVista
         {
             if (string.IsNullOrWhiteSpace(txtCorreo.Text) || string.IsNullOrWhiteSpace(txtIngCodigo.Text))
             {
-                MessageBox.Show(" Complete ambos campos. ", " Campos incompletos ",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T(" Complete ambos campos. "), ClsIdioma.T(" Campos incompletos "),MessageBoxButtons.OK,MessageBoxIcon.Warning);
                 return;
             }
 
@@ -73,32 +74,32 @@ namespace CapaVista
             switch (resultado)
             {
                 case ResultadoCambioPassword.Correcto:
-                    MessageBox.Show("La contraseña se cambió correctamente.", "Contraseña actualizada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(ClsIdioma.T("La contraseña se cambió correctamente."), ClsIdioma.T("Contraseña actualizada"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                     break;
 
                 case ResultadoCambioPassword.PasswordNoCoinciden:
-                    MessageBox.Show("Las contraseñas no coinciden.", "Contraseña no válida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ClsIdioma.T("Las contraseñas no coinciden."), ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
 
                 case ResultadoCambioPassword.PasswordNoCumpleRequisitos:
-                    MessageBox.Show(ClsReglasPassword.Requisitos, "Contraseña no válida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ClsReglasPassword.Requisitos, ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtCorreo.Focus();
                     txtCorreo.SelectAll();
                     break;
 
                 case ResultadoCambioPassword.PasswordIgualAnterior:
-                    MessageBox.Show("La contraseña nueva debe ser distinta de la actual.", "Contraseña no válida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ClsIdioma.T("La contraseña nueva debe ser distinta de la actual."), ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
 
                 case ResultadoCambioPassword.PasswordUsadaRecientemente:
-                    MessageBox.Show("No puede utilizar ninguna de sus últimas 3 contraseñas.", "Contraseña no válida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ClsIdioma.T("No puede utilizar ninguna de sus últimas 3 contraseñas."), ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
 
                 default:
-                    MessageBox.Show("No se pudo cambiar la contraseña.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ClsIdioma.T("No se pudo cambiar la contraseña."), ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
         }

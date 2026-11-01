@@ -84,6 +84,7 @@
             tpgContacto = new TabPage();
             label21 = new Label();
             cmbRol = new ComboBox();
+            lblAyudaRol = new Label();
             chkHabilitarEdicion = new CheckBox();
             tpgDatosUsuario.SuspendLayout();
             tpgDatosPersonales.SuspendLayout();
@@ -409,22 +410,23 @@
             // 
             // btnCrear
             // 
-            btnCrear.Location = new Point(325, 498);
+            btnCrear.Location = new Point(266, 498);
             btnCrear.Name = "btnCrear";
-            btnCrear.Size = new Size(75, 23);
+            btnCrear.Size = new Size(125, 30);
             btnCrear.TabIndex = 21;
-            btnCrear.Text = "GUARDAR";
+            btnCrear.Text = "CREAR EMPLEADO";
             btnCrear.UseVisualStyleBackColor = true;
             btnCrear.Click += btnCrear_Click;
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(167, 498);
+            btnVolver.Location = new Point(12, 498);
             btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(75, 23);
+            btnVolver.Size = new Size(80, 30);
             btnVolver.TabIndex = 19;
             btnVolver.Text = "VOLVER";
             btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
             // 
             // label19
             // 
@@ -446,9 +448,9 @@
             // 
             // btnNuevo
             // 
-            btnNuevo.Location = new Point(248, 498);
+            btnNuevo.Location = new Point(180, 498);
             btnNuevo.Name = "btnNuevo";
-            btnNuevo.Size = new Size(71, 23);
+            btnNuevo.Size = new Size(80, 30);
             btnNuevo.TabIndex = 20;
             btnNuevo.Text = "NUEVO";
             btnNuevo.UseVisualStyleBackColor = true;
@@ -456,11 +458,11 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(68, 498);
+            btnModificar.Location = new Point(397, 498);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(93, 23);
+            btnModificar.Size = new Size(127, 30);
             btnModificar.TabIndex = 18;
-            btnModificar.Text = "MODIFICAR";
+            btnModificar.Text = "GUARDAR CAMBIOS";
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
             // 
@@ -477,14 +479,14 @@
             // btnPermisos
             // 
             btnPermisos.BackColor = Color.Transparent;
-            btnPermisos.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnPermisos.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnPermisos.Image = (Image)resources.GetObject("btnPermisos.Image");
             btnPermisos.ImageAlign = ContentAlignment.TopCenter;
             btnPermisos.Location = new Point(405, 163);
             btnPermisos.Name = "btnPermisos";
             btnPermisos.Size = new Size(124, 102);
             btnPermisos.TabIndex = 34;
-            btnPermisos.Text = "Permisos";
+            btnPermisos.Text = "Permisos del rol";
             btnPermisos.TextAlign = ContentAlignment.BottomCenter;
             btnPermisos.UseVisualStyleBackColor = false;
             btnPermisos.Click += btnPermisos_Click;
@@ -620,6 +622,16 @@
             cmbRol.Size = new Size(124, 23);
             cmbRol.TabIndex = 37;
             // 
+            // 
+            // lblAyudaRol
+            // 
+            lblAyudaRol.Font = new Font("Segoe UI", 8F);
+            lblAyudaRol.ForeColor = SystemColors.GrayText;
+            lblAyudaRol.Location = new Point(405, 322);
+            lblAyudaRol.Name = "lblAyudaRol";
+            lblAyudaRol.Size = new Size(124, 80);
+            lblAyudaRol.TabIndex = 39;
+            lblAyudaRol.Text = "Los permisos dependen del rol: cambiarlos afecta a todos los empleados con ese rol.";
             // chkHabilitarEdicion
             // 
             chkHabilitarEdicion.AutoSize = true;
@@ -638,6 +650,7 @@
             ClientSize = new Size(536, 550);
             Controls.Add(chkHabilitarEdicion);
             Controls.Add(cmbRol);
+            Controls.Add(lblAyudaRol);
             Controls.Add(label21);
             Controls.Add(tpgDatosUsuario);
             Controls.Add(btnPermisos);
@@ -738,6 +751,7 @@
         private TabPage tpgContacto;
         private Label label21;
         private ComboBox cmbRol;
+        private Label lblAyudaRol;
         private CheckBox chkHabilitarEdicion;
     }
 }

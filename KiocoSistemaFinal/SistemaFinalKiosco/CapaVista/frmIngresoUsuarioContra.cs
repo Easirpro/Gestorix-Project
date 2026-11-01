@@ -17,13 +17,14 @@ namespace CapaVista
         public frmIngresoUsuarioContra()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
 
         private void btnValidarUsuario_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtIngresoUsuario.Text))
             {
-                MessageBox.Show("Ingrese un usuario.");
+                MessageBox.Show(ClsIdioma.T("Ingrese un usuario."));
                 return;
             }
 
@@ -35,15 +36,15 @@ namespace CapaVista
             // para no revelar qué usuarios existen.
             if (idUsuario == 0 || !new ClsPreguntaSeguridadLogica().UsuarioTienePreguntas(idUsuario))
             {
-                MessageBox.Show("No es posible recuperar la contraseña con los datos ingresados.\n" +
-                    "Verifique el usuario o contacte al administrador.", "Recuperar contraseña",
+                MessageBox.Show(ClsIdioma.T("No es posible recuperar la contraseña con los datos ingresados.\n") +
+                    ClsIdioma.T("Verifique el usuario o contacte al administrador."), ClsIdioma.T("Recuperar contraseña"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (new ClsPreguntaSeguridadLogica().RecuperoBloqueado(idUsuario))
             {
-                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, "Recuperar contraseña",
+                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, ClsIdioma.T("Recuperar contraseña"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }

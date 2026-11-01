@@ -20,11 +20,28 @@ namespace CapaVista
         private bool actualizandoArbol = false;
         private HashSet<TreeNode> nodosBloqueados = new HashSet<TreeNode>();
 
+        // Abierto desde Carga de empleados con el rol del empleado: no se puede cambiar de rol ni crear o borrar roles.
+        private bool soloEseRol = false;
+        // Hay tildes cambiados que todavía no se guardaron.
+        private bool hayCambios = false;
+        // Rol que se está mostrando (para volver a él si el usuario no quiere perder los cambios).
+        private int idRolActual = 0;
+        // Evita preguntar mientras se vuelve a elegir el rol anterior por código.
+        private bool cambiandoRol = false;
+
         public frmPermisos()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.Load += frmPermisos_Load;
+            this.FormClosing += frmPermisos_FormClosing;
+
+            // Un solo botón para salir: Cancelar pregunta si hay cambios sin guardar. Guardar guarda y vuelve.
+            btnSalir.Visible = false;
+            btnCancelar.Bounds = btnSalir.Bounds;   // Cancelar ocupa el lugar de Salir (a la derecha)
+            btnGuardar.Text = ClsIdioma.T("Guardar y volver");
+            btnGuardar.SetBounds(btnCancelar.Left - 148, btnCancelar.Top, 140, btnCancelar.Height);
 
             treePermisos.BeforeCheck += treePermisos_BeforeCheck;
             treePermisos.AfterCheck += treePermisos_AfterCheck;
@@ -33,9 +50,11 @@ namespace CapaVista
             treePermisos.DrawNode += treePermisos_DrawNode;
         }
         // Abre con ese rol seleccionado (por ejemplo, el del empleado que se está viendo).
-        public frmPermisos(int idRol) : this()
+        // soloEseRol: no deja cambiar de rol (se edita el rol del empleado, no otro por error).
+        public frmPermisos(int idRol, bool soloEseRol = false) : this()
         {
             idRolInicial = idRol;
+            this.soloEseRol = soloEseRol;
         }
 
         // Este formulario solo edita los permisos de los roles; el rol de cada empleado se elige
@@ -57,6 +76,72 @@ namespace CapaVista
             {
                 lstRoles.SelectedValue = idRolInicial.Value;
                 lstRoles_SelectedIndexChanged(lstRoles, EventArgs.Empty);
+            }
+
+            if (soloEseRol && idRolInicial.HasValue)
+            {
+                // Se ve la lista de roles, pero no se puede cambiar: se edita el rol del empleado.
+                lstRoles.Enabled = false;
+                btnNuevoRol.Enabled = false;
+                btnEliminarRol.Enabled = false;
+            }
+
+            ActualizarTitulo();
+        }
+        // Título con el rol que se edita y a cuántos empleados activos afecta.
+        private void ActualizarTitulo()
+        {
+            if (lstRoles.SelectedIndex == -1 || !int.TryParse(lstRoles.SelectedValue?.ToString(), out int idRol))
+            {
+                Text = ClsIdioma.T("Permisos de los roles");
+                return;
+            }
+
+            string nombre = lstRoles.Text;
+            int cantidad = 0;
+
+            try
+            {
+                cantidad = new CapaLogica.ClsRol().ContarUsuariosPorRol(idRol);
+            }
+            catch
+            {
+                // Si no se puede contar, el título queda sin la cantidad.
+                cantidad = -1;
+            }
+
+            bool ingles = ClsIdioma.Ingles;
+            string empleados = ingles
+                ? cantidad + (cantidad == 1 ? " employee" : " employees")
+                : cantidad + (cantidad == 1 ? " empleado" : " empleados");
+
+            Text = cantidad < 0
+                ? (ingles ? "Permissions of role " : "Permisos del rol ") + nombre
+                : (ingles ? "Permissions of role " + nombre + ": affects " : "Permisos del rol " + nombre + ": afecta a ") + empleados;
+
+            gpbPermisos.Text = (ingles ? "PERMISSIONS OF ROLE " : "PERMISOS DEL ROL ") + nombre.ToUpper() +
+                (cantidad < 0 ? "" : (ingles ? "  (affects " : "  (afecta a ") + empleados + ")");
+        }
+        // Pregunta si se pueden descartar los cambios sin guardar. true = seguir.
+        private bool ConfirmarDescartarCambios()
+        {
+            if (!hayCambios)
+            {
+                return true;
+            }
+
+            DialogResult respuesta = MessageBox.Show(
+                ClsIdioma.T("Tenés cambios sin guardar en los permisos del rol ") + lstRoles.Text + ClsIdioma.T(".\n\n¿Querés descartarlos?"),
+                ClsIdioma.T("Cambios sin guardar"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            return respuesta == DialogResult.Yes;
+        }
+        private void frmPermisos_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            // Guardar y volver ya guardó; cualquier otra forma de cerrar pregunta si hay cambios.
+            if (DialogResult != DialogResult.OK && !ConfirmarDescartarCambios())
+            {
+                e.Cancel = true;
             }
         }
 
@@ -201,43 +286,43 @@ namespace CapaVista
             switch (numeroSeccion)
             {
                 case 1:
-                    return "ARTÍCULOS";
+                    return ClsIdioma.T("ARTÍCULOS");
 
                 case 2:
-                    return "VENTAS";
+                    return ClsIdioma.T("VENTAS");
 
                 case 3:
-                    return "COMPRAS";
+                    return ClsIdioma.T("COMPRAS");
 
                 case 4:
-                    return "PROVEEDORES";
+                    return ClsIdioma.T("PROVEEDORES");
 
                 case 5:
-                    return "LISTADOS";
+                    return ClsIdioma.T("LISTADOS");
 
                 case 6:
-                    return "INFORMES";
+                    return ClsIdioma.T("INFORMES");
 
                 case 7:
-                    return "CAJA";
+                    return ClsIdioma.T("CAJA");
 
                 case 8:
-                    return "AJUSTES";
+                    return ClsIdioma.T("AJUSTES");
 
                 case 9:
-                    return "AYUDA";
+                    return ClsIdioma.T("AYUDA");
 
                 case 10:
-                    return "EMPLEADOS";
+                    return ClsIdioma.T("EMPLEADOS");
 
                 case 11:
-                    return "ALARMAS";
+                    return ClsIdioma.T("ALARMAS");
 
                 case 12:
-                    return "DATOS SENSIBLES";
+                    return ClsIdioma.T("DATOS SENSIBLES");
 
                 default:
-                    return "SECCIÓN";
+                    return ClsIdioma.T("SECCIÓN");
             }
         }
         private List<int> ObtenerPermisosSeleccionados()
@@ -321,6 +406,9 @@ namespace CapaVista
                 return;
             }
 
+            // Tilde cambiado por el usuario: queda pendiente de guardar.
+            hayCambios = true;
+
             actualizandoArbol = true;
 
             try
@@ -360,15 +448,15 @@ namespace CapaVista
             DataRow fila = filas[0];
 
             lblPermisoSeleccionado.Text =
-                "Permiso seleccionado: " + fila["Nombre"].ToString();
+                ClsIdioma.T("Permiso seleccionado: ") + fila["Nombre"].ToString();
 
             lblDescripcion.Text =
-                "Descripción:\r\n" + fila["Descripcion"].ToString();
+                ClsIdioma.T("Descripción:\r\n") + fila["Descripcion"].ToString();
 
             lblEstado.Text =
-                "Estado del permiso:\r\n" +
-                "Asignado al rol: " +
-                (nodo.Checked ? "SÍ" : "NO");
+                ClsIdioma.T("Estado del permiso:\r\n") +
+                ClsIdioma.T("Asignado al rol: ") +
+                (nodo.Checked ? ClsIdioma.T("SÍ") : "NO");
         }
         private void AplicarBloqueoSegunEstado(TreeNode nodo)
         {
@@ -456,6 +544,20 @@ namespace CapaVista
                 return;
             }
 
+            if (cambiandoRol)
+            {
+                return;
+            }
+
+            // Si se cambia de rol con tildes sin guardar, se pregunta; si no se quieren perder, se vuelve al rol anterior.
+            if (idRol != idRolActual && idRolActual != 0 && !ConfirmarDescartarCambios())
+            {
+                cambiandoRol = true;
+                lstRoles.SelectedValue = idRolActual;
+                cambiandoRol = false;
+                return;
+            }
+
             CapaLogica.ClsRol rol = new CapaLogica.ClsRol();
 
             List<int> permisos = rol.ObtenerPermisos(idRol);
@@ -501,6 +603,10 @@ namespace CapaVista
                 actualizandoArbol = false;
             }
 
+            idRolActual = idRol;
+            hayCambios = false;
+            ActualizarTitulo();
+
             treePermisos.Invalidate();
 
         }
@@ -509,14 +615,14 @@ namespace CapaVista
             if (lstRoles.SelectedIndex == -1)
             {
                 MessageBox.Show(
-                    "Seleccione un rol.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ClsIdioma.T("Seleccione un rol."), ClsIdioma.T("Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
 
             if (!int.TryParse(lstRoles.SelectedValue?.ToString(), out int idRol))
             {
-                MessageBox.Show("No se pudo obtener el rol seleccionado.", "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el rol seleccionado."), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
@@ -530,18 +636,31 @@ namespace CapaVista
             {
                 rol.GuardarPermisos(idRol, permisos);
 
-                MessageBox.Show("Los permisos del rol se guardaron correctamente.\n\n" +
-                    "Los usuarios de ese rol los verán la próxima vez que inicien sesión.", "Permisos",
+                hayCambios = false;
+
+                MessageBox.Show(ClsIdioma.T("Se guardaron los permisos del rol ") + lstRoles.Text + ".\n\n" +
+                    ClsIdioma.T("Los empleados con ese rol los verán la próxima vez que inicien sesión."), ClsIdioma.T("Permisos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Guardar y volver: se cierra y vuelve a la pantalla anterior.
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron guardar los permisos.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron guardar los permisos.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnNuevoRol_Click(object sender, EventArgs e)
         {
+            if (!ConfirmarDescartarCambios())
+            {
+                return;
+            }
+
+            hayCambios = false;
+
             using (frmNuevoRol formulario = new frmNuevoRol())
             {
                 if (formulario.ShowDialog() == DialogResult.OK)
@@ -559,7 +678,7 @@ namespace CapaVista
         {
             if (lstRoles.SelectedIndex == -1)
             {
-                MessageBox.Show("Seleccione un rol para eliminar.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un rol para eliminar."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -567,7 +686,7 @@ namespace CapaVista
 
             if (!int.TryParse(lstRoles.SelectedValue?.ToString(), out int idRol))
             {
-                MessageBox.Show("No se pudo obtener el rol seleccionado.", "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el rol seleccionado."), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
@@ -576,15 +695,20 @@ namespace CapaVista
             // Los 4 roles principales no se pueden eliminar
             if (idRol >= 1 && idRol <= 4)
             {
-                MessageBox.Show("Los roles principales del sistema no se pueden eliminar.", "Rol protegido",
+                MessageBox.Show(ClsIdioma.T("Los roles principales del sistema no se pueden eliminar."), ClsIdioma.T("Rol protegido"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
 
+            if (!ConfirmarDescartarCambios())
+            {
+                return;
+            }
+
             string nombreRol = lstRoles.Text;
 
-            DialogResult resultado = MessageBox.Show("¿Está seguro de eliminar el rol \"" + nombreRol + "\"?", "Eliminar Rol",
+            DialogResult resultado = MessageBox.Show(ClsIdioma.T("¿Está seguro de eliminar el rol \"") + nombreRol + "\"?", ClsIdioma.T("Eliminar Rol"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (resultado != DialogResult.Yes)
@@ -598,7 +722,10 @@ namespace CapaVista
                 CapaLogica.ClsRol rol = new CapaLogica.ClsRol();
                 rol.EliminarRol(idRol);
 
-                MessageBox.Show("El rol se eliminó correctamente.", "Eliminar Rol",
+                hayCambios = false;
+                idRolActual = 0;
+
+                MessageBox.Show(ClsIdioma.T("El rol se eliminó correctamente."), ClsIdioma.T("Eliminar Rol"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarRoles();
@@ -610,7 +737,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar el rol.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo eliminar el rol.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

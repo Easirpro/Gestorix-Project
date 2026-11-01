@@ -25,6 +25,7 @@ namespace CapaVista
         public frmInformeCobro(decimal total, DataGridView carrito)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             totalVenta = total;
             carritoVenta = carrito;
@@ -60,7 +61,7 @@ namespace CapaVista
 
             if (restante <= 0)
             {
-                MessageBox.Show("La venta ya está completamente pagada.", "Agregar pago",
+                MessageBox.Show(ClsIdioma.T("La venta ya está completamente pagada."), ClsIdioma.T("Agregar pago"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return;
@@ -68,7 +69,7 @@ namespace CapaVista
 
             if (!decimal.TryParse(txtMontoRecibido.Text, out decimal monto))
             {
-                MessageBox.Show("Ingrese un monto válido.", "Monto inválido",
+                MessageBox.Show(ClsIdioma.T("Ingrese un monto válido."), ClsIdioma.T("Monto inválido"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtMontoRecibido.Focus();
@@ -77,7 +78,7 @@ namespace CapaVista
 
             if (monto <= 0)
             {
-                MessageBox.Show("El monto debe ser mayor que cero.", "Monto inválido",
+                MessageBox.Show(ClsIdioma.T("El monto debe ser mayor que cero."), ClsIdioma.T("Monto inválido"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtMontoRecibido.SelectAll();
@@ -109,7 +110,7 @@ namespace CapaVista
 
                 if (yaHayPagos && monto < restante)
                 {
-                    MessageBox.Show($"El importe no alcanza para completar el pago con este método.\n\n" + $"Saldo pendiente: $ {restante:N2}\n" + $"Importe ingresado: $ {monto:N2}", "Importe insuficiente",
+                    MessageBox.Show((ClsIdioma.Ingles ? $"The amount is not enough to complete the payment with this method.\n\n" : $"El importe no alcanza para completar el pago con este método.\n\n") + (ClsIdioma.Ingles ? $"Outstanding balance: $ {restante:N2}\n" : $"Saldo pendiente: $ {restante:N2}\n") + (ClsIdioma.Ingles ? $"Amount entered: $ {monto:N2}" : $"Importe ingresado: $ {monto:N2}"), ClsIdioma.T("Importe insuficiente"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtMontoRecibido.SelectAll();
@@ -119,7 +120,7 @@ namespace CapaVista
 
                 if (monto > restante)
                 {
-                    MessageBox.Show($"El monto supera el saldo restante.\n\n" + $"Saldo pendiente: $ {restante:N2}", "Monto inválido",
+                    MessageBox.Show((ClsIdioma.Ingles ? $"The amount exceeds the remaining balance.\n\n" : $"El monto supera el saldo restante.\n\n") + (ClsIdioma.Ingles ? $"Outstanding balance: $ {restante:N2}" : $"Saldo pendiente: $ {restante:N2}"), ClsIdioma.T("Monto inválido"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtMontoRecibido.SelectAll();
@@ -160,7 +161,7 @@ namespace CapaVista
             }
 
             throw new Exception(
-                $"No se encontró el método de pago '{metodoPago}' en la base de datos.");
+                (ClsIdioma.Ingles ? $"The payment method '{metodoPago}' was not found in the database." : $"No se encontró el método de pago '{metodoPago}' en la base de datos."));
         }
         private void CalcularVuelto()
         {
@@ -250,7 +251,7 @@ namespace CapaVista
             if (metodosUtilizados.Count >= 2 &&
                 !metodosUtilizados.Contains(metodoPago))
             {
-                MessageBox.Show("Solo se permiten dos métodos de pago diferentes por venta.", "Límite de métodos de pago",
+                MessageBox.Show(ClsIdioma.T("Solo se permiten dos métodos de pago diferentes por venta."), ClsIdioma.T("Límite de métodos de pago"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
@@ -299,7 +300,7 @@ namespace CapaVista
 
                 if (totalPagado != totalVenta)
                 {
-                    MessageBox.Show("La venta todavía no está completamente pagada.", "Confirmar venta",
+                    MessageBox.Show(ClsIdioma.T("La venta todavía no está completamente pagada."), ClsIdioma.T("Confirmar venta"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
@@ -353,7 +354,7 @@ namespace CapaVista
 
                 int idVenta = gestorVenta.RegistrarVenta(totalVenta, SesionUsuario.IdUsuario, null, detalles, pagos, promociones);   // [PROMO]
 
-                MessageBox.Show($"Venta #{idVenta} registrada correctamente.", "Venta registrada",
+                MessageBox.Show((ClsIdioma.Ingles ? $"Sale #{idVenta} registered successfully." : $"Venta #{idVenta} registrada correctamente."), ClsIdioma.T("Venta registrada"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 DialogResult = DialogResult.OK;
@@ -362,7 +363,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"No se pudo registrar la venta.\n\n{ex.Message}", "Error",
+                MessageBox.Show((ClsIdioma.Ingles ? $"The sale could not be registered.\n\n{ex.Message}" : $"No se pudo registrar la venta.\n\n{ex.Message}"), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

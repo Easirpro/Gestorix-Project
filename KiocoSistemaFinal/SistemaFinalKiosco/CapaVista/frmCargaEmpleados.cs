@@ -25,6 +25,7 @@ namespace CapaVista
         public frmCargaEmpleados()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             txtNombre.KeyPress += txt_KeyPress;
             txtApellido.KeyPress += txt_KeyPress;
             txtCorreo.KeyPress += txt_KeyPress;
@@ -43,14 +44,14 @@ namespace CapaVista
         // Nombre que ve el usuario de cada campo obligatorio.
         private string NombreCampo(Control control)
         {
-            if (control == txtNombre) return "Nombre";
-            if (control == txtApellido) return "Apellido";
-            if (control == txtDNI) return "DNI";
-            if (control == txtCalle) return "Calle";
-            if (control == txtAltura) return "Altura";
-            if (control == txtPostal) return "Código Postal";
-            if (control == txtTelefono) return "Teléfono";
-            if (control == txtCorreo) return "Correo Electrónico";
+            if (control == txtNombre) return ClsIdioma.T("Nombre");
+            if (control == txtApellido) return ClsIdioma.T("Apellido");
+            if (control == txtDNI) return ClsIdioma.T("DNI");
+            if (control == txtCalle) return ClsIdioma.T("Calle");
+            if (control == txtAltura) return ClsIdioma.T("Altura");
+            if (control == txtPostal) return ClsIdioma.T("Código Postal");
+            if (control == txtTelefono) return ClsIdioma.T("Teléfono");
+            if (control == txtCorreo) return ClsIdioma.T("Correo Electrónico");
 
             return control.Name;
         }
@@ -85,11 +86,11 @@ namespace CapaVista
                         bool esPostal = control == txtPostal;
 
                         string mensaje = esPostal
-                            ? "Seleccione provincia, partido y localidad para completar el Código Postal."
-                            : "El campo " + NombreCampo(control) + " no puede estar vacío.";
+                            ? ClsIdioma.T("Seleccione provincia, partido y localidad para completar el Código Postal.")
+                            : ClsIdioma.T("El campo ") + NombreCampo(control) + ClsIdioma.T(" no puede estar vacío.");
 
                         MessageBox.Show(mensaje,
-                                        "Validación",
+                                        ClsIdioma.T("Validación"),
                                         MessageBoxButtons.OK,
                                         MessageBoxIcon.Warning);
 
@@ -121,7 +122,7 @@ namespace CapaVista
             DataRow fila = dt.NewRow();
 
             fila["IdGenero"] = 0;
-            fila["Tipo"] = "Seleccione un género";
+            fila["Tipo"] = ClsIdioma.T("Seleccione un género");
 
             dt.Rows.InsertAt(fila, 0);
 
@@ -143,7 +144,7 @@ namespace CapaVista
             DataRow fila = dt.NewRow();
 
             fila["idProvincia"] = 0;
-            fila["NomProvincia"] = "-Seleccione Provincia -";
+            fila["NomProvincia"] = ClsIdioma.T("-Seleccione Provincia -");
 
             dt.Rows.InsertAt(fila, 0);
 
@@ -163,7 +164,7 @@ namespace CapaVista
 
             DataRow fila = dt.NewRow();
             fila["IdRol"] = 0;
-            fila["Nombre"] = "-Seleccione un rol-";
+            fila["Nombre"] = ClsIdioma.T("-Seleccione un rol-");
 
             dt.Rows.InsertAt(fila, 0);
 
@@ -214,8 +215,12 @@ namespace CapaVista
             bool haySeleccionado = !modoNuevo && personaOriginal != null;
 
             btnNuevo.Enabled = puedeCrear;
-            btnCrear.Enabled = modoNuevo && puedeCrear;
-            btnModificar.Enabled = haySeleccionado && puedeModificar;
+            // Crear empleado y Guardar cambios quedan habilitados según el permiso; si se tocan en el
+            // momento equivocado, explican qué hacer en vez de no responder.
+            btnCrear.Enabled = puedeCrear;
+            btnModificar.Enabled = puedeModificar;
+            // Con NUEVO, "Habilitar Edición" queda tildado y bloqueado (no se pueden bloquear los campos a mitad de la carga).
+            chkHabilitarEdicion.Enabled = !modoNuevo && haySeleccionado;
             // Solo con un empleado nuevo en carga o uno elegido del combo (no al abrir el formulario).
             btnPermisos.Enabled = PuedeCambiarRol && (modoNuevo || haySeleccionado);
         }
@@ -272,7 +277,7 @@ namespace CapaVista
 
                 DataRow fila = dt.NewRow();
                 fila["IdPersona"] = 0;
-                fila["Username"] = "-Seleccione un Usuario-";
+                fila["Username"] = ClsIdioma.T("-Seleccione un Usuario-");
 
                 dt.Rows.InsertAt(fila, 0);
 
@@ -316,8 +321,8 @@ namespace CapaVista
 
             if (!ClsValidarCorreo.EsEmailValido(txtCorreo.Text))
             {
-                MessageBox.Show("Ingrese un correo electrónico válido.",
-                                "Validación",
+                MessageBox.Show(ClsIdioma.T("Ingrese un correo electrónico válido."),
+                                ClsIdioma.T("Validación"),
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
 
@@ -346,7 +351,7 @@ namespace CapaVista
 
                 if (persona == null)
                 {
-                    MessageBox.Show("No se encontraron los datos de la persona.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("No se encontraron los datos de la persona."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
@@ -558,7 +563,7 @@ namespace CapaVista
             {
                 cargandoDatosUsuario = false;
 
-                MessageBox.Show("ERROR COMPLETO:\n\n" + ex.ToString(), "Error",
+                MessageBox.Show(ClsIdioma.T("ERROR COMPLETO:\n\n") + ex.ToString(), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -582,7 +587,7 @@ namespace CapaVista
 
             if (!modificarPersona.ModificarPersona(persona, idRol))
             {
-                MessageBox.Show("No se pudo modificar la información de la persona.", "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo modificar la información de la persona."), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return false;
@@ -593,7 +598,7 @@ namespace CapaVista
 
             if (domicilio == null)
             {
-                MessageBox.Show("La persona no tiene un domicilio asociado.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La persona no tiene un domicilio asociado."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
@@ -609,7 +614,7 @@ namespace CapaVista
 
             if (!modificarDomicilio.ModificarDomicilio(domicilio))
             {
-                MessageBox.Show("La persona se modificó, pero no el domicilio.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La persona se modificó, pero no el domicilio."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
@@ -621,7 +626,7 @@ namespace CapaVista
 
             if (idTelefono <= 0)
             {
-                MessageBox.Show("La persona no tiene un teléfono asociado.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("La persona no tiene un teléfono asociado."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
@@ -637,7 +642,7 @@ namespace CapaVista
 
             if (!modificarTelefono.ModificarTelefono(telefono))
             {
-                MessageBox.Show("No se pudo modificar el teléfono.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("No se pudo modificar el teléfono."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
@@ -658,8 +663,8 @@ namespace CapaVista
             if (string.IsNullOrWhiteSpace(correoNuevo))
             {
                 MessageBox.Show(
-                    "El correo electrónico no puede estar vacío.",
-                    "Validación",
+                    ClsIdioma.T("El correo electrónico no puede estar vacío."),
+                    ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
@@ -671,8 +676,8 @@ namespace CapaVista
             if (!ClsValidarCorreo.EsEmailValido(correoNuevo))
             {
                 MessageBox.Show(
-                    "Ingrese un correo electrónico válido.",
-                    "Validación",
+                    ClsIdioma.T("Ingrese un correo electrónico válido."),
+                    ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
@@ -688,8 +693,8 @@ namespace CapaVista
             if (!resultado)
             {
                 MessageBox.Show(
-                    "No se pudo actualizar el correo.",
-                    "Error",
+                    ClsIdioma.T("No se pudo actualizar el correo."),
+                    ClsIdioma.T("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
@@ -715,7 +720,7 @@ namespace CapaVista
             {
                 MessageBox.Show(
                     motivo,
-                    "Validación",
+                    ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
@@ -730,8 +735,8 @@ namespace CapaVista
             if (string.IsNullOrWhiteSpace(dni))
             {
                 MessageBox.Show(
-                    "No se pudo obtener el DNI correspondiente al CUIL.",
-                    "Validación",
+                    ClsIdioma.T("No se pudo obtener el DNI correspondiente al CUIL."),
+                    ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
@@ -763,8 +768,8 @@ namespace CapaVista
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Error al cargar los tipos de teléfono: " + ex.Message,
-                    "Error",
+                    ClsIdioma.T("Error al cargar los tipos de teléfono: ") + ex.Message,
+                    ClsIdioma.T("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -818,7 +823,7 @@ namespace CapaVista
             dtPartidoInicial.Columns.Add("IdPartido", typeof(int));
             dtPartidoInicial.Columns.Add("NomPartido", typeof(string));
 
-            dtPartidoInicial.Rows.Add(0, "-Seleccione Partido-");
+            dtPartidoInicial.Rows.Add(0, ClsIdioma.T("-Seleccione Partido-"));
 
             cmbPartido.DataSource = dtPartidoInicial;
             cmbPartido.DisplayMember = "NomPartido";
@@ -829,7 +834,7 @@ namespace CapaVista
             dtLocalidadInicial.Columns.Add("IdLocalidad", typeof(int));
             dtLocalidadInicial.Columns.Add("NomLocalidad", typeof(string));
 
-            dtLocalidadInicial.Rows.Add(0, "-Seleccione Localidad-");
+            dtLocalidadInicial.Rows.Add(0, ClsIdioma.T("-Seleccione Localidad-"));
 
             cmbLocalidad.DataSource = dtLocalidadInicial;
             cmbLocalidad.DisplayMember = "NomLocalidad";
@@ -847,13 +852,23 @@ namespace CapaVista
         //Evento Boton Crear
         private void btnCrear_Click(object sender, EventArgs e)
         {
+            // CREAR EMPLEADO solo sirve después de NUEVO: si no, se explica qué hacer.
+            if (!modoNuevo)
+            {
+                MessageBox.Show(personaOriginal != null
+                        ? ClsIdioma.T("Este botón es para crear empleados nuevos.\n\nPara guardar cambios del empleado elegido, tildá «Habilitar Edición», cambiá los datos y tocá GUARDAR CAMBIOS.\nPara crear uno nuevo, tocá NUEVO primero.")
+                        : ClsIdioma.T("Para crear un empleado, tocá NUEVO primero y completá sus datos."),
+                    ClsIdioma.T("Crear empleado"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             ClsValidarCUIL validarCUIL = new ClsValidarCUIL();
 
             string motivoCuil = validarCUIL.MotivoCuilInvalido(mkdCuil.Text);
 
             if (motivoCuil != string.Empty)
             {
-                MessageBox.Show(motivoCuil, "Validación",
+                MessageBox.Show(motivoCuil, ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 MostrarControl(mkdCuil);
@@ -864,7 +879,7 @@ namespace CapaVista
 
             if (dniDelCUIL != txtDNI.Text.Trim())
             {
-                MessageBox.Show("El DNI no corresponde al CUIL ingresado.", "Validación",
+                MessageBox.Show(ClsIdioma.T("El DNI no corresponde al CUIL ingresado."), ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -874,7 +889,7 @@ namespace CapaVista
 
             if (idRol <= 0)
             {
-                MessageBox.Show("Seleccione el rol del empleado.", "Validación",
+                MessageBox.Show(ClsIdioma.T("Seleccione el rol del empleado."), ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 cmbRol.Focus();
@@ -888,7 +903,7 @@ namespace CapaVista
 
             if (cmbTipoTelefono.SelectedValue == null || cmbTipoTelefono.SelectedIndex == -1)
             {
-                MessageBox.Show("Seleccione un tipo de teléfono.", "Validación",
+                MessageBox.Show(ClsIdioma.T("Seleccione un tipo de teléfono."), ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 MostrarControl(cmbTipoTelefono);
@@ -923,22 +938,23 @@ namespace CapaVista
                 {
                     if (emp.UsuarioSinCorreo != null)
                     {
-                        MessageBox.Show("El empleado se creó, pero no se pudo enviar el correo con la contraseña temporal.\n\n" +
-                            "Entréguele estos datos al empleado:\n\n" +
-                            "Usuario: " + emp.UsuarioSinCorreo + "\n" +
-                            "Contraseña temporal: " + emp.PasswordTemporalSinCorreo + "\n\n" +
-                            "Deberá cambiarla en el primer inicio de sesión.", "Empleado creado",
+                        MessageBox.Show(ClsIdioma.T("El empleado se creó, pero no se pudo enviar el correo con la contraseña temporal.\n\n") +
+                            ClsIdioma.T("Entréguele estos datos al empleado:\n\n") +
+                            ClsIdioma.T("Usuario: ") + emp.UsuarioSinCorreo + "\n" +
+                            ClsIdioma.T("Contraseña temporal: ") + emp.PasswordTemporalSinCorreo + "\n\n" +
+                            ClsIdioma.T("Deberá cambiarla en el primer inicio de sesión."), ClsIdioma.T("Empleado creado"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
-                        MessageBox.Show("Empleado creado correctamente.", "Éxito",
+                        MessageBox.Show(ClsIdioma.T("Empleado creado correctamente."), ClsIdioma.T("Éxito"),
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
                     modoNuevo = false;
                     CargarUsuarios();
                     LimpiarFormulario();
+                    chkHabilitarEdicion.Checked = false;
                     HabilitarEdicion(false);
                     ActualizarBotones();
                 }
@@ -949,11 +965,11 @@ namespace CapaVista
 
                 if (ex.InnerException != null)
                 {
-                    detalle += "\n\nERROR INTERNO:\n" + ex.InnerException.Message;
+                    detalle += ClsIdioma.T("\n\nERROR INTERNO:\n") + ex.InnerException.Message;
                 }
 
-                MessageBox.Show("NO SE PUDO CREAR EL EMPLEADO\n\n" + "ERROR:\n" + detalle + "\n\nTIPO:\n" + ex.GetType().FullName +
-                    "\n\nSTACK TRACE:\n" + ex.StackTrace, "Error al crear empleado",
+                MessageBox.Show(ClsIdioma.T("NO SE PUDO CREAR EL EMPLEADO\n\n") + ClsIdioma.T("ERROR:\n") + detalle + ClsIdioma.T("\n\nTIPO:\n") + ex.GetType().FullName +
+                    ClsIdioma.T("\n\nSTACK TRACE:\n") + ex.StackTrace, ClsIdioma.T("Error al crear empleado"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -966,7 +982,7 @@ namespace CapaVista
         {
             if (!ClsVerificarDNI.DniValido(txtDNI.Text))
             {
-                MessageBox.Show("El DNI debe tener exactamente 8 números y no pueden ser todos iguales.");
+                MessageBox.Show(ClsIdioma.T("El DNI debe tener exactamente 8 números y no pueden ser todos iguales."));
                 txtDNI.Focus();
                 txtDNI.SelectAll();
             }
@@ -1156,6 +1172,7 @@ namespace CapaVista
             if (idPersona <= 0)
             {
                 LimpiarFormulario();
+                chkHabilitarEdicion.Checked = false;
                 HabilitarEdicion(false);
                 ActualizarBotones();
                 return;
@@ -1174,18 +1191,46 @@ namespace CapaVista
 
             LimpiarFormulario();
 
-            chkHabilitarEdicion.Checked = false;
+            // Al crear, la edición queda habilitada (tildado y bloqueado por ActualizarBotones).
+            chkHabilitarEdicion.Checked = true;
             chkActivo.Checked = true;
             HabilitarEdicion(true);
             ActualizarBotones();
+
+            txtNombre.Focus();
         }
         private void btnModificar_Click(object sender, EventArgs e)
         {
+            // GUARDAR CAMBIOS: explica qué falta en vez de no responder.
+            if (modoNuevo)
+            {
+                MessageBox.Show(ClsIdioma.T("Estás cargando un empleado nuevo: para guardarlo tocá CREAR EMPLEADO."), ClsIdioma.T("Guardar cambios"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (personaOriginal == null)
+            {
+                MessageBox.Show(ClsIdioma.T("Elegí un empleado de la lista «Usuarios» para modificar sus datos."), ClsIdioma.T("Guardar cambios"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                lstUsuarios.Focus();
+                return;
+            }
+
+            if (!chkHabilitarEdicion.Checked)
+            {
+                MessageBox.Show(ClsIdioma.T("Para modificar al empleado, tildá «Habilitar Edición», cambiá los datos y después tocá GUARDAR CAMBIOS.\n\n") +
+                    ClsIdioma.T("Los permisos no se guardan acá: se guardan desde «Permisos del rol»."), ClsIdioma.T("Guardar cambios"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                chkHabilitarEdicion.Focus();
+                return;
+            }
+
             try
             {
                 if (lstUsuarios.SelectedValue == null || !int.TryParse(lstUsuarios.SelectedValue.ToString(), out int idPersonaSeleccionada))
                 {
-                    MessageBox.Show("Seleccione un usuario para modificar.", "Aviso",
+                    MessageBox.Show(ClsIdioma.T("Seleccione un usuario para modificar."), ClsIdioma.T("Aviso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
@@ -1195,7 +1240,7 @@ namespace CapaVista
 
                 if (cmbGenero.SelectedValue == null || !int.TryParse(cmbGenero.SelectedValue.ToString(), out int idGenero) || idGenero <= 0)
                 {
-                    MessageBox.Show("Seleccione un género.", "Validación",
+                    MessageBox.Show(ClsIdioma.T("Seleccione un género."), ClsIdioma.T("Validación"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     MostrarControl(cmbGenero);
@@ -1204,7 +1249,7 @@ namespace CapaVista
 
                 if (cmbLocalidad.SelectedValue == null || !int.TryParse(cmbLocalidad.SelectedValue.ToString(), out int idLocalidad) || idLocalidad <= 0)
                 {
-                    MessageBox.Show("Seleccione una localidad.", "Validación",
+                    MessageBox.Show(ClsIdioma.T("Seleccione una localidad."), ClsIdioma.T("Validación"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     MostrarControl(cmbLocalidad);
@@ -1213,7 +1258,7 @@ namespace CapaVista
 
                 if (cmbTipoTelefono.SelectedValue == null || !int.TryParse(cmbTipoTelefono.SelectedValue.ToString(), out int idTipoTelefono) || idTipoTelefono <= 0)
                 {
-                    MessageBox.Show("Seleccione un tipo de teléfono.", "Validación",
+                    MessageBox.Show(ClsIdioma.T("Seleccione un tipo de teléfono."), ClsIdioma.T("Validación"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     MostrarControl(cmbTipoTelefono);
@@ -1222,8 +1267,8 @@ namespace CapaVista
 
                 if (personaOriginal == null || domicilioOriginal == null || correoOriginal == null)
                 {
-                    MessageBox.Show("No se pudieron cargar correctamente los datos originales del usuario.",
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ClsIdioma.T("No se pudieron cargar correctamente los datos originales del usuario."),
+                        ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     return;
                 }
@@ -1243,7 +1288,7 @@ namespace CapaVista
 
                     if (motivoCuil != string.Empty)
                     {
-                        MessageBox.Show(motivoCuil, "Validación",
+                        MessageBox.Show(motivoCuil, ClsIdioma.T("Validación"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         MostrarControl(mkdCuil);
@@ -1254,7 +1299,7 @@ namespace CapaVista
 
                     if (dniDelCUIL != txtDNI.Text.Trim())
                     {
-                        MessageBox.Show("El DNI no corresponde al CUIL ingresado.", "Validación",
+                        MessageBox.Show(ClsIdioma.T("El DNI no corresponde al CUIL ingresado."), ClsIdioma.T("Validación"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         MostrarControl(mkdCuil);
@@ -1267,7 +1312,7 @@ namespace CapaVista
 
                 if (idRol <= 0)
                 {
-                    MessageBox.Show("Seleccione el rol del empleado.", "Validación",
+                    MessageBox.Show(ClsIdioma.T("Seleccione el rol del empleado."), ClsIdioma.T("Validación"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     cmbRol.Focus();
@@ -1282,7 +1327,7 @@ namespace CapaVista
 
                 if (existe)
                 {
-                    MessageBox.Show("Ya existe otra persona registrada con ese DNI o CUIL.", "Datos duplicados",
+                    MessageBox.Show(ClsIdioma.T("Ya existe otra persona registrada con ese DNI o CUIL."), ClsIdioma.T("Datos duplicados"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
@@ -1317,8 +1362,9 @@ namespace CapaVista
 
                 if (!huboCambios)
                 {
-                    MessageBox.Show("No realizó ningún cambio. Modifique algún dato antes de guardar.",
-                        "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ClsIdioma.T("No hay cambios en los datos del empleado.\n\n") +
+                        ClsIdioma.T("Si cambiaste permisos, no hace falta guardar acá: los permisos se guardan desde «Permisos del rol» ") +
+                        ClsIdioma.T("y ya quedaron guardados ahí."), ClsIdioma.T("Sin cambios"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     return;
                 }
@@ -1328,7 +1374,7 @@ namespace CapaVista
 
                 if (motivoRol != string.Empty)
                 {
-                    MessageBox.Show(motivoRol, "Cambio no permitido",
+                    MessageBox.Show(motivoRol, ClsIdioma.T("Cambio no permitido"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
@@ -1366,7 +1412,7 @@ namespace CapaVista
 
                 if (filaSeleccionada == null)
                 {
-                    throw new Exception("No se pudo identificar el usuario seleccionado.");
+                    throw new Exception(ClsIdioma.T("No se pudo identificar el usuario seleccionado."));
                 }
 
                 string usernameAfectado = filaSeleccionada["Username"].ToString();
@@ -1375,7 +1421,7 @@ namespace CapaVista
 
                 if (idUsuarioAfectado <= 0)
                 {
-                    throw new Exception("No se pudo obtener el ID del usuario afectado.");
+                    throw new Exception(ClsIdioma.T("No se pudo obtener el ID del usuario afectado."));
                 }
 
                 clsBitacoraLogica bitacora = new clsBitacoraLogica();
@@ -1407,8 +1453,8 @@ namespace CapaVista
                         rol.ObtenerNombreRol(idRolOriginal) + " → " + rol.ObtenerNombreRol(idRol));
                 }
 
-                MessageBox.Show("Los datos se modificaron correctamente.",
-                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ClsIdioma.T("Los datos se modificaron correctamente."),
+                    ClsIdioma.T("Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Se recargan los datos para que la próxima modificación compare contra lo guardado.
                 CargarUsuarios(idPersona);
@@ -1420,34 +1466,54 @@ namespace CapaVista
             }
             catch (FormatException)
             {
-                MessageBox.Show("Verifique que la altura sea un número válido.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T("Verifique que la altura sea un número válido."), ClsIdioma.T("Datos incorrectos"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnActualizar_Click(object sender, EventArgs e)
         {
             CargarUsuarios();
         }
-        // Abre la edición de permisos de los roles (con el rol del combo seleccionado).
-        // No cambia el rol del empleado: eso se hace con el combo Rol y Modificar.
+        // Abre los permisos del rol elegido en el combo. Con un rol elegido, se edita solo ese rol
+        // (afecta a todos los empleados con ese rol). No cambia el rol del empleado: eso es el combo Rol.
         private void btnPermisos_Click(object sender, EventArgs e)
         {
             int idRol = RolSeleccionado();
 
-            using (frmPermisos permiso = idRol > 0 ? new frmPermisos(idRol) : new frmPermisos())
+            using (frmPermisos permiso = idRol > 0 ? new frmPermisos(idRol, soloEseRol: true) : new frmPermisos())
             {
-                permiso.ShowDialog();
+                permiso.Icon = Icon;
+                permiso.ShowDialog(this);
             }
 
-            // Desde ahí se pueden crear o eliminar roles: se recarga el combo sin perder la selección.
+            // Sin rol elegido se pueden crear o eliminar roles: se recarga el combo sin perder la selección.
             CargarRoles();
         }
         private void chkHabilitarEdicion_CheckedChanged(object sender, EventArgs e)
         {
             HabilitarEdicion(chkHabilitarEdicion.Checked);
+        }
+        // VOLVER: cierra la pantalla. Si se estaba cargando o editando un empleado, pregunta antes.
+        private void btnVolver_Click(object? sender, EventArgs e)
+        {
+            if (modoNuevo || chkHabilitarEdicion.Checked)
+            {
+                DialogResult respuesta = MessageBox.Show(
+                    modoNuevo
+                        ? ClsIdioma.T("Estás cargando un empleado nuevo y todavía no lo creaste.\n\n¿Salir sin guardar?")
+                        : ClsIdioma.T("La edición del empleado está habilitada. Si cambiaste datos y no tocaste GUARDAR CAMBIOS, se pierden.\n\n¿Salir igual?"),
+                    ClsIdioma.T("Volver"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (respuesta != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
+            Close();
         }
 
         #endregion

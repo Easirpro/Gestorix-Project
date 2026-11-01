@@ -13,6 +13,7 @@ namespace CapaVista
         public frmRecupResSegur(int idUsuario)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             this.idUsuario = idUsuario;
 
@@ -40,7 +41,7 @@ namespace CapaVista
 
             if (logica.RecuperoBloqueado(idUsuario))
             {
-                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, "Recuperar contraseña",
+                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, ClsIdioma.T("Recuperar contraseña"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 this.Close();
@@ -63,14 +64,14 @@ namespace CapaVista
             }
             else if (logica.RecuperoBloqueado(idUsuario))
             {
-                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, "Recuperar contraseña",
+                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, ClsIdioma.T("Recuperar contraseña"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Respuesta incorrecta.", "Recuperar contraseña",
+                MessageBox.Show(ClsIdioma.T("Respuesta incorrecta."), ClsIdioma.T("Recuperar contraseña"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtRespuesta.Clear();

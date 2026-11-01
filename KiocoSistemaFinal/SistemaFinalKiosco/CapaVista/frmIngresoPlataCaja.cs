@@ -26,6 +26,7 @@ namespace CapaVista
         public frmIngresoPlataCaja(frmmenuPres.TipoMovimiento tipoMovimiento)
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
             this.tipo = tipoMovimiento == frmmenuPres.TipoMovimiento.Ingreso ? "I" : "E";
         }
 
@@ -38,7 +39,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo obtener el estado de la caja.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el estado de la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
                 return;
@@ -46,15 +47,15 @@ namespace CapaVista
 
             if (sesion == null)
             {
-                MessageBox.Show("No hay una caja abierta. Abra la caja antes de registrar movimientos.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("No hay una caja abierta. Abra la caja antes de registrar movimientos."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 this.Close();
                 return;
             }
 
             bool esIngreso = tipo == "I";
-            this.Text = esIngreso ? "Nuevo ingreso de caja" : "Nuevo egreso de caja";
-            lblTitulo.Text = esIngreso ? "Nuevo ingreso" : "Nuevo egreso";
+            this.Text = esIngreso ? ClsIdioma.T("Nuevo ingreso de caja") : ClsIdioma.T("Nuevo egreso de caja");
+            lblTitulo.Text = esIngreso ? ClsIdioma.T("Nuevo ingreso") : ClsIdioma.T("Nuevo egreso");
             lblTitulo.ForeColor = esIngreso ? Color.SeaGreen : Color.Firebrick;
 
             try
@@ -65,7 +66,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar los datos.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -142,7 +143,7 @@ namespace CapaVista
             // En egresos de efectivo se muestra cuánto hay en la caja.
             if (tipo == "E" && EsEfectivo())
             {
-                lblDisponible.Text = $"Disponible: $ {sesion.EfectivoEsperado:N2}";
+                lblDisponible.Text = (ClsIdioma.Ingles ? $"Available: $ {sesion.EfectivoEsperado:N2}" : $"Disponible: $ {sesion.EfectivoEsperado:N2}");
             }
             else
             {
@@ -154,7 +155,7 @@ namespace CapaVista
         {
             if (cmbConcepto.SelectedValue == null)
             {
-                MessageBox.Show("Seleccione un concepto.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un concepto."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbConcepto.Focus();
                 return false;
@@ -162,7 +163,7 @@ namespace CapaVista
 
             if (cmbMedioPago.SelectedValue == null)
             {
-                MessageBox.Show("Seleccione un medio de pago.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione un medio de pago."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbMedioPago.Focus();
                 return false;
@@ -170,7 +171,7 @@ namespace CapaVista
 
             if (nudImporte.Value <= 0)
             {
-                MessageBox.Show("El importe debe ser mayor a cero.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("El importe debe ser mayor a cero."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 nudImporte.Focus();
                 return false;
@@ -178,8 +179,8 @@ namespace CapaVista
 
             if (tipo == "E" && EsEfectivo() && nudImporte.Value > sesion.EfectivoEsperado)
             {
-                MessageBox.Show("El importe supera el efectivo disponible en la caja ($ " +
-                                sesion.EfectivoEsperado.ToString("N2") + ").", "Aviso",
+                MessageBox.Show(ClsIdioma.T("El importe supera el efectivo disponible en la caja ($ ") +
+                                sesion.EfectivoEsperado.ToString("N2") + ").", ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 nudImporte.Focus();
                 return false;
@@ -187,7 +188,7 @@ namespace CapaVista
 
             if (ConceptoRequiereEmpleado() && cmbEmpleado.SelectedValue == null)
             {
-                MessageBox.Show("Seleccione el empleado que recibe el dinero.", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Seleccione el empleado que recibe el dinero."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbEmpleado.Focus();
                 return false;
@@ -195,7 +196,7 @@ namespace CapaVista
 
             if (string.IsNullOrWhiteSpace(txtObservacion.Text))
             {
-                MessageBox.Show("Ingrese una observación (motivo del movimiento).", "Aviso",
+                MessageBox.Show(ClsIdioma.T("Ingrese una observación (motivo del movimiento)."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtObservacion.Focus();
                 return false;
@@ -246,16 +247,16 @@ namespace CapaVista
             {
                 logica.RegistrarMovimiento(movimiento);
 
-                MessageBox.Show("El movimiento se registró correctamente.\n\n" +
+                MessageBox.Show(ClsIdioma.T("El movimiento se registró correctamente.\n\n") +
                                 cmbConcepto.Text + ": $ " + movimiento.Importe.ToString("N2"),
-                    "Movimiento registrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClsIdioma.T("Movimiento registrado"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo registrar el movimiento.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo registrar el movimiento.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

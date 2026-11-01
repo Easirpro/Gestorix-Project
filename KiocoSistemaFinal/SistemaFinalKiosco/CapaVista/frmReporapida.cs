@@ -23,6 +23,7 @@ namespace CapaVista
         public frmReporapida()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             CargarFiltros();
 
@@ -164,8 +165,8 @@ namespace CapaVista
                     Convert.ToInt32(fila.Tag) == idProducto)
                 {
                     MessageBox.Show(
-                        "Ese producto ya está cargado en la grilla.",
-                        "Producto duplicado",
+                        ClsIdioma.T("Ese producto ya está cargado en la grilla."),
+                        ClsIdioma.T("Producto duplicado"),
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                     return;
@@ -242,7 +243,7 @@ namespace CapaVista
 
             DataRow filaProveedor = proveedores.NewRow();
             filaProveedor["IdProveedor"] = 0;
-            filaProveedor["RazonSocial"] = "-Seleccione un proveedor-";
+            filaProveedor["RazonSocial"] = ClsIdioma.T("-Seleccione un proveedor-");
             proveedores.Rows.InsertAt(filaProveedor, 0);
 
             cmbProveedor.DisplayMember = "RazonSocial";
@@ -255,7 +256,7 @@ namespace CapaVista
 
             DataRow filaCategoria = categorias.NewRow();
             filaCategoria["IdCategoria"] = 0;
-            filaCategoria["Nombre"] = "-Seleccione una categoría-";
+            filaCategoria["Nombre"] = ClsIdioma.T("-Seleccione una categoría-");
             categorias.Rows.InsertAt(filaCategoria, 0);
 
             cmbCategoria.DisplayMember = "Nombre";
@@ -268,7 +269,7 @@ namespace CapaVista
 
             DataRow filaMarca = marcas.NewRow();
             filaMarca["IdMarca"] = 0;
-            filaMarca["Nombre"] = "-Seleccione una marca-";
+            filaMarca["Nombre"] = ClsIdioma.T("-Seleccione una marca-");
             marcas.Rows.InsertAt(filaMarca, 0);
 
             cmbMarca.DisplayMember = "Nombre";
@@ -283,7 +284,7 @@ namespace CapaVista
 
             DataRow filaSucursal = sucursales.NewRow();
             filaSucursal["IdSucursal"] = 0;
-            filaSucursal["Sucursal"] = "-Seleccione una sucursal-";
+            filaSucursal["Sucursal"] = ClsIdioma.T("-Seleccione una sucursal-");
             sucursales.Rows.Add(filaSucursal);
 
             cmbSucursal.DisplayMember = "Sucursal";
@@ -405,8 +406,8 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al buscar productos: " + ex.Message,
-                    "Error de búsqueda", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ClsIdioma.T("Error al buscar productos: ") + ex.Message,
+                    ClsIdioma.T("Error de búsqueda"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -437,7 +438,7 @@ namespace CapaVista
 
                 DataRow fila = tabla.NewRow();
                 fila["IdSucursal"] = 0;
-                fila["Sucursal"] = "-Seleccione una sucursal-";
+                fila["Sucursal"] = ClsIdioma.T("-Seleccione una sucursal-");
                 tabla.Rows.InsertAt(fila, 0);
 
                 cmbSucursal.DisplayMember = "Sucursal";
@@ -448,8 +449,8 @@ namespace CapaVista
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Error al cargar las sucursales: " + ex.Message,
-                    "Error",
+                    ClsIdioma.T("Error al cargar las sucursales: ") + ex.Message,
+                    ClsIdioma.T("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -479,7 +480,7 @@ namespace CapaVista
 
                         if (!decimal.TryParse(valor.ToString(), out decimal precio) || precio < 0)
                         {
-                            MessageBox.Show("Ingresá un precio válido.");
+                            MessageBox.Show(ClsIdioma.T("Ingresá un precio válido."));
                             return;
                         }
 
@@ -490,14 +491,14 @@ namespace CapaVista
 
                     if (precios.Rows.Count == 0)
                     {
-                        MessageBox.Show("No hay precios para guardar.");
+                        MessageBox.Show(ClsIdioma.T("No hay precios para guardar."));
                         return;
                     }
 
                     ClsPrecioLogica logicaPrecio = new ClsPrecioLogica();
                     logicaPrecio.ActualizarPrecios(precios);
 
-                    MessageBox.Show("Precios actualizados correctamente.");
+                    MessageBox.Show(ClsIdioma.T("Precios actualizados correctamente."));
                 }
                 else if (modoActual == "STOCK")
                 {
@@ -516,7 +517,7 @@ namespace CapaVista
 
                         if (!int.TryParse(valor.ToString(), out int cantidad) || cantidad < 0)
                         {
-                            MessageBox.Show("Ingresá una cantidad válida para reponer.");
+                            MessageBox.Show(ClsIdioma.T("Ingresá una cantidad válida para reponer."));
                             return;
                         }
 
@@ -527,7 +528,7 @@ namespace CapaVista
 
                         if (!logicaProducto.AgregarStock(idProducto, cantidad))
                         {
-                            MessageBox.Show("No se pudo actualizar el stock del producto con ID " + idProducto);
+                            MessageBox.Show(ClsIdioma.T("No se pudo actualizar el stock del producto con ID ") + idProducto);
                             return;
                         }
 
@@ -536,16 +537,16 @@ namespace CapaVista
 
                     if (!hayCambios)
                     {
-                        MessageBox.Show("No hay cantidades para reponer.");
+                        MessageBox.Show(ClsIdioma.T("No hay cantidades para reponer."));
                         return;
                     }
 
-                    MessageBox.Show("Stock actualizado correctamente.");
+                    MessageBox.Show(ClsIdioma.T("Stock actualizado correctamente."));
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar los cambios: " + ex.Message);
+                MessageBox.Show(ClsIdioma.T("Error al guardar los cambios: ") + ex.Message);
             }
         }
     }

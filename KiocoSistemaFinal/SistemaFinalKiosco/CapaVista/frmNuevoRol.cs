@@ -17,6 +17,7 @@ namespace CapaVista
         public frmNuevoRol()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
         }
 
@@ -27,7 +28,7 @@ namespace CapaVista
 
             if (string.IsNullOrWhiteSpace(nombre))
             {
-                MessageBox.Show("Ingrese un nombre para el rol.","Aviso",
+                MessageBox.Show(ClsIdioma.T("Ingrese un nombre para el rol."),ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtNuevoRol.Focus();
@@ -42,14 +43,14 @@ namespace CapaVista
 
                 if (IdRolCreado == 0)
                 {
-                    MessageBox.Show("Ya existe un rol con ese nombre.","Rol existente",
+                    MessageBox.Show(ClsIdioma.T("Ya existe un rol con ese nombre."),ClsIdioma.T("Rol existente"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtNuevoRol.Focus();
                     return;
                 }
 
-                MessageBox.Show("El rol se creó correctamente.", "Nuevo Rol",
+                MessageBox.Show(ClsIdioma.T("El rol se creó correctamente."), ClsIdioma.T("Nuevo Rol"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 DialogResult = DialogResult.OK;
@@ -57,7 +58,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo crear el rol.\n\n" + ex.Message,"Error",
+                MessageBox.Show(ClsIdioma.T("No se pudo crear el rol.\n\n") + ex.Message,ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

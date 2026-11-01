@@ -24,6 +24,12 @@ namespace CapaLogica
 
             return datos.ObtenerPermisos(idRol);
         }
+        public int ContarUsuariosPorRol(int idRol)
+        {
+            ClsRolDatos datos = new ClsRolDatos();
+
+            return datos.ContarUsuariosPorRol(idRol);
+        }
         public string ObtenerNombreRol(int idRol)
         {
             ClsRolDatos datos = new ClsRolDatos();

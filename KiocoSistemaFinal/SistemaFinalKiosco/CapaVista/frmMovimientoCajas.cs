@@ -15,6 +15,7 @@ namespace CapaVista
         public frmMovimientoCajas()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
     }
 }

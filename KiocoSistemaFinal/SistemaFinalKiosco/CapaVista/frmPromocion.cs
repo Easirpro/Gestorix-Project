@@ -58,6 +58,7 @@ namespace CapaVista
         public frmPromocion()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             tamanoDiseno = ClientSize;
             limitesDiseno = new Dictionary<Control, Rectangle>
@@ -141,7 +142,7 @@ namespace CapaVista
 
             if (dgtCargaArticulo.Columns.Contains("Nombre"))
             {
-                dgtCargaArticulo.Columns["Nombre"].HeaderText = "Producto";
+                dgtCargaArticulo.Columns["Nombre"].HeaderText = ClsIdioma.T("Producto");
             }
 
             if (dgtCargaArticulo.Columns.Contains("SKU"))
@@ -151,13 +152,13 @@ namespace CapaVista
 
             if (dgtCargaArticulo.Columns.Contains("PrecioVenta"))
             {
-                dgtCargaArticulo.Columns["PrecioVenta"].HeaderText = "Precio";
+                dgtCargaArticulo.Columns["PrecioVenta"].HeaderText = ClsIdioma.T("Precio");
                 dgtCargaArticulo.Columns["PrecioVenta"].DefaultCellStyle.Format = "C2";
             }
 
             if (dgtCargaArticulo.Columns.Contains("CantidadActual"))
             {
-                dgtCargaArticulo.Columns["CantidadActual"].HeaderText = "Stock disponible";
+                dgtCargaArticulo.Columns["CantidadActual"].HeaderText = ClsIdioma.T("Stock disponible");
             }
 
             if (dgtCargaArticulo.Columns.Contains("clnEliminar"))
@@ -166,8 +167,8 @@ namespace CapaVista
 
                 if (columna != null)
                 {
-                    columna.HeaderText = "Acción";
-                    columna.Text = "Eliminar";
+                    columna.HeaderText = ClsIdioma.T("Acción");
+                    columna.Text = ClsIdioma.T("Eliminar");
                     columna.UseColumnTextForButtonValue = true;
                     columna.FlatStyle = FlatStyle.Standard;
                 }
@@ -190,7 +191,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar las promociones por volumen: " + ex.Message, "Promociones",
+                MessageBox.Show(ClsIdioma.T("Error al cargar las promociones por volumen: ") + ex.Message, ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -201,9 +202,9 @@ namespace CapaVista
             categorias.Columns.Add("IdCategoria", typeof(int));
             categorias.Columns.Add("Nombre", typeof(string));
 
-            categorias.Rows.Add(1, "Descuento por volumen");
-            categorias.Rows.Add(2, "Descuento porcentual");
-            categorias.Rows.Add(3, "Precio especial");
+            categorias.Rows.Add(1, ClsIdioma.T("Descuento por volumen"));
+            categorias.Rows.Add(2, ClsIdioma.T("Descuento porcentual"));
+            categorias.Rows.Add(3, ClsIdioma.T("Precio especial"));
 
             cmbMecanicaPromocional.DataSource = categorias;
             cmbMecanicaPromocional.DisplayMember = "Nombre";
@@ -217,15 +218,15 @@ namespace CapaVista
             if (idTipo == 4)
             {
                 if (string.IsNullOrWhiteSpace(txtDescuentoPorcentual.Text))
-                    throw new Exception("Ingresá el porcentaje de descuento.");
+                    throw new Exception(ClsIdioma.T("Ingresá el porcentaje de descuento."));
 
                 if (!decimal.TryParse(txtDescuentoPorcentual.Text.Trim(), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.CurrentCulture, out decimal porcentaje))
                 {
-                    throw new Exception("Ingresá un porcentaje válido.");
+                    throw new Exception(ClsIdioma.T("Ingresá un porcentaje válido."));
                 }
 
                 if (porcentaje <= 0 || porcentaje > 100)
-                    throw new Exception("El descuento debe ser mayor que 0 y no superar el 100%.");
+                    throw new Exception(ClsIdioma.T("El descuento debe ser mayor que 0 y no superar el 100%."));
 
                 return porcentaje;
             }
@@ -233,15 +234,15 @@ namespace CapaVista
             if (idTipo == 5)
             {
                 if (string.IsNullOrWhiteSpace(txtBajaPrecio.Text))
-                    throw new Exception("Ingresá el precio especial.");
+                    throw new Exception(ClsIdioma.T("Ingresá el precio especial."));
 
                 if (!decimal.TryParse(txtBajaPrecio.Text.Trim(), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.CurrentCulture, out decimal precio))
                 {
-                    throw new Exception("Ingresá un precio especial válido.");
+                    throw new Exception(ClsIdioma.T("Ingresá un precio especial válido."));
                 }
 
                 if (precio <= 0)
-                    throw new Exception("El precio especial debe ser mayor que cero.");
+                    throw new Exception(ClsIdioma.T("El precio especial debe ser mayor que cero."));
 
                 return precio;
             }
@@ -264,7 +265,7 @@ namespace CapaVista
 
             if (esVolumen && HayProductosDiferentes())
             {
-                MessageBox.Show("La mecánica de volumen (2x1, 3x2, 6x4, etc.) " + "solo puede aplicarse a un mismo producto. " + "Quitá los productos diferentes para utilizarla.", "Mecánica de volumen",
+                MessageBox.Show(ClsIdioma.T("La mecánica de volumen (2x1, 3x2, 6x4, etc.) ") + ClsIdioma.T("solo puede aplicarse a un mismo producto. ") + ClsIdioma.T("Quitá los productos diferentes para utilizarla."), ClsIdioma.T("Mecánica de volumen"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 cmbMecanicaPromocional.SelectedIndex = -1;
@@ -313,14 +314,14 @@ namespace CapaVista
         private int ObtenerIdTipoPromocion()
         {
             if (cmbMecanicaPromocional.SelectedValue == null)
-                throw new Exception("Debe seleccionar una mecánica promocional.");
+                throw new Exception(ClsIdioma.T("Debe seleccionar una mecánica promocional."));
 
             int idCategoria = Convert.ToInt32(cmbMecanicaPromocional.SelectedValue);
 
             if (idCategoria == 1)
             {
                 if (cmbDescuentoVolumen.SelectedValue == null)
-                    throw new Exception("Debe seleccionar una promoción por volumen.");
+                    throw new Exception(ClsIdioma.T("Debe seleccionar una promoción por volumen."));
 
                 return Convert.ToInt32(cmbDescuentoVolumen.SelectedValue);
             }
@@ -331,7 +332,7 @@ namespace CapaVista
             if (idCategoria == 3)
                 return 5;
 
-            throw new Exception("La categoría promocional seleccionada no es válida.");
+            throw new Exception(ClsIdioma.T("La categoría promocional seleccionada no es válida."));
         }
         private DataRow ObtenerMecanicaVolumenSeleccionada()
         {
@@ -462,11 +463,11 @@ namespace CapaVista
                 if (datosPromocion == null || datosPromocion.Tables.Count < 2 || datosPromocion.Tables[0].Rows.Count == 0)
                 {
 
-                    MessageBox.Show("No se encontraron los datos de la promoción.", "Promociones",
+                    MessageBox.Show(ClsIdioma.T("No se encontraron los datos de la promoción."), ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    MessageBox.Show("No se encontraron los datos de la promoción.",
-                        "Promociones", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ClsIdioma.T("No se encontraron los datos de la promoción."),
+                        ClsIdioma.T("Promociones"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
                 }
@@ -476,7 +477,7 @@ namespace CapaVista
 
                 idPromocionSeleccionada = idPromocion;
                 modoEdicionPromocion = true;
-                btnGuardarPromo.Text = "Guardar cambios";
+                btnGuardarPromo.Text = ClsIdioma.T("Guardar cambios");
 
                 txtCodigoPromocion.Text = promocion["CodigoPromocion"].ToString();
                 txtNombrePromocion.Text = promocion["Nombre"].ToString();
@@ -529,19 +530,19 @@ namespace CapaVista
                     string dias = string.Join(", ", diasVigenciaPromocion.Select(d => d.ToString()));
 
                     resumenVigencia =
-                        "Recurrente: " + dias +
+                        ClsIdioma.T("Recurrente: ") + dias +
                         Environment.NewLine +
-                        "Horario: " +
+                        ClsIdioma.T("Horario: ") +
                         horaInicioPromocion.ToString(@"hh\:mm") + " - " +
                         horaFinPromocion.ToString(@"hh\:mm");
                 }
                 else if (fechaInicioPromocion.HasValue && fechaFinPromocion.HasValue)
                 {
                     resumenVigencia =
-                        "Del " + fechaInicioPromocion.Value.ToString("dd/MM/yyyy") +
-                        " al " + fechaFinPromocion.Value.ToString("dd/MM/yyyy") +
+                        ClsIdioma.T("Del ") + fechaInicioPromocion.Value.ToString("dd/MM/yyyy") +
+                        ClsIdioma.T(" al ") + fechaFinPromocion.Value.ToString("dd/MM/yyyy") +
                         Environment.NewLine +
-                        "Horario: " +
+                        ClsIdioma.T("Horario: ") +
                         horaInicioPromocion.ToString(@"hh\:mm") + " - " +
                         horaFinPromocion.ToString(@"hh\:mm");
 
@@ -549,7 +550,7 @@ namespace CapaVista
 
                 else
                 {
-                    resumenVigencia = "La promoción no tiene un período de vigencia completo.";
+                    resumenVigencia = ClsIdioma.T("La promoción no tiene un período de vigencia completo.");
                 }
 
                 lblResumenVigencia.Text = resumenVigencia;
@@ -617,10 +618,10 @@ namespace CapaVista
             catch (Exception ex)
             {
 
-                MessageBox.Show("Error al cargar la promoción: " + ex.Message, "Promociones",
+                MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                MessageBox.Show(ex.ToString(), "Error al cargar la promoción", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.ToString(), ClsIdioma.T("Error al cargar la promoción"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -641,7 +642,7 @@ namespace CapaVista
 
             idPromocionSeleccionada = 0;
             modoEdicionPromocion = false;
-            btnGuardarPromo.Text = "Guardar Promoción";
+            btnGuardarPromo.Text = ClsIdioma.T("Guardar Promoción");
 
             txtCodigoPromocion.Enabled = false;
             txtCodigoPromocion.TabStop = false;
@@ -665,7 +666,7 @@ namespace CapaVista
         }
         private void ActualizarTextoCheckboxPromocion()
         {
-            chkDesactivarPromo.Text = promocionActivaSeleccionada ? "Desactivar promoción" : "Activar promoción";
+            chkDesactivarPromo.Text = promocionActivaSeleccionada ? ClsIdioma.T("Desactivar promoción") : ClsIdioma.T("Activar promoción");
         }
 
 
@@ -713,7 +714,7 @@ namespace CapaVista
                         if (fila.Tag != null &&
                             Convert.ToInt32(fila.Tag) == producto.IdProducto)
                         {
-                            MessageBox.Show("Este artículo ya fue agregado a la promoción.", "Promociones",
+                            MessageBox.Show(ClsIdioma.T("Este artículo ya fue agregado a la promoción."), ClsIdioma.T("Promociones"),
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                             return;
@@ -743,7 +744,7 @@ namespace CapaVista
 
                 if (cmbMecanicaPromocional.SelectedValue == null)
                 {
-                    MessageBox.Show("Debe seleccionar una mecánica promocional.", "Promociones",
+                    MessageBox.Show(ClsIdioma.T("Debe seleccionar una mecánica promocional."), ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     cmbMecanicaPromocional.Focus();
                     return;
@@ -752,8 +753,8 @@ namespace CapaVista
                 if (string.IsNullOrWhiteSpace(txtNombrePromocion.Text))
                 {
                     MessageBox.Show(
-                        "Debe ingresar el nombre de la promoción.",
-                        "Promociones",
+                        ClsIdioma.T("Debe ingresar el nombre de la promoción."),
+                        ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
                     txtNombrePromocion.Focus();
@@ -762,7 +763,7 @@ namespace CapaVista
 
                 if (!vigenciaConfigurada || fechaInicioPromocion == null)
                 {
-                    MessageBox.Show("Debe configurar la fecha de vigencia de la promoción.", "Promociones",
+                    MessageBox.Show(ClsIdioma.T("Debe configurar la fecha de vigencia de la promoción."), ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -771,7 +772,7 @@ namespace CapaVista
 
                 if (!hayProductos)
                 {
-                    MessageBox.Show("Debe agregar al menos un producto a la promoción.", "Promociones",
+                    MessageBox.Show(ClsIdioma.T("Debe agregar al menos un producto a la promoción."), ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -780,7 +781,7 @@ namespace CapaVista
 
                 if (idTipoPromocion >= 1 && idTipoPromocion <= 3 && HayProductosDiferentes())
                 {
-                    MessageBox.Show("Las promociones por volumen solo pueden aplicarse a un mismo producto. No se pueden combinar productos diferentes.", "Validación de promoción",
+                    MessageBox.Show(ClsIdioma.T("Las promociones por volumen solo pueden aplicarse a un mismo producto. No se pueden combinar productos diferentes."), ClsIdioma.T("Validación de promoción"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -798,7 +799,7 @@ namespace CapaVista
 
                     if (fila.Cells["clnCantidad"].Value == null || !decimal.TryParse(fila.Cells["clnCantidad"].Value.ToString(), out decimal cantidad) || cantidad <= 0)
                     {
-                        throw new Exception("Todos los productos deben tener una cantidad mayor que cero.");
+                        throw new Exception(ClsIdioma.T("Todos los productos deben tener una cantidad mayor que cero."));
                     }
 
                     detalles.Add(new ClsDetallePromocion
@@ -836,7 +837,7 @@ namespace CapaVista
 
                     if (!huboCambios)
                     {
-                        MessageBox.Show( "Debe realizar un cambio para continuar.", "Sin cambios",
+                        MessageBox.Show( ClsIdioma.T("Debe realizar un cambio para continuar."), ClsIdioma.T("Sin cambios"),
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
@@ -875,7 +876,7 @@ namespace CapaVista
 
                     logica.ModificarPromocion(promocion, detalles);
 
-                    MessageBox.Show("La promoción se modificó correctamente.", "Promociones",
+                    MessageBox.Show(ClsIdioma.T("La promoción se modificó correctamente."), ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -884,7 +885,7 @@ namespace CapaVista
 
                     logica.GuardarPromocion(promocion, detalles, out codigoPromocion);
 
-                    MessageBox.Show("La promoción se guardó correctamente.\nCódigo: " + codigoPromocion, "Promociones",
+                    MessageBox.Show(ClsIdioma.T("La promoción se guardó correctamente.\nCódigo: ") + codigoPromocion, ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -892,7 +893,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar la promoción: " + ex.Message, "Promociones",
+                MessageBox.Show(ClsIdioma.T("Error al guardar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -935,7 +936,7 @@ namespace CapaVista
                 lstPromocionesEncontradas.DataSource = null;
                 lstPromocionesEncontradas.Visible = false;
 
-                MessageBox.Show("Error al buscar promociones: " + ex.Message, "Promociones",
+                MessageBox.Show(ClsIdioma.T("Error al buscar promociones: ") + ex.Message, ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -978,15 +979,15 @@ namespace CapaVista
                     {
                         string dias = string.Join(", ", ventana.DiasSeleccionados);
 
-                        lblResumenVigencia.Text = $"Días: {dias}\n" +
-                            $"Horario: {ventana.HoraInicioSeleccionada:hh\\:mm} - " +
+                        lblResumenVigencia.Text = (ClsIdioma.Ingles ? $"Days: {dias}\n" : $"Días: {dias}\n") +
+                            (ClsIdioma.Ingles ? $"Time: {ventana.HoraInicioSeleccionada:hh\\:mm} -" : $"Horario: {ventana.HoraInicioSeleccionada:hh\\:mm} - ") +
                             $"{ventana.HoraFinSeleccionada:hh\\:mm}";
                     }
                     else
                     {
-                        lblResumenVigencia.Text = $"Del {ventana.FechaInicioSeleccionada:dd/MM/yyyy} " +
-                            $"al {ventana.FechaFinSeleccionada:dd/MM/yyyy}\n" +
-                            $"Horario: {ventana.HoraInicioSeleccionada:hh\\:mm} - " +
+                        lblResumenVigencia.Text = (ClsIdioma.Ingles ? $"From {ventana.FechaInicioSeleccionada:dd/MM/yyyy}" : $"Del {ventana.FechaInicioSeleccionada:dd/MM/yyyy} ") +
+                            (ClsIdioma.Ingles ? $"to {ventana.FechaFinSeleccionada:dd/MM/yyyy}\n" : $"al {ventana.FechaFinSeleccionada:dd/MM/yyyy}\n") +
+                            (ClsIdioma.Ingles ? $"Time: {ventana.HoraInicioSeleccionada:hh\\:mm} -" : $"Horario: {ventana.HoraInicioSeleccionada:hh\\:mm} - ") +
                             $"{ventana.HoraFinSeleccionada:hh\\:mm}";
                     }
                 }
@@ -1031,12 +1032,12 @@ namespace CapaVista
                 if (idPromocionSeleccionada <= 0)
                 {
                     MessageBox.Show(
-                        "Primero buscá y seleccioná la promoción que querés eliminar.", "Promociones",
+                        ClsIdioma.T("Primero buscá y seleccioná la promoción que querés eliminar."), ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                DialogResult respuesta = MessageBox.Show("¿Estás seguro de que querés eliminar esta promoción?\nEsta acción no se puede deshacer.", "Confirmar eliminación",
+                DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Estás seguro de que querés eliminar esta promoción?\nEsta acción no se puede deshacer."), ClsIdioma.T("Confirmar eliminación"),
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (respuesta != DialogResult.Yes)
@@ -1044,14 +1045,14 @@ namespace CapaVista
 
                 logica.EliminarPromocion(idPromocionSeleccionada);
 
-                MessageBox.Show("La promoción se eliminó correctamente.", "Promociones",
+                MessageBox.Show(ClsIdioma.T("La promoción se eliminó correctamente."), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 LimpiarFormularioPromocion();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al eliminar la promoción: " + ex.Message, "Promociones",
+                MessageBox.Show(ClsIdioma.T("Error al eliminar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1124,7 +1125,7 @@ namespace CapaVista
 
                 promocionActivaSeleccionada = nuevoEstado;
 
-                MessageBox.Show(nuevoEstado ? "La promoción se activó correctamente." : "La promoción se desactivó correctamente.", "Promociones",
+                MessageBox.Show(nuevoEstado ? ClsIdioma.T("La promoción se activó correctamente.") : ClsIdioma.T("La promoción se desactivó correctamente."), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 ActualizarTextoCheckboxPromocion();
@@ -1138,7 +1139,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo cambiar el estado de la promoción: " + ex.Message, "Promociones",
+                MessageBox.Show(ClsIdioma.T("No se pudo cambiar el estado de la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -1173,13 +1174,13 @@ namespace CapaVista
 
                     cmbDescuentoVolumen.SelectedValue = idNuevo;
 
-                    MessageBox.Show( "La mecánica se guardó correctamente.", "Agregar mecánica",
+                    MessageBox.Show( ClsIdioma.T("La mecánica se guardó correctamente."), ClsIdioma.T("Agregar mecánica"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information
                     );
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error al agregar mecánica",
+                    MessageBox.Show(ex.Message, ClsIdioma.T("Error al agregar mecánica"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error
                     );
                 }

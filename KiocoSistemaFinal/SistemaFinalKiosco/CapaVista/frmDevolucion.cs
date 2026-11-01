@@ -25,6 +25,7 @@ namespace CapaVista
         public frmDevolucion()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
 
             btnNuevaDevolucion.Enabled = SesionUsuario.Permisos.Contains(220) || SesionUsuario.Permisos.Contains(221);
 
@@ -32,6 +33,7 @@ namespace CapaVista
             dateTimePicker1.Value = DateTime.Today.AddDays(-30);
             dateTimePicker2.Value = DateTime.Today;
             cmbTipo.SelectedIndex = 0;
+            ClsIdioma.TraducirOpciones(cmbTipo);   // se elige por posición
             cargando = false;
 
             CargarDevoluciones();
@@ -55,7 +57,7 @@ namespace CapaVista
             {
                 devolucionesCargadas = null;
 
-                MessageBox.Show("No se pudieron obtener las devoluciones.\n\n" + ex.Message, "Error",
+                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las devoluciones.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -70,7 +72,8 @@ namespace CapaVista
 
             if (devolucionesCargadas != null)
             {
-                string tipoElegido = cmbTipo.SelectedIndex > 0 ? cmbTipo.Text : "";
+                string[] tiposDato = { "", "Reintegro en efectivo", "Cambio de unidad" };   // así vienen de la base
+                string tipoElegido = cmbTipo.SelectedIndex > 0 && cmbTipo.SelectedIndex < tiposDato.Length ? tiposDato[cmbTipo.SelectedIndex] : "";
                 string texto = txtBuscar.Text.Trim();
 
                 foreach (DataRow fila in devolucionesCargadas.Rows)
@@ -104,8 +107,8 @@ namespace CapaVista
                         producto,
                         Convert.ToDecimal(fila["Cantidad"]).ToString("0.###"),
                         tipo,
-                        esEfectivo ? importe.ToString("C2") : "Sin reintegro",
-                        reingresa ? "Sí" : "No (descartada)",
+                        esEfectivo ? importe.ToString("C2") : ClsIdioma.T("Sin reintegro"),
+                        reingresa ? ClsIdioma.T("Sí") : ClsIdioma.T("No (descartada)"),
                         cajero,
                         fila["IdSesionCaja"] == DBNull.Value ? "-" : fila["IdSesionCaja"].ToString());
 
@@ -132,9 +135,9 @@ namespace CapaVista
             ElegirFila(idAElegir);
 
             lblResumen.Text = dataGridView1.Rows.Count == 0
-                ? "No hay devoluciones para mostrar con estos filtros."
-                : dataGridView1.Rows.Count + (dataGridView1.Rows.Count == 1 ? " devolución" : " devoluciones") +
-                  "   ·   Total reintegrado en efectivo: " + totalReintegrado.ToString("C2");
+                ? ClsIdioma.T("No hay devoluciones para mostrar con estos filtros.")
+                : dataGridView1.Rows.Count + (dataGridView1.Rows.Count == 1 ? ClsIdioma.T(" devolución") : ClsIdioma.T(" devoluciones")) +
+                  ClsIdioma.T("   ·   Total reintegrado en efectivo: ") + totalReintegrado.ToString("C2");
 
             MostrarMotivo();
         }
@@ -170,7 +173,7 @@ namespace CapaVista
             }
 
             string motivo = fila["Motivo"]?.ToString() ?? "";
-            txtMotivo.Text = string.IsNullOrWhiteSpace(motivo) ? "Sin motivo registrado." : motivo;
+            txtMotivo.Text = string.IsNullOrWhiteSpace(motivo) ? ClsIdioma.T("Sin motivo registrado.") : motivo;
         }
         private int? IdDevolucionElegida()
         {

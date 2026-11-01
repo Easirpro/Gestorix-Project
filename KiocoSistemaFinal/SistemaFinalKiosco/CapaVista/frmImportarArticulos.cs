@@ -19,6 +19,7 @@ namespace CapaVista
         public frmImportarArticulos()
         {
             InitializeComponent();
+            ClsIdioma.Registrar(this);
         }
 
         #region Metodos
@@ -33,7 +34,7 @@ namespace CapaVista
                     //Verifica las hojas de los articulos
                     if (!libro.Worksheets.Contains("ARTICULOS"))
                     {
-                        MessageBox.Show("El archivo no contiene la hoja 'ARTICULOS'.", "Importación de artículos",
+                        MessageBox.Show(ClsIdioma.T("El archivo no contiene la hoja 'ARTICULOS'."), ClsIdioma.T("Importación de artículos"),
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         return;
@@ -45,7 +46,7 @@ namespace CapaVista
 
                     if (ultimaFila < 3)
                     {
-                        MessageBox.Show("No se encontraron artículos para importar.","Importación de artículos",
+                        MessageBox.Show(ClsIdioma.T("No se encontraron artículos para importar."),ClsIdioma.T("Importación de artículos"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         return;
@@ -130,7 +131,7 @@ namespace CapaVista
                                 //La fecha no es valida
                                 if (!fechaVencimiento.HasValue)
                                 {
-                                    errores.Add( $"Fila {fila}: la Fecha Vencimiento '{fechaTexto}' no tiene un formato válido. Use dd/MM/yyyy o 8 dígitos, por ejemplo 25092026.");
+                                    errores.Add( (ClsIdioma.Ingles ? $"Row {fila}: the expiration date '{fechaTexto}' does not have a valid format. Use dd/MM/yyyy or 8 digits, for example 25092026." : $"Fila {fila}: la Fecha Vencimiento '{fechaTexto}' no tiene un formato válido. Use dd/MM/yyyy o 8 dígitos, por ejemplo 25092026."));
 
                                     continue;
                                 }
@@ -150,7 +151,7 @@ namespace CapaVista
                         {
                             if (logica.ExisteCodigoBarra(codigoBarra))
                             {
-                                errores.Add($"Fila {fila}: el código de barra '{codigoBarra}' ya existe en la base de datos.");
+                                errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the barcode '{codigoBarra}' already exists in the database." : $"Fila {fila}: el código de barra '{codigoBarra}' ya existe en la base de datos."));
 
                                 continue;
                             }
@@ -159,14 +160,14 @@ namespace CapaVista
                         //Campos obligatorio
                         if (string.IsNullOrWhiteSpace(nombre))
                         {
-                            errores.Add($"Fila {fila}: el campo 'Nombre' es obligatorio.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the 'Nombre' field is required." : $"Fila {fila}: el campo 'Nombre' es obligatorio."));
 
                             continue;
                         }
 
                         if (string.IsNullOrWhiteSpace(marca))
                         {
-                            errores.Add($"Fila {fila}: el campo 'Marca' es obligatorio.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the 'Marca' field is required." : $"Fila {fila}: el campo 'Marca' es obligatorio."));
 
                             continue;
                         }
@@ -175,14 +176,14 @@ namespace CapaVista
 
                         if (idMarca == 0)
                         {
-                            errores.Add($"Fila {fila}: la marca '{marca}' no existe o no está activa.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the brand '{marca}' does not exist or is not active." : $"Fila {fila}: la marca '{marca}' no existe o no está activa."));
 
                             continue;
                         }
 
                         if (string.IsNullOrWhiteSpace(categoria))
                         {
-                            errores.Add($"Fila {fila}: el campo 'Categoría' es obligatorio.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the 'Categoría' field is required." : $"Fila {fila}: el campo 'Categoría' es obligatorio."));
 
                             continue;
                         }
@@ -191,14 +192,14 @@ namespace CapaVista
 
                         if (idCategoria == 0)
                         {
-                            errores.Add($"Fila {fila}: la categoría '{categoria}' no existe o no está activa.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the category '{categoria}' does not exist or is not active." : $"Fila {fila}: la categoría '{categoria}' no existe o no está activa."));
 
                             continue;
                         }
 
                         if (string.IsNullOrWhiteSpace(unidad))
                         {
-                            errores.Add($"Fila {fila}: el campo 'Unidad' es obligatorio.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the 'Unidad' field is required." : $"Fila {fila}: el campo 'Unidad' es obligatorio."));
 
                             continue;
                         }
@@ -207,14 +208,14 @@ namespace CapaVista
 
                         if (idUnidad == 0)
                         {
-                            errores.Add($"Fila {fila}: la unidad '{unidad}' no existe.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the unit '{unidad}' does not exist." : $"Fila {fila}: la unidad '{unidad}' no existe."));
 
                             continue;
                         }
 
                         if (string.IsNullOrWhiteSpace(ivaTexto))
                         {
-                            errores.Add($"Fila {fila}: el campo 'IVA' es obligatorio.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the 'IVA' field is required." : $"Fila {fila}: el campo 'IVA' es obligatorio."));
 
                             continue;
                         }
@@ -223,7 +224,7 @@ namespace CapaVista
 
                         if (!decimal.TryParse(ivaTexto, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.CurrentCulture, out alicuota))
                         {
-                            errores.Add($"Fila {fila}: el IVA '{ivaTexto}' no tiene un formato válido.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: the VAT '{ivaTexto}' does not have a valid format." : $"Fila {fila}: el IVA '{ivaTexto}' no tiene un formato válido."));
 
                             continue;
                         }
@@ -232,7 +233,7 @@ namespace CapaVista
 
                         if (idIVA == 0)
                         {
-                            errores.Add($"Fila {fila}: no existe un IVA activo con alícuota {alicuota}.");
+                            errores.Add((ClsIdioma.Ingles ? $"Row {fila}: there is no active VAT with rate {alicuota}." : $"Fila {fila}: no existe un IVA activo con alícuota {alicuota}."));
 
                             continue;
                         }
@@ -263,7 +264,7 @@ namespace CapaVista
                     //Validar articulo
                     if (cantidadArticulos == 0 && errores.Count == 0)
                     {
-                        MessageBox.Show("No se encontraron artículos para importar.","Importación de artículos",
+                        MessageBox.Show(ClsIdioma.T("No se encontraron artículos para importar."),ClsIdioma.T("Importación de artículos"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         return;
@@ -271,13 +272,13 @@ namespace CapaVista
 
                     if (errores.Count > 0)
                     {
-                        string mensaje = "Se encontraron los siguientes errores:\n\n";
+                        string mensaje = ClsIdioma.T("Se encontraron los siguientes errores:\n\n");
 
                         mensaje += string.Join(Environment.NewLine, errores);
 
-                        mensaje += "\n\nNo se importó ningún artículo. Corrija el archivo y vuelva a intentarlo.";
+                        mensaje += ClsIdioma.T("\n\nNo se importó ningún artículo. Corrija el archivo y vuelva a intentarlo.");
 
-                        MessageBox.Show(mensaje,"Errores de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(mensaje,ClsIdioma.T("Errores de validación"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         return;
                     }
@@ -285,7 +286,7 @@ namespace CapaVista
                     //Verificacion proveedores costo
                     if (!libro.Worksheets.Contains("PROVEEDORES_COSTOS"))
                     {
-                        MessageBox.Show("El archivo no contiene la hoja 'PROVEEDORES_COSTOS'.", "Importación de artículos",
+                        MessageBox.Show(ClsIdioma.T("El archivo no contiene la hoja 'PROVEEDORES_COSTOS'."), ClsIdioma.T("Importación de artículos"),
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         return;
@@ -313,28 +314,28 @@ namespace CapaVista
 
                             if (string.IsNullOrWhiteSpace(codigoBarra))
                             {
-                                errores.Add($"PROVEEDORES_COSTOS - Fila {fila}: el Código de Barra es obligatorio.");
+                                errores.Add((ClsIdioma.Ingles ? $"PROVEEDORES_COSTOS - Row {fila}: the barcode is required." : $"PROVEEDORES_COSTOS - Fila {fila}: el Código de Barra es obligatorio."));
 
                                 continue;
                             }
 
                             if (string.IsNullOrWhiteSpace(proveedor))
                             {
-                                errores.Add($"PROVEEDORES_COSTOS - Fila {fila}: el Proveedor es obligatorio.");
+                                errores.Add((ClsIdioma.Ingles ? $"PROVEEDORES_COSTOS - Row {fila}: the supplier is required." : $"PROVEEDORES_COSTOS - Fila {fila}: el Proveedor es obligatorio."));
 
                                 continue;
                             }
 
                             if (string.IsNullOrWhiteSpace(sucursal))
                             {
-                                errores.Add($"PROVEEDORES_COSTOS - Fila {fila}: la Sucursal es obligatoria.");
+                                errores.Add((ClsIdioma.Ingles ? $"PROVEEDORES_COSTOS - Row {fila}: the branch is required." : $"PROVEEDORES_COSTOS - Fila {fila}: la Sucursal es obligatoria."));
 
                                 continue;
                             }
 
                             if (string.IsNullOrWhiteSpace(precioTexto))
                             {
-                                errores.Add($"PROVEEDORES_COSTOS - Fila {fila}: el Precio de Compra es obligatorio.");
+                                errores.Add((ClsIdioma.Ingles ? $"PROVEEDORES_COSTOS - Row {fila}: the purchase price is required." : $"PROVEEDORES_COSTOS - Fila {fila}: el Precio de Compra es obligatorio."));
 
                                 continue;
                             }
@@ -343,14 +344,14 @@ namespace CapaVista
 
                             if (!decimal.TryParse(precioTexto, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.CurrentCulture, out precioCompra))
                             {
-                                errores.Add($"PROVEEDORES_COSTOS - Fila {fila}: el Precio de Compra '{precioTexto}' no tiene un formato válido.");
+                                errores.Add((ClsIdioma.Ingles ? $"PROVEEDORES_COSTOS - Row {fila}: the purchase price '{precioTexto}' does not have a valid format." : $"PROVEEDORES_COSTOS - Fila {fila}: el Precio de Compra '{precioTexto}' no tiene un formato válido."));
 
                                 continue;
                             }
 
                             if (precioCompra < 0)
                             {
-                                errores.Add( $"PROVEEDORES_COSTOS - Fila {fila}: el Precio de Compra no puede ser negativo.");
+                                errores.Add( (ClsIdioma.Ingles ? $"PROVEEDORES_COSTOS - Row {fila}: the purchase price cannot be negative." : $"PROVEEDORES_COSTOS - Fila {fila}: el Precio de Compra no puede ser negativo."));
 
                                 continue;
                             }
@@ -366,7 +367,7 @@ namespace CapaVista
 
                         if (!existeArticuloEnImportacion)
                         {
-                            errores.Add($"PROVEEDORES_COSTOS: el código de barra '{proveedorCosto.CodigoBarra}' " + $"no corresponde a ningún artículo de la hoja ARTICULOS.");
+                            errores.Add((ClsIdioma.Ingles ? $"PROVEEDORES_COSTOS: the barcode '{proveedorCosto.CodigoBarra}'" : $"PROVEEDORES_COSTOS: el código de barra '{proveedorCosto.CodigoBarra}' ") + (ClsIdioma.Ingles ? $"does not match any product in the ARTICULOS sheet." : $"no corresponde a ningún artículo de la hoja ARTICULOS."));
                         }
                     }
 
@@ -379,20 +380,20 @@ namespace CapaVista
 
                             if (idSucursal == 0)
                             {
-                                errores.Add($"PROVEEDORES_COSTOS: el proveedor '{proveedorCosto.Proveedor}' " +
-                                    $"no tiene una sucursal activa llamada '{proveedorCosto.Sucursal}'.");
+                                errores.Add((ClsIdioma.Ingles ? $"PROVEEDORES_COSTOS: the supplier '{proveedorCosto.Proveedor}'" : $"PROVEEDORES_COSTOS: el proveedor '{proveedorCosto.Proveedor}' ") +
+                                    (ClsIdioma.Ingles ? $"does not have an active branch named '{proveedorCosto.Sucursal}'." : $"no tiene una sucursal activa llamada '{proveedorCosto.Sucursal}'."));
                             }
                         }
                     }
 
                     if (errores.Count > 0)
                     {
-                        string mensaje = "Se encontraron los siguientes errores:\n\n";
+                        string mensaje = ClsIdioma.T("Se encontraron los siguientes errores:\n\n");
 
                         mensaje += string.Join(Environment.NewLine,errores);
-                        mensaje += "\n\nNo se importó ningún artículo. Corrija el archivo y vuelva a intentarlo.";
+                        mensaje += ClsIdioma.T("\n\nNo se importó ningún artículo. Corrija el archivo y vuelva a intentarlo.");
 
-                        MessageBox.Show(mensaje,"Errores de validación",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(mensaje,ClsIdioma.T("Errores de validación"),MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         return;
                     }
@@ -412,21 +413,21 @@ namespace CapaVista
                     {
                         logica.ImportarProductos(productos, costosImportacion, fechasVencimiento);
 
-                        MessageBox.Show($"Importación realizada correctamente.\n\n" +$"Artículos importados: {productos.Count}\n" +
-                            $"Relaciones proveedor/sucursal: {costosImportacion.Count}", "Importación de artículos",
+                        MessageBox.Show((ClsIdioma.Ingles ? $"Import completed successfully.\n\n" : $"Importación realizada correctamente.\n\n") +(ClsIdioma.Ingles ? $"Imported products: {productos.Count}\n" : $"Artículos importados: {productos.Count}\n") +
+                            (ClsIdioma.Ingles ? $"Supplier/branch relations: {costosImportacion.Count}" : $"Relaciones proveedor/sucursal: {costosImportacion.Count}"), ClsIdioma.T("Importación de artículos"),
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("No se pudo completar la importación.\n\n" +
-                            "No se guardó ningún artículo, proveedor, costo ni lote.\n\n" +ex.Message, "Error de importación",
+                        MessageBox.Show(ClsIdioma.T("No se pudo completar la importación.\n\n") +
+                            ClsIdioma.T("No se guardó ningún artículo, proveedor, costo ni lote.\n\n") +ex.Message, ClsIdioma.T("Error de importación"),
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ocurrió un error al leer o procesar el archivo de Excel.\n\n" +ex.Message, "Importación de artículos",
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error al leer o procesar el archivo de Excel.\n\n") +ex.Message, ClsIdioma.T("Importación de artículos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -971,7 +972,7 @@ namespace CapaVista
                     //Guardar
                     SaveFileDialog guardar = new SaveFileDialog();
 
-                    guardar.Title = "Guardar plantilla de importación";
+                    guardar.Title = ClsIdioma.T("Guardar plantilla de importación");
                     guardar.Filter = "Archivo de Excel (*.xlsx)|*.xlsx";
                     guardar.FileName = "Plantilla_Importacion_Articulos.xlsx";
                     guardar.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -980,14 +981,14 @@ namespace CapaVista
                     {
                         libro.SaveAs(guardar.FileName);
 
-                        MessageBox.Show("La plantilla fue generada correctamente.","Plantilla de importación",
+                        MessageBox.Show(ClsIdioma.T("La plantilla fue generada correctamente."),ClsIdioma.T("Plantilla de importación"),
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo generar la plantilla.\n\n" + ex.Message, "Plantilla de importación",
+                MessageBox.Show(ClsIdioma.T("No se pudo generar la plantilla.\n\n") + ex.Message, ClsIdioma.T("Plantilla de importación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1000,7 +1001,7 @@ namespace CapaVista
         {
             OpenFileDialog abrirArchivo = new OpenFileDialog();
 
-            abrirArchivo.Title = "Seleccionar plantilla de artículos";
+            abrirArchivo.Title = ClsIdioma.T("Seleccionar plantilla de artículos");
             abrirArchivo.Filter = "Archivo de Excel (*.xlsx)|*.xlsx";
             abrirArchivo.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             abrirArchivo.Multiselect = false;
@@ -1018,7 +1019,7 @@ namespace CapaVista
         {
             if (string.IsNullOrWhiteSpace(txtTraerArchivo.Text))
             {
-                MessageBox.Show("Debe seleccionar un archivo de Excel.", "Importación de artículos",
+                MessageBox.Show(ClsIdioma.T("Debe seleccionar un archivo de Excel."), ClsIdioma.T("Importación de artículos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -1026,7 +1027,7 @@ namespace CapaVista
 
             if (!File.Exists(txtTraerArchivo.Text))
             {
-                MessageBox.Show("El archivo seleccionado no existe.", "Importación de artículos",
+                MessageBox.Show(ClsIdioma.T("El archivo seleccionado no existe."), ClsIdioma.T("Importación de artículos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
