@@ -21,6 +21,11 @@ namespace CapaVista
 
         private clsBitacoraLogica logicaBitacora = new clsBitacoraLogica();
         private int idProductoModificar = 0;
+
+        // Proveedores del artículo (cada fila es una sucursal de un proveedor). Al modificar se
+        // recuerdan las que tenía, para dar de baja las que se quiten de la lista.
+        private DataTable tablaProveedores = CrearTablaProveedores();
+        private List<int> sucursalesOriginales = new List<int>();
         public frmNuevoArticulo()
         {
             InitializeComponent();
@@ -61,6 +66,7 @@ namespace CapaVista
                 CargarUnidades();
                 CargarIVAs();
                 CargarProveedores();
+                ConfigurarGrillaProveedores();
 
                 if (idProductoModificar == 0)
                 {
@@ -120,23 +126,21 @@ namespace CapaVista
 
             DataTable tablaProveedor = logica.ObtenerProveedoresPorProducto(idProductoModificar);
 
-            if (tablaProveedor.Rows.Count > 0)
+            foreach (DataRow proveedor in tablaProveedor.Rows)
             {
-                DataRow proveedor = tablaProveedor.Rows[0];
+                if (proveedor["Activo"] != DBNull.Value && !Convert.ToBoolean(proveedor["Activo"]))
+                    continue;
 
-                int idProveedor = Convert.ToInt32(proveedor["IdProveedor"]);
                 int idSucursal = Convert.ToInt32(proveedor["IdSucursal"]);
 
-                DataTable tablaSucursales = logicaProveedor.ObtenerSucursalesPorProveedor(idProveedor);
+                tablaProveedores.Rows.Add(idSucursal, proveedor["Proveedor"].ToString(), proveedor["Sucursal"].ToString());
+                sucursalesOriginales.Add(idSucursal);
 
-                cmbSucursal.DataSource = tablaSucursales;
-                cmbSucursal.DisplayMember = "Sucursal";
-                cmbSucursal.ValueMember = "IdSucursal";
-
-                cmbProveedor.SelectedValue = idProveedor;
-                cmbSucursal.SelectedValue = idSucursal;
-
-                txtPrecioCosto.Text = proveedor["PrecioCompra"] == DBNull.Value ? "" : proveedor["PrecioCompra"].ToString();
+                // El costo que se muestra es el del primer proveedor que lo tenga cargado.
+                if (txtPrecioCosto.Text == "" && proveedor["PrecioCompra"] != DBNull.Value)
+                {
+                    txtPrecioCosto.Text = proveedor["PrecioCompra"].ToString();
+                }
             }
 
             txtCodigo.Text = fila["CodigoBarra"]?.ToString() ?? "";
@@ -424,6 +428,74 @@ namespace CapaVista
 
             cmbProveedor.SelectedIndex = 0;
         }
+        private static DataTable CrearTablaProveedores()
+        {
+            DataTable tabla = new DataTable();
+
+            tabla.Columns.Add("IdSucursal", typeof(int));
+            tabla.Columns.Add("Proveedor", typeof(string));
+            tabla.Columns.Add("Sucursal", typeof(string));
+
+            return tabla;
+        }
+        private void ConfigurarGrillaProveedores()
+        {
+            dgvProveedores.DataSource = tablaProveedores;
+
+            dgvProveedores.Columns["IdSucursal"].Visible = false;
+            dgvProveedores.Columns["Proveedor"].HeaderText = ClsIdioma.T("Proveedor");
+            dgvProveedores.Columns["Sucursal"].HeaderText = ClsIdioma.T("Sucursal");
+        }
+        // Proveedor y sucursal elegidos en los combos (los dos tienen que estar elegidos).
+        private bool ObtenerSucursalElegida(out int idSucursal)
+        {
+            idSucursal = 0;
+
+            return cmbProveedor.SelectedValue != null &&
+                   int.TryParse(cmbProveedor.SelectedValue.ToString(), out int idProveedor) && idProveedor > 0 &&
+                   cmbSucursal.SelectedValue != null &&
+                   int.TryParse(cmbSucursal.SelectedValue.ToString(), out idSucursal) && idSucursal > 0;
+        }
+        private bool ProveedorElegido()
+        {
+            return cmbProveedor.SelectedValue != null &&
+                   int.TryParse(cmbProveedor.SelectedValue.ToString(), out int idProveedor) && idProveedor > 0;
+        }
+        private void AgregarSucursalALista(int idSucursal)
+        {
+            tablaProveedores.Rows.Add(idSucursal, cmbProveedor.Text, cmbSucursal.Text);
+        }
+        private List<int> ObtenerSucursalesDeLista()
+        {
+            return tablaProveedores.Rows.Cast<DataRow>().Select(fila => Convert.ToInt32(fila["IdSucursal"])).ToList();
+        }
+        // Deja activos los proveedores de la lista (los nuevos se agregan) y da de baja los que se quitaron.
+        private bool GuardarProveedores(int idProducto, List<int> sucursales)
+        {
+            foreach (int idSucursal in sucursales)
+            {
+                if (!GuardarRelacionProveedor(idProducto, idSucursal, true))
+                    return false;
+            }
+
+            foreach (int idSucursal in sucursalesOriginales.Except(sucursales))
+            {
+                if (!GuardarRelacionProveedor(idProducto, idSucursal, false))
+                    return false;
+            }
+
+            return true;
+        }
+        private bool GuardarRelacionProveedor(int idProducto, int idSucursal, bool activo)
+        {
+            ClsProductoSucursalProveedor relacion = new ClsProductoSucursalProveedor();
+
+            relacion.IdProducto = idProducto;
+            relacion.IdSucursal = idSucursal;
+            relacion.Activo = activo;
+
+            return logica.ModificarProductoSucursalProveedor(relacion);
+        }
 
 
         #endregion
@@ -442,27 +514,28 @@ namespace CapaVista
                     return;
                 }
 
-                // El proveedor es opcional; si se elige uno, hace falta la sucursal.
-                int idProveedor = 0;
-                int idSucursal = 0;
-
-                if (cmbProveedor.SelectedValue != null)
+                // Los proveedores son opcionales. Si la lista está vacía pero hay uno elegido en los
+                // combos, se toma ese, así alcanza con elegirlo cuando el artículo tiene uno solo.
+                if (tablaProveedores.Rows.Count == 0 && ProveedorElegido())
                 {
-                    int.TryParse(cmbProveedor.SelectedValue.ToString(), out idProveedor);
+                    if (!ObtenerSucursalElegida(out int idSucursalElegida))
+                    {
+                        MessageBox.Show(ClsIdioma.T("Seleccione una sucursal."));
+                        cmbSucursal.Focus();
+                        return;
+                    }
+
+                    AgregarSucursalALista(idSucursalElegida);
                 }
 
-                if (idProveedor > 0 &&
-                    (cmbSucursal.SelectedValue == null || !int.TryParse(cmbSucursal.SelectedValue.ToString(), out idSucursal) || idSucursal == 0))
-                {
-                    MessageBox.Show(ClsIdioma.T("Seleccione una sucursal."));
-                    cmbSucursal.Focus();
-                    return;
-                }
+                List<int> sucursales = ObtenerSucursalesDeLista();
 
-                // El lote se guarda por sucursal: sin proveedor no se puede cargar.
+                // El lote se guarda por sucursal: se usa la del primer proveedor de la lista.
+                int idSucursal = sucursales.Count > 0 ? sucursales[0] : 0;
+
                 if ((chkControlLote.Checked || chkAlertaVencimiento.Checked) && idSucursal == 0)
                 {
-                    MessageBox.Show(ClsIdioma.T("Para cargar lote o vencimiento seleccione el proveedor y la sucursal."));
+                    MessageBox.Show(ClsIdioma.T("Para cargar lote o vencimiento agregue al menos un proveedor."));
                     cmbProveedor.Focus();
                     return;
                 }
@@ -508,25 +581,10 @@ namespace CapaVista
                         return;
                     }
 
-                    ClsProductoSucursalProveedor relacion = new ClsProductoSucursalProveedor();
-
-                    relacion.IdProducto = idProductoModificar;
-                    relacion.IdSucursal = idSucursal;
-                    relacion.Activo = true;
-
-                    bool relacionModificada = idSucursal == 0 || logica.ModificarProductoSucursalProveedor(relacion);
-
-                    if (!relacionModificada)
+                    if (!GuardarProveedores(idProductoModificar, sucursales))
                     {
-                        MessageBox.Show(
-                            ClsIdioma.T("No se pudo actualizar la relación con la sucursal.\n\n") +
-                            ClsIdioma.T("IdProducto: ") + relacion.IdProducto + "\n" +
-                            ClsIdioma.T("IdSucursal: ") + relacion.IdSucursal + "\n\n" +
-                            ClsIdioma.T("La operación de modificación devolvió false."),
-                            ClsIdioma.T("Error al actualizar sucursal"),
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
-
+                        MessageBox.Show(ClsIdioma.T("El artículo y el stock se actualizaron, pero no se pudieron guardar los proveedores."), ClsIdioma.T("Modificar artículo"),
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -572,15 +630,11 @@ namespace CapaVista
 
                 logica.RegistrarStock(idProducto, stockActual, stockMinimo, stockIdeal);
 
-                if (idSucursal > 0)
+                if (!GuardarProveedores(idProducto, sucursales))
                 {
-                    ClsProductoSucursalProveedor nuevaRelacion = new ClsProductoSucursalProveedor();
-
-                    nuevaRelacion.IdProducto = idProducto;
-                    nuevaRelacion.IdSucursal = idSucursal;
-                    nuevaRelacion.Activo = true;
-
-                    logica.RegistrarProductoSucursalProveedor(nuevaRelacion);
+                    MessageBox.Show(ClsIdioma.T("El artículo se registró, pero no se pudieron guardar los proveedores."), ClsIdioma.T("Nuevo artículo"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
 
                 if (chkAlertaVencimiento.Checked || chkControlLote.Checked)
@@ -736,6 +790,36 @@ namespace CapaVista
                 MessageBox.Show(ClsIdioma.T("Ocurrió un error al cargar las sucursales del proveedor.\n\n") + ex.Message,ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private void btnAgregarProveedor_Click(object sender, EventArgs e)
+        {
+            if (!ObtenerSucursalElegida(out int idSucursal))
+            {
+                MessageBox.Show(ClsIdioma.T("Seleccione el proveedor y la sucursal."), ClsIdioma.T("Proveedores"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbProveedor.Focus();
+                return;
+            }
+
+            if (ObtenerSucursalesDeLista().Contains(idSucursal))
+            {
+                MessageBox.Show(ClsIdioma.T("Ese proveedor y sucursal ya están en la lista."), ClsIdioma.T("Proveedores"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            AgregarSucursalALista(idSucursal);
+        }
+        private void btnQuitarProveedor_Click(object sender, EventArgs e)
+        {
+            if (dgvProveedores.CurrentRow?.DataBoundItem is not DataRowView fila)
+            {
+                MessageBox.Show(ClsIdioma.T("Seleccione un proveedor de la lista."), ClsIdioma.T("Proveedores"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            tablaProveedores.Rows.Remove(fila.Row);
         }
         private void btnCancelar_Click(object sender, EventArgs e)
         {

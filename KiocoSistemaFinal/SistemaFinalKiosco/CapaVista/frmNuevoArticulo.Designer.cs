@@ -64,6 +64,9 @@ namespace CapaVista
             cmbProveedor = new ComboBox();
             label14 = new Label();
             cmbSucursal = new ComboBox();
+            btnAgregarProveedor = new Button();
+            dgvProveedores = new DataGridView();
+            btnQuitarProveedor = new Button();
             grpIdentificacion = new GroupBox();
             label16 = new Label();
             txtNombreProducto = new TextBox();
@@ -94,6 +97,7 @@ namespace CapaVista
             tbpVencimiento.SuspendLayout();
             tbpLotes.SuspendLayout();
             tbpProveedor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvProveedores).BeginInit();
             grpIdentificacion.SuspendLayout();
             pnlPie.SuspendLayout();
             grpDatosPrincipales.SuspendLayout();
@@ -477,6 +481,9 @@ namespace CapaVista
             tbpProveedor.Controls.Add(cmbProveedor);
             tbpProveedor.Controls.Add(label14);
             tbpProveedor.Controls.Add(cmbSucursal);
+            tbpProveedor.Controls.Add(btnAgregarProveedor);
+            tbpProveedor.Controls.Add(dgvProveedores);
+            tbpProveedor.Controls.Add(btnQuitarProveedor);
             tbpProveedor.Location = new Point(4, 26);
             tbpProveedor.Name = "tbpProveedor";
             tbpProveedor.Padding = new Padding(9);
@@ -487,7 +494,7 @@ namespace CapaVista
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(14, 29);
+            label13.Location = new Point(14, 12);
             label13.Name = "label13";
             label13.Size = new Size(61, 15);
             label13.TabIndex = 0;
@@ -496,16 +503,16 @@ namespace CapaVista
             // cmbProveedor
             // 
             cmbProveedor.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbProveedor.Location = new Point(18, 51);
+            cmbProveedor.Location = new Point(18, 32);
             cmbProveedor.Name = "cmbProveedor";
-            cmbProveedor.Size = new Size(349, 23);
+            cmbProveedor.Size = new Size(230, 23);
             cmbProveedor.TabIndex = 1;
             cmbProveedor.SelectedIndexChanged += cmbProveedor_SelectedIndexChanged;
             // 
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(14, 102);
+            label14.Location = new Point(258, 12);
             label14.Name = "label14";
             label14.Size = new Size(51, 15);
             label14.TabIndex = 2;
@@ -514,10 +521,48 @@ namespace CapaVista
             // cmbSucursal
             // 
             cmbSucursal.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbSucursal.Location = new Point(18, 123);
+            cmbSucursal.Location = new Point(262, 32);
             cmbSucursal.Name = "cmbSucursal";
-            cmbSucursal.Size = new Size(349, 23);
+            cmbSucursal.Size = new Size(180, 23);
             cmbSucursal.TabIndex = 3;
+            // 
+            // btnAgregarProveedor
+            // 
+            btnAgregarProveedor.Location = new Point(452, 31);
+            btnAgregarProveedor.Name = "btnAgregarProveedor";
+            btnAgregarProveedor.Size = new Size(85, 25);
+            btnAgregarProveedor.TabIndex = 4;
+            btnAgregarProveedor.Text = "Agregar";
+            btnAgregarProveedor.UseVisualStyleBackColor = true;
+            btnAgregarProveedor.Click += btnAgregarProveedor_Click;
+            // 
+            // dgvProveedores
+            // 
+            dgvProveedores.AllowUserToAddRows = false;
+            dgvProveedores.AllowUserToDeleteRows = false;
+            dgvProveedores.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvProveedores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvProveedores.BackgroundColor = SystemColors.Window;
+            dgvProveedores.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvProveedores.Location = new Point(18, 70);
+            dgvProveedores.MultiSelect = false;
+            dgvProveedores.Name = "dgvProveedores";
+            dgvProveedores.ReadOnly = true;
+            dgvProveedores.RowHeadersVisible = false;
+            dgvProveedores.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvProveedores.Size = new Size(519, 200);
+            dgvProveedores.TabIndex = 5;
+            // 
+            // btnQuitarProveedor
+            // 
+            btnQuitarProveedor.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnQuitarProveedor.Location = new Point(18, 278);
+            btnQuitarProveedor.Name = "btnQuitarProveedor";
+            btnQuitarProveedor.Size = new Size(85, 25);
+            btnQuitarProveedor.TabIndex = 6;
+            btnQuitarProveedor.Text = "Quitar";
+            btnQuitarProveedor.UseVisualStyleBackColor = true;
+            btnQuitarProveedor.Click += btnQuitarProveedor_Click;
             // 
             // grpIdentificacion
             // 
@@ -755,6 +800,7 @@ namespace CapaVista
             tbpVencimiento.PerformLayout();
             tbpLotes.ResumeLayout(false);
             tbpLotes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvProveedores).EndInit();
             tbpProveedor.ResumeLayout(false);
             tbpProveedor.PerformLayout();
             grpIdentificacion.ResumeLayout(false);
@@ -840,6 +886,9 @@ namespace CapaVista
         private ComboBox cmbProveedor;
         private Label label14;
         private ComboBox cmbSucursal;
+        private Button btnAgregarProveedor;
+        private DataGridView dgvProveedores;
+        private Button btnQuitarProveedor;
         private Panel pnlPie;
         private Button btnCancelar;
         private Button btnGuardar;
