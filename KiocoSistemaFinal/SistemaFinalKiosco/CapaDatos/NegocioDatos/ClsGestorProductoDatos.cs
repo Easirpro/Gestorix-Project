@@ -40,10 +40,10 @@ namespace CapaDatos.NegocioDatos
             using (SqlCommand cmd = new SqlCommand("sp_RegistrarProducto", conexion))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@CodigoBarra", producto.CodigoBarra);
+                cmd.Parameters.AddWithValue("@CodigoBarra", string.IsNullOrWhiteSpace(producto.CodigoBarra) ? (object)DBNull.Value : producto.CodigoBarra);
                 cmd.Parameters.AddWithValue("@SKU", producto.SKU);
                 cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
-                cmd.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                cmd.Parameters.AddWithValue("@Descripcion", string.IsNullOrWhiteSpace(producto.Descripcion) ? (object)DBNull.Value : producto.Descripcion);
                 cmd.Parameters.AddWithValue("@IdMarca", producto.IdMarca);
                 cmd.Parameters.AddWithValue("@IdIVA", producto.IdIVA);
                 cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
@@ -483,10 +483,10 @@ namespace CapaDatos.NegocioDatos
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@IdProducto", producto.IdProducto);
-                cmd.Parameters.AddWithValue("@CodigoBarra", producto.CodigoBarra);
+                cmd.Parameters.AddWithValue("@CodigoBarra", string.IsNullOrWhiteSpace(producto.CodigoBarra) ? (object)DBNull.Value : producto.CodigoBarra);
                 cmd.Parameters.AddWithValue("@SKU", producto.SKU);
                 cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
-                cmd.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                cmd.Parameters.AddWithValue("@Descripcion", string.IsNullOrWhiteSpace(producto.Descripcion) ? (object)DBNull.Value : producto.Descripcion);
                 cmd.Parameters.AddWithValue("@IdMarca", producto.IdMarca);
                 cmd.Parameters.AddWithValue("@IdIVA", producto.IdIVA);
                 cmd.Parameters.AddWithValue("@IdCategoria", producto.IdCategoria);
@@ -876,6 +876,8 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        // El precio va siempre con dos decimales y punto: así da lo mismo si viene del formulario
+        // (1500) o leído de la base (1500,00), y no depende de la configuración regional de la PC.
         private string GenerarDVHProducto(ClsGestorEntidadProducto.ClsProducto producto)
         {
             string cadena =
@@ -887,7 +889,7 @@ namespace CapaDatos.NegocioDatos
                 producto.IdIVA +
                 producto.IdCategoria +
                 producto.IdUnidad +
-                producto.PrecioVenta;
+                producto.PrecioVenta.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
 
             return ClsDigitoVerificador
                 .GenerarHash(cadena);

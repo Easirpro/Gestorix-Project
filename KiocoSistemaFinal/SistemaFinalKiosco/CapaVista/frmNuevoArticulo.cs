@@ -21,6 +21,11 @@ namespace CapaVista
 
         private clsBitacoraLogica logicaBitacora = new clsBitacoraLogica();
         private int idProductoModificar = 0;
+
+        // Proveedores del artículo (cada fila es una sucursal de un proveedor). Al modificar se
+        // recuerdan las que tenía, para dar de baja las que se quiten de la lista.
+        private DataTable tablaProveedores = CrearTablaProveedores();
+        private List<int> sucursalesOriginales = new List<int>();
         public frmNuevoArticulo()
         {
             InitializeComponent();
@@ -61,6 +66,7 @@ namespace CapaVista
                 CargarUnidades();
                 CargarIVAs();
                 CargarProveedores();
+                ConfigurarGrillaProveedores();
 
                 if (idProductoModificar == 0)
                 {
@@ -120,23 +126,21 @@ namespace CapaVista
 
             DataTable tablaProveedor = logica.ObtenerProveedoresPorProducto(idProductoModificar);
 
-            if (tablaProveedor.Rows.Count > 0)
+            foreach (DataRow proveedor in tablaProveedor.Rows)
             {
-                DataRow proveedor = tablaProveedor.Rows[0];
+                if (proveedor["Activo"] != DBNull.Value && !Convert.ToBoolean(proveedor["Activo"]))
+                    continue;
 
-                int idProveedor = Convert.ToInt32(proveedor["IdProveedor"]);
                 int idSucursal = Convert.ToInt32(proveedor["IdSucursal"]);
 
-                DataTable tablaSucursales = logicaProveedor.ObtenerSucursalesPorProveedor(idProveedor);
+                tablaProveedores.Rows.Add(idSucursal, proveedor["Proveedor"].ToString(), proveedor["Sucursal"].ToString());
+                sucursalesOriginales.Add(idSucursal);
 
-                cmbSucursal.DataSource = tablaSucursales;
-                cmbSucursal.DisplayMember = "Sucursal";
-                cmbSucursal.ValueMember = "IdSucursal";
-
-                cmbProveedor.SelectedValue = idProveedor;
-                cmbSucursal.SelectedValue = idSucursal;
-
-                txtPrecioCosto.Text = proveedor["PrecioCompra"] == DBNull.Value ? "" : proveedor["PrecioCompra"].ToString();
+                // El costo que se muestra es el del primer proveedor que lo tenga cargado.
+                if (txtPrecioCosto.Text == "" && proveedor["PrecioCompra"] != DBNull.Value)
+                {
+                    txtPrecioCosto.Text = proveedor["PrecioCompra"].ToString();
+                }
             }
 
             txtCodigo.Text = fila["CodigoBarra"]?.ToString() ?? "";
@@ -235,27 +239,20 @@ namespace CapaVista
             cmbIva.ValueMember = "IdIVA";
             cmbIva.SelectedIndex = -1;
         }
+        // Obligatorios: nombre, marca, unidad de venta y rubro (y el SKU, que se genera solo).
+        // El resto es opcional: si se deja vacío se guarda sin dato (o en 0), pero si se carga
+        // tiene que ser válido.
         private bool ValidarDatos()
         {
-            if (string.IsNullOrWhiteSpace(txtCodigo.Text))
+            if (string.IsNullOrWhiteSpace(txtNombreProducto.Text))
             {
-                txtCodigo.Focus();
+                txtNombreProducto.Focus();
                 return false;
             }
 
-            string codigoBarra = txtCodigo.Text.Trim();
-
-            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
-
-            if (logica.ExisteCodigoBarra(codigoBarra, idProductoModificar))
+            if (cmbMarca.SelectedIndex == -1 || cmbMarca.SelectedValue == null)
             {
-                txtCodigo.Focus();
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
-            {
-                txtDescripcion.Focus();
+                cmbMarca.Focus();
                 return false;
             }
 
@@ -271,19 +268,33 @@ namespace CapaVista
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtPrecioCosto.Text))
+            if (string.IsNullOrWhiteSpace(txtSKU.Text))
+            {
+                txtSKU.Focus();
+                return false;
+            }
+
+            string codigoBarra = txtCodigo.Text.Trim();
+
+            if (codigoBarra != "" && new ClsGestorProductoLogica().ExisteCodigoBarra(codigoBarra, idProductoModificar))
+            {
+                txtCodigo.Focus();
+                return false;
+            }
+
+            if (!DecimalOpcional(txtPrecioCosto, out _))
             {
                 txtPrecioCosto.Focus();
                 return false;
             }
 
-            if (!decimal.TryParse(txtPrecioCosto.Text, out decimal precioCosto))
+            if (!DecimalOpcional(txtGanancia, out _))
             {
-                txtPrecioCosto.Focus();
+                txtGanancia.Focus();
                 return false;
             }
 
-            if (precioCosto <= 0)
+            if (!DecimalOpcional(txtPrecioVenta, out _))
             {
                 txtPrecioCosto.Focus();
                 return false;
@@ -298,87 +309,28 @@ namespace CapaVista
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(txtGanancia.Text))
+            if (!DecimalOpcional(txtStockActual, out _))
             {
-                txtGanancia.Focus();
+                txtStockActual.Focus();
                 return false;
             }
 
-            if (!decimal.TryParse(txtGanancia.Text, out decimal ganancia))
+            if (!DecimalOpcional(txtStockMinimo, out decimal stockMinimo))
             {
-                txtGanancia.Focus();
+                txtStockMinimo.Focus();
                 return false;
             }
 
-            if (ganancia < 0)
+            if (!DecimalOpcional(txtStockMaximo, out decimal stockIdeal))
             {
-                txtGanancia.Focus();
+                txtStockMaximo.Focus();
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtPrecioVenta.Text))
+            if (chkControlStock.Checked && stockIdeal < stockMinimo)
             {
-                txtPrecioCosto.Focus();
+                txtStockMaximo.Focus();
                 return false;
-            }
-
-            if (!decimal.TryParse(txtPrecioVenta.Text, out decimal precioVenta))
-            {
-                txtPrecioCosto.Focus();
-                return false;
-            }
-
-            if (precioVenta <= 0)
-            {
-                txtPrecioCosto.Focus();
-                return false;
-            }
-
-            decimal stockMinimo = 0;
-
-            if (chkControlStock.Checked)
-            {
-                if (string.IsNullOrWhiteSpace(txtStockMinimo.Text))
-                {
-                    txtStockMinimo.Focus();
-                    return false;
-                }
-
-                if (!decimal.TryParse(txtStockMinimo.Text, out stockMinimo))
-                {
-                    txtStockMinimo.Focus();
-                    return false;
-                }
-
-                if (stockMinimo < 0)
-                {
-                    txtStockMinimo.Focus();
-                    return false;
-                }
-
-                if (string.IsNullOrWhiteSpace(txtStockMaximo.Text))
-                {
-                    txtStockMaximo.Focus();
-                    return false;
-                }
-
-                if (!decimal.TryParse(txtStockMaximo.Text, out decimal stockIdeal))
-                {
-                    txtStockMaximo.Focus();
-                    return false;
-                }
-
-                if (stockIdeal < 0)
-                {
-                    txtStockMaximo.Focus();
-                    return false;
-                }
-
-                if (stockIdeal < stockMinimo)
-                {
-                    txtStockMaximo.Focus();
-                    return false;
-                }
             }
 
             if (chkAlertaVencimiento.Checked)
@@ -423,25 +375,19 @@ namespace CapaVista
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(txtNombreProducto.Text))
-            {
-                txtNombreProducto.Focus();
-                return false;
-            }
-
-            if (cmbMarca.SelectedIndex == -1 || cmbMarca.SelectedValue == null)
-            {
-                cmbMarca.Focus();
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtSKU.Text))
-            {
-                txtSKU.Focus();
-                return false;
-            }
-
             return true;
+        }
+        // Campo numérico opcional: vacío vale 0; si tiene algo, tiene que ser un número no negativo.
+        private static bool DecimalOpcional(TextBox texto, out decimal valor)
+        {
+            valor = 0;
+
+            if (string.IsNullOrWhiteSpace(texto.Text))
+            {
+                return true;
+            }
+
+            return decimal.TryParse(texto.Text, out valor) && valor >= 0;
         }
         private void CalcularPrecioVenta()
         {
@@ -482,6 +428,74 @@ namespace CapaVista
 
             cmbProveedor.SelectedIndex = 0;
         }
+        private static DataTable CrearTablaProveedores()
+        {
+            DataTable tabla = new DataTable();
+
+            tabla.Columns.Add("IdSucursal", typeof(int));
+            tabla.Columns.Add("Proveedor", typeof(string));
+            tabla.Columns.Add("Sucursal", typeof(string));
+
+            return tabla;
+        }
+        private void ConfigurarGrillaProveedores()
+        {
+            dgvProveedores.DataSource = tablaProveedores;
+
+            dgvProveedores.Columns["IdSucursal"].Visible = false;
+            dgvProveedores.Columns["Proveedor"].HeaderText = ClsIdioma.T("Proveedor");
+            dgvProveedores.Columns["Sucursal"].HeaderText = ClsIdioma.T("Sucursal");
+        }
+        // Proveedor y sucursal elegidos en los combos (los dos tienen que estar elegidos).
+        private bool ObtenerSucursalElegida(out int idSucursal)
+        {
+            idSucursal = 0;
+
+            return cmbProveedor.SelectedValue != null &&
+                   int.TryParse(cmbProveedor.SelectedValue.ToString(), out int idProveedor) && idProveedor > 0 &&
+                   cmbSucursal.SelectedValue != null &&
+                   int.TryParse(cmbSucursal.SelectedValue.ToString(), out idSucursal) && idSucursal > 0;
+        }
+        private bool ProveedorElegido()
+        {
+            return cmbProveedor.SelectedValue != null &&
+                   int.TryParse(cmbProveedor.SelectedValue.ToString(), out int idProveedor) && idProveedor > 0;
+        }
+        private void AgregarSucursalALista(int idSucursal)
+        {
+            tablaProveedores.Rows.Add(idSucursal, cmbProveedor.Text, cmbSucursal.Text);
+        }
+        private List<int> ObtenerSucursalesDeLista()
+        {
+            return tablaProveedores.Rows.Cast<DataRow>().Select(fila => Convert.ToInt32(fila["IdSucursal"])).ToList();
+        }
+        // Deja activos los proveedores de la lista (los nuevos se agregan) y da de baja los que se quitaron.
+        private bool GuardarProveedores(int idProducto, List<int> sucursales)
+        {
+            foreach (int idSucursal in sucursales)
+            {
+                if (!GuardarRelacionProveedor(idProducto, idSucursal, true))
+                    return false;
+            }
+
+            foreach (int idSucursal in sucursalesOriginales.Except(sucursales))
+            {
+                if (!GuardarRelacionProveedor(idProducto, idSucursal, false))
+                    return false;
+            }
+
+            return true;
+        }
+        private bool GuardarRelacionProveedor(int idProducto, int idSucursal, bool activo)
+        {
+            ClsProductoSucursalProveedor relacion = new ClsProductoSucursalProveedor();
+
+            relacion.IdProducto = idProducto;
+            relacion.IdSucursal = idSucursal;
+            relacion.Activo = activo;
+
+            return logica.ModificarProductoSucursalProveedor(relacion);
+        }
 
 
         #endregion
@@ -495,45 +509,42 @@ namespace CapaVista
             {
                 if (!ValidarDatos())
                 {
-                    MessageBox.Show(ClsIdioma.T("Revise los datos ingresados. Hay campos vacíos o valores inválidos."), ClsIdioma.T("Validación"),
+                    MessageBox.Show(ClsIdioma.T("Complete los campos obligatorios (nombre, marca, unidad de venta y rubro) y revise los valores ingresados."), ClsIdioma.T("Validación"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (cmbProveedor.SelectedValue == null || !int.TryParse(cmbProveedor.SelectedValue.ToString(), out int idProveedor) || idProveedor == 0)
+                // Los proveedores son opcionales. Si la lista está vacía pero hay uno elegido en los
+                // combos, se toma ese, así alcanza con elegirlo cuando el artículo tiene uno solo.
+                if (tablaProveedores.Rows.Count == 0 && ProveedorElegido())
                 {
-                    MessageBox.Show(ClsIdioma.T("Seleccione un proveedor."));
+                    if (!ObtenerSucursalElegida(out int idSucursalElegida))
+                    {
+                        MessageBox.Show(ClsIdioma.T("Seleccione una sucursal."));
+                        cmbSucursal.Focus();
+                        return;
+                    }
+
+                    AgregarSucursalALista(idSucursalElegida);
+                }
+
+                List<int> sucursales = ObtenerSucursalesDeLista();
+
+                // El lote se guarda por sucursal: se usa la del primer proveedor de la lista.
+                int idSucursal = sucursales.Count > 0 ? sucursales[0] : 0;
+
+                if ((chkControlLote.Checked || chkAlertaVencimiento.Checked) && idSucursal == 0)
+                {
+                    MessageBox.Show(ClsIdioma.T("Para cargar lote o vencimiento agregue al menos un proveedor."));
                     cmbProveedor.Focus();
                     return;
                 }
 
-                if (cmbSucursal.SelectedValue == null || !int.TryParse(cmbSucursal.SelectedValue.ToString(), out int idSucursal) ||
-                    idSucursal == 0)
-                {
-                    MessageBox.Show(ClsIdioma.T("Seleccione una sucursal."));
-                    cmbSucursal.Focus();
-                    return;
-                }
-
-                if (!decimal.TryParse(txtPrecioVenta.Text, out decimal precioVenta))
-                {
-                    MessageBox.Show(ClsIdioma.T("Ingrese un precio de venta válido."));
-                    txtPrecioVenta.Focus();
-                    return;
-                }
-
-                decimal stockActual = 0;
-                decimal stockMinimo = 0;
-                decimal stockIdeal = 0;
-
-                if (chkControlStock.Checked)
-                {
-                    if (!decimal.TryParse(txtStockActual.Text, out stockActual) || !decimal.TryParse(txtStockMinimo.Text, out stockMinimo) || !decimal.TryParse(txtStockMaximo.Text, out stockIdeal))
-                    {
-                        MessageBox.Show(ClsIdioma.T("Revise los valores de stock ingresados."));
-                        return;
-                    }
-                }
+                // Ya validados en ValidarDatos: vacíos quedan en 0 (precio 0 = sin precio cargado).
+                DecimalOpcional(txtPrecioVenta, out decimal precioVenta);
+                DecimalOpcional(txtStockActual, out decimal stockActual);
+                DecimalOpcional(txtStockMinimo, out decimal stockMinimo);
+                DecimalOpcional(txtStockMaximo, out decimal stockIdeal);
 
                 ClsProducto producto = new ClsProducto();
 
@@ -570,25 +581,10 @@ namespace CapaVista
                         return;
                     }
 
-                    ClsProductoSucursalProveedor relacion = new ClsProductoSucursalProveedor();
-
-                    relacion.IdProducto = idProductoModificar;
-                    relacion.IdSucursal = idSucursal;
-                    relacion.Activo = true;
-
-                    bool relacionModificada = logica.ModificarProductoSucursalProveedor(relacion);
-
-                    if (!relacionModificada)
+                    if (!GuardarProveedores(idProductoModificar, sucursales))
                     {
-                        MessageBox.Show(
-                            ClsIdioma.T("No se pudo actualizar la relación con la sucursal.\n\n") +
-                            ClsIdioma.T("IdProducto: ") + relacion.IdProducto + "\n" +
-                            ClsIdioma.T("IdSucursal: ") + relacion.IdSucursal + "\n\n" +
-                            ClsIdioma.T("La operación de modificación devolvió false."),
-                            ClsIdioma.T("Error al actualizar sucursal"),
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
-
+                        MessageBox.Show(ClsIdioma.T("El artículo y el stock se actualizaron, pero no se pudieron guardar los proveedores."), ClsIdioma.T("Modificar artículo"),
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -634,13 +630,12 @@ namespace CapaVista
 
                 logica.RegistrarStock(idProducto, stockActual, stockMinimo, stockIdeal);
 
-                ClsProductoSucursalProveedor nuevaRelacion = new ClsProductoSucursalProveedor();
-
-                nuevaRelacion.IdProducto = idProducto;
-                nuevaRelacion.IdSucursal = idSucursal;
-                nuevaRelacion.Activo = true;
-
-                logica.RegistrarProductoSucursalProveedor(nuevaRelacion);
+                if (!GuardarProveedores(idProducto, sucursales))
+                {
+                    MessageBox.Show(ClsIdioma.T("El artículo se registró, pero no se pudieron guardar los proveedores."), ClsIdioma.T("Nuevo artículo"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
                 if (chkAlertaVencimiento.Checked || chkControlLote.Checked)
                 {
@@ -795,6 +790,36 @@ namespace CapaVista
                 MessageBox.Show(ClsIdioma.T("Ocurrió un error al cargar las sucursales del proveedor.\n\n") + ex.Message,ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private void btnAgregarProveedor_Click(object sender, EventArgs e)
+        {
+            if (!ObtenerSucursalElegida(out int idSucursal))
+            {
+                MessageBox.Show(ClsIdioma.T("Seleccione el proveedor y la sucursal."), ClsIdioma.T("Proveedores"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbProveedor.Focus();
+                return;
+            }
+
+            if (ObtenerSucursalesDeLista().Contains(idSucursal))
+            {
+                MessageBox.Show(ClsIdioma.T("Ese proveedor y sucursal ya están en la lista."), ClsIdioma.T("Proveedores"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            AgregarSucursalALista(idSucursal);
+        }
+        private void btnQuitarProveedor_Click(object sender, EventArgs e)
+        {
+            if (dgvProveedores.CurrentRow?.DataBoundItem is not DataRowView fila)
+            {
+                MessageBox.Show(ClsIdioma.T("Seleccione un proveedor de la lista."), ClsIdioma.T("Proveedores"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            tablaProveedores.Rows.Remove(fila.Row);
         }
         private void btnCancelar_Click(object sender, EventArgs e)
         {
