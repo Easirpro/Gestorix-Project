@@ -235,27 +235,20 @@ namespace CapaVista
             cmbIva.ValueMember = "IdIVA";
             cmbIva.SelectedIndex = -1;
         }
+        // Obligatorios: nombre, marca, unidad de venta y rubro (y el SKU, que se genera solo).
+        // El resto es opcional: si se deja vacío se guarda sin dato (o en 0), pero si se carga
+        // tiene que ser válido.
         private bool ValidarDatos()
         {
-            if (string.IsNullOrWhiteSpace(txtCodigo.Text))
+            if (string.IsNullOrWhiteSpace(txtNombreProducto.Text))
             {
-                txtCodigo.Focus();
+                txtNombreProducto.Focus();
                 return false;
             }
 
-            string codigoBarra = txtCodigo.Text.Trim();
-
-            ClsGestorProductoLogica logica = new ClsGestorProductoLogica();
-
-            if (logica.ExisteCodigoBarra(codigoBarra, idProductoModificar))
+            if (cmbMarca.SelectedIndex == -1 || cmbMarca.SelectedValue == null)
             {
-                txtCodigo.Focus();
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
-            {
-                txtDescripcion.Focus();
+                cmbMarca.Focus();
                 return false;
             }
 
@@ -271,19 +264,33 @@ namespace CapaVista
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtPrecioCosto.Text))
+            if (string.IsNullOrWhiteSpace(txtSKU.Text))
+            {
+                txtSKU.Focus();
+                return false;
+            }
+
+            string codigoBarra = txtCodigo.Text.Trim();
+
+            if (codigoBarra != "" && new ClsGestorProductoLogica().ExisteCodigoBarra(codigoBarra, idProductoModificar))
+            {
+                txtCodigo.Focus();
+                return false;
+            }
+
+            if (!DecimalOpcional(txtPrecioCosto, out _))
             {
                 txtPrecioCosto.Focus();
                 return false;
             }
 
-            if (!decimal.TryParse(txtPrecioCosto.Text, out decimal precioCosto))
+            if (!DecimalOpcional(txtGanancia, out _))
             {
-                txtPrecioCosto.Focus();
+                txtGanancia.Focus();
                 return false;
             }
 
-            if (precioCosto <= 0)
+            if (!DecimalOpcional(txtPrecioVenta, out _))
             {
                 txtPrecioCosto.Focus();
                 return false;
@@ -298,87 +305,28 @@ namespace CapaVista
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(txtGanancia.Text))
+            if (!DecimalOpcional(txtStockActual, out _))
             {
-                txtGanancia.Focus();
+                txtStockActual.Focus();
                 return false;
             }
 
-            if (!decimal.TryParse(txtGanancia.Text, out decimal ganancia))
+            if (!DecimalOpcional(txtStockMinimo, out decimal stockMinimo))
             {
-                txtGanancia.Focus();
+                txtStockMinimo.Focus();
                 return false;
             }
 
-            if (ganancia < 0)
+            if (!DecimalOpcional(txtStockMaximo, out decimal stockIdeal))
             {
-                txtGanancia.Focus();
+                txtStockMaximo.Focus();
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtPrecioVenta.Text))
+            if (chkControlStock.Checked && stockIdeal < stockMinimo)
             {
-                txtPrecioCosto.Focus();
+                txtStockMaximo.Focus();
                 return false;
-            }
-
-            if (!decimal.TryParse(txtPrecioVenta.Text, out decimal precioVenta))
-            {
-                txtPrecioCosto.Focus();
-                return false;
-            }
-
-            if (precioVenta <= 0)
-            {
-                txtPrecioCosto.Focus();
-                return false;
-            }
-
-            decimal stockMinimo = 0;
-
-            if (chkControlStock.Checked)
-            {
-                if (string.IsNullOrWhiteSpace(txtStockMinimo.Text))
-                {
-                    txtStockMinimo.Focus();
-                    return false;
-                }
-
-                if (!decimal.TryParse(txtStockMinimo.Text, out stockMinimo))
-                {
-                    txtStockMinimo.Focus();
-                    return false;
-                }
-
-                if (stockMinimo < 0)
-                {
-                    txtStockMinimo.Focus();
-                    return false;
-                }
-
-                if (string.IsNullOrWhiteSpace(txtStockMaximo.Text))
-                {
-                    txtStockMaximo.Focus();
-                    return false;
-                }
-
-                if (!decimal.TryParse(txtStockMaximo.Text, out decimal stockIdeal))
-                {
-                    txtStockMaximo.Focus();
-                    return false;
-                }
-
-                if (stockIdeal < 0)
-                {
-                    txtStockMaximo.Focus();
-                    return false;
-                }
-
-                if (stockIdeal < stockMinimo)
-                {
-                    txtStockMaximo.Focus();
-                    return false;
-                }
             }
 
             if (chkAlertaVencimiento.Checked)
@@ -423,25 +371,19 @@ namespace CapaVista
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(txtNombreProducto.Text))
-            {
-                txtNombreProducto.Focus();
-                return false;
-            }
-
-            if (cmbMarca.SelectedIndex == -1 || cmbMarca.SelectedValue == null)
-            {
-                cmbMarca.Focus();
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtSKU.Text))
-            {
-                txtSKU.Focus();
-                return false;
-            }
-
             return true;
+        }
+        // Campo numérico opcional: vacío vale 0; si tiene algo, tiene que ser un número no negativo.
+        private static bool DecimalOpcional(TextBox texto, out decimal valor)
+        {
+            valor = 0;
+
+            if (string.IsNullOrWhiteSpace(texto.Text))
+            {
+                return true;
+            }
+
+            return decimal.TryParse(texto.Text, out valor) && valor >= 0;
         }
         private void CalcularPrecioVenta()
         {
@@ -495,45 +437,41 @@ namespace CapaVista
             {
                 if (!ValidarDatos())
                 {
-                    MessageBox.Show(ClsIdioma.T("Revise los datos ingresados. Hay campos vacíos o valores inválidos."), ClsIdioma.T("Validación"),
+                    MessageBox.Show(ClsIdioma.T("Complete los campos obligatorios (nombre, marca, unidad de venta y rubro) y revise los valores ingresados."), ClsIdioma.T("Validación"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (cmbProveedor.SelectedValue == null || !int.TryParse(cmbProveedor.SelectedValue.ToString(), out int idProveedor) || idProveedor == 0)
+                // El proveedor es opcional; si se elige uno, hace falta la sucursal.
+                int idProveedor = 0;
+                int idSucursal = 0;
+
+                if (cmbProveedor.SelectedValue != null)
                 {
-                    MessageBox.Show(ClsIdioma.T("Seleccione un proveedor."));
-                    cmbProveedor.Focus();
-                    return;
+                    int.TryParse(cmbProveedor.SelectedValue.ToString(), out idProveedor);
                 }
 
-                if (cmbSucursal.SelectedValue == null || !int.TryParse(cmbSucursal.SelectedValue.ToString(), out int idSucursal) ||
-                    idSucursal == 0)
+                if (idProveedor > 0 &&
+                    (cmbSucursal.SelectedValue == null || !int.TryParse(cmbSucursal.SelectedValue.ToString(), out idSucursal) || idSucursal == 0))
                 {
                     MessageBox.Show(ClsIdioma.T("Seleccione una sucursal."));
                     cmbSucursal.Focus();
                     return;
                 }
 
-                if (!decimal.TryParse(txtPrecioVenta.Text, out decimal precioVenta))
+                // El lote se guarda por sucursal: sin proveedor no se puede cargar.
+                if ((chkControlLote.Checked || chkAlertaVencimiento.Checked) && idSucursal == 0)
                 {
-                    MessageBox.Show(ClsIdioma.T("Ingrese un precio de venta válido."));
-                    txtPrecioVenta.Focus();
+                    MessageBox.Show(ClsIdioma.T("Para cargar lote o vencimiento seleccione el proveedor y la sucursal."));
+                    cmbProveedor.Focus();
                     return;
                 }
 
-                decimal stockActual = 0;
-                decimal stockMinimo = 0;
-                decimal stockIdeal = 0;
-
-                if (chkControlStock.Checked)
-                {
-                    if (!decimal.TryParse(txtStockActual.Text, out stockActual) || !decimal.TryParse(txtStockMinimo.Text, out stockMinimo) || !decimal.TryParse(txtStockMaximo.Text, out stockIdeal))
-                    {
-                        MessageBox.Show(ClsIdioma.T("Revise los valores de stock ingresados."));
-                        return;
-                    }
-                }
+                // Ya validados en ValidarDatos: vacíos quedan en 0 (precio 0 = sin precio cargado).
+                DecimalOpcional(txtPrecioVenta, out decimal precioVenta);
+                DecimalOpcional(txtStockActual, out decimal stockActual);
+                DecimalOpcional(txtStockMinimo, out decimal stockMinimo);
+                DecimalOpcional(txtStockMaximo, out decimal stockIdeal);
 
                 ClsProducto producto = new ClsProducto();
 
@@ -576,7 +514,7 @@ namespace CapaVista
                     relacion.IdSucursal = idSucursal;
                     relacion.Activo = true;
 
-                    bool relacionModificada = logica.ModificarProductoSucursalProveedor(relacion);
+                    bool relacionModificada = idSucursal == 0 || logica.ModificarProductoSucursalProveedor(relacion);
 
                     if (!relacionModificada)
                     {
@@ -634,13 +572,16 @@ namespace CapaVista
 
                 logica.RegistrarStock(idProducto, stockActual, stockMinimo, stockIdeal);
 
-                ClsProductoSucursalProveedor nuevaRelacion = new ClsProductoSucursalProveedor();
+                if (idSucursal > 0)
+                {
+                    ClsProductoSucursalProveedor nuevaRelacion = new ClsProductoSucursalProveedor();
 
-                nuevaRelacion.IdProducto = idProducto;
-                nuevaRelacion.IdSucursal = idSucursal;
-                nuevaRelacion.Activo = true;
+                    nuevaRelacion.IdProducto = idProducto;
+                    nuevaRelacion.IdSucursal = idSucursal;
+                    nuevaRelacion.Activo = true;
 
-                logica.RegistrarProductoSucursalProveedor(nuevaRelacion);
+                    logica.RegistrarProductoSucursalProveedor(nuevaRelacion);
+                }
 
                 if (chkAlertaVencimiento.Checked || chkControlLote.Checked)
                 {

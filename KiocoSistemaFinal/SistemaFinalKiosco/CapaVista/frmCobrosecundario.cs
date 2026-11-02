@@ -82,6 +82,14 @@ namespace CapaVista
                 return false;
             }
 
+            // Precio 0 = artículo cargado sin precio: no se vende hasta que se le cargue uno.
+            if (precio == 0)
+            {
+                MessageBox.Show(ClsIdioma.T("El artículo no tiene precio de venta. Cárguelo en Artículos antes de venderlo."), ClsIdioma.T("Precio inválido"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
             decimal cantidadYaCargada = 0m;
 
             foreach (DataGridViewRow fila in dtgPresentacion.Rows)
