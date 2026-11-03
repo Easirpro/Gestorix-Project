@@ -35,6 +35,7 @@
             btnModificar = new Button();
             btnDescontinuar = new Button();
             btnActualizar = new Button();
+            btnNuevaSucursal = new Button();
             lblBuscar = new Label();
             txtBuscar = new TextBox();
             lstProveedores = new ListBox();
@@ -42,6 +43,7 @@
             btnLimpiarFiltros = new Button();
             dtgProveedores = new DataGridView();
             clnId = new DataGridViewTextBoxColumn();
+            clnIdSucursal = new DataGridViewTextBoxColumn();
             clnSucursal = new DataGridViewTextBoxColumn();
             clnRazonSocial = new DataGridViewTextBoxColumn();
             clnCuit = new DataGridViewTextBoxColumn();
@@ -75,7 +77,7 @@
             lblDescripcion.Name = "lblDescripcion";
             lblDescripcion.Size = new Size(600, 15);
             lblDescripcion.TabIndex = 1;
-            lblDescripcion.Text = "Buscá un proveedor por nombre o CUIT y elegilo con doble clic o Enter. Doble clic en la fila para modificarlo.";
+            lblDescripcion.Text = "Se ven todos los proveedores. Buscá uno por nombre o CUIT para ver solo ese. Doble clic en la fila para modificar esa sucursal.";
             //
             // btnNuevoProveedor
             //
@@ -125,6 +127,16 @@
             btnActualizar.TextAlign = ContentAlignment.MiddleRight;
             btnActualizar.UseVisualStyleBackColor = true;
             btnActualizar.Click += btnActualizar_Click;
+            //
+            // btnNuevaSucursal
+            //
+            btnNuevaSucursal.Location = new Point(519, 64);
+            btnNuevaSucursal.Name = "btnNuevaSucursal";
+            btnNuevaSucursal.Size = new Size(130, 34);
+            btnNuevaSucursal.TabIndex = 6;
+            btnNuevaSucursal.Text = "Nueva sucursal";
+            btnNuevaSucursal.UseVisualStyleBackColor = true;
+            btnNuevaSucursal.Click += btnNuevaSucursal_Click;
             //
             // lblBuscar
             //
@@ -192,7 +204,7 @@
             dtgProveedores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dtgProveedores.BackgroundColor = SystemColors.Window;
             dtgProveedores.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgProveedores.Columns.AddRange(new DataGridViewColumn[] { clnId, clnSucursal, clnRazonSocial, clnCuit, clnIva, clnTelefono, clnCorreo, clnDireccion, clnEstado });
+            dtgProveedores.Columns.AddRange(new DataGridViewColumn[] { clnId, clnIdSucursal, clnSucursal, clnRazonSocial, clnCuit, clnIva, clnTelefono, clnCorreo, clnDireccion, clnEstado });
             dtgProveedores.Location = new Point(12, 149);
             dtgProveedores.MultiSelect = false;
             dtgProveedores.Name = "dtgProveedores";
@@ -211,6 +223,13 @@
             clnId.MinimumWidth = 45;
             clnId.Name = "clnId";
             clnId.ReadOnly = true;
+            //
+            // clnIdSucursal
+            //
+            clnIdSucursal.HeaderText = "IdSucursal";
+            clnIdSucursal.Name = "clnIdSucursal";
+            clnIdSucursal.ReadOnly = true;
+            clnIdSucursal.Visible = false;
             //
             // clnSucursal
             //
@@ -331,6 +350,7 @@
             Controls.Add(btnModificar);
             Controls.Add(btnDescontinuar);
             Controls.Add(btnActualizar);
+            Controls.Add(btnNuevaSucursal);
             Controls.Add(lblBuscar);
             Controls.Add(txtBuscar);
             Controls.Add(chkOcultarProveedores);
@@ -358,6 +378,7 @@
         private Button btnModificar;
         private Button btnDescontinuar;
         private Button btnActualizar;
+        private Button btnNuevaSucursal;
         private Label lblBuscar;
         private TextBox txtBuscar;
         private ListBox lstProveedores;
@@ -365,6 +386,7 @@
         private Button btnLimpiarFiltros;
         private DataGridView dtgProveedores;
         private DataGridViewTextBoxColumn clnId;
+        private DataGridViewTextBoxColumn clnIdSucursal;
         private DataGridViewTextBoxColumn clnSucursal;
         private DataGridViewTextBoxColumn clnRazonSocial;
         private DataGridViewTextBoxColumn clnCuit;

@@ -58,6 +58,7 @@ namespace CapaVista
 
             btnModificar.Enabled = puedeModificar && hayFila;
             btnDescontinuar.Enabled = puedeModificar && hayFila;
+            btnNuevaSucursal.Enabled = puedeCrear && hayFila;
         }
         // Vuelve a leer los proveedores de la base. Si se indica, deja elegido ese proveedor.
         private void CargarProveedores(int? idProveedorAElegir = null)
@@ -76,12 +77,12 @@ namespace CapaVista
 
             FiltrarProveedores(idProveedorAElegir);
         }
-        // Llena la grilla solo con el proveedor elegido en el buscador (sin proveedor elegido queda vacía).
+        // Todos los proveedores, o solo el elegido en el buscador
         private void FiltrarProveedores(int? idProveedorAElegir = null)
         {
             dtgProveedores.Rows.Clear();
 
-            if (tablaProveedores != null && idProveedorSeleccionado.HasValue)
+            if (tablaProveedores != null)
             {
                 foreach (DataRow fila in tablaProveedores.Rows)
                 {
@@ -93,7 +94,7 @@ namespace CapaVista
                         continue;
                     }
 
-                    if (idProveedor != idProveedorSeleccionado.Value)
+                    if (idProveedorSeleccionado.HasValue && idProveedor != idProveedorSeleccionado.Value)
                     {
                         continue;
                     }
@@ -102,13 +103,14 @@ namespace CapaVista
 
                     int indice = dtgProveedores.Rows.Add(
                         idProveedor,
+                        fila["IdSucursal"] == DBNull.Value ? null : fila["IdSucursal"],
                         sucursal,
                         fila["RazonSocial"],
                         fila["CUIT"],
                         fila["CondiciónIVA"],
                         fila["NumTelefono"],
                         fila["Correo"],
-                        fila["Direccion"],
+                        (fila["Direccion"]?.ToString() ?? "").Trim(),
                         estado);
 
                     DataGridViewRow filaGrilla = dtgProveedores.Rows[indice];
@@ -144,17 +146,21 @@ namespace CapaVista
                 filaAElegir.Selected = true;
             }
 
-            if (!idProveedorSeleccionado.HasValue)
-            {
-                lblCantidad.Text = ClsIdioma.T("Busque un proveedor arriba para ver sus datos.");
-            }
-            else if (dtgProveedores.Rows.Count == 0)
+            int proveedores = dtgProveedores.Rows.Cast<DataGridViewRow>()
+                .Select(f => Convert.ToInt32(f.Cells["clnId"].Value)).Distinct().Count();
+            string sucursales = dtgProveedores.Rows.Count == 1 ? ClsIdioma.T("1 sucursal") : dtgProveedores.Rows.Count + ClsIdioma.T(" sucursales");
+
+            if (idProveedorSeleccionado.HasValue && dtgProveedores.Rows.Count == 0)
             {
                 lblCantidad.Text = ClsIdioma.T("El proveedor elegido está inactivo y oculto por el filtro.");
             }
+            else if (idProveedorSeleccionado.HasValue)
+            {
+                lblCantidad.Text = sucursales;
+            }
             else
             {
-                lblCantidad.Text = dtgProveedores.Rows.Count == 1 ? ClsIdioma.T("1 sucursal") : dtgProveedores.Rows.Count + ClsIdioma.T(" sucursales");
+                lblCantidad.Text = (proveedores == 1 ? ClsIdioma.T("1 proveedor") : proveedores + ClsIdioma.T(" proveedores")) + "  ·  " + sucursales;
             }
 
             MostrarDatosFilaActual();
@@ -255,6 +261,12 @@ namespace CapaVista
             lstProveedores.Items.Clear();
             lstProveedores.Visible = false;
         }
+        private int IdSucursalFilaActual()
+        {
+            object? valor = dtgProveedores.CurrentRow?.Cells["clnIdSucursal"].Value;
+
+            return valor == null || valor == DBNull.Value ? 0 : Convert.ToInt32(valor);
+        }
         private int? IdProveedorFilaActual()
         {
             if (dtgProveedores.CurrentRow == null || dtgProveedores.CurrentRow.Cells["clnId"].Value == null)
@@ -291,12 +303,35 @@ namespace CapaVista
                 return;
             }
 
-            using (frmNuevoProveedor modproveedor = new frmNuevoProveedor(idProveedor.Value))
+            using (frmNuevoProveedor modproveedor = new frmNuevoProveedor(idProveedor.Value, IdSucursalFilaActual()))
             {
                 modproveedor.ShowDialog(this);
             }
 
             // Se recarga y se vuelve a elegir el mismo proveedor.
+            CargarProveedores(idProveedor.Value);
+        }
+        private void btnNuevaSucursal_Click(object? sender, EventArgs e)
+        {
+            int? idProveedor = IdProveedorFilaActual();
+
+            if (!idProveedor.HasValue || dtgProveedores.CurrentRow == null)
+            {
+                MessageBox.Show(ClsIdioma.T("Seleccione un proveedor."), ClsIdioma.T("Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataGridViewRow fila = dtgProveedores.CurrentRow;
+
+            using (frmNuevoProveedor nuevaSucursal = frmNuevoProveedor.ParaNuevaSucursal(idProveedor.Value,
+                fila.Cells["clnRazonSocial"].Value?.ToString() ?? "",
+                fila.Cells["clnCuit"].Value?.ToString() ?? "",
+                fila.Cells["clnIva"].Value?.ToString() ?? ""))
+            {
+                nuevaSucursal.ShowDialog(this);
+            }
+
             CargarProveedores(idProveedor.Value);
         }
         private void dtgProveedores_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
@@ -328,7 +363,7 @@ namespace CapaVista
 
             string texto = txtBuscar.Text.Trim();
 
-            // Al escribir de nuevo, la grilla se vacía hasta elegir otro proveedor de la lista.
+            // Al escribir de nuevo se vuelven a mostrar todos
             if (idProveedorSeleccionado.HasValue)
             {
                 idProveedorSeleccionado = null;

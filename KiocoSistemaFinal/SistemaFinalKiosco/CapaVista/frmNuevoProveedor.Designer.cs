@@ -62,6 +62,7 @@
             txtCalle = new TextBox();
             lblNumero = new Label();
             txtNumero = new TextBox();
+            chkSinNumero = new CheckBox();
             lblPiso = new Label();
             txtPiso = new TextBox();
             lblDepartamento = new Label();
@@ -270,6 +271,7 @@
             grpDireccion.Controls.Add(txtCalle);
             grpDireccion.Controls.Add(lblNumero);
             grpDireccion.Controls.Add(txtNumero);
+            grpDireccion.Controls.Add(chkSinNumero);
             grpDireccion.Controls.Add(lblPiso);
             grpDireccion.Controls.Add(txtPiso);
             grpDireccion.Controls.Add(lblDepartamento);
@@ -392,6 +394,17 @@
             txtNumero.Size = new Size(80, 23);
             txtNumero.TabIndex = 11;
             txtNumero.KeyPress += SoloNumeros_KeyPress;
+            //
+            // chkSinNumero
+            //
+            chkSinNumero.AutoSize = true;
+            chkSinNumero.Location = new Point(500, 89);
+            chkSinNumero.Name = "chkSinNumero";
+            chkSinNumero.Size = new Size(87, 19);
+            chkSinNumero.TabIndex = 11;
+            chkSinNumero.Text = "Sin número";
+            chkSinNumero.UseVisualStyleBackColor = true;
+            chkSinNumero.CheckedChanged += chkSinNumero_CheckedChanged;
             //
             // lblPiso
             //
@@ -558,6 +571,7 @@
         private TextBox txtCalle;
         private Label lblNumero;
         private TextBox txtNumero;
+        private CheckBox chkSinNumero;
         private Label lblPiso;
         private TextBox txtPiso;
         private Label lblDepartamento;

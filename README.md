@@ -117,3 +117,5 @@ y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
 0.0.1.1- 3/11 Guía de instalación para el usuario (requisitos, pasos y solución de problemas) en KiocoSistemaFinal/Instalador -Marce-
 
 0.0.1.2- 3/11 Importes en pesos argentinos (ARS) y en dólares (USD) con el sistema en inglés (también en la vista previa de Promociones); Registrar/Modificar artículo, Categorías y marcas, Importar y Exportar artículos sin botón de maximizar -Marce-
+
+0.0.1.3- 3/11 Proveedores: la grilla muestra todos los proveedores y se actualiza al cargar uno nuevo; dirección "Sin número"; e-mail con dominio propio; varias sucursales por proveedor (al cargarlo o con "Nueva sucursal") y Modificar edita la sucursal elegida -Marce-
