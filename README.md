@@ -10,11 +10,13 @@ movimientos e historial), balance, empleados, roles y permisos, login con pregun
 bitácora, backup y dígito verificador (DVH).
 
 ## Puesta en marcha
-1. Instalar SQL Server Express con la instancia `SQLEXPRESS`: la cadena de conexión de `CapaDatos/Conexion.cs`
-   apunta a `.\SQLEXPRESS` (la base local de cada PC) con autenticación de Windows.
-2. Restaurar la base `Gestorix` desde un backup actualizado. Si se parte de un backup viejo, ejecutar además
-   los scripts `KiocoSistemaFinal/Migracion_*.sql` (por ejemplo `Migracion_Login_Seguridad.sql`, que convierte
-   las respuestas de seguridad a hash, y `Migracion_Articulos_CamposOpcionales.sql`).
+1. Instalar **SQL Server 2025 Express** (o más nuevo) con la instancia `SQLEXPRESS`: la cadena de conexión de
+   `CapaDatos/Conexion.cs` apunta a `.\SQLEXPRESS` (la base local de cada PC) con autenticación de Windows.
+2. Restaurar la base de referencia: descomprimir `KiocoSistemaFinal/BaseDatos/Gestorix_referencia_0.0.1.0.zip`
+   (trae el `.bak` y su firma `.hash`) y restaurarla en SSMS con el nombre `Gestorix`
+   (Bases de datos > Restaurar base de datos > Dispositivo). El backup es de SQL Server 2025: no se puede
+   restaurar en versiones anteriores. Ya tiene aplicados todos los `Migracion_*.sql`, el DVH recalculado
+   y los errores técnicos revisados; `KioscoFinal.sql` es el script viejo y no alcanza para crear la base.
 3. Abrir `SistemaFinalKiosco.sln` en Visual Studio 2022 y compilar.
 
 ## Historial de versiones
@@ -96,3 +98,5 @@ bitácora, backup y dígito verificador (DVH).
 0.0.0.38- 2/11 Se vuelve a la base local (.\SQLEXPRESS en cada PC); backup y restauración en el disco local con barras de progreso -Marce-
 
 0.0.0.39- 2/11 Verificación de integridad con DVH (productos, usuarios y ventas) al iniciar sesión y desde Administración; formatos fijos de precio, total y fecha en el DVH y DVH recalculado al cambiar precios o importar artículos -Marce-
+
+0.0.0.40- 2/11 Base de datos de referencia (.bak verificado) en KiocoSistemaFinal/BaseDatos para instalar el sistema; errores técnicos viejos marcados como resueltos; se quitaron de Conexion.cs las cadenas de conexión viejas -Marce-
