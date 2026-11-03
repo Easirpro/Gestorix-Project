@@ -523,7 +523,7 @@ namespace CapaVista
                         if (valor is decimal numero)
                         {
                             celda.Value = numero;
-                            celda.Style.NumberFormat.Format = columnas[i].DefaultCellStyle.Format == "C2" ? "$ #,##0.00" : "#,##0.###";
+                            celda.Style.NumberFormat.Format = columnas[i].DefaultCellStyle.Format == "C2" ? ClsIdioma.FormatoMonedaExcel : "#,##0.###";
                         }
                         else
                         {

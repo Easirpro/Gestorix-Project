@@ -76,6 +76,28 @@ namespace CapaVista
             }
 
             Resize += (sender, e) => DistribuirSecciones();
+
+            MostrarSimboloMoneda();
+            Action idioma = () =>
+            {
+                MostrarSimboloMoneda();
+                ActualizarVistaPrevia();
+            };
+            ClsIdioma.IdiomaCambiado += idioma;
+            Disposed += (sender, e) => ClsIdioma.IdiomaCambiado -= idioma;
+        }
+
+        // Símbolo de la moneda en la vista previa: $ en castellano, US$ en inglés.
+        // Cada importe queda pegado a su símbolo aunque el símbolo cambie de ancho.
+        private void MostrarSimboloMoneda()
+        {
+            string simbolo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol;
+
+            label5.Text = simbolo;
+            lblPrecioNormal.Left = label5.Left + label5.PreferredWidth + 4;
+
+            label12.Text = simbolo;
+            label12.Left = lblPrecioPromocional.Left - label12.PreferredWidth - 6;
         }
 
         // Cada columna recibe la mitad del ancho extra. El alto extra va a
@@ -366,9 +388,9 @@ namespace CapaVista
             decimal precioNormal = 0m;
             decimal precioPromocional = 0m;
 
-            lblPrecioNormal.Text = "0,00";
+            lblPrecioNormal.Text = ClsIdioma.ImporteSinSimbolo(0m);
             lblDescuento.Text = "0,00";
-            lblPrecioPromocional.Text = "0,00";
+            lblPrecioPromocional.Text = ClsIdioma.ImporteSinSimbolo(0m);
 
             if (cmbMecanicaPromocional.SelectedValue == null)
                 return;
@@ -442,14 +464,14 @@ namespace CapaVista
 
                 decimal descuento = logica.CalcularPorcentajeDescuento(precioNormal, precioPromocional);
 
-                lblPrecioNormal.Text = precioNormal.ToString("N2");
-                lblPrecioPromocional.Text = precioPromocional.ToString("N2");
+                lblPrecioNormal.Text = ClsIdioma.ImporteSinSimbolo(precioNormal);
+                lblPrecioPromocional.Text = ClsIdioma.ImporteSinSimbolo(precioPromocional);
                 lblDescuento.Text = descuento.ToString("N2");
             }
             catch (Exception)
             {
                 lblDescuento.Text = "0,00";
-                lblPrecioPromocional.Text = "0,00";
+                lblPrecioPromocional.Text = ClsIdioma.ImporteSinSimbolo(0m);
             }
         }
         private void CargarPromocionSeleccionada(int idPromocion)
@@ -653,9 +675,9 @@ namespace CapaVista
 
             dgtCargaArticulo.Rows.Clear();
 
-            lblPrecioNormal.Text = "0,00";
+            lblPrecioNormal.Text = ClsIdioma.ImporteSinSimbolo(0m);
             lblDescuento.Text = "0,00";
-            lblPrecioPromocional.Text = "0,00";
+            lblPrecioPromocional.Text = ClsIdioma.ImporteSinSimbolo(0m);
             lblResumenVigencia.Text = string.Empty;
 
             cmbDescuentoVolumen.Enabled = false;

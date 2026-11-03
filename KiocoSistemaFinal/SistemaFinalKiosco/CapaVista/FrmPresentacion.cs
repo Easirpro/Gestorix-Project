@@ -894,7 +894,7 @@ namespace CapaVista
             lblTotalMonto.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             lblTotalMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
 
-            lblTotalMonto.Text = total.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR"));
+            lblTotalMonto.Text = total.ToString("C2");
         }
         // [PROMO] Anota una promoción aplicada. Si la misma promo se aplica de nuevo
         // en la misma venta, suma una vez más.

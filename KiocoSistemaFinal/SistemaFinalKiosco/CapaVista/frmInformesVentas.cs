@@ -468,7 +468,7 @@ namespace CapaVista
                                 break;
                             case decimal numero:
                                 celda.Value = numero;
-                                celda.Style.NumberFormat.Format = formato == "C2" ? "$ #,##0.00" : formato == "0.00' %'" ? "0.00\" %\"" : "#,##0.###";
+                                celda.Style.NumberFormat.Format = formato == "C2" ? ClsIdioma.FormatoMonedaExcel : formato == "0.00' %'" ? "0.00\" %\"" : "#,##0.###";
                                 break;
                             case int entero:
                                 celda.Value = entero;

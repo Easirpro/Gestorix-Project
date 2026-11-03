@@ -270,6 +270,7 @@ namespace CapaVista
             Controls.Add(lblTitulo);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(642, 541);
+            MaximizeBox = false;
             Name = "frmCategoriaMarca";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Categorías y marcas";

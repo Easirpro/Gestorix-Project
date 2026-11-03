@@ -783,6 +783,7 @@ namespace CapaVista
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 3, 4, 3);
             MinimumSize = new Size(861, 617);
+            MaximizeBox = false;
             Name = "frmNuevoArticulo";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Registrar articulo nuevo";
