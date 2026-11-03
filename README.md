@@ -92,3 +92,5 @@ bitácora, backup y dígito verificador (DVH).
 0.0.0.36- 2/11 Artículos: solo nombre, marca, unidad de venta y rubro obligatorios; ventas no deja vender artículos sin precio; DVH de artículos con formato fijo de precio -Marce-
 
 0.0.0.37- 2/11 Artículos con varios proveedores -Marce-
+
+0.0.0.38- 2/11 Se vuelve a la base local (.\SQLEXPRESS en cada PC); backup y restauración en el disco local con barras de progreso -Marce-
