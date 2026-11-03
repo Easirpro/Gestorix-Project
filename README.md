@@ -12,8 +12,9 @@ bitácora, backup y dígito verificador (DVH).
 ## Puesta en marcha
 1. Conectarse a la red de Radmin VPN del equipo: la cadena de conexión de `CapaDatos/Conexion.cs`
    apunta al servidor SQL compartido. Para trabajar con una base local, cambiar la cadena por la del servidor local.
-2. Si se usa una base local: restaurar la base `Gestorix` y ejecutar `KiocoSistemaFinal/Migracion_Login_Seguridad.sql`
-   (convierte las respuestas de seguridad a hash; se puede correr más de una vez).
+2. Si se usa una base local: restaurar la base `Gestorix` y ejecutar los scripts `KiocoSistemaFinal/Migracion_*.sql`
+   (por ejemplo `Migracion_Login_Seguridad.sql`, que convierte las respuestas de seguridad a hash, y
+   `Migracion_Articulos_CamposOpcionales.sql`). La base compartida ya los tiene aplicados.
 3. Abrir `SistemaFinalKiosco.sln` en Visual Studio 2022 y compilar.
 
 ## Historial de versiones
@@ -77,3 +78,17 @@ bitácora, backup y dígito verificador (DVH).
 0.0.0.29- 29/10 Categorías y marcas unificadas en un solo formulario, formularios ajustables y mejoras en compras, devoluciones y promociones; se quitaron la búsqueda de marca/rubro y la carga rápida de precios -Cristian-
 
 0.0.0.30- 29/10 Login: se quitó el bloqueo por intentos fallidos y se oculta el detalle técnico de los errores -Tobias-
+
+0.0.0.31- 30/10 Backup con base de datos remota (se genera en el servidor y se descarga a la PC que lo pide) -Marce-
+
+0.0.0.32- 30/10 Backup compatible con el servidor SQL compartido; alertas, informes de ventas, listados y mejoras en compras y recepción -Cristian-
+
+0.0.0.33- 30/10 Permisos por rol según el Excel; empleados con rol en combo, protección de administradores y validación de CUIL; primer ingreso y recuperación obligatorios -Cristian-
+
+0.0.0.34- 31/10 Diseño, búsquedas y correcciones en empleados, proveedores, compras, ventas y alertas; comprobante opcional en compras y stock al anular ventas; devoluciones y ayudas en todos los formularios -Cristian-
+
+0.0.0.35- 31/10 Idioma inglés/español en todo el sistema -Cristian-
+
+0.0.0.36- 2/11 Artículos: solo nombre, marca, unidad de venta y rubro obligatorios; ventas no deja vender artículos sin precio; DVH de artículos con formato fijo de precio -Marce-
+
+0.0.0.37- 2/11 Artículos con varios proveedores -Marce-
