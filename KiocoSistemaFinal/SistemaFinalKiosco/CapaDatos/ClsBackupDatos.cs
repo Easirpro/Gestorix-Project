@@ -2,6 +2,8 @@ using Microsoft.Data.SqlClient;
 using SistemaKiosco;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace CapaDatos
@@ -34,10 +36,100 @@ namespace CapaDatos
             EjecutarConProgreso(sql, archivoBackup, progreso);
         }
 
+        // true si se puede conectar al SQL Server local (sin depender de que exista la base).
+        public bool ServidorDisponible(out string error)
+        {
+            try
+            {
+                using (SqlConnection conexion = cn.ObtenerConexionMaster())
+                {
+                    conexion.Open();
+                }
+
+                error = null;
+                return true;
+            }
+            catch (SqlException ex)
+            {
+                error = ex.Message;
+                return false;
+            }
+        }
+
+        public bool ExisteBase()
+        {
+            using (SqlConnection conexion = cn.ObtenerConexionMaster())
+            using (SqlCommand cmd = new SqlCommand("SELECT CASE WHEN DB_ID('Gestorix') IS NULL THEN 0 ELSE 1 END", conexion))
+            {
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) == 1;
+            }
+        }
+
+        // Crea la base Gestorix desde un backup en una PC donde todavía no existe. Los archivos de
+        // datos se ubican en las carpetas por defecto de esta instancia, que pueden no coincidir con
+        // las de la PC donde se generó el backup.
+        public void CrearBaseDesdeBackup(string archivoBackup, IProgress<int> progreso = null)
+        {
+            List<(string Nombre, string Destino)> archivos = new List<(string, string)>();
+            bool hayDatos = false;
+
+            using (SqlConnection conexion = cn.ObtenerConexionMaster())
+            {
+                conexion.Open();
+
+                string carpetaDatos;
+                string carpetaLog;
+
+                using (SqlCommand cmd = new SqlCommand(
+                    "SELECT CAST(SERVERPROPERTY('InstanceDefaultDataPath') AS NVARCHAR(260)), CAST(SERVERPROPERTY('InstanceDefaultLogPath') AS NVARCHAR(260))", conexion))
+                using (SqlDataReader lector = cmd.ExecuteReader())
+                {
+                    lector.Read();
+                    carpetaDatos = lector.GetString(0);
+                    carpetaLog = lector.GetString(1);
+                }
+
+                using (SqlCommand cmd = new SqlCommand("RESTORE FILELISTONLY FROM DISK = @Archivo", conexion))
+                {
+                    cmd.Parameters.AddWithValue("@Archivo", archivoBackup);
+
+                    using (SqlDataReader lector = cmd.ExecuteReader())
+                    {
+                        while (lector.Read())
+                        {
+                            string nombre = lector["LogicalName"].ToString();
+                            bool esLog = lector["Type"].ToString() == "L";
+
+                            string destino = Path.Combine(esLog ? carpetaLog : carpetaDatos,
+                                esLog ? "Gestorix_log.ldf" : (hayDatos ? "Gestorix_" + nombre + ".ndf" : "Gestorix.mdf"));
+
+                            hayDatos |= !esLog;
+
+                            archivos.Add((nombre, destino));
+                        }
+                    }
+                }
+            }
+
+            string mover = string.Join(", ", archivos.Select((a, i) => "MOVE @Nombre" + i + " TO @Destino" + i));
+
+            EjecutarConProgreso("RESTORE DATABASE Gestorix FROM DISK = @Archivo WITH " + mover + ", STATS = 5",
+                archivoBackup, progreso, cmd =>
+                {
+                    for (int i = 0; i < archivos.Count; i++)
+                    {
+                        cmd.Parameters.AddWithValue("@Nombre" + i, archivos[i].Nombre);
+                        cmd.Parameters.AddWithValue("@Destino" + i, archivos[i].Destino);
+                    }
+                });
+        }
+
         // Para recibir los porcentajes mientras el comando corre (y no todos juntos al final) hay que
         // activar FireInfoMessageEventOnUserErrors. Con eso los errores tampoco cortan el comando:
         // llegan como mensajes, se juntan y se lanzan al terminar.
-        private void EjecutarConProgreso(string sql, string archivo, IProgress<int> progreso)
+        private void EjecutarConProgreso(string sql, string archivo, IProgress<int> progreso, Action<SqlCommand> masParametros = null)
         {
             List<string> errores = new List<string>();
 
@@ -71,6 +163,7 @@ namespace CapaDatos
                 {
                     cmd.CommandTimeout = 0;
                     cmd.Parameters.AddWithValue("@Archivo", archivo);
+                    masParametros?.Invoke(cmd);
                     cmd.ExecuteNonQuery();
                 }
             }

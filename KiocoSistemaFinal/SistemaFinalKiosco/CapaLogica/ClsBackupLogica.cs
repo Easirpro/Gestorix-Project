@@ -6,6 +6,32 @@ namespace CapaLogica
 {
     public class ClsBackupLogica
     {
+        // El instalador deja acá la base de referencia (con su .hash) para crear la base la primera vez.
+        public const string ArchivoBaseInicial = @"C:\Gestorix\BaseInicial\Gestorix_inicial.bak";
+
+        public bool ServidorDisponible(out string error)
+        {
+            return new ClsBackupDatos().ServidorDisponible(out error);
+        }
+        public bool ExisteBase()
+        {
+            return new ClsBackupDatos().ExisteBase();
+        }
+        // Primera vez en una PC: crea la base Gestorix desde la base de referencia del instalador.
+        public void CrearBaseInicial(IProgress<int> progreso = null)
+        {
+            if (!File.Exists(ArchivoBaseInicial))
+            {
+                throw new Exception("No se encontró la base inicial en " + ArchivoBaseInicial + ". Vuelva a ejecutar el instalador.");
+            }
+
+            if (!ValidarHashBackup(ArchivoBaseInicial))
+            {
+                throw new Exception("La base inicial está dañada o fue modificada (no coincide su firma). Vuelva a ejecutar el instalador.");
+            }
+
+            new ClsBackupDatos().CrearBaseDesdeBackup(ArchivoBaseInicial, progreso);
+        }
         // Genera el backup de la base local en la carpeta indicada.
         public bool GenerarBackup(string ruta, IProgress<int> progreso = null)
         {
