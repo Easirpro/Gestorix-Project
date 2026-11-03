@@ -1856,8 +1856,7 @@ namespace CapaVista
         private async void FrmPresentacion_Load(object sender, EventArgs e)
         {
 
-            // backup automatico: con la base remota se descarga por la red, así que se hace
-            // en segundo plano para no congelar la pantalla al iniciar.
+            // backup automatico: se hace en segundo plano para no congelar la pantalla al iniciar.
 
             try
             {

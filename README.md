@@ -10,11 +10,11 @@ movimientos e historial), balance, empleados, roles y permisos, login con pregun
 bitácora, backup y dígito verificador (DVH).
 
 ## Puesta en marcha
-1. Conectarse a la red de Radmin VPN del equipo: la cadena de conexión de `CapaDatos/Conexion.cs`
-   apunta al servidor SQL compartido. Para trabajar con una base local, cambiar la cadena por la del servidor local.
-2. Si se usa una base local: restaurar la base `Gestorix` y ejecutar los scripts `KiocoSistemaFinal/Migracion_*.sql`
-   (por ejemplo `Migracion_Login_Seguridad.sql`, que convierte las respuestas de seguridad a hash, y
-   `Migracion_Articulos_CamposOpcionales.sql`). La base compartida ya los tiene aplicados.
+1. Instalar SQL Server Express con la instancia `SQLEXPRESS`: la cadena de conexión de `CapaDatos/Conexion.cs`
+   apunta a `.\SQLEXPRESS` (la base local de cada PC) con autenticación de Windows.
+2. Restaurar la base `Gestorix` desde un backup actualizado. Si se parte de un backup viejo, ejecutar además
+   los scripts `KiocoSistemaFinal/Migracion_*.sql` (por ejemplo `Migracion_Login_Seguridad.sql`, que convierte
+   las respuestas de seguridad a hash, y `Migracion_Articulos_CamposOpcionales.sql`).
 3. Abrir `SistemaFinalKiosco.sln` en Visual Studio 2022 y compilar.
 
 ## Historial de versiones

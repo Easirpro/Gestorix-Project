@@ -1,170 +1,83 @@
 using Microsoft.Data.SqlClient;
 using SistemaKiosco;
 using System;
-using System.Data;
-using System.IO;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace CapaDatos
 {
-    // BACKUP y RESTORE siempre trabajan con el disco de la PC donde corre SQL Server.
-    // Como la base está en la PC de un compañero, el backup se genera en una carpeta del
-    // servidor y después se descarga a la PC que lo pidió con OPENROWSET(BULK).
-    //
-    // Permisos que necesita el usuario de la conexión:
-    //   - BACKUP DATABASE en Gestorix (rol db_backupoperator o db_owner).
-    //   - ADMINISTER BULK OPERATIONS en el servidor (rol bulkadmin) para leer el archivo.
-    //   - Para restaurar: rol dbcreator (o sysadmin).
+    // BACKUP y RESTORE trabajan con el disco de la PC donde corre SQL Server, que es esta
+    // misma PC porque la base es local. El servicio de SQL Server tiene que poder escribir y
+    // leer en la carpeta elegida.
     public class ClsBackupDatos
     {
         private Conexion cn = new Conexion();
 
-        public void GenerarBackupLocal(string archivoLocal)
+        // Mensaje 3211 de SQL Server: "N percent processed." (lo manda BACKUP/RESTORE con STATS).
+        private const int MensajePorcentaje = 3211;
+
+        public void GenerarBackup(string archivo, IProgress<int> progreso = null)
         {
-            using (SqlConnection conexion = cn.ObtenerConexionMaster())
-            {
-                conexion.Open();
-
-                string archivoServidor = ObtenerRutaServidor(conexion);
-
-                using (SqlCommand cmd = new SqlCommand(
-                    "BACKUP DATABASE Gestorix TO DISK = @Archivo WITH FORMAT, INIT, COPY_ONLY", conexion))
-                {
-                    cmd.CommandTimeout = 0;
-                    cmd.Parameters.AddWithValue("@Archivo", archivoServidor);
-                    cmd.ExecuteNonQuery();
-                }
-
-                DescargarArchivo(conexion, archivoServidor, archivoLocal);
-            }
+            EjecutarConProgreso(
+                "BACKUP DATABASE Gestorix TO DISK = @Archivo WITH FORMAT, INIT, STATS = 5",
+                archivo, progreso);
         }
 
-        public void RestaurarBackup(string archivoBackup)
+        public void RestaurarBackup(string archivoBackup, IProgress<int> progreso = null)
         {
-            using (SqlConnection conexion = cn.ObtenerConexionMaster())
-            {
-                conexion.Open();
-
-                // SINGLE_USER desconecta a todos los que estén usando la base.
-                string sql = @"
-                    ALTER DATABASE Gestorix SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-                    RESTORE DATABASE Gestorix FROM DISK = @Archivo WITH REPLACE;
-                    ALTER DATABASE Gestorix SET MULTI_USER;";
-
-                using (SqlCommand cmd = new SqlCommand(sql, conexion))
-                {
-                    cmd.CommandTimeout = 0;
-                    cmd.Parameters.AddWithValue("@Archivo", archivoBackup);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
-        // Nombre de la PC donde corre SQL Server.
-        public string ObtenerNombreServidor()
-        {
-            using (SqlConnection conexion = cn.ObtenerConexionMaster())
-            {
-                conexion.Open();
-
-                using (SqlCommand cmd = new SqlCommand("SELECT CAST(SERVERPROPERTY('MachineName') AS NVARCHAR(128))", conexion))
-                {
-                    return cmd.ExecuteScalar()?.ToString() ?? "";
-                }
-            }
-        }
-
-        // true si el servidor ya registró un backup de Gestorix hoy (historial de msdb).
-        // Devuelve null si no hay permiso para leer msdb, para que se revise la carpeta local.
-        public bool? ExisteBackupHoyEnServidor()
-        {
-            try
-            {
-                using (SqlConnection conexion = cn.ObtenerConexionMaster())
-                {
-                    conexion.Open();
-
-                    string sql = @"SELECT COUNT(*) FROM msdb.dbo.backupset
-                                   WHERE database_name = 'Gestorix'
-                                   AND backup_finish_date >= CAST(GETDATE() AS date)";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conexion))
-                    {
-                        return (int)cmd.ExecuteScalar() > 0;
-                    }
-                }
-            }
-            catch (SqlException)
-            {
-                return null;
-            }
-        }
-
-        // Carpeta de backups por defecto de la instancia; si no está configurada,
-        // la carpeta donde están los archivos de datos de la base.
-        private string ObtenerRutaServidor(SqlConnection conexion)
-        {
+            // SINGLE_USER desconecta a todos los que estén usando la base.
             string sql = @"
-                SELECT COALESCE(
-                    CAST(SERVERPROPERTY('InstanceDefaultBackupPath') AS NVARCHAR(260)),
-                    (
-                        SELECT TOP 1
-                            LEFT(physical_name, LEN(physical_name) - CHARINDEX('\', REVERSE(physical_name)) + 1)
-                        FROM Gestorix.sys.database_files
-                        WHERE type = 0
-                    ))";
+                ALTER DATABASE Gestorix SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                RESTORE DATABASE Gestorix FROM DISK = @Archivo WITH REPLACE, STATS = 5;
+                ALTER DATABASE Gestorix SET MULTI_USER;";
 
-            using (SqlCommand cmd = new SqlCommand(sql, conexion))
-            {
-                object resultado = cmd.ExecuteScalar();
-
-                if (resultado == null || resultado == DBNull.Value)
-                {
-                    throw new Exception("No se pudo obtener una carpeta del servidor para generar el backup.");
-                }
-
-                // Un archivo por PC: si dos PCs hacen backup a la vez no se pisan entre sí.
-                // Se reutiliza en cada backup para no acumular archivos en el servidor.
-                string archivo = "Gestorix_transferencia_" + Environment.MachineName + ".bak";
-
-                return resultado.ToString().TrimEnd('\\') + "\\" + archivo;
-            }
+            EjecutarConProgreso(sql, archivoBackup, progreso);
         }
 
-        private void DescargarArchivo(SqlConnection conexion, string archivoServidor, string archivoLocal)
+        // Para recibir los porcentajes mientras el comando corre (y no todos juntos al final) hay que
+        // activar FireInfoMessageEventOnUserErrors. Con eso los errores tampoco cortan el comando:
+        // llegan como mensajes, se juntan y se lanzan al terminar.
+        private void EjecutarConProgreso(string sql, string archivo, IProgress<int> progreso)
         {
-            // OPENROWSET(BULK) no acepta parámetros: la ruta se arma con las comillas escapadas.
-            string sql = "SELECT BulkColumn FROM OPENROWSET(BULK N'" + archivoServidor.Replace("'", "''") + "', SINGLE_BLOB) AS archivo";
+            List<string> errores = new List<string>();
 
-            try
+            using (SqlConnection conexion = cn.ObtenerConexionMaster())
             {
+                conexion.FireInfoMessageEventOnUserErrors = true;
+
+                conexion.InfoMessage += (sender, e) =>
+                {
+                    foreach (SqlError mensaje in e.Errors)
+                    {
+                        if (mensaje.Class > 10)
+                        {
+                            errores.Add(mensaje.Message);
+                        }
+                        else if (mensaje.Number == MensajePorcentaje && progreso != null)
+                        {
+                            Match numero = Regex.Match(mensaje.Message, @"\d+");
+
+                            if (numero.Success)
+                            {
+                                progreso.Report(Math.Min(100, int.Parse(numero.Value)));
+                            }
+                        }
+                    }
+                };
+
+                conexion.Open();
+
                 using (SqlCommand cmd = new SqlCommand(sql, conexion))
                 {
                     cmd.CommandTimeout = 0;
-
-                    using (SqlDataReader lector = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
-                    {
-                        if (!lector.Read())
-                        {
-                            throw new Exception("El servidor no devolvió el archivo de backup.");
-                        }
-
-                        using (Stream origen = lector.GetStream(0))
-                        using (FileStream destino = File.Create(archivoLocal))
-                        {
-                            origen.CopyTo(destino);
-                        }
-                    }
+                    cmd.Parameters.AddWithValue("@Archivo", archivo);
+                    cmd.ExecuteNonQuery();
                 }
             }
-            catch
-            {
-                // No dejar un .bak incompleto en la PC.
-                if (File.Exists(archivoLocal))
-                {
-                    File.Delete(archivoLocal);
-                }
 
-                throw;
+            if (errores.Count > 0)
+            {
+                throw new Exception(string.Join(Environment.NewLine, errores));
             }
         }
     }

@@ -38,6 +38,10 @@
             btnCancelar = new Button();
             btnRestaurarBackup = new Button();
             lbListado = new Label();
+            lblProgresoBackup = new Label();
+            pgbGenerarBackup = new ProgressBar();
+            pgbRestaurarBackup = new ProgressBar();
+            lblProgresoRestaurar = new Label();
             SuspendLayout();
             // 
             // btnExaminar
@@ -96,10 +100,48 @@
             resources.ApplyResources(lbListado, "lbListado");
             lbListado.Name = "lbListado";
             // 
+            // lblProgresoBackup
+            // 
+            lblProgresoBackup.AutoSize = true;
+            lblProgresoBackup.Location = new Point(12, 124);
+            lblProgresoBackup.Name = "lblProgresoBackup";
+            lblProgresoBackup.Size = new Size(0, 15);
+            lblProgresoBackup.TabIndex = 9;
+            lblProgresoBackup.Visible = false;
+            // 
+            // pgbGenerarBackup
+            // 
+            pgbGenerarBackup.Location = new Point(12, 143);
+            pgbGenerarBackup.Name = "pgbGenerarBackup";
+            pgbGenerarBackup.Size = new Size(334, 20);
+            pgbGenerarBackup.TabIndex = 10;
+            pgbGenerarBackup.Visible = false;
+            // 
+            // pgbRestaurarBackup
+            // 
+            pgbRestaurarBackup.Location = new Point(12, 377);
+            pgbRestaurarBackup.Name = "pgbRestaurarBackup";
+            pgbRestaurarBackup.Size = new Size(334, 20);
+            pgbRestaurarBackup.TabIndex = 11;
+            pgbRestaurarBackup.Visible = false;
+            // 
+            // lblProgresoRestaurar
+            // 
+            lblProgresoRestaurar.AutoSize = true;
+            lblProgresoRestaurar.Location = new Point(12, 402);
+            lblProgresoRestaurar.Name = "lblProgresoRestaurar";
+            lblProgresoRestaurar.Size = new Size(0, 15);
+            lblProgresoRestaurar.TabIndex = 12;
+            lblProgresoRestaurar.Visible = false;
+            // 
             // frmGestionBackup
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(lblProgresoRestaurar);
+            Controls.Add(pgbRestaurarBackup);
+            Controls.Add(pgbGenerarBackup);
+            Controls.Add(lblProgresoBackup);
             Controls.Add(lbListado);
             Controls.Add(btnRestaurarBackup);
             Controls.Add(btnCancelar);
@@ -127,5 +169,9 @@
         private Button btnCancelar;
         private Button btnRestaurarBackup;
         private Label lbListado;
+        private Label lblProgresoBackup;
+        private ProgressBar pgbGenerarBackup;
+        private ProgressBar pgbRestaurarBackup;
+        private Label lblProgresoRestaurar;
     }
 }

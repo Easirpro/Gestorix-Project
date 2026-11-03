@@ -6,8 +6,8 @@ namespace CapaLogica
 {
     public class ClsBackupLogica
     {
-        // Genera el backup en el servidor SQL y lo guarda en la carpeta indicada de esta PC.
-        public bool GenerarBackup(string ruta)
+        // Genera el backup de la base local en la carpeta indicada.
+        public bool GenerarBackup(string ruta, IProgress<int> progreso = null)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace CapaLogica
 
                 ClsBackupDatos datos = new ClsBackupDatos();
 
-                datos.GenerarBackupLocal(archivo);
+                datos.GenerarBackup(archivo, progreso);
 
                 string hash = CalcularHashArchivo(archivo);
 
@@ -64,26 +64,13 @@ namespace CapaLogica
 
             return hashGuardado == hashActual;
         }
-        // RESTORE lee el archivo desde el disco del servidor SQL, así que por ahora solo se
-        // puede restaurar desde la PC donde está la base.
-        public bool ServidorEsEstaPc()
-        {
-            ClsBackupDatos datos = new ClsBackupDatos();
-
-            return string.Equals(datos.ObtenerNombreServidor(), Environment.MachineName, StringComparison.OrdinalIgnoreCase);
-        }
-        public bool RestaurarBackup(string archivoBackup)
+        public bool RestaurarBackup(string archivoBackup, IProgress<int> progreso = null)
         {
             try
             {
-                if (!ServidorEsEstaPc())
-                {
-                    throw new Exception("La base de datos está en otra PC. Por ahora el backup solo se puede restaurar desde la PC donde está la base.");
-                }
-
                 ClsBackupDatos datos = new ClsBackupDatos();
 
-                datos.RestaurarBackup(archivoBackup);
+                datos.RestaurarBackup(archivoBackup, progreso);
 
                 return true;
             }
@@ -134,17 +121,6 @@ namespace CapaLogica
         }
         public bool ExisteBackupHoy(string ruta)
         {
-            // Primero se consulta el historial del servidor: con la base compartida alcanza con un
-            // backup automático por día entre todas las PCs (no uno por cada PC que abre el sistema).
-            bool? enServidor = new ClsBackupDatos().ExisteBackupHoyEnServidor();
-
-            if (enServidor.HasValue)
-            {
-                return enServidor.Value;
-            }
-
-            // Sin acceso a msdb: se revisa la carpeta local como antes.
-
             if (!Directory.Exists(ruta))
                 return false;
 
