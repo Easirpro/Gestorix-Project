@@ -74,7 +74,7 @@ namespace CapaVista
                     return;
                 }
 
-                ContinuarIngreso();
+                ContinuarIngreso(login.Inconsistencias);
             }
             catch (Exception ex)
             {
@@ -100,9 +100,14 @@ namespace CapaVista
         // Después de un login correcto: primero el cambio de la contraseña temporal y después las
         // preguntas de seguridad, los dos obligatorios. Si se cierra alguno sin completarlo, se
         // cierra la sesión y se vuelve al login. Al final se abre el menú principal, una sola vez.
-        private void ContinuarIngreso()
+        private void ContinuarIngreso(List<ClsInconsistenciaDVH> inconsistencias)
         {
             this.Hide();
+
+            if (!RevisarIntegridad(inconsistencias))
+            {
+                return;
+            }
 
             if (SesionUsuario.PrimerIngreso)
             {
@@ -140,6 +145,37 @@ namespace CapaVista
             };
 
             menu.Show();
+        }
+        // Si la verificación de integridad encontró registros alterados: quien puede restaurar
+        // backups los revisa en Verificar integridad y después entra; el resto no puede ingresar.
+        private bool RevisarIntegridad(List<ClsInconsistenciaDVH> inconsistencias)
+        {
+            if (inconsistencias == null || inconsistencias.Count == 0)
+            {
+                return true;
+            }
+
+            ClsIntegridadLogica integridad = new ClsIntegridadLogica();
+
+            integridad.RegistrarInconsistencias(SesionUsuario.IdUsuario, inconsistencias.Count);
+
+            if (!SesionUsuario.Permisos.Contains(ClsIntegridadLogica.PermisoIntegridad))
+            {
+                CancelarIngreso(ClsIdioma.T("La base de datos tiene registros modificados por fuera del sistema.\n") +
+                    ClsIdioma.T("No se puede ingresar hasta que un administrador lo revise."));
+                return false;
+            }
+
+            MessageBox.Show(ClsIdioma.T("La verificación de integridad encontró registros modificados por fuera del sistema.\n") +
+                ClsIdioma.T("Revíselos antes de continuar."), ClsIdioma.T("Verificar integridad"),
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            using (frmVerificarIntegridad verificar = new frmVerificarIntegridad(inconsistencias))
+            {
+                verificar.ShowDialog();
+            }
+
+            return true;
         }
         private void CancelarIngreso(string motivo)
         {

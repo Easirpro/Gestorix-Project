@@ -1,4 +1,5 @@
 ﻿using CapaDatos.SistemaKiosco;
+using CapaEntidades;
 using CapaEntidades.NegocioEntidad;
 using Microsoft.Data.SqlClient;
 using SistemaKiosco;
@@ -728,6 +729,9 @@ namespace CapaDatos.NegocioDatos
                     }
                 }
             }
+
+            // sp_RegistrarProductoImportacion no guarda el DVH: se calcula con los datos ya guardados.
+            RecalcularDVHProductos(productos.Select(p => p.IdProducto));
         }
         public bool EliminarProducto(int idProducto)
         {
@@ -889,91 +893,119 @@ namespace CapaDatos.NegocioDatos
                 producto.IdIVA +
                 producto.IdCategoria +
                 producto.IdUnidad +
-                producto.PrecioVenta.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+                ClsDigitoVerificador.FormatoImporte(producto.PrecioVenta);
 
             return ClsDigitoVerificador
                 .GenerarHash(cadena);
         }
+        // Completa el DVH de los productos que no lo tienen (por ejemplo, los importados desde Excel).
         public void RecalcularDVHProductos()
         {
-            using (SqlConnection conexion =
-                   cn.ObtenerConexion())
+            ActualizarDVHProductos("WHERE DVH IS NULL", null);
+        }
+        // Recalcula el DVH de los productos indicados (después de cambiarles el precio).
+        public void RecalcularDVHProductos(IEnumerable<int> idsProductos)
+        {
+            foreach (int idProducto in idsProductos.Distinct())
+            {
+                ActualizarDVHProductos("WHERE IdProducto = @IdProducto", idProducto);
+            }
+        }
+        // Recalcula el DVH de todos los productos (lo usa el administrador desde Verificar integridad).
+        public void RecalcularDVHTodosLosProductos()
+        {
+            ActualizarDVHProductos("", null);
+        }
+        // Productos cuyo DVH guardado no coincide con el que dan sus datos actuales.
+        public List<ClsInconsistenciaDVH> VerificarDVHProductos()
+        {
+            List<ClsInconsistenciaDVH> inconsistencias = new List<ClsInconsistenciaDVH>();
+
+            using (SqlConnection conexion = cn.ObtenerConexion())
             {
                 conexion.Open();
 
-                string sql =
-                @"SELECT
-            IdProducto,
-            CodigoBarra,
-            SKU,
-            Nombre,
-            Descripcion,
-            IdMarca,
-            IdIVA,
-            IdCategoria,
-            IdUnidad,
-            PrecioVenta,
-            Activo
-          FROM Producto
-          WHERE DVH IS NULL";
-
-                using (SqlCommand cmd =
-                       new SqlCommand(sql, conexion))
+                foreach (var (producto, dvhGuardado) in LeerProductosParaDVH(conexion, "", null))
                 {
-                    using (SqlDataReader dr =
-                           cmd.ExecuteReader())
+                    string problema = ClsDigitoVerificador.CompararDVH(dvhGuardado, GenerarDVHProducto(producto));
+
+                    if (problema != null)
                     {
-                        List<ClsGestorEntidadProducto.ClsProducto>
-                            productos =
-                            new List<ClsGestorEntidadProducto.ClsProducto>();
-
-                        while (dr.Read())
+                        inconsistencias.Add(new ClsInconsistenciaDVH
                         {
-                            productos.Add(
-                                new ClsGestorEntidadProducto.ClsProducto
-                                {
-                                    IdProducto = Convert.ToInt32(dr["IdProducto"]),
-                                    CodigoBarra = dr["CodigoBarra"].ToString(),
-                                    SKU = dr["SKU"].ToString(),
-                                    Nombre = dr["Nombre"].ToString(),
-                                    Descripcion = dr["Descripcion"].ToString(),
-                                    IdMarca = Convert.ToInt32(dr["IdMarca"]),
-                                    IdIVA = Convert.ToInt32(dr["IdIVA"]),
-                                    IdCategoria = Convert.ToInt32(dr["IdCategoria"]),
-                                    IdUnidad = Convert.ToInt32(dr["IdUnidad"]),
-                                    PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
-                                    Activo = Convert.ToBoolean(dr["Activo"])
-                                });
-                        }
-
-                        dr.Close();
-
-                        foreach (var producto in productos)
-                        {
-                            string dvh =
-                                GenerarDVHProducto(producto);
-
-                            string update =
-                            @"UPDATE Producto
-                      SET DVH = @DVH
-                      WHERE IdProducto = @IdProducto";
-
-                            using (SqlCommand cmdUpdate =
-                                new SqlCommand(update, conexion))
-                            {
-                                cmdUpdate.Parameters.AddWithValue(
-                                    "@DVH", dvh);
-
-                                cmdUpdate.Parameters.AddWithValue(
-                                    "@IdProducto",
-                                    producto.IdProducto);
-
-                                cmdUpdate.ExecuteNonQuery();
-                            }
-                        }
+                            Tabla = "Producto",
+                            IdRegistro = producto.IdProducto,
+                            Registro = producto.SKU + " - " + producto.Nombre,
+                            Problema = problema
+                        });
                     }
                 }
             }
+
+            return inconsistencias;
+        }
+        private void ActualizarDVHProductos(string filtro, int? idProducto)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+
+                foreach (var (producto, _) in LeerProductosParaDVH(conexion, filtro, idProducto))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UPDATE Producto SET DVH = @DVH WHERE IdProducto = @IdProducto", conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@DVH", GenerarDVHProducto(producto));
+                        cmd.Parameters.AddWithValue("@IdProducto", producto.IdProducto);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+        // Lee los productos con los mismos datos que usa GenerarDVHProducto, más el DVH guardado.
+        // El filtro es un texto fijo armado en esta clase (nunca viene del usuario).
+        private List<(ClsGestorEntidadProducto.ClsProducto Producto, string DVH)> LeerProductosParaDVH(
+            SqlConnection conexion, string filtro, int? idProducto)
+        {
+            List<(ClsGestorEntidadProducto.ClsProducto, string)> productos = new List<(ClsGestorEntidadProducto.ClsProducto, string)>();
+
+            string sql = @"
+                SELECT IdProducto, CodigoBarra, SKU, Nombre, Descripcion, IdMarca, IdIVA,
+                       IdCategoria, IdUnidad, PrecioVenta, Activo, DVH
+                FROM Producto " + filtro;
+
+            using (SqlCommand cmd = new SqlCommand(sql, conexion))
+            {
+                if (idProducto.HasValue)
+                {
+                    cmd.Parameters.AddWithValue("@IdProducto", idProducto.Value);
+                }
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        ClsGestorEntidadProducto.ClsProducto producto = new ClsGestorEntidadProducto.ClsProducto
+                        {
+                            IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                            CodigoBarra = dr["CodigoBarra"].ToString(),
+                            SKU = dr["SKU"].ToString(),
+                            Nombre = dr["Nombre"].ToString(),
+                            Descripcion = dr["Descripcion"].ToString(),
+                            IdMarca = Convert.ToInt32(dr["IdMarca"]),
+                            IdIVA = Convert.ToInt32(dr["IdIVA"]),
+                            IdCategoria = Convert.ToInt32(dr["IdCategoria"]),
+                            IdUnidad = Convert.ToInt32(dr["IdUnidad"]),
+                            PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
+                            Activo = Convert.ToBoolean(dr["Activo"])
+                        };
+
+                        productos.Add((producto, dr["DVH"] == DBNull.Value ? null : dr["DVH"].ToString()));
+                    }
+                }
+            }
+
+            return productos;
         }
         public DataTable ObtenerListadoArticulos(string texto, int? idProducto, int? idProveedor, int? idSucursal, int? idCategoria, int? idMarca, bool soloOfertas, bool soloReponer)
         {

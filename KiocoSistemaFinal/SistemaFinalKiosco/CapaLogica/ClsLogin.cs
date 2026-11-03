@@ -19,6 +19,9 @@ namespace CapaLogica
         // Bloqueado por el administrador (Usuario.Estado) o persona inactiva.
         public bool UsuarioBloqueado { get; private set; }
 
+        // Registros con DVH inválido encontrados al iniciar sesión (vacía si la base está íntegra).
+        public List<ClsInconsistenciaDVH> Inconsistencias { get; private set; } = new List<ClsInconsistenciaDVH>();
+
         public bool IniciarSesion(string usuario, string password)
         {
             UsuarioBloqueado = false;
@@ -51,9 +54,19 @@ namespace CapaLogica
                 return false;
             }
 
+            // La verificación de integridad va antes de registrar el ingreso: RegistrarIngresoExitoso
+            // recalcula el DVH del usuario y taparía una modificación hecha a su fila. Si su fila está
+            // alterada no se toca, así sigue apareciendo en la verificación.
+            Inconsistencias = new ClsIntegridadLogica().Verificar();
+
+            bool usuarioAlterado = Inconsistencias.Any(i => i.Tabla == "Usuario" && i.IdRegistro == encontrado.IdUsuario);
+
             DateTime fechaIngreso = DateTime.Now;
 
-            datos.RegistrarIngresoExitoso(encontrado, fechaIngreso);
+            if (!usuarioAlterado)
+            {
+                datos.RegistrarIngresoExitoso(encontrado, fechaIngreso);
+            }
 
             CargarSesion(encontrado, fechaIngreso);
 

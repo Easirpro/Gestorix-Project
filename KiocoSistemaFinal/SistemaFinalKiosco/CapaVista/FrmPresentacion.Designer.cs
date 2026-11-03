@@ -95,6 +95,7 @@
             idiomaToolStripMenuItem = new ToolStripMenuItem();
             btnEmpleado = new ToolStripMenuItem();
             gestioToolStripMenuItem = new ToolStripMenuItem();
+            verificarIntegridadToolStripMenuItem = new ToolStripMenuItem();
             permisosToolStripMenuItem = new ToolStripMenuItem();
             bitacoraToolStripMenuItem = new ToolStripMenuItem();
             tollClosed = new ToolStripMenuItem();
@@ -691,7 +692,7 @@
             // 
             // btnEmpleado
             // 
-            btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { gestioToolStripMenuItem, permisosToolStripMenuItem, bitacoraToolStripMenuItem });
+            btnEmpleado.DropDownItems.AddRange(new ToolStripItem[] { gestioToolStripMenuItem, verificarIntegridadToolStripMenuItem, permisosToolStripMenuItem, bitacoraToolStripMenuItem });
             btnEmpleado.Enabled = false;
             btnEmpleado.Name = "btnEmpleado";
             btnEmpleado.Size = new Size(100, 20);
@@ -703,6 +704,13 @@
             gestioToolStripMenuItem.Size = new Size(172, 22);
             gestioToolStripMenuItem.Text = "Gestión de Backup";
             gestioToolStripMenuItem.Click += gestioToolStripMenuItem_Click;
+            // 
+            // verificarIntegridadToolStripMenuItem
+            // 
+            verificarIntegridadToolStripMenuItem.Name = "verificarIntegridadToolStripMenuItem";
+            verificarIntegridadToolStripMenuItem.Size = new Size(172, 22);
+            verificarIntegridadToolStripMenuItem.Text = "Verificar integridad";
+            verificarIntegridadToolStripMenuItem.Click += verificarIntegridadToolStripMenuItem_Click;
             // 
             // permisosToolStripMenuItem
             // 
@@ -887,6 +895,7 @@
         private ToolStripMenuItem administrarPromocionesToolStripMenuItem;
 
         private ToolStripMenuItem gestioToolStripMenuItem;
+        private ToolStripMenuItem verificarIntegridadToolStripMenuItem;
 
         private ToolStripMenuItem cargarArticuloNuevoToolStripMenuItem;
         private ToolStripMenuItem bitacoraToolStripMenuItem;

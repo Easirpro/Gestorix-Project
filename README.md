@@ -94,3 +94,5 @@ bitácora, backup y dígito verificador (DVH).
 0.0.0.37- 2/11 Artículos con varios proveedores -Marce-
 
 0.0.0.38- 2/11 Se vuelve a la base local (.\SQLEXPRESS en cada PC); backup y restauración en el disco local con barras de progreso -Marce-
+
+0.0.0.39- 2/11 Verificación de integridad con DVH (productos, usuarios y ventas) al iniciar sesión y desde Administración; formatos fijos de precio, total y fecha en el DVH y DVH recalculado al cambiar precios o importar artículos -Marce-
