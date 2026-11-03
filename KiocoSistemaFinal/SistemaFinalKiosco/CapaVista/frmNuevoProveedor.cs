@@ -26,6 +26,14 @@ namespace CapaVista
         private int idCorreoModificar = 0;
         // Si el proveedor a modificar no se pudo cargar, el formulario se cierra al abrirse.
         private bool proveedorNoEncontrado = false;
+        // sucursal a modificar (0 = la primera)
+        private int idSucursalElegida = 0;
+        // proveedor al que se le agrega sucursal
+        private int idProveedorSucursalNueva = 0;
+        // abierto desde el botón Nueva sucursal
+        private bool abiertoParaSucursal = false;
+
+        private bool EsSoloSucursal => idProveedorSucursalNueva > 0;
 
         public frmNuevoProveedor()
         {
@@ -34,12 +42,13 @@ namespace CapaVista
 
             CargarCombos();
         }
-        public frmNuevoProveedor(int idProveedor)
+        public frmNuevoProveedor(int idProveedor, int idSucursal = 0)
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
 
             idProveedorModificar = idProveedor;
+            idSucursalElegida = idSucursal;
 
             lblTitulo.Text = ClsIdioma.T("Modificar proveedor");
             Text = ClsIdioma.T("Modificar proveedor");
@@ -50,7 +59,45 @@ namespace CapaVista
             this.Load += frmNuevoProveedor_Load;
         }
 
+        // Nueva sucursal de un proveedor existente
+        public static frmNuevoProveedor ParaNuevaSucursal(int idProveedor, string razonSocial, string cuit, string condicionIva)
+        {
+            frmNuevoProveedor formulario = new frmNuevoProveedor();
+
+            formulario.abiertoParaSucursal = true;
+            formulario.PasarAModoSucursal(idProveedor, razonSocial, cuit);
+
+            int indiceIva = formulario.cmbIva.Items.IndexOf(condicionIva ?? "");
+            formulario.cmbIva.SelectedIndex = indiceIva > 0 ? indiceIva : 0;
+
+            formulario.ActiveControl = formulario.txtSucursalProveedor;
+
+            return formulario;
+        }
+
         #region Metodo
+        private void PasarAModoSucursal(int idProveedor, string razonSocial, string cuit)
+        {
+            idProveedorSucursalNueva = idProveedor;
+
+            txtRazonSocial.Text = razonSocial;
+            txtCuit.Text = cuit;
+            txtRazonSocial.ReadOnly = true;
+            txtCuit.ReadOnly = true;
+
+            lblTitulo.Text = ClsIdioma.T("Nueva sucursal de ") + razonSocial;
+            Text = lblTitulo.Text;
+        }
+        private void VolverAModoProveedorNuevo()
+        {
+            idProveedorSucursalNueva = 0;
+
+            txtRazonSocial.ReadOnly = false;
+            txtCuit.ReadOnly = false;
+
+            lblTitulo.Text = ClsIdioma.T("Nuevo proveedor");
+            Text = lblTitulo.Text;
+        }
         private void CargarCombos()
         {
             try
@@ -79,7 +126,7 @@ namespace CapaVista
                 return Aviso(ClsIdioma.T("Ingrese la sucursal (por ejemplo, \"Casa central\")."), txtSucursalProveedor);
             }
 
-            if (!string.IsNullOrWhiteSpace(txtCuit.Text))
+            if (!EsSoloSucursal && !string.IsNullOrWhiteSpace(txtCuit.Text))
             {
                 ClsValidarCUIL validar = new ClsValidarCUIL();
 
@@ -99,6 +146,11 @@ namespace CapaVista
                 return Aviso(ClsIdioma.T("Seleccione la condición de IVA."), cmbIva);
             }
 
+            if (SucursalRepetida(txtSucursalProveedor.Text.Trim()))
+            {
+                return Aviso(ClsIdioma.T("Este proveedor ya tiene una sucursal con ese nombre."), txtSucursalProveedor);
+            }
+
             // --- Contacto ---
             if (!ClsValidarNumero.ClsValidarNumeros.NumeroValido(txtCelular.Text))
             {
@@ -115,7 +167,7 @@ namespace CapaVista
                 return Aviso(ClsIdioma.T("Seleccione el tipo de teléfono."), cmbTipoTelefono);
             }
 
-            if (!ClsValidarCorreo.EsEmailValido(txtEmail.Text.Trim()))
+            if (!ClsValidarCorreo.EsEmailValidoCualquierDominio(txtEmail.Text.Trim()))
             {
                 return Aviso(ClsIdioma.T("Ingrese un e-mail válido."), txtEmail);
             }
@@ -141,13 +193,13 @@ namespace CapaVista
                 return Aviso(ClsIdioma.T("Ingrese la calle."), txtCalle);
             }
 
-            if (!int.TryParse(txtNumero.Text.Trim(), out int altura) || altura <= 0)
+            if (!chkSinNumero.Checked && (!int.TryParse(txtNumero.Text.Trim(), out int altura) || altura <= 0))
             {
-                return Aviso(ClsIdioma.T("Ingrese el número de la calle (mayor que cero)."), txtNumero);
+                return Aviso(ClsIdioma.T("Ingrese el número de la calle (mayor que cero) o marque \"Sin número\"."), txtNumero);
             }
 
             // Sin CUIT, la razón social es lo único que distingue al proveedor: se avisa si ya existe.
-            if (string.IsNullOrWhiteSpace(txtCuit.Text) &&
+            if (!EsSoloSucursal && string.IsNullOrWhiteSpace(txtCuit.Text) &&
                 logica.ExisteNombreProveedor(txtRazonSocial.Text.Trim(), idProveedorModificar))
             {
                 DialogResult respuesta = MessageBox.Show(ClsIdioma.T("Ya existe un proveedor llamado \"") + txtRazonSocial.Text.Trim() + "\".\n\n" +
@@ -161,6 +213,22 @@ namespace CapaVista
             }
 
             return true;
+        }
+        // sucursal con el mismo nombre
+        private bool SucursalRepetida(string nombre)
+        {
+            int idProveedor = EsSoloSucursal ? idProveedorSucursalNueva : idProveedorModificar;
+
+            if (idProveedor == 0)
+            {
+                return false;
+            }
+
+            DataTable sucursales = logica.ObtenerSucursalesPorProveedor(idProveedor);
+
+            return sucursales.AsEnumerable().Any(f =>
+                Convert.ToInt32(f["IdSucursal"]) != idSucursalModificar &&
+                string.Equals((f["Sucursal"]?.ToString() ?? "").Trim(), nombre, StringComparison.CurrentCultureIgnoreCase));
         }
         private bool Aviso(string mensaje, Control control)
         {
@@ -304,7 +372,8 @@ namespace CapaVista
                     return;
                 }
 
-                DataRow fila = tabla.Rows[0];
+                DataRow fila = tabla.AsEnumerable()
+                    .FirstOrDefault(f => Convert.ToInt32(f["IdSucursal"]) == idSucursalElegida) ?? tabla.Rows[0];
 
                 txtRazonSocial.Text = fila["RazonSocial"]?.ToString() ?? "";
                 txtSucursalProveedor.Text = fila["Sucursal"]?.ToString() ?? "";
@@ -314,6 +383,7 @@ namespace CapaVista
                 idSucursalModificar = Convert.ToInt32(fila["IdSucursal"]);
                 txtCalle.Text = fila["Calle"]?.ToString() ?? "";
                 txtNumero.Text = fila["Altura"]?.ToString() ?? "";
+                chkSinNumero.Checked = fila["Altura"] == DBNull.Value;
                 txtPiso.Text = fila["Piso"]?.ToString() ?? "";
                 txtDepartamento.Text = fila["Departamento"]?.ToString() ?? "";
 
@@ -374,6 +444,7 @@ namespace CapaVista
             cmbProvincia.SelectedIndex = 0;   // recarga partido y localidad vacíos
             cmbTipoTelefono.SelectedIndex = 0;
             cmbIva.SelectedIndex = 0;
+            chkSinNumero.Checked = false;
 
             txtRazonSocial.Focus();
         }
@@ -416,6 +487,15 @@ namespace CapaVista
                 e.Handled = true;
             }
         }
+        private void chkSinNumero_CheckedChanged(object? sender, EventArgs e)
+        {
+            txtNumero.Enabled = !chkSinNumero.Checked;
+
+            if (chkSinNumero.Checked)
+            {
+                txtNumero.Clear();
+            }
+        }
         // CUIT: dígitos y guiones.
         private void txtCuit_KeyPress(object? sender, KeyPressEventArgs e)
         {
@@ -449,7 +529,11 @@ namespace CapaVista
 
                 int idProveedor;
 
-                if (esNuevo)
+                if (EsSoloSucursal)
+                {
+                    idProveedor = idProveedorSucursalNueva;
+                }
+                else if (esNuevo)
                 {
                     idProveedor = logica.RegistrarProveedor(proveedor);
                 }
@@ -462,7 +546,7 @@ namespace CapaVista
                 ClsDireccion direccion = new ClsDireccion
                 {
                     Calle = txtCalle.Text.Trim(),
-                    Altura = int.Parse(txtNumero.Text.Trim()),
+                    Altura = chkSinNumero.Checked ? null : int.Parse(txtNumero.Text.Trim()),
                     Piso = txtPiso.Text.Trim(),
                     Departamento = txtDepartamento.Text.Trim(),
                     IdLocalidad = ValorCombo(cmbLocalidad)
@@ -566,10 +650,33 @@ namespace CapaVista
 
                 if (esNuevo)
                 {
-                    MessageBox.Show(ClsIdioma.T("Proveedor registrado correctamente.\n\nPuede cargar otro o tocar Cancelar para volver."), ClsIdioma.T("Proveedores"),
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string registrado = EsSoloSucursal ? ClsIdioma.T("Sucursal registrada correctamente.") : ClsIdioma.T("Proveedor registrado correctamente.");
 
-                    LimpiarFormulario();
+                    DialogResult otra = MessageBox.Show(registrado + "\n\n" + ClsIdioma.T("¿Desea cargar otra sucursal de este proveedor?"),
+                        ClsIdioma.T("Proveedores"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (otra == DialogResult.Yes)
+                    {
+                        // otra sucursal del mismo proveedor
+                        string razonSocial = txtRazonSocial.Text.Trim();
+                        string cuit = CuitFormateado();
+                        int indiceIva = cmbIva.SelectedIndex;
+
+                        LimpiarFormulario();
+                        PasarAModoSucursal(idProveedor, razonSocial, cuit);
+                        cmbIva.SelectedIndex = indiceIva;
+
+                        txtSucursalProveedor.Focus();
+                    }
+                    else if (abiertoParaSucursal)
+                    {
+                        this.Close();
+                    }
+                    else
+                    {
+                        VolverAModoProveedorNuevo();
+                        LimpiarFormulario();
+                    }
                 }
                 else
                 {
