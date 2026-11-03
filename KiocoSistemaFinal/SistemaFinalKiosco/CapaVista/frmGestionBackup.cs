@@ -14,6 +14,9 @@ namespace CapaVista
 {
     public partial class frmGestionBackup : Form
     {
+        // true mientras se genera o restaura un backup: no se puede cerrar la ventana.
+        private bool trabajando = false;
+
         public frmGestionBackup()
         {
             InitializeComponent();
@@ -21,6 +24,16 @@ namespace CapaVista
             txtRutabk.Text = @"C:\Gestorix\Backups";
             this.CancelButton = btnCancelar;
             CargarBackups();
+            this.FormClosing += frmGestionBackup_FormClosing;
+        }
+        private void frmGestionBackup_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (trabajando)
+            {
+                e.Cancel = true;
+                MessageBox.Show(ClsIdioma.T("Espere a que termine el backup o la restauración."), ClsIdioma.T("Gestión de Backup"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
         private void btnExaminar_Click(object sender, EventArgs e)
         {
@@ -31,14 +44,18 @@ namespace CapaVista
                     carpeta.SelectedPath;
             }
         }
-        private void btnGenerarBackup_Click(object sender, EventArgs e)
+        private async void btnGenerarBackup_Click(object sender, EventArgs e)
         {
+            string ruta = txtRutabk.Text;
+            IProgress<int> progreso = MostrarProgreso(pgbGenerarBackup, lblProgresoBackup, ClsIdioma.T("Generando backup..."));
+
             try
             {
                 ClsBackupLogica backup = new ClsBackupLogica();
-                
-                bool resultado = backup.GenerarBackup(txtRutabk.Text);
-                MessageBox.Show(ClsIdioma.T("Backup generado correctamente en ") + txtRutabk.Text);
+
+                await Task.Run(() => backup.GenerarBackup(ruta, progreso));
+
+                MessageBox.Show(ClsIdioma.T("Backup generado correctamente en ") + ruta);
                 CargarBackups();
             }
             catch (Exception ex)
@@ -46,6 +63,46 @@ namespace CapaVista
                 MessageBox.Show(ex.Message, "ERROR",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                OcultarProgreso(pgbGenerarBackup, lblProgresoBackup);
+            }
+        }
+        // Muestra la barra en 0 y bloquea los botones mientras dura el backup o la restauración.
+        // Progress<int> se crea acá, en la pantalla, así los avisos llegan al hilo de la pantalla.
+        private IProgress<int> MostrarProgreso(ProgressBar barra, Label etiqueta, string texto)
+        {
+            HabilitarBotones(false);
+
+            barra.Value = 0;
+            barra.Visible = true;
+            etiqueta.Text = texto + " 0%";
+            etiqueta.Visible = true;
+
+            return new Progress<int>(porcentaje =>
+            {
+                barra.Value = porcentaje;
+                etiqueta.Text = texto + " " + porcentaje + "%";
+            });
+        }
+        private void OcultarProgreso(ProgressBar barra, Label etiqueta)
+        {
+            barra.Visible = false;
+            etiqueta.Visible = false;
+
+            HabilitarBotones(true);
+        }
+        private void HabilitarBotones(bool habilitar)
+        {
+            trabajando = !habilitar;
+
+            btnGenerarBackup.Enabled = habilitar;
+            btnRestaurarBackup.Enabled = habilitar;
+            btnExaminar.Enabled = habilitar;
+            btnActualizar.Enabled = habilitar;
+            btnCancelar.Enabled = habilitar;
+            lstBackup.Enabled = habilitar;
+            txtRutabk.Enabled = habilitar;
         }
         private void CargarBackups()
         {
@@ -65,31 +122,12 @@ namespace CapaVista
         {
             this.Close();
         }
-        private void btnRestaurarBackup_Click(object sender, EventArgs e)
+        private async void btnRestaurarBackup_Click(object sender, EventArgs e)
         {
             if (lstBackup.SelectedItem == null)
             {
                 MessageBox.Show(
                     ClsIdioma.T("Seleccione un backup para restaurar."), ClsIdioma.T("Gestión de Backup"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            // Avisar antes de pedir confirmación: con la base en otra PC no se puede restaurar.
-            try
-            {
-                if (!new ClsBackupLogica().ServidorEsEstaPc())
-                {
-                    MessageBox.Show(
-                        ClsIdioma.T("La base de datos está en otra PC. Por ahora el backup solo se puede restaurar desde la PC donde está la base."),
-                        ClsIdioma.T("Gestión de Backup"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
             }
@@ -124,7 +162,9 @@ namespace CapaVista
                             return;
                         }
                     }
-                    bool exito = backupLogica.RestaurarBackup(archivoBackup);
+                    IProgress<int> progreso = MostrarProgreso(pgbRestaurarBackup, lblProgresoRestaurar, ClsIdioma.T("Restaurando backup..."));
+
+                    bool exito = await Task.Run(() => backupLogica.RestaurarBackup(archivoBackup, progreso));
 
                     if (exito)
                     {
@@ -133,12 +173,16 @@ namespace CapaVista
                         Environment.Exit(5);
                     }
                 }
-                
+
                 catch (Exception ex)
                 {
-                
+
                 MessageBox.Show(ex.Message,ClsIdioma.T("ERROR AL RESTAURAR"),MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                }
+                finally
+                {
+                    OcultarProgreso(pgbRestaurarBackup, lblProgresoRestaurar);
                 }
 
             }

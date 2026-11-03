@@ -1274,6 +1274,9 @@ namespace CapaVista
                 { "Seleccione el rol del empleado.", "Select the employee's role." },
                 { "Seleccione la venta y el producto a devolver.", "Select the sale and the product to return." },
                 { "Seleccione un artículo.", "Select a product." },
+                { "Generando backup...", "Creating backup..." },
+                { "Restaurando backup...", "Restoring backup..." },
+                { "Espere a que termine el backup o la restauración.", "Wait for the backup or restore to finish." },
                 { "Seleccione un backup para restaurar.", "Select a backup to restore." },
                 { "Seleccione un concepto.", "Select a concept." },
                 { "Seleccione un género.", "Select a gender." },
@@ -1581,7 +1584,6 @@ namespace CapaVista
                 { "Seleccionar plantilla de artículos", "Select products template" },
                 { "No se pudo generar el backup automático: ", "The automatic backup could not be created: " },
                 { "Backup generado correctamente en ", "Backup created successfully in " },
-                { "La base de datos está en otra PC. Por ahora el backup solo se puede restaurar desde la PC donde está la base.", "The database is on another PC. For now the backup can only be restored from the PC where the database is." },
                 // Nombres y descripciones de permisos y nombres de roles (vienen de la base; solo se muestran)
                 { "Permite usar todas las funciones de la sección Artículos.", "Allows using every function in the Products section." },
                 { "Gestión de Artículos", "Product management" },
