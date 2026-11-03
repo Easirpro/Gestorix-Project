@@ -358,7 +358,7 @@ namespace CapaVista
                 }
                 else if (nombreTipo.Contains("precio"))
                 {
-                    mensaje.AppendLine(ClsIdioma.T("Precio especial: ") + valor.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR")));
+                    mensaje.AppendLine(ClsIdioma.T("Precio especial: ") + valor.ToString("C2"));
                 }
                 else if (promo["CantidadLleva"] != DBNull.Value && promo["CantidadPaga"] != DBNull.Value)
                 {

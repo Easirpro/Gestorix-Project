@@ -286,7 +286,7 @@ namespace CapaVista
             lblTotalMonto.AutoSize = false;
             lblTotalMonto.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             lblTotalMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
-            lblTotalMonto.Text = total.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("es-AR"));
+            lblTotalMonto.Text = total.ToString("C2");
         }
         private void LimpiarVenta()
         {

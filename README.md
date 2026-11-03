@@ -113,3 +113,5 @@ y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
 0.0.0.40- 2/11 Base de datos de referencia (.bak verificado) en KiocoSistemaFinal/BaseDatos para instalar el sistema; errores técnicos viejos marcados como resueltos; se quitaron de Conexion.cs las cadenas de conexión viejas -Marce-
 
 0.0.1.0- 2/11 Primera versión instalable: instalador con Inno Setup (programa autocontenido, base de referencia y permisos para SQL Server); el programa crea la base sola la primera vez y avisa si no encuentra SQL Server -Marce-
+
+0.0.1.2- 3/11 Importes en pesos argentinos (ARS) y en dólares (USD) con el sistema en inglés (también en la vista previa de Promociones); Registrar/Modificar artículo, Categorías y marcas, Importar y Exportar artículos sin botón de maximizar -Marce-

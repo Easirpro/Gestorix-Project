@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -78,12 +79,58 @@ namespace CapaVista
             {
                 Ingles = false;
             }
+
+            AplicarMoneda();
+        }
+
+        // Los importes se muestran en pesos argentinos (ARS) y en inglés en dólares (USD).
+        // Se parte siempre de es-AR (no de la configuración regional de Windows, que puede estar
+        // en euros) y en inglés solo cambia el formato de moneda: la forma de escribir números y
+        // fechas en los campos sigue siendo la misma en los dos idiomas.
+        // No se convierte el valor: solo cambia el símbolo y el formato del importe.
+        private static void AplicarMoneda()
+        {
+            CultureInfo cultura = (CultureInfo)CultureInfo.GetCultureInfo("es-AR").Clone();
+
+            if (Ingles)
+            {
+                NumberFormatInfo dolares = CultureInfo.GetCultureInfo("en-US").NumberFormat;
+
+                cultura.NumberFormat.CurrencySymbol = "US$";
+                cultura.NumberFormat.CurrencyDecimalSeparator = dolares.CurrencyDecimalSeparator;
+                cultura.NumberFormat.CurrencyGroupSeparator = dolares.CurrencyGroupSeparator;
+            }
+
+            CultureInfo.DefaultThreadCurrentCulture = cultura;
+            CultureInfo.CurrentCulture = cultura;
+        }
+
+        // Importe sin el símbolo, con los separadores de la moneda actual (para pantallas que
+        // muestran el símbolo en una etiqueta aparte).
+        public static string ImporteSinSimbolo(decimal valor)
+        {
+            NumberFormatInfo formato = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
+
+            formato.NumberDecimalSeparator = formato.CurrencyDecimalSeparator;
+            formato.NumberGroupSeparator = formato.CurrencyGroupSeparator;
+
+            return valor.ToString("N2", formato);
+        }
+
+        // Formato de importe para las planillas de Excel que se exportan.
+        public static string FormatoMonedaExcel
+        {
+            get
+            {
+                return Ingles ? "\"US$\" #,##0.00" : "\"$\" #,##0.00";
+            }
         }
 
         // Cambia el idioma, lo guarda en esta PC y traduce las ventanas abiertas.
         public static void CambiarIdioma(bool ingles)
         {
             Ingles = ingles;
+            AplicarMoneda();
 
             try
             {
