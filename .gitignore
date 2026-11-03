@@ -12,3 +12,6 @@ obj/
 *.pdb
 *.cache
 *.sqlite
+
+# Configuración local de herramientas del editor
+.claude/
