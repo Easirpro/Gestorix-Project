@@ -15,3 +15,8 @@ obj/
 
 # Configuración local de herramientas del editor
 .claude/
+
+# Archivos que genera GenerarInstalador.ps1
+KiocoSistemaFinal/Instalador/publicado/
+KiocoSistemaFinal/Instalador/base/
+KiocoSistemaFinal/Instalador/salida/

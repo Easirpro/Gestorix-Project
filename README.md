@@ -19,6 +19,17 @@ bitácora, backup y dígito verificador (DVH).
    y los errores técnicos revisados; `KioscoFinal.sql` es el script viejo y no alcanza para crear la base.
 3. Abrir `SistemaFinalKiosco.sln` en Visual Studio 2022 y compilar.
 
+## Instalación en una PC
+1. Instalar **SQL Server 2025 Express** (o más nuevo) con la instancia `SQLEXPRESS`, con el usuario de Windows
+   que va a usar Gestorix (queda como administrador del servidor). El instalador de Gestorix no sigue si no lo encuentra.
+2. Ejecutar `Instalar_Gestorix_0.0.1.0.exe`: instala el programa en `Archivos de programa\Gestorix`, crea los accesos
+   directos, deja la base de referencia en `C:\Gestorix\BaseInicial` y le da permiso a SQL Server sobre `C:\Gestorix`.
+3. Abrir Gestorix: la primera vez, si no existe la base `Gestorix`, la crea sola desde la base de referencia.
+
+Para generar el instalador: instalar [Inno Setup 6](https://jrsoftware.org/isdl.php) y ejecutar en PowerShell
+`KiocoSistemaFinal\Instalador\GenerarInstalador.ps1`. Publica el programa (incluye .NET, la PC no necesita tenerlo)
+y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
+
 ## Historial de versiones
 
 0.0.0.1- 9/9 se subió el proyecto a GitHub
@@ -100,3 +111,5 @@ bitácora, backup y dígito verificador (DVH).
 0.0.0.39- 2/11 Verificación de integridad con DVH (productos, usuarios y ventas) al iniciar sesión y desde Administración; formatos fijos de precio, total y fecha en el DVH y DVH recalculado al cambiar precios o importar artículos -Marce-
 
 0.0.0.40- 2/11 Base de datos de referencia (.bak verificado) en KiocoSistemaFinal/BaseDatos para instalar el sistema; errores técnicos viejos marcados como resueltos; se quitaron de Conexion.cs las cadenas de conexión viejas -Marce-
+
+0.0.1.0- 2/11 Primera versión instalable: instalador con Inno Setup (programa autocontenido, base de referencia y permisos para SQL Server); el programa crea la base sola la primera vez y avisa si no encuentra SQL Server -Marce-
