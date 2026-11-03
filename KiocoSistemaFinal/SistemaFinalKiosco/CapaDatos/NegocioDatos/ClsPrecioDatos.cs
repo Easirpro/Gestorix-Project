@@ -43,6 +43,10 @@ namespace CapaDatos.NegocioDatos
 
                 cmd.ExecuteNonQuery();
             }
+
+            // El precio forma parte del DVH del producto: se recalcula para los que cambiaron.
+            new ClsGestorProductoDatos().RecalcularDVHProductos(
+                precios.Rows.Cast<DataRow>().Select(fila => Convert.ToInt32(fila["IdProducto"])));
         }
     }
 }

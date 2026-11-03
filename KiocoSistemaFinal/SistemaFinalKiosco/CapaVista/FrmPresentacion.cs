@@ -369,6 +369,7 @@ namespace CapaVista
             // empleados
             permisosToolStripMenuItem.Text = idiomaIngles ? "Employees" : ClsIdioma.T("Empleado");
             gestioToolStripMenuItem.Text = idiomaIngles ? "Backup Management" : ClsIdioma.T("Gestión de Backup");
+            verificarIntegridadToolStripMenuItem.Text = idiomaIngles ? "Check Integrity" : ClsIdioma.T("Verificar integridad");
             bitacoraToolStripMenuItem.Text = idiomaIngles ? "Activity Log" : ClsIdioma.T("Bitácora");
 
             // promociones
@@ -594,6 +595,7 @@ namespace CapaVista
             //Administración operaciones
             permisosToolStripMenuItem.Enabled = TieneAlguno(1010, 1020, 1270);
             gestioToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1280);
+            verificarIntegridadToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(ClsIntegridadLogica.PermisoIntegridad);
             bitacoraToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1290);        }
         //Ingreso de plata
         public enum TipoMovimiento
@@ -1847,6 +1849,13 @@ namespace CapaVista
         {
             frmPromocion promo = new frmPromocion();
             promo.ShowDialog();
+        }
+        private void verificarIntegridadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (frmVerificarIntegridad frm = new frmVerificarIntegridad())
+            {
+                frm.ShowDialog(this);
+            }
         }
         private void gestioToolStripMenuItem_Click(object sender, EventArgs e)
         {

@@ -1,4 +1,5 @@
 ﻿using CapaDatos.SistemaKiosco;
+using CapaEntidades;
 using CapaEntidades.NegocioEntidad;
 using Microsoft.Data.SqlClient;
 using SistemaKiosco;
@@ -275,9 +276,77 @@ namespace CapaDatos.NegocioDatos
         }
         private string GenerarDVHVenta(decimal total, int idUsuario)
         {
-            string cadena = total.ToString() + idUsuario.ToString();
+            string cadena = ClsDigitoVerificador.FormatoImporte(total) + idUsuario.ToString();
 
             return ClsDigitoVerificador.GenerarHash(cadena);
+        }
+        // Recalcula el DVH de todas las ventas (lo usa el administrador desde Verificar integridad).
+        public void RecalcularDVHTodasLasVentas()
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+
+                foreach (var (idVenta, _, total, idUsuario, _) in LeerVentasParaDVH(conexion))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UPDATE Venta SET DVH = @DVH WHERE IdVenta = @IdVenta", conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@DVH", GenerarDVHVenta(total, idUsuario));
+                        cmd.Parameters.AddWithValue("@IdVenta", idVenta);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+        // Ventas cuyo DVH guardado no coincide con el que dan sus datos actuales.
+        public List<ClsInconsistenciaDVH> VerificarDVHVentas()
+        {
+            List<ClsInconsistenciaDVH> inconsistencias = new List<ClsInconsistenciaDVH>();
+
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            {
+                conexion.Open();
+
+                foreach (var (idVenta, fechaHora, total, idUsuario, dvhGuardado) in LeerVentasParaDVH(conexion))
+                {
+                    string problema = ClsDigitoVerificador.CompararDVH(dvhGuardado, GenerarDVHVenta(total, idUsuario));
+
+                    if (problema != null)
+                    {
+                        inconsistencias.Add(new ClsInconsistenciaDVH
+                        {
+                            Tabla = "Venta",
+                            IdRegistro = idVenta,
+                            Registro = "Venta #" + idVenta + " - " + fechaHora.ToString("dd/MM/yyyy HH:mm") +
+                                       " - $" + ClsDigitoVerificador.FormatoImporte(total),
+                            Problema = problema
+                        });
+                    }
+                }
+            }
+
+            return inconsistencias;
+        }
+        private List<(int IdVenta, DateTime FechaHora, decimal Total, int IdUsuario, string DVH)> LeerVentasParaDVH(SqlConnection conexion)
+        {
+            List<(int, DateTime, decimal, int, string)> ventas = new List<(int, DateTime, decimal, int, string)>();
+
+            using (SqlCommand cmd = new SqlCommand("SELECT IdVenta, FechaHora, Total, IdUsuario, DVH FROM Venta", conexion))
+            using (SqlDataReader dr = cmd.ExecuteReader())
+            {
+                while (dr.Read())
+                {
+                    ventas.Add((
+                        Convert.ToInt32(dr["IdVenta"]),
+                        Convert.ToDateTime(dr["FechaHora"]),
+                        Convert.ToDecimal(dr["Total"]),
+                        Convert.ToInt32(dr["IdUsuario"]),
+                        dr["DVH"] == DBNull.Value ? null : dr["DVH"].ToString()));
+                }
+            }
+
+            return ventas;
         }
 
 
