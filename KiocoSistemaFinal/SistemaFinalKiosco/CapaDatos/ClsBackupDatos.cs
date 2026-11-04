@@ -8,14 +8,12 @@ using System.Text.RegularExpressions;
 
 namespace CapaDatos
 {
-    // BACKUP y RESTORE trabajan con el disco de la PC donde corre SQL Server, que es esta
-    // misma PC porque la base es local. El servicio de SQL Server tiene que poder escribir y
-    // leer en la carpeta elegida.
+    
     public class ClsBackupDatos
     {
         private Conexion cn = new Conexion();
 
-        // Mensaje 3211 de SQL Server: "N percent processed." (lo manda BACKUP/RESTORE con STATS).
+       
         private const int MensajePorcentaje = 3211;
 
         public void GenerarBackup(string archivo, IProgress<int> progreso = null)
@@ -27,7 +25,7 @@ namespace CapaDatos
 
         public void RestaurarBackup(string archivoBackup, IProgress<int> progreso = null)
         {
-            // SINGLE_USER desconecta a todos los que estén usando la base.
+            
             string sql = @"
                 ALTER DATABASE Gestorix SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
                 RESTORE DATABASE Gestorix FROM DISK = @Archivo WITH REPLACE, STATS = 5;
@@ -36,7 +34,7 @@ namespace CapaDatos
             EjecutarConProgreso(sql, archivoBackup, progreso);
         }
 
-        // true si se puede conectar al SQL Server local (sin depender de que exista la base).
+       
         public bool ServidorDisponible(out string error)
         {
             try
@@ -67,9 +65,6 @@ namespace CapaDatos
             }
         }
 
-        // Crea la base Gestorix desde un backup en una PC donde todavía no existe. Los archivos de
-        // datos se ubican en las carpetas por defecto de esta instancia, que pueden no coincidir con
-        // las de la PC donde se generó el backup.
         public void CrearBaseDesdeBackup(string archivoBackup, IProgress<int> progreso = null)
         {
             List<(string Nombre, string Destino)> archivos = new List<(string, string)>();
@@ -126,9 +121,6 @@ namespace CapaDatos
                 });
         }
 
-        // Para recibir los porcentajes mientras el comando corre (y no todos juntos al final) hay que
-        // activar FireInfoMessageEventOnUserErrors. Con eso los errores tampoco cortan el comando:
-        // llegan como mensajes, se juntan y se lanzan al terminar.
         private void EjecutarConProgreso(string sql, string archivo, IProgress<int> progreso, Action<SqlCommand> masParametros = null)
         {
             List<string> errores = new List<string>();

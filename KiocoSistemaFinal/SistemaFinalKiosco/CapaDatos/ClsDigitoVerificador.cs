@@ -23,8 +23,7 @@ namespace CapaDatos
                 }
             }
 
-            // Formatos fijos para armar el DVH: no dependen de la configuración regional de la PC
-            // ni de cómo vuelve el dato de la base (1500 y 1500,00 dan lo mismo).
+            
             public static string FormatoImporte(decimal valor)
             {
                 return valor.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
@@ -35,7 +34,7 @@ namespace CapaDatos
                 return valor?.ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) ?? "";
             }
 
-            // null si el DVH guardado coincide con el calculado; si no, el problema encontrado.
+            
             public static string CompararDVH(string dvhGuardado, string dvhCalculado)
             {
                 if (string.IsNullOrWhiteSpace(dvhGuardado))
