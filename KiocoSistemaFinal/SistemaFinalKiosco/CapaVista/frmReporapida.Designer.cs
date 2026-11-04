@@ -46,10 +46,14 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ttAyuda = new ToolTip(components);
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReporapida));
+            ttAyuda = new ToolTip(components);
+            cmbProveedor = new ComboBox();
+            cmbSucursal = new ComboBox();
+            cmbCategoria = new ComboBox();
+            cmbMarca = new ComboBox();
             pnlBotones = new Panel();
             btnCancelar = new Button();
             btnGuardarCambios = new Button();
@@ -63,15 +67,14 @@
             pnlBusqueda = new Panel();
             txtCodigo = new TextBox();
             lblCodigoArticulo = new Label();
+            lblPorcentaje = new Label();
+            txtPorcentaje = new TextBox();
+            btnAplicarPorcentaje = new Button();
             lstDescripcion = new ListBox();
             tlpFiltros = new TableLayoutPanel();
             lblProveedor = new Label();
-            cmbProveedor = new ComboBox();
             lblCategoria = new Label();
-            cmbCategoria = new ComboBox();
             lblMarca = new Label();
-            cmbMarca = new ComboBox();
-            cmbSucursal = new ComboBox();
             lblSucursal = new Label();
             pnlModo = new Panel();
             btnActualizarPrecios = new Button();
@@ -84,6 +87,55 @@
             tlpFiltros.SuspendLayout();
             pnlModo.SuspendLayout();
             SuspendLayout();
+            // 
+            // ttAyuda
+            // 
+            ttAyuda.AutoPopDelay = 10000;
+            ttAyuda.InitialDelay = 300;
+            ttAyuda.ReshowDelay = 100;
+            // 
+            // cmbProveedor
+            // 
+            cmbProveedor.Dock = DockStyle.Fill;
+            cmbProveedor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbProveedor.FormattingEnabled = true;
+            cmbProveedor.Location = new Point(3, 30);
+            cmbProveedor.Name = "cmbProveedor";
+            cmbProveedor.Size = new Size(239, 23);
+            cmbProveedor.TabIndex = 3;
+            ttAyuda.SetToolTip(cmbProveedor, "Filtrá los productos por proveedor.");
+            cmbProveedor.SelectedIndexChanged += cmbProveedor_SelectedIndexChanged;
+            // 
+            // cmbSucursal
+            // 
+            cmbSucursal.FormattingEnabled = true;
+            cmbSucursal.Location = new Point(738, 30);
+            cmbSucursal.Name = "cmbSucursal";
+            cmbSucursal.Size = new Size(239, 23);
+            cmbSucursal.TabIndex = 7;
+            ttAyuda.SetToolTip(cmbSucursal, "Filtrá los productos por sucursal del proveedor.");
+            // 
+            // cmbCategoria
+            // 
+            cmbCategoria.Dock = DockStyle.Fill;
+            cmbCategoria.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCategoria.FormattingEnabled = true;
+            cmbCategoria.Location = new Point(248, 30);
+            cmbCategoria.Name = "cmbCategoria";
+            cmbCategoria.Size = new Size(239, 23);
+            cmbCategoria.TabIndex = 4;
+            ttAyuda.SetToolTip(cmbCategoria, "Filtrá los productos por categoría.");
+            // 
+            // cmbMarca
+            // 
+            cmbMarca.Dock = DockStyle.Fill;
+            cmbMarca.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMarca.FormattingEnabled = true;
+            cmbMarca.Location = new Point(493, 30);
+            cmbMarca.Name = "cmbMarca";
+            cmbMarca.Size = new Size(239, 23);
+            cmbMarca.TabIndex = 5;
+            ttAyuda.SetToolTip(cmbMarca, "Filtrá los productos por marca.");
             // 
             // pnlBotones
             // 
@@ -135,6 +187,9 @@
             dgvProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvProductos.Size = new Size(980, 348);
             dgvProductos.TabIndex = 7;
+            dgvProductos.CellClick += dgvProductos_CellClick;
+            dgvProductos.CellEnter += dgvProductos_CellEnter;
+            dgvProductos.EditingControlShowing += dgvProductos_EditingControlShowing;
             // 
             // clnCodigo
             // 
@@ -193,6 +248,9 @@
             // pnlBusqueda
             // 
             pnlBusqueda.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlBusqueda.Controls.Add(btnAplicarPorcentaje);
+            pnlBusqueda.Controls.Add(txtPorcentaje);
+            pnlBusqueda.Controls.Add(lblPorcentaje);
             pnlBusqueda.Controls.Add(txtCodigo);
             pnlBusqueda.Controls.Add(lblCodigoArticulo);
             pnlBusqueda.Location = new Point(13, 167);
@@ -206,10 +264,45 @@
             txtCodigo.Location = new Point(179, 13);
             txtCodigo.Name = "txtCodigo";
             txtCodigo.PlaceholderText = "Código, SKU o nombre del producto";
-            txtCodigo.Size = new Size(550, 23);
+            txtCodigo.Size = new Size(470, 23);
             txtCodigo.TabIndex = 1;
             txtCodigo.TextChanged += txtCodigo_TextChanged;
             txtCodigo.KeyDown += txtCodigo_KeyDown;
+            //
+            // lblPorcentaje
+            //
+            lblPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblPorcentaje.AutoSize = true;
+            lblPorcentaje.Location = new Point(662, 16);
+            lblPorcentaje.Name = "lblPorcentaje";
+            lblPorcentaje.Size = new Size(77, 15);
+            lblPorcentaje.TabIndex = 2;
+            lblPorcentaje.Text = "Aumento (%):";
+            //
+            // txtPorcentaje
+            //
+            txtPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtPorcentaje.Location = new Point(745, 13);
+            txtPorcentaje.Name = "txtPorcentaje";
+            txtPorcentaje.PlaceholderText = "Ej.: 15";
+            txtPorcentaje.Size = new Size(70, 23);
+            txtPorcentaje.TabIndex = 3;
+            txtPorcentaje.TextAlign = HorizontalAlignment.Right;
+            ttAyuda.SetToolTip(txtPorcentaje, "Porcentaje de aumento sobre el precio actual. Para bajar el precio, poné un número negativo.");
+            txtPorcentaje.KeyDown += txtPorcentaje_KeyDown;
+            txtPorcentaje.KeyPress += txtPorcentaje_KeyPress;
+            //
+            // btnAplicarPorcentaje
+            //
+            btnAplicarPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnAplicarPorcentaje.Location = new Point(825, 12);
+            btnAplicarPorcentaje.Name = "btnAplicarPorcentaje";
+            btnAplicarPorcentaje.Size = new Size(150, 25);
+            btnAplicarPorcentaje.TabIndex = 4;
+            btnAplicarPorcentaje.Text = "Aplicar aumento";
+            ttAyuda.SetToolTip(btnAplicarPorcentaje, "Calcula el nuevo precio de todos los productos de la grilla con el porcentaje indicado.");
+            btnAplicarPorcentaje.UseVisualStyleBackColor = true;
+            btnAplicarPorcentaje.Click += btnAplicarPorcentaje_Click;
             // 
             // lblCodigoArticulo
             // 
@@ -267,17 +360,6 @@
             lblProveedor.Text = "Proveedor";
             lblProveedor.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // cmbProveedor
-            // 
-            cmbProveedor.Dock = DockStyle.Fill;
-            cmbProveedor.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbProveedor.FormattingEnabled = true;
-            cmbProveedor.Location = new Point(3, 30);
-            cmbProveedor.Name = "cmbProveedor";
-            cmbProveedor.Size = new Size(239, 23);
-            cmbProveedor.TabIndex = 3;
-            cmbProveedor.SelectedIndexChanged += cmbProveedor_SelectedIndexChanged;
-            // 
             // lblCategoria
             // 
             lblCategoria.Dock = DockStyle.Fill;
@@ -288,16 +370,6 @@
             lblCategoria.Text = "Categoría";
             lblCategoria.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // cmbCategoria
-            // 
-            cmbCategoria.Dock = DockStyle.Fill;
-            cmbCategoria.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbCategoria.FormattingEnabled = true;
-            cmbCategoria.Location = new Point(248, 30);
-            cmbCategoria.Name = "cmbCategoria";
-            cmbCategoria.Size = new Size(239, 23);
-            cmbCategoria.TabIndex = 4;
-            // 
             // lblMarca
             // 
             lblMarca.Dock = DockStyle.Fill;
@@ -307,24 +379,6 @@
             lblMarca.TabIndex = 5;
             lblMarca.Text = "Marca";
             lblMarca.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // cmbMarca
-            // 
-            cmbMarca.Dock = DockStyle.Fill;
-            cmbMarca.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMarca.FormattingEnabled = true;
-            cmbMarca.Location = new Point(493, 30);
-            cmbMarca.Name = "cmbMarca";
-            cmbMarca.Size = new Size(239, 23);
-            cmbMarca.TabIndex = 5;
-            // 
-            // cmbSucursal
-            // 
-            cmbSucursal.FormattingEnabled = true;
-            cmbSucursal.Location = new Point(738, 30);
-            cmbSucursal.Name = "cmbSucursal";
-            cmbSucursal.Size = new Size(239, 23);
-            cmbSucursal.TabIndex = 7;
             // 
             // lblSucursal
             // 
@@ -411,15 +465,6 @@
             tlpFiltros.PerformLayout();
             pnlModo.ResumeLayout(false);
             pnlModo.PerformLayout();
-            // 
-            // 
-            ttAyuda.AutoPopDelay = 10000;
-            ttAyuda.InitialDelay = 300;
-            ttAyuda.ReshowDelay = 100;
-            ttAyuda.SetToolTip(cmbProveedor, "Filtrá los productos por proveedor.");
-            ttAyuda.SetToolTip(cmbSucursal, "Filtrá los productos por sucursal del proveedor.");
-            ttAyuda.SetToolTip(cmbCategoria, "Filtrá los productos por categoría.");
-            ttAyuda.SetToolTip(cmbMarca, "Filtrá los productos por marca.");
             ResumeLayout(false);
         }
 
@@ -429,5 +474,8 @@
 
         private ComboBox cmbSucursal;
         private Label lblSucursal;
+        private Label lblPorcentaje;
+        private TextBox txtPorcentaje;
+        private Button btnAplicarPorcentaje;
     }
 }

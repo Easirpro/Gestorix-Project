@@ -19,14 +19,17 @@ namespace CapaVista
         private string modoActual = "";
         private DataTable resultadosBusqueda;
         private ClsLogicaProveedor logicaProveedor = new ClsLogicaProveedor();
+        // evita recargar la grilla mientras se rellenan los combos
+        private bool cargandoFiltros = false;
 
         public frmReporapida()
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
 
+            cargandoFiltros = true;
             CargarFiltros();
-
+            cargandoFiltros = false;
 
             cmbProveedor.SelectedIndexChanged += Filtros_SelectedIndexChanged;
             cmbSucursal.SelectedIndexChanged += Filtros_SelectedIndexChanged;
@@ -49,10 +52,139 @@ namespace CapaVista
         }
         private void Filtros_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cargandoFiltros)
+                return;
+
+            CargarGrillaPorFiltros();
+
             if (!string.IsNullOrWhiteSpace(txtCodigo.Text))
             {
                 txtCodigo_TextChanged(txtCodigo, EventArgs.Empty);
             }
+        }
+        // carga en la grilla todos los productos que cumplen los filtros elegidos
+        private void CargarGrillaPorFiltros()
+        {
+            if (modoActual == "")
+                return;
+
+            int? idProveedor = ObtenerIdFiltro(cmbProveedor);
+            int? idSucursal = ObtenerIdFiltro(cmbSucursal);
+            int? idCategoria = ObtenerIdFiltro(cmbCategoria);
+            int? idMarca = ObtenerIdFiltro(cmbMarca);
+
+            dgvProductos.EndEdit();
+
+            // se conserva lo que ya se escribio para los productos que siguen en la grilla
+            Dictionary<int, object[]> escritos = new Dictionary<int, object[]>();
+
+            foreach (DataGridViewRow fila in dgvProductos.Rows)
+            {
+                if (fila.IsNewRow || fila.Tag == null)
+                    continue;
+
+                escritos[Convert.ToInt32(fila.Tag)] = new object[] { fila.Cells["clnNuevoPrecio"].Value, fila.Cells["clnCantidadReponer"].Value };
+            }
+
+            dgvProductos.Rows.Clear();
+
+            if (idProveedor == null && idSucursal == null && idCategoria == null && idMarca == null)
+                return;
+
+            try
+            {
+                DataTable productos = logica.BuscarProductosConFiltrosRapida("", idProveedor, idSucursal, idCategoria, idMarca);
+
+                if (productos == null)
+                    return;
+
+                foreach (DataRow producto in productos.Rows)
+                {
+                    DataGridViewRow fila = AgregarFila(producto);
+
+                    if (escritos.TryGetValue(Convert.ToInt32(fila.Tag), out object[] valores))
+                    {
+                        fila.Cells["clnNuevoPrecio"].Value = valores[0];
+                        fila.Cells["clnCantidadReponer"].Value = valores[1];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ClsIdioma.T("Error al cargar los productos: ") + ex.Message,
+                    ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private DataGridViewRow AgregarFila(DataRow producto)
+        {
+            int indice = dgvProductos.Rows.Add();
+            DataGridViewRow fila = dgvProductos.Rows[indice];
+
+            fila.Tag = Convert.ToInt32(producto["IdProducto"]);
+
+            string codigoBarra = producto["CodigoBarra"] == DBNull.Value ? "" : producto["CodigoBarra"].ToString();
+            string sku = producto["SKU"] == DBNull.Value ? "" : producto["SKU"].ToString();
+
+            fila.Cells["clnCodigo"].Value = !string.IsNullOrWhiteSpace(codigoBarra) ? codigoBarra : sku;
+            fila.Cells["clnProducto"].Value = producto["Nombre"] == DBNull.Value ? "" : producto["Nombre"].ToString();
+            fila.Cells["clnPrecioActual"].Value = producto["PrecioVenta"] == DBNull.Value ? 0m : Convert.ToDecimal(producto["PrecioVenta"]);
+            fila.Cells["clnStockActual"].Value = producto["CantidadActual"] == DBNull.Value ? 0 : Convert.ToInt32(producto["CantidadActual"]);
+            fila.Cells["clnNuevoPrecio"].Value = null;
+            fila.Cells["clnCantidadReponer"].Value = null;
+
+            return fila;
+        }
+        // acepta punto o coma como separador decimal
+        private static bool ParsearDecimal(object valor, out decimal numero)
+        {
+            numero = 0;
+
+            if (valor == null)
+                return false;
+
+            if (valor is decimal d)
+            {
+                numero = d;
+                return true;
+            }
+
+            string texto = valor.ToString().Trim().Replace("%", "").Replace("$", "").Trim();
+
+            if (texto == "")
+                return false;
+
+            texto = texto.Replace(",", ".");
+
+            return decimal.TryParse(texto, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out numero);
+        }
+        private string ColumnaEditable()
+        {
+            if (modoActual == "PRECIOS")
+                return "clnNuevoPrecio";
+
+            if (modoActual == "STOCK")
+                return "clnCantidadReponer";
+
+            return "";
+        }
+        private void EditarSiCorresponde(int fila, int columna)
+        {
+            if (fila < 0 || columna < 0)
+                return;
+
+            if (dgvProductos.Columns[columna].Name != ColumnaEditable())
+                return;
+
+            BeginInvoke(new Action(() =>
+            {
+                if (dgvProductos.CurrentCell != null &&
+                    dgvProductos.CurrentCell.RowIndex == fila &&
+                    dgvProductos.CurrentCell.ColumnIndex == columna &&
+                    !dgvProductos.IsCurrentCellInEditMode)
+                {
+                    dgvProductos.BeginEdit(true);
+                }
+            }));
         }
         private void AplicarModo(string modo)
         {
@@ -97,6 +229,11 @@ namespace CapaVista
             clnCantidadReponer.Visible = modo == "STOCK";
             clnCantidadReponer.ReadOnly = modo != "STOCK";
 
+            lblPorcentaje.Visible = modo == "PRECIOS";
+            txtPorcentaje.Visible = modo == "PRECIOS";
+            btnAplicarPorcentaje.Visible = modo == "PRECIOS";
+            txtPorcentaje.Clear();
+
             // Colores de la grilla
             if (modo == "PRECIOS")
             {
@@ -132,6 +269,8 @@ namespace CapaVista
                 modoActivo ? Color.White : SystemColors.ControlText;
 
             dgvProductos.Refresh();
+
+            CargarGrillaPorFiltros();
         }
         private void SeleccionarProducto()
         {
@@ -164,43 +303,7 @@ namespace CapaVista
                 }
             }
 
-            // Agregar una fila nueva
-            int indice = dgvProductos.Rows.Add();
-            DataGridViewRow nuevaFila = dgvProductos.Rows[indice];
-
-            nuevaFila.Tag = idProducto;
-
-            string codigoBarra = producto["CodigoBarra"] == DBNull.Value
-                ? ""
-                : producto["CodigoBarra"].ToString();
-
-            string sku = producto["SKU"] == DBNull.Value
-                ? ""
-                : producto["SKU"].ToString();
-
-            nuevaFila.Cells["clnCodigo"].Value =
-                !string.IsNullOrWhiteSpace(codigoBarra) ? codigoBarra : sku;
-
-            // Nombre del producto
-            nuevaFila.Cells["clnProducto"].Value =
-                producto["Nombre"] == DBNull.Value
-                    ? ""
-                    : producto["Nombre"].ToString();
-
-            // Precio actual
-            nuevaFila.Cells["clnPrecioActual"].Value =
-                producto["PrecioVenta"] == DBNull.Value
-                    ? 0m
-                    : Convert.ToDecimal(producto["PrecioVenta"]);
-
-            // Stock actual
-            nuevaFila.Cells["clnStockActual"].Value =
-                producto["CantidadActual"] == DBNull.Value
-                    ? 0
-                    : Convert.ToInt32(producto["CantidadActual"]);
-
-            nuevaFila.Cells["clnNuevoPrecio"].Value = null;
-            nuevaFila.Cells["clnCantidadReponer"].Value = null;
+            AgregarFila(producto);
 
             // Limpiar la busqueda
             lstDescripcion.DataSource = null;
@@ -361,13 +464,81 @@ namespace CapaVista
             }
         }
 
+        private void btnAplicarPorcentaje_Click(object sender, EventArgs e)
+        {
+            dgvProductos.EndEdit();
+
+            if (!ParsearDecimal(txtPorcentaje.Text, out decimal porcentaje) || porcentaje <= -100)
+            {
+                MessageBox.Show(ClsIdioma.T("Ingresá un porcentaje válido."), ClsIdioma.T("Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPorcentaje.Focus();
+                return;
+            }
+
+            bool hayFilas = false;
+
+            foreach (DataGridViewRow fila in dgvProductos.Rows)
+            {
+                if (fila.IsNewRow || fila.Tag == null)
+                    continue;
+
+                decimal precioActual = fila.Cells["clnPrecioActual"].Value == null ? 0m : Convert.ToDecimal(fila.Cells["clnPrecioActual"].Value);
+
+                fila.Cells["clnNuevoPrecio"].Value = Math.Round(precioActual * (1 + porcentaje / 100m), 2, MidpointRounding.AwayFromZero);
+                hayFilas = true;
+            }
+
+            if (!hayFilas)
+            {
+                MessageBox.Show(ClsIdioma.T("No hay productos en la grilla para aplicar el aumento."), ClsIdioma.T("Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        private void txtPorcentaje_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter)
+                return;
+
+            e.SuppressKeyPress = true;
+            btnAplicarPorcentaje_Click(btnAplicarPorcentaje, EventArgs.Empty);
+        }
+        private void txtPorcentaje_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',' && e.KeyChar != '.' && e.KeyChar != '-')
+            {
+                e.Handled = true;
+            }
+        }
+        private void dgvProductos_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            EditarSiCorresponde(e.RowIndex, e.ColumnIndex);
+        }
+        private void dgvProductos_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            EditarSiCorresponde(e.RowIndex, e.ColumnIndex);
+        }
+        private void dgvProductos_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (e.Control is TextBox editor)
+            {
+                editor.KeyPress -= EditorCelda_KeyPress;
+                editor.KeyPress += EditorCelda_KeyPress;
+            }
+        }
+        // precio: numeros y separador decimal; cantidad: solo numeros
+        private void EditorCelda_KeyPress(object? sender, KeyPressEventArgs e)
+        {
+            if (char.IsControl(e.KeyChar) || char.IsDigit(e.KeyChar))
+                return;
+
+            if (modoActual == "PRECIOS" && (e.KeyChar == ',' || e.KeyChar == '.'))
+                return;
+
+            e.Handled = true;
+        }
+
         #endregion
-
-
-
-
-
-
 
         private void txtCodigo_TextChanged(object sender, EventArgs e)
         {
@@ -409,6 +580,20 @@ namespace CapaVista
 
 
         private void cmbProveedor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bool estabaCargando = cargandoFiltros;
+            cargandoFiltros = true;
+
+            try
+            {
+                CargarSucursales();
+            }
+            finally
+            {
+                cargandoFiltros = estabaCargando;
+            }
+        }
+        private void CargarSucursales()
         {
             cmbSucursal.DataSource = null;
 
@@ -465,7 +650,7 @@ namespace CapaVista
                         if (valor == null || string.IsNullOrWhiteSpace(valor.ToString()))
                             continue;
 
-                        if (!decimal.TryParse(valor.ToString(), out decimal precio) || precio < 0)
+                        if (!ParsearDecimal(valor, out decimal precio) || precio < 0)
                         {
                             MessageBox.Show(ClsIdioma.T("Ingresá un precio válido."));
                             return;
@@ -484,6 +669,22 @@ namespace CapaVista
 
                     ClsPrecioLogica logicaPrecio = new ClsPrecioLogica();
                     logicaPrecio.ActualizarPrecios(precios);
+
+                    // el precio guardado pasa a ser el actual y la columna queda en blanco
+                    foreach (DataGridViewRow fila in dgvProductos.Rows)
+                    {
+                        if (fila.IsNewRow || fila.Tag == null)
+                            continue;
+
+                        if (ParsearDecimal(fila.Cells["clnNuevoPrecio"].Value, out decimal guardado))
+                        {
+                            fila.Cells["clnPrecioActual"].Value = guardado;
+                        }
+
+                        fila.Cells["clnNuevoPrecio"].Value = null;
+                    }
+
+                    txtPorcentaje.Clear();
 
                     MessageBox.Show(ClsIdioma.T("Precios actualizados correctamente."));
                 }
@@ -518,6 +719,11 @@ namespace CapaVista
                             MessageBox.Show(ClsIdioma.T("No se pudo actualizar el stock del producto con ID ") + idProducto);
                             return;
                         }
+
+                        // lo repuesto se suma al stock actual y la columna queda en blanco
+                        int stockActual = fila.Cells["clnStockActual"].Value == null ? 0 : Convert.ToInt32(fila.Cells["clnStockActual"].Value);
+                        fila.Cells["clnStockActual"].Value = stockActual + cantidad;
+                        fila.Cells["clnCantidadReponer"].Value = null;
 
                         hayCambios = true;
                     }
