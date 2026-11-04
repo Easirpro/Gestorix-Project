@@ -94,7 +94,6 @@
             label5.Size = new Size(51, 15);
             label5.TabIndex = 4;
             label5.Text = "Sucursal";
-            label5.Click += label5_Click;
             // 
             // label7
             // 
@@ -199,6 +198,7 @@
             btnSalir.TabIndex = 16;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.Click += btnSalir_Click;
             // 
             // frmExportarArchivos
             // 
@@ -228,7 +228,6 @@
             Text = "Exportar Archivos";
             Load += frmExportarArchivos_Load_1;
             // 
-            // ttAyuda: explicación de cada combo al pasar el mouse
             // 
             ttAyuda.AutoPopDelay = 10000;
             ttAyuda.InitialDelay = 300;

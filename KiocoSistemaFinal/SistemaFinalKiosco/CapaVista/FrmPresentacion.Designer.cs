@@ -250,7 +250,6 @@
             label2.TabIndex = 1;
             label2.Text = "Descuento/Recargo";
             label2.TextAlign = ContentAlignment.MiddleLeft;
-            label2.Click += label2_Click;
             // 
             // label1
             // 
@@ -307,7 +306,6 @@
             txtCantidad.PlaceholderText = "1 si lo dejás vacío";
             txtCantidad.Size = new Size(117, 23);
             txtCantidad.TabIndex = 6;
-            txtCantidad.TextChanged += txtCantidad_TextChanged;
             txtCantidad.KeyDown += txtCantidad_KeyDown;
             // 
             // dtgPresentacion
@@ -472,7 +470,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
             tableLayoutPanel1.Size = new Size(273, 145);
             tableLayoutPanel1.TabIndex = 19;
-            tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
             // 
             // btnArt
             // 
@@ -741,7 +738,6 @@
             btnConfig.Size = new Size(877, 24);
             btnConfig.TabIndex = 0;
             btnConfig.Text = "menuStrip1";
-            btnConfig.ItemClicked += btnConfig_ItemClicked;
             // 
             // toolStripMenuItem2
             // 
@@ -776,7 +772,6 @@
             lstDescripcion.Size = new Size(303, 94);
             lstDescripcion.TabIndex = 21;
             lstDescripcion.Visible = false;
-            lstDescripcion.SelectedIndexChanged += lstDescripcion_SelectedIndexChanged;
             lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
             lstDescripcion.KeyDown += lstDescripcion_KeyDown;
             // 

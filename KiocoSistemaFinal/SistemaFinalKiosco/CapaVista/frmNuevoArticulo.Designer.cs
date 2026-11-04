@@ -198,7 +198,6 @@ namespace CapaVista
             gpbCargarPrecio.TabIndex = 0;
             gpbCargarPrecio.TabStop = false;
             gpbCargarPrecio.Text = "Configuración de precios";
-            gpbCargarPrecio.Enter += gpbCargarPrecio_Enter;
             // 
             // label3
             // 
@@ -398,7 +397,6 @@ namespace CapaVista
             dtpFechaVencimiento.Name = "dtpFechaVencimiento";
             dtpFechaVencimiento.Size = new Size(204, 23);
             dtpFechaVencimiento.TabIndex = 2;
-            dtpFechaVencimiento.ValueChanged += dtpFechaVencimiento_ValueChanged;
             // 
             // label11
             // 
@@ -810,7 +808,6 @@ namespace CapaVista
             grpDatosPrincipales.ResumeLayout(false);
             grpDatosPrincipales.PerformLayout();
             // 
-            // ttAyuda: explicación de cada combo al pasar el mouse
             // 
             ttAyuda.AutoPopDelay = 10000;
             ttAyuda.InitialDelay = 300;

@@ -321,7 +321,6 @@
             lblMecanicaPromo.Size = new Size(148, 15);
             lblMecanicaPromo.TabIndex = 1;
             lblMecanicaPromo.Text = "Mecánica de la promoción";
-            lblMecanicaPromo.Click += lblMecanicaPromo_Click;
             // 
             // lblDescuentoPorcentual
             // 
@@ -585,7 +584,6 @@
             gpbModificar.ResumeLayout(false);
             gpbModificar.PerformLayout();
             // 
-            // ttAyuda: explicación de cada combo al pasar el mouse
             // 
             ttAyuda.AutoPopDelay = 10000;
             ttAyuda.InitialDelay = 300;

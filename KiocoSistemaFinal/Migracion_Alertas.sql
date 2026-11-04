@@ -1,8 +1,3 @@
--- Migración: alertas del sistema (campana del menú principal).
--- 1) Lote.DiasAlertaVencimiento: cuántos días antes del vencimiento avisar (lo pide Nuevo artículo).
---    sp_RegistrarLote y sp_ModificarLote lo reciben como parámetro opcional (las llamadas viejas siguen andando).
--- 2) sp_ObtenerAlertas: las alertas vigentes, una fila por cada cosa a revisar.
--- Se puede ejecutar más de una vez sin problemas.
 USE Gestorix;
 GO
 
@@ -28,7 +23,7 @@ CREATE OR ALTER PROCEDURE dbo.sp_RegistrarLote
     @Stock DECIMAL(10,3),
     @Activo BIT,
     @IdSucursal INT,
-    @DiasAlertaVencimiento INT = NULL   -- [ALERTAS] días de aviso antes del vencimiento
+    @DiasAlertaVencimiento INT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -71,7 +66,7 @@ CREATE OR ALTER PROCEDURE dbo.sp_ModificarLote
     @Stock DECIMAL(10,3),
     @Activo BIT,
     @IdSucursal INT,
-    @DiasAlertaVencimiento INT = NULL   -- [ALERTAS] días de aviso antes del vencimiento
+    @DiasAlertaVencimiento INT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -92,13 +87,6 @@ BEGIN
 END;
 GO
 
-/* ---------------------------------------------------------------------
-   sp_ObtenerAlertas: alertas vigentes, una fila por cada cosa a revisar.
-   Tipo: LOTE | STOCK | ENTREGA | CAJA | PAGO | PROMOCION | PRECIO
-   Prioridad: 1 = urgente, 2 = aviso.
-   IdReferencia: el registro al que se refiere (producto, compra, caja...).
-   Qué tipos ve cada usuario lo decide la aplicación según sus permisos.
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_ObtenerAlertas
     @DiasAvisoPagos INT = 3
 AS
@@ -116,8 +104,6 @@ BEGIN
         Orden        INT
     );
 
-    -- Lotes vencidos o dentro de sus días de aviso (sin días configurados: avisa el día que vence).
-    -- Solo de productos con stock: el stock por lote todavía no se descuenta con las ventas.
     INSERT INTO @Alertas
     SELECT
         'LOTE',
@@ -140,7 +126,6 @@ BEGIN
       AND s.CantidadActual > 0
       AND DATEADD(DAY, -ISNULL(l.DiasAlertaVencimiento, 0), l.FechaVencimiento) <= @Hoy;
 
-    -- Stock en el mínimo o por debajo (solo productos con mínimo cargado).
     INSERT INTO @Alertas
     SELECT
         'STOCK',
@@ -154,7 +139,6 @@ BEGIN
       AND s.StockMinimo > 0
       AND s.CantidadActual <= s.StockMinimo;
 
-    -- Pedidos sin recibir que llegan hoy o están atrasados.
     INSERT INTO @Alertas
     SELECT
         'ENTREGA',
@@ -173,7 +157,6 @@ BEGIN
       AND c.EstadoRecepcion = N'PENDIENTE'
       AND c.FechaEntregaEstimada <= @Hoy;
 
-    -- Cajas que quedaron abiertas desde un día anterior.
     INSERT INTO @Alertas
     SELECT
         'CAJA',
@@ -185,7 +168,6 @@ BEGIN
     WHERE sc.FechaCierre IS NULL
       AND CONVERT(DATE, sc.FechaApertura) < @Hoy;
 
-    -- Pagos a proveedores vencidos o que vencen dentro de @DiasAvisoPagos días.
     INSERT INTO @Alertas
     SELECT
         'PAGO',
@@ -204,7 +186,6 @@ BEGIN
       AND sc.FechaVencimiento IS NOT NULL
       AND sc.FechaVencimiento <= DATEADD(DAY, @DiasAvisoPagos, @Hoy);
 
-    -- Promociones que siguen activas pero ya terminaron (fin de su vigencia o de la promoción).
     INSERT INTO @Alertas
     SELECT
         'PROMOCION',
@@ -217,7 +198,6 @@ BEGIN
     WHERE pm.Activo = 1
       AND COALESCE(v.FechaFin, CONVERT(DATE, pm.FechaFin)) < @Hoy;
 
-    -- Precio de venta menor que el costo de alguna de sus sucursales de proveedor.
     INSERT INTO @Alertas
     SELECT
         'PRECIO',

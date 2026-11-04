@@ -27,7 +27,6 @@ namespace CapaVista
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.RowHeadersVisible = false;
 
-            btnBuscar.Click += btnBuscar_Click;
         }
         public ClsProducto ProductoSeleccionado { get; private set; }
         public Action<ClsProducto> ProductoAgregado { get; set; }

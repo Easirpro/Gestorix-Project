@@ -437,7 +437,6 @@ namespace CapaDatos.NegocioDatos
                 cmd.ExecuteNonQuery();
             }
         }
-        // true si otro proveedor (distinto de idProveedorExcluir) ya tiene ese CUIT. Se compara sin guiones.
         public bool ExisteCuitProveedor(string cuit, int idProveedorExcluir)
         {
             string query = @"SELECT COUNT(*)
@@ -456,7 +455,6 @@ namespace CapaDatos.NegocioDatos
                 return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
-        // true si otro proveedor (distinto de idProveedorExcluir) ya tiene esa razón social.
         public bool ExisteNombreProveedor(string nombre, int idProveedorExcluir)
         {
             string query = @"SELECT COUNT(*)

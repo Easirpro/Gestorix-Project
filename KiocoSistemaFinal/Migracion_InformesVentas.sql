@@ -1,27 +1,6 @@
--- Migración: informes de ventas (formulario frmInformesVentas).
--- sp_InformeVentas devuelve cada informe (por fecha, detalle, por rubro, por artículo y por medio de pago)
--- con los mismos filtros; las devoluciones con reintegro de dinero restan.
--- sp_InformeVentasVendedores lista los usuarios que hicieron ventas.
--- Se puede ejecutar más de una vez sin problemas.
 USE Gestorix;
 GO
 
-/* ---------------------------------------------------------------------
-   sp_InformeVentas
-   @Tipo: FECHA | DETALLE | RUBRO | ARTICULO | MEDIO
-   Filtros: rango de fechas, vendedor, medio de pago, categoría y artículo.
-   - No se cuentan las ventas anuladas.
-   - "Vendido" es lo cobrado: si la venta tuvo descuento por promoción,
-     se reparte entre sus artículos en proporción a su subtotal, así la
-     suma por rubro o por artículo coincide con lo que entró.
-   - Una venta puede pagarse con varios medios (VentaPago). Si no tiene
-     pagos registrados se usa el medio guardado en la venta.
-   - Las devoluciones con reintegro de dinero (TipoReintegro = 1) restan:
-     cuentan el día en que se hicieron, con el vendedor de la venta
-     original y el medio con que se devolvió la plata. Los cambios por
-     otra unidad (TipoReintegro = 0) no mueven dinero y no se restan.
-   - "Total" es el neto: vendido menos devuelto.
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_InformeVentas
     @Tipo         VARCHAR(10),
     @Desde        DATE,
@@ -47,7 +26,6 @@ BEGIN
     DECLARE @HastaExclusivo DATE = DATEADD(DAY, 1, @Hasta);
     DECLARE @IdEfectivo INT = (SELECT TOP 1 IdMetodoPago FROM dbo.MetodoPago WHERE Nombre = N'Efectivo');
 
-    -- Pagos de cada venta (con el medio de la venta si no tiene pagos registrados).
     DECLARE @Pagos TABLE (IdVenta INT, IdMetodoPago INT, Monto DECIMAL(18,2));
 
     INSERT INTO @Pagos (IdVenta, IdMetodoPago, Monto)
@@ -63,7 +41,6 @@ BEGIN
       AND v.FechaHora >= @Desde AND v.FechaHora < @HastaExclusivo
       AND NOT EXISTS (SELECT 1 FROM dbo.VentaPago AS vp WHERE vp.IdVenta = v.IdVenta);
 
-    -- Ventas que cumplen los filtros de fecha, vendedor y medio de pago.
     DECLARE @Ventas TABLE (IdVenta INT PRIMARY KEY, FechaHora DATETIME2, Total DECIMAL(18,2), IdUsuario INT);
 
     INSERT INTO @Ventas (IdVenta, FechaHora, Total, IdUsuario)
@@ -74,7 +51,6 @@ BEGIN
       AND (@IdUsuario IS NULL OR v.IdUsuario = @IdUsuario)
       AND (@IdMetodoPago IS NULL OR EXISTS (SELECT 1 FROM @Pagos AS p WHERE p.IdVenta = v.IdVenta AND p.IdMetodoPago = @IdMetodoPago));
 
-    -- Artículos vendidos, con el importe cobrado repartido y los filtros de categoría y artículo.
     DECLARE @Lineas TABLE
     (
         IdVenta        INT,
@@ -107,7 +83,6 @@ BEGIN
     WHERE (@IdCategoria IS NULL OR p.IdCategoria = @IdCategoria)
       AND (@IdProducto IS NULL OR dv.IdProducto = @IdProducto);
 
-    -- Devoluciones con reintegro de dinero hechas en el período, con los mismos filtros.
     DECLARE @Devoluciones TABLE
     (
         IdDevolucion   INT,
@@ -222,7 +197,6 @@ BEGIN
     END
     ELSE IF @Tipo IN ('RUBRO', 'ARTICULO')
     BEGIN
-        -- Vendido y devuelto por artículo; por rubro se agrupa sobre esto.
         DECLARE @PorArticulo TABLE
         (
             IdProducto INT PRIMARY KEY,
@@ -254,7 +228,6 @@ BEGIN
 
         IF @Tipo = 'RUBRO'
         BEGIN
-            -- Las ventas se cuentan una vez por rubro aunque tengan varios artículos de ese rubro.
             SELECT
                 r.Rubro,
                 ISNULL(v.Ventas, 0) AS Ventas,
@@ -314,8 +287,6 @@ BEGIN
     END
     ELSE
     BEGIN
-        -- Por medio de pago: lo cobrado de las ventas con artículos que cumplen los filtros,
-        -- menos lo devuelto por ese medio.
         SELECT
             m.Nombre AS MedioPago,
             SUM(x.Pagos) AS Pagos,
@@ -346,10 +317,6 @@ BEGIN
 END;
 GO
 
-/* ---------------------------------------------------------------------
-   sp_InformeVentasVendedores: usuarios que registraron alguna venta,
-   para el filtro de vendedor.
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_InformeVentasVendedores
 AS
 BEGIN

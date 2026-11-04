@@ -62,8 +62,6 @@ namespace CapaDatos
                 return cmd.ExecuteNonQuery() > 0;
             }
         }
-        // Reemplaza todas las respuestas del usuario en una sola transacción:
-        // o quedan guardadas las tres, o no cambia nada (sin respuestas a medias ni duplicadas).
         public bool GuardarRespuestas(int idUsuario, List<KeyValuePair<int, string>> respuestas)
         {
             using (SqlConnection con = conexion.ObtenerConexion())

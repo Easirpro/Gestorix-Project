@@ -23,7 +23,6 @@ namespace CapaVista
             ConfigurarFormulario();
             ConfigurarEventos();
 
-            // La descripción se guarda en castellano; en inglés se traducen sus frases fijas al mostrarla.
             dgvBitacora.CellFormatting += (sender, e) =>
             {
                 if (ClsIdioma.Ingles && e.RowIndex >= 0 && e.Value is string texto && dgvBitacora.Columns[e.ColumnIndex].Name == "Descripcion")
@@ -46,7 +45,6 @@ namespace CapaVista
             this.dgvBitacora.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             this.dgvBitacora.MultiSelect = false;
             this.dgvBitacora.ScrollBars = ScrollBars.Both;
-            // Cada columna toma el ancho de su contenido (ver AjustarAnchoColumnas).
             this.dgvBitacora.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             this.dgvBitacora.BackgroundColor = SystemColors.Window;
             this.dgvBitacora.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
@@ -58,16 +56,12 @@ namespace CapaVista
         }
         private void ConfigurarEventos()
         {
-            // Los Click de los botones y el TextChanged de txtBuscar ya se enganchan en el Designer;
-            // volver a engancharlos acá hacía que cada consulta se ejecutara dos veces.
             this.dgvBitacora.SelectionChanged += dgvBitacora_SelectionChanged;
             this.dgvBitacora.CellFormatting += dgvBitacora_CellFormatting;
             this.dgvBitacora.SizeChanged += (sender, e) => AjustarAnchoColumnas();
 
-            // La primera carga se hace antes de que la grilla esté en pantalla: al mostrarse se vuelve a medir.
             this.Shown += (sender, e) => AjustarAnchoColumnas();
 
-            // Al cambiar de idioma cambian los encabezados: se vuelven a medir las columnas.
             Action idioma = () => BeginInvoke(new Action(AjustarAnchoColumnas));
             ClsIdioma.IdiomaCambiado += idioma;
             this.Disposed += (sender, e) => ClsIdioma.IdiomaCambiado -= idioma;
@@ -122,16 +116,12 @@ namespace CapaVista
                     }
                 }
 
-                MessageBox.Show(
-                    ClsIdioma.T("No se pudieron cargar los registros.\n\n") + ex.Message,
-                    ClsIdioma.T("Error"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los registros.\n\n") + ex.Message,
+                    ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void ConfigurarColumnas()
         {
-            // Bitácora general y errores técnicos.
             ConfigurarColumna("IdBitacora", "N.º");
             ConfigurarColumna("IdError", "N.º");
             ConfigurarColumna("Username", "Usuario");
@@ -145,7 +135,6 @@ namespace CapaVista
             ConfigurarColumna("Mensaje", "Mensaje");
             ConfigurarColumna("Estado", "Estado");
 
-            // Compras: quién la cargó, quién la recibió y en qué estado está.
             ConfigurarColumna("IdCompra", "N.º");
             ConfigurarColumna("FechaCompra", "Compra", "dd/MM/yy HH:mm");
             ConfigurarColumna("CargadoPor", "Cargó");
@@ -157,8 +146,6 @@ namespace CapaVista
             ConfigurarColumna("FechaRecepcion", "Recibida", "dd/MM/yy HH:mm");
             ConfigurarColumna("RecibidoPor", "Recibió");
 
-            // Datos que se ven en el panel de detalle, no en la grilla.
-            // Entrega y pago por separado se leían como contradicción: en la grilla va el Estado combinado.
             string[] ocultas =
             {
                 "IdUsuario", "DetalleTecnico", "IdRecepcion", "Saldo", "CUIT", "Motivos", "Observaciones",
@@ -201,7 +188,6 @@ namespace CapaVista
                 columna.DefaultCellStyle.Format = formato;
             }
         }
-        // Columna que se estira o se achica para ocupar justo el ancho disponible (la primera que exista y esté visible).
         private static readonly string[] ColumnasFlexibles = { "Descripcion", "Mensaje", "Proveedor" };
 
         private void AjustarAnchoColumnas()
@@ -211,31 +197,20 @@ namespace CapaVista
                 return;
             }
 
-            // Cada columna toma el ancho de su encabezado y su contenido.
             this.dgvBitacora.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
 
-            DataGridViewColumn flexible = ColumnasFlexibles
-                .Where(nombre => this.dgvBitacora.Columns.Contains(nombre) && this.dgvBitacora.Columns[nombre].Visible)
-                .Select(nombre => this.dgvBitacora.Columns[nombre])
-                .FirstOrDefault();
+            DataGridViewColumn flexible = ColumnasFlexibles.Where(nombre => this.dgvBitacora.Columns.Contains(nombre) && this.dgvBitacora.Columns[nombre].Visible)
+                .Select(nombre => this.dgvBitacora.Columns[nombre]).FirstOrDefault();
 
             if (flexible == null)
             {
                 return;
             }
 
-            // La columna flexible ocupa lo que dejan las demás (sin espacio gris); si su texto no entra, hay barra horizontal.
-            // Se calcula si las filas van a necesitar barra vertical: recién cargada la grilla todavía no se ve.
-            bool barraVertical = this.dgvBitacora.ColumnHeadersHeight + this.dgvBitacora.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
-                > this.dgvBitacora.ClientSize.Height;
-            int disponible = this.dgvBitacora.ClientSize.Width - 4
-                - (barraVertical ? SystemInformation.VerticalScrollBarWidth : 0)
-                - (this.dgvBitacora.RowHeadersVisible ? this.dgvBitacora.RowHeadersWidth : 0);
-            int otras = this.dgvBitacora.Columns.Cast<DataGridViewColumn>()
-                .Where(c => c.Visible && c != flexible)
-                .Sum(c => c.Width);
+            bool barraVertical = this.dgvBitacora.ColumnHeadersHeight + this.dgvBitacora.Rows.GetRowsHeight(DataGridViewElementStates.Visible) > this.dgvBitacora.ClientSize.Height;
+            int disponible = this.dgvBitacora.ClientSize.Width - 4 - (barraVertical ? SystemInformation.VerticalScrollBarWidth : 0) - (this.dgvBitacora.RowHeadersVisible ? this.dgvBitacora.RowHeadersWidth : 0);
+            int otras = this.dgvBitacora.Columns.Cast<DataGridViewColumn>().Where(c => c.Visible && c != flexible).Sum(c => c.Width);
 
-            // Nunca más angosta que su contenido: si no entra, aparece la barra horizontal.
             flexible.Width = Math.Max(flexible.Width, disponible - otras);
         }
         private void AplicarFiltros()
@@ -251,10 +226,7 @@ namespace CapaVista
         }
         private void MostrarDetalles()
         {
-            // Al cambiar la selección, CurrentRow todavía puede ser la fila anterior: se usa la fila seleccionada.
-            DataGridViewRow fila = this.dgvBitacora.SelectedRows.Count > 0
-                ? this.dgvBitacora.SelectedRows[0]
-                : this.dgvBitacora.CurrentRow;
+            DataGridViewRow fila = this.dgvBitacora.SelectedRows.Count > 0 ? this.dgvBitacora.SelectedRows[0] : this.dgvBitacora.CurrentRow;
 
             if (fila == null || fila.IsNewRow)
             {
@@ -264,7 +236,6 @@ namespace CapaVista
 
             if (this.categoriaActual == "Compras")
             {
-                // Al cambiar de categoría la selección cambia antes de que lleguen las columnas de compras.
                 if (!this.dgvBitacora.Columns.Contains("IdCompra"))
                 {
                     this.LimpiarDetalles();
@@ -272,26 +243,17 @@ namespace CapaVista
                 }
 
                 this.lblDetalleFecha.Text = ClsIdioma.T("Compra: ") + ClsIdioma.Dato(ObtenerValor(fila, "FechaCompra"));
-
-                this.lblDetalleUsuario.Text =
-                    ClsIdioma.T("Cargó: ") + ClsIdioma.Dato(ObtenerValor(fila, "CargadoPor")) +
+                this.lblDetalleUsuario.Text = ClsIdioma.T("Cargó: ") + ClsIdioma.Dato(ObtenerValor(fila, "CargadoPor")) +
                     ClsIdioma.T("  |  Recibió: ") + ClsIdioma.Dato(ObtenerValor(fila, "RecibidoPor"));
-
-                this.lblDetalleAccion.Text =
-                    ClsIdioma.T("Proveedor: ") + ClsIdioma.Dato(ObtenerValor(fila, "Proveedor")) +
+                this.lblDetalleAccion.Text = ClsIdioma.T("Proveedor: ") + ClsIdioma.Dato(ObtenerValor(fila, "Proveedor")) +
                     ClsIdioma.T(" (CUIT ") + ClsIdioma.Dato(ObtenerValor(fila, "CUIT")) + ClsIdioma.T(") - Sucursal: ") + ClsIdioma.Dato(ObtenerValor(fila, "Sucursal"));
-
                 bool recibida = ObtenerValor(fila, "IdRecepcion") != "Sin datos";
-
-                // Tres renglones cortos para que entren en el panel sin cortarse.
                 this.lblDetalleDescripcion.Text =
                     ClsIdioma.T("Estado: ") + ClsIdioma.Dato(ObtenerValor(fila, "Estado")) +
                     ClsIdioma.T("  |  Entrega estimada: ") + ClsIdioma.Dato(ObtenerValor(fila, "FechaEntregaEstimada")) +
                     Environment.NewLine +
                     ClsIdioma.T("Pago: ") + (ClsIdioma.Ingles && ObtenerValor(fila, "CondicionPago") == "Contado" ? "Cash" : ClsIdioma.Dato(ObtenerValor(fila, "CondicionPago"))) + ClsIdioma.T(", saldo ") + ClsIdioma.Dato(ObtenerValor(fila, "Saldo")) +
-                    (recibida
-                        ? ClsIdioma.T("  |  Boleta: ") + ClsIdioma.Dato(ObtenerValor(fila, "TotalBoleta")) + " (" + ClsIdioma.Dato(ObtenerValor(fila, "Resultado")).ToLower() + ")"
-                        : ClsIdioma.T("  |  Sin recibir")) +
+                    (recibida ? ClsIdioma.T("  |  Boleta: ") + ClsIdioma.Dato(ObtenerValor(fila, "TotalBoleta")) + " (" + ClsIdioma.Dato(ObtenerValor(fila, "Resultado")).ToLower() + ")" : ClsIdioma.T("  |  Sin recibir")) +
                     Environment.NewLine +
                     ClsIdioma.T("Motivos: ") + ClsIdioma.Dato(ObtenerValor(fila, "Motivos")) +
                     ClsIdioma.T("  |  Observaciones: ") + ClsIdioma.Dato(ObtenerValor(fila, "Observaciones"));
@@ -349,9 +311,7 @@ namespace CapaVista
 
             if (valor is DateTime fechaCompra)
             {
-                return fechaCompra.TimeOfDay == TimeSpan.Zero
-                    ? fechaCompra.ToString("dd/MM/yyyy")
-                    : fechaCompra.ToString("dd/MM/yyyy HH:mm");
+                return fechaCompra.TimeOfDay == TimeSpan.Zero ? fechaCompra.ToString("dd/MM/yyyy") : fechaCompra.ToString("dd/MM/yyyy HH:mm");
             }
 
             if (valor is decimal importe)
@@ -371,7 +331,6 @@ namespace CapaVista
         }
         private void dgvBitacora_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            // Solo en compras: la columna Estado de errores técnicos no se colorea.
             if (e.RowIndex < 0 || this.categoriaActual != "Compras" || this.dgvBitacora.Columns[e.ColumnIndex].Name != "Estado")
             {
                 return;
@@ -384,7 +343,7 @@ namespace CapaVista
             else if (estado == "Anulada")
                 e.CellStyle.ForeColor = SystemColors.GrayText;
             else
-                e.CellStyle.ForeColor = Color.DarkOrange;   // le falta la entrega, el pago o ambos
+                e.CellStyle.ForeColor = Color.DarkOrange;
         }
         #endregion
 
@@ -441,10 +400,6 @@ namespace CapaVista
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-        private void lblSubtitulo_Click(object sender, EventArgs e)
-        {
-
         }
 
 

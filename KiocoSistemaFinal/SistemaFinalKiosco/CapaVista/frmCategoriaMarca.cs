@@ -12,8 +12,6 @@ using System.Windows.Forms;
 
 namespace CapaVista
 {
-    // Unifica la gestión de categorías (rubros) y marcas en un solo formulario.
-    // Igual que frmReporapida, primero se elige el modo y después se trabaja sobre la grilla.
     public partial class frmCategoriaMarca : Form
     {
         private const string MODO_CATEGORIAS = "CATEGORIAS";
@@ -37,7 +35,6 @@ namespace CapaVista
         }
         private void AplicarModo(string modo)
         {
-            // Si se vuelve a pulsar el mismo botón, desactivar el modo.
             if (modoActual == modo && modo != "")
                 modo = "";
 
@@ -45,18 +42,16 @@ namespace CapaVista
 
             bool modoActivo = modo != "";
 
-            // Limpiar el formulario al cambiar o desactivar el modo.
             txtNombre.Clear();
             dgvItems.Rows.Clear();
 
-            // Habilitar o deshabilitar los controles.
             txtNombre.Enabled = modoActivo;
             btnBuscar.Enabled = modoActivo;
             chkSoloActivos.Enabled = modoActivo;
 
             btnEliminar.Visible = EsCategorias;
 
-            // Textos según el modo.
+            // Textos segun el modo
             if (EsCategorias)
             {
                 lblTitulo.Text = ClsIdioma.T("Categorías");
@@ -73,7 +68,7 @@ namespace CapaVista
                 btnNuevo.Text = ClsIdioma.T("Nuevo");
             }
 
-            // Estilo de los botones.
+            // Estilo de los botones
             btnCategorias.FlatStyle = FlatStyle.Flat;
             btnMarcas.FlatStyle = FlatStyle.Flat;
 
@@ -86,7 +81,7 @@ namespace CapaVista
             btnMarcas.BackColor = modo == MODO_MARCAS ? Color.SeaGreen : SystemColors.Control;
             btnMarcas.ForeColor = modo == MODO_MARCAS ? Color.White : Color.Black;
 
-            // Colores de la grilla.
+            // Colores de la grilla
             if (EsCategorias)
             {
                 dgvItems.BackgroundColor = Color.AliceBlue;
@@ -107,12 +102,8 @@ namespace CapaVista
             }
 
             dgvItems.EnableHeadersVisualStyles = false;
-
-            dgvItems.DefaultCellStyle.SelectionForeColor =
-                modoActivo ? Color.Black : SystemColors.HighlightText;
-
-            dgvItems.ColumnHeadersDefaultCellStyle.ForeColor =
-                modoActivo ? Color.White : SystemColors.ControlText;
+            dgvItems.DefaultCellStyle.SelectionForeColor = modoActivo ? Color.Black : SystemColors.HighlightText;
+            dgvItems.ColumnHeadersDefaultCellStyle.ForeColor = modoActivo ? Color.White : SystemColors.ControlText;
 
             AplicarPermisos();
 
@@ -126,7 +117,6 @@ namespace CapaVista
         {
             List<int> permisos = SesionUsuario.Permisos;
 
-            // Cada modo se habilita con los mismos permisos que tenían los formularios anteriores.
             btnCategorias.Enabled = permisos.Contains(120) || permisos.Contains(121) || permisos.Contains(122);
             btnMarcas.Enabled = permisos.Contains(130) || permisos.Contains(131) || permisos.Contains(132);
 
@@ -231,7 +221,6 @@ namespace CapaVista
                 dgvItems.Rows[indice].Tag = fila["IdMarca"];
             }
         }
-        // Devuelve la fila seleccionada o null (mostrando el aviso correspondiente).
         private DataGridViewRow ObtenerFilaSeleccionada(string accion)
         {
             if (dgvItems.SelectedRows.Count == 0)
@@ -246,7 +235,6 @@ namespace CapaVista
 
             return dgvItems.SelectedRows[0];
         }
-        // Las categorías predeterminadas del sistema no se pueden tocar.
         private bool EsCategoriaProtegida(int idCategoria, string mensaje)
         {
             if (idCategoria >= 1002 && idCategoria <= 1012)
@@ -476,7 +464,6 @@ namespace CapaVista
         }
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            // Solo las categorías se pueden eliminar (el botón no se muestra en el modo marcas).
             if (!EsCategorias)
             {
                 return;

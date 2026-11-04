@@ -120,7 +120,6 @@
             lblSubtitulo.Size = new Size(344, 15);
             lblSubtitulo.TabIndex = 1;
             lblSubtitulo.Text = "Registro y seguimiento de las operaciones realizadas en Gestorix";
-            lblSubtitulo.Click += lblSubtitulo_Click;
             //
             // pnlCategorias
             //

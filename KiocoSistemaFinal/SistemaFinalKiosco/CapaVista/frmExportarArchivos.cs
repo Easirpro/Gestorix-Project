@@ -214,6 +214,10 @@ namespace CapaVista
 
 
         #region Eventos
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
         private void cmbProveedor_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbProveedor.SelectedValue == null)
@@ -266,10 +270,6 @@ namespace CapaVista
 
 
         #endregion
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
 
 
 

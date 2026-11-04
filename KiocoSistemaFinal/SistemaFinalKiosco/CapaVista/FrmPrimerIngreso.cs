@@ -49,9 +49,7 @@ namespace CapaVista
 
             ValidacionCampoVacio validar = new ValidacionCampoVacio();
 
-            if (validar.ValidarCamposVacios(txtPassTemporal.Text) ||
-                validar.ValidarCamposVacios(txtNuevaPass.Text) ||
-                validar.ValidarCamposVacios(txtConfirmarPass.Text))
+            if (validar.ValidarCamposVacios(txtPassTemporal.Text) || validar.ValidarCamposVacios(txtNuevaPass.Text) || validar.ValidarCamposVacios(txtConfirmarPass.Text))
             {
                 MessageBox.Show(ClsIdioma.T("Complete todos los campos."), ClsIdioma.T("Datos incompletos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -69,7 +67,6 @@ namespace CapaVista
                     MessageBox.Show(ClsIdioma.T("Contraseña modificada correctamente."), ClsIdioma.T("Primer ingreso"),
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // El login sigue con las preguntas de seguridad o el menú principal.
                     this.DialogResult = DialogResult.OK;
                     this.Close();
 

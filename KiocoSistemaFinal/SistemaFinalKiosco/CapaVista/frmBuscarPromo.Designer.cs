@@ -157,7 +157,6 @@
             Load += frmBuscarPromo_Load_1;
             ((System.ComponentModel.ISupportInitialize)dtgBuscarPromo).EndInit();
             // 
-            // ttAyuda: explicación de cada combo al pasar el mouse
             // 
             ttAyuda.AutoPopDelay = 10000;
             ttAyuda.InitialDelay = 300;

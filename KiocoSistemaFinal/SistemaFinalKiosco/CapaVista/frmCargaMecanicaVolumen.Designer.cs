@@ -103,7 +103,7 @@
             txtCantidadLleva.PlaceholderText = "Ej.: 3 (lleva 3)";
             txtCantidadLleva.Size = new Size(107, 23);
             txtCantidadLleva.TabIndex = 6;
-            txtCantidadLleva.TextChanged += txtCantidadLleva_TextChanged;
+            txtCantidadLleva.TextChanged += Cantidades_TextChanged;
             // 
             // txtCantidadPaga
             // 
@@ -112,7 +112,7 @@
             txtCantidadPaga.PlaceholderText = "Ej.: 2 (paga 2)";
             txtCantidadPaga.Size = new Size(107, 23);
             txtCantidadPaga.TabIndex = 7;
-            txtCantidadPaga.TextChanged += txtCantidadPaga_TextChanged;
+            txtCantidadPaga.TextChanged += Cantidades_TextChanged;
             // 
             // btnCancelar
             // 
@@ -153,7 +153,6 @@
             Name = "frmCargaMecanicaVolumen";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Agregar Mecanica de Volumen";
-            Load += frmCargaMecanicaVolumen_Load;
             ResumeLayout(false);
             PerformLayout();
         }

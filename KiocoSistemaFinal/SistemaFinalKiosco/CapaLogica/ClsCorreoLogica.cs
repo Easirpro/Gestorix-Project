@@ -16,11 +16,11 @@ namespace CapaLogica
         public string ObtenerCorreoPorPersona(int idPersona)
         {
             return datos.ObtenerCorreoPorPersona(idPersona);
-        }//revisar
+        }// revisar
         public int ObtenerIdCorreoPorPersona(int idPersona)
         {
             return datos.ObtenerIdCorreoPorPersona(idPersona);
-        }//revisar
+        }// revisar
         public bool CambiarCorreoPersona(int idPersona,string nuevoCorreo)
         {
 

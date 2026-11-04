@@ -10,8 +10,6 @@ using System.Windows.Forms;
 
 namespace CapaVista
 {
-    // Unifica la lista de precios y la de reposición en un solo formulario,
-    // con el mismo formato que frmCategoriaMarca: primero se elige el listado y después se filtra.
     public partial class frmListados : Form
     {
         public enum Modo { Ninguno, Precios, Reposicion }
@@ -27,7 +25,6 @@ namespace CapaVista
         private DataTable listado;
         private DataTable sugerencias;
 
-        // Columnas de cada listado: nombre en el origen de datos, encabezado y formato.
         private static readonly (string Campo, string Encabezado, string Formato)[] ColumnasPrecios =
         {
             ("CodigoBarra", "Código", null),
@@ -90,7 +87,6 @@ namespace CapaVista
             dgvListado.CellFormatting += dgvListado_CellFormatting;
             dgvListado.SizeChanged += (sender, e) => AjustarAnchoColumnas();
 
-            // Los combos dejan escribir y van sugiriendo las opciones que coinciden.
             foreach (ComboBox combo in new[] { cmbProveedor, cmbSucursal, cmbCategoria, cmbMarca })
             {
                 combo.DropDownStyle = ComboBoxStyle.DropDown;
@@ -105,7 +101,6 @@ namespace CapaVista
         {
             try
             {
-                // ObtenerProveedores trae una fila por sucursal: se deja una por proveedor.
                 DataTable proveedores = new DataTable();
                 proveedores.Columns.Add("IdProveedor", typeof(int));
                 proveedores.Columns.Add("Nombre", typeof(string));
@@ -131,7 +126,6 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // Sucursales del proveedor elegido; sin proveedor, solo "Todas".
         private void CargarSucursales()
         {
             int? idProveedor = ObtenerFiltro(cmbProveedor);
@@ -180,7 +174,6 @@ namespace CapaVista
             combo.DataSource = tabla;
             combo.SelectedIndex = 0;
         }
-        // Valor del combo, o null si está en "Todos" / "Todas".
         private static int? ObtenerFiltro(ComboBox combo)
         {
             return combo.SelectedValue is int id && id > 0 ? id : (int?)null;
@@ -192,7 +185,6 @@ namespace CapaVista
         }
         private void AplicarModo(Modo modo)
         {
-            // Si se vuelve a pulsar el mismo botón, desactivar el modo.
             if (modoActual == modo && modo != Modo.Ninguno)
                 modo = Modo.Ninguno;
 
@@ -204,7 +196,6 @@ namespace CapaVista
             bool modoActivo = modo != Modo.Ninguno;
             bool precios = modo == Modo.Precios;
 
-            // Limpiar al cambiar o desactivar el modo.
             OcultarSugerencias();
             txtArticulo.Clear();
             chkFiltro.Checked = false;
@@ -215,18 +206,16 @@ namespace CapaVista
             foreach (Control control in pnlFiltros.Controls)
                 control.Enabled = modoActivo;
 
-            // La sucursal solo se elige después del proveedor.
             cmbSucursal.Enabled = modoActivo && ObtenerFiltro(cmbProveedor).HasValue;
 
             btnExportar.Enabled = modoActivo;
 
-            // Textos según el modo.
+            // Textos segun el modo
             chkFiltro.Text = precios ? ClsIdioma.T("Solo con oferta") : ClsIdioma.T("Solo para reponer");
             lblTitulo.Text = precios ? ClsIdioma.T("Lista de precios")
                            : modo == Modo.Reposicion ? ClsIdioma.T("Listado de reposición")
                            : ClsIdioma.T("Listados de precios y reposición");
 
-            // Estilo de los botones y la grilla, igual que categorías y marcas.
             Color colorPrecios = Color.DodgerBlue;
             Color colorReposicion = Color.SeaGreen;
 
@@ -292,7 +281,6 @@ namespace CapaVista
                 modoActual == Modo.Precios && chkFiltro.Checked,
                 modoActual == Modo.Reposicion && chkFiltro.Checked);
         }
-        // Carga en la grilla todo lo que coincide con los filtros.
         private void Buscar()
         {
             if (modoActual == Modo.Ninguno)
@@ -361,7 +349,6 @@ namespace CapaVista
             lstArticulos.Items.Clear();
             sugerencias = null;
         }
-        // Agrega a la grilla el artículo elegido en la lista de sugerencias.
         private void AgregarSugerenciaSeleccionada()
         {
             if (sugerencias == null || lstArticulos.SelectedIndex < 0 || lstArticulos.SelectedIndex >= sugerencias.Rows.Count)
@@ -414,7 +401,6 @@ namespace CapaVista
                 ? ClsIdioma.T("Elegí un listado para empezar.")
                 : (dgvListado.Rows.Count == 1 ? ClsIdioma.T("1 artículo") : dgvListado.Rows.Count + ClsIdioma.T(" artículos"));
         }
-        // Cada columna toma el ancho de su contenido y "Artículo" ocupa lo que sobra.
         private void AjustarAnchoColumnas()
         {
             if (dgvListado.Columns.Count == 0 || !dgvListado.Columns.Contains("Nombre"))
@@ -424,7 +410,6 @@ namespace CapaVista
 
             DataGridViewColumn articulo = dgvListado.Columns["Nombre"];
 
-            // Se calcula si las filas van a necesitar barra vertical: recién cargada la grilla todavía no se ve.
             bool barraVertical = dgvListado.ColumnHeadersHeight + dgvListado.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
                 > dgvListado.ClientSize.Height;
             int disponible = dgvListado.ClientSize.Width - 4 - (barraVertical ? SystemInformation.VerticalScrollBarWidth : 0);
@@ -479,7 +464,6 @@ namespace CapaVista
                 IXLWorksheet hoja = libro.Worksheets.Add(titulo);
                 int ultimaColumna = columnas.Count;
 
-                // Título, fecha y filtros aplicados.
                 hoja.Range(1, 1, 1, ultimaColumna).Merge();
                 hoja.Cell(1, 1).Value = titulo;
                 hoja.Cell(1, 1).Style.Font.Bold = true;
@@ -497,7 +481,7 @@ namespace CapaVista
                     (chkFiltro.Checked ? "   |   " + chkFiltro.Text : "");
                 hoja.Cell(2, 1).Style.Font.Bold = true;
 
-                // Encabezados.
+                // Encabezados
                 for (int i = 0; i < columnas.Count; i++)
                 {
                     hoja.Cell(4, i + 1).Value = columnas[i].HeaderText;
@@ -510,7 +494,6 @@ namespace CapaVista
                 encabezado.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 hoja.Row(4).Height = 22;
 
-                // Datos, con números como números para poder sumar y filtrar en Excel.
                 int filaExcel = 5;
 
                 foreach (DataGridViewRow fila in dgvListado.Rows)
@@ -559,7 +542,6 @@ namespace CapaVista
         {
             CargarSucursales();
         }
-        // Si se escribió algo que no es ninguna opción, se busca sin importar mayúsculas; si no existe, vuelve a "Todos".
         private void combo_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ComboBox combo = (ComboBox)sender;
@@ -570,7 +552,6 @@ namespace CapaVista
             int indice = combo.FindStringExact(combo.Text.Trim());
             combo.SelectedIndex = indice >= 0 ? indice : 0;
 
-            // Si el índice no cambió, el texto escrito queda: se reescribe el de la opción elegida.
             combo.Text = combo.GetItemText(combo.SelectedItem);
         }
         private void btnReposicion_Click(object sender, EventArgs e)
@@ -583,7 +564,7 @@ namespace CapaVista
         }
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
-            cmbProveedor.SelectedIndex = 0;   // también deja la sucursal en "Todas"
+            cmbProveedor.SelectedIndex = 0;
             cmbCategoria.SelectedIndex = 0;
             cmbMarca.SelectedIndex = 0;
             chkFiltro.Checked = false;

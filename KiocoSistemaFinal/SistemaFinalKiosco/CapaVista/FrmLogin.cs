@@ -87,19 +87,14 @@ namespace CapaVista
                 }
                 catch
                 {
-                    // Evita que un fallo al registrar la bitácora oculte el error original.
                 }
 
-                // Si falló a mitad del ingreso, el login no puede quedar oculto.
                 this.Show();
 
                 MessageBox.Show(ClsIdioma.T("Ocurrió un error técnico durante el inicio de sesión.\n") + ClsIdioma.T("Si el problema continúa, contacte al administrador."), ClsIdioma.T("Error del sistema"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // Después de un login correcto: primero el cambio de la contraseña temporal y después las
-        // preguntas de seguridad, los dos obligatorios. Si se cierra alguno sin completarlo, se
-        // cierra la sesión y se vuelve al login. Al final se abre el menú principal, una sola vez.
         private void ContinuarIngreso(List<ClsInconsistenciaDVH> inconsistencias)
         {
             this.Hide();

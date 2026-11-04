@@ -402,7 +402,6 @@ namespace CapaVista
             dtgNuevaCompra.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgNuevaCompra.Size = new Size(848, 146);
             dtgNuevaCompra.TabIndex = 4;
-            dtgNuevaCompra.CellContentClick += dataGridView1_CellContentClick;
             dtgNuevaCompra.CellEndEdit += dataGridView1_CellEndEdit_1;
             // 
             // Column1
@@ -529,6 +528,7 @@ namespace CapaVista
             btnCacelar.TabIndex = 8;
             btnCacelar.Text = "Cancelar";
             btnCacelar.UseVisualStyleBackColor = true;
+            btnCacelar.Click += btnCacelar_Click;
             // 
             // grpCondicionPago
             // 
@@ -646,7 +646,6 @@ namespace CapaVista
             grpCondicionPago.ResumeLayout(false);
             grpCondicionPago.PerformLayout();
             // 
-            // ttAyuda: explicación de cada combo al pasar el mouse
             // 
             ttAyuda.AutoPopDelay = 10000;
             ttAyuda.InitialDelay = 300;

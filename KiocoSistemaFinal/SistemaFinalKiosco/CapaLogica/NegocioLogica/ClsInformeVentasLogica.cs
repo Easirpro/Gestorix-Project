@@ -8,7 +8,6 @@ namespace CapaLogica.NegocioLogica
     {
         private ClsInformeVentasDatos datos = new ClsInformeVentasDatos();
 
-        // tipo: FECHA, DETALLE, RUBRO, ARTICULO o MEDIO.
         public DataTable ObtenerInforme(string tipo, DateTime desde, DateTime hasta, int? idUsuario, int? idMetodoPago, int? idCategoria, int? idProducto)
         {
             if (desde.Date > hasta.Date)

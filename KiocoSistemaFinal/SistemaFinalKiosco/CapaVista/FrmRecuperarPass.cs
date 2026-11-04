@@ -66,7 +66,6 @@ namespace CapaVista
                 return;
             }
 
-            // txtCorreo es la contraseña nueva y txtIngCodigo su confirmación (nombres de un diseño anterior).
             ClsRecuperarPassword recuperar = new ClsRecuperarPassword();
 
             ResultadoCambioPassword resultado = recuperar.CambiarPassword(idUsuario, txtCorreo.Text, txtIngCodigo.Text);
@@ -104,7 +103,7 @@ namespace CapaVista
             }
         }
 
-        //validacion txt de correro
+        // validacion txt de correro
         private void txtCorreo_KeyPress(object sender, KeyPressEventArgs e)
         {
             ValidacionCampoVacio validar = new ValidacionCampoVacio();
@@ -116,7 +115,7 @@ namespace CapaVista
 
         }
 
-        //validacion txt de ingcodigo
+        // validacion txt de ingcodigo
         private void txtIngCodigo_KeyPress(object sender, KeyPressEventArgs e)
         {
             ValidacionCampoVacio validar = new ValidacionCampoVacio();

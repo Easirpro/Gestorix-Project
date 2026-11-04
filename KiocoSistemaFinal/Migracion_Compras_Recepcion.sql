@@ -1,17 +1,4 @@
-﻿-- Migración: recepción de compras, sucursal en compras y bitácora de compras.
--- 1) Compra: columnas IdSucursal (sucursal del proveedor) y EstadoRecepcion (PENDIENTE / APROBADA).
--- 2) Tablas RecepcionCompra y DetalleRecepcionCompra, y tipo dbo.TipoDetalleRecepcion.
--- 3) sp_GuardarCompra recibe @IdSucursal; sp_AnularCompra no anula compras ya recibidas y lo deja en la bitácora.
--- 4) sp_ObtenerBitacora: la categoría 'Compras' incluye los pagos a proveedores.
--- 5) Nuevos: sp_ObtenerComprasPendientesRecepcion, sp_ConfirmarRecepcionCompra, sp_ObtenerComprasBitacora
---    (todas las compras con quién la cargó, quién la recibió y estado de entrega y pago).
--- 6) Costo de compra por sucursal: sp_BuscarProductoCompra (solo productos de la sucursal, con su costo)
---    y sp_GuardarCompra valida los productos de la sucursal y actualiza su PrecioCompra.
--- 7) Fechas: Compra.FechaEntregaEstimada; sp_GuardarCompra exige que la fecha del pedido sea hoy
---    y que la entrega estimada no sea anterior a hoy. Las pendientes de recepción la devuelven.
--- 8) sp_GuardarCompra no acepta notas de crédito como comprobante de compra.
--- Se puede ejecutar más de una vez sin problemas.
-USE Gestorix;
+﻿USE Gestorix;
 GO
 
 IF COL_LENGTH('dbo.Compra', 'IdSucursal') IS NULL
@@ -104,7 +91,7 @@ BEGIN
 
     ;WITH Registros AS
     (
-        -- Bitácora general existente
+        -- Bitacora general existente
         SELECT
             CAST(b.IdBitacora AS BIGINT) AS IdBitacora,
             b.IdUsuario,
@@ -120,7 +107,7 @@ BEGIN
 
         UNION ALL
 
-        -- Historial específico de promociones
+        -- Historial especifico de promociones
         SELECT
             hp.IdHistorial AS IdBitacora,
             CAST(NULL AS INT) AS IdUsuario,
@@ -219,9 +206,6 @@ BEGIN
 END;
 GO
 
-/* ---------------------------------------------------------------------
-   MODIFICADO: sp_GuardarCompra  (cambios marcados con [PAGOS])
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_GuardarCompra
     @IdProveedor INT,
     @Fecha DATETIME,
@@ -232,14 +216,13 @@ CREATE OR ALTER PROCEDURE dbo.sp_GuardarCompra
     @Total DECIMAL(18,2),
     @Observaciones NVARCHAR(MAX),
     @Detalles dbo.TipoDetalleCompra READONLY,
-    -- [PAGOS] Parámetros nuevos (opcionales para no romper llamadas actuales)
-    @IdUsuario         INT          = NULL,       -- quién carga la compra
+    @IdUsuario         INT          = NULL,       -- quien carga la compra
     @CondicionPago     VARCHAR(10)  = 'CONTADO',  -- 'CONTADO' o 'CTA_CTE'
-    @FechaVencimiento  DATE         = NULL,       -- solo Cta. Cte.
-    @IdMetodoPago      INT          = NULL,       -- contado: con qué se pagó
-    @IdSesionCaja      INT          = NULL,        -- contado: si el pago sale de la caja abierta
-    @IdSucursal        INT          = NULL,       -- [RECEPCION] sucursal del proveedor
-    @FechaEntregaEstimada DATE      = NULL        -- [FECHAS] cuándo se espera la mercadería
+    @FechaVencimiento  DATE         = NULL,       -- solo Cta. Cte
+    @IdMetodoPago      INT          = NULL,
+    @IdSesionCaja      INT          = NULL,
+    @IdSucursal        INT          = NULL,
+    @FechaEntregaEstimada DATE      = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -247,7 +230,7 @@ BEGIN
 
     BEGIN TRY
 
-        -- Validar proveedor.
+        -- Validar proveedor
         IF @IdProveedor IS NULL OR @IdProveedor <= 0
            OR NOT EXISTS
            (
@@ -259,28 +242,24 @@ BEGIN
             THROW 50010, 'El proveedor seleccionado no es válido.', 1;
         END;
 
-        -- [FECHAS] La fecha del pedido es siempre la de hoy: ni pasada ni futura.
         IF @Fecha IS NULL
            OR CONVERT(DATE, @Fecha) <> CONVERT(DATE, GETDATE())
         BEGIN
             THROW 50011, 'La fecha del pedido debe ser la de hoy.', 1;
         END;
 
-        -- [FECHAS] La entrega estimada, si se indica, no puede ser anterior a hoy.
         IF @FechaEntregaEstimada IS NOT NULL
            AND @FechaEntregaEstimada < CONVERT(DATE, GETDATE())
         BEGIN
             THROW 50026, 'La entrega estimada no puede ser anterior a hoy.', 1;
         END;
 
-        -- [NOTAS DE CREDITO] Una nota de crédito no es una compra: resta deuda en vez de sumarla.
-        -- Hasta que tengan su propia funcionalidad, no se pueden registrar como compra.
         IF @TipoComprobante LIKE N'Nota de Cr%dito%'
         BEGIN
             THROW 50027, 'Las notas de crédito no se registran como compra.', 1;
         END;
 
-        -- Validar comprobante.
+        -- Validar comprobante
         IF NULLIF(LTRIM(RTRIM(@TipoComprobante)), N'') IS NULL
         BEGIN
             THROW 50012, 'El tipo de comprobante es obligatorio.', 1;
@@ -291,13 +270,13 @@ BEGIN
             THROW 50013, 'El número de comprobante es obligatorio.', 1;
         END;
 
-        -- Validar observaciones.
+        -- Validar observaciones
         IF LEN(@Observaciones) > 500
         BEGIN
             THROW 50014, 'Las observaciones no pueden superar los 500 caracteres.', 1;
         END;
 
-        -- Validar importes generales.
+        -- Validar importes generales
         IF @SubtotalSinIVA IS NULL
            OR @IVA IS NULL
            OR @Total IS NULL
@@ -313,13 +292,11 @@ BEGIN
             THROW 50016, 'El total no coincide con el subtotal más el IVA.', 1;
         END;
 
-        -- Exigir al menos un detalle.
         IF NOT EXISTS (SELECT 1 FROM @Detalles)
         BEGIN
             THROW 50017, 'La compra debe contener al menos un producto.', 1;
         END;
 
-        -- Validar cantidades e importes de los detalles.
         IF EXISTS
         (
             SELECT 1
@@ -340,7 +317,6 @@ BEGIN
             THROW 50018, 'Hay productos con cantidades o importes inválidos.', 1;
         END;
 
-        -- Comprobar que los productos existan.
         IF EXISTS
         (
             SELECT 1
@@ -353,7 +329,6 @@ BEGIN
             THROW 50019, 'Uno o más productos de la compra no existen.', 1;
         END;
 
-        -- Validar el total de cada detalle.
         IF EXISTS
         (
             SELECT 1
@@ -370,7 +345,6 @@ BEGIN
             THROW 50020, 'El total de uno o más detalles no coincide con sus importes.', 1;
         END;
 
-        -- Calcular los importes esperados a partir de los detalles.
         DECLARE @SubtotalCalculado DECIMAL(18,2);
         DECLARE @IVACalculado DECIMAL(18,2);
         DECLARE @TotalCalculado DECIMAL(18,2);
@@ -400,25 +374,21 @@ BEGIN
             )
         FROM @Detalles;
 
-        -- Comparar el subtotal general con los detalles.
         IF @SubtotalSinIVA <> @SubtotalCalculado
         BEGIN
             THROW 50021, 'El subtotal no coincide con los detalles de la compra.', 1;
         END;
 
-        -- Comparar el IVA general con los detalles.
         IF @IVA <> @IVACalculado
         BEGIN
             THROW 50022, 'El IVA no coincide con los detalles de la compra.', 1;
         END;
 
-        -- Comparar el total general con los detalles.
         IF @Total <> @TotalCalculado
         BEGIN
             THROW 50023, 'El total no coincide con los detalles de la compra.', 1;
         END;
 
-        -- [PAGOS] Validar usuario y condición de pago.
         IF @IdUsuario IS NOT NULL
            AND NOT EXISTS (SELECT 1 FROM dbo.Usuario WHERE IdUsuario = @IdUsuario AND Estado = 1)
         BEGIN
@@ -434,7 +404,6 @@ BEGIN
 
         IF @CondicionPago = 'CTA_CTE'
         BEGIN
-            -- En Cta. Cte. no se registra pago al cargar la compra.
             SET @IdMetodoPago = NULL;
             SET @IdSesionCaja = NULL;
 
@@ -449,9 +418,6 @@ BEGIN
             SET @FechaVencimiento = NULL;
         END;
 
-        -- [PAGOS] Compra de contado con medio de pago: se registra el pago.
-        -- (Si no se envía @IdMetodoPago, la compra queda pendiente de pago,
-        --  igual que antes del cambio, y se paga con sp_RegistrarPagoCompra.)
         DECLARE @MetodoPago NVARCHAR(30);
         DECLARE @Disponible DECIMAL(10,2);
 
@@ -504,7 +470,6 @@ BEGIN
             END;
         END;
 
-        -- [RECEPCION] La sucursal, si se indica, tiene que ser del proveedor.
         IF @IdSucursal IS NOT NULL
            AND NOT EXISTS
            (
@@ -517,7 +482,6 @@ BEGIN
             THROW 50024, 'La sucursal seleccionada no pertenece al proveedor.', 1;
         END;
 
-        -- [COSTO] Con sucursal, los productos tienen que estar asociados a ella.
         IF @IdSucursal IS NOT NULL
            AND EXISTS
            (
@@ -593,7 +557,6 @@ BEGIN
             Total
         FROM @Detalles;
 
-        -- [COSTO] El costo de esta compra pasa a ser el costo vigente de la sucursal.
         IF @IdSucursal IS NOT NULL
         BEGIN
             UPDATE PSP
@@ -611,7 +574,6 @@ BEGIN
               AND (PSP.PrecioCompra IS NULL OR PSP.PrecioCompra <> D.PrecioSinIVA);
         END;
 
-        -- [PAGOS] Registrar el pago de contado.
         IF @IdMetodoPago IS NOT NULL
         BEGIN
             INSERT INTO dbo.PagoCompra
@@ -636,7 +598,6 @@ BEGIN
             );
         END;
 
-        -- [PAGOS] Registrar en la bitácora.
         INSERT INTO dbo.Bitacora
         (
             IdUsuario,
@@ -677,9 +638,6 @@ BEGIN
 END;
 GO
 
-/* ---------------------------------------------------------------------
-   MODIFICADO: sp_AnularCompra  (cambio marcado con [PAGOS])
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_AnularCompra
     @IdCompra INT,
     @Motivo NVARCHAR(500),
@@ -720,14 +678,11 @@ BEGIN
             THROW 50003, N'La compra ya está anulada.', 1;
         END;
 
-        -- [RECEPCION] Una compra recibida ya tiene el stock controlado y ajustado: no se anula.
         IF EXISTS (SELECT 1 FROM dbo.Compra WHERE IdCompra = @IdCompra AND EstadoRecepcion = N'APROBADA')
         BEGIN
             THROW 50007, N'La compra ya fue recibida y aprobada; no se puede anular.', 1;
         END;
 
-        -- [PAGOS] Si la compra tiene pagos activos, primero hay que anularlos
-        -- (si no, el dinero que salió desaparecería del balance).
         IF EXISTS
         (
             SELECT 1
@@ -741,8 +696,6 @@ BEGIN
                 1;
         END;
 
-        -- Verificamos que exista stock suficiente para revertir
-        -- las cantidades ingresadas por esta compra.
         IF EXISTS
         (
             SELECT 1
@@ -766,7 +719,7 @@ BEGIN
                 1;
         END;
 
-        -- Revertimos las cantidades ingresadas.
+        -- Revertimos las cantidades ingresadas
         UPDATE S
         SET S.CantidadActual = S.CantidadActual - D.Cantidad
         FROM dbo.Stock AS S
@@ -781,7 +734,6 @@ BEGIN
         ) AS D
             ON D.IdProducto = S.IdProducto;
 
-        -- Registramos un egreso por cada producto de la compra.
         SET @Observacion = LEFT(
             CONCAT(N'Anulación compra #', @IdCompra, N' - ', @MotivoFinal),
             255
@@ -807,7 +759,6 @@ BEGIN
         WHERE D.IdCompra = @IdCompra
         GROUP BY D.IdProducto;
 
-        -- Marcamos la compra como anulada y guardamos el motivo.
         UPDATE dbo.Compra
         SET
             Anulada = 1,
@@ -832,7 +783,6 @@ BEGIN
             THROW 50005, N'No se pudo actualizar el estado de la compra.', 1;
         END;
 
-        -- Registrar la anulación en la bitácora.
         INSERT INTO dbo.Bitacora
         (
             IdUsuario,
@@ -865,10 +815,6 @@ BEGIN
 END;
 GO
 
-/* ---------------------------------------------------------------------
-   sp_ObtenerComprasPendientesRecepcion: compras activas que todavía no
-   se recibieron. Filtra por proveedor / sucursal / comprobante y fecha.
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_ObtenerComprasPendientesRecepcion
     @Buscar NVARCHAR(100) = NULL,
     @Fecha  DATE          = NULL
@@ -906,13 +852,6 @@ BEGIN
 END;
 GO
 
-/* ---------------------------------------------------------------------
-   sp_ConfirmarRecepcionCompra: aprueba la recepción de una compra.
-   - El stock ya ingresó al guardar la compra; acá solo se ajusta la
-     diferencia entre lo pedido y lo recibido (faltantes y sobrantes).
-   - Guarda la recepción y su detalle, marca la compra como APROBADA
-     y lo registra en la bitácora.
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_ConfirmarRecepcionCompra
     @IdCompra      INT,
     @IdUsuario     INT,
@@ -992,7 +931,6 @@ BEGIN
             THROW 50308, N'La compra ya fue recibida.', 1;
         END;
 
-        -- Todos los productos de la compra tienen que figurar (con 0 si no llegaron).
         IF EXISTS
         (
             SELECT 1
@@ -1028,7 +966,6 @@ BEGIN
         ) AS p
             ON p.IdProducto = d.IdProducto;
 
-        -- Para descontar faltantes tiene que haber stock suficiente.
         IF EXISTS
         (
             SELECT 1
@@ -1042,7 +979,6 @@ BEGIN
             THROW 50310, N'No hay stock suficiente para descontar los faltantes. Verificá las existencias actuales.', 1;
         END;
 
-        -- Ajustar el stock por las diferencias.
         UPDATE s
         SET s.CantidadActual = s.CantidadActual + c.Diferencia
         FROM dbo.Stock AS s
@@ -1076,7 +1012,7 @@ BEGIN
         FROM @Comparacion AS c
         WHERE c.Diferencia <> 0;
 
-        -- Guardar la recepción.
+        -- Guardar la recepcion
         INSERT INTO dbo.RecepcionCompra
         (
             IdCompra,
@@ -1154,15 +1090,9 @@ BEGIN
 END;
 GO
 
--- Reemplazado por sp_ObtenerComprasBitacora (muestra todas las compras, no solo las recibidas).
 DROP PROCEDURE IF EXISTS dbo.sp_ObtenerComprasAprobadas;
 GO
 
-/* ---------------------------------------------------------------------
-   sp_ObtenerComprasBitacora: todas las compras para la bitácora, con
-   quién la cargó, quién la recibió y su estado de entrega y de pago.
-   Una compra entra en el rango de fechas si se cargó o se recibió en él.
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_ObtenerComprasBitacora
     @FechaDesde DATE          = NULL,
     @FechaHasta DATE          = NULL,
@@ -1184,7 +1114,6 @@ BEGIN
         ISNULL(s.Nombre, N'Sin sucursal') AS Sucursal,
         LTRIM(CONCAT(c.TipoComprobante, N' ', c.NumeroComprobante)) AS Comprobante,
         c.Total AS TotalCompra,
-        -- Estado único que combina entrega y pago, para que no se lea como contradicción.
         CASE
             WHEN c.Anulada = 1 THEN N'Anulada'
             WHEN c.EstadoRecepcion = N'APROBADA' AND sc.EstadoPago = 'PAGADA' THEN N'Completada'
@@ -1263,11 +1192,6 @@ BEGIN
 END;
 GO
 
-/* ---------------------------------------------------------------------
-   sp_BuscarProductoCompra: productos de una sucursal del proveedor para
-   cargar en una compra, con su costo (sin IVA) y la alícuota de IVA.
-   PrecioCompra puede venir NULL si todavía no se cargó el costo.
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_BuscarProductoCompra
     @Texto      NVARCHAR(200),
     @IdSucursal INT

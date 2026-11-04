@@ -38,7 +38,6 @@ namespace CapaDatos.NegocioDatos
                 {
                     while (lector.Read())
                     {
-                        // Un tipo nuevo en la base que la aplicación no conoce se ignora.
                         if (!Tipos.TryGetValue(lector.GetString(0), out TipoAlerta tipo))
                             continue;
 

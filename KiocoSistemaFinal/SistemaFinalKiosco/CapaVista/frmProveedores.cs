@@ -17,15 +17,12 @@ namespace CapaVista
         ClsLogicaProveedor logica = new ClsLogicaProveedor();
         DataTable? tablaProveedores;
 
-        // Proveedor elegido en el buscador (null = todos).
         private int? idProveedorSeleccionado = null;
-        // Evita que poner el nombre elegido en el cuadro vuelva a abrir la lista.
         private bool cambiandoTexto = false;
 
         private bool puedeCrear;
         private bool puedeModificar;
 
-        // Ítem de la lista de sugerencias: muestra el nombre (y CUIT) y guarda el id.
         private class ItemProveedor
         {
             public int Id { get; set; }
@@ -51,7 +48,6 @@ namespace CapaVista
             btnNuevoProveedor.Enabled = puedeCrear;
             ActualizarBotones();
         }
-        // Modificar y Descontinuar/Activar solo con permiso y con un proveedor elegido en la grilla.
         private void ActualizarBotones()
         {
             bool hayFila = dtgProveedores.CurrentRow != null;
@@ -60,7 +56,6 @@ namespace CapaVista
             btnDescontinuar.Enabled = puedeModificar && hayFila;
             btnNuevaSucursal.Enabled = puedeCrear && hayFila;
         }
-        // Vuelve a leer los proveedores de la base. Si se indica, deja elegido ese proveedor.
         private void CargarProveedores(int? idProveedorAElegir = null)
         {
             try
@@ -77,7 +72,6 @@ namespace CapaVista
 
             FiltrarProveedores(idProveedorAElegir);
         }
-        // Todos los proveedores, o solo el elegido en el buscador
         private void FiltrarProveedores(int? idProveedorAElegir = null)
         {
             dtgProveedores.Rows.Clear();
@@ -117,7 +111,6 @@ namespace CapaVista
 
                     filaGrilla.Tag = fila["Observacion"]?.ToString() ?? "";
 
-                    // Los inactivos en gris, para distinguirlos de un vistazo.
                     if (estado == "Inactivo")
                     {
                         filaGrilla.DefaultCellStyle.ForeColor = SystemColors.GrayText;
@@ -165,7 +158,6 @@ namespace CapaVista
 
             MostrarDatosFilaActual();
         }
-        // Observaciones y texto del botón Descontinuar/Activar según la fila elegida.
         private void MostrarDatosFilaActual()
         {
             DataGridViewRow? fila = dtgProveedores.CurrentRow;
@@ -186,7 +178,6 @@ namespace CapaVista
 
             ActualizarBotones();
         }
-        // Lista los proveedores cuyo nombre empieza con lo escrito (o cuyo CUIT empieza con esos números).
         private void MostrarSugerencias(string texto)
         {
             lstProveedores.Items.Clear();
@@ -229,7 +220,6 @@ namespace CapaVista
                 lstProveedores.BringToFront();
             }
         }
-        // Toma el proveedor marcado en la lista y deja en la grilla solo ese proveedor.
         private void SeleccionarProveedor()
         {
             if (!lstProveedores.Visible || lstProveedores.SelectedItem is not ItemProveedor item)
@@ -308,7 +298,6 @@ namespace CapaVista
                 modproveedor.ShowDialog(this);
             }
 
-            // Se recarga y se vuelve a elegir el mismo proveedor.
             CargarProveedores(idProveedor.Value);
         }
         private void btnNuevaSucursal_Click(object? sender, EventArgs e)
@@ -336,7 +325,6 @@ namespace CapaVista
         }
         private void dtgProveedores_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
-            // Doble clic en una fila (no en el encabezado) = Modificar, si tiene permiso.
             if (e.RowIndex >= 0 && btnModificar.Enabled)
             {
                 BtnModificar_Click(btnModificar, EventArgs.Empty);
@@ -363,7 +351,6 @@ namespace CapaVista
 
             string texto = txtBuscar.Text.Trim();
 
-            // Al escribir de nuevo se vuelven a mostrar todos
             if (idProveedorSeleccionado.HasValue)
             {
                 idProveedorSeleccionado = null;
@@ -453,7 +440,7 @@ namespace CapaVista
 
             if (chkOcultarProveedores.Checked)
             {
-                chkOcultarProveedores.Checked = false;   // su evento ya vuelve a llenar la grilla
+                chkOcultarProveedores.Checked = false;
             }
             else
             {

@@ -34,7 +34,6 @@ namespace CapaEntidades.NegocioEntidad
             public decimal Stock { get; set; }
             public bool Activo { get; set; }
             public int IdSucursal { get; set; }
-            // Días antes del vencimiento en que avisa la alerta (null: avisa el día que vence).
             public int? DiasAlertaVencimiento { get; set; }
 
         }

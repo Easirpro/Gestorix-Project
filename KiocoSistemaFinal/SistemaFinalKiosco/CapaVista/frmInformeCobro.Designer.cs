@@ -204,7 +204,7 @@
             btnConfirmar.Name = "btnConfirmar";
             btnConfirmar.Size = new Size(139, 21);
             btnConfirmar.TabIndex = 20;
-            btnConfirmar.Text = "CONFIRMAR COMPRA";
+            btnConfirmar.Text = "CONFIRMAR VENTA";
             btnConfirmar.UseVisualStyleBackColor = true;
             btnConfirmar.Visible = false;
             btnConfirmar.Click += btnConfirmar_Click;
@@ -327,7 +327,6 @@
             Name = "frmInformeCobro";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Informe de Cobro";
-            Load += frmInformeCobro_Load;
             pnlTotal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dtgPagos).EndInit();
             pnlResta.ResumeLayout(false);

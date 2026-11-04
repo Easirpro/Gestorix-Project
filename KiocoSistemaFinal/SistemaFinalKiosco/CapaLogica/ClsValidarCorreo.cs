@@ -19,7 +19,6 @@ namespace CapaLogica
             {
                 MailAddress correo = new MailAddress(email);
 
-                // Verifica que sea exactamente el mismo texto ingresado
                 if (correo.Address != email)
                     return false;
 

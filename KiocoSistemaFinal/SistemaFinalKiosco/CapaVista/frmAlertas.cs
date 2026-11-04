@@ -8,28 +8,19 @@ using System.Windows.Forms;
 
 namespace CapaVista
 {
-    // Lista completa de alertas: resumen, filtros y acceso directo a la pantalla donde se resuelve cada una.
-    // La abre quien ve la campana (permiso 1110) y cada uno ve solo los tipos que le corresponden.
-    // "Ir a resolver" solo funciona si el usuario puede entrar a la pantalla de destino.
-    // Las alertas salen de sp_ObtenerAlertas, igual que la campana.
     public partial class frmAlertas : Form
     {
         private static readonly Color ColorUrgente = Color.Firebrick;
         private static readonly Color ColorAviso = Color.DarkOrange;
 
         private readonly ClsAlertaLogica logica = new ClsAlertaLogica();
-        // Qué pantalla abre cada tipo de alerta (las mismas opciones del menú principal).
         private readonly Dictionary<TipoAlerta, Action> acciones;
-        // Si el usuario puede entrar a la pantalla donde se resuelve cada tipo (null = siempre).
         private readonly Func<TipoAlerta, bool>? puedeResolver;
-        // Se llama después de resolver algo, para refrescar la campana del menú principal.
         private readonly Action? alCambiar;
 
         private List<ClsAlertaEntidad> alertas = new List<ClsAlertaEntidad>();
-        // Evita filtrar varias veces mientras se cargan los combos.
         private bool cargando = false;
 
-        // Ítem del combo de tipos: null = todos.
         private class ItemTipo
         {
             public TipoAlerta? Tipo { get; set; }
@@ -48,7 +39,7 @@ namespace CapaVista
 
             cargando = true;
             cmbPrioridad.SelectedIndex = 0;
-            ClsIdioma.TraducirOpciones(cmbPrioridad);   // se elige por posición
+            ClsIdioma.TraducirOpciones(cmbPrioridad);   
             cargando = false;
 
             CargarAlertas();
@@ -82,7 +73,6 @@ namespace CapaVista
             btnUrgentes.Text = urgentes + (urgentes == 1 ? ClsIdioma.T(" urgente") : ClsIdioma.T(" urgentes"));
             btnAvisos.Text = avisos + (avisos == 1 ? ClsIdioma.T(" aviso") : ClsIdioma.T(" avisos"));
         }
-        // Solo los tipos que tienen alertas, con su cantidad. Mantiene el tipo elegido si sigue habiendo.
         private void CargarTipos()
         {
             TipoAlerta? tipoElegido = (cmbTipo.SelectedItem as ItemTipo)?.Tipo;
@@ -111,7 +101,6 @@ namespace CapaVista
                 cargando = false;
             }
         }
-        // Llena la grilla con las alertas que cumplen los filtros: urgentes primero.
         private void Filtrar()
         {
             if (cargando)
@@ -120,18 +109,15 @@ namespace CapaVista
             }
 
             TipoAlerta? tipo = (cmbTipo.SelectedItem as ItemTipo)?.Tipo;
-            int prioridad = cmbPrioridad.SelectedIndex;   // 0 todas, 1 urgentes, 2 avisos
+            int prioridad = cmbPrioridad.SelectedIndex;
             string texto = txtBuscar.Text.Trim();
 
             IEnumerable<ClsAlertaEntidad> filtradas = alertas
                 .Where(a => tipo == null || a.Tipo == tipo)
                 .Where(a => prioridad != 1 || a.Urgente)
                 .Where(a => prioridad != 2 || !a.Urgente)
-                .Where(a => texto == "" ||
-                            (a.Descripcion ?? "").Contains(texto, StringComparison.CurrentCultureIgnoreCase) ||
-                    ClsIdioma.TraducirAlerta(a.Descripcion).Contains(texto, StringComparison.CurrentCultureIgnoreCase) ||
-                            ClsCampanaAlertas.TituloDe(a.Tipo).Contains(texto, StringComparison.CurrentCultureIgnoreCase))
-                .OrderByDescending(a => a.Urgente);   // OrderBy es estable: dentro de cada prioridad queda el orden del SP
+                .Where(a => texto == "" || (a.Descripcion ?? "").Contains(texto, StringComparison.CurrentCultureIgnoreCase) ||
+                    ClsIdioma.TraducirAlerta(a.Descripcion).Contains(texto, StringComparison.CurrentCultureIgnoreCase) || ClsCampanaAlertas.TituloDe(a.Tipo).Contains(texto, StringComparison.CurrentCultureIgnoreCase)) .OrderByDescending(a => a.Urgente);
 
             dtgAlertas.Rows.Clear();
 
@@ -167,14 +153,12 @@ namespace CapaVista
             MarcarResumen(prioridad);
             ActualizarBotones();
         }
-        // Resalta el recuadro del resumen que corresponde al filtro de prioridad.
         private void MarcarResumen(int prioridad)
         {
             btnTotal.BackColor = prioridad == 0 ? Color.Gainsboro : SystemColors.Control;
             btnUrgentes.BackColor = prioridad == 1 ? Color.MistyRose : SystemColors.Control;
             btnAvisos.BackColor = prioridad == 2 ? Color.OldLace : SystemColors.Control;
         }
-        // "Ir a resolver" solo con una alerta elegida que el usuario pueda resolver; si no puede, se le explica.
         private void ActualizarBotones()
         {
             ClsAlertaEntidad? alerta = AlertaElegida();
@@ -191,7 +175,6 @@ namespace CapaVista
         {
             return dtgAlertas.CurrentRow?.Tag as ClsAlertaEntidad;
         }
-        // Abre la pantalla donde se resuelve la alerta elegida y, al volver, recarga la lista.
         private void IrAResolver()
         {
             ClsAlertaEntidad? alerta = AlertaElegida();
@@ -271,7 +254,7 @@ namespace CapaVista
         {
             if (e.KeyCode == Keys.Enter)
             {
-                e.SuppressKeyPress = true;   // si no, Enter baja a la fila siguiente
+                e.SuppressKeyPress = true;
                 IrAResolver();
             }
         }

@@ -16,13 +16,11 @@ namespace CapaVista
     {
         private ClsCajaLogica logica = new ClsCajaLogica();
 
-        private readonly string tipo;                      // "I" ingreso, "E" egreso
-        private ClsSesionCajaEntidad sesion;               // caja abierta
+        private readonly string tipo;
+        private ClsSesionCajaEntidad sesion;             
         private DataTable tablaConceptos;
         private bool cargando = true;
 
-        // Mismo constructor que ya usa el menú principal:
-        //   new frmIngresoPlataCaja(TipoMovimiento.Ingreso) / (TipoMovimiento.Egreso)
         public frmIngresoPlataCaja(frmmenuPres.TipoMovimiento tipoMovimiento)
         {
             InitializeComponent();
@@ -32,7 +30,6 @@ namespace CapaVista
 
         private void frmIngresoPlataCaja_Load(object sender, EventArgs e)
         {
-            // Sin caja abierta no se pueden registrar movimientos.
             try
             {
                 sesion = logica.ObtenerSesionAbierta();
@@ -83,14 +80,13 @@ namespace CapaVista
             cmbConcepto.DataSource = tablaConceptos;
             cmbConcepto.DisplayMember = "Nombre";
             cmbConcepto.ValueMember = "IdConceptoCaja";
-            ClsIdioma.TraducirDatosAlMostrar(cmbConcepto);   // solo cambia lo que se ve
+            ClsIdioma.TraducirDatosAlMostrar(cmbConcepto);
         }
 
         private void CargarMediosPago()
         {
             DataTable tabla = logica.ObtenerMetodosPago();
 
-            // "Cuenta Corriente" no mueve dinero de la caja: se quita del combo.
             foreach (DataRow fila in tabla.Select("Nombre = 'Cuenta Corriente'"))
             {
                 tabla.Rows.Remove(fila);
@@ -100,9 +96,8 @@ namespace CapaVista
             cmbMedioPago.DisplayMember = "Nombre";
             cmbMedioPago.ValueMember = "IdMetodoPago";
 
-            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPago);   // solo cambia lo que se ve
+            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPago);
 
-            // Por defecto, efectivo (se busca por el dato, no por el texto que se muestra).
             int indiceEfectivo = tabla.Rows.IndexOf(tabla.Select("Nombre = 'Efectivo'").FirstOrDefault());
             if (indiceEfectivo >= 0)
             {
@@ -126,7 +121,6 @@ namespace CapaVista
 
         private bool EsEfectivo()
         {
-            // Se mira el dato: el texto que se ve puede estar traducido.
             return cmbMedioPago.SelectedItem is DataRowView medio && Convert.ToString(medio["Nombre"]) == "Efectivo";
         }
 
@@ -144,7 +138,6 @@ namespace CapaVista
 
         private void ActualizarDisponible()
         {
-            // En egresos de efectivo se muestra cuánto hay en la caja.
             if (tipo == "E" && EsEfectivo())
             {
                 lblDisponible.Text = (ClsIdioma.Ingles ? $"Available: $ {sesion.EfectivoEsperado:N2}" : $"Disponible: $ {sesion.EfectivoEsperado:N2}");

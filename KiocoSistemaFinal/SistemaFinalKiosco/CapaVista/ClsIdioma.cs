@@ -10,18 +10,10 @@ using System.Windows.Forms;
 
 namespace CapaVista
 {
-    // Idioma de las pantallas (castellano / inglés) para todo el sistema.
-    // - El idioma elegido se guarda en la configuración del usuario de Windows de esta PC.
-    // - Cada formulario se traduce solo al abrirse (ClsIdioma.Registrar en su constructor).
-    // - Al cambiar de idioma se traducen también las ventanas que ya están abiertas.
-    // Se traducen títulos, etiquetas, botones, casillas, recuadros, pestañas, columnas, menús,
-    // textos de ayuda y globos. NO se traduce lo que escribe el usuario, los datos de las grillas
-    // ni las opciones de los combos (algunas se guardan en la base tal cual).
     public static class ClsIdioma
     {
         public static bool Ingles { get; private set; }
 
-        // Para pantallas que arman textos por código y quieren actualizarlos al cambiar de idioma.
         public static event Action? IdiomaCambiado;
 
         private static readonly Dictionary<string, string> aIngles;
@@ -29,12 +21,9 @@ namespace CapaVista
         private static readonly List<KeyValuePair<string, string>> prefijosIngles;
         private static readonly List<KeyValuePair<string, string>> prefijosCastellano;
 
-        // Texto original en castellano de cada objeto traducido (por propiedad), para volver exactamente a él.
-        // Hace falta porque hay textos distintos con la misma traducción (ej. "Activa" y "Activo" = "Active").
         private sealed class Originales : Dictionary<string, (string Castellano, string Ingles)> { }
         private static readonly ConditionalWeakTable<object, Originales> originales = new ConditionalWeakTable<object, Originales>();
 
-        // Controles a los que ya se les enganchó el aviso de cambio de texto.
         private static readonly ConditionalWeakTable<object, object> enganchados = new ConditionalWeakTable<object, object>();
         private static bool cambiandoTexto = false;
 
@@ -46,14 +35,12 @@ namespace CapaVista
 
             foreach (KeyValuePair<string, string> par in aIngles)
             {
-                // Solo se usa si no hay texto original guardado (por ejemplo, textos que puso el código).
                 if (!aCastellano.ContainsKey(par.Value))
                 {
                     aCastellano[par.Value] = par.Key;
                 }
             }
 
-            // Prefijos: claves que terminan en espacio (ej. "Fecha: " + valor). Primero los más largos.
             prefijosIngles = aIngles.Where(p => p.Key.EndsWith(" ") && p.Key.Trim().Length > 1)
                 .OrderByDescending(p => p.Key.Length).ToList();
             prefijosCastellano = aCastellano.Where(p => p.Key.EndsWith(" ") && p.Key.Trim().Length > 1)
@@ -68,7 +55,6 @@ namespace CapaVista
             }
         }
 
-        // Lee el idioma guardado en esta PC (llamar al iniciar el programa).
         public static void Cargar()
         {
             try
@@ -126,7 +112,6 @@ namespace CapaVista
             }
         }
 
-        // Cambia el idioma, lo guarda en esta PC y traduce las ventanas abiertas.
         public static void CambiarIdioma(bool ingles)
         {
             Ingles = ingles;
@@ -139,7 +124,6 @@ namespace CapaVista
             }
             catch
             {
-                // Si no se puede guardar, el idioma igual cambia durante esta sesión.
             }
 
             foreach (Form formulario in Application.OpenForms.Cast<Form>().ToList())
@@ -150,8 +134,6 @@ namespace CapaVista
             IdiomaCambiado?.Invoke();
         }
 
-        // Llamar en el constructor de cada formulario, después de InitializeComponent: lo traduce al cargarse
-        // (después del Load propio del formulario, así también se traducen los textos que pone el código).
         public static void Registrar(Form formulario)
         {
             formulario.Load += (sender, e) =>
@@ -163,17 +145,11 @@ namespace CapaVista
             };
         }
 
-        // Traduce un texto suelto al idioma actual (para textos que arma el código).
         public static string T(string texto)
         {
             return Ingles ? Buscar(texto, aIngles, prefijosIngles) : texto;
         }
 
-        // Grillas: los valores fijos que vienen de la base (estados, medios de pago, conceptos...)
-        // se traducen solo AL DIBUJARLOS. El valor de la celda no cambia, así el código que lo lee
-        // o lo compara sigue viendo el dato en castellano. Solo celdas de solo lectura, para no
-        // meter texto traducido al editar. Nombres de artículos o texto libre no están en el
-        // diccionario y quedan como vienen.
         private static void EngancharGrilla(DataGridView grilla)
         {
             grilla.CellFormatting -= GrillaCellFormatting;
@@ -203,7 +179,6 @@ namespace CapaVista
             }
         }
 
-        // Columnas creadas al cargar datos (DataSource): sus encabezados se traducen al terminar de cargar.
         private static void GrillaDataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             if (!Ingles || sender is not DataGridView grilla)
@@ -217,8 +192,6 @@ namespace CapaVista
             }
         }
 
-        // Descripciones de la bitácora: se guardan en castellano (registro de auditoría).
-        // En inglés se traducen solo las frases fijas; nombres, importes y motivos quedan igual.
         private static readonly (string es, string en)[] frasesBitacora =
         {
             ("Intento de inicio de sesión fallido para el usuario: ", "Failed login attempt for user: "),
@@ -302,14 +275,11 @@ namespace CapaVista
                 descripcion = descripcion.Replace(es, en);
             }
 
-            // Rangos "desde a hasta" de fechas y horarios (después de traducir "Sin datos" y "Sin fecha fin").
             descripcion = Regex.Replace(descripcion, @"(\d{2}/\d{2}/\d{4}|\d{2}:\d{2}(:\d{2})?|No data) a ", "$1 to ");
 
             return descripcion;
         }
 
-        // Las descripciones de las alertas las arma sp_ObtenerAlertas en castellano, mezclando
-        // nombres (artículos, proveedores) con frases fijas. En inglés se traducen solo esas frases.
         private static readonly (Regex patron, string reemplazo)[] frasesAlertas =
         {
             (new Regex(@" \(lote "), " (batch "),
@@ -345,8 +315,6 @@ namespace CapaVista
             return descripcion;
         }
 
-        // Textos que vienen de la base solo para mostrar (nombres de permisos, roles...):
-        // se traducen si están en el diccionario y, si no, quedan como vinieron.
         public static string Dato(object? valor)
         {
             string texto = Convert.ToString(valor) ?? "";
@@ -354,11 +322,9 @@ namespace CapaVista
             return Ingles && aIngles.TryGetValue(texto.Trim(), out string? traducido) && traducido != texto ? traducido : texto;
         }
 
-        // Traduce al mostrar los ítems de un combo cargado desde la base (DataSource),
-        // sin tocar los datos ni el valor elegido.
         public static void TraducirDatosAlMostrar(ListControl combo)
         {
-            combo.FormattingEnabled = true;   // sin esto la lista no usa el evento Format
+            combo.FormattingEnabled = true;
             combo.Format -= FormatoTraducido;
             combo.Format += FormatoTraducido;
         }
@@ -371,9 +337,6 @@ namespace CapaVista
             }
         }
 
-        // Traduce las opciones de combos que el código elige por POSICIÓN (SelectedIndex), nunca por texto.
-        // No usar en combos cuyo texto se guarda en la base o se compara (IVA, motivos, medios de pago...).
-        // Guarda las opciones originales para poder volver a castellano.
         private static readonly ConditionalWeakTable<ComboBox, object[]> opcionesOriginales = new ConditionalWeakTable<ComboBox, object[]>();
 
         public static void TraducirOpciones(params ComboBox[] combos)
@@ -430,7 +393,6 @@ namespace CapaVista
                 switch (control)
                 {
                     case TextBox textBox:
-                        // Solo el texto de ayuda: lo que escribe el usuario no se toca.
                         textBox.PlaceholderText = Convertir(textBox, "Placeholder", textBox.PlaceholderText);
                         break;
 
@@ -441,7 +403,6 @@ namespace CapaVista
                     case MaskedTextBox:
                     case RichTextBox:
                     case TreeView:
-                        // Datos u opciones: no se traducen.
                         break;
 
                     case DataGridView grilla:
@@ -495,7 +456,6 @@ namespace CapaVista
             }
         }
 
-        // Globos de ayuda: se buscan los ToolTip que tenga el formulario.
         private static void AplicarToolTips(Form formulario)
         {
             List<ToolTip> toolTips = formulario.GetType()
@@ -543,8 +503,6 @@ namespace CapaVista
             }
         }
 
-        // Si el código cambia el texto de un botón o etiqueta mientras se ve en inglés
-        // (por ejemplo, Anular/Activar), se traduce al momento.
         private static void EngancharTexto(Control control)
         {
             if (enganchados.TryGetValue(control, out _))
@@ -558,7 +516,6 @@ namespace CapaVista
 
         private static void TextoCambiado(object objeto, Func<string> leer, Action<string> escribir)
         {
-            // En castellano el código ya pone los textos en castellano: no hay nada que hacer.
             if (cambiandoTexto || !Ingles)
             {
                 return;
@@ -582,8 +539,6 @@ namespace CapaVista
             }
         }
 
-        // Devuelve el texto en el idioma actual para esa propiedad del objeto.
-        // En inglés traduce y guarda el original; en castellano vuelve al original guardado.
         private static string Convertir(object objeto, string propiedad, string actual)
         {
             if (string.IsNullOrEmpty(actual))
@@ -595,7 +550,6 @@ namespace CapaVista
 
             if (Ingles)
             {
-                // Ya está traducido (por ejemplo, se vuelve a aplicar con la ventana abierta).
                 if (guardados.TryGetValue(propiedad, out var previo) && previo.Ingles == actual)
                 {
                     return actual;
@@ -615,19 +569,15 @@ namespace CapaVista
             {
                 guardados.Remove(propiedad);
 
-                // Si el texto sigue siendo el que puso la traducción, se vuelve al original exacto.
                 if (original.Ingles == actual)
                 {
                     return original.Castellano;
                 }
             }
 
-            // Sin original guardado: si el texto está en inglés (del diccionario), se pasa a castellano.
             return Buscar(actual, aCastellano, prefijosCastellano);
         }
 
-        // Busca el texto exacto, después sin espacios de más y después por prefijo.
-        // Si no lo encuentra, lo devuelve igual (datos, números, textos que no están en el diccionario).
         private static string Buscar(string texto, Dictionary<string, string> diccionario, List<KeyValuePair<string, string>> prefijos)
         {
             if (string.IsNullOrEmpty(texto))

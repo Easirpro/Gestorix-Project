@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace CapaEntidades.NegocioEntidad
 {
-    // Ingreso o egreso manual de caja (sp_RegistrarMovimientoCaja).
     public class ClsMovimientoCajaEntidad
     {
         public int IdMovimientoCaja { get; set; }

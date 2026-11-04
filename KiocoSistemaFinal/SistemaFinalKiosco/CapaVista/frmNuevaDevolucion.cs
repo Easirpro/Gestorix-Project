@@ -18,12 +18,10 @@ namespace CapaVista
         private ClsDevolucionLogica logica = new ClsDevolucionLogica();
         private ClsCajaLogica logicaCaja = new ClsCajaLogica();
 
-        private ClsSesionCajaEntidad? sesionCaja;   // null = no hay caja abierta
+        private ClsSesionCajaEntidad? sesionCaja;
         private decimal precioDevolucion = 0;
-        // Cuántas devoluciones se registraron sin cerrar el formulario (se pueden cargar varias).
         private int registradas = 0;
 
-        // Motivos que, por defecto, indican que la unidad devuelta NO vuelve al stock
         private static readonly string[] MotivosSinReingreso = { "Producto fallado", "Producto vencido" };
 
         public frmNuevaDevolucion()
@@ -36,8 +34,6 @@ namespace CapaVista
             Resize += (sender, e) => DistribuirAltura();
         }
 
-        // Reparte el alto disponible entre "1. Venta" y "2. Producto" en la misma
-        // proporción del diseño (205 / 155). "3. Datos" y los botones quedan abajo por Anchor.
         private void DistribuirAltura()
         {
             const int separacion = 5;
@@ -66,7 +62,7 @@ namespace CapaVista
             cmbMotivo.Items.Add("El cliente se arrepintió");
             cmbMotivo.Items.Add("Otro");
             cmbMotivo.SelectedIndex = -1;
-            ClsIdioma.TraducirDatosAlMostrar(cmbMotivo);   // se ve traducido; se guarda el motivo original
+            ClsIdioma.TraducirDatosAlMostrar(cmbMotivo);
 
             RefrescarCaja(mostrarError: true);
 
@@ -84,11 +80,11 @@ namespace CapaVista
             grilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             grilla.MultiSelect = false;
             grilla.AllowUserToAddRows = false;
-            grilla.AllowUserToResizeColumns = true;   // se puede ajustar el ancho de las columnas
+            grilla.AllowUserToResizeColumns = true;
             grilla.AllowUserToResizeRows = false;
             grilla.AllowUserToOrderColumns = false;
             grilla.RowHeadersVisible = false;
-            ClsGrilla.AjustarAlContenido(grilla);   // columnas al ancho del texto, con scroll si no entra
+            ClsGrilla.AjustarAlContenido(grilla);
         }
 
         private void CargarVentas()
@@ -180,7 +176,6 @@ namespace CapaVista
             decimal vendida = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["CantidadVendida"].Value);
             precioDevolucion = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["PrecioDevolucion"].Value);
 
-            // Productos vendidos con decimales (por peso): la cantidad acepta hasta 3 decimales.
             bool conDecimales = vendida % 1 != 0 || disponible % 1 != 0;
             nudCantidad.DecimalPlaces = conDecimales ? 3 : 0;
             nudCantidad.Increment = conDecimales ? 0.1m : 1m;
@@ -222,7 +217,6 @@ namespace CapaVista
             btnRegistrar.Enabled = false;
         }
 
-        // Vuelve a leer la caja abierta y su efectivo (puede haber cambiado desde que se abrió el formulario).
         private void RefrescarCaja(bool mostrarError = false)
         {
             try
@@ -247,9 +241,7 @@ namespace CapaVista
 
         private void ActualizarImporte()
         {
-            lblImporteValor.Text = rbEfectivo.Checked
-                ? $"$ {ImporteADevolver():N2}"
-                : ClsIdioma.T("Sin reintegro de dinero");
+            lblImporteValor.Text = rbEfectivo.Checked ? $"$ {ImporteADevolver():N2}" : ClsIdioma.T("Sin reintegro de dinero");
         }
 
         private void ActualizarInfoCaja()
@@ -428,19 +420,15 @@ namespace CapaVista
             ActualizarInfoCaja();
         }
 
-        // Motivo tal como está en la lista (en castellano), aunque en pantalla se vea traducido.
         private string MotivoElegido => cmbMotivo.SelectedItem as string ?? "";
 
         private void cmbMotivo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Si el producto está fallado o vencido, por defecto NO vuelve al stock
-            // (el usuario igual puede cambiarlo).
             chkReingresaStock.Checked = !MotivosSinReingreso.Contains(MotivoElegido);
         }
 
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
-            // El efectivo de la caja se valida con el dato actual, no con el de cuando se abrió el formulario.
             RefrescarCaja();
             ActualizarInfoCaja();
 
@@ -464,8 +452,7 @@ namespace CapaVista
             string resumen = ClsIdioma.T("Venta N.º ") + devolucion.IdVenta +
                              ClsIdioma.T("\nProducto: ") + producto.Cells["Producto"].Value +
                              ClsIdioma.T("\nCantidad: ") + devolucion.Cantidad +
-                             (devolucion.ReintegroEfectivo
-                                 ? ClsIdioma.T("\nSe devuelven $ ") + ImporteADevolver().ToString("N2") + ClsIdioma.T(" en efectivo")
+                             (devolucion.ReintegroEfectivo ? ClsIdioma.T("\nSe devuelven $ ") + ImporteADevolver().ToString("N2") + ClsIdioma.T(" en efectivo")
                                  : ClsIdioma.T("\nSe entrega otra unidad del producto")) +
                              ClsIdioma.T("\nVuelve al stock: ") + (devolucion.ReingresaStock ? ClsIdioma.T("Sí") : ClsIdioma.T("No")) +
                              ClsIdioma.T("\nMotivo: ") + devolucion.Motivo;
@@ -485,13 +472,11 @@ namespace CapaVista
 
                 MessageBox.Show(ClsIdioma.T("La devolución se registró correctamente.\n\n") +
                                 ClsIdioma.T("Devolución N.º ") + devolucion.IdDevolucion +
-                                (devolucion.ReintegroEfectivo
-                                    ? ClsIdioma.T("\nImporte devuelto: $ ") + devolucion.ImporteDevuelto.ToString("N2")
+                                (devolucion.ReintegroEfectivo ? ClsIdioma.T("\nImporte devuelto: $ ") + devolucion.ImporteDevuelto.ToString("N2")
                                     : ClsIdioma.T("\nCambio por otra unidad")) +
                                 ClsIdioma.T("\n\nPodés devolver otro producto de la misma venta o tocar Cerrar."),
                     ClsIdioma.T("Devolución registrada"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // El formulario queda abierto en la misma venta para seguir devolviendo.
                 PrepararSiguienteDevolucion(venta);
             }
             catch (Exception ex)
@@ -501,7 +486,6 @@ namespace CapaVista
             }
         }
 
-        // Después de registrar: marca la venta, recarga lo que queda por devolver y vacía los datos.
         private void PrepararSiguienteDevolucion(DataGridViewRow venta)
         {
             try
@@ -510,14 +494,13 @@ namespace CapaVista
             }
             catch
             {
-                // Es solo el texto de la grilla; si no se puede cambiar, se verá al volver a buscar.
             }
 
             RefrescarCaja();
             CargarDetalle();
 
             cmbMotivo.SelectedIndex = -1;
-            ClsIdioma.TraducirDatosAlMostrar(cmbMotivo);   // se ve traducido; se guarda el motivo original
+            ClsIdioma.TraducirDatosAlMostrar(cmbMotivo);
             txtObservacion.Clear();
 
             btnCancelar.Text = ClsIdioma.T("Cerrar");

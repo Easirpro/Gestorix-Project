@@ -19,7 +19,6 @@ namespace CapaLogica.NegocioLogica
 
                     using (XLWorkbook libro = new XLWorkbook(rutaArchivo))
                     {
-                        //Verifica las hojas de los articulos
                         if (!libro.Worksheets.Contains("ARTICULOS"))
                         {
                             return ClsGestorEntidadProducto.ClsResultadoImportacion.Error("El archivo no contiene la hoja 'ARTICULOS'.");
@@ -34,7 +33,7 @@ namespace CapaLogica.NegocioLogica
                             return ClsGestorEntidadProducto.ClsResultadoImportacion.AdvertenciaResultado("No se encontraron artículos para importar.");
                         }
 
-                        //Listas temporalres
+                        // Listas temporalres
                         List<string> errores = new List<string>();
                         List<ClsGestorEntidadProducto.ClsProducto> productos = new List<ClsGestorEntidadProducto.ClsProducto>();
                         List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto> proveedoresCostos = new List<ClsGestorEntidadProducto.ClsImportacionProveedorCosto>();
@@ -42,7 +41,7 @@ namespace CapaLogica.NegocioLogica
 
                         int cantidadArticulos = 0;
 
-                        //Leer articuos
+                        // Leer articuos
                         for (int fila = 3; fila <= ultimaFila; fila++)
                         {
                             string codigoBarra = hoja.Cell(fila, 1).GetString().Trim();
@@ -54,14 +53,14 @@ namespace CapaLogica.NegocioLogica
                             string ivaTexto = hoja.Cell(fila, 7).GetString().Trim();
 
                          
-                            //Fecha vencimineto
+                            // Fecha vencimineto
                             DateTime? fechaVencimiento = null;
 
                             IXLCell celdaFecha = hoja.Cell(fila, 8);
 
                             if (!celdaFecha.IsEmpty())
                             {
-                                //Reconoce fecha como celda
+                                // Reconoce fecha como celda
                                 if (celdaFecha.DataType == XLDataType.DateTime)
                                 {
                                     fechaVencimiento = celdaFecha.GetDateTime().Date;
@@ -70,7 +69,7 @@ namespace CapaLogica.NegocioLogica
                                 {
                                     string fechaTexto = celdaFecha.GetString().Trim();
 
-                                    //fecha escritacomo dd/mm/aaaa
+                                    // fecha escritacomo dd/mm/aaaa
                                     if (DateTime.TryParseExact(fechaTexto,new string[]
                                         {
                                             "dd/MM/yyyy",
@@ -85,7 +84,7 @@ namespace CapaLogica.NegocioLogica
                                         fechaVencimiento = fechaExacta.Date;
                                     }
                                     
-                                    //Fecha como ocho digitos
+                                    // Fecha como ocho digitos
                                     if (!fechaVencimiento.HasValue)
                                     {
                                         string numeroTexto = fechaTexto.Replace("/", "").Replace("-", "").Trim();
@@ -103,14 +102,11 @@ namespace CapaLogica.NegocioLogica
                                         }
                                     }
 
-                                    if (!fechaVencimiento.HasValue && DateTime.TryParse(fechaTexto,
-                                            System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out DateTime fechaConvertida))
+                                    if (!fechaVencimiento.HasValue && DateTime.TryParse(fechaTexto, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out DateTime fechaConvertida))
                                     {
-                                        fechaVencimiento =
-                                            fechaConvertida.Date;
+                                        fechaVencimiento = fechaConvertida.Date;
                                     }
 
-                                    //La fecha no es valida
                                     if (!fechaVencimiento.HasValue)
                                     {
                                         errores.Add( $"Fila {fila}: la Fecha Vencimiento '{fechaTexto}' no tiene un formato válido. Use dd/MM/yyyy o 8 dígitos, por ejemplo 25092026.");
@@ -120,7 +116,7 @@ namespace CapaLogica.NegocioLogica
                                 }
                             }
 
-                            //Fila vacia
+                            // Fila vacia
                             if (string.IsNullOrWhiteSpace(codigoBarra) && string.IsNullOrWhiteSpace(nombre) && string.IsNullOrWhiteSpace(descripcion) && string.IsNullOrWhiteSpace(marca) &&
                                 string.IsNullOrWhiteSpace(categoria) && string.IsNullOrWhiteSpace(unidad) && string.IsNullOrWhiteSpace(ivaTexto) &&
                                 fechaVencimiento == null)
@@ -128,7 +124,7 @@ namespace CapaLogica.NegocioLogica
                                 continue;
                             }
 
-                            //Codigo de barra
+                            // Codigo de barra
                             if (!string.IsNullOrWhiteSpace(codigoBarra))
                             {
                                 if (logica.ExisteCodigoBarra(codigoBarra))
@@ -139,7 +135,7 @@ namespace CapaLogica.NegocioLogica
                                 }
                             }
 
-                            //Campos obligatorio
+                            // Campos obligatorio
                             if (string.IsNullOrWhiteSpace(nombre))
                             {
                                 errores.Add($"Fila {fila}: el campo 'Nombre' es obligatorio.");
@@ -220,7 +216,7 @@ namespace CapaLogica.NegocioLogica
                                 continue;
                             }
 
-                            //Crear Producto
+                            // Crear Producto
                             ClsGestorEntidadProducto.ClsProducto producto = new ClsGestorEntidadProducto.ClsProducto();
 
                             producto.CodigoBarra = codigoBarra;
@@ -243,7 +239,7 @@ namespace CapaLogica.NegocioLogica
                             cantidadArticulos++;
                         }
 
-                        //Validar articulo
+                        // Validar articulo
                         if (cantidadArticulos == 0 && errores.Count == 0)
                         {
                             return ClsGestorEntidadProducto.ClsResultadoImportacion.AdvertenciaResultado("No se encontraron artículos para importar.");
@@ -260,7 +256,7 @@ namespace CapaLogica.NegocioLogica
                             return ClsGestorEntidadProducto.ClsResultadoImportacion.Error(mensaje, "Errores de validación");
                         }
 
-                        //Verificacion proveedores costo
+                        // Verificacion proveedores costo
                         if (!libro.Worksheets.Contains("PROVEEDORES_COSTOS"))
                         {
                             return ClsGestorEntidadProducto.ClsResultadoImportacion.Error("El archivo no contiene la hoja 'PROVEEDORES_COSTOS'.");
@@ -270,7 +266,7 @@ namespace CapaLogica.NegocioLogica
 
                         int ultimaFilaProveedores = hojaProveedoresCostos.LastRowUsed()?.RowNumber() ?? 0;
 
-                        //Leer proveedores costo
+                        // Leer proveedores costo
                         if (ultimaFilaProveedores >= 3)
                         {
                             for (int fila = 3; fila <= ultimaFilaProveedores; fila++)
@@ -280,7 +276,7 @@ namespace CapaLogica.NegocioLogica
                                 string sucursal = hojaProveedoresCostos.Cell(fila, 3).GetString().Trim();
                                 string precioTexto = hojaProveedoresCostos.Cell(fila, 4).GetString().Trim();
 
-                                // Fila vacía
+                                // Fila vacia
                                 if (string.IsNullOrWhiteSpace(codigoBarra) && string.IsNullOrWhiteSpace(proveedor) && string.IsNullOrWhiteSpace(sucursal) && string.IsNullOrWhiteSpace(precioTexto))
                                 {
                                     continue;
@@ -340,7 +336,7 @@ namespace CapaLogica.NegocioLogica
                             }
                         }
 
-                        //Validar codigo de barra
+                        // Validar codigo de barra
                         foreach (var proveedorCosto in proveedoresCostos)
                         {
                             bool existeArticuloEnImportacion = productos.Any(p => p.CodigoBarra == proveedorCosto.CodigoBarra);
@@ -351,7 +347,7 @@ namespace CapaLogica.NegocioLogica
                             }
                         }
 
-                        //Validar proveedores y sucursales
+                        // Validar proveedores y sucursales
                         if (errores.Count == 0 && proveedoresCostos.Count > 0)
                         {
                             foreach (var proveedorCosto in proveedoresCostos)
@@ -375,7 +371,6 @@ namespace CapaLogica.NegocioLogica
                             return ClsGestorEntidadProducto.ClsResultadoImportacion.Error(mensaje, "Errores de validación");
                         }
 
-                        // Guardar todo en una única operación transaccional de CapaDatos
                         logica.ImportarProductos(productos, proveedoresCostos, fechasVencimiento);
 
                         return ClsGestorEntidadProducto.ClsResultadoImportacion.Exitoso(
@@ -398,7 +393,7 @@ namespace CapaLogica.NegocioLogica
                 {
                     using (XLWorkbook libro = new XLWorkbook())
                     {
-                        //Colores
+                        // Colores
                         XLColor colorTitulo = XLColor.FromHtml("#1F4E78");
                         XLColor colorEncabezado = XLColor.FromHtml("#4472C4");
                         XLColor colorCarga = XLColor.FromHtml("#F3F8FC");
@@ -407,18 +402,18 @@ namespace CapaLogica.NegocioLogica
                         XLColor colorBorde = XLColor.FromHtml("#B4C7E7");
                         XLColor colorInstrucciones = XLColor.FromHtml("#FFF2CC");
 
-                        //Constantes de filas
+                        // Constantes de filas
                         int filaEncabezado = 2;
                         int primeraFilaDatos = 3;
                         int ultimaFilaDatos = 502;
 
-                        //Hoja de los articulos
+                        // Hoja de los articulos
                         IXLWorksheet hojaArticulos = libro.Worksheets.Add("ARTICULOS");
 
                         hojaArticulos.Cell(1, 1).Value = "PLANTILLA DE IMPORTACIÓN DE ARTÍCULOS";
                         hojaArticulos.Range("A1:H1").Merge();
 
-                        //Encabezado
+                        // Encabezado
                         hojaArticulos.Cell(filaEncabezado, 1).Value = "Código de Barra";
                         hojaArticulos.Cell(filaEncabezado, 2).Value = "Nombre (*)";
                         hojaArticulos.Cell(filaEncabezado, 3).Value = "Descripción";
@@ -428,7 +423,7 @@ namespace CapaLogica.NegocioLogica
                         hojaArticulos.Cell(filaEncabezado, 7).Value = "IVA (*)";
                         hojaArticulos.Cell(filaEncabezado, 8).Value = "Fecha Vencimiento";
 
-                        //Estilo del titulo
+                        // Estilo del titulo
                         hojaArticulos.Range("A1:H1").Style.Fill.SetBackgroundColor(colorTitulo);
                         hojaArticulos.Range("A1:H1").Style.Font.Bold = true;
                         hojaArticulos.Range("A1:H1").Style.Font.FontColor = XLColor.White;
@@ -437,7 +432,7 @@ namespace CapaLogica.NegocioLogica
                         hojaArticulos.Range("A1:H1").Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                         hojaArticulos.Row(1).Height = 30;
 
-                        //Estilo del encabedo
+                        // Estilo del encabedo
                         hojaArticulos.Range("A2:H2").Style.Fill.SetBackgroundColor(colorEncabezado);
                         hojaArticulos.Range("A2:H2").Style.Font.Bold = true;
                         hojaArticulos.Range("A2:H2").Style.Font.FontColor = XLColor.White;
@@ -446,13 +441,13 @@ namespace CapaLogica.NegocioLogica
                         hojaArticulos.Range("A2:H2").Style.Alignment.WrapText = true;
                         hojaArticulos.Row(2).Height = 30;
 
-                        //Bordes
+                        // Bordes
                         hojaArticulos.Range($"A2:H{ultimaFilaDatos}").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                         hojaArticulos.Range($"A2:H{ultimaFilaDatos}").Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                         hojaArticulos.Range($"A2:H{ultimaFilaDatos}").Style.Border.OutsideBorderColor = colorBorde;
                         hojaArticulos.Range($"A2:H{ultimaFilaDatos}").Style.Border.InsideBorderColor = colorBorde;
 
-                        //Colo de las filas
+                        // Colo de las filas
                         hojaArticulos.Range($"A{primeraFilaDatos}:H{ultimaFilaDatos}").Style.Fill.SetBackgroundColor(colorCarga);
 
                         for (int fila = primeraFilaDatos; fila <= ultimaFilaDatos; fila++)
@@ -463,24 +458,24 @@ namespace CapaLogica.NegocioLogica
                             }
                         }
 
-                        //Campo oblogatorios
+                        // Campo oblogatorios
                         hojaArticulos.Range($"B{primeraFilaDatos}:B{ultimaFilaDatos}").Style.Fill.SetBackgroundColor(colorObligatorio);
                         hojaArticulos.Range($"D{primeraFilaDatos}:G{ultimaFilaDatos}").Style.Fill.SetBackgroundColor(colorObligatorio);
 
-                        //Codigo de barras
+                        // Codigo de barras
                         hojaArticulos.Range($"A{primeraFilaDatos}:A{ultimaFilaDatos}").Style.NumberFormat.Format = "@";
                         hojaArticulos.Range($"A{primeraFilaDatos}:A{ultimaFilaDatos}").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                        //Fecha
+                        // Fecha
                         IXLRange rangoFechas = hojaArticulos.Range($"H{primeraFilaDatos}:H{ultimaFilaDatos}");
 
                         rangoFechas.Style.NumberFormat.Format = "00\\/00\\/0000";
                         rangoFechas.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                        //Alineacion
+                        // Alineacion
                         hojaArticulos.Range($"D{primeraFilaDatos}:G{ultimaFilaDatos}").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                        //Anchos
+                        // Anchos
                         hojaArticulos.Column(1).Width = 18;
                         hojaArticulos.Column(2).Width = 28;
                         hojaArticulos.Column(3).Width = 35;
@@ -490,7 +485,7 @@ namespace CapaLogica.NegocioLogica
                         hojaArticulos.Column(7).Width = 15;
                         hojaArticulos.Column(8).Width = 20;
 
-                        //Hojas auxiliares
+                        // Hojas auxiliares
                         IXLWorksheet hojaMarcas = libro.Worksheets.Add("_MARCAS");
                         IXLWorksheet hojaCategorias = libro.Worksheets.Add("_CATEGORIAS");
                         IXLWorksheet hojaUnidades = libro.Worksheets.Add("_UNIDADES");
@@ -498,7 +493,7 @@ namespace CapaLogica.NegocioLogica
                         IXLWorksheet hojaProveedores = libro.Worksheets.Add("_PROVEEDORES");
                         IXLWorksheet hojaSucursales = libro.Worksheets.Add("_SUCURSALES");
 
-                        //Marcas
+                        // Marcas
                         DataTable tablaMarcas = new ClsGestorProductoLogica().CargarMarcasActivas();
 
                         hojaMarcas.Cell(1, 1).Value = "Marca";
@@ -512,7 +507,7 @@ namespace CapaLogica.NegocioLogica
                             filaMarca++;
                         }
 
-                        //Categorias
+                        // Categorias
                         DataTable tablaCategorias = new ClsGestorProductoLogica().CargarCategoriasActivas();
 
                         hojaCategorias.Cell(1, 1).Value = "Categoría";
@@ -526,7 +521,7 @@ namespace CapaLogica.NegocioLogica
                             filaCategoria++;
                         }
 
-                        //Unidades
+                        // Unidades
                         DataTable tablaUnidades = new ClsGestorProductoLogica().CargarUnidades();
 
                         hojaUnidades.Cell(1, 1).Value = "Unidad";
@@ -540,7 +535,7 @@ namespace CapaLogica.NegocioLogica
                             filaUnidad++;
                         }
 
-                        //Iva
+                        // Iva
                         DataTable tablaIVA = new ClsGestorProductoLogica().CargarIVAsActivos();
 
                         hojaIVA.Cell(1, 1).Value = "Alicuota";
@@ -554,7 +549,7 @@ namespace CapaLogica.NegocioLogica
                             filaIVA++;
                         }
 
-                        //Proveedores
+                        // Proveedores
                         ClsLogicaProveedor logicaProveedor = new ClsLogicaProveedor();
                         DataTable tablaProveedores = logicaProveedor.ObtenerProveedores();
 
@@ -591,7 +586,7 @@ namespace CapaLogica.NegocioLogica
                             }
                         }
 
-                        //Sucursales
+                        // Sucursales
                         hojaSucursales.Cell(1, 1).Value = "IdProveedor";
                         hojaSucursales.Cell(1, 2).Value = "Proveedor";
                         hojaSucursales.Cell(1, 3).Value = "IdSucursal";
@@ -657,7 +652,7 @@ namespace CapaLogica.NegocioLogica
                             }
                         }
 
-                        //Rango nombrados
+                        // Rango nombrados
                         if (filaMarca > 2)
                         {
                             hojaMarcas.Range($"A2:A{filaMarca - 1}").AddToNamed("ListaMarcas");
@@ -685,7 +680,7 @@ namespace CapaLogica.NegocioLogica
                             hojaProveedores.Range($"B2:B{filaProveedor - 1}").AddToNamed("ListaProveedores");
                         }
 
-                        //Validacionde los los articulos
+                        // Validacionde los los articulos
                         if (filaMarca > 2)
                         {
                             hojaArticulos.Range($"D{primeraFilaDatos}:D{ultimaFilaDatos}").CreateDataValidation().List("=ListaMarcas");
@@ -706,25 +701,23 @@ namespace CapaLogica.NegocioLogica
                             hojaArticulos.Range($"G{primeraFilaDatos}:G{ultimaFilaDatos}").CreateDataValidation().List("=ListaIVA");
                         }
 
-                        //Validacion de la fecha
+                        // Validacion de la fecha
                         var validacionFecha = rangoFechas.CreateDataValidation();
 
                         validacionFecha.IgnoreBlanks = true;
-
-                        //Hoja de los proveedores costo
 
                         IXLWorksheet hojaProveedoresCostos = libro.Worksheets.Add("PROVEEDORES_COSTOS");
 
                         hojaProveedoresCostos.Cell(1, 1).Value = "PROVEEDORES Y COSTOS";
                         hojaProveedoresCostos.Range("A1:D1").Merge();
 
-                        //Encabezados
+                        // Encabezados
                         hojaProveedoresCostos.Cell(2, 1).Value = "Código de Barra";
                         hojaProveedoresCostos.Cell(2, 2).Value = "Proveedor (*)";
                         hojaProveedoresCostos.Cell(2, 3).Value = "Sucursal (*)";
                         hojaProveedoresCostos.Cell(2, 4).Value = "Precio Compra (*)";
 
-                        //Titulo pagina 2
+                        // Titulo pagina 2
 
 
                         hojaProveedoresCostos.Range("A1:D1").Style.Fill.SetBackgroundColor(colorTitulo);
@@ -735,7 +728,7 @@ namespace CapaLogica.NegocioLogica
                         hojaProveedoresCostos.Range("A1:D1").Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                         hojaProveedoresCostos.Row(1).Height = 30;
 
-                        //Encabezados
+                        // Encabezados
                         hojaProveedoresCostos.Range("A2:D2").Style.Fill.SetBackgroundColor(colorEncabezado);
                         hojaProveedoresCostos.Range("A2:D2").Style.Font.Bold = true;
                         hojaProveedoresCostos.Range("A2:D2").Style.Font.FontColor = XLColor.White;
@@ -744,13 +737,13 @@ namespace CapaLogica.NegocioLogica
                         hojaProveedoresCostos.Range("A2:D2").Style.Alignment.WrapText = true;
                         hojaProveedoresCostos.Row(2).Height = 30;
 
-                        //Borde
+                        // Borde
                         hojaProveedoresCostos.Range($"A2:D{ultimaFilaDatos}").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                         hojaProveedoresCostos.Range($"A2:D{ultimaFilaDatos}").Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                         hojaProveedoresCostos.Range($"A2:D{ultimaFilaDatos}").Style.Border.OutsideBorderColor = colorBorde;
                         hojaProveedoresCostos.Range($"A2:D{ultimaFilaDatos}").Style.Border.InsideBorderColor = colorBorde;
 
-                        //Colo de las filad
+                        // Colo de las filad
                         hojaProveedoresCostos.Range($"A{primeraFilaDatos}:D{ultimaFilaDatos}").Style.Fill.SetBackgroundColor(colorCarga);
 
                         for (int fila = primeraFilaDatos; fila <= ultimaFilaDatos; fila++)
@@ -761,39 +754,38 @@ namespace CapaLogica.NegocioLogica
                             }
                         }
 
-                        //Obligatorios
+                        // Obligatorios
                         hojaProveedoresCostos.Range($"B{primeraFilaDatos}:D{ultimaFilaDatos}").Style.Fill.SetBackgroundColor(colorObligatorio);
 
-                        //Codigo de barra
+                        // Codigo de barra
                         hojaProveedoresCostos.Range($"A{primeraFilaDatos}:A{ultimaFilaDatos}").Style.NumberFormat.Format = "@";
                         hojaProveedoresCostos.Range($"A{primeraFilaDatos}:A{ultimaFilaDatos}").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                        //Precio
+                        // Precio
                         hojaProveedoresCostos.Range($"D{primeraFilaDatos}:D{ultimaFilaDatos}").Style.NumberFormat.Format = "#,##0.00";
                         hojaProveedoresCostos.Range($"D{primeraFilaDatos}:D{ultimaFilaDatos}").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
 
-                        //Sucursal
+                        // Sucursal
                         hojaProveedoresCostos.Range($"C{primeraFilaDatos}:C{ultimaFilaDatos}").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                        //Anchos
+                        // Anchos
                         hojaProveedoresCostos.Column(1).Width = 20;
                         hojaProveedoresCostos.Column(2).Width = 30;
                         hojaProveedoresCostos.Column(3).Width = 30;
                         hojaProveedoresCostos.Column(4).Width = 20;
 
-                        //Validacioon del codgigo de barras
                         var validacionCodigo = hojaProveedoresCostos.Range($"A{primeraFilaDatos}:A{ultimaFilaDatos}").CreateDataValidation();
 
                         validacionCodigo.List("=ListaCodigosBarra");
                         validacionCodigo.IgnoreBlanks = true;
 
-                        //Validacion de los proveedores
+                        // Validacion de los proveedores
                         if (filaProveedor > 2)
                         {
                             hojaProveedoresCostos.Range($"B{primeraFilaDatos}:B{ultimaFilaDatos}").CreateDataValidation().List("=ListaProveedores");
                         }
 
-                        //Rango de sucursales
+                        // Rango de sucursales
                         int ultimaFilaSucursales = 0;
 
                         if (hojaSucursales.LastRowUsed() != null)
@@ -849,7 +841,7 @@ namespace CapaLogica.NegocioLogica
                             }
                         }
 
-                        //Sucursal dependiente
+                        // Sucursal dependiente
                         if (filaProveedor > 2)
                         {
                             string ultimaFilaProveedor = (filaProveedor - 1).ToString();
@@ -881,7 +873,7 @@ namespace CapaLogica.NegocioLogica
                         hojaInstrucciones.Cell(1, 1).Value = "INSTRUCCIONES PARA IMPORTAR ARTÍCULOS";
                         hojaInstrucciones.Range("A1:D1").Merge();
 
-                        //Instrucciones
+                        // Instrucciones
                         hojaInstrucciones.Cell(2, 1).Value = "IMPORTACIÓN DE ARTÍCULOS";
                         hojaInstrucciones.Range("A2:D2").Merge();
                         hojaInstrucciones.Cell(3, 1).Value = "1. Complete la hoja ARTICULOS.";
@@ -899,7 +891,7 @@ namespace CapaLogica.NegocioLogica
                         hojaInstrucciones.Cell(15, 1).Value = "Los campos con (*) son necesarios para realizar la importación.";
                         hojaInstrucciones.Column(1).Width = 100;
 
-                        //Estilo instrucciones
+                        // Estilo instrucciones
                         hojaInstrucciones.Range("A1:D1").Style.Fill.SetBackgroundColor(colorTitulo);
                         hojaInstrucciones.Range("A1:D1").Style.Font.Bold = true;
                         hojaInstrucciones.Range("A1:D1").Style.Font.FontColor = XLColor.White;
@@ -914,15 +906,15 @@ namespace CapaLogica.NegocioLogica
                         hojaInstrucciones.Range("A14:D15").Style.Fill.SetBackgroundColor(colorInstrucciones);
                         hojaInstrucciones.Range("A3:A15").Style.Alignment.WrapText = true;
 
-                        //Filtros
+                        // Filtros
                         hojaArticulos.Range($"A2:H{ultimaFilaDatos}").SetAutoFilter();
                         hojaProveedoresCostos.Range($"A2:D{ultimaFilaDatos}").SetAutoFilter();
 
-                        //Congelar los encabezados
+                        // Congelar los encabezados
                         hojaArticulos.SheetView.FreezeRows(2);
                         hojaProveedoresCostos.SheetView.FreezeRows(2);
 
-                        //Oculta las hojas auxiliares
+                        // Oculta las hojas auxiliares
                         hojaMarcas.Visibility = XLWorksheetVisibility.VeryHidden;
                         hojaCategorias.Visibility = XLWorksheetVisibility.VeryHidden;
                         hojaUnidades.Visibility = XLWorksheetVisibility.VeryHidden;
@@ -930,7 +922,6 @@ namespace CapaLogica.NegocioLogica
                         hojaProveedores.Visibility = XLWorksheetVisibility.VeryHidden;
                         hojaSucursales.Visibility = XLWorksheetVisibility.VeryHidden;
 
-                        // Guardar la plantilla en la ruta elegida por la Vista.
                         libro.SaveAs(rutaSalida);
                         return ClsGestorEntidadProducto.ClsResultadoImportacion.Exitoso(
                             "La plantilla fue generada correctamente.", 0, 0);

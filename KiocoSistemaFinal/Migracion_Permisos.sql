@@ -1,20 +1,6 @@
--- Migración: permisos de los formularios nuevos y permisos de cada rol (según Permisos_KC.xlsx, Hoja2).
--- 1) Permisos nuevos: Anular venta, Nueva compra, Recepción de mercadería, Anular compra, Balance,
---    Estado e historial de caja, Anular movimiento de caja, Gestión de Backup y Bitácora.
--- 2) RolPermiso de los cuatro roles:
---    - Administrador: todos los permisos.
---    - Empleado Ventas, Empleado Compras y Empleado General: lo del Excel más los permisos nuevos a criterio.
---      Las anulaciones, el Balance, el Backup y la Bitácora quedan solo para el Administrador.
---    - Un rol tiene el "Total" de una sección (o el permiso de un grupo) solo si tiene todo lo de abajo,
---      porque el formulario de permisos marca todos los hijos al tildar el padre.
--- Reescribe los permisos de los cuatro roles: se pierden los cambios hechos a mano desde el formulario.
--- Se puede ejecutar más de una vez sin problemas.
 USE Gestorix;
 GO
 
-/* ---------------------------------------------------------------------
-   1) Permisos nuevos
-   --------------------------------------------------------------------- */
 DECLARE @Nuevos TABLE (IdPermiso INT, CodigoPermiso VARCHAR(20), Nombre NVARCHAR(100), Descripcion NVARCHAR(300));
 
 INSERT INTO @Nuevos (IdPermiso, CodigoPermiso, Nombre, Descripcion) VALUES
@@ -28,7 +14,6 @@ INSERT INTO @Nuevos (IdPermiso, CodigoPermiso, Nombre, Descripcion) VALUES
 (1280, '12.8.0', N'Gestión de Backup',             N'Permite generar y restaurar copias de seguridad de la base de datos.'),
 (1290, '12.9.0', N'Bitácora',                      N'Permite consultar la bitácora del sistema.');
 
--- IdPermiso es IDENTITY: los ids se fijan a mano porque el código los usa.
 SET IDENTITY_INSERT dbo.Permiso ON;
 
 INSERT INTO dbo.Permiso (IdPermiso, CodigoPermiso, Nombre, Descripcion)
@@ -39,12 +24,8 @@ WHERE NOT EXISTS (SELECT 1 FROM dbo.Permiso p WHERE p.IdPermiso = n.IdPermiso);
 SET IDENTITY_INSERT dbo.Permiso OFF;
 GO
 
-/* ---------------------------------------------------------------------
-   2) Permisos de cada rol
-   --------------------------------------------------------------------- */
 DECLARE @RolPermiso TABLE (Rol NVARCHAR(50), IdPermiso INT);
 
--- Empleado Ventas: vender y devolver, lista de precios y caja (sin anular movimientos).
 INSERT INTO @RolPermiso (Rol, IdPermiso)
 SELECT N'Empleado Ventas', IdPermiso FROM (VALUES
     (210), (220), (221), (222),
@@ -55,7 +36,6 @@ SELECT N'Empleado Ventas', IdPermiso FROM (VALUES
     (1110)
 ) v(IdPermiso);
 
--- Empleado Compras: artículos, compras (sin anular), cuenta corriente, reposición e ingresos/egresos de caja.
 INSERT INTO @RolPermiso (Rol, IdPermiso)
 SELECT N'Empleado Compras', IdPermiso FROM (VALUES
     (110), (111), (112), (113), (121), (130), (131), (132), (140),
@@ -68,7 +48,6 @@ SELECT N'Empleado Compras', IdPermiso FROM (VALUES
     (1100), (1110), (1120)
 ) v(IdPermiso);
 
--- Empleado General (encargado): lo de Ventas y Compras, más promociones y los dos listados.
 INSERT INTO @RolPermiso (Rol, IdPermiso)
 SELECT N'Empleado General', IdPermiso FROM (VALUES
     (110), (111), (112), (113), (121), (130), (131), (132), (140),
@@ -89,7 +68,6 @@ FROM dbo.RolPermiso rp
 JOIN dbo.Rol r ON r.IdRol = rp.IdRol
 WHERE r.Nombre IN (N'Administrador', N'Empleado Ventas', N'Empleado Compras', N'Empleado General');
 
--- Administrador: todos los permisos.
 INSERT INTO dbo.RolPermiso (IdRol, IdPermiso)
 SELECT r.IdRol, p.IdPermiso
 FROM dbo.Rol r

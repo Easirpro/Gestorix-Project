@@ -11,7 +11,6 @@ namespace CapaLogica.NegocioLogica
 {
     public class ClsCajaLogica
     {
-        // El kiosco trabaja con una sola caja ("Caja 1", IdCaja = 1).
         public const int ID_CAJA_PRINCIPAL = 1;
 
         private ClsCajaDatos datos = new ClsCajaDatos();

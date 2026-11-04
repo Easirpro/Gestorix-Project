@@ -522,7 +522,6 @@
             grpDireccion.ResumeLayout(false);
             grpDireccion.PerformLayout();
             // 
-            // ttAyuda: explicación de cada combo al pasar el mouse
             // 
             ttAyuda.AutoPopDelay = 10000;
             ttAyuda.InitialDelay = 300;

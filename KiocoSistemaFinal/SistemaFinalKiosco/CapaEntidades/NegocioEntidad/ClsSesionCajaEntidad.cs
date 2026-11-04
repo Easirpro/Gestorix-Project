@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace CapaEntidades.NegocioEntidad
 {
-    // Sesión de caja abierta: lo que devuelve sp_ObtenerSesionCajaAbierta.
     public class ClsSesionCajaEntidad
     {
         public int IdSesionCaja { get; set; }

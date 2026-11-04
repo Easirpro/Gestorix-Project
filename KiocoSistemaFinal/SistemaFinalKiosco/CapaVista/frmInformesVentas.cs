@@ -10,18 +10,16 @@ using System.Windows.Forms;
 
 namespace CapaVista
 {
-    // Unifica los informes de ventas (por fecha, detalle, por rubro, por artículo y por medio de pago)
-    // en un solo formulario: se elige el informe arriba y todos comparten los mismos filtros.
     public partial class frmInformesVentas : Form
     {
         public enum Informe { Ninguno, PorFecha, Detalle, PorRubro, PorArticulo, PorMedioPago }
 
         private class DefinicionInforme
         {
-            public string Tipo;            // valor de @Tipo en sp_InformeVentas
+            public string Tipo;
             public string Titulo;
             public int Permiso;
-            public string ColumnaFlexible;  // la que ocupa el ancho que sobra
+            public string ColumnaFlexible;
             public (string Campo, string Encabezado, string Formato)[] Columnas;
         }
 
@@ -110,7 +108,6 @@ namespace CapaVista
             AplicarInforme(informeInicial);
         }
 
-        // Con un solo informe permitido se abre directo en ese; con varios, se elige adentro.
         public static Informe InformeInicialSegunPermisos()
         {
             List<Informe> permitidos = Informes.Where(i => SesionUsuario.Permisos.Contains(i.Value.Permiso)).Select(i => i.Key).ToList();
@@ -141,7 +138,6 @@ namespace CapaVista
             dgvInforme.SizeChanged += (sender, e) => AjustarAnchoColumnas();
             dgvInforme.CellFormatting += dgvInforme_CellFormatting;
 
-            // Los combos dejan escribir y van sugiriendo las opciones que coinciden.
             foreach (ComboBox combo in new[] { cmbVendedor, cmbMedioPago, cmbCategoria, cmbArticulo })
             {
                 combo.DropDownStyle = ComboBoxStyle.DropDown;
@@ -159,7 +155,7 @@ namespace CapaVista
             {
                 CargarCombo(cmbVendedor, ConTodos(logica.ObtenerVendedores(), "IdUsuario", "Username", ClsIdioma.T("Todos")), "IdUsuario");
                 CargarCombo(cmbMedioPago, ConTodos(logicaCaja.ObtenerMetodosPago(), "IdMetodoPago", "Nombre", ClsIdioma.T("Todos")), "IdMetodoPago");
-            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPago);   // solo cambia lo que se ve
+            ClsIdioma.TraducirDatosAlMostrar(cmbMedioPago);
                 CargarCombo(cmbCategoria, ConTodos(logicaProducto.CargarCategoriasActivas(), "IdCategoria", "Nombre", ClsIdioma.T("Todas")), "IdCategoria");
                 CargarCombo(cmbArticulo, ConTodos(logicaProducto.ObtenerListadoArticulos(null, null, null, null, null, null, false, false), "IdProducto", "Nombre", ClsIdioma.T("Todos")), "IdProducto");
             }
@@ -190,14 +186,12 @@ namespace CapaVista
             combo.DataSource = tabla;
             combo.SelectedIndex = 0;
         }
-        // Valor del combo, o null si está en "Todos" / "Todas".
         private static int? ObtenerFiltro(ComboBox combo)
         {
             return combo.SelectedValue is int id && id > 0 ? id : (int?)null;
         }
         private void AplicarInforme(Informe informe)
         {
-            // Si se vuelve a pulsar el mismo botón, desactivar el informe.
             if (informeActual == informe && informe != Informe.Ninguno)
                 informe = Informe.Ninguno;
 
@@ -216,7 +210,6 @@ namespace CapaVista
             btnExportar.Enabled = activo;
             lblTitulo.Text = activo ? ClsIdioma.T(Informes[informe].Titulo) : ClsIdioma.T("Informes de ventas");
 
-            // Estilo de los botones, igual que en categorías y marcas.
             foreach (var boton in botones)
             {
                 bool elegido = boton.Key == informe;
@@ -255,7 +248,6 @@ namespace CapaVista
                     SortMode = DataGridViewColumnSortMode.Automatic
                 };
 
-                // Números a la derecha; las fechas mantienen la alineación de texto.
                 if (definicion.Formato != null)
                 {
                     columna.DefaultCellStyle.Format = definicion.Formato;
@@ -311,7 +303,6 @@ namespace CapaVista
 
             Buscar();
         }
-        // Totales al pie según el informe.
         private void ActualizarTotales(DataTable datos)
         {
             decimal Sumar(string columna) => datos.Columns.Contains(columna)
@@ -346,7 +337,6 @@ namespace CapaVista
                     break;
             }
         }
-        // Cada columna toma el ancho de su contenido y la columna principal ocupa lo que sobra.
         private void AjustarAnchoColumnas()
         {
             if (informeActual == Informe.Ninguno || dgvInforme.Columns.Count == 0)
@@ -361,9 +351,7 @@ namespace CapaVista
 
             DataGridViewColumn flexible = dgvInforme.Columns[nombreFlexible];
 
-            // Se calcula si las filas van a necesitar barra vertical: recién cargada la grilla todavía no se ve.
-            bool barraVertical = dgvInforme.ColumnHeadersHeight + dgvInforme.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
-                > dgvInforme.ClientSize.Height;
+            bool barraVertical = dgvInforme.ColumnHeadersHeight + dgvInforme.Rows.GetRowsHeight(DataGridViewElementStates.Visible) > dgvInforme.ClientSize.Height;
             int disponible = dgvInforme.ClientSize.Width - 4 - (barraVertical ? SystemInformation.VerticalScrollBarWidth : 0);
             int otras = dgvInforme.Columns.Cast<DataGridViewColumn>().Where(c => c.Visible && c != flexible).Sum(c => c.Width);
             int minimo = Math.Min(140, flexible.Width);
@@ -416,7 +404,6 @@ namespace CapaVista
                 IXLWorksheet hoja = libro.Worksheets.Add("Informe");
                 int ultimaColumna = columnas.Count;
 
-                // Título, período, filtros y totales.
                 hoja.Range(1, 1, 1, ultimaColumna).Merge();
                 hoja.Cell(1, 1).Value = titulo;
                 hoja.Cell(1, 1).Style.Font.Bold = true;
@@ -436,7 +423,7 @@ namespace CapaVista
                 hoja.Range(3, 1, 3, ultimaColumna).Merge();
                 hoja.Cell(3, 1).Value = lblTotales.Text;
 
-                // Encabezados.
+                // Encabezados
                 for (int i = 0; i < columnas.Count; i++)
                 {
                     hoja.Cell(5, i + 1).Value = columnas[i].HeaderText;
@@ -449,7 +436,6 @@ namespace CapaVista
                 encabezado.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 hoja.Row(5).Height = 22;
 
-                // Datos: números y fechas con su tipo, para poder sumar y filtrar en Excel.
                 int filaExcel = 6;
 
                 foreach (DataGridViewRow fila in dgvInforme.Rows)
@@ -499,7 +485,6 @@ namespace CapaVista
         #endregion
 
         #region Eventos
-        // En el detalle, las devoluciones van en rojo; en los resúmenes, lo devuelto también.
         private void dgvInforme_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex < 0)
@@ -507,7 +492,6 @@ namespace CapaVista
 
             string columna = dgvInforme.Columns[e.ColumnIndex].Name;
 
-            // Al cambiar de informe, la grilla puede tener todavía las columnas del anterior.
             if (informeActual == Informe.Detalle && dgvInforme.Columns.Contains("Movimiento"))
             {
                 if (dgvInforme.Rows[e.RowIndex].Cells["Movimiento"].Value?.ToString() == "Devolución")
@@ -518,7 +502,6 @@ namespace CapaVista
                 e.CellStyle.ForeColor = Color.Firebrick;
             }
         }
-        // Si se escribió algo que no es ninguna opción, se busca sin importar mayúsculas; si no existe, vuelve a "Todos".
         private void combo_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ComboBox combo = (ComboBox)sender;
@@ -529,7 +512,6 @@ namespace CapaVista
             int indice = combo.FindStringExact(combo.Text.Trim());
             combo.SelectedIndex = indice >= 0 ? indice : 0;
 
-            // Si el índice no cambió, el texto escrito queda: se reescribe el de la opción elegida.
             combo.Text = combo.GetItemText(combo.SelectedItem);
         }
         #endregion

@@ -21,7 +21,6 @@ namespace CapaVista
     public partial class frmmenuPres : Form
     {
 
-        // El idioma es el de todo el sistema (ClsIdioma): se guarda en esta PC y traduce todos los formularios.
         private bool idiomaIngles => ClsIdioma.Ingles;
         private ClsCampanaAlertas campanaAlertas;
         private decimal subtotal = 0.00m;
@@ -33,7 +32,6 @@ namespace CapaVista
 
         private frmCobroSecundario formularioSecundario;
 
-        // [PROMO] Promociones aplicadas en la venta en curso (se guardan al cobrar)
         private readonly List<ClsPromocionVentaEntidad> promocionesAplicadas = new List<ClsPromocionVentaEntidad>();
 
 
@@ -53,14 +51,13 @@ namespace CapaVista
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
             dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            // Se puede cambiar el ancho de las columnas arrastrando el borde del encabezado.
             dtgPresentacion.AllowUserToResizeColumns = true;
             dtgPresentacion.AllowUserToResizeRows = false;
 
             foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
             {
                 columna.Resizable = DataGridViewTriState.True;
-                columna.MinimumWidth = 50;   // que ninguna columna se pueda achicar hasta desaparecer
+                columna.MinimumWidth = 50;
             }
             dtgPresentacion.AllowUserToOrderColumns = false;
             dtgPresentacion.RowHeadersVisible = false;
@@ -114,15 +111,12 @@ namespace CapaVista
             RellenarFilas();
             CalcularYMostrarMontos();
 
-            // Si la última vez se eligió inglés en esta PC, el menú principal arranca en inglés.
             if (ClsIdioma.Ingles)
             {
                 AplicarIdioma();
             }
         }
 
-        // Quien no tiene el permiso de vender (210) no ve la pantalla de venta: solo el logo al centro
-        // con un mensaje de bienvenida. El menú de arriba queda igual, con las opciones de su rol.
         private bool modoBienvenida = false;
         private Label? lblBienvenida;
         private Label? lblBienvenidaAyuda;
@@ -145,7 +139,6 @@ namespace CapaVista
                 control.Visible = !modoBienvenida;
             }
 
-            // La lista de sugerencias arranca oculta: solo aparece al escribir en el buscador de productos.
             lstDescripcion.Visible = false;
 
             if (!modoBienvenida)
@@ -193,14 +186,13 @@ namespace CapaVista
 
             AjustarDiseno();
         }
-        // Logo grande al centro y el mensaje debajo, entre el menú y el pie con el usuario.
         private void UbicarBienvenida(int ancho, int altoMenu, int abajo)
         {
             int margen = 12;
             int disponibleAlto = Math.Max(200, abajo - altoMenu);
 
             int anchoLogo = Math.Min(520, (int)(ancho * 0.5));
-            int altoLogo = anchoLogo * 169 / 270;   // misma proporción que el logo original
+            int altoLogo = anchoLogo * 169 / 270;
 
             int altoTextos = 40 + 6 + 30;
 
@@ -222,11 +214,8 @@ namespace CapaVista
             lblBienvenidaAyuda?.BringToFront();
         }
 
-        // Campana de alertas arriba a la derecha, al lado de cerrar sesión. Cada tipo de alerta
-        // abre la pantalla donde se resuelve, usando las mismas opciones del menú (respetan los permisos).
         private void IniciarAlertas()
         {
-            // Sin permiso para visualizar alarmas no se muestra la campana.
             if (!SesionUsuario.Permisos.Contains(1110))
             {
                 return;
@@ -234,25 +223,22 @@ namespace CapaVista
 
             campanaAlertas = new ClsCampanaAlertas(this, btnConfig, tollClosed, CrearAccionesAlertas());
 
-            // Quien ve la campana puede abrir la lista completa (cada uno ve solo los tipos que le corresponden).
             campanaAlertas.VerTodas = AbrirAlertas;
             campanaAlertas.PuedeResolver = PuedeResolverAlerta;
 
             campanaAlertas.Iniciar(mostrarAviso: true);
         }
-        // Si el usuario puede entrar a la pantalla donde se resuelve cada tipo de alerta
-        // (los mismos permisos que habilitan esas opciones del menú en CargarBotones).
         private bool PuedeResolverAlerta(TipoAlerta tipo)
         {
             switch (tipo)
             {
                 case TipoAlerta.Lote:
                 case TipoAlerta.Precio:
-                    return TieneAlguno(110, 111, 112, 113);         // Modificar artículo
+                    return TieneAlguno(110, 111, 112, 113);         // Modificar articulo
                 case TipoAlerta.Stock:
-                    return TieneAlguno(520, 110, 111, 112, 113);    // Reposición o Modificar artículo
+                    return TieneAlguno(520, 110, 111, 112, 113);    // Reposicion o Modificar articulo
                 case TipoAlerta.Entrega:
-                    return SesionUsuario.Permisos.Contains(320);     // Recepción de mercadería
+                    return SesionUsuario.Permisos.Contains(320);     // Recepcion de mercaderia
                 case TipoAlerta.Caja:
                     return SesionUsuario.Permisos.Contains(740);     // Cerrar caja
                 case TipoAlerta.Pago:
@@ -263,7 +249,6 @@ namespace CapaVista
                     return false;
             }
         }
-        // Qué pantalla abre cada tipo de alerta (las mismas opciones del menú: respetan los permisos).
         private Dictionary<TipoAlerta, Action> CrearAccionesAlertas()
         {
             return new Dictionary<TipoAlerta, Action>
@@ -277,14 +262,12 @@ namespace CapaVista
                 [TipoAlerta.Precio] = () => menuitemAdmistradorarticulos.PerformClick()
             };
         }
-        // Ocultar alertas y configurar los días de aviso (cuando se agreguen) son solo del rol Administrador.
         private const int ID_ROL_ADMINISTRADOR = 1;
 
         private static bool EsAdministrador
         {
             get { return SesionUsuario.IdRol == ID_ROL_ADMINISTRADOR; }
         }
-        // Lista completa de alertas: la ve quien tiene el permiso de visualizar alarmas (1110).
         private void AbrirAlertas()
         {
             if (!SesionUsuario.Permisos.Contains(1110))
@@ -304,7 +287,6 @@ namespace CapaVista
         }
         private void AbrirReposicion()
         {
-            // Con permiso de reposición abre ese listado; si no, la administración de artículos.
             if (!SesionUsuario.Permisos.Contains(520))
             {
                 menuitemAdmistradorarticulos.PerformClick();
@@ -412,7 +394,6 @@ namespace CapaVista
             // fromulario
             this.Text = idiomaIngles ? "Sales Terminal" : ClsIdioma.T("Presentación");
 
-            // Fecha, hora y mensaje de bienvenida se arman por código: se vuelven a armar en el idioma nuevo.
             ActualizarFechaHora();
 
             if (modoBienvenida)
@@ -445,7 +426,7 @@ namespace CapaVista
                 {
                     UbicarBienvenida(ancho, altoMenu, pnlUsuario.Top);
                     UbicarFechaHora();
-                    return;   // el finally reanuda el diseño
+                    return;
                 }
 
                 int anchoDerecha = Math.Clamp((int)(ancho * 0.32), 260, 360);
@@ -494,55 +475,49 @@ namespace CapaVista
                 ResumeLayout(true);
             }
         }
-        // true si el usuario tiene al menos uno de los permisos.
         private static bool TieneAlguno(params int[] permisos)
         {
             return permisos.Any(SesionUsuario.Permisos.Contains);
         }
         private void CargarBotones()
         {
-            // Cada sección del menú se habilita si el rol tiene el Total o alguno de sus permisos.
-
-            //Articulo
+            // Articulo
             btnArt.Enabled = TieneAlguno(100, 110, 111, 112, 113, 120, 121, 122, 130, 131, 132, 140, 150);
 
-            //Promociones
+            // Promociones
             toolStripMenuItem2.Enabled = TieneAlguno(230, 240);
 
-            //Ventas
+            // Ventas
             btnVentas.Enabled = TieneAlguno(200, 210, 220, 221, 222, 250);
 
-            //Compras
+            // Compras
             btnCompras.Enabled = TieneAlguno(300, 310, 320, 330);
 
-            //Proveedores
+            // Proveedores
             btnProve.Enabled = TieneAlguno(400, 410, 411, 412, 420);
 
-            //Listados
+            // Listados
             toolStripMenuItem1.Enabled = TieneAlguno(500, 510, 520);
 
-            //Informes
+            // Informes
             btnInformes.Enabled = TieneAlguno(600, 610, 620, 630, 640, 650, 660);
 
-            //Caja
+            // Caja
             btnCaja.Enabled = TieneAlguno(700, 710, 720, 730, 740, 750, 760);
 
-            //Ajustes
+            // Ajustes
             btnIdioma.Enabled = SesionUsuario.Permisos.Contains(800);
 
-            //Administración (empleados, backup y bitácora)
             btnEmpleado.Enabled = TieneAlguno(1000, 1010, 1020, 1270, 1280, 1290);
 
-            //Listados
+            // Listados
             preciosYReposicionToolStripMenuItem.Enabled = TieneAlguno(510, 520);
 
-            //Articulos operaciones
+            // Articulos operaciones
 
-            // Cargar artículo nuevo
             cargarArticuloNuevoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(111);
-            // Gestión de Articulos
+            // Gestion de Articulos
             menuitemAdmistradorarticulos.Enabled = TieneAlguno(110, 111, 112, 113);
-            // Gestión de Categorías y Marcas
             menuitemAdministradoarticulos.Enabled = TieneAlguno(120, 121, 122, 130, 131, 132);
             // Reposicion rapida de stock
             meniitemReporapida.Enabled = SesionUsuario.Permisos.Contains(113);
@@ -551,17 +526,15 @@ namespace CapaVista
             // Exportar articulos a Excel
             menuitemExporexcel.Enabled = SesionUsuario.Permisos.Contains(150);
 
-            //Promociones operaciones
+            // Promociones operaciones
             administrarPromocionesToolStripMenuItem.Enabled = TieneAlguno(230, 240);
 
-            //Ventas
+            // Ventas
 
-            // Administrador de ventas (ver ventas; anular pide 250)
             menuitemAdministradorventas.Enabled = TieneAlguno(210, 250);
             // Devoluciones
             notaDeCreditoToolStripMenuItem.Enabled = TieneAlguno(220, 221, 222);
 
-            // Pantalla de venta: cargar artículos, cobrar, segunda venta (F4) y aplicar promociones
             bool puedeVender = SesionUsuario.Permisos.Contains(210);
             txtCodigoBarra.Enabled = puedeVender;
             txtCantidad.Enabled = puedeVender;
@@ -571,39 +544,37 @@ namespace CapaVista
             btnNuevaCompra.Enabled = puedeVender;
             btnPromocion.Enabled = puedeVender;
 
-            //Compras operaciones
+            // Compras operaciones
             menuitemAministradorcompras.Enabled = TieneAlguno(310, 330);
             recepciónDeMercaderiaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(320);
 
-            //Proveedores
+            // Proveedores
 
-            // Gestión de proveedores
+            // Gestion de proveedores
             administradorDeProveedoresToolStripMenuItem.Enabled = TieneAlguno(410, 411, 412);
             // Cuenta corriente
             cuentaCorrienteDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(420);
-            //Informe operaciones
-            // Un solo acceso a los cinco informes de ventas; adentro cada informe respeta su permiso (610 a 650).
             informesVentasToolStripMenuItem.Enabled = TieneAlguno(610, 620, 630, 640, 650);
             balanceToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(660);
-            //Caja operaciones
+            // Caja operaciones
             nuevoIngresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(710);
             nuevoEgresoToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(720);
             abrirCajaToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(730);
             cerrarSeToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(740);
             estadoCajaToolStripMenuItem.Enabled = TieneAlguno(750, 760);
 
-            //Administración operaciones
+            // Administracion operaciones
             permisosToolStripMenuItem.Enabled = TieneAlguno(1010, 1020, 1270);
             gestioToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1280);
             verificarIntegridadToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(ClsIntegridadLogica.PermisoIntegridad);
             bitacoraToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(1290);        }
-        //Ingreso de plata
+        // Ingreso de plata
         public enum TipoMovimiento
         {
             Ingreso,
             Egreso
         }
-        //bloqueo menu
+        // bloqueo menu
         private void BloquearMenu()
         {
             // Menu superior
@@ -701,8 +672,6 @@ namespace CapaVista
             }
 
 
-            // Si el producto ya está en la venta (fuera de promociones), se suma la cantidad
-            // a esa fila en vez de agregar otra. Las filas de promoción no se mezclan.
             if (codigoBarra != "PROMOCION")
             {
                 foreach (DataGridViewRow fila in dtgPresentacion.Rows)
@@ -832,7 +801,6 @@ namespace CapaVista
             lblFecha.Text = (idiomaIngles ? "Date: " : ClsIdioma.T("Fecha: ")) + ahora.ToString("dd/MM/yyyy");
             lblHora.Text = (idiomaIngles ? "Time: " : ClsIdioma.T("Hora: ")) + ahora.ToString("HH:mm:ss");
 
-            // El ancho de los labels cambia con el texto: se reubican para que no se corran.
             UbicarFechaHora();
         }
         private void UbicarFechaHora()
@@ -849,7 +817,7 @@ namespace CapaVista
             subtotal = 0.00m;
             descuentoRecargo = 0.00m;
             total = 0.00m;
-            promocionesAplicadas.Clear();   // [PROMO]
+            promocionesAplicadas.Clear();
 
             CalcularYMostrarMontos();
             RellenarFilas();
@@ -896,8 +864,6 @@ namespace CapaVista
 
             lblTotalMonto.Text = total.ToString("C2");
         }
-        // [PROMO] Anota una promoción aplicada. Si la misma promo se aplica de nuevo
-        // en la misma venta, suma una vez más.
         private void RegistrarPromocionAplicada(int idPromocion, string nombre, decimal importeLista, decimal importeCobrado)
         {
             ClsPromocionVentaEntidad existente = promocionesAplicadas.FirstOrDefault(p => p.IdPromocion == idPromocion);
@@ -921,9 +887,7 @@ namespace CapaVista
             }
         }
 
-        // [CAJA] Devuelve true si hay caja abierta. Si no la hay y el usuario
-        // tiene permiso (730), ofrece abrirla en el momento.
-        private bool VerificarCajaAbierta()
+        internal static bool VerificarCajaAbierta()
         {
             try
             {
@@ -966,7 +930,6 @@ namespace CapaVista
             if (lstDescripcion.SelectedIndex < 0 || tablaProductosEncontrados == null)
                 return;
 
-            // Sin cantidad escrita se agrega 1, igual que con el código de barras.
             decimal cantidad = 1;
 
             if (!string.IsNullOrWhiteSpace(txtCantidad.Text) &&
@@ -1003,13 +966,12 @@ namespace CapaVista
                 stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
             }
 
-            // Agregar usando la cantidad ingresada
             AgregarProductoAGrilla(idProducto, sku, codigoBarra, descripcion, precio, cantidad, stockDisponible);
 
             lstDescripcion.Visible = false;
             lstDescripcion.Items.Clear();
             txtCodigoBarra.Clear();
-            txtCantidad.Clear();   // la próxima vuelve a ser 1 si no se escribe otra
+            txtCantidad.Clear();
             txtCodigoBarra.Focus();
         }
 
@@ -1087,10 +1049,9 @@ namespace CapaVista
                 AgregarProductoSeleccionado();
             }
         }
-        //Menu Item
+        // Menu Item
         private void frmmenuPres_KeyDown(object sender, KeyEventArgs e)
         {
-            // Sin pantalla de venta no hay cobro (F2) ni segunda venta (F4).
             if (modoBienvenida)
                 return;
 
@@ -1105,7 +1066,7 @@ namespace CapaVista
                 btnNuevaCompra.PerformClick();
             }
         }
-        //Importar y Exportar
+        // Importar y Exportar
         private void menuitemImporexcel_Click(object sender, EventArgs e)
         {
             frmImportarArticulos frmImportar = new frmImportarArticulos();
@@ -1121,7 +1082,7 @@ namespace CapaVista
             frmCuentaCorrienteProveedores cuentacorr = new frmCuentaCorrienteProveedores();
             cuentacorr.ShowDialog();
         }
-        //Informes
+        // Informes
         private void informesVentasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (frmInformesVentas informes = new frmInformesVentas(frmInformesVentas.InformeInicialSegunPermisos()))
@@ -1129,7 +1090,7 @@ namespace CapaVista
                 informes.ShowDialog();
             }
         }
-        //Caja
+        // Caja
         private void nuevoIngresoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmIngresoPlataCaja ingresoPlata = new frmIngresoPlataCaja(TipoMovimiento.Ingreso);
@@ -1144,7 +1105,6 @@ namespace CapaVista
         }
         private void preciosYReposicionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Con un solo permiso se abre directo en ese listado; con los dos, se elige adentro.
             bool precios = SesionUsuario.Permisos.Contains(510);
             bool reposicion = SesionUsuario.Permisos.Contains(520);
 
@@ -1188,7 +1148,7 @@ namespace CapaVista
             frmProveedores proveedores = new frmProveedores();
             proveedores.ShowDialog();
         }
-        //Cerrar sesion
+        // Cerrar sesion
         private void cerrarSeToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -1273,10 +1233,6 @@ namespace CapaVista
 
             }
         }
-        private void btnConfig_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
         private void permisosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmCargaEmpleados Carga = new frmCargaEmpleados();
@@ -1307,7 +1263,6 @@ namespace CapaVista
                 return;
             }
 
-            // Evita abrir una segunda ventana secundaria
             if (formularioSecundario != null && !formularioSecundario.IsDisposed)
             {
                 formularioSecundario.Activate();
@@ -1324,37 +1279,6 @@ namespace CapaVista
             formularioSecundario.Show();
 
         }
-        private void btnBuscarArticulo_Click(object sender, EventArgs e)
-        {
-            using (frmBuscarArticulo buscarArticulo = new frmBuscarArticulo())
-            {
-                buscarArticulo.ShowDialog();
-
-                ClsProducto producto = buscarArticulo.ProductoSeleccionado;
-
-                if (producto == null)
-                {
-                    MessageBox.Show(ClsIdioma.T("No se recibió ningún producto seleccionado. ") + ClsIdioma.T("Revisá el botón de selección de frmBuscarArticulo."), ClsIdioma.T("Producto no seleccionado"),
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                ClsGestorProductoLogica logicaProducto = new ClsGestorProductoLogica();
-
-                DataTable tablaStock = logicaProducto.ObtenerStockPorProducto(producto.IdProducto);
-
-                decimal stockDisponible = 0m;
-
-                if (tablaStock != null && tablaStock.Rows.Count > 0 && tablaStock.Rows[0]["CantidadActual"] != DBNull.Value)
-                {
-                    stockDisponible = Convert.ToDecimal(tablaStock.Rows[0]["CantidadActual"]);
-                }
-
-                AgregarProductoAGrilla(producto.IdProducto, producto.SKU, producto.CodigoBarra, producto.Descripcion, producto.PrecioVenta, 1m, stockDisponible);
-
-                txtCodigoBarra.Focus();
-            }
-        }
         private void btnCobrar_Click_1(object sender, EventArgs e)
         {
             if (total <= 0)
@@ -1366,13 +1290,12 @@ namespace CapaVista
                 return;
             }
 
-            // [CAJA] Sin caja abierta no se puede vender
             if (!VerificarCajaAbierta())
             {
                 return;
             }
 
-            frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion, promocionesAplicadas);   // [PROMO]
+            frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion, promocionesAplicadas);
 
             if (cobro.ShowDialog() == DialogResult.OK)
             {
@@ -1666,7 +1589,6 @@ namespace CapaVista
 
                     descuentoRecargo = ajusteAnterior - descuentoPromocion;
 
-                    // [PROMO] Anotar la promoción para guardarla al cobrar
                     RegistrarPromocionAplicada(
                         idPromocion,
                         promo.Table.Columns.Contains("Nombre") ? Convert.ToString(promo["Nombre"]) : "",
@@ -1684,10 +1606,6 @@ namespace CapaVista
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }
-        private void label2_Click(object sender, EventArgs e)
-        {
-
         }
         private void btnCambiarcantidad_Click(object sender, EventArgs e)
         {
@@ -1803,8 +1721,6 @@ namespace CapaVista
 
             DataGridViewRow fila = dtgPresentacion.CurrentRow;
 
-            // [PROMO] Si el producto es de una promoción, se quitan todas las
-            // promociones juntas (si no, el descuento quedaba aplicado igual).
             if (Convert.ToString(fila.Cells["ClnCodigo"].Value) == "PROMOCION")
             {
                 DialogResult quitarPromos = MessageBox.Show(
@@ -1817,7 +1733,6 @@ namespace CapaVista
                     return;
                 }
 
-                // Se eliminan las filas (no solo se vacían), así no quedan huecos en la grilla.
                 List<DataGridViewRow> filasPromo = dtgPresentacion.Rows.Cast<DataGridViewRow>()
                     .Where(f => !f.IsNewRow && Convert.ToString(f.Cells["ClnCodigo"].Value) == "PROMOCION")
                     .ToList();
@@ -1837,7 +1752,6 @@ namespace CapaVista
                 return;
             }
 
-            // Se elimina la fila: los productos de abajo suben y las filas vacías quedan al final.
             dtgPresentacion.Rows.Remove(fila);
 
             RellenarFilas();
@@ -1865,8 +1779,6 @@ namespace CapaVista
         private async void FrmPresentacion_Load(object sender, EventArgs e)
         {
 
-            // backup automatico: se hace en segundo plano para no congelar la pantalla al iniciar.
-
             try
             {
                 ClsBackupLogica backup = new ClsBackupLogica();
@@ -1884,17 +1796,9 @@ namespace CapaVista
             nuevoarticulo.ShowDialog();
 
         }
-        private void lstDescripcion_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
 
-        //idioma
-        private void btnIdioma_Click(object sender, EventArgs e)
-        {
-
-        }
+        // idioma
         private void españolToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ClsIdioma.CambiarIdioma(false);
@@ -1906,7 +1810,7 @@ namespace CapaVista
             AplicarIdioma();
         }
 
-        //bitacora
+        // bitacora
         private void bitacoraToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmBitacora bitacora = new frmBitacora();
@@ -1941,15 +1845,7 @@ namespace CapaVista
 
 
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
-
-        private void txtCantidad_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void recepciónDeMercaderiaToolStripMenuItem_Click(object sender, EventArgs e)
         {

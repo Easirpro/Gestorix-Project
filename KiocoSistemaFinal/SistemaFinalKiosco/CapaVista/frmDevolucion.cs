@@ -12,21 +12,18 @@ using CapaEntidades;
 
 namespace CapaVista
 {
-    // Listado de devoluciones: filtros por fecha, tipo y búsqueda; el motivo de la elegida se ve abajo.
     public partial class frmDevolucion : Form
     {
         private ClsDevolucionLogica logica = new ClsDevolucionLogica();
 
-        // Devoluciones del rango de fechas; el tipo y la búsqueda se filtran sobre esta tabla.
         private DataTable? devolucionesCargadas;
-        // Evita recargar mientras se acomodan las fechas o los filtros por código.
         private bool cargando = false;
 
         public frmDevolucion()
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
-            ClsGrilla.AjustarAlContenido(dataGridView1, "clnProducto");   // columnas al ancho del texto, con scroll si no entra
+            ClsGrilla.AjustarAlContenido(dataGridView1, "clnProducto");
 
             btnNuevaDevolucion.Enabled = SesionUsuario.Permisos.Contains(220) || SesionUsuario.Permisos.Contains(221);
 
@@ -34,7 +31,7 @@ namespace CapaVista
             dateTimePicker1.Value = DateTime.Today.AddDays(-30);
             dateTimePicker2.Value = DateTime.Today;
             cmbTipo.SelectedIndex = 0;
-            ClsIdioma.TraducirOpciones(cmbTipo);   // se elige por posición
+            ClsIdioma.TraducirOpciones(cmbTipo);   // se elige por posicion
             cargando = false;
 
             CargarDevoluciones();
@@ -42,7 +39,6 @@ namespace CapaVista
 
         #region Metodos
 
-        // Lee de la base las devoluciones del rango de fechas. Si se indica, deja elegida esa devolución.
         private void CargarDevoluciones(int? idAElegir = null)
         {
             if (cargando)
@@ -64,7 +60,6 @@ namespace CapaVista
 
             MostrarDevoluciones(idAElegir);
         }
-        // Llena la grilla con las devoluciones que cumplen el tipo y la búsqueda.
         private void MostrarDevoluciones(int? idAElegir = null)
         {
             dataGridView1.Rows.Clear();
@@ -73,7 +68,7 @@ namespace CapaVista
 
             if (devolucionesCargadas != null)
             {
-                string[] tiposDato = { "", "Reintegro en efectivo", "Cambio de unidad" };   // así vienen de la base
+                string[] tiposDato = { "", "Reintegro en efectivo", "Cambio de unidad" };
                 string tipoElegido = cmbTipo.SelectedIndex > 0 && cmbTipo.SelectedIndex < tiposDato.Length ? tiposDato[cmbTipo.SelectedIndex] : "";
                 string texto = txtBuscar.Text.Trim();
 
@@ -89,9 +84,7 @@ namespace CapaVista
                         continue;
                     }
 
-                    if (texto != "" &&
-                        !venta.Contains(texto) &&
-                        !producto.Contains(texto, StringComparison.CurrentCultureIgnoreCase) &&
+                    if (texto != "" && !venta.Contains(texto) && !producto.Contains(texto, StringComparison.CurrentCultureIgnoreCase) &&
                         !cajero.Contains(texto, StringComparison.CurrentCultureIgnoreCase))
                     {
                         continue;
@@ -118,7 +111,6 @@ namespace CapaVista
 
                     if (!esEfectivo)
                     {
-                        // Los cambios de unidad no mueven plata: en gris para distinguirlos.
                         renglon.DefaultCellStyle.ForeColor = SystemColors.GrayText;
                     }
                     else
@@ -150,8 +142,7 @@ namespace CapaVista
 
             if (idDevolucion.HasValue)
             {
-                fila = dataGridView1.Rows.Cast<DataGridViewRow>()
-                    .FirstOrDefault(f => f.Cells["clnId"].Value?.ToString() == idDevolucion.Value.ToString());
+                fila = dataGridView1.Rows.Cast<DataGridViewRow>().FirstOrDefault(f => f.Cells["clnId"].Value?.ToString() == idDevolucion.Value.ToString());
             }
 
             if (fila == null && dataGridView1.Rows.Count > 0)
@@ -174,7 +165,7 @@ namespace CapaVista
             }
 
             string motivo = fila["Motivo"]?.ToString() ?? "";
-            txtMotivo.Text = string.IsNullOrWhiteSpace(motivo) ? ClsIdioma.T("Sin motivo registrado.") : ClsIdioma.TraducirBitacora(motivo);   // el motivo se guarda en castellano
+            txtMotivo.Text = string.IsNullOrWhiteSpace(motivo) ? ClsIdioma.T("Sin motivo registrado.") : ClsIdioma.TraducirBitacora(motivo);
         }
         private int? IdDevolucionElegida()
         {
@@ -192,19 +183,16 @@ namespace CapaVista
                 devolucion.ShowDialog(this);
             }
 
-            // Se recarga siempre: en Nueva devolución se pueden registrar varias antes de cerrar.
             CargarDevoluciones();
         }
         private void btnActualizar_Click(object? sender, EventArgs e)
         {
-            // Vuelve a leer la base manteniendo las fechas y los filtros elegidos.
             CargarDevoluciones(IdDevolucionElegida());
         }
         private void dataGridView1_SelectionChanged(object? sender, EventArgs e)
         {
             MostrarMotivo();
         }
-        // Al cambiar una fecha se recarga sola. Si Desde queda después de Hasta, se corre la otra fecha.
         private void dateTimePicker1_ValueChanged(object? sender, EventArgs e)
         {
             if (cargando)
@@ -212,7 +200,7 @@ namespace CapaVista
 
             if (dateTimePicker1.Value.Date > dateTimePicker2.Value.Date)
             {
-                dateTimePicker2.Value = dateTimePicker1.Value.Date;   // dispara su ValueChanged, que recarga
+                dateTimePicker2.Value = dateTimePicker1.Value.Date;
                 return;
             }
 

@@ -90,7 +90,6 @@ public class ClsUsuarioDatos
             }
         }
     }
-    // Guarda la fecha de ingreso y recalcula el DVH.
     public void RegistrarIngresoExitoso(ClsUsuarioLogin usuario, DateTime fechaIngreso)
     {
         string dvh = GenerarDVHUsuario(new ClslUsuario
@@ -242,12 +241,10 @@ public class ClsUsuarioDatos
 
                 if (filasAfectadas == 0)
                 {
-                    // La contraseña temporal no coincide: no se cambia nada.
                     trans.Rollback();
                     return false;
                 }
 
-                // La temporal queda en el historial, como cualquier contraseña reemplazada.
                 using (SqlCommand cmdAntigua = new SqlCommand(@"
                     INSERT INTO UsuarioPassAntigua (IdUsuario, PassAntigua)
                     VALUES (@IdUsuario, @PassTemporal)", conn, trans))
@@ -572,7 +569,6 @@ public class ClsUsuarioDatos
             }
         }
     }
-    // Administradores habilitados (usuario sin bloquear y persona activa), sin contar a idPersonaExcluida.
     public int ContarAdministradoresActivos(int idRolAdministrador, int idPersonaExcluida)
     {
         using (SqlConnection con = conexion.ObtenerConexion())
@@ -631,8 +627,6 @@ public class ClsUsuarioDatos
         return ClsDigitoVerificador
             .GenerarHash(cadena);
     }
-    // Recalcula el DVH con los valores guardados en la base, dentro de la misma transacción.
-    // Se lee la fila para usar el UltimoIngreso que puso GETDATE().
     internal void ActualizarDVHUsuario(int idUsuario, SqlConnection con, SqlTransaction trans)
     {
         ClslUsuario usuario = null;

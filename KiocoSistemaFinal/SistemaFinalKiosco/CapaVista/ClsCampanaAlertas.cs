@@ -9,13 +9,8 @@ using System.Windows.Forms;
 
 namespace CapaVista
 {
-    // Campana de alertas del menú principal: se ubica arriba a la derecha, muestra cuántas alertas hay
-    // y al hacer clic despliega la lista agrupada por tipo. Cada grupo abre la pantalla donde se resuelve.
     public class ClsCampanaAlertas : IDisposable
     {
-        // Para usar una imagen propia de campana, asignarla acá antes de crear la campana
-        // (por ejemplo: ClsCampanaAlertas.ImagenCampana = Properties.Resources.campana;).
-        // Si queda en null se dibuja una campana simple. El número de alertas se dibuja encima.
         public static Image ImagenCampana { get; set; }
 
         private const int MINUTOS_ACTUALIZACION = 5;
@@ -46,23 +41,14 @@ namespace CapaVista
 
         public List<ClsAlertaEntidad> Alertas { get; private set; } = new List<ClsAlertaEntidad>();
 
-        // Si se asigna, al pie de la lista aparece "Ver todas las alertas…".
         public Action? VerTodas { get; set; }
-
-        // Si se asigna, antes de abrir la pantalla de un tipo se verifica que el usuario pueda entrar;
-        // si no, se avisa en vez de no hacer nada.
         public Func<TipoAlerta, bool>? PuedeResolver { get; set; }
-
         public const string MENSAJE_SIN_PERMISO = "No tenés permiso para resolver esta alerta. Avisale al administrador.";
-
-        // Nombre de cada tipo de alerta, el mismo que usa la campana (lo usa también frmAlertas).
         public static string TituloDe(TipoAlerta tipo)
         {
             return ClsIdioma.T(Titulos.TryGetValue(tipo, out string? titulo) ? titulo : tipo.ToString());
         }
 
-        // menu: barra del menú principal; antesDe: ítem que queda a la derecha de la campana (cerrar sesión);
-        // acciones: qué pantalla abrir para cada tipo de alerta.
         public ClsCampanaAlertas(Form formulario, MenuStrip menu, ToolStripItem antesDe, Dictionary<TipoAlerta, Action> acciones)
         {
             this.formulario = formulario;
@@ -77,8 +63,6 @@ namespace CapaVista
                 AutoToolTip = false
             };
 
-            // Los ítems alineados a la derecha se ubican de derecha a izquierda en el orden de la colección:
-            // primero el de cerrar sesión (queda en el borde) y después la campana, a su izquierda.
             antesDe.Alignment = ToolStripItemAlignment.Right;
             menu.Items.Remove(antesDe);
             menu.Items.Add(antesDe);
@@ -89,10 +73,8 @@ namespace CapaVista
             temporizador = new System.Windows.Forms.Timer { Interval = MINUTOS_ACTUALIZACION * 60 * 1000 };
             temporizador.Tick += (sender, e) => Actualizar();
 
-            // Al cambiar de idioma se vuelve a armar la lista con los textos en el idioma nuevo.
             ClsIdioma.IdiomaCambiado += Actualizar;
 
-            // Al volver de otra pantalla (por ejemplo, después de recibir una compra) se refresca.
             formulario.Activated += (sender, e) =>
             {
                 if ((DateTime.Now - ultimaActualizacion).TotalSeconds >= SEGUNDOS_ENTRE_ACTUALIZACIONES)
@@ -100,7 +82,6 @@ namespace CapaVista
             };
         }
 
-        // Carga las alertas, arranca la actualización periódica y, si hay urgentes, muestra el aviso.
         public void Iniciar(bool mostrarAviso)
         {
             Actualizar();
@@ -125,7 +106,6 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                // No se interrumpe el trabajo con un cartel: la campana muestra que no se pudo cargar.
                 Alertas = new List<ClsAlertaEntidad>();
                 campana.DropDownItems.Clear();
                 campana.DropDownItems.Add(new ToolStripMenuItem(ClsIdioma.T("No se pudieron cargar las alertas")) { Enabled = false, ToolTipText = ex.Message });
@@ -138,8 +118,7 @@ namespace CapaVista
             int urgentes = Alertas.Count(a => a.Urgente);
 
             campana.Image = DibujarCampana(Alertas.Count, urgentes > 0);
-            campana.ToolTipText = Alertas.Count == 0
-                ? ClsIdioma.T("No hay alertas")
+            campana.ToolTipText = Alertas.Count == 0 ? ClsIdioma.T("No hay alertas")
                 : Alertas.Count + (Alertas.Count == 1 ? ClsIdioma.T(" alerta") : ClsIdioma.T(" alertas")) + (urgentes > 0 ? " (" + urgentes + (urgentes == 1 ? ClsIdioma.T(" urgente)") : ClsIdioma.T(" urgentes)")) : "");
         }
         private void ConstruirLista()
@@ -163,11 +142,7 @@ namespace CapaVista
                 });
             }
 
-            // Primero los grupos con alertas urgentes y, dentro de cada prioridad, los más numerosos.
-            var grupos = Alertas
-                .GroupBy(a => a.Tipo)
-                .OrderByDescending(g => g.Any(a => a.Urgente))
-                .ThenByDescending(g => g.Count());
+            var grupos = Alertas.GroupBy(a => a.Tipo).OrderByDescending(g => g.Any(a => a.Urgente)) .ThenByDescending(g => g.Count());
 
             foreach (var grupo in grupos)
             {
@@ -232,7 +207,6 @@ namespace CapaVista
         {
             return texto.Length <= LARGO_MAXIMO_DESCRIPCION ? texto : texto.Substring(0, LARGO_MAXIMO_DESCRIPCION - 1) + "…";
         }
-        // Campana (propia o dibujada) con el número de alertas encima, en rojo si hay urgentes.
         private static Bitmap DibujarCampana(int cantidad, bool hayUrgentes)
         {
             Bitmap imagen = new Bitmap(24, 22);

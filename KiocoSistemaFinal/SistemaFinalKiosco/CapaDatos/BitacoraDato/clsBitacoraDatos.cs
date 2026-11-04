@@ -27,7 +27,6 @@ namespace CapaDatos.BitacoraDato
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
-        // Cuántas veces se registró esa acción sobre ese registro en los últimos minutos.
         public int ContarAccionesRecientes(string accion, int idRegistroAfectado, int minutos)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

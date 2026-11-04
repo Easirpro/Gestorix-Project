@@ -107,7 +107,6 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // Estado de la compra según su entrega estimada: atrasada, llega hoy, fecha prevista o sin fecha.
         private static string ObtenerEstadoEntrega(DataRow compra, out Color color)
         {
             color = SystemColors.ControlText;
@@ -178,7 +177,6 @@ namespace CapaVista
                 lblEstadoCompraValor.ForeColor = colorEstado;
                 lblTotalCompraValor.Text = totalCompra.ToString("C2");
 
-                // Un mismo producto puede estar en varias líneas de la compra: se recibe por producto.
                 var productos = detalle.AsEnumerable()
                     .GroupBy(f => Convert.ToInt32(f["IdProducto"]))
                     .Select(g => new
@@ -604,25 +602,9 @@ namespace CapaVista
         {
             ConfirmarRecepcion();
         }
-        private void lblBuscar_Click(object sender, EventArgs e)
-        {
 
-        }
 
-        private void lblTitulo_Click(object sender, EventArgs e)
-        {
 
-        }
-
-        private void pnlObservaciones_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void lblTotalBoleta_Click(object sender, EventArgs e)
-        {
-
-        }
         #endregion
     }
 }

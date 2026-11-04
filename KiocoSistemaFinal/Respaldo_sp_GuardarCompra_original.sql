@@ -1,11 +1,6 @@
--- Respaldo de sp_GuardarCompra tal como estaba en el servidor el 31/10/2026, antes de la migración.
--- Ejecutarlo restaura la versión anterior (deshace la migración correspondiente).
 USE Gestorix;
 GO
 
-/* ---------------------------------------------------------------------
-   MODIFICADO: sp_GuardarCompra  (cambios marcados con [PAGOS])
-   --------------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE dbo.sp_GuardarCompra
     @IdProveedor INT,
     @Fecha DATETIME,
@@ -16,14 +11,13 @@ CREATE OR ALTER PROCEDURE dbo.sp_GuardarCompra
     @Total DECIMAL(18,2),
     @Observaciones NVARCHAR(MAX),
     @Detalles dbo.TipoDetalleCompra READONLY,
-    -- [PAGOS] Parámetros nuevos (opcionales para no romper llamadas actuales)
-    @IdUsuario         INT          = NULL,       -- quién carga la compra
+    @IdUsuario         INT          = NULL,       -- quien carga la compra
     @CondicionPago     VARCHAR(10)  = 'CONTADO',  -- 'CONTADO' o 'CTA_CTE'
-    @FechaVencimiento  DATE         = NULL,       -- solo Cta. Cte.
-    @IdMetodoPago      INT          = NULL,       -- contado: con qué se pagó
-    @IdSesionCaja      INT          = NULL,        -- contado: si el pago sale de la caja abierta
-    @IdSucursal        INT          = NULL,       -- [RECEPCION] sucursal del proveedor
-    @FechaEntregaEstimada DATE      = NULL        -- [FECHAS] cuándo se espera la mercadería
+    @FechaVencimiento  DATE         = NULL,       -- solo Cta. Cte
+    @IdMetodoPago      INT          = NULL,
+    @IdSesionCaja      INT          = NULL,
+    @IdSucursal        INT          = NULL,
+    @FechaEntregaEstimada DATE      = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -31,7 +25,7 @@ BEGIN
 
     BEGIN TRY
 
-        -- Validar proveedor.
+        -- Validar proveedor
         IF @IdProveedor IS NULL OR @IdProveedor <= 0
            OR NOT EXISTS
            (
@@ -43,28 +37,24 @@ BEGIN
             THROW 50010, 'El proveedor seleccionado no es válido.', 1;
         END;
 
-        -- [FECHAS] La fecha del pedido es siempre la de hoy: ni pasada ni futura.
         IF @Fecha IS NULL
            OR CONVERT(DATE, @Fecha) <> CONVERT(DATE, GETDATE())
         BEGIN
             THROW 50011, 'La fecha del pedido debe ser la de hoy.', 1;
         END;
 
-        -- [FECHAS] La entrega estimada, si se indica, no puede ser anterior a hoy.
         IF @FechaEntregaEstimada IS NOT NULL
            AND @FechaEntregaEstimada < CONVERT(DATE, GETDATE())
         BEGIN
             THROW 50026, 'La entrega estimada no puede ser anterior a hoy.', 1;
         END;
 
-        -- [NOTAS DE CREDITO] Una nota de crédito no es una compra: resta deuda en vez de sumarla.
-        -- Hasta que tengan su propia funcionalidad, no se pueden registrar como compra.
         IF @TipoComprobante LIKE N'Nota de Cr%dito%'
         BEGIN
             THROW 50027, 'Las notas de crédito no se registran como compra.', 1;
         END;
 
-        -- Validar comprobante.
+        -- Validar comprobante
         IF NULLIF(LTRIM(RTRIM(@TipoComprobante)), N'') IS NULL
         BEGIN
             THROW 50012, 'El tipo de comprobante es obligatorio.', 1;
@@ -75,13 +65,13 @@ BEGIN
             THROW 50013, 'El número de comprobante es obligatorio.', 1;
         END;
 
-        -- Validar observaciones.
+        -- Validar observaciones
         IF LEN(@Observaciones) > 500
         BEGIN
             THROW 50014, 'Las observaciones no pueden superar los 500 caracteres.', 1;
         END;
 
-        -- Validar importes generales.
+        -- Validar importes generales
         IF @SubtotalSinIVA IS NULL
            OR @IVA IS NULL
            OR @Total IS NULL
@@ -97,13 +87,11 @@ BEGIN
             THROW 50016, 'El total no coincide con el subtotal más el IVA.', 1;
         END;
 
-        -- Exigir al menos un detalle.
         IF NOT EXISTS (SELECT 1 FROM @Detalles)
         BEGIN
             THROW 50017, 'La compra debe contener al menos un producto.', 1;
         END;
 
-        -- Validar cantidades e importes de los detalles.
         IF EXISTS
         (
             SELECT 1
@@ -124,7 +112,6 @@ BEGIN
             THROW 50018, 'Hay productos con cantidades o importes inválidos.', 1;
         END;
 
-        -- Comprobar que los productos existan.
         IF EXISTS
         (
             SELECT 1
@@ -137,7 +124,6 @@ BEGIN
             THROW 50019, 'Uno o más productos de la compra no existen.', 1;
         END;
 
-        -- Validar el total de cada detalle.
         IF EXISTS
         (
             SELECT 1
@@ -154,7 +140,6 @@ BEGIN
             THROW 50020, 'El total de uno o más detalles no coincide con sus importes.', 1;
         END;
 
-        -- Calcular los importes esperados a partir de los detalles.
         DECLARE @SubtotalCalculado DECIMAL(18,2);
         DECLARE @IVACalculado DECIMAL(18,2);
         DECLARE @TotalCalculado DECIMAL(18,2);
@@ -184,25 +169,21 @@ BEGIN
             )
         FROM @Detalles;
 
-        -- Comparar el subtotal general con los detalles.
         IF @SubtotalSinIVA <> @SubtotalCalculado
         BEGIN
             THROW 50021, 'El subtotal no coincide con los detalles de la compra.', 1;
         END;
 
-        -- Comparar el IVA general con los detalles.
         IF @IVA <> @IVACalculado
         BEGIN
             THROW 50022, 'El IVA no coincide con los detalles de la compra.', 1;
         END;
 
-        -- Comparar el total general con los detalles.
         IF @Total <> @TotalCalculado
         BEGIN
             THROW 50023, 'El total no coincide con los detalles de la compra.', 1;
         END;
 
-        -- [PAGOS] Validar usuario y condición de pago.
         IF @IdUsuario IS NOT NULL
            AND NOT EXISTS (SELECT 1 FROM dbo.Usuario WHERE IdUsuario = @IdUsuario AND Estado = 1)
         BEGIN
@@ -218,7 +199,6 @@ BEGIN
 
         IF @CondicionPago = 'CTA_CTE'
         BEGIN
-            -- En Cta. Cte. no se registra pago al cargar la compra.
             SET @IdMetodoPago = NULL;
             SET @IdSesionCaja = NULL;
 
@@ -233,9 +213,6 @@ BEGIN
             SET @FechaVencimiento = NULL;
         END;
 
-        -- [PAGOS] Compra de contado con medio de pago: se registra el pago.
-        -- (Si no se envía @IdMetodoPago, la compra queda pendiente de pago,
-        --  igual que antes del cambio, y se paga con sp_RegistrarPagoCompra.)
         DECLARE @MetodoPago NVARCHAR(30);
         DECLARE @Disponible DECIMAL(10,2);
 
@@ -288,7 +265,6 @@ BEGIN
             END;
         END;
 
-        -- [RECEPCION] La sucursal, si se indica, tiene que ser del proveedor.
         IF @IdSucursal IS NOT NULL
            AND NOT EXISTS
            (
@@ -301,7 +277,6 @@ BEGIN
             THROW 50024, 'La sucursal seleccionada no pertenece al proveedor.', 1;
         END;
 
-        -- [COSTO] Con sucursal, los productos tienen que estar asociados a ella.
         IF @IdSucursal IS NOT NULL
            AND EXISTS
            (
@@ -377,7 +352,6 @@ BEGIN
             Total
         FROM @Detalles;
 
-        -- [COSTO] El costo de esta compra pasa a ser el costo vigente de la sucursal.
         IF @IdSucursal IS NOT NULL
         BEGIN
             UPDATE PSP
@@ -395,7 +369,6 @@ BEGIN
               AND (PSP.PrecioCompra IS NULL OR PSP.PrecioCompra <> D.PrecioSinIVA);
         END;
 
-        -- [PAGOS] Registrar el pago de contado.
         IF @IdMetodoPago IS NOT NULL
         BEGIN
             INSERT INTO dbo.PagoCompra
@@ -420,7 +393,6 @@ BEGIN
             );
         END;
 
-        -- [PAGOS] Registrar en la bitácora.
         INSERT INTO dbo.Bitacora
         (
             IdUsuario,
