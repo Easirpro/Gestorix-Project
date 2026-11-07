@@ -80,7 +80,7 @@ namespace CapaVista
         {
             dgvListado.AutoGenerateColumns = false;
             dgvListado.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvListado.AllowUserToResizeColumns = true;
+            dgvListado.AllowUserToResizeColumns = false;
             dgvListado.EnableHeadersVisualStyles = false;
             dgvListado.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
         }

@@ -209,6 +209,7 @@
             //
             dtgVentas.AllowUserToAddRows = false;
             dtgVentas.AllowUserToDeleteRows = false;
+            dtgVentas.AllowUserToResizeColumns = false;
             dtgVentas.AllowUserToResizeRows = false;
             dtgVentas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dtgVentas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;

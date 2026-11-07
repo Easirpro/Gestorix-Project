@@ -152,6 +152,7 @@ namespace CapaVista
             //
             dgvItems.AllowUserToAddRows = false;
             dgvItems.AllowUserToDeleteRows = false;
+            dgvItems.AllowUserToResizeColumns = false;
             dgvItems.AllowUserToResizeRows = false;
             dgvItems.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvItems.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
