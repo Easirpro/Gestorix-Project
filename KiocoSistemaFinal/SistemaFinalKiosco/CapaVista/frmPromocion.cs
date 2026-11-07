@@ -84,6 +84,11 @@ namespace CapaVista
             ClsIdioma.IdiomaCambiado += idioma;
             Disposed += (sender, e) => ClsIdioma.IdiomaCambiado -= idioma;
         }
+        // desde las alertas
+        public frmPromocion(int idPromocion) : this()
+        {
+            Shown += (sender, e) => CargarPromocionSeleccionada(idPromocion);
+        }
 
         // Símbolo de la moneda en la vista previa: $ en castellano, US$ en inglés.
         // Cada importe queda pegado a su símbolo aunque el símbolo cambie de ancho.
@@ -909,6 +914,10 @@ namespace CapaVista
         }
         private void txtBuscarPromo_TextChanged(object sender, EventArgs e)
         {
+            // no buscar mientras se carga
+            if (cargandoPromocion)
+                return;
+
             try
             {
                 string texto = txtBuscarPromo.Text.Trim();

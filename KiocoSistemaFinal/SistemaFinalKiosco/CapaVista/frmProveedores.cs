@@ -36,6 +36,8 @@ namespace CapaVista
             InitializeComponent();
             ClsIdioma.Registrar(this);
 
+            ClsGrilla.Fijar(dtgProveedores);
+
             AplicarPermisos();
             CargarProveedores();
         }

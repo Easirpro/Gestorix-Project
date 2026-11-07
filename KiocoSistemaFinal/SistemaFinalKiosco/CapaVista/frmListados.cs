@@ -68,6 +68,12 @@ namespace CapaVista
             CargarFiltros();
             AplicarModo(modoInicial);
         }
+        // desde las alertas
+        public frmListados(Modo modoInicial, int? idProducto) : this(modoInicial)
+        {
+            if (idProducto.HasValue)
+                Shown += (sender, e) => MostrarArticulo(idProducto.Value);
+        }
 
         #region Metodos
         private void ConfigurarGrilla()
@@ -297,6 +303,29 @@ namespace CapaVista
             catch (Exception ex)
             {
                 MessageBox.Show(ClsIdioma.T("No se pudo cargar el listado.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void MostrarArticulo(int idProducto)
+        {
+            if (modoActual == Modo.Ninguno)
+                return;
+
+            try
+            {
+                listado = Consultar(null, idProducto);
+                dgvListado.DataSource = listado;
+                AjustarAnchoColumnas();
+                ActualizarCantidad();
+
+                if (listado.Rows.Count > 0)
+                    SeleccionarEnGrilla(listado.Rows[0]);
+
+                dgvListado.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ClsIdioma.T("No se pudo cargar el artículo.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

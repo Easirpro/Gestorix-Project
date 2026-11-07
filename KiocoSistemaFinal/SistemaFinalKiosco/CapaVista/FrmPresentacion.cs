@@ -50,17 +50,11 @@ namespace CapaVista
             dtgPresentacion.ReadOnly = true;
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
-            dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dtgPresentacion.AllowUserToResizeColumns = true;
-            dtgPresentacion.AllowUserToResizeRows = false;
-
-            foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
-            {
-                columna.Resizable = DataGridViewTriState.True;
-                columna.MinimumWidth = 50;
-            }
-            dtgPresentacion.AllowUserToOrderColumns = false;
             dtgPresentacion.RowHeadersVisible = false;
+
+            // ancho minimo de descripcion
+            ClnDescripcion.MinimumWidth = 220;
+            ClsGrilla.Fijar(dtgPresentacion);
 
             Load += frmmenuPres_Load;
             Load += FrmPresentacion_Load;
@@ -249,18 +243,47 @@ namespace CapaVista
                     return false;
             }
         }
-        private Dictionary<TipoAlerta, Action> CrearAccionesAlertas()
+        // alertas (null desde la campana)
+        private Dictionary<TipoAlerta, Action<ClsAlertaEntidad?>> CrearAccionesAlertas()
         {
-            return new Dictionary<TipoAlerta, Action>
+            return new Dictionary<TipoAlerta, Action<ClsAlertaEntidad?>>
             {
-                [TipoAlerta.Lote] = () => menuitemAdmistradorarticulos.PerformClick(),
-                [TipoAlerta.Stock] = AbrirReposicion,
-                [TipoAlerta.Entrega] = () => recepciónDeMercaderiaToolStripMenuItem.PerformClick(),
-                [TipoAlerta.Caja] = () => cerrarSeToolStripMenuItem.PerformClick(),
-                [TipoAlerta.Pago] = () => cuentaCorrienteDeProveedoresToolStripMenuItem.PerformClick(),
-                [TipoAlerta.Promocion] = () => administrarPromocionesToolStripMenuItem.PerformClick(),
-                [TipoAlerta.Precio] = () => menuitemAdmistradorarticulos.PerformClick()
+                [TipoAlerta.Lote] = AbrirLote,
+                [TipoAlerta.Stock] = alerta => AbrirReposicion(alerta?.IdReferencia),
+                [TipoAlerta.Entrega] = alerta => AbrirRecepcion(alerta?.IdReferencia),
+                [TipoAlerta.Caja] = _ => cerrarSeToolStripMenuItem.PerformClick(),
+                [TipoAlerta.Pago] = alerta => AbrirCuentaCorriente(alerta?.IdReferencia),
+                [TipoAlerta.Promocion] = alerta => AbrirPromocion(alerta?.IdReferencia),
+                [TipoAlerta.Precio] = alerta => AbrirArticulos(alerta?.IdReferencia)
             };
+        }
+        // vencido: devolucion, por vencer: articulo
+        private void AbrirLote(ClsAlertaEntidad? alerta)
+        {
+            if (alerta == null || !alerta.Urgente)
+            {
+                AbrirArticulos(alerta?.IdReferencia);
+                return;
+            }
+
+            using (frmDevolucionProveedor devolucion = new frmDevolucionProveedor(alerta.IdReferencia))
+            {
+                devolucion.Icon = Icon;
+                devolucion.ShowDialog(this);
+            }
+        }
+        private void AbrirArticulos(int? idProducto)
+        {
+            if (idProducto == null)
+            {
+                menuitemAdmistradorarticulos.PerformClick();
+                return;
+            }
+
+            using (frmCargaarticulo articulos = new frmCargaarticulo(idProducto.Value))
+            {
+                articulos.ShowDialog(this);
+            }
         }
         private const int ID_ROL_ADMINISTRADOR = 1;
 
@@ -285,15 +308,55 @@ namespace CapaVista
 
             campanaAlertas?.Actualizar();
         }
-        private void AbrirReposicion()
+        private void AbrirPromocion(int? idPromocion)
         {
-            if (!SesionUsuario.Permisos.Contains(520))
+            if (idPromocion == null)
             {
-                menuitemAdmistradorarticulos.PerformClick();
+                administrarPromocionesToolStripMenuItem.PerformClick();
                 return;
             }
 
-            using (frmListados listados = new frmListados(frmListados.Modo.Reposicion))
+            using (frmPromocion promocion = new frmPromocion(idPromocion.Value))
+            {
+                promocion.ShowDialog(this);
+            }
+        }
+        // compras
+        private void AbrirRecepcion(int? idCompra)
+        {
+            if (idCompra == null)
+            {
+                recepciónDeMercaderiaToolStripMenuItem.PerformClick();
+                return;
+            }
+
+            using (frmRecepcionCompra recepcion = new frmRecepcionCompra(idCompra.Value))
+            {
+                recepcion.ShowDialog(this);
+            }
+        }
+        private void AbrirCuentaCorriente(int? idCompra)
+        {
+            if (idCompra == null)
+            {
+                cuentaCorrienteDeProveedoresToolStripMenuItem.PerformClick();
+                return;
+            }
+
+            using (frmCuentaCorrienteProveedores cuenta = new frmCuentaCorrienteProveedores(idCompra.Value))
+            {
+                cuenta.ShowDialog(this);
+            }
+        }
+        private void AbrirReposicion(int? idProducto)
+        {
+            if (!SesionUsuario.Permisos.Contains(520))
+            {
+                AbrirArticulos(idProducto);
+                return;
+            }
+
+            using (frmListados listados = new frmListados(frmListados.Modo.Reposicion, idProducto))
             {
                 listados.ShowDialog();
             }
@@ -331,6 +394,7 @@ namespace CapaVista
             // proveedores
             administradorDeProveedoresToolStripMenuItem.Text = idiomaIngles ? "Supplier Management" : ClsIdioma.T("Administrador de proveedores");
             cuentaCorrienteDeProveedoresToolStripMenuItem.Text = idiomaIngles ? "Supplier Account" : ClsIdioma.T("Cuenta corriente de proveedores");
+            devolucionesAProveedorToolStripMenuItem.Text = idiomaIngles ? "Returns to Suppliers" : ClsIdioma.T("Devoluciones a proveedor");
 
             // listados
             preciosYReposicionToolStripMenuItem.Text = idiomaIngles ? "Prices and Restocking" : ClsIdioma.T("Precios y reposición");
@@ -554,6 +618,8 @@ namespace CapaVista
             administradorDeProveedoresToolStripMenuItem.Enabled = TieneAlguno(410, 411, 412);
             // Cuenta corriente
             cuentaCorrienteDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(420);
+            // Devoluciones a proveedor
+            devolucionesAProveedorToolStripMenuItem.Enabled = TieneAlguno(410, 411, 412, 420);
             informesVentasToolStripMenuItem.Enabled = TieneAlguno(610, 620, 630, 640, 650);
             balanceToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(660);
             // Caja operaciones
@@ -1012,13 +1078,23 @@ namespace CapaVista
                     return;
                 }
 
+                // nombre, codigo y SKU
                 foreach (DataRow fila in tablaProductosEncontrados.Rows)
                 {
                     string descripcion = fila["Descripcion"].ToString();
+                    string codigo = fila["CodigoBarra"] == DBNull.Value ? "" : fila["CodigoBarra"].ToString().Trim();
+                    string sku = fila["SKU"] == DBNull.Value ? "" : fila["SKU"].ToString().Trim();
+
+                    if (codigo != "")
+                        descripcion += "   ·   " + ClsIdioma.T("Cód. ") + codigo;
+
+                    if (sku != "")
+                        descripcion += "   ·   SKU " + sku;
 
                     lstDescripcion.Items.Add(descripcion);
                 }
 
+                lstDescripcion.Width = Math.Max(lstDescripcion.Width, dtgPresentacion.Width);
                 lstDescripcion.Visible = lstDescripcion.Items.Count > 0;
             }
             catch (Exception ex)
@@ -1076,6 +1152,14 @@ namespace CapaVista
         {
             frmExportarArchivos exportararchivos = new frmExportarArchivos();
             exportararchivos.ShowDialog();
+        }
+        private void devolucionesAProveedorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (frmDevolucionesProveedor devoluciones = new frmDevolucionesProveedor())
+            {
+                devoluciones.Icon = Icon;
+                devoluciones.ShowDialog(this);
+            }
         }
         private void cuentaCorrienteDeProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {

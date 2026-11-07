@@ -29,8 +29,29 @@ namespace CapaVista
             ConfigurarEventos();
             CargarComprasPendientes();
         }
+        // desde las alertas
+        public frmRecepcionCompra(int idCompra) : this()
+        {
+            Shown += (sender, e) => SeleccionarCompra(idCompra);
+        }
 
         #region Metodos
+        private void SeleccionarCompra(int idCompra)
+        {
+            DataGridViewRow? fila = dgvCompras.Rows.Cast<DataGridViewRow>()
+                .FirstOrDefault(f => Convert.ToInt32(f.Cells[clnIdCompra.Name].Value) == idCompra);
+
+            if (fila == null)
+            {
+                MessageBox.Show(ClsIdioma.T("La compra de la alerta ya no está pendiente de recepción."), ClsIdioma.T("Recepción de mercadería"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            dgvCompras.CurrentCell = fila.Cells.Cast<DataGridViewCell>().First(c => c.Visible);
+            fila.Selected = true;
+            CargarCompraSeleccionada();
+        }
         private void ConfigurarFormulario()
         {
             dgvProductos.ReadOnly = false;
