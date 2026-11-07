@@ -41,6 +41,9 @@
             lblMinuscula = new Label();
             lblNumero = new Label();
             lblCoincide = new Label();
+            btnMostrarTemporal = new Button();
+            btnMostrarNueva = new Button();
+            btnMostrarConfirmar = new Button();
             SuspendLayout();
             // 
             // label1
@@ -75,7 +78,7 @@
             btnCambiarPass.Location = new Point(82, 311);
             btnCambiarPass.Name = "btnCambiarPass";
             btnCambiarPass.Size = new Size(122, 23);
-            btnCambiarPass.TabIndex = 3;
+            btnCambiarPass.TabIndex = 7;
             btnCambiarPass.Text = "Cambiar contraseña";
             btnCambiarPass.UseVisualStyleBackColor = true;
             btnCambiarPass.Click += btnCambiarPass_Click;
@@ -87,7 +90,8 @@
             txtPassTemporal.PlaceholderText = "La que te llegó por correo";
             txtPassTemporal.Size = new Size(120, 23);
             txtPassTemporal.TabIndex = 4;
-            // 
+            txtPassTemporal.UseSystemPasswordChar = true;
+            //
             // txtNuevaPass
             // 
             txtNuevaPass.Location = new Point(84, 127);
@@ -95,6 +99,7 @@
             txtNuevaPass.PlaceholderText = "Tu nueva contraseña";
             txtNuevaPass.Size = new Size(120, 23);
             txtNuevaPass.TabIndex = 5;
+            txtNuevaPass.UseSystemPasswordChar = true;
             txtNuevaPass.TextChanged += txtNuevaPass_TextChanged;
             // 
             // txtConfirmarPass
@@ -104,8 +109,51 @@
             txtConfirmarPass.PlaceholderText = "Repetí la nueva contraseña";
             txtConfirmarPass.Size = new Size(120, 23);
             txtConfirmarPass.TabIndex = 6;
+            txtConfirmarPass.UseSystemPasswordChar = true;
             txtConfirmarPass.TextChanged += txtConfirmarPass_TextChanged;
-            // 
+            //
+            // btnMostrarTemporal
+            //
+            btnMostrarTemporal.Cursor = Cursors.Hand;
+            btnMostrarTemporal.FlatAppearance.BorderSize = 0;
+            btnMostrarTemporal.FlatStyle = FlatStyle.Flat;
+            btnMostrarTemporal.Location = new Point(208, 63);
+            btnMostrarTemporal.Name = "btnMostrarTemporal";
+            btnMostrarTemporal.Size = new Size(34, 25);
+            btnMostrarTemporal.TabIndex = 12;
+            btnMostrarTemporal.TabStop = false;
+            btnMostrarTemporal.Text = "👁️";
+            btnMostrarTemporal.UseVisualStyleBackColor = true;
+            btnMostrarTemporal.Click += btnMostrar_Click;
+            //
+            // btnMostrarNueva
+            //
+            btnMostrarNueva.Cursor = Cursors.Hand;
+            btnMostrarNueva.FlatAppearance.BorderSize = 0;
+            btnMostrarNueva.FlatStyle = FlatStyle.Flat;
+            btnMostrarNueva.Location = new Point(208, 126);
+            btnMostrarNueva.Name = "btnMostrarNueva";
+            btnMostrarNueva.Size = new Size(34, 25);
+            btnMostrarNueva.TabIndex = 13;
+            btnMostrarNueva.TabStop = false;
+            btnMostrarNueva.Text = "👁️";
+            btnMostrarNueva.UseVisualStyleBackColor = true;
+            btnMostrarNueva.Click += btnMostrar_Click;
+            //
+            // btnMostrarConfirmar
+            //
+            btnMostrarConfirmar.Cursor = Cursors.Hand;
+            btnMostrarConfirmar.FlatAppearance.BorderSize = 0;
+            btnMostrarConfirmar.FlatStyle = FlatStyle.Flat;
+            btnMostrarConfirmar.Location = new Point(208, 252);
+            btnMostrarConfirmar.Name = "btnMostrarConfirmar";
+            btnMostrarConfirmar.Size = new Size(34, 25);
+            btnMostrarConfirmar.TabIndex = 14;
+            btnMostrarConfirmar.TabStop = false;
+            btnMostrarConfirmar.Text = "👁️";
+            btnMostrarConfirmar.UseVisualStyleBackColor = true;
+            btnMostrarConfirmar.Click += btnMostrar_Click;
+            //
             // lblMinimo
             // 
             lblMinimo.AutoSize = true;
@@ -166,6 +214,9 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(293, 364);
+            Controls.Add(btnMostrarConfirmar);
+            Controls.Add(btnMostrarNueva);
+            Controls.Add(btnMostrarTemporal);
             Controls.Add(lblCoincide);
             Controls.Add(lblNumero);
             Controls.Add(lblMinuscula);
@@ -196,6 +247,9 @@
         private TextBox txtPassTemporal;
         private TextBox txtNuevaPass;
         private TextBox txtConfirmarPass;
+        private Button btnMostrarTemporal;
+        private Button btnMostrarNueva;
+        private Button btnMostrarConfirmar;
         private Label lblMinimo;
         private Label lblMayuscula;
         private Label lblMinuscula;

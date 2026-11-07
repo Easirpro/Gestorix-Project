@@ -740,12 +740,23 @@ namespace CapaVista
                         }
                     }
 
+                    // una promocion lleva un solo producto
+                    if (dgtCargaArticulo.Rows.Cast<DataGridViewRow>().Any(fila => !fila.IsNewRow && fila.Tag != null))
+                    {
+                        MessageBox.Show(ClsIdioma.T("Cada promoción lleva un solo producto.\nQuitá el que está cargado para cambiarlo."), ClsIdioma.T("Promociones"),
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        return;
+                    }
+
                     int indice = dgtCargaArticulo.Rows.Add();
 
                     dgtCargaArticulo.Rows[indice].Tag = producto.IdProducto;
                     dgtCargaArticulo.Rows[indice].Cells["clnProducto"].Value = producto.Descripcion;
                     dgtCargaArticulo.Rows[indice].Cells["clnCantidad"].Value = 1;
                     dgtCargaArticulo.Rows[indice].Cells["clnPrecio"].Value = producto.PrecioVenta;
+
+                    formulario.Close();
                 };
 
                 formulario.ShowDialog();
@@ -794,9 +805,9 @@ namespace CapaVista
 
                 int idTipoPromocion = ObtenerIdTipoPromocion();
 
-                if (idTipoPromocion >= 1 && idTipoPromocion <= 3 && HayProductosDiferentes())
+                if (HayProductosDiferentes())
                 {
-                    MessageBox.Show(ClsIdioma.T("Las promociones por volumen solo pueden aplicarse a un mismo producto. No se pueden combinar productos diferentes."), ClsIdioma.T("Validación de promoción"),
+                    MessageBox.Show(ClsIdioma.T("Cada promoción lleva un solo producto.\nQuitá los demás para poder guardarla."), ClsIdioma.T("Validación de promoción"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }

@@ -31,6 +31,7 @@ namespace CapaVista
         private readonly HashSet<DataGridViewRow> filasDePromocion = new HashSet<DataGridViewRow>();
 
         private frmCobroSecundario formularioSecundario;
+        private ClsBotonVaciarVenta botonVaciar;
 
         private readonly List<ClsPromocionVentaEntidad> promocionesAplicadas = new List<ClsPromocionVentaEntidad>();
 
@@ -55,6 +56,8 @@ namespace CapaVista
             // ancho minimo de descripcion
             ClnDescripcion.MinimumWidth = 220;
             ClsGrilla.Fijar(dtgPresentacion);
+            botonVaciar = ClsBotonVaciarVenta.Agregar(dtgPresentacion, ClnPrecioUnitario, ClnImporte, "ClnIdProducto",
+                LimpiarVenta, () => txtCodigoBarra.Focus());
 
             Load += frmmenuPres_Load;
             Load += FrmPresentacion_Load;
@@ -884,6 +887,7 @@ namespace CapaVista
             descuentoRecargo = 0.00m;
             total = 0.00m;
             promocionesAplicadas.Clear();
+            filasDePromocion.Clear();
 
             CalcularYMostrarMontos();
             RellenarFilas();
@@ -929,6 +933,8 @@ namespace CapaVista
             lblTotalMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
 
             lblTotalMonto.Text = total.ToString("C2");
+
+            botonVaciar?.Actualizar();
         }
         private void RegistrarPromocionAplicada(int idPromocion, string nombre, decimal importeLista, decimal importeCobrado)
         {
@@ -1049,10 +1055,18 @@ namespace CapaVista
 
         private void txtCodigoBarra_KeyDown(object sender, KeyEventArgs e)
         {
+            if (ClsListaSugerencias.Navegar(lstDescripcion, e))
+                return;
+
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                IngresarProductoPorCodigo();
+
+                // elegido con las flechas o el codigo escrito
+                if (ClsListaSugerencias.HayElegido(lstDescripcion))
+                    AgregarProductoSeleccionado();
+                else
+                    IngresarProductoPorCodigo();
             }
         }
         private void txtCodigoBarra_TextChanged(object sender, EventArgs e)

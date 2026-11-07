@@ -37,7 +37,12 @@ namespace CapaVista
             InitializeComponent();
             ClsIdioma.Registrar(this);
             this.grillaPrincipal = grillaPrincipal;
+
+            botonVaciar = ClsBotonVaciarVenta.Agregar(dtgPresentacion, ClnPrecioUnitario, ClnImporte, "ClnIdProducto",
+                LimpiarVenta, () => txtCodigoBarra.Focus());
         }
+
+        private ClsBotonVaciarVenta botonVaciar;
 
 
         #region Metodos
@@ -282,6 +287,8 @@ namespace CapaVista
             lblTotalMonto.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             lblTotalMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
             lblTotalMonto.Text = total.ToString("C2");
+
+            botonVaciar?.Actualizar();
         }
         private void LimpiarVenta()
         {
@@ -458,10 +465,18 @@ namespace CapaVista
         }
         private void txtCodigoBarra_KeyDown(object sender, KeyEventArgs e)
         {
+            if (ClsListaSugerencias.Navegar(lstDescripcion, e))
+                return;
+
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                IngresarProductoPorCodigo();
+
+                // elegido con las flechas o el codigo escrito
+                if (ClsListaSugerencias.HayElegido(lstDescripcion))
+                    AgregarProductoSeleccionado();
+                else
+                    IngresarProductoPorCodigo();
             }
         }
         private void btnCambiarcantidad_Click(object sender, EventArgs e)
