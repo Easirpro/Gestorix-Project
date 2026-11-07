@@ -46,7 +46,7 @@
             label1.Name = "label1";
             label1.Size = new Size(177, 15);
             label1.TabIndex = 0;
-            label1.Text = "¿Nombre de tu primer mascota?";
+            label1.Text = "¿Cuál es el nombre de tu mascota?";
             // 
             // label2
             // 
@@ -55,7 +55,7 @@
             label2.Name = "label2";
             label2.Size = new Size(162, 15);
             label2.TabIndex = 1;
-            label2.Text = "¿Nombre de tu libro favorito?";
+            label2.Text = "¿Cuál es tu libro favorito?";
             // 
             // label3
             // 
@@ -64,7 +64,7 @@
             label3.Name = "label3";
             label3.Size = new Size(155, 15);
             label3.TabIndex = 2;
-            label3.Text = "¿Cual es tu comida favorita?";
+            label3.Text = "¿Cuál es tu comida favorita?";
             // 
             // txtNombreMascota
             // 
@@ -114,6 +114,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AcceptButton = btnAceptar;
             ClientSize = new Size(256, 368);
             Controls.Add(btnAceptar);
             Controls.Add(txtComida);

@@ -31,12 +31,22 @@ namespace CapaVista
             {
                 idPregunta = pregunta.IdPregunta;
 
-                lblPregun.Text = pregunta.Pregunta;
+                lblPregun.Text = ClsIdioma.T(pregunta.Pregunta);
             }
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
+            // vacia no cuenta como intento
+            if (string.IsNullOrWhiteSpace(txtRespuesta.Text))
+            {
+                MessageBox.Show(ClsIdioma.T("Escriba la respuesta."), ClsIdioma.T("Recuperar contraseña"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                txtRespuesta.Focus();
+                return;
+            }
+
             ClsPreguntaSeguridadLogica logica = new ClsPreguntaSeguridadLogica();
 
             if (logica.RecuperoBloqueado(idUsuario))

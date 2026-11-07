@@ -41,7 +41,7 @@
             lblPregun.Name = "lblPregun";
             lblPregun.Size = new Size(38, 15);
             lblPregun.TabIndex = 0;
-            lblPregun.Text = "label1";
+            lblPregun.Text = "";
             // 
             // txtRespuesta
             // 
@@ -65,6 +65,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AcceptButton = btnAceptar;
             ClientSize = new Size(313, 278);
             Controls.Add(btnAceptar);
             Controls.Add(txtRespuesta);

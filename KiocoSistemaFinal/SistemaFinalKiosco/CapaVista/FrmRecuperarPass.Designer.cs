@@ -62,9 +62,9 @@
             // 
             btnEnviarCodigo.Location = new Point(123, 141);
             btnEnviarCodigo.Name = "btnEnviarCodigo";
-            btnEnviarCodigo.Size = new Size(95, 23);
+            btnEnviarCodigo.Size = new Size(122, 23);
             btnEnviarCodigo.TabIndex = 2;
-            btnEnviarCodigo.Text = "Enviar Codigo";
+            btnEnviarCodigo.Text = "Cambiar contraseña";
             btnEnviarCodigo.UseVisualStyleBackColor = true;
             btnEnviarCodigo.Click += btnEnviarCodigo_Click;
             // 
@@ -130,6 +130,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AcceptButton = btnEnviarCodigo;
             ClientSize = new Size(282, 204);
             Controls.Add(btnMostrar1);
             Controls.Add(btnMostrar);

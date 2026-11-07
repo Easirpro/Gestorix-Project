@@ -18,6 +18,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ValidarRequisitosPassword();
         }
         private void ValidarRequisitosPassword()
         {

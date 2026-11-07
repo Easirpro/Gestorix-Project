@@ -87,6 +87,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AcceptButton = btnGuardar;
             ClientSize = new Size(361, 204);
             Controls.Add(btnGuardar);
             Controls.Add(btnVolver);

@@ -115,7 +115,7 @@
             lblMinimo.Name = "lblMinimo";
             lblMinimo.Size = new Size(87, 12);
             lblMinimo.TabIndex = 7;
-            lblMinimo.Text = "Maximo 8 caracteres";
+            lblMinimo.Text = "Mínimo 8 caracteres";
             // 
             // lblMayuscula
             // 
@@ -126,7 +126,7 @@
             lblMayuscula.Name = "lblMayuscula";
             lblMayuscula.Size = new Size(65, 12);
             lblMayuscula.TabIndex = 8;
-            lblMayuscula.Text = "Una Mayúscula";
+            lblMayuscula.Text = "Una mayúscula";
             // 
             // lblMinuscula
             // 
@@ -137,7 +137,7 @@
             lblMinuscula.Name = "lblMinuscula";
             lblMinuscula.Size = new Size(71, 12);
             lblMinuscula.TabIndex = 9;
-            lblMinuscula.Text = "Una Minúscula";
+            lblMinuscula.Text = "Una minúscula";
             // 
             // lblNumero
             // 
@@ -148,7 +148,7 @@
             lblNumero.Name = "lblNumero";
             lblNumero.Size = new Size(57, 12);
             lblNumero.TabIndex = 10;
-            lblNumero.Text = "Un Numero";
+            lblNumero.Text = "Un número";
             // 
             // lblCoincide
             // 
@@ -178,6 +178,7 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            AcceptButton = btnCambiarPass;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPrimerIngreso";
             StartPosition = FormStartPosition.CenterScreen;
