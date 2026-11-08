@@ -57,6 +57,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Decimales(txtDescuentoPorcentual, txtBajaPrecio);
 
             tamanoDiseno = ClientSize;
             limitesDiseno = new Dictionary<Control, Rectangle>

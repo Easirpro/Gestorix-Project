@@ -32,6 +32,7 @@ namespace CapaLogica
         public const int MAX_INTENTOS_RECUPERO = 3;
         public const int MINUTOS_BLOQUEO_RECUPERO = 15;
         private const string ACCION_RECUPERO_FALLIDO = "RECUPERO_FALLIDO";
+        private const string ACCION_RECUPERO_CORRECTO = "RECUPERO_RESPUESTA_OK";
 
         public static string MensajeRecuperoBloqueado
         {
@@ -46,7 +47,7 @@ namespace CapaLogica
         {
             BitacoraLogi.clsBitacoraLogica bitacora = new BitacoraLogi.clsBitacoraLogica();
 
-            return bitacora.ContarAccionesRecientes(ACCION_RECUPERO_FALLIDO, idUsuario, MINUTOS_BLOQUEO_RECUPERO)
+            return bitacora.ContarAccionesRecientes(ACCION_RECUPERO_FALLIDO, ACCION_RECUPERO_CORRECTO, idUsuario, MINUTOS_BLOQUEO_RECUPERO)
                 >= MAX_INTENTOS_RECUPERO;
         }
 
@@ -54,11 +55,10 @@ namespace CapaLogica
         {
             bool correcta = datos.ValidarRespuesta(idUsuario,idPregunta,ClsSeguridad.HashRespuesta(idUsuario,respuesta));
 
-            if (!correcta)
-            {
-                ClsRegistroSeguridad.Registrar(idUsuario, ACCION_RECUPERO_FALLIDO,
-                    "Respuesta de seguridad incorrecta al recuperar la contraseña.");
-            }
+            // el acierto reinicia los fallos
+            ClsRegistroSeguridad.Registrar(idUsuario, correcta ? ACCION_RECUPERO_CORRECTO : ACCION_RECUPERO_FALLIDO,
+                correcta ? "Respuesta de seguridad correcta al recuperar la contraseña."
+                         : "Respuesta de seguridad incorrecta al recuperar la contraseña.");
 
             return correcta;
         }

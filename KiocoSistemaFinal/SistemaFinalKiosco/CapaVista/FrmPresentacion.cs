@@ -40,6 +40,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Decimales(txtCantidad);
 
             MinimumSize = new Size(900, 620);
             StartPosition = FormStartPosition.CenterScreen;

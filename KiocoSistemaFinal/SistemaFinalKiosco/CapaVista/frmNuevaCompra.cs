@@ -28,6 +28,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Comprobantes(txtNumeroComprobante);
 
             dtgNuevaCompra.Columns["Column1"].ReadOnly = true;
             dtgNuevaCompra.Columns["Column2"].ReadOnly = false;

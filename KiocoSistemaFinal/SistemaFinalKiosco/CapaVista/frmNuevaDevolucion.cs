@@ -28,6 +28,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Enteros(txtNroVenta);
             ConfigurarGrid(dgvVentas);
             ConfigurarGrid(dgvDetalle);
 

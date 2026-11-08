@@ -30,12 +30,14 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Decimales(txtCantidad);
         }
 
         public frmCobroSecundario(DataGridView grillaPrincipal)
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Decimales(txtCantidad);
             this.grillaPrincipal = grillaPrincipal;
 
             botonVaciar = ClsBotonVaciarVenta.Agregar(dtgPresentacion, ClnPrecioUnitario, ClnImporte, "ClnIdProducto",

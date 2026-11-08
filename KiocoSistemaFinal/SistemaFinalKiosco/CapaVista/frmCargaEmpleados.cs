@@ -35,6 +35,10 @@ namespace CapaVista
             txtDepartamento.KeyPress += txt_KeyPress;
             txtPostal.KeyPress += txt_KeyPress;
 
+            txtAltura.MaxLength = 6;
+            txtTelefono.MaxLength = 10;
+            ClsCampoNumerico.Enteros(txtAltura, txtTelefono);
+
             CargarProvincias();
         }
 
@@ -68,6 +72,38 @@ namespace CapaVista
             }
 
             control.Focus();
+        }
+        // altura y telefono antes de guardar
+        private bool ValidarAlturaYTelefono()
+        {
+            if (!int.TryParse(txtAltura.Text.Trim(), out int altura) || altura <= 0)
+            {
+                MessageBox.Show(ClsIdioma.T("Ingrese una altura válida (solo números)."), ClsIdioma.T("Validación"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                MostrarControl(txtAltura);
+                return false;
+            }
+
+            if (!ClsValidarNumeros.NumeroValido(txtTelefono.Text))
+            {
+                MessageBox.Show(ClsIdioma.T("Ingrese el teléfono (solo números)."), ClsIdioma.T("Validación"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                MostrarControl(txtTelefono);
+                return false;
+            }
+
+            if (txtTelefono.Text.Trim().Length < 6)
+            {
+                MessageBox.Show(ClsIdioma.T("El teléfono es muy corto. Ingréselo con la característica."), ClsIdioma.T("Validación"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                MostrarControl(txtTelefono);
+                return false;
+            }
+
+            return true;
         }
         private bool ValidarCamposVacios(Control.ControlCollection controles)
 
@@ -870,6 +906,11 @@ namespace CapaVista
                 return;
             }
 
+            if (!ValidarAlturaYTelefono())
+            {
+                return;
+            }
+
             try
             {
                 ClsAltaEmpleado emp = new ClsAltaEmpleado();
@@ -1211,6 +1252,11 @@ namespace CapaVista
                     MessageBox.Show(ClsIdioma.T("No se pudieron cargar correctamente los datos originales del usuario."),
                         ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                    return;
+                }
+
+                if (!ValidarAlturaYTelefono())
+                {
                     return;
                 }
 

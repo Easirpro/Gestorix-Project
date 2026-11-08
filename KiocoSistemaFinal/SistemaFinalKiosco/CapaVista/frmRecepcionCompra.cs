@@ -25,6 +25,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Decimales(txtTotalBoleta);
             ConfigurarFormulario();
             ConfigurarEventos();
             CargarComprasPendientes();

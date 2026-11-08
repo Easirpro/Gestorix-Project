@@ -32,9 +32,9 @@ namespace CapaLogica.BitacoraLogi
 
             return datos.RegistrarBitacora(idUsuario, accion.Trim(),tablaAfectada, idRegistroAfectado, descripcion);
         }
-        public int ContarAccionesRecientes(string accion, int idRegistroAfectado, int minutos)
+        public int ContarAccionesRecientes(string accion, string accionReinicio, int idRegistroAfectado, int minutos)
         {
-            return datos.ContarAccionesRecientes(accion, idRegistroAfectado, minutos);
+            return datos.ContarAccionesRecientes(accion, accionReinicio, idRegistroAfectado, minutos);
         }
         public DataTable ObtenerBitacora(DateTime? fechaDesde, DateTime? fechaHasta, string categoria, string buscar)
         {

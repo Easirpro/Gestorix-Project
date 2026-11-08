@@ -569,6 +569,27 @@ public class ClsUsuarioDatos
             }
         }
     }
+    // misma condicion que el login
+    public bool UsuarioHabilitado(int idUsuario)
+    {
+        using (SqlConnection con = conexion.ObtenerConexion())
+        {
+            string consulta = @"
+                SELECT COUNT(*)
+                FROM Usuario AS U
+                INNER JOIN Persona AS P ON P.IdPersona = U.IdPersona
+                WHERE U.IdUsuario = @IdUsuario
+                  AND U.Estado = 1
+                  AND P.Activo = 1";
+
+            SqlCommand cmd = new SqlCommand(consulta, con);
+            cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+
+            con.Open();
+
+            return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+        }
+    }
     public int ContarAdministradoresActivos(int idRolAdministrador, int idPersonaExcluida)
     {
         using (SqlConnection con = conexion.ObtenerConexion())
