@@ -61,6 +61,7 @@ namespace CapaVista
 
             Load += frmmenuPres_Load;
             Load += FrmPresentacion_Load;
+            FormClosing += frmmenuPres_FormClosing;
 
             Resize += (sender, e) => AjustarDiseno();
             Shown += (sender, e) => AjustarDiseno();
@@ -127,9 +128,40 @@ namespace CapaVista
                 tableLayoutPanel1, btnCobrar, btnNuevaCompra
             };
         }
+        private bool puedeVender;
+        private bool modoInicialAplicado;
+
+        // al entrar: sin permiso de venta o administrador arrancan en el inicio
         private void AplicarModoPantalla()
         {
-            modoBienvenida = !SesionUsuario.Permisos.Contains(210);
+            if (!modoInicialAplicado)
+            {
+                puedeVender = SesionUsuario.Permisos.Contains(210);
+                modoBienvenida = !puedeVender || SesionUsuario.IdRol == ClsUsuarioLogica.ID_ROL_ADMINISTRADOR;
+                modoInicialAplicado = true;
+
+                pcbLogo.Click += pcbLogo_Click;
+            }
+
+            MostrarModoPantalla();
+        }
+        // el logo pasa del inicio a la venta y vuelve
+        private void pcbLogo_Click(object? sender, EventArgs e)
+        {
+            if (!puedeVender)
+                return;
+
+            modoBienvenida = !modoBienvenida;
+            MostrarModoPantalla();
+
+            if (!modoBienvenida)
+                txtCodigoBarra.Focus();
+        }
+        private void MostrarModoPantalla()
+        {
+            pcbLogo.Cursor = puedeVender ? Cursors.Hand : Cursors.Default;
+            toolTip1.SetToolTip(pcbLogo, !puedeVender ? "" :
+                modoBienvenida ? ClsIdioma.T("Ir a la pantalla de venta") : ClsIdioma.T("Volver al inicio"));
 
             foreach (System.Windows.Forms.Control control in ControlesDeVenta())
             {
@@ -175,9 +207,13 @@ namespace CapaVista
             lblBienvenida.Text = ClsIdioma.Ingles
                 ? "Hello, " + nombre + "! Welcome to Gestorix"
                 : "¡Hola, " + nombre + "! Te damos la bienvenida a Gestorix";
-            lblBienvenidaAyuda!.Text = ClsIdioma.Ingles
-                ? "Use the menu above to work with the options of your role."
-                : "Usá el menú de arriba para trabajar con las opciones de tu rol.";
+            lblBienvenidaAyuda!.Text = puedeVender
+                ? (ClsIdioma.Ingles
+                    ? "Click the Gestorix logo to go to the sales screen, or use the menu above."
+                    : "Tocá el logo de Gestorix para ir a la pantalla de venta, o usá el menú de arriba.")
+                : (ClsIdioma.Ingles
+                    ? "Use the menu above to work with the options of your role."
+                    : "Usá el menú de arriba para trabajar con las opciones de tu rol.");
             lblBienvenida.Visible = true;
             lblBienvenidaAyuda.Visible = true;
 
@@ -1246,90 +1282,122 @@ namespace CapaVista
             frmProveedores proveedores = new frmProveedores();
             proveedores.ShowDialog();
         }
-        // Cerrar sesion
+        // Cerrar caja: arqueo y cierre, la sesion sigue abierta
         private void cerrarSeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             try
             {
-                ClsCajaLogica logicaCaja = new ClsCajaLogica();
-                var sesionCaja = logicaCaja.ObtenerSesionAbierta();
+                var sesionCaja = new ClsCajaLogica().ObtenerSesionAbierta();
 
-                if (sesionCaja != null)
+                if (sesionCaja == null)
                 {
-                    DialogResult arqueo = MessageBox.Show(
-                        ClsIdioma.T("¿Desea hacer el arqueo y cerrar la caja?\n\n") +
-                        ClsIdioma.T("Sí: cuenta el efectivo y cierra la caja.\n") +
-                        ClsIdioma.T("No: cierra solo su sesión y la caja sigue abierta para el próximo turno."),
-                        ClsIdioma.T("Cerrar caja"), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    MessageBox.Show(ClsIdioma.T("No hay una caja abierta."), ClsIdioma.T("Cerrar caja"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 
-                    if (arqueo == DialogResult.Cancel)
-                    {
-                        return;
-                    }
-
-                    if (arqueo == DialogResult.Yes)
-                    {
-                        using (frmCerrarCaja cierre = new frmCerrarCaja(sesionCaja.IdSesionCaja))
-                        {
-
-                            if (cierre.ShowDialog() != DialogResult.OK)
-                            {
-                                return;
-                            }
-                        }
-                    }
+                using (frmCerrarCaja cierre = new frmCerrarCaja(sesionCaja.IdSesionCaja))
+                {
+                    cierre.ShowDialog(this);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-
-            DialogResult resultado = MessageBox.Show(ClsIdioma.T("Estas seguro de cerrar la sesión?"), ClsIdioma.T("Cerrar sesión"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (resultado == DialogResult.Yes)
-            {
-                ClsLogin login = new ClsLogin();
-                login.CerrarSesion();
-
-                BloquearMenu();
             }
         }
+        // Abrir caja con el fondo inicial
         private void abrirCajaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (SesionUsuario.SesionActiva)
+            try
             {
-                MessageBox.Show(
-                    ClsIdioma.T("Ya hay una sesión abierta. Debe cerrar la sesión actual antes de iniciar otra."),
-                    ClsIdioma.T("Sesión abierta"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                if (new ClsCajaLogica().HayCajaAbierta())
+                {
+                    MessageBox.Show(ClsIdioma.T("La caja ya está abierta."), ClsIdioma.T("Abrir caja"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 
-                return;
+                using (frmAbrirCaja abrir = new frmAbrirCaja())
+                {
+                    abrir.ShowDialog(this);
+                }
             }
-
-            FrmLogin login = Application.OpenForms.OfType<FrmLogin>().FirstOrDefault();
-
-            if (login != null)
+            catch (Exception ex)
             {
-                login.LimpiarCampos();
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            this.Close();
         }
+        // Salir: mismo camino que la X
         private void tollClosed_Click(object sender, EventArgs e)
         {
-            DialogResult resultado = MessageBox.Show(ClsIdioma.T("Estas seguro de cerrar la sesión?"), ClsIdioma.T("Cerrar sesión"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (resultado == DialogResult.Yes)
-            {
-                Application.Exit();
+            Close();
+        }
 
+        // true cuando el formulario se cierra para salir del programa
+        public bool SalirDelPrograma { get; private set; }
+
+        private bool HayVentaCargada()
+        {
+            return dtgPresentacion.Rows.Cast<DataGridViewRow>()
+                .Any(f => !f.IsNewRow && !string.IsNullOrWhiteSpace(Convert.ToString(f.Cells["ClnIdProducto"].Value)));
+        }
+        // avisos de lo que se pierde o queda pendiente al salir
+        private List<string> AvisosAlSalir(bool revisarCaja)
+        {
+            List<string> avisos = new List<string>();
+
+            if (HayVentaCargada())
+                avisos.Add(ClsIdioma.T("Hay una venta cargada sin cobrar y se va a perder."));
+
+            if (formularioSecundario != null && !formularioSecundario.IsDisposed)
+                avisos.Add(ClsIdioma.T("El segundo cobro está abierto y se va a cerrar."));
+
+            if (revisarCaja && SesionUsuario.SesionActiva)
+            {
+                try
+                {
+                    if (new ClsCajaLogica().HayCajaAbierta())
+                        avisos.Add(ClsIdioma.T("La caja sigue abierta. Si terminó el turno, ciérrela desde Caja > Cerrar Caja."));
+                }
+                catch
+                {
+                }
             }
+
+            return avisos;
+        }
+        private static string ArmarMensaje(string pregunta, List<string> avisos)
+        {
+            if (avisos.Count == 0)
+                return pregunta;
+
+            return pregunta + "\n\n" + string.Join("\n", avisos.Select(a => "• " + a));
+        }
+        private void frmmenuPres_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            // X o boton de salir: se confirma
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                List<string> avisos = AvisosAlSalir(true);
+
+                DialogResult respuesta = MessageBox.Show(ArmarMensaje(ClsIdioma.T("¿Cerrar Gestorix?"), avisos), ClsIdioma.T("Salir"),
+                    MessageBoxButtons.YesNo, avisos.Count > 0 ? MessageBoxIcon.Warning : MessageBoxIcon.Question,
+                    avisos.Count > 0 ? MessageBoxDefaultButton.Button2 : MessageBoxDefaultButton.Button1);
+
+                if (respuesta != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
+            if (SesionUsuario.SesionActiva)
+                new ClsLogin().CerrarSesion();
+
+            SalirDelPrograma = true;
         }
         private void permisosToolStripMenuItem_Click(object sender, EventArgs e)
         {

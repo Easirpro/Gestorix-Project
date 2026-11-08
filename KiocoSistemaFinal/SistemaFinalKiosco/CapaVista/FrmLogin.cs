@@ -134,6 +134,13 @@ namespace CapaVista
 
             menu.FormClosed += (s, e) =>
             {
+                // X o Salir cierran el programa; Cerrar sesion vuelve aca
+                if (menu.SalirDelPrograma)
+                {
+                    Application.Exit();
+                    return;
+                }
+
                 this.Show();
                 this.BringToFront();
                 LimpiarCampos();

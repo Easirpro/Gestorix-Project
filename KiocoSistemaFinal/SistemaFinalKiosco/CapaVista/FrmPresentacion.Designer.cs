@@ -732,10 +732,11 @@
             bitacoraToolStripMenuItem.Click += bitacoraToolStripMenuItem_Click;
             // 
             // tollClosed
-            // 
+            //
             tollClosed.Image = (Image)resources.GetObject("tollClosed.Image");
             tollClosed.Name = "tollClosed";
             tollClosed.Size = new Size(28, 20);
+            tollClosed.ToolTipText = "Salir de Gestorix";
             tollClosed.Click += tollClosed_Click;
             // 
             // btnConfig
