@@ -558,6 +558,9 @@ namespace CapaLogica.NegocioLogica
 
                         int filaProveedor = 2;
 
+                        // viene una fila por sucursal
+                        HashSet<int> proveedoresCargados = new HashSet<int>();
+
                         foreach (DataRow fila in tablaProveedores.Rows)
                         {
                             bool proveedorActivo = false;
@@ -574,7 +577,7 @@ namespace CapaLogica.NegocioLogica
                             {
                                 int idProveedor;
 
-                                if (!int.TryParse(fila["IdProveedor"].ToString(), out idProveedor))
+                                if (!int.TryParse(fila["IdProveedor"].ToString(), out idProveedor) || !proveedoresCargados.Add(idProveedor))
                                 {
                                     continue;
                                 }

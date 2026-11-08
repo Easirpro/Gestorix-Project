@@ -528,9 +528,6 @@ namespace CapaVista
 
                 if (promocionEsRecurrente && datosPromocion.Tables.Count >= 3)
                 {
-
-                    DateTime fechaFin = Convert.ToDateTime(promocion["FechaFin"]);
-
                     foreach (DataRow filaDia in datosPromocion.Tables[2].Rows)
                     {
                         int numeroDia = Convert.ToInt32(filaDia["DiaSemana"]);
@@ -608,6 +605,14 @@ namespace CapaVista
 
                 ActualizarVistaPrevia();
 
+                if (!ClsDatosSensibles.Promocion)
+                {
+                    cmbMecanicaPromocional.Enabled = false;
+                    cmbDescuentoVolumen.Enabled = false;
+                    txtDescuentoPorcentual.Enabled = false;
+                    txtBajaPrecio.Enabled = false;
+                }
+
                 nombreOriginal = txtNombrePromocion.Text.Trim();
                 tipoOriginal = ObtenerIdTipoPromocion();
                 valorOriginal = ObtenerValorPromocion();
@@ -663,6 +668,7 @@ namespace CapaVista
 
             idPromocionSeleccionada = 0;
             modoEdicionPromocion = false;
+            cmbMecanicaPromocional.Enabled = true;
             btnGuardarPromo.Text = ClsIdioma.T("Guardar Promoción");
 
             txtCodigoPromocion.Enabled = false;

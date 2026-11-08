@@ -21,6 +21,10 @@ namespace CapaVista
         private decimal totalCompra = 0;
         private bool cargando = false;
 
+        private readonly Dictionary<int, decimal> costosConIva = new Dictionary<int, decimal>();
+        private bool boletaEditada = false;
+        private bool actualizandoBoleta = false;
+
         public frmRecepcionCompra()
         {
             InitializeComponent();
@@ -205,7 +209,8 @@ namespace CapaVista
                     {
                         IdProducto = g.Key,
                         Nombre = g.First()["Producto"].ToString(),
-                        Cantidad = g.Sum(f => Convert.ToDecimal(f["Cantidad"]))
+                        Cantidad = g.Sum(f => Convert.ToDecimal(f["Cantidad"])),
+                        Importe = g.Sum(f => Convert.ToDecimal(f["TotalDetalle"]))
                     });
 
                 foreach (var producto in productos)
@@ -218,9 +223,15 @@ namespace CapaVista
                         FormatearCantidad(0));
 
                     RecalcularFila(dgvProductos.Rows[indice]);
+
+                    if (producto.Cantidad > 0)
+                    {
+                        costosConIva[producto.IdProducto] = producto.Importe / producto.Cantidad;
+                    }
                 }
 
                 txtTotalBoleta.Text = totalCompra.ToString("N2");
+                boletaEditada = false;
                 HabilitarRecepcion(true);
                 ActualizarEstado();
             }
@@ -234,6 +245,7 @@ namespace CapaVista
         {
             idCompraSeleccionada = 0;
             totalCompra = 0;
+            costosConIva.Clear();
 
             dgvProductos.Rows.Clear();
             lblProveedorValor.Text = "-";
@@ -276,6 +288,42 @@ namespace CapaVista
             fila.Cells[clnDiferencia.Name].Style.ForeColor =
                 diferencia < 0 ? Color.Firebrick : diferencia > 0 ? Color.DarkGreen : SystemColors.ControlText;
         }
+        // total sugerido segun lo recibido, hasta que lo carguen a mano
+        private void SugerirTotalBoleta()
+        {
+            if (boletaEditada || idCompraSeleccionada == 0)
+            {
+                return;
+            }
+
+            List<DataGridViewRow> filas = dgvProductos.Rows.Cast<DataGridViewRow>().Where(f => !f.IsNewRow).ToList();
+
+            bool sinCambios = filas.All(f => ObtenerDecimal(f.Cells[clnCantidadRecibida.Name].Value) == ObtenerDecimal(f.Cells[clnCantidadPedida.Name].Value));
+
+            decimal total = sinCambios ? totalCompra : Math.Round(filas.Sum(f =>
+            {
+                costosConIva.TryGetValue(Convert.ToInt32(f.Cells[clnIdProducto.Name].Value), out decimal costo);
+                return ObtenerDecimal(f.Cells[clnCantidadRecibida.Name].Value) * costo;
+            }), 2, MidpointRounding.AwayFromZero);
+
+            string texto = total.ToString("N2");
+
+            if (txtTotalBoleta.Text == texto)
+            {
+                return;
+            }
+
+            actualizandoBoleta = true;
+
+            try
+            {
+                txtTotalBoleta.Text = texto;
+            }
+            finally
+            {
+                actualizandoBoleta = false;
+            }
+        }
         private void ActualizarDiferenciaTotal()
         {
             if (!TryObtenerImporte(txtTotalBoleta.Text, out decimal totalBoleta))
@@ -306,6 +354,7 @@ namespace CapaVista
                 return;
             }
 
+            SugerirTotalBoleta();
             ActualizarDiferenciaTotal();
 
             if (HayDiferencias())
@@ -606,6 +655,11 @@ namespace CapaVista
         }
         private void txtTotalBoleta_TextChanged(object sender, EventArgs e)
         {
+            if (!actualizandoBoleta)
+            {
+                boletaEditada = true;
+            }
+
             ActualizarEstado();
         }
         private void btnAgregarProducto_Click(object sender, EventArgs e)

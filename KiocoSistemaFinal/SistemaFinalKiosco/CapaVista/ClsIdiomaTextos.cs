@@ -752,6 +752,7 @@ namespace CapaVista
                 { "Login", "Login" },
                 { "Primer Ingreso", "First login" },
                 { "Recuperar Contraseña", "Recover password" },
+                { "Ocultar", "Hide" },
                 { "Pregunta de seguridad", "Security question" },
                 { "Revise el campo: ", "Check the field: " },
                 { "Ganancia", "Profit" },

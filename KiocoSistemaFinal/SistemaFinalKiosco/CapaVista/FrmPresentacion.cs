@@ -250,7 +250,7 @@ namespace CapaVista
 
         private void IniciarAlertas()
         {
-            if (!SesionUsuario.Permisos.Contains(1110))
+            if (!TieneAlguno(1100, 1110))
             {
                 return;
             }
@@ -333,7 +333,7 @@ namespace CapaVista
         }
         private void AbrirAlertas()
         {
-            if (!SesionUsuario.Permisos.Contains(1110))
+            if (!TieneAlguno(1100, 1110))
             {
                 MessageBox.Show(ClsIdioma.T("No tenés permiso para ver las alertas."), ClsIdioma.T("Alertas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);

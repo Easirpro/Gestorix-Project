@@ -776,8 +776,10 @@ namespace CapaVista
         {
             txtNombre.Enabled = habilitar;
             txtApellido.Enabled = habilitar;
-            txtDNI.Enabled = habilitar;
-            mkdCuil.Enabled = habilitar;
+            bool identidad = habilitar && (modoNuevo || ClsDatosSensibles.Empleado);
+
+            txtDNI.Enabled = identidad;
+            mkdCuil.Enabled = identidad;
             dtpFechaNacimiento.Enabled = habilitar;
             cmbGenero.Enabled = habilitar;
             rdbMasculino.Enabled = habilitar;
@@ -799,7 +801,7 @@ namespace CapaVista
             txtCorreo.Enabled = habilitar;
 
             chkActivo.Enabled = habilitar && !EsUnoMismo;
-            cmbRol.Enabled = habilitar && PuedeCambiarRol && !EsUnoMismo;
+            cmbRol.Enabled = identidad && PuedeCambiarRol && !EsUnoMismo;
         }
         #endregion
 

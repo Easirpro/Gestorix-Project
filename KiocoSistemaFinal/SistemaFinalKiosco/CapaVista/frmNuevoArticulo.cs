@@ -94,6 +94,14 @@ namespace CapaVista
                 chkControlStock_CheckedChanged(null, null);
                 chkAlertaVencimiento_CheckedChanged(null, null);
                 chkControlLote_CheckedChanged(null, null);
+
+                if (idProductoModificar != 0 && !ClsDatosSensibles.Articulo)
+                {
+                    txtPrecioCosto.ReadOnly = true;
+                    txtGanancia.ReadOnly = true;
+                    chkActivarIva.Enabled = false;
+                    cmbIva.Enabled = false;
+                }
             }
             catch (Exception ex)
             {

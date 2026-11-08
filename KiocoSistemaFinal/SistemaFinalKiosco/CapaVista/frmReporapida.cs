@@ -27,6 +27,8 @@ namespace CapaVista
             InitializeComponent();
             ClsIdioma.Registrar(this);
 
+            btnActualizarPrecios.Enabled = ClsDatosSensibles.Articulo;
+
             cargandoFiltros = true;
             CargarFiltros();
             cargandoFiltros = false;
