@@ -44,7 +44,7 @@
             label1.AutoSize = true;
             label1.Location = new Point(35, 124);
             label1.Name = "label1";
-            label1.Size = new Size(177, 15);
+            label1.Size = new Size(190, 15);
             label1.TabIndex = 0;
             label1.Text = "¿Cuál es el nombre de tu mascota?";
             // 
@@ -53,7 +53,7 @@
             label2.AutoSize = true;
             label2.Location = new Point(35, 182);
             label2.Name = "label2";
-            label2.Size = new Size(162, 15);
+            label2.Size = new Size(140, 15);
             label2.TabIndex = 1;
             label2.Text = "¿Cuál es tu libro favorito?";
             // 
@@ -112,9 +112,9 @@
             // 
             // frmPreguntasSegu
             // 
+            AcceptButton = btnAceptar;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            AcceptButton = btnAceptar;
             ClientSize = new Size(256, 368);
             Controls.Add(btnAceptar);
             Controls.Add(txtComida);
@@ -128,7 +128,7 @@
             MaximizeBox = false;
             Name = "frmPreguntasSegu";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "frmPreguntasSegu";
+            Text = "Preguntas de Seguridad";
             ResumeLayout(false);
             PerformLayout();
         }
