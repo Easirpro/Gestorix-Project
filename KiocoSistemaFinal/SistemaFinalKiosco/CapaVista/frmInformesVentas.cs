@@ -119,7 +119,7 @@ namespace CapaVista
         {
             dgvInforme.AutoGenerateColumns = false;
             dgvInforme.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvInforme.AllowUserToResizeColumns = true;
+            dgvInforme.AllowUserToResizeColumns = false;
             dgvInforme.EnableHeadersVisualStyles = false;
             dgvInforme.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
         }

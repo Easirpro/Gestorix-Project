@@ -17,6 +17,14 @@ namespace CapaVista
 
             this.idUsuario = idUsuario;
 
+            // aviso segun las constantes del bloqueo
+            int intentos = ClsPreguntaSeguridadLogica.MAX_INTENTOS_RECUPERO;
+            int minutos = ClsPreguntaSeguridadLogica.MINUTOS_BLOQUEO_RECUPERO;
+
+            lblIntentos.Text = ClsIdioma.Ingles
+                ? "For security, after " + intentos + " wrong answers you will have to wait " + minutos + " minutes."
+                : "Por seguridad, después de " + intentos + " respuestas incorrectas vas a tener que esperar " + minutos + " minutos.";
+
             this.Load += frmRecupResSegur_Load;
             btnAceptar.Click += btnAceptar_Click;
         }
@@ -31,17 +39,27 @@ namespace CapaVista
             {
                 idPregunta = pregunta.IdPregunta;
 
-                lblPregun.Text = pregunta.Pregunta;
+                lblPregun.Text = ClsIdioma.T(pregunta.Pregunta);
             }
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
+            // vacia no cuenta como intento
+            if (string.IsNullOrWhiteSpace(txtRespuesta.Text))
+            {
+                MessageBox.Show(ClsIdioma.T("Escriba la respuesta."), ClsIdioma.T("Recuperar contraseña"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                txtRespuesta.Focus();
+                return;
+            }
+
             ClsPreguntaSeguridadLogica logica = new ClsPreguntaSeguridadLogica();
 
             if (logica.RecuperoBloqueado(idUsuario))
             {
-                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, ClsIdioma.T("Recuperar contraseña"),
+                MessageBox.Show(ClsIdioma.T(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado), ClsIdioma.T("Recuperar contraseña"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 this.Close();
@@ -64,7 +82,7 @@ namespace CapaVista
             }
             else if (logica.RecuperoBloqueado(idUsuario))
             {
-                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, ClsIdioma.T("Recuperar contraseña"),
+                MessageBox.Show(ClsIdioma.T(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado), ClsIdioma.T("Recuperar contraseña"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 this.Close();

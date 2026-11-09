@@ -48,7 +48,7 @@ namespace CapaVista
             this.dgvBitacora.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             this.dgvBitacora.BackgroundColor = SystemColors.Window;
             this.dgvBitacora.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-            this.dgvBitacora.AllowUserToResizeColumns = true;
+            this.dgvBitacora.AllowUserToResizeColumns = false;
             this.dgvBitacora.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             this.dtpFechaDesde.Value = DateTime.Today.AddDays(-30);
             this.dtpFechaHasta.Value = DateTime.Today;
@@ -188,8 +188,7 @@ namespace CapaVista
                 columna.DefaultCellStyle.Format = formato;
             }
         }
-        private static readonly string[] ColumnasFlexibles = { "Descripcion", "Mensaje", "Proveedor" };
-
+        // ancho segun contenido y el sobrante repartido hasta llenar la grilla
         private void AjustarAnchoColumnas()
         {
             if (this.dgvBitacora.Columns.Count == 0)
@@ -197,21 +196,7 @@ namespace CapaVista
                 return;
             }
 
-            this.dgvBitacora.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-
-            DataGridViewColumn flexible = ColumnasFlexibles.Where(nombre => this.dgvBitacora.Columns.Contains(nombre) && this.dgvBitacora.Columns[nombre].Visible)
-                .Select(nombre => this.dgvBitacora.Columns[nombre]).FirstOrDefault();
-
-            if (flexible == null)
-            {
-                return;
-            }
-
-            bool barraVertical = this.dgvBitacora.ColumnHeadersHeight + this.dgvBitacora.Rows.GetRowsHeight(DataGridViewElementStates.Visible) > this.dgvBitacora.ClientSize.Height;
-            int disponible = this.dgvBitacora.ClientSize.Width - 4 - (barraVertical ? SystemInformation.VerticalScrollBarWidth : 0) - (this.dgvBitacora.RowHeadersVisible ? this.dgvBitacora.RowHeadersWidth : 0);
-            int otras = this.dgvBitacora.Columns.Cast<DataGridViewColumn>().Where(c => c.Visible && c != flexible).Sum(c => c.Width);
-
-            flexible.Width = Math.Max(flexible.Width, disponible - otras);
+            ClsGrilla.Ajustar(this.dgvBitacora, repartir: true);
         }
         private void AplicarFiltros()
         {

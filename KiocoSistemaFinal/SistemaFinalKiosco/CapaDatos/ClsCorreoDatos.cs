@@ -125,19 +125,19 @@ namespace CapaDatos
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
             {
+                // la relacion no tiene estado: se reemplaza
                 string consulta = @"
-                    UPDATE PersonaCorreo
-                    SET Activo = 0
-                    WHERE IdPersona = @IdPersona
-                    AND Activo = 1";
+                    DELETE FROM PersonaCorreo
+                    WHERE IdPersona = @IdPersona";
 
                 using (SqlCommand cmd = new SqlCommand(consulta, conexion))
                 {
                     cmd.Parameters.AddWithValue("@IdPersona", idPersona);
 
                     conexion.Open();
+                    cmd.ExecuteNonQuery();
 
-                    return cmd.ExecuteNonQuery() > 0;
+                    return true;
                 }
             }
         }

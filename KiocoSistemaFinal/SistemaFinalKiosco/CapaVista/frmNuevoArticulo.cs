@@ -26,10 +26,25 @@ namespace CapaVista
         // recuerdan las que tenía, para dar de baja las que se quiten de la lista.
         private DataTable tablaProveedores = CrearTablaProveedores();
         private List<int> sucursalesOriginales = new List<int>();
+        // motivo del ultimo rechazo de ValidarDatos
+        private string motivoInvalido = "";
+
+        private void ConfigurarCamposNumericos()
+        {
+            ClsCampoNumerico.Decimales(txtPrecioCosto, txtGanancia, txtStockActual, txtStockMinimo, txtStockMaximo);
+            ClsCampoNumerico.Enteros(txtAlertaVencimiento);
+        }
+        private bool CampoInvalido(TextBox campo, string motivo)
+        {
+            motivoInvalido = motivo;
+            campo.Focus();
+            return false;
+        }
         public frmNuevoArticulo()
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ConfigurarCamposNumericos();
 
 
 
@@ -38,6 +53,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ConfigurarCamposNumericos();
 
             idProductoModificar = idProducto;
 
@@ -78,6 +94,14 @@ namespace CapaVista
                 chkControlStock_CheckedChanged(null, null);
                 chkAlertaVencimiento_CheckedChanged(null, null);
                 chkControlLote_CheckedChanged(null, null);
+
+                if (idProductoModificar != 0 && !ClsDatosSensibles.Articulo)
+                {
+                    txtPrecioCosto.ReadOnly = true;
+                    txtGanancia.ReadOnly = true;
+                    chkActivarIva.Enabled = false;
+                    cmbIva.Enabled = false;
+                }
             }
             catch (Exception ex)
             {
@@ -242,6 +266,8 @@ namespace CapaVista
         // tiene que ser válido.
         private bool ValidarDatos()
         {
+            motivoInvalido = "";
+
             if (string.IsNullOrWhiteSpace(txtNombreProducto.Text))
             {
                 txtNombreProducto.Focus();
@@ -282,20 +308,17 @@ namespace CapaVista
 
             if (!DecimalOpcional(txtPrecioCosto, out _))
             {
-                txtPrecioCosto.Focus();
-                return false;
+                return CampoInvalido(txtPrecioCosto, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Precio de costo"));
             }
 
             if (!DecimalOpcional(txtGanancia, out _))
             {
-                txtGanancia.Focus();
-                return false;
+                return CampoInvalido(txtGanancia, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Ganancia"));
             }
 
             if (!DecimalOpcional(txtPrecioVenta, out _))
             {
-                txtPrecioCosto.Focus();
-                return false;
+                return CampoInvalido(txtPrecioCosto, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Precio de costo"));
             }
 
             if (chkActivarIva.Checked)
@@ -309,26 +332,22 @@ namespace CapaVista
 
             if (!DecimalOpcional(txtStockActual, out _))
             {
-                txtStockActual.Focus();
-                return false;
+                return CampoInvalido(txtStockActual, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Stock actual"));
             }
 
             if (!DecimalOpcional(txtStockMinimo, out decimal stockMinimo))
             {
-                txtStockMinimo.Focus();
-                return false;
+                return CampoInvalido(txtStockMinimo, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Stock mínimo"));
             }
 
             if (!DecimalOpcional(txtStockMaximo, out decimal stockIdeal))
             {
-                txtStockMaximo.Focus();
-                return false;
+                return CampoInvalido(txtStockMaximo, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Stock máximo"));
             }
 
             if (chkControlStock.Checked && stockIdeal < stockMinimo)
             {
-                txtStockMaximo.Focus();
-                return false;
+                return CampoInvalido(txtStockMaximo, ClsIdioma.T("El stock máximo no puede ser menor que el stock mínimo."));
             }
 
             if (chkAlertaVencimiento.Checked)
@@ -339,22 +358,9 @@ namespace CapaVista
                     return false;
                 }
 
-                if (string.IsNullOrWhiteSpace(txtAlertaVencimiento.Text))
+                if (!int.TryParse(txtAlertaVencimiento.Text, out int diasAlerta) || diasAlerta < 0)
                 {
-                    txtAlertaVencimiento.Focus();
-                    return false;
-                }
-
-                if (!int.TryParse(txtAlertaVencimiento.Text, out int diasAlerta))
-                {
-                    txtAlertaVencimiento.Focus();
-                    return false;
-                }
-
-                if (diasAlerta < 0)
-                {
-                    txtAlertaVencimiento.Focus();
-                    return false;
+                    return CampoInvalido(txtAlertaVencimiento, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Días de aviso de vencimiento"));
                 }
             }
 
@@ -507,7 +513,7 @@ namespace CapaVista
             {
                 if (!ValidarDatos())
                 {
-                    MessageBox.Show(ClsIdioma.T("Complete los campos obligatorios (nombre, marca, unidad de venta y rubro) y revise los valores ingresados."), ClsIdioma.T("Validación"),
+                    MessageBox.Show(motivoInvalido != "" ? motivoInvalido : ClsIdioma.T("Complete los campos obligatorios (nombre, marca, unidad de venta y rubro) y revise los valores ingresados."), ClsIdioma.T("Validación"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }

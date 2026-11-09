@@ -57,6 +57,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Decimales(txtDescuentoPorcentual, txtBajaPrecio);
 
             tamanoDiseno = ClientSize;
             limitesDiseno = new Dictionary<Control, Rectangle>
@@ -83,6 +84,11 @@ namespace CapaVista
             };
             ClsIdioma.IdiomaCambiado += idioma;
             Disposed += (sender, e) => ClsIdioma.IdiomaCambiado -= idioma;
+        }
+        // desde las alertas
+        public frmPromocion(int idPromocion) : this()
+        {
+            Shown += (sender, e) => CargarPromocionSeleccionada(idPromocion);
         }
 
         // Símbolo de la moneda en la vista previa: $ en castellano, US$ en inglés.
@@ -522,9 +528,6 @@ namespace CapaVista
 
                 if (promocionEsRecurrente && datosPromocion.Tables.Count >= 3)
                 {
-
-                    DateTime fechaFin = Convert.ToDateTime(promocion["FechaFin"]);
-
                     foreach (DataRow filaDia in datosPromocion.Tables[2].Rows)
                     {
                         int numeroDia = Convert.ToInt32(filaDia["DiaSemana"]);
@@ -602,6 +605,14 @@ namespace CapaVista
 
                 ActualizarVistaPrevia();
 
+                if (!ClsDatosSensibles.Promocion)
+                {
+                    cmbMecanicaPromocional.Enabled = false;
+                    cmbDescuentoVolumen.Enabled = false;
+                    txtDescuentoPorcentual.Enabled = false;
+                    txtBajaPrecio.Enabled = false;
+                }
+
                 nombreOriginal = txtNombrePromocion.Text.Trim();
                 tipoOriginal = ObtenerIdTipoPromocion();
                 valorOriginal = ObtenerValorPromocion();
@@ -657,6 +668,7 @@ namespace CapaVista
 
             idPromocionSeleccionada = 0;
             modoEdicionPromocion = false;
+            cmbMecanicaPromocional.Enabled = true;
             btnGuardarPromo.Text = ClsIdioma.T("Guardar Promoción");
 
             txtCodigoPromocion.Enabled = false;
@@ -735,12 +747,23 @@ namespace CapaVista
                         }
                     }
 
+                    // una promocion lleva un solo producto
+                    if (dgtCargaArticulo.Rows.Cast<DataGridViewRow>().Any(fila => !fila.IsNewRow && fila.Tag != null))
+                    {
+                        MessageBox.Show(ClsIdioma.T("Cada promoción lleva un solo producto.\nQuitá el que está cargado para cambiarlo."), ClsIdioma.T("Promociones"),
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        return;
+                    }
+
                     int indice = dgtCargaArticulo.Rows.Add();
 
                     dgtCargaArticulo.Rows[indice].Tag = producto.IdProducto;
                     dgtCargaArticulo.Rows[indice].Cells["clnProducto"].Value = producto.Descripcion;
                     dgtCargaArticulo.Rows[indice].Cells["clnCantidad"].Value = 1;
                     dgtCargaArticulo.Rows[indice].Cells["clnPrecio"].Value = producto.PrecioVenta;
+
+                    formulario.Close();
                 };
 
                 formulario.ShowDialog();
@@ -789,9 +812,9 @@ namespace CapaVista
 
                 int idTipoPromocion = ObtenerIdTipoPromocion();
 
-                if (idTipoPromocion >= 1 && idTipoPromocion <= 3 && HayProductosDiferentes())
+                if (HayProductosDiferentes())
                 {
-                    MessageBox.Show(ClsIdioma.T("Las promociones por volumen solo pueden aplicarse a un mismo producto. No se pueden combinar productos diferentes."), ClsIdioma.T("Validación de promoción"),
+                    MessageBox.Show(ClsIdioma.T("Cada promoción lleva un solo producto.\nQuitá los demás para poder guardarla."), ClsIdioma.T("Validación de promoción"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -909,6 +932,10 @@ namespace CapaVista
         }
         private void txtBuscarPromo_TextChanged(object sender, EventArgs e)
         {
+            // no buscar mientras se carga
+            if (cargandoPromocion)
+                return;
+
             try
             {
                 string texto = txtBuscarPromo.Text.Trim();

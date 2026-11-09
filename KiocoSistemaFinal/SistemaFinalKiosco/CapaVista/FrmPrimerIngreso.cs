@@ -18,6 +18,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ValidarRequisitosPassword();
         }
         private void ValidarRequisitosPassword()
         {
@@ -106,6 +107,15 @@ namespace CapaVista
 
                     break;
             }
+        }
+        // muestra u oculta la contraseña del campo de al lado
+        private void btnMostrar_Click(object sender, EventArgs e)
+        {
+            Button boton = (Button)sender;
+            TextBox campo = boton == btnMostrarTemporal ? txtPassTemporal : boton == btnMostrarNueva ? txtNuevaPass : txtConfirmarPass;
+
+            campo.UseSystemPasswordChar = !campo.UseSystemPasswordChar;
+            boton.Text = campo.UseSystemPasswordChar ? "👁️" : "🔒";
         }
         private void txtNuevaPass_TextChanged(object sender, EventArgs e)
         {
