@@ -41,6 +41,7 @@ namespace CapaVista
             dtgCargaarticulo.Columns["clnMarca"].FillWeight = 100;
             dtgCargaarticulo.Columns["clnPrecioVenta"].FillWeight = 90;
             dtgCargaarticulo.Columns["clnStockActual"].FillWeight = 90;
+            dtgCargaarticulo.Columns["clnStockActual"].DefaultCellStyle.Format = "0.###";
             dtgCargaarticulo.Columns["clnDetalle"].FillWeight = 90;
 
             foreach (DataGridViewColumn columna in dtgCargaarticulo.Columns)
@@ -245,6 +246,14 @@ namespace CapaVista
                 return detalle[columna].ToString();
             }
 
+            string ObtenerCantidad(string columna)
+            {
+                if (!tabla.Columns.Contains(columna) || detalle[columna] == DBNull.Value)
+                    return ClsIdioma.T("No disponible");
+
+                return Convert.ToDecimal(detalle[columna]).ToString("0.###");
+            }
+
             string mensaje =
                 (ClsIdioma.Ingles ? $"Code: {ObtenerTexto("CodigoBarra")}\n" : $"Código: {ObtenerTexto("CodigoBarra")}\n") +
                 (ClsIdioma.Ingles ? $"Description: {ObtenerTexto("Descripcion")}\n" : $"Descripción: {ObtenerTexto("Descripcion")}\n") +
@@ -256,9 +265,9 @@ namespace CapaVista
                 (ClsIdioma.Ingles ? $"Sale price: {ObtenerTexto("PrecioVenta")}\n" : $"Precio de venta: {ObtenerTexto("PrecioVenta")}\n") +
                 (ClsIdioma.Ingles ? $"VAT: {ObtenerTexto("IVA")}\n" : $"IVA: {ObtenerTexto("IVA")}\n") +
                 (ClsIdioma.Ingles ? $"VAT rate: {ObtenerTexto("Alicuota")}\n" : $"Alícuota: {ObtenerTexto("Alicuota")}\n") +
-                (ClsIdioma.Ingles ? $"Current stock: {ObtenerTexto("CantidadActual")}\n" : $"Stock actual: {ObtenerTexto("CantidadActual")}\n") +
-                (ClsIdioma.Ingles ? $"Minimum stock: {ObtenerTexto("StockMinimo")}\n" : $"Stock mínimo: {ObtenerTexto("StockMinimo")}\n") +
-                (ClsIdioma.Ingles ? $"Ideal stock: {ObtenerTexto("StockIdeal")}\n" : $"Stock ideal: {ObtenerTexto("StockIdeal")}\n") +
+                (ClsIdioma.Ingles ? $"Current stock: {ObtenerCantidad("CantidadActual")}\n" : $"Stock actual: {ObtenerCantidad("CantidadActual")}\n") +
+                (ClsIdioma.Ingles ? $"Minimum stock: {ObtenerCantidad("StockMinimo")}\n" : $"Stock mínimo: {ObtenerCantidad("StockMinimo")}\n") +
+                (ClsIdioma.Ingles ? $"Ideal stock: {ObtenerCantidad("StockIdeal")}\n" : $"Stock ideal: {ObtenerCantidad("StockIdeal")}\n") +
                 (ClsIdioma.Ingles ? $"Expiration: {ObtenerTexto("FechaVencimiento")}\n" : $"Vencimiento: {ObtenerTexto("FechaVencimiento")}\n") +
                 (ClsIdioma.Ingles ? $"Status: {(Convert.ToBoolean(detalle["Activo"]) ? "Active" : "Discontinued")}" : $"Estado: {(Convert.ToBoolean(detalle["Activo"]) ? "Activo" : "Discontinuado")}");
 

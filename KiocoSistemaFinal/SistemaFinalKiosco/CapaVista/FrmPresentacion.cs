@@ -41,6 +41,7 @@ namespace CapaVista
             InitializeComponent();
             ClsIdioma.Registrar(this);
             ClsCampoNumerico.Enteros(txtCantidad);
+            ClnCantidad.DefaultCellStyle.Format = "0.###";
 
             MinimumSize = new Size(900, 620);
             StartPosition = FormStartPosition.CenterScreen;
@@ -770,8 +771,8 @@ namespace CapaVista
             {
                 decimal stockRestante = Math.Max(0m, stockDisponible - cantidadYaCargada - cantidadEnGrillaSecundaria);
 
-                MessageBox.Show((ClsIdioma.Ingles ? $"Insufficient stock.\n" : $"Stock insuficiente.\n") + (ClsIdioma.Ingles ? $"Stock in system: {stockDisponible}\n" : $"Stock en sistema: {stockDisponible}\n") + (ClsIdioma.Ingles ? $"Quantity in main sale: {cantidadYaCargada}\n" : $"Cantidad en venta principal: {cantidadYaCargada}\n") +
-                    (ClsIdioma.Ingles ? $"Quantity in secondary sale: {cantidadEnGrillaSecundaria}\n" : $"Cantidad en venta secundaria: {cantidadEnGrillaSecundaria}\n") + (ClsIdioma.Ingles ? $"Stock available to add: {stockRestante}\n" : $"Stock disponible para agregar: {stockRestante}\n") + (ClsIdioma.Ingles ? $"Quantity to add: {cantidad}" : $"Cantidad a agregar: {cantidad}"),
+                MessageBox.Show((ClsIdioma.Ingles ? $"Insufficient stock.\n" : $"Stock insuficiente.\n") + (ClsIdioma.Ingles ? $"Stock in system: {stockDisponible:0.###}\n" : $"Stock en sistema: {stockDisponible:0.###}\n") + (ClsIdioma.Ingles ? $"Quantity in main sale: {cantidadYaCargada}\n" : $"Cantidad en venta principal: {cantidadYaCargada}\n") +
+                    (ClsIdioma.Ingles ? $"Quantity in secondary sale: {cantidadEnGrillaSecundaria}\n" : $"Cantidad en venta secundaria: {cantidadEnGrillaSecundaria}\n") + (ClsIdioma.Ingles ? $"Stock available to add: {stockRestante:0.###}\n" : $"Stock disponible para agregar: {stockRestante:0.###}\n") + (ClsIdioma.Ingles ? $"Quantity to add: {cantidad}" : $"Cantidad a agregar: {cantidad}"),
                     ClsIdioma.T("Stock insuficiente"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return false;
@@ -1681,7 +1682,7 @@ namespace CapaVista
                         if (cantidadEnPrincipal + cantidadEnSecundaria + cantidadAgregar > stockDisponible)
                         {
                             MessageBox.Show(ClsIdioma.T("Stock insuficiente para un producto de la promoción.\n\n") + (ClsIdioma.Ingles ? $"Product ID: {idProducto}\n" : $"ID del producto: {idProducto}\n") +
-                                (ClsIdioma.Ingles ? $"Stock in system: {stockDisponible}\n" : $"Stock en sistema: {stockDisponible}\n") + (ClsIdioma.Ingles ? $"In main sale: {cantidadEnPrincipal}\n" : $"En venta principal: {cantidadEnPrincipal}\n") + (ClsIdioma.Ingles ? $"In secondary sale: {cantidadEnSecundaria}\n" : $"En venta secundaria: {cantidadEnSecundaria}\n") +
+                                (ClsIdioma.Ingles ? $"Stock in system: {stockDisponible:0.###}\n" : $"Stock en sistema: {stockDisponible:0.###}\n") + (ClsIdioma.Ingles ? $"In main sale: {cantidadEnPrincipal}\n" : $"En venta principal: {cantidadEnPrincipal}\n") + (ClsIdioma.Ingles ? $"In secondary sale: {cantidadEnSecundaria}\n" : $"En venta secundaria: {cantidadEnSecundaria}\n") +
                                 (ClsIdioma.Ingles ? $"Quantity required by the promotion: {cantidadAgregar}" : $"Cantidad requerida por la promoción: {cantidadAgregar}"),
                                 ClsIdioma.T("Promociones"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
@@ -1803,7 +1804,7 @@ namespace CapaVista
 
             int idProducto = Convert.ToInt32(fila.Cells["ClnIdProducto"].Value);
             decimal cantidadActual = Convert.ToDecimal(fila.Cells["ClnCantidad"].Value);
-            string entrada = Microsoft.VisualBasic.Interaction.InputBox(ClsIdioma.T("Ingrese la nueva cantidad:"), ClsIdioma.T("Cambiar cantidad"), cantidadActual.ToString());
+            string entrada = Microsoft.VisualBasic.Interaction.InputBox(ClsIdioma.T("Ingrese la nueva cantidad:"), ClsIdioma.T("Cambiar cantidad"), cantidadActual.ToString("0.###"));
 
             if (string.IsNullOrWhiteSpace(entrada))
             {
@@ -1858,9 +1859,9 @@ namespace CapaVista
             {
                 decimal stockRestante = Math.Max(0m, stockDisponible - cantidadEnGrillaPrincipalSinFila - cantidadEnGrillaSecundaria);
 
-                MessageBox.Show((ClsIdioma.Ingles ? $"Insufficient stock.\n\n" : $"Stock insuficiente.\n\n") + (ClsIdioma.Ingles ? $"Stock in system: {stockDisponible}\n" : $"Stock en sistema: {stockDisponible}\n") +
+                MessageBox.Show((ClsIdioma.Ingles ? $"Insufficient stock.\n\n" : $"Stock insuficiente.\n\n") + (ClsIdioma.Ingles ? $"Stock in system: {stockDisponible:0.###}\n" : $"Stock en sistema: {stockDisponible:0.###}\n") +
                     (ClsIdioma.Ingles ? $"Other units in main sale: {cantidadEnGrillaPrincipalSinFila}\n" : $"Otras unidades en venta principal: {cantidadEnGrillaPrincipalSinFila}\n") + (ClsIdioma.Ingles ? $"Units in secondary sale: {cantidadEnGrillaSecundaria}\n" : $"Unidades en venta secundaria: {cantidadEnGrillaSecundaria}\n") +
-                    (ClsIdioma.Ingles ? $"Available for this row: {stockRestante}\n" : $"Disponible para esta fila: {stockRestante}\n") + (ClsIdioma.Ingles ? $"Requested quantity: {nuevaCantidad}" : $"Cantidad solicitada: {nuevaCantidad}"),
+                    (ClsIdioma.Ingles ? $"Available for this row: {stockRestante:0.###}\n" : $"Disponible para esta fila: {stockRestante:0.###}\n") + (ClsIdioma.Ingles ? $"Requested quantity: {nuevaCantidad}" : $"Cantidad solicitada: {nuevaCantidad}"),
                     ClsIdioma.T("Stock insuficiente"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;

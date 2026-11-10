@@ -388,6 +388,7 @@ namespace CapaVista
                 {
                     dgvDetalle.Columns[titulo.Key].HeaderText = ClsIdioma.T(titulo.Value);
                     dgvDetalle.Columns[titulo.Key].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    dgvDetalle.Columns[titulo.Key].DefaultCellStyle.Format = "0.###";
                 }
             }
 
