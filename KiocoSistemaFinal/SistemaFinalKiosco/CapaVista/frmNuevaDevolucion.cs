@@ -174,12 +174,7 @@ namespace CapaVista
             }
 
             decimal disponible = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["CantidadDisponible"].Value);
-            decimal vendida = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["CantidadVendida"].Value);
             precioDevolucion = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["PrecioDevolucion"].Value);
-
-            bool conDecimales = vendida % 1 != 0 || disponible % 1 != 0;
-            nudCantidad.DecimalPlaces = conDecimales ? 3 : 0;
-            nudCantidad.Increment = conDecimales ? 0.1m : 1m;
 
             lblPrecioValor.Text = $"$ {precioDevolucion:N2}";
 
@@ -412,6 +407,8 @@ namespace CapaVista
 
         private void nudCantidad_ValueChanged(object sender, EventArgs e)
         {
+            // el control deja pasar decimales escritos a mano
+            nudCantidad.Value = decimal.Truncate(nudCantidad.Value);
             ActualizarImporte();
         }
 

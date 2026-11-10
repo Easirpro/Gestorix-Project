@@ -830,9 +830,9 @@ namespace CapaVista
 
                     int idProducto = Convert.ToInt32(fila.Tag);
 
-                    if (fila.Cells["clnCantidad"].Value == null || !decimal.TryParse(fila.Cells["clnCantidad"].Value.ToString(), out decimal cantidad) || cantidad <= 0)
+                    if (fila.Cells["clnCantidad"].Value == null || !ClsCampoNumerico.EsCantidadEntera(fila.Cells["clnCantidad"].Value, out decimal cantidad) || cantidad <= 0)
                     {
-                        throw new Exception(ClsIdioma.T("Todos los productos deben tener una cantidad mayor que cero."));
+                        throw new Exception(ClsIdioma.T("Todos los productos deben tener una cantidad entera mayor que cero."));
                     }
 
                     detalles.Add(new ClsDetallePromocion

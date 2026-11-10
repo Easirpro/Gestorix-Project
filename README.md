@@ -160,3 +160,5 @@ y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
 0.0.1.19- 10/11 Instalador 0.0.1.1 con la base de referencia 0.0.1.1 de KiocoSistemaFinal/Instalador/base; el script ya no borra esa carpeta y genera la firma del .bak -Marce-
 
 0.0.1.20- 10/11 README revisado: módulos, base de referencia, actualización de una PC, documentación e historial completo -Marce-
+
+0.0.1.21- 10/11 Stock y cantidades solo por unidades enteras en artículos, ventas, compras, recepción, promociones y devoluciones -Marce-
