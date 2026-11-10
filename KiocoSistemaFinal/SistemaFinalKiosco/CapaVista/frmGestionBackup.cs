@@ -14,7 +14,6 @@ namespace CapaVista
 {
     public partial class frmGestionBackup : Form
     {
-        // true mientras se genera o restaura un backup: no se puede cerrar la ventana.
         private bool trabajando = false;
 
         public frmGestionBackup()
@@ -68,8 +67,7 @@ namespace CapaVista
                 OcultarProgreso(pgbGenerarBackup, lblProgresoBackup);
             }
         }
-        // Muestra la barra en 0 y bloquea los botones mientras dura el backup o la restauración.
-        // Progress<int> se crea acá, en la pantalla, así los avisos llegan al hilo de la pantalla.
+       
         private IProgress<int> MostrarProgreso(ProgressBar barra, Label etiqueta, string texto)
         {
             HabilitarBotones(false);
