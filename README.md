@@ -22,11 +22,11 @@ bitácora, backup y dígito verificador (DVH).
 ## Instalación en una PC
 1. Instalar **SQL Server 2025 Express** (o más nuevo) con la instancia `SQLEXPRESS`, con el usuario de Windows
    que va a usar Gestorix (queda como administrador del servidor). El instalador de Gestorix no sigue si no lo encuentra.
-2. Ejecutar `Instalar_Gestorix_0.0.1.0.exe`: instala el programa en `Archivos de programa\Gestorix`, crea los accesos
+2. Ejecutar `Instalar_Gestorix_0.0.1.1.exe`: instala el programa en `Archivos de programa\Gestorix`, crea los accesos
    directos, deja la base de referencia en `C:\Gestorix\BaseInicial` y le da permiso a SQL Server sobre `C:\Gestorix`.
 3. Abrir Gestorix: la primera vez, si no existe la base `Gestorix`, la crea sola desde la base de referencia.
 
-Para generar el instalador: instalar [Inno Setup 6](https://jrsoftware.org/isdl.php) y ejecutar en PowerShell
+Para generar el instalador: dejar `Gestorix_referencia_0.0.1.1.bak` en `KiocoSistemaFinal\Instalador\base` (no está en el repositorio), instalar [Inno Setup 6](https://jrsoftware.org/isdl.php) y ejecutar en PowerShell
 `KiocoSistemaFinal\Instalador\GenerarInstalador.ps1`. Publica el programa (incluye .NET, la PC no necesita tenerlo)
 y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
 
@@ -119,3 +119,5 @@ y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
 0.0.1.2- 3/11 Importes en pesos argentinos (ARS) y en dólares (USD) con el sistema en inglés (también en la vista previa de Promociones); Registrar/Modificar artículo, Categorías y marcas, Importar y Exportar artículos sin botón de maximizar -Marce-
 
 0.0.1.3- 3/11 Proveedores: la grilla muestra todos los proveedores y se actualiza al cargar uno nuevo; dirección "Sin número"; e-mail con dominio propio; varias sucursales por proveedor (al cargarlo o con "Nueva sucursal") y Modificar edita la sucursal elegida -Marce-
+
+0.0.1.4- 10/11 Instalador 0.0.1.1 con la base de referencia 0.0.1.1 de KiocoSistemaFinal/Instalador/base; el script ya no borra esa carpeta y genera la firma del .bak -Marce-
