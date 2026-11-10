@@ -1,7 +1,7 @@
 ﻿; Instalador de Gestorix (Inno Setup 6). Se compila con GenerarInstalador.ps1, que antes
 ; publica el programa en .\publicado y genera la firma de la base de referencia de .\base.
 
-#define Version "0.0.1.2"
+#define Version "0.0.1.3"
 #define VersionBase "0.0.1.1"
 
 [Setup]

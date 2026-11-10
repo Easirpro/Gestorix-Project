@@ -66,7 +66,7 @@ namespace CapaVista
 
                     dgvDetalle.Rows[indice].Cells["clnCodigo"].Value = fila["CodigoBarra"].ToString();
                     dgvDetalle.Rows[indice].Cells["clnProducto"].Value = fila["Producto"].ToString();
-                    dgvDetalle.Rows[indice].Cells["clnCantidad"].Value = Convert.ToDecimal(fila["Cantidad"]).ToString("N3");
+                    dgvDetalle.Rows[indice].Cells["clnCantidad"].Value = Convert.ToDecimal(fila["Cantidad"]).ToString("0.###");
                     dgvDetalle.Rows[indice].Cells["clnPrecio"].Value = Convert.ToDecimal(fila["PrecioSinIVA"]).ToString("N2");
                     dgvDetalle.Rows[indice].Cells["clnIVA"].Value = Convert.ToDecimal(fila["PorcentajeIVA"]).ToString("N2");
                     dgvDetalle.Rows[indice].Cells["clnTotal"].Value = Convert.ToDecimal(fila["TotalDetalle"]).ToString("N2");

@@ -23,7 +23,7 @@ devoluciones a proveedores e idioma español/inglés.
 ## Instalación en una PC
 1. Instalar **SQL Server 2025 Express** (o más nuevo) con la instancia `SQLEXPRESS`, con el usuario de Windows
    que va a usar Gestorix (queda como administrador del servidor). El instalador de Gestorix no sigue si no lo encuentra.
-2. Ejecutar `Instalar_Gestorix_0.0.1.2.exe`: instala el programa en `Archivos de programa\Gestorix`, crea los accesos
+2. Ejecutar `Instalar_Gestorix_0.0.1.3.exe`: instala el programa en `Archivos de programa\Gestorix`, crea los accesos
    directos, deja la base de referencia en `C:\Gestorix\BaseInicial` y le da permiso a SQL Server sobre `C:\Gestorix`.
 3. Abrir Gestorix: la primera vez, si no existe la base `Gestorix`, la crea sola desde la base de referencia.
 
@@ -164,3 +164,5 @@ y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
 0.0.1.21- 10/11 Stock y cantidades solo por unidades enteras en artículos, ventas, compras, recepción, promociones y devoluciones -Marce-
 
 0.0.1.22- 10/11 Instalador 0.0.1.2 con unidades enteras y la base de referencia 0.0.1.1 -Marce-
+
+0.0.1.23- 10/11 Stock y cantidades sin decimales en grillas y mensajes; instalador 0.0.1.3 -Marce-

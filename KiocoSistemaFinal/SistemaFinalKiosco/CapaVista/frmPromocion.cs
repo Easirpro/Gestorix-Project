@@ -180,6 +180,7 @@ namespace CapaVista
             if (dgtCargaArticulo.Columns.Contains("CantidadActual"))
             {
                 dgtCargaArticulo.Columns["CantidadActual"].HeaderText = ClsIdioma.T("Stock disponible");
+                dgtCargaArticulo.Columns["CantidadActual"].DefaultCellStyle.Format = "0.###";
             }
 
             if (dgtCargaArticulo.Columns.Contains("clnEliminar"))
@@ -599,7 +600,7 @@ namespace CapaVista
 
                     dgtCargaArticulo.Rows[indice].Tag = Convert.ToInt32(detalle["IdProducto"]);
                     dgtCargaArticulo.Rows[indice].Cells["clnProducto"].Value = detalle["NombreProducto"].ToString();
-                    dgtCargaArticulo.Rows[indice].Cells["clnCantidad"].Value = detalle["Cantidad"];
+                    dgtCargaArticulo.Rows[indice].Cells["clnCantidad"].Value = Convert.ToDecimal(detalle["Cantidad"]).ToString("0.###");
                     dgtCargaArticulo.Rows[indice].Cells["clnPrecio"].Value = detalle["PrecioVenta"];
                 }
 
