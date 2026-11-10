@@ -1,7 +1,8 @@
 ﻿; Instalador de Gestorix (Inno Setup 6). Se compila con GenerarInstalador.ps1, que antes
 ; publica el programa en .\publicado y genera la firma de la base de referencia de .\base.
 
-#define Version "0.0.1.1"
+#define Version "0.0.1.2"
+#define VersionBase "0.0.1.1"
 
 [Setup]
 AppId={{8F3C2A51-6B7D-4E2A-9C1F-3D5E7A9B1C20}
@@ -37,8 +38,8 @@ Name: "C:\Gestorix\BaseInicial"; Flags: uninsneveruninstall
 [Files]
 Source: "publicado\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Base de referencia: el programa la restaura sola la primera vez que se abre (si no existe la base).
-Source: "base\Gestorix_referencia_{#Version}.bak"; DestDir: "C:\Gestorix\BaseInicial"; DestName: "Gestorix_inicial.bak"; Flags: ignoreversion uninsneveruninstall
-Source: "base\Gestorix_referencia_{#Version}.bak.hash"; DestDir: "C:\Gestorix\BaseInicial"; DestName: "Gestorix_inicial.bak.hash"; Flags: ignoreversion uninsneveruninstall
+Source: "base\Gestorix_referencia_{#VersionBase}.bak"; DestDir: "C:\Gestorix\BaseInicial"; DestName: "Gestorix_inicial.bak"; Flags: ignoreversion uninsneveruninstall
+Source: "base\Gestorix_referencia_{#VersionBase}.bak.hash"; DestDir: "C:\Gestorix\BaseInicial"; DestName: "Gestorix_inicial.bak.hash"; Flags: ignoreversion uninsneveruninstall
 
 [Icons]
 Name: "{group}\Gestorix"; Filename: "{app}\CapaVista.exe"
