@@ -393,6 +393,12 @@ namespace CapaVista
                     idTelefonoModificar = Convert.ToInt32(fila["IdTelefono"]);
                 }
 
+                if (!ClsDatosSensibles.Proveedor)
+                {
+                    txtRazonSocial.ReadOnly = true;
+                    txtCuit.ReadOnly = true;
+                }
+
                 if (fila["IdCorreo"] != DBNull.Value)
                 {
                     idCorreoModificar = Convert.ToInt32(fila["IdCorreo"]);

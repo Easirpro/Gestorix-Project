@@ -135,7 +135,7 @@ namespace CapaVista
             }
 
             btnNuevo.Enabled = puedeCrear;
-            btnModificar.Enabled = puedeModificar;
+            btnModificar.Enabled = puedeModificar && (EsCategorias ? ClsDatosSensibles.Rubro : ClsDatosSensibles.Marca);
             btnDiscontinuar.Enabled = puedeModificar;
             btnHabilitar.Enabled = puedeModificar;
             btnEliminar.Enabled = puedeModificar;

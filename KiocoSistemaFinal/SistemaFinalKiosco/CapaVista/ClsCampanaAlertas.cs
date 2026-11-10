@@ -35,7 +35,7 @@ namespace CapaVista
         private readonly ClsAlertaLogica logica = new ClsAlertaLogica();
         private readonly Form formulario;
         private readonly ToolStripMenuItem campana;
-        private readonly Dictionary<TipoAlerta, Action> acciones;
+        private readonly Dictionary<TipoAlerta, Action<ClsAlertaEntidad?>> acciones;
         private readonly System.Windows.Forms.Timer temporizador;
         private DateTime ultimaActualizacion = DateTime.MinValue;
 
@@ -49,7 +49,7 @@ namespace CapaVista
             return ClsIdioma.T(Titulos.TryGetValue(tipo, out string? titulo) ? titulo : tipo.ToString());
         }
 
-        public ClsCampanaAlertas(Form formulario, MenuStrip menu, ToolStripItem antesDe, Dictionary<TipoAlerta, Action> acciones)
+        public ClsCampanaAlertas(Form formulario, MenuStrip menu, ToolStripItem antesDe, Dictionary<TipoAlerta, Action<ClsAlertaEntidad?>> acciones)
         {
             this.formulario = formulario;
             this.acciones = acciones;
@@ -198,8 +198,9 @@ namespace CapaVista
                 return;
             }
 
-            if (acciones.TryGetValue(tipo, out Action accion))
-                accion();
+            // desde la campana: sin registro puntual
+            if (acciones.TryGetValue(tipo, out Action<ClsAlertaEntidad?> accion))
+                accion(null);
 
             Actualizar();
         }

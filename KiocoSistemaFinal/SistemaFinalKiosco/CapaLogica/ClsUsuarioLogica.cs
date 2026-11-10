@@ -29,6 +29,12 @@ namespace CapaLogica
 
             return datos.ObtenerIdUsuarioPorUsername(username);
         }
+        public bool UsuarioHabilitado(int idUsuario)
+        {
+            ClsUsuarioDatos datos = new ClsUsuarioDatos();
+
+            return datos.UsuarioHabilitado(idUsuario);
+        }
         public ClsPreguntaSeguridad ObtenerPregunta(int idUsuario)
         {
             ClsPreguntaSeguridaDatos datos = new ClsPreguntaSeguridaDatos();

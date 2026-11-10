@@ -16,6 +16,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Enteros(txtCantidadLleva, txtCantidadPaga);
 
 
 

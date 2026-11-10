@@ -32,7 +32,7 @@ namespace CapaVista
 
             idUsuario = logica.ObtenerIdUsuario(txtIngresoUsuario.Text.Trim());
 
-            if (idUsuario == 0 || !new ClsPreguntaSeguridadLogica().UsuarioTienePreguntas(idUsuario))
+            if (idUsuario == 0 || !logica.UsuarioHabilitado(idUsuario) || !new ClsPreguntaSeguridadLogica().UsuarioTienePreguntas(idUsuario))
             {
                 MessageBox.Show(ClsIdioma.T("No es posible recuperar la contraseña con los datos ingresados.\n") +
                     ClsIdioma.T("Verifique el usuario o contacte al administrador."), ClsIdioma.T("Recuperar contraseña"),
@@ -42,7 +42,7 @@ namespace CapaVista
 
             if (new ClsPreguntaSeguridadLogica().RecuperoBloqueado(idUsuario))
             {
-                MessageBox.Show(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado, ClsIdioma.T("Recuperar contraseña"),
+                MessageBox.Show(ClsIdioma.T(ClsPreguntaSeguridadLogica.MensajeRecuperoBloqueado), ClsIdioma.T("Recuperar contraseña"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }

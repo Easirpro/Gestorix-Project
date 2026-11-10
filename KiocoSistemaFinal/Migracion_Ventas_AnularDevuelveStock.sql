@@ -144,6 +144,17 @@ BEGIN
                 END
         WHERE IdVenta = @IdVenta;
 
+        INSERT INTO dbo.Bitacora (IdUsuario, FechaHora, Accion, TablaAfectada, IdRegistroAfectado, Descripcion)
+        VALUES
+        (
+            @IdUsuarioMovimiento, SYSDATETIME(),
+            CASE WHEN @Anulada = 1 THEN N'ANULAR' ELSE N'REACTIVAR' END,
+            N'Venta', @IdVenta,
+            LEFT(CASE WHEN @Anulada = 1
+                      THEN CONCAT(N'Venta #', @IdVenta, N' anulada | Motivo: ', LTRIM(RTRIM(@MotivoAnulacion)))
+                      ELSE CONCAT(N'Venta #', @IdVenta, N' reactivada') END, 255)
+        );
+
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH

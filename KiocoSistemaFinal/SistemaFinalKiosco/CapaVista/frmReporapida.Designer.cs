@@ -54,6 +54,8 @@
             cmbSucursal = new ComboBox();
             cmbCategoria = new ComboBox();
             cmbMarca = new ComboBox();
+            txtPorcentaje = new TextBox();
+            btnAplicarPorcentaje = new Button();
             pnlBotones = new Panel();
             btnCancelar = new Button();
             btnGuardarCambios = new Button();
@@ -65,11 +67,9 @@
             clnStockActual = new DataGridViewTextBoxColumn();
             clnCantidadReponer = new DataGridViewTextBoxColumn();
             pnlBusqueda = new Panel();
+            lblPorcentaje = new Label();
             txtCodigo = new TextBox();
             lblCodigoArticulo = new Label();
-            lblPorcentaje = new Label();
-            txtPorcentaje = new TextBox();
-            btnAplicarPorcentaje = new Button();
             lstDescripcion = new ListBox();
             tlpFiltros = new TableLayoutPanel();
             lblProveedor = new Label();
@@ -137,6 +137,31 @@
             cmbMarca.TabIndex = 5;
             ttAyuda.SetToolTip(cmbMarca, "Filtrá los productos por marca.");
             // 
+            // txtPorcentaje
+            // 
+            txtPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtPorcentaje.Location = new Point(745, 13);
+            txtPorcentaje.Name = "txtPorcentaje";
+            txtPorcentaje.PlaceholderText = "Ej.: 15";
+            txtPorcentaje.Size = new Size(70, 23);
+            txtPorcentaje.TabIndex = 3;
+            txtPorcentaje.TextAlign = HorizontalAlignment.Right;
+            ttAyuda.SetToolTip(txtPorcentaje, "Porcentaje de aumento sobre el precio actual. Para bajar el precio, poné un número negativo.");
+            txtPorcentaje.KeyDown += txtPorcentaje_KeyDown;
+            txtPorcentaje.KeyPress += txtPorcentaje_KeyPress;
+            // 
+            // btnAplicarPorcentaje
+            // 
+            btnAplicarPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnAplicarPorcentaje.Location = new Point(825, 12);
+            btnAplicarPorcentaje.Name = "btnAplicarPorcentaje";
+            btnAplicarPorcentaje.Size = new Size(150, 25);
+            btnAplicarPorcentaje.TabIndex = 4;
+            btnAplicarPorcentaje.Text = "Aplicar aumento";
+            ttAyuda.SetToolTip(btnAplicarPorcentaje, "Calcula el nuevo precio de todos los productos de la grilla con el porcentaje indicado.");
+            btnAplicarPorcentaje.UseVisualStyleBackColor = true;
+            btnAplicarPorcentaje.Click += btnAplicarPorcentaje_Click;
+            // 
             // pnlBotones
             // 
             pnlBotones.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -173,6 +198,7 @@
             // 
             dgvProductos.AllowUserToAddRows = false;
             dgvProductos.AllowUserToDeleteRows = false;
+            dgvProductos.AllowUserToResizeColumns = false;
             dgvProductos.AllowUserToResizeRows = false;
             dgvProductos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvProductos.BackgroundColor = SystemColors.Window;
@@ -258,6 +284,16 @@
             pnlBusqueda.Size = new Size(980, 42);
             pnlBusqueda.TabIndex = 3;
             // 
+            // lblPorcentaje
+            // 
+            lblPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblPorcentaje.AutoSize = true;
+            lblPorcentaje.Location = new Point(662, 16);
+            lblPorcentaje.Name = "lblPorcentaje";
+            lblPorcentaje.Size = new Size(81, 15);
+            lblPorcentaje.TabIndex = 2;
+            lblPorcentaje.Text = "Aumento (%):";
+            // 
             // txtCodigo
             // 
             txtCodigo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -268,41 +304,6 @@
             txtCodigo.TabIndex = 1;
             txtCodigo.TextChanged += txtCodigo_TextChanged;
             txtCodigo.KeyDown += txtCodigo_KeyDown;
-            //
-            // lblPorcentaje
-            //
-            lblPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            lblPorcentaje.AutoSize = true;
-            lblPorcentaje.Location = new Point(662, 16);
-            lblPorcentaje.Name = "lblPorcentaje";
-            lblPorcentaje.Size = new Size(77, 15);
-            lblPorcentaje.TabIndex = 2;
-            lblPorcentaje.Text = "Aumento (%):";
-            //
-            // txtPorcentaje
-            //
-            txtPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtPorcentaje.Location = new Point(745, 13);
-            txtPorcentaje.Name = "txtPorcentaje";
-            txtPorcentaje.PlaceholderText = "Ej.: 15";
-            txtPorcentaje.Size = new Size(70, 23);
-            txtPorcentaje.TabIndex = 3;
-            txtPorcentaje.TextAlign = HorizontalAlignment.Right;
-            ttAyuda.SetToolTip(txtPorcentaje, "Porcentaje de aumento sobre el precio actual. Para bajar el precio, poné un número negativo.");
-            txtPorcentaje.KeyDown += txtPorcentaje_KeyDown;
-            txtPorcentaje.KeyPress += txtPorcentaje_KeyPress;
-            //
-            // btnAplicarPorcentaje
-            //
-            btnAplicarPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnAplicarPorcentaje.Location = new Point(825, 12);
-            btnAplicarPorcentaje.Name = "btnAplicarPorcentaje";
-            btnAplicarPorcentaje.Size = new Size(150, 25);
-            btnAplicarPorcentaje.TabIndex = 4;
-            btnAplicarPorcentaje.Text = "Aplicar aumento";
-            ttAyuda.SetToolTip(btnAplicarPorcentaje, "Calcula el nuevo precio de todos los productos de la grilla con el porcentaje indicado.");
-            btnAplicarPorcentaje.UseVisualStyleBackColor = true;
-            btnAplicarPorcentaje.Click += btnAplicarPorcentaje_Click;
             // 
             // lblCodigoArticulo
             // 

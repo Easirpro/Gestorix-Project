@@ -31,6 +31,7 @@ namespace CapaVista
         private readonly HashSet<DataGridViewRow> filasDePromocion = new HashSet<DataGridViewRow>();
 
         private frmCobroSecundario formularioSecundario;
+        private ClsBotonVaciarVenta botonVaciar;
 
         private readonly List<ClsPromocionVentaEntidad> promocionesAplicadas = new List<ClsPromocionVentaEntidad>();
 
@@ -39,6 +40,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Decimales(txtCantidad);
 
             MinimumSize = new Size(900, 620);
             StartPosition = FormStartPosition.CenterScreen;
@@ -50,20 +52,17 @@ namespace CapaVista
             dtgPresentacion.ReadOnly = true;
             dtgPresentacion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPresentacion.MultiSelect = false;
-            dtgPresentacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dtgPresentacion.AllowUserToResizeColumns = true;
-            dtgPresentacion.AllowUserToResizeRows = false;
-
-            foreach (DataGridViewColumn columna in dtgPresentacion.Columns)
-            {
-                columna.Resizable = DataGridViewTriState.True;
-                columna.MinimumWidth = 50;
-            }
-            dtgPresentacion.AllowUserToOrderColumns = false;
             dtgPresentacion.RowHeadersVisible = false;
+
+            // ancho minimo de descripcion
+            ClnDescripcion.MinimumWidth = 220;
+            ClsGrilla.Fijar(dtgPresentacion);
+            botonVaciar = ClsBotonVaciarVenta.Agregar(dtgPresentacion, ClnPrecioUnitario, ClnImporte, "ClnIdProducto",
+                LimpiarVenta, () => txtCodigoBarra.Focus());
 
             Load += frmmenuPres_Load;
             Load += FrmPresentacion_Load;
+            FormClosing += frmmenuPres_FormClosing;
 
             Resize += (sender, e) => AjustarDiseno();
             Shown += (sender, e) => AjustarDiseno();
@@ -130,9 +129,40 @@ namespace CapaVista
                 tableLayoutPanel1, btnCobrar, btnNuevaCompra
             };
         }
+        private bool puedeVender;
+        private bool modoInicialAplicado;
+
+        // al entrar: sin permiso de venta o administrador arrancan en el inicio
         private void AplicarModoPantalla()
         {
-            modoBienvenida = !SesionUsuario.Permisos.Contains(210);
+            if (!modoInicialAplicado)
+            {
+                puedeVender = SesionUsuario.Permisos.Contains(210);
+                modoBienvenida = !puedeVender || SesionUsuario.IdRol == ClsUsuarioLogica.ID_ROL_ADMINISTRADOR;
+                modoInicialAplicado = true;
+
+                pcbLogo.Click += pcbLogo_Click;
+            }
+
+            MostrarModoPantalla();
+        }
+        // el logo pasa del inicio a la venta y vuelve
+        private void pcbLogo_Click(object? sender, EventArgs e)
+        {
+            if (!puedeVender)
+                return;
+
+            modoBienvenida = !modoBienvenida;
+            MostrarModoPantalla();
+
+            if (!modoBienvenida)
+                txtCodigoBarra.Focus();
+        }
+        private void MostrarModoPantalla()
+        {
+            pcbLogo.Cursor = puedeVender ? Cursors.Hand : Cursors.Default;
+            toolTip1.SetToolTip(pcbLogo, !puedeVender ? "" :
+                modoBienvenida ? ClsIdioma.T("Ir a la pantalla de venta") : ClsIdioma.T("Volver al inicio"));
 
             foreach (System.Windows.Forms.Control control in ControlesDeVenta())
             {
@@ -178,9 +208,13 @@ namespace CapaVista
             lblBienvenida.Text = ClsIdioma.Ingles
                 ? "Hello, " + nombre + "! Welcome to Gestorix"
                 : "¡Hola, " + nombre + "! Te damos la bienvenida a Gestorix";
-            lblBienvenidaAyuda!.Text = ClsIdioma.Ingles
-                ? "Use the menu above to work with the options of your role."
-                : "Usá el menú de arriba para trabajar con las opciones de tu rol.";
+            lblBienvenidaAyuda!.Text = puedeVender
+                ? (ClsIdioma.Ingles
+                    ? "Click the Gestorix logo to go to the sales screen, or use the menu above."
+                    : "Tocá el logo de Gestorix para ir a la pantalla de venta, o usá el menú de arriba.")
+                : (ClsIdioma.Ingles
+                    ? "Use the menu above to work with the options of your role."
+                    : "Usá el menú de arriba para trabajar con las opciones de tu rol.");
             lblBienvenida.Visible = true;
             lblBienvenidaAyuda.Visible = true;
 
@@ -216,7 +250,7 @@ namespace CapaVista
 
         private void IniciarAlertas()
         {
-            if (!SesionUsuario.Permisos.Contains(1110))
+            if (!TieneAlguno(1100, 1110))
             {
                 return;
             }
@@ -249,18 +283,47 @@ namespace CapaVista
                     return false;
             }
         }
-        private Dictionary<TipoAlerta, Action> CrearAccionesAlertas()
+        // alertas (null desde la campana)
+        private Dictionary<TipoAlerta, Action<ClsAlertaEntidad?>> CrearAccionesAlertas()
         {
-            return new Dictionary<TipoAlerta, Action>
+            return new Dictionary<TipoAlerta, Action<ClsAlertaEntidad?>>
             {
-                [TipoAlerta.Lote] = () => menuitemAdmistradorarticulos.PerformClick(),
-                [TipoAlerta.Stock] = AbrirReposicion,
-                [TipoAlerta.Entrega] = () => recepciónDeMercaderiaToolStripMenuItem.PerformClick(),
-                [TipoAlerta.Caja] = () => cerrarSeToolStripMenuItem.PerformClick(),
-                [TipoAlerta.Pago] = () => cuentaCorrienteDeProveedoresToolStripMenuItem.PerformClick(),
-                [TipoAlerta.Promocion] = () => administrarPromocionesToolStripMenuItem.PerformClick(),
-                [TipoAlerta.Precio] = () => menuitemAdmistradorarticulos.PerformClick()
+                [TipoAlerta.Lote] = AbrirLote,
+                [TipoAlerta.Stock] = alerta => AbrirReposicion(alerta?.IdReferencia),
+                [TipoAlerta.Entrega] = alerta => AbrirRecepcion(alerta?.IdReferencia),
+                [TipoAlerta.Caja] = _ => cerrarSeToolStripMenuItem.PerformClick(),
+                [TipoAlerta.Pago] = alerta => AbrirCuentaCorriente(alerta?.IdReferencia),
+                [TipoAlerta.Promocion] = alerta => AbrirPromocion(alerta?.IdReferencia),
+                [TipoAlerta.Precio] = alerta => AbrirArticulos(alerta?.IdReferencia)
             };
+        }
+        // vencido: devolucion, por vencer: articulo
+        private void AbrirLote(ClsAlertaEntidad? alerta)
+        {
+            if (alerta == null || !alerta.Urgente)
+            {
+                AbrirArticulos(alerta?.IdReferencia);
+                return;
+            }
+
+            using (frmDevolucionProveedor devolucion = new frmDevolucionProveedor(alerta.IdReferencia))
+            {
+                devolucion.Icon = Icon;
+                devolucion.ShowDialog(this);
+            }
+        }
+        private void AbrirArticulos(int? idProducto)
+        {
+            if (idProducto == null)
+            {
+                menuitemAdmistradorarticulos.PerformClick();
+                return;
+            }
+
+            using (frmCargaarticulo articulos = new frmCargaarticulo(idProducto.Value))
+            {
+                articulos.ShowDialog(this);
+            }
         }
         private const int ID_ROL_ADMINISTRADOR = 1;
 
@@ -270,7 +333,7 @@ namespace CapaVista
         }
         private void AbrirAlertas()
         {
-            if (!SesionUsuario.Permisos.Contains(1110))
+            if (!TieneAlguno(1100, 1110))
             {
                 MessageBox.Show(ClsIdioma.T("No tenés permiso para ver las alertas."), ClsIdioma.T("Alertas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -285,15 +348,55 @@ namespace CapaVista
 
             campanaAlertas?.Actualizar();
         }
-        private void AbrirReposicion()
+        private void AbrirPromocion(int? idPromocion)
         {
-            if (!SesionUsuario.Permisos.Contains(520))
+            if (idPromocion == null)
             {
-                menuitemAdmistradorarticulos.PerformClick();
+                administrarPromocionesToolStripMenuItem.PerformClick();
                 return;
             }
 
-            using (frmListados listados = new frmListados(frmListados.Modo.Reposicion))
+            using (frmPromocion promocion = new frmPromocion(idPromocion.Value))
+            {
+                promocion.ShowDialog(this);
+            }
+        }
+        // compras
+        private void AbrirRecepcion(int? idCompra)
+        {
+            if (idCompra == null)
+            {
+                recepciónDeMercaderiaToolStripMenuItem.PerformClick();
+                return;
+            }
+
+            using (frmRecepcionCompra recepcion = new frmRecepcionCompra(idCompra.Value))
+            {
+                recepcion.ShowDialog(this);
+            }
+        }
+        private void AbrirCuentaCorriente(int? idCompra)
+        {
+            if (idCompra == null)
+            {
+                cuentaCorrienteDeProveedoresToolStripMenuItem.PerformClick();
+                return;
+            }
+
+            using (frmCuentaCorrienteProveedores cuenta = new frmCuentaCorrienteProveedores(idCompra.Value))
+            {
+                cuenta.ShowDialog(this);
+            }
+        }
+        private void AbrirReposicion(int? idProducto)
+        {
+            if (!SesionUsuario.Permisos.Contains(520))
+            {
+                AbrirArticulos(idProducto);
+                return;
+            }
+
+            using (frmListados listados = new frmListados(frmListados.Modo.Reposicion, idProducto))
             {
                 listados.ShowDialog();
             }
@@ -331,6 +434,7 @@ namespace CapaVista
             // proveedores
             administradorDeProveedoresToolStripMenuItem.Text = idiomaIngles ? "Supplier Management" : ClsIdioma.T("Administrador de proveedores");
             cuentaCorrienteDeProveedoresToolStripMenuItem.Text = idiomaIngles ? "Supplier Account" : ClsIdioma.T("Cuenta corriente de proveedores");
+            devolucionesAProveedorToolStripMenuItem.Text = idiomaIngles ? "Returns to Suppliers" : ClsIdioma.T("Devoluciones a proveedor");
 
             // listados
             preciosYReposicionToolStripMenuItem.Text = idiomaIngles ? "Prices and Restocking" : ClsIdioma.T("Precios y reposición");
@@ -554,6 +658,8 @@ namespace CapaVista
             administradorDeProveedoresToolStripMenuItem.Enabled = TieneAlguno(410, 411, 412);
             // Cuenta corriente
             cuentaCorrienteDeProveedoresToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(420);
+            // Devoluciones a proveedor
+            devolucionesAProveedorToolStripMenuItem.Enabled = TieneAlguno(410, 411, 412, 420);
             informesVentasToolStripMenuItem.Enabled = TieneAlguno(610, 620, 630, 640, 650);
             balanceToolStripMenuItem.Enabled = SesionUsuario.Permisos.Contains(660);
             // Caja operaciones
@@ -818,6 +924,7 @@ namespace CapaVista
             descuentoRecargo = 0.00m;
             total = 0.00m;
             promocionesAplicadas.Clear();
+            filasDePromocion.Clear();
 
             CalcularYMostrarMontos();
             RellenarFilas();
@@ -863,6 +970,8 @@ namespace CapaVista
             lblTotalMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
 
             lblTotalMonto.Text = total.ToString("C2");
+
+            botonVaciar?.Actualizar();
         }
         private void RegistrarPromocionAplicada(int idPromocion, string nombre, decimal importeLista, decimal importeCobrado)
         {
@@ -983,10 +1092,18 @@ namespace CapaVista
 
         private void txtCodigoBarra_KeyDown(object sender, KeyEventArgs e)
         {
+            if (ClsListaSugerencias.Navegar(lstDescripcion, e))
+                return;
+
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                IngresarProductoPorCodigo();
+
+                // elegido con las flechas o el codigo escrito
+                if (ClsListaSugerencias.HayElegido(lstDescripcion))
+                    AgregarProductoSeleccionado();
+                else
+                    IngresarProductoPorCodigo();
             }
         }
         private void txtCodigoBarra_TextChanged(object sender, EventArgs e)
@@ -1012,13 +1129,23 @@ namespace CapaVista
                     return;
                 }
 
+                // nombre, codigo y SKU
                 foreach (DataRow fila in tablaProductosEncontrados.Rows)
                 {
                     string descripcion = fila["Descripcion"].ToString();
+                    string codigo = fila["CodigoBarra"] == DBNull.Value ? "" : fila["CodigoBarra"].ToString().Trim();
+                    string sku = fila["SKU"] == DBNull.Value ? "" : fila["SKU"].ToString().Trim();
+
+                    if (codigo != "")
+                        descripcion += "   ·   " + ClsIdioma.T("Cód. ") + codigo;
+
+                    if (sku != "")
+                        descripcion += "   ·   SKU " + sku;
 
                     lstDescripcion.Items.Add(descripcion);
                 }
 
+                lstDescripcion.Width = Math.Max(lstDescripcion.Width, dtgPresentacion.Width);
                 lstDescripcion.Visible = lstDescripcion.Items.Count > 0;
             }
             catch (Exception ex)
@@ -1076,6 +1203,14 @@ namespace CapaVista
         {
             frmExportarArchivos exportararchivos = new frmExportarArchivos();
             exportararchivos.ShowDialog();
+        }
+        private void devolucionesAProveedorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (frmDevolucionesProveedor devoluciones = new frmDevolucionesProveedor())
+            {
+                devoluciones.Icon = Icon;
+                devoluciones.ShowDialog(this);
+            }
         }
         private void cuentaCorrienteDeProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1148,90 +1283,122 @@ namespace CapaVista
             frmProveedores proveedores = new frmProveedores();
             proveedores.ShowDialog();
         }
-        // Cerrar sesion
+        // Cerrar caja: arqueo y cierre, la sesion sigue abierta
         private void cerrarSeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             try
             {
-                ClsCajaLogica logicaCaja = new ClsCajaLogica();
-                var sesionCaja = logicaCaja.ObtenerSesionAbierta();
+                var sesionCaja = new ClsCajaLogica().ObtenerSesionAbierta();
 
-                if (sesionCaja != null)
+                if (sesionCaja == null)
                 {
-                    DialogResult arqueo = MessageBox.Show(
-                        ClsIdioma.T("¿Desea hacer el arqueo y cerrar la caja?\n\n") +
-                        ClsIdioma.T("Sí: cuenta el efectivo y cierra la caja.\n") +
-                        ClsIdioma.T("No: cierra solo su sesión y la caja sigue abierta para el próximo turno."),
-                        ClsIdioma.T("Cerrar caja"), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    MessageBox.Show(ClsIdioma.T("No hay una caja abierta."), ClsIdioma.T("Cerrar caja"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 
-                    if (arqueo == DialogResult.Cancel)
-                    {
-                        return;
-                    }
-
-                    if (arqueo == DialogResult.Yes)
-                    {
-                        using (frmCerrarCaja cierre = new frmCerrarCaja(sesionCaja.IdSesionCaja))
-                        {
-
-                            if (cierre.ShowDialog() != DialogResult.OK)
-                            {
-                                return;
-                            }
-                        }
-                    }
+                using (frmCerrarCaja cierre = new frmCerrarCaja(sesionCaja.IdSesionCaja))
+                {
+                    cierre.ShowDialog(this);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-
-            DialogResult resultado = MessageBox.Show(ClsIdioma.T("Estas seguro de cerrar la sesión?"), ClsIdioma.T("Cerrar sesión"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (resultado == DialogResult.Yes)
-            {
-                ClsLogin login = new ClsLogin();
-                login.CerrarSesion();
-
-                BloquearMenu();
             }
         }
+        // Abrir caja con el fondo inicial
         private void abrirCajaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (SesionUsuario.SesionActiva)
+            try
             {
-                MessageBox.Show(
-                    ClsIdioma.T("Ya hay una sesión abierta. Debe cerrar la sesión actual antes de iniciar otra."),
-                    ClsIdioma.T("Sesión abierta"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                if (new ClsCajaLogica().HayCajaAbierta())
+                {
+                    MessageBox.Show(ClsIdioma.T("La caja ya está abierta."), ClsIdioma.T("Abrir caja"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 
-                return;
+                using (frmAbrirCaja abrir = new frmAbrirCaja())
+                {
+                    abrir.ShowDialog(this);
+                }
             }
-
-            FrmLogin login = Application.OpenForms.OfType<FrmLogin>().FirstOrDefault();
-
-            if (login != null)
+            catch (Exception ex)
             {
-                login.LimpiarCampos();
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            this.Close();
         }
+        // Salir: mismo camino que la X
         private void tollClosed_Click(object sender, EventArgs e)
         {
-            DialogResult resultado = MessageBox.Show(ClsIdioma.T("Estas seguro de cerrar la sesión?"), ClsIdioma.T("Cerrar sesión"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (resultado == DialogResult.Yes)
-            {
-                Application.Exit();
+            Close();
+        }
 
+        // true cuando el formulario se cierra para salir del programa
+        public bool SalirDelPrograma { get; private set; }
+
+        private bool HayVentaCargada()
+        {
+            return dtgPresentacion.Rows.Cast<DataGridViewRow>()
+                .Any(f => !f.IsNewRow && !string.IsNullOrWhiteSpace(Convert.ToString(f.Cells["ClnIdProducto"].Value)));
+        }
+        // avisos de lo que se pierde o queda pendiente al salir
+        private List<string> AvisosAlSalir(bool revisarCaja)
+        {
+            List<string> avisos = new List<string>();
+
+            if (HayVentaCargada())
+                avisos.Add(ClsIdioma.T("Hay una venta cargada sin cobrar y se va a perder."));
+
+            if (formularioSecundario != null && !formularioSecundario.IsDisposed)
+                avisos.Add(ClsIdioma.T("El segundo cobro está abierto y se va a cerrar."));
+
+            if (revisarCaja && SesionUsuario.SesionActiva)
+            {
+                try
+                {
+                    if (new ClsCajaLogica().HayCajaAbierta())
+                        avisos.Add(ClsIdioma.T("La caja sigue abierta. Si terminó el turno, ciérrela desde Caja > Cerrar Caja."));
+                }
+                catch
+                {
+                }
             }
+
+            return avisos;
+        }
+        private static string ArmarMensaje(string pregunta, List<string> avisos)
+        {
+            if (avisos.Count == 0)
+                return pregunta;
+
+            return pregunta + "\n\n" + string.Join("\n", avisos.Select(a => "• " + a));
+        }
+        private void frmmenuPres_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            // X o boton de salir: se confirma
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                List<string> avisos = AvisosAlSalir(true);
+
+                DialogResult respuesta = MessageBox.Show(ArmarMensaje(ClsIdioma.T("¿Cerrar Gestorix?"), avisos), ClsIdioma.T("Salir"),
+                    MessageBoxButtons.YesNo, avisos.Count > 0 ? MessageBoxIcon.Warning : MessageBoxIcon.Question,
+                    avisos.Count > 0 ? MessageBoxDefaultButton.Button2 : MessageBoxDefaultButton.Button1);
+
+                if (respuesta != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
+            if (SesionUsuario.SesionActiva)
+                new ClsLogin().CerrarSesion();
+
+            SalirDelPrograma = true;
         }
         private void permisosToolStripMenuItem_Click(object sender, EventArgs e)
         {

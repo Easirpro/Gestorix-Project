@@ -27,6 +27,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Decimales(txtMontoRecibido);
 
             totalVenta = total;
             carritoVenta = carrito;

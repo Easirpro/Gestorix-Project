@@ -14,7 +14,7 @@ namespace CapaVista
         private static readonly Color ColorAviso = Color.DarkOrange;
 
         private readonly ClsAlertaLogica logica = new ClsAlertaLogica();
-        private readonly Dictionary<TipoAlerta, Action> acciones;
+        private readonly Dictionary<TipoAlerta, Action<ClsAlertaEntidad?>> acciones;
         private readonly Func<TipoAlerta, bool>? puedeResolver;
         private readonly Action? alCambiar;
 
@@ -28,7 +28,7 @@ namespace CapaVista
             public override string ToString() => Texto;
         }
 
-        public frmAlertas(Dictionary<TipoAlerta, Action> acciones, Func<TipoAlerta, bool>? puedeResolver = null, Action? alCambiar = null)
+        public frmAlertas(Dictionary<TipoAlerta, Action<ClsAlertaEntidad?>> acciones, Func<TipoAlerta, bool>? puedeResolver = null, Action? alCambiar = null)
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
@@ -193,14 +193,14 @@ namespace CapaVista
                 return;
             }
 
-            if (!acciones.TryGetValue(alerta.Tipo, out Action? accion))
+            if (!acciones.TryGetValue(alerta.Tipo, out Action<ClsAlertaEntidad?>? accion))
             {
                 MessageBox.Show(ClsIdioma.T("Esta alerta no tiene una pantalla asociada para resolverla."), ClsIdioma.T("Alertas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            accion();
+            accion(alerta);
 
             CargarAlertas();
             alCambiar?.Invoke();

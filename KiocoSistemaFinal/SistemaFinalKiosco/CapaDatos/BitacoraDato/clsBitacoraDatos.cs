@@ -27,7 +27,8 @@ namespace CapaDatos.BitacoraDato
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
-        public int ContarAccionesRecientes(string accion, int idRegistroAfectado, int minutos)
+        // cuenta solo lo posterior a la ultima accionReinicio
+        public int ContarAccionesRecientes(string accion, string accionReinicio, int idRegistroAfectado, int minutos)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
             using (SqlCommand cmd = new SqlCommand(@"
@@ -35,9 +36,14 @@ namespace CapaDatos.BitacoraDato
                 FROM Bitacora
                 WHERE Accion = @Accion
                   AND IdRegistroAfectado = @IdRegistroAfectado
-                  AND FechaHora >= DATEADD(MINUTE, -@Minutos, SYSDATETIME())", conexion))
+                  AND FechaHora >= DATEADD(MINUTE, -@Minutos, SYSDATETIME())
+                  AND IdBitacora > ISNULL((SELECT MAX(IdBitacora)
+                                           FROM Bitacora
+                                           WHERE Accion = @AccionReinicio
+                                             AND IdRegistroAfectado = @IdRegistroAfectado), 0)", conexion))
             {
                 cmd.Parameters.Add("@Accion", SqlDbType.NVarChar, 50).Value = accion;
+                cmd.Parameters.Add("@AccionReinicio", SqlDbType.NVarChar, 50).Value = accionReinicio;
                 cmd.Parameters.Add("@IdRegistroAfectado", SqlDbType.Int).Value = idRegistroAfectado;
                 cmd.Parameters.Add("@Minutos", SqlDbType.Int).Value = minutos;
 

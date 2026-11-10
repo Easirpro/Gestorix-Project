@@ -50,6 +50,11 @@ namespace CapaVista
 
             this.Load += frmCargaarticulo_Load;
         }
+        // desde las alertas
+        public frmCargaarticulo(int idProducto) : this()
+        {
+            this.Shown += (sender, e) => MostrarArticulo(idProducto);
+        }
         // Metodos
         #region Metodos
         private void CargarArticulos()
@@ -114,6 +119,29 @@ namespace CapaVista
 
                 fila.Visible = coincideTexto && coincideRubro && coincideMarca;
             }
+        }
+        private void MostrarArticulo(int idProducto)
+        {
+            CargarArticulos();
+
+            DataGridViewRow? fila = dtgCargaarticulo.Rows.Cast<DataGridViewRow>()
+                .FirstOrDefault(f => f.Tag != null && Convert.ToInt32(f.Tag) == idProducto);
+
+            if (fila == null)
+            {
+                MessageBox.Show(ClsIdioma.T("No se encontró el artículo de la alerta entre los artículos activos."), ClsIdioma.T("Artículos"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // filtra por codigo o nombre
+            string codigo = fila.Cells["clnCodigo"].Value?.ToString() ?? "";
+            txtBuscarCodigoNombre.Text = codigo != "" ? codigo : fila.Cells["clnDescripcion"].Value?.ToString() ?? "";
+
+            dtgCargaarticulo.ClearSelection();
+            fila.Selected = true;
+            dtgCargaarticulo.CurrentCell = fila.Cells["clnDescripcion"];
+            dtgCargaarticulo.Focus();
         }
         private void CargarRubros()
         {

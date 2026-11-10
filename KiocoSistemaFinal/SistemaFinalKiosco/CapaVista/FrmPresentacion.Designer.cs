@@ -79,6 +79,7 @@
             btnProve = new ToolStripMenuItem();
             administradorDeProveedoresToolStripMenuItem = new ToolStripMenuItem();
             cuentaCorrienteDeProveedoresToolStripMenuItem = new ToolStripMenuItem();
+            devolucionesAProveedorToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
             preciosYReposicionToolStripMenuItem = new ToolStripMenuItem();
             btnInformes = new ToolStripMenuItem();
@@ -567,7 +568,7 @@
             // 
             // btnProve
             // 
-            btnProve.DropDownItems.AddRange(new ToolStripItem[] { administradorDeProveedoresToolStripMenuItem, cuentaCorrienteDeProveedoresToolStripMenuItem });
+            btnProve.DropDownItems.AddRange(new ToolStripItem[] { administradorDeProveedoresToolStripMenuItem, cuentaCorrienteDeProveedoresToolStripMenuItem, devolucionesAProveedorToolStripMenuItem });
             btnProve.Enabled = false;
             btnProve.Name = "btnProve";
             btnProve.Size = new Size(84, 20);
@@ -586,7 +587,14 @@
             cuentaCorrienteDeProveedoresToolStripMenuItem.Size = new Size(246, 22);
             cuentaCorrienteDeProveedoresToolStripMenuItem.Text = "Cuenta corriente de Proveedores";
             cuentaCorrienteDeProveedoresToolStripMenuItem.Click += cuentaCorrienteDeProveedoresToolStripMenuItem_Click;
-            // 
+            //
+            // devolucionesAProveedorToolStripMenuItem
+            //
+            devolucionesAProveedorToolStripMenuItem.Name = "devolucionesAProveedorToolStripMenuItem";
+            devolucionesAProveedorToolStripMenuItem.Size = new Size(246, 22);
+            devolucionesAProveedorToolStripMenuItem.Text = "Devoluciones a proveedor";
+            devolucionesAProveedorToolStripMenuItem.Click += devolucionesAProveedorToolStripMenuItem_Click;
+            //
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { preciosYReposicionToolStripMenuItem });
@@ -724,10 +732,11 @@
             bitacoraToolStripMenuItem.Click += bitacoraToolStripMenuItem_Click;
             // 
             // tollClosed
-            // 
+            //
             tollClosed.Image = (Image)resources.GetObject("tollClosed.Image");
             tollClosed.Name = "tollClosed";
             tollClosed.Size = new Size(28, 20);
+            tollClosed.ToolTipText = "Salir de Gestorix";
             tollClosed.Click += tollClosed_Click;
             // 
             // btnConfig
@@ -870,6 +879,7 @@
         private ToolStripMenuItem btnProve;
         private ToolStripMenuItem administradorDeProveedoresToolStripMenuItem;
         private ToolStripMenuItem cuentaCorrienteDeProveedoresToolStripMenuItem;
+        private ToolStripMenuItem devolucionesAProveedorToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem preciosYReposicionToolStripMenuItem;
         private ToolStripMenuItem btnInformes;

@@ -26,6 +26,11 @@ namespace CapaVista
             ConfigurarGrid(dgvCompras);
             ConfigurarGrid(dgvPagos);
         }
+        // desde las alertas
+        public frmCuentaCorrienteProveedores(int idCompra) : this()
+        {
+            Shown += (sender, e) => SeleccionarCompra(idCompra);
+        }
 
         private void frmCuentaCorrienteProveedores_Load(object sender, EventArgs e)
         {
@@ -138,6 +143,28 @@ namespace CapaVista
                 MessageBox.Show(ClsIdioma.T("No se pudieron obtener los pagos.\n\n") + ex.Message, ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void SeleccionarCompra(int idCompra)
+        {
+            if (!dgvCompras.Columns.Contains("IdCompra"))
+                return;
+
+            DataGridViewRow? fila = dgvCompras.Rows.Cast<DataGridViewRow>()
+                .FirstOrDefault(f => f.Cells["IdCompra"].Value != null && f.Cells["IdCompra"].Value != DBNull.Value
+                    && Convert.ToInt32(f.Cells["IdCompra"].Value) == idCompra);
+
+            if (fila == null)
+            {
+                MessageBox.Show(ClsIdioma.T("La compra de la alerta ya no tiene saldo pendiente."), ClsIdioma.T("Cuenta corriente de proveedores"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            dgvCompras.CurrentCell = fila.Cells.Cast<DataGridViewCell>().First(c => c.Visible);
+            fila.Selected = true;
+            CargarPagos();
+            dgvCompras.Focus();
         }
 
         private static void FormatearImportes(DataGridView grilla, params string[] columnas)

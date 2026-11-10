@@ -66,6 +66,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AcceptButton = btnValidarUsuario;
             ClientSize = new Size(251, 234);
             Controls.Add(btnValidarUsuario);
             Controls.Add(txtIngresoUsuario);
