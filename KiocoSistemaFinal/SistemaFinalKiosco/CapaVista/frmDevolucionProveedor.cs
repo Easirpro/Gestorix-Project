@@ -89,7 +89,12 @@ namespace CapaVista
             CancelButton = btnCancelar;
 
             cmbLote.SelectedIndexChanged += (sender, e) => MostrarLote();
-            nudCantidad.ValueChanged += (sender, e) => ActualizarImporte();
+            nudCantidad.ValueChanged += (sender, e) =>
+            {
+                // el control deja pasar decimales escritos a mano
+                nudCantidad.Value = decimal.Truncate(nudCantidad.Value);
+                ActualizarImporte();
+            };
             btnGuardar.Click += (sender, e) => Guardar();
 
             ClsIdioma.Registrar(this);
@@ -178,13 +183,11 @@ namespace CapaVista
 
             decimal stock = Convert.ToDecimal(lote["StockActual"]);
             decimal sugerida = Convert.ToDecimal(lote["CantidadSugerida"]);
-            bool conDecimales = stock != Math.Floor(stock) || sugerida != Math.Floor(sugerida);
 
             lblVencimiento.Text = Convert.ToDateTime(lote["FechaVencimiento"]).ToString("dd/MM/yyyy");
             lblProveedor.Text = lote["Proveedor"] + " - " + lote["Sucursal"];
             lblCosto.Text = Convert.ToDecimal(lote["CostoUnitario"]).ToString("C2");
 
-            nudCantidad.DecimalPlaces = conDecimales ? 3 : 0;
             nudCantidad.Minimum = 0;
             nudCantidad.Maximum = Math.Max(stock, 0);
             nudCantidad.Value = Math.Min(Math.Max(sugerida, 0), nudCantidad.Maximum);

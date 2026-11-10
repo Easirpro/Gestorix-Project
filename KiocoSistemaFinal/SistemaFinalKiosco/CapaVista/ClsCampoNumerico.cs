@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -22,6 +23,12 @@ namespace CapaVista
             Aplicar(Tipo.Comprobante, campos);
         }
 
+        // sin separador de miles: "1.5" no se lee como 15
+        public static bool EsCantidadEntera(object valor, out decimal cantidad)
+        {
+            return decimal.TryParse(Convert.ToString(valor), NumberStyles.AllowDecimalPoint, CultureInfo.CurrentCulture, out cantidad)
+                && cantidad == decimal.Truncate(cantidad);
+        }
         private static void Aplicar(Tipo tipo, TextBox[] campos)
         {
             foreach (TextBox campo in campos)

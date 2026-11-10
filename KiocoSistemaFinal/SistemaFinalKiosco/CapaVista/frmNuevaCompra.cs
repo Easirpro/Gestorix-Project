@@ -554,9 +554,9 @@ namespace CapaVista
                         return;
                     }
 
-                    if (!decimal.TryParse(fila.Cells["Column2"].Value.ToString(), out decimal cantidad) || cantidad <= 0)
+                    if (!ClsCampoNumerico.EsCantidadEntera(fila.Cells["Column2"].Value, out decimal cantidad) || cantidad <= 0)
                     {
-                        MessageBox.Show(ClsIdioma.T("La cantidad debe ser mayor que cero."), ClsIdioma.T("Aviso"),
+                        MessageBox.Show(ClsIdioma.T("La cantidad debe ser un número entero mayor que cero."), ClsIdioma.T("Aviso"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         return;

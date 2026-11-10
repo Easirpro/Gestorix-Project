@@ -40,7 +40,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
-            ClsCampoNumerico.Decimales(txtCantidad);
+            ClsCampoNumerico.Enteros(txtCantidad);
 
             MinimumSize = new Size(900, 620);
             StartPosition = FormStartPosition.CenterScreen;
@@ -856,7 +856,7 @@ namespace CapaVista
             {
                 if (!decimal.TryParse(txtCantidad.Text, out cantidad) || cantidad <= 0)
                 {
-                    MessageBox.Show(ClsIdioma.T("Ingrese una cantidad válida mayor a 0."), ClsIdioma.T("Cantidad inválida"),
+                    MessageBox.Show(ClsIdioma.T("Ingrese una cantidad entera mayor a 0."), ClsIdioma.T("Cantidad inválida"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtCantidad.SelectAll();
@@ -1810,9 +1810,9 @@ namespace CapaVista
                 return;
             }
 
-            if (!decimal.TryParse(entrada, out decimal nuevaCantidad) || nuevaCantidad <= 0)
+            if (!ClsCampoNumerico.EsCantidadEntera(entrada, out decimal nuevaCantidad) || nuevaCantidad <= 0)
             {
-                MessageBox.Show(ClsIdioma.T("Ingrese una cantidad válida mayor a 0."), ClsIdioma.T("Cantidad inválida"),
+                MessageBox.Show(ClsIdioma.T("Ingrese una cantidad entera mayor a 0."), ClsIdioma.T("Cantidad inválida"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;

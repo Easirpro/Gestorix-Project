@@ -636,9 +636,9 @@ namespace CapaVista
 
             string texto = Convert.ToString(e.FormattedValue);
 
-            if (!decimal.TryParse(texto, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal cantidad) || cantidad < 0)
+            if (!ClsCampoNumerico.EsCantidadEntera(texto, out _))
             {
-                MessageBox.Show(ClsIdioma.T("Ingrese una cantidad recibida válida (0 o mayor)."), ClsIdioma.T("Aviso"),
+                MessageBox.Show(ClsIdioma.T("Ingrese una cantidad recibida entera (0 o mayor)."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
             }

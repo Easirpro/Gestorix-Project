@@ -31,8 +31,8 @@ namespace CapaVista
 
         private void ConfigurarCamposNumericos()
         {
-            ClsCampoNumerico.Decimales(txtPrecioCosto, txtGanancia, txtStockActual, txtStockMinimo, txtStockMaximo);
-            ClsCampoNumerico.Enteros(txtAlertaVencimiento);
+            ClsCampoNumerico.Decimales(txtPrecioCosto, txtGanancia);
+            ClsCampoNumerico.Enteros(txtAlertaVencimiento, txtStockActual, txtStockMinimo, txtStockMaximo);
         }
         private bool CampoInvalido(TextBox campo, string motivo)
         {
@@ -208,9 +208,9 @@ namespace CapaVista
             {
                 DataRow stock = tablaStock.Rows[0];
 
-                txtStockActual.Text = stock["CantidadActual"]?.ToString() ?? "0";
-                txtStockMinimo.Text = stock["StockMinimo"]?.ToString() ?? "0";
-                txtStockMaximo.Text = stock["StockIdeal"]?.ToString() ?? "0";
+                txtStockActual.Text = TextoStock(stock["CantidadActual"]);
+                txtStockMinimo.Text = TextoStock(stock["StockMinimo"]);
+                txtStockMaximo.Text = TextoStock(stock["StockIdeal"]);
             }
             else
             {
@@ -330,17 +330,17 @@ namespace CapaVista
                 }
             }
 
-            if (!DecimalOpcional(txtStockActual, out _))
+            if (!StockValido(txtStockActual, out _))
             {
                 return CampoInvalido(txtStockActual, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Stock actual"));
             }
 
-            if (!DecimalOpcional(txtStockMinimo, out decimal stockMinimo))
+            if (!StockValido(txtStockMinimo, out decimal stockMinimo))
             {
                 return CampoInvalido(txtStockMinimo, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Stock mínimo"));
             }
 
-            if (!DecimalOpcional(txtStockMaximo, out decimal stockIdeal))
+            if (!StockValido(txtStockMaximo, out decimal stockIdeal))
             {
                 return CampoInvalido(txtStockMaximo, ClsIdioma.T("Revise el campo: ") + ClsIdioma.T("Stock máximo"));
             }
@@ -382,6 +382,16 @@ namespace CapaVista
             return true;
         }
         // Campo numérico opcional: vacío vale 0; si tiene algo, tiene que ser un número no negativo.
+        private static string TextoStock(object valor)
+        {
+            return valor is decimal numero ? numero.ToString("0.###") : Convert.ToString(valor) ?? "0";
+        }
+        private static bool StockValido(TextBox texto, out decimal valor)
+        {
+            valor = 0;
+
+            return string.IsNullOrWhiteSpace(texto.Text) || ClsCampoNumerico.EsCantidadEntera(texto.Text, out valor);
+        }
         private static bool DecimalOpcional(TextBox texto, out decimal valor)
         {
             valor = 0;
