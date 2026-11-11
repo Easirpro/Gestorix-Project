@@ -129,7 +129,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las ventas.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las ventas.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -160,7 +160,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo obtener el detalle de la venta.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el detalle de la venta.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -176,7 +176,7 @@ namespace CapaVista
             decimal disponible = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["CantidadDisponible"].Value);
             precioDevolucion = Convert.ToDecimal(dgvDetalle.CurrentRow.Cells["PrecioDevolucion"].Value);
 
-            lblPrecioValor.Text = $"$ {precioDevolucion:N2}";
+            lblPrecioValor.Text = $"{precioDevolucion:C2}";
 
             if (disponible <= 0)
             {
@@ -225,7 +225,7 @@ namespace CapaVista
 
                 if (mostrarError)
                 {
-                    MessageBox.Show(ClsIdioma.T("No se pudo obtener el estado de la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBox.Show(ClsIdioma.T("No se pudo obtener el estado de la caja.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -237,7 +237,7 @@ namespace CapaVista
 
         private void ActualizarImporte()
         {
-            lblImporteValor.Text = rbEfectivo.Checked ? $"$ {ImporteADevolver():N2}" : ClsIdioma.T("Sin reintegro de dinero");
+            lblImporteValor.Text = rbEfectivo.Checked ? $"{ImporteADevolver():C2}" : ClsIdioma.T("Sin reintegro de dinero");
         }
 
         private void ActualizarInfoCaja()
@@ -254,7 +254,7 @@ namespace CapaVista
             }
             else
             {
-                lblCaja.Text = (ClsIdioma.Ingles ? $"Cash available in register: $ {sesionCaja.EfectivoEsperado:N2}" : $"Efectivo disponible en caja: $ {sesionCaja.EfectivoEsperado:N2}");
+                lblCaja.Text = (ClsIdioma.Ingles ? $"Cash available in register: {sesionCaja.EfectivoEsperado:C2}" : $"Efectivo disponible en caja: {sesionCaja.EfectivoEsperado:C2}");
                 lblCaja.ForeColor = SystemColors.GrayText;
             }
         }
@@ -480,7 +480,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo registrar la devolución.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo registrar la devolución.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

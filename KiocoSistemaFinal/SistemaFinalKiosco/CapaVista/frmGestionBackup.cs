@@ -59,7 +59,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "ERROR",
+                MessageBox.Show(ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -175,7 +175,7 @@ namespace CapaVista
                 catch (Exception ex)
                 {
 
-                MessageBox.Show(ex.Message,ClsIdioma.T("ERROR AL RESTAURAR"),MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ClsIdioma.T(ex.Message),ClsIdioma.T("ERROR AL RESTAURAR"),MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 }
                 finally

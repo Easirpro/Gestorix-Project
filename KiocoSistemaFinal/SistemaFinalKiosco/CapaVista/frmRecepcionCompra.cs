@@ -29,6 +29,8 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            // los motivos se guardan en castellano: solo se traduce lo que se ve
+            ClsIdioma.TraducirDatosAlMostrar(clbMotivos);
             ClsCampoNumerico.Decimales(txtTotalBoleta);
             ConfigurarFormulario();
             ConfigurarEventos();
@@ -129,7 +131,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 cargando = false;
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las compras pendientes.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las compras pendientes.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -237,7 +239,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo cargar el detalle de la compra.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo cargar el detalle de la compra.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -425,7 +427,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo confirmar la recepción.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo confirmar la recepción.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -550,7 +552,7 @@ namespace CapaVista
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ClsIdioma.T("No se pudieron buscar los productos.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                        MessageBox.Show(ClsIdioma.T("No se pudieron buscar los productos.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 };

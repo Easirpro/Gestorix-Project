@@ -47,7 +47,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo verificar la integridad de la base de datos.\n\n") + ex.Message,
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la integridad de la base de datos.\n\n") + ClsIdioma.T(ex.Message),
                     ClsIdioma.T("Verificar integridad"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -110,7 +110,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo recalcular el DVH.\n\n") + ex.Message,
+                MessageBox.Show(ClsIdioma.T("No se pudo recalcular el DVH.\n\n") + ClsIdioma.T(ex.Message),
                     ClsIdioma.T("Recalcular DVH"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally

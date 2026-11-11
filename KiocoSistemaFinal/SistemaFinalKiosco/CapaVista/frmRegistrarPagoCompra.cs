@@ -34,7 +34,7 @@ namespace CapaVista
         private void frmRegistrarPagoCompra_Load(object sender, EventArgs e)
         {
             lblCompra.Text = ClsIdioma.T("Compra N.º ") + idCompra + "  -  " + proveedor;
-            lblSaldo.Text = (ClsIdioma.Ingles ? $"Outstanding balance: $ {saldo:N2}" : $"Saldo pendiente: $ {saldo:N2}");
+            lblSaldo.Text = (ClsIdioma.Ingles ? $"Outstanding balance: {saldo:C2}" : $"Saldo pendiente: {saldo:C2}");
 
             nudMonto.Maximum = saldo;
             nudMonto.Value = saldo;
@@ -46,7 +46,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -97,7 +97,7 @@ namespace CapaVista
         {
             if (sesionCaja != null && chkDesdeCaja.Checked && EsEfectivo())
             {
-                lblDisponible.Text = (ClsIdioma.Ingles ? $"Cash available in register: $ {sesionCaja.EfectivoEsperado:N2}" : $"Efectivo disponible en caja: $ {sesionCaja.EfectivoEsperado:N2}");
+                lblDisponible.Text = (ClsIdioma.Ingles ? $"Cash available in register: {sesionCaja.EfectivoEsperado:C2}" : $"Efectivo disponible en caja: {sesionCaja.EfectivoEsperado:C2}");
             }
             else
             {
@@ -201,7 +201,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo registrar el pago.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo registrar el pago.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -55,7 +55,7 @@ namespace CapaVista
             {
                 ventasCargadas = null;
 
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las ventas.\n\n") + ex.Message, ClsIdioma.T("Error al consultar ventas"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las ventas.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error al consultar ventas"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -339,7 +339,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo cambiar el estado de la venta.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo cambiar el estado de la venta.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

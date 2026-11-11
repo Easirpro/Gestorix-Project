@@ -212,11 +212,24 @@ namespace CapaLogica.NegocioLogica
 
             return datos.ObtenerPromocionPorId(idPromocion);
         }
+        public int ContarVentasPromocion(int idPromocion)
+        {
+            return datos.ContarVentasPromocion(idPromocion);
+        }
+        // CU20: solo se elimina si no se uso en ventas
         public void EliminarPromocion(int idPromocion)
         {
             if (idPromocion <= 0)
             {
                 throw new Exception("El identificador de la promoción no es válido.");
+            }
+
+            int ventas = datos.ContarVentasPromocion(idPromocion);
+
+            if (ventas > 0)
+            {
+                throw new InvalidOperationException("La promoción se usó en " + ventas +
+                    " venta(s) y no se puede eliminar. Desactívela.");
             }
 
             datos.EliminarPromocion(idPromocion);

@@ -54,7 +54,7 @@ namespace CapaVista
             {
                 devolucionesCargadas = null;
 
-                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las devoluciones.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las devoluciones.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 

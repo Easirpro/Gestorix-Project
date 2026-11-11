@@ -65,6 +65,11 @@ namespace CapaLogica.NegocioLogica
             return datos.ObtenerEmpleadosActivos();
         }
 
+        public DataTable ObtenerUsuariosParaFiltro()
+        {
+            return datos.ObtenerUsuariosParaFiltro();
+        }
+
         public DataTable ObtenerMetodosPago()
         {
             return datos.ObtenerMetodosPago();

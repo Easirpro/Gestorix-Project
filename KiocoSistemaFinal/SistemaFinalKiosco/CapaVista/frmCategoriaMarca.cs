@@ -380,7 +380,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ClsIdioma.T("No se pudo desactivar la categoría.\n\n") + ex.Message,
+                    MessageBox.Show(ClsIdioma.T("No se pudo desactivar la categoría.\n\n") + ClsIdioma.T(ex.Message),
                         ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -439,7 +439,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ClsIdioma.T("No se pudo habilitar la categoría.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBox.Show(ClsIdioma.T("No se pudo habilitar la categoría.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -484,6 +484,26 @@ namespace CapaVista
                 return;
             }
 
+            // con articulos (aunque esten discontinuados) no se borra, se discontinua
+            try
+            {
+                int articulos = logica.ContarProductosCategoria(idCategoria);
+
+                if (articulos > 0)
+                {
+                    MessageBox.Show(ClsIdioma.T("La categoría tiene ") + articulos + ClsIdioma.T(" artículo(s), contando los discontinuados, y no se puede eliminar.\n\n") +
+                        ClsIdioma.T("Para que no se ofrezca al cargar artículos, presione «Discontinuar»."),
+                        ClsIdioma.T("Eliminar categoría"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ClsIdioma.T("No se pudo eliminar la categoría.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             DialogResult respuesta = MessageBox.Show((ClsIdioma.Ingles ? $"Are you sure you want to delete the category \"{nombre}\"?" : $"¿Está seguro de eliminar la categoría \"{nombre}\"?"), ClsIdioma.T("Confirmar eliminación"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -506,7 +526,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo eliminar la categoría.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo eliminar la categoría.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

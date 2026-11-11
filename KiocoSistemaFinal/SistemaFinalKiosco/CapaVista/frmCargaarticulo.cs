@@ -185,10 +185,11 @@ namespace CapaVista
             }
             int idProducto = Convert.ToInt32(dtgCargaarticulo.CurrentRow.Tag);
 
-            frmNuevoArticulo modificararticulo = new frmNuevoArticulo(idProducto);
-
-            modificararticulo.Text = ClsIdioma.T("Modificar Articulo");
-            modificararticulo.ShowDialog(this);
+            using (frmNuevoArticulo modificararticulo = new frmNuevoArticulo(idProducto))
+            {
+                modificararticulo.Text = ClsIdioma.T("Modificar Articulo");
+                modificararticulo.ShowDialog(this);
+            }
 
             CargarArticulos();
         }
@@ -283,6 +284,19 @@ namespace CapaVista
 
             int idProducto = Convert.ToInt32(dtgCargaarticulo.CurrentRow.Tag);
 
+            // con historial no se borra: se perderian ventas, compras y movimientos
+            List<string> historial = logica.ObtenerHistorialProducto(idProducto);
+
+            if (historial.Count > 0)
+            {
+                MessageBox.Show(ClsIdioma.T("No se puede eliminar el artículo porque tiene ") +
+                    string.Join(", ", historial.Select(h => ClsIdioma.T(h))) + ".\n\n" +
+                    ClsIdioma.T("Para que deje de usarse, presione «Discontinuar»: el historial se conserva."),
+                    ClsIdioma.T("Eliminar artículo"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
             DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de que desea eliminar el artículo seleccionado?"),
                 ClsIdioma.T("Eliminar artículo"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -291,7 +305,24 @@ namespace CapaVista
                 return;
             }
 
-            bool eliminado = logica.EliminarProducto(idProducto);
+            bool eliminado;
+
+            try
+            {
+                eliminado = logica.EliminarProducto(idProducto);
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ClsIdioma.T(ex.Message), ClsIdioma.T("Eliminar artículo"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            // la base puede frenar el borrado (por ejemplo, un lote con alertas registradas)
+            catch (Exception ex)
+            {
+                MessageBox.Show(ClsIdioma.T("No se pudo eliminar el artículo.") + "\n\n" + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             if (eliminado)
             {
@@ -352,7 +383,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Ocurrió un error al cambiar el estado del artículo.\n\nDetalle: ") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error al cambiar el estado del artículo.\n\nDetalle: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

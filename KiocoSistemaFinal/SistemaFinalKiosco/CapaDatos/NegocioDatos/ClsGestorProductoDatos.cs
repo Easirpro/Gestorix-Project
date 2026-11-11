@@ -748,6 +748,43 @@ namespace CapaDatos.NegocioDatos
                 return resultado != null && resultado != DBNull.Value && Convert.ToBoolean(resultado);
             }
         }
+        // historial que impide borrar el articulo (doc 3.3.2: sin eliminacion fisica)
+        public List<string> ObtenerHistorialProducto(int idProducto)
+        {
+            List<string> historial = new List<string>();
+
+            using (SqlConnection conexion = cn.ObtenerConexion())
+
+            using (SqlCommand cmd = new SqlCommand(@"
+                SELECT
+                    CASE WHEN EXISTS (SELECT 1 FROM dbo.DetalleVenta WHERE IdProducto = @IdProducto) THEN 1 ELSE 0 END AS Ventas,
+                    CASE WHEN EXISTS (SELECT 1 FROM dbo.DetalleCompra WHERE IdProducto = @IdProducto) THEN 1 ELSE 0 END AS Compras,
+                    CASE WHEN EXISTS (SELECT 1 FROM dbo.DetalleRecepcionCompra WHERE IdProducto = @IdProducto) THEN 1 ELSE 0 END AS Recepciones,
+                    CASE WHEN EXISTS (SELECT 1 FROM dbo.Devolucion WHERE IdProducto = @IdProducto) THEN 1 ELSE 0 END AS Devoluciones,
+                    CASE WHEN EXISTS (SELECT 1 FROM dbo.DevolucionProveedor WHERE IdProducto = @IdProducto) THEN 1 ELSE 0 END AS DevolucionesProveedor,
+                    CASE WHEN EXISTS (SELECT 1 FROM dbo.MovimientoStock WHERE IdProducto = @IdProducto) THEN 1 ELSE 0 END AS Movimientos,
+                    CASE WHEN EXISTS (SELECT 1 FROM dbo.DetallePromocion WHERE IdProducto = @IdProducto) THEN 1 ELSE 0 END AS Promociones;", conexion))
+            {
+                cmd.Parameters.Add("@IdProducto", SqlDbType.Int).Value = idProducto;
+                conexion.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        if (Convert.ToInt32(dr["Ventas"]) == 1) historial.Add("ventas");
+                        if (Convert.ToInt32(dr["Compras"]) == 1) historial.Add("compras");
+                        if (Convert.ToInt32(dr["Recepciones"]) == 1) historial.Add("recepciones de compra");
+                        if (Convert.ToInt32(dr["Devoluciones"]) == 1) historial.Add("devoluciones de clientes");
+                        if (Convert.ToInt32(dr["DevolucionesProveedor"]) == 1) historial.Add("devoluciones a proveedor");
+                        if (Convert.ToInt32(dr["Movimientos"]) == 1) historial.Add("movimientos de stock");
+                        if (Convert.ToInt32(dr["Promociones"]) == 1) historial.Add("promociones");
+                    }
+                }
+            }
+
+            return historial;
+        }
         public bool DescontinuarProducto(int idProducto)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
@@ -833,6 +870,20 @@ namespace CapaDatos.NegocioDatos
                 conexion.Open();
 
                 return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+        // articulos con esa categoria, incluidos los discontinuados (si hay, no se puede borrar)
+        public int ContarProductosCategoria(int idCategoria)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(
+                "SELECT COUNT(*) FROM dbo.Producto WHERE IdCategoria = @IdCategoria", conexion))
+            {
+                cmd.Parameters.Add("@IdCategoria", SqlDbType.Int).Value = idCategoria;
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
         public bool EliminarCategoria(int idCategoria)

@@ -107,7 +107,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las listas del formulario.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las listas del formulario.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -346,6 +346,8 @@ namespace CapaVista
             cmbIva.Items.Add("Exento");
             cmbIva.Items.Add("Consumidor Final");
             cmbIva.Items.Add("Sujeto No Categorizado");
+            // se traduce solo lo que se ve: en la base se guarda la condicion en castellano
+            ClsIdioma.TraducirDatosAlMostrar(cmbIva);
 
             cmbIva.SelectedIndex = 0;
         }
@@ -414,7 +416,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos del proveedor.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos del proveedor.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 proveedorNoEncontrado = true;
@@ -567,7 +569,7 @@ namespace CapaVista
                     Nombre = txtSucursalProveedor.Text.Trim(),
                     Activo = true,
                     IdDireccion = idDireccion,
-                    CondicionIVA = cmbIva.Text,
+                    CondicionIVA = cmbIva.SelectedItem?.ToString() ?? "",
                     Observacion = txtObservaciones.Text.Trim()
                 };
 
@@ -681,7 +683,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 MessageBox.Show((esNuevo ? ClsIdioma.T("No se pudo registrar el proveedor.") : ClsIdioma.T("No se pudo modificar el proveedor.")) +
-                    "\n\n" + ex.Message, ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "\n\n" + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnCancelar_Click(object sender, EventArgs e)

@@ -42,17 +42,17 @@ namespace CapaVista
                 }
 
                 efectivoEsperado = sesion.EfectivoEsperado;
-                lblFondo.Text = $"$ {sesion.MontoInicial:N2}";
-                lblIngresos.Text = $"$ {sesion.IngresosEfectivo:N2}";
-                lblEgresos.Text = $"$ {sesion.EgresosEfectivo:N2}";
-                lblEsperado.Text = $"$ {efectivoEsperado:N2}";
+                lblFondo.Text = $"{sesion.MontoInicial:C2}";
+                lblIngresos.Text = $"{sesion.IngresosEfectivo:C2}";
+                lblEgresos.Text = $"{sesion.EgresosEfectivo:C2}";
+                lblEsperado.Text = $"{efectivoEsperado:C2}";
 
                 nudEfectivoContado.Value = 0;
                 MostrarDiferencia();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo obtener la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener la caja.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
@@ -66,12 +66,12 @@ namespace CapaVista
 
             if (diferencia < 0)
             {
-                lblDiferencia.Text = (ClsIdioma.Ingles ? $"$ {diferencia:N2}  (short)" : $"$ {diferencia:N2}  (faltante)");
+                lblDiferencia.Text = (ClsIdioma.Ingles ? $"{diferencia:C2}  (short)" : $"{diferencia:C2}  (faltante)");
                 lblDiferencia.ForeColor = Color.Firebrick;
             }
             else if (diferencia > 0)
             {
-                lblDiferencia.Text = (ClsIdioma.Ingles ? $"$ {diferencia:N2}  (over)" : $"$ {diferencia:N2}  (sobrante)");
+                lblDiferencia.Text = (ClsIdioma.Ingles ? $"{diferencia:C2}  (over)" : $"{diferencia:C2}  (sobrante)");
                 lblDiferencia.ForeColor = Color.DarkOrange;
             }
             else
@@ -139,7 +139,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo cerrar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo cerrar la caja.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -32,11 +32,11 @@ namespace CapaVista
             totalVenta = total;
             carritoVenta = carrito;
 
-            lblTotal.Text = $"$ {totalVenta:N2}";
+            lblTotal.Text = $"{totalVenta:C2}";
             lblPagado.Text = "$ 0,00";
-            lblRestante.Text = $"$ {totalVenta:N2}";
+            lblRestante.Text = $"{totalVenta:C2}";
             lblVuelto.Text = "$ 0,00";
-            lblRestaP.Text = $"$ {totalVenta:N2}";
+            lblRestaP.Text = $"{totalVenta:C2}";
 
             PonerMonto(totalVenta);
 
@@ -91,7 +91,7 @@ namespace CapaVista
 
             if (yaHayPagos && monto < restante)
             {
-                MessageBox.Show((ClsIdioma.Ingles ? $"The amount is not enough to complete the payment with this method.\n\n" : $"El importe no alcanza para completar el pago con este método.\n\n") + (ClsIdioma.Ingles ? $"Outstanding balance: $ {restante:N2}\n" : $"Saldo pendiente: $ {restante:N2}\n") + (ClsIdioma.Ingles ? $"Amount entered: $ {monto:N2}" : $"Importe ingresado: $ {monto:N2}"), ClsIdioma.T("Importe insuficiente"),
+                MessageBox.Show((ClsIdioma.Ingles ? $"The amount is not enough to complete the payment with this method.\n\n" : $"El importe no alcanza para completar el pago con este método.\n\n") + (ClsIdioma.Ingles ? $"Outstanding balance: {restante:C2}\n" : $"Saldo pendiente: {restante:C2}\n") + (ClsIdioma.Ingles ? $"Amount entered: {monto:C2}" : $"Importe ingresado: {monto:C2}"), ClsIdioma.T("Importe insuficiente"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtMontoRecibido.SelectAll();
@@ -114,7 +114,7 @@ namespace CapaVista
             }
             else if (monto > restante)
             {
-                MessageBox.Show((ClsIdioma.Ingles ? $"The amount exceeds the remaining balance.\n\n" : $"El monto supera el saldo restante.\n\n") + (ClsIdioma.Ingles ? $"Outstanding balance: $ {restante:N2}" : $"Saldo pendiente: $ {restante:N2}"), ClsIdioma.T("Monto inválido"),
+                MessageBox.Show((ClsIdioma.Ingles ? $"The amount exceeds the remaining balance.\n\n" : $"El monto supera el saldo restante.\n\n") + (ClsIdioma.Ingles ? $"Outstanding balance: {restante:C2}" : $"Saldo pendiente: {restante:C2}"), ClsIdioma.T("Monto inválido"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtMontoRecibido.SelectAll();
@@ -130,7 +130,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo agregar el pago.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo agregar el pago.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -141,7 +141,7 @@ namespace CapaVista
             ActualizarBotonesMetodo();
 
             vueltoVenta = vuelto;
-            lblVuelto.Text = $"$ {vueltoVenta:N2}";
+            lblVuelto.Text = $"{vueltoVenta:C2}";
 
             PonerMonto(Math.Max(totalVenta - totalPagado, 0));
         }
@@ -215,7 +215,7 @@ namespace CapaVista
 
             vueltoVenta = montoRecibido > restante ? montoRecibido - restante : 0;
 
-            lblVuelto.Text = $"$ {vueltoVenta:N2}";
+            lblVuelto.Text = $"{vueltoVenta:C2}";
         }
         private void CalcularPagos()
         {
@@ -234,9 +234,9 @@ namespace CapaVista
 
             decimal restante = Math.Max(totalVenta - totalPagado, 0);
 
-            lblPagado.Text = $"$ {totalPagado:N2}";
-            lblRestante.Text = $"$ {restante:N2}";
-            lblRestaP.Text = $"$ {restante:N2}";
+            lblPagado.Text = $"{totalPagado:C2}";
+            lblRestante.Text = $"{restante:C2}";
+            lblRestaP.Text = $"{restante:C2}";
 
             btnConfirmar.Enabled = restante == 0;
         }
@@ -411,7 +411,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show((ClsIdioma.Ingles ? $"The sale could not be registered.\n\n{ex.Message}" : $"No se pudo registrar la venta.\n\n{ex.Message}"), ClsIdioma.T("Error"),
+                MessageBox.Show((ClsIdioma.Ingles ? $"The sale could not be registered.\n\n{ClsIdioma.T(ex.Message)}" : $"No se pudo registrar la venta.\n\n{ClsIdioma.T(ex.Message)}"), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally

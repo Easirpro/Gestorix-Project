@@ -74,9 +74,12 @@ namespace CapaVista
 
             if (correcta)
             {
-                FrmRecuperarPass frm = new FrmRecuperarPass(idUsuario);
                 this.Hide();
-                frm.ShowDialog();
+
+                using (FrmRecuperarPass frm = new FrmRecuperarPass(idUsuario))
+                {
+                    frm.ShowDialog();
+                }
 
                 this.Close();
             }

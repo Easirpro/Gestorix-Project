@@ -105,7 +105,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al cargar las promociones: ") + ex.Message, ClsIdioma.T("Buscar promociones"),
+                MessageBox.Show(ClsIdioma.T("Error al cargar las promociones: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Buscar promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -203,7 +203,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al cargar el detalle de la promoción: ") + ex.Message, ClsIdioma.T("Buscar promociones"),
+                MessageBox.Show(ClsIdioma.T("Error al cargar el detalle de la promoción: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Buscar promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -252,7 +252,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al filtrar las promociones: ") + ex.Message, ClsIdioma.T("Buscar promociones"),
+                MessageBox.Show(ClsIdioma.T("Error al filtrar las promociones: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Buscar promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -408,7 +408,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al mostrar el detalle: ") + ex.Message, ClsIdioma.T("Detalle de la promoción"),
+                MessageBox.Show(ClsIdioma.T("Error al mostrar el detalle: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Detalle de la promoción"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

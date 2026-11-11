@@ -74,7 +74,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -111,14 +111,14 @@ namespace CapaVista
                     }
                 }
 
-                lblTotalDeuda.Text = (ClsIdioma.Ingles ? $"Total debt: $ {deuda:N2}" : $"Deuda total: $ {deuda:N2}");
-                lblVencido.Text = (ClsIdioma.Ingles ? $"Overdue: $ {vencido:N2}" : $"Vencido: $ {vencido:N2}");
+                lblTotalDeuda.Text = (ClsIdioma.Ingles ? $"Total debt: {deuda:C2}" : $"Deuda total: {deuda:C2}");
+                lblVencido.Text = (ClsIdioma.Ingles ? $"Overdue: {vencido:C2}" : $"Vencido: {vencido:C2}");
 
                 CargarPagos();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las compras.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron obtener las compras.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -140,7 +140,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron obtener los pagos.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron obtener los pagos.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -345,7 +345,7 @@ namespace CapaVista
             }
 
             DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de anular este pago?\n\n") +
-                ClsIdioma.T("Pago N.º ") + idPago + "  $ " + monto.ToString("N2") + ClsIdioma.T("\nMotivo: ") + motivo,
+                ClsIdioma.T("Pago N.º ") + idPago + "  " + monto.ToString("C2") + ClsIdioma.T("\nMotivo: ") + motivo,
                 ClsIdioma.T("Confirmar anulación"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes)
@@ -364,7 +364,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo anular el pago.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo anular el pago.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

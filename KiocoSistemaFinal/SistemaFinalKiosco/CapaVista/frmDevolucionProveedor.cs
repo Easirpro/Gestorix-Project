@@ -142,7 +142,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 lotes = new DataTable();
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los lotes vencidos.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los lotes vencidos.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -250,7 +250,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 btnGuardar.Enabled = true;
-                MessageBox.Show(ClsIdioma.T("No se pudo registrar la devolución.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo registrar la devolución.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

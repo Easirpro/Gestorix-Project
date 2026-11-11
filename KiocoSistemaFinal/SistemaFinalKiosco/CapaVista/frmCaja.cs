@@ -71,11 +71,11 @@ namespace CapaVista
                     lblEstado.ForeColor = Color.SeaGreen;
                     lblAbiertaPor.Text = ClsIdioma.T("Sesión N.º ") + sesionActual.IdSesionCaja + ClsIdioma.T("  -  Abierta por: ") + sesionActual.UsuarioApertura;
                     lblFechaApertura.Text = ClsIdioma.T("Apertura: ") + sesionActual.FechaApertura.ToString("dd/MM/yyyy HH:mm");
-                    lblFondo.Text = $"$ {sesionActual.MontoInicial:N2}";
-                    lblIngresos.Text = $"$ {sesionActual.IngresosEfectivo:N2}";
-                    lblEgresos.Text = $"$ {sesionActual.EgresosEfectivo:N2}";
-                    lblEsperado.Text = $"$ {sesionActual.EfectivoEsperado:N2}";
-                    lblOtrosMedios.Text = $"$ {sesionActual.IngresosOtrosMedios:N2}";
+                    lblFondo.Text = $"{sesionActual.MontoInicial:C2}";
+                    lblIngresos.Text = $"{sesionActual.IngresosEfectivo:C2}";
+                    lblEgresos.Text = $"{sesionActual.EgresosEfectivo:C2}";
+                    lblEsperado.Text = $"{sesionActual.EfectivoEsperado:C2}";
+                    lblOtrosMedios.Text = $"{sesionActual.IngresosOtrosMedios:C2}";
 
                     dgvMovimientos.DataSource = logica.ObtenerMovimientosSesion(sesionActual.IdSesionCaja);
                 }
@@ -84,7 +84,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo obtener el estado de la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el estado de la caja.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -217,7 +217,7 @@ namespace CapaVista
             }
 
             DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Está seguro de anular este movimiento?\n\n") +
-                fila.Cells["Concepto"].Value + "  $ " + Convert.ToDecimal(fila.Cells["Importe"].Value).ToString("N2") +
+                fila.Cells["Concepto"].Value + "  " + Convert.ToDecimal(fila.Cells["Importe"].Value).ToString("C2") +
                 ClsIdioma.T("\nMotivo: ") + motivo, ClsIdioma.T("Confirmar anulación"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -237,7 +237,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo anular el movimiento.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo anular el movimiento.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

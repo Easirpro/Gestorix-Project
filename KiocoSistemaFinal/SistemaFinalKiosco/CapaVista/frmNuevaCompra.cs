@@ -74,13 +74,15 @@ namespace CapaVista
                 cmbMedioPagoCompra.DisplayMember = "Nombre";
                 cmbMedioPagoCompra.ValueMember = "IdMetodoPago";
             ClsIdioma.TraducirDatosAlMostrar(cmbMedioPagoCompra);
+            // se traduce solo lo que se ve: el comprobante se guarda en castellano
+            ClsIdioma.TraducirDatosAlMostrar(cmbTipoComprobante);
 
                 chkPagaDesdeCaja.Enabled = logicaCaja.HayCajaAbierta();
                 chkPagaDesdeCaja.Checked = chkPagaDesdeCaja.Enabled;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los medios de pago.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los medios de pago.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -88,6 +90,8 @@ namespace CapaVista
             ActualizarOpcionesPago();
         }
 
+        // comprobante elegido en castellano (lo que se guarda), aunque se muestre traducido
+        private string TipoComprobanteElegido => (cmbTipoComprobante.SelectedItem?.ToString() ?? "").Trim();
         private bool EsCuentaCorriente()
         {
             return cmbCondicionPago.SelectedIndex == 1;
@@ -205,7 +209,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las sucursales del proveedor.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las sucursales del proveedor.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -428,7 +432,7 @@ namespace CapaVista
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(cmbTipoComprobante.Text))
+            if (string.IsNullOrWhiteSpace(TipoComprobanteElegido))
             {
                 MessageBox.Show(ClsIdioma.T("Debe seleccionar un tipo de comprobante."), ClsIdioma.T("Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -459,7 +463,7 @@ namespace CapaVista
 
             try
             {
-                if (logica.ExisteComprobante(idProveedor, cmbTipoComprobante.Text, txtNumeroComprobante.Text))
+                if (logica.ExisteComprobante(idProveedor, TipoComprobanteElegido, txtNumeroComprobante.Text))
                 {
                     MessageBox.Show(ClsIdioma.T("Ya está cargada la ") + cmbTipoComprobante.Text.Trim() + " N.º " + txtNumeroComprobante.Text.Trim() +
                         ClsIdioma.T(" de ") + txtProveedor.Text.Trim() + ClsIdioma.T(".\n\nRevise el número o anule la compra anterior si estaba mal cargada."),
@@ -475,7 +479,7 @@ namespace CapaVista
                 compra.IdSucursal = ObtenerIdSucursal();
                 compra.Fecha = DateTime.Now;
                 compra.FechaEntregaEstimada = dtpEntrega.Checked ? dtpEntrega.Value.Date : (DateTime?)null;
-                compra.TipoComprobante = cmbTipoComprobante.Text.Trim();
+                compra.TipoComprobante = TipoComprobanteElegido;
                 compra.NumeroComprobante = string.IsNullOrWhiteSpace(txtNumeroComprobante.Text) ? null : txtNumeroComprobante.Text.Trim();
                 compra.SubtotalSinIVA = Convert.ToDecimal(txtSubsinImpuesto.Text);
                 compra.IVA = Convert.ToDecimal(txtIva.Text);
@@ -603,7 +607,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo guardar la compra.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo guardar la compra.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -673,7 +677,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 productosEncontrados = null;
-                MessageBox.Show(ClsIdioma.T("No se pudieron buscar los productos.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron buscar los productos.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }

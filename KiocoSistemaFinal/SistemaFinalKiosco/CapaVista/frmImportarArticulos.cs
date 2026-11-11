@@ -417,14 +417,14 @@ namespace CapaVista
                     catch (Exception ex)
                     {
                         MessageBox.Show(ClsIdioma.T("No se pudo completar la importación.\n\n") +
-                            ClsIdioma.T("No se guardó ningún artículo, proveedor, costo ni lote.\n\n") +ex.Message, ClsIdioma.T("Error de importación"),
+                            ClsIdioma.T("No se guardó ningún artículo, proveedor, costo ni lote.\n\n") +ClsIdioma.T(ex.Message), ClsIdioma.T("Error de importación"),
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Ocurrió un error al leer o procesar el archivo de Excel.\n\n") +ex.Message, ClsIdioma.T("Importación de artículos"),
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error al leer o procesar el archivo de Excel.\n\n") +ClsIdioma.T(ex.Message), ClsIdioma.T("Importación de artículos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -982,7 +982,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo generar la plantilla.\n\n") + ex.Message, ClsIdioma.T("Plantilla de importación"),
+                MessageBox.Show(ClsIdioma.T("No se pudo generar la plantilla.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Plantilla de importación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

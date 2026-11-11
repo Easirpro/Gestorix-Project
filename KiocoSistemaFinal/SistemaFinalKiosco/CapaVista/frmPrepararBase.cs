@@ -37,7 +37,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo crear la base de datos.\n\n") + ex.Message, "Gestorix",
+                MessageBox.Show(ClsIdioma.T("No se pudo crear la base de datos.\n\n") + ClsIdioma.T(ex.Message), "Gestorix",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 this.DialogResult = DialogResult.Abort;

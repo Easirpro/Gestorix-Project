@@ -56,7 +56,7 @@ namespace CapaVista
             {
                 alertas = new List<ClsAlertaEntidad>();
 
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las alertas.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las alertas.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 

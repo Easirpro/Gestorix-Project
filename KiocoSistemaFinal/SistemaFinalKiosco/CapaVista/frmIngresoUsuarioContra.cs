@@ -47,10 +47,13 @@ namespace CapaVista
                 return;
             }
 
-            frmRecupResSegur frm = new frmRecupResSegur(idUsuario);
-
             this.Hide();
-            frm.ShowDialog();
+
+            using (frmRecupResSegur frm = new frmRecupResSegur(idUsuario))
+            {
+                frm.ShowDialog();
+            }
+
             this.Close();
         }
 

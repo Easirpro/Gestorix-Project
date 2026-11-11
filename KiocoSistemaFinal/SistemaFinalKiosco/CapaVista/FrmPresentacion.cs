@@ -102,7 +102,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -1030,7 +1030,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -1153,7 +1153,7 @@ namespace CapaVista
             {
                 lstDescripcion.Visible = false;
 
-                MessageBox.Show(ClsIdioma.T("Error al buscar artículos: ") + ex.Message, ClsIdioma.T("Búsqueda de artículos"),
+                MessageBox.Show(ClsIdioma.T("Error al buscar artículos: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Búsqueda de artículos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1197,13 +1197,17 @@ namespace CapaVista
         // Importar y Exportar
         private void menuitemImporexcel_Click(object sender, EventArgs e)
         {
-            frmImportarArticulos frmImportar = new frmImportarArticulos();
-            frmImportar.ShowDialog();
+            using (frmImportarArticulos frmImportar = new frmImportarArticulos())
+            {
+                frmImportar.ShowDialog();
+            }
         }
         private void menuitemExporexcel_Click(object sender, EventArgs e)
         {
-            frmExportarArchivos exportararchivos = new frmExportarArchivos();
-            exportararchivos.ShowDialog();
+            using (frmExportarArchivos exportararchivos = new frmExportarArchivos())
+            {
+                exportararchivos.ShowDialog();
+            }
         }
         private void devolucionesAProveedorToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1215,8 +1219,10 @@ namespace CapaVista
         }
         private void cuentaCorrienteDeProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmCuentaCorrienteProveedores cuentacorr = new frmCuentaCorrienteProveedores();
-            cuentacorr.ShowDialog();
+            using (frmCuentaCorrienteProveedores cuentacorr = new frmCuentaCorrienteProveedores())
+            {
+                cuentacorr.ShowDialog();
+            }
         }
         // Informes
         private void informesVentasToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1229,15 +1235,17 @@ namespace CapaVista
         // Caja
         private void nuevoIngresoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmIngresoPlataCaja ingresoPlata = new frmIngresoPlataCaja(TipoMovimiento.Ingreso);
-
-            ingresoPlata.ShowDialog();
+            using (frmIngresoPlataCaja ingresoPlata = new frmIngresoPlataCaja(TipoMovimiento.Ingreso))
+            {
+                ingresoPlata.ShowDialog();
+            }
         }
         private void nuevoEgresoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmIngresoPlataCaja egresoPlata = new frmIngresoPlataCaja(TipoMovimiento.Egreso);
-
-            egresoPlata.ShowDialog();
+            using (frmIngresoPlataCaja egresoPlata = new frmIngresoPlataCaja(TipoMovimiento.Egreso))
+            {
+                egresoPlata.ShowDialog();
+            }
         }
         private void preciosYReposicionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1255,18 +1263,24 @@ namespace CapaVista
         }
         private void menuitemAministradorcompras_Click(object sender, EventArgs e)
         {
-            frmCompras compra = new frmCompras();
-            compra.ShowDialog();
+            using (frmCompras compra = new frmCompras())
+            {
+                compra.ShowDialog();
+            }
         }
         private void menuitemAdmistradorarticulos_Click(object sender, EventArgs e)
         {
-            frmCargaarticulo cargaarticulo = new frmCargaarticulo();
-            cargaarticulo.ShowDialog();
+            using (frmCargaarticulo cargaarticulo = new frmCargaarticulo())
+            {
+                cargaarticulo.ShowDialog();
+            }
         }
         private void meniitemReporapida_Click(object sender, EventArgs e)
         {
-            frmReporapida reporapida = new frmReporapida();
-            reporapida.ShowDialog();
+            using (frmReporapida reporapida = new frmReporapida())
+            {
+                reporapida.ShowDialog();
+            }
         }
         private void menuitemAdministradorventas_Click(object sender, EventArgs e)
         {
@@ -1276,13 +1290,17 @@ namespace CapaVista
         }
         private void notaDeCreditoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmDevolucion devolucion = new frmDevolucion();
-            devolucion.ShowDialog();
+            using (frmDevolucion devolucion = new frmDevolucion())
+            {
+                devolucion.ShowDialog();
+            }
         }
         private void administradorDeProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmProveedores proveedores = new frmProveedores();
-            proveedores.ShowDialog();
+            using (frmProveedores proveedores = new frmProveedores())
+            {
+                proveedores.ShowDialog();
+            }
         }
         // Cerrar caja: arqueo y cierre, la sesion sigue abierta
         private void cerrarSeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1305,7 +1323,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1328,7 +1346,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo verificar la caja.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1403,8 +1421,10 @@ namespace CapaVista
         }
         private void permisosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmCargaEmpleados Carga = new frmCargaEmpleados();
-            Carga.ShowDialog();
+            using (frmCargaEmpleados Carga = new frmCargaEmpleados())
+            {
+                Carga.ShowDialog();
+            }
         }
         private void btnNuevaCompra_Click(object sender, EventArgs e)
         {
@@ -1463,17 +1483,20 @@ namespace CapaVista
                 return;
             }
 
-            frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion, promocionesAplicadas);
-
-            if (cobro.ShowDialog() == DialogResult.OK)
+            using (frmInformeCobro cobro = new frmInformeCobro(total, dtgPresentacion, promocionesAplicadas))
             {
-                LimpiarVenta();
+                if (cobro.ShowDialog() == DialogResult.OK)
+                {
+                    LimpiarVenta();
+                }
             }
         }
         private void menuitemAdministradoarticulos_Click(object sender, EventArgs e)
         {
-            frmCategoriaMarca categoriaMarca = new frmCategoriaMarca();
-            categoriaMarca.ShowDialog();
+            using (frmCategoriaMarca categoriaMarca = new frmCategoriaMarca())
+            {
+                categoriaMarca.ShowDialog();
+            }
         }
         private void btnPromocion_Click(object sender, EventArgs e)
         {
@@ -1770,7 +1793,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
+                    MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -1929,8 +1952,10 @@ namespace CapaVista
         }
         private void administrarPromocionesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmPromocion promo = new frmPromocion();
-            promo.ShowDialog();
+            using (frmPromocion promo = new frmPromocion())
+            {
+                promo.ShowDialog();
+            }
         }
         private void verificarIntegridadToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1941,8 +1966,10 @@ namespace CapaVista
         }
         private void gestioToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmGestionBackup frm = new frmGestionBackup();
-            frm.ShowDialog();
+            using (frmGestionBackup frm = new frmGestionBackup())
+            {
+                frm.ShowDialog();
+            }
         }
         private async void FrmPresentacion_Load(object sender, EventArgs e)
         {
@@ -1955,13 +1982,15 @@ namespace CapaVista
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    ClsIdioma.T("No se pudo generar el backup automático: ") + ex.Message, ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClsIdioma.T("No se pudo generar el backup automático: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void cargarArticuloNuevoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmNuevoArticulo nuevoarticulo = new frmNuevoArticulo();
-            nuevoarticulo.ShowDialog();
+            using (frmNuevoArticulo nuevoarticulo = new frmNuevoArticulo())
+            {
+                nuevoarticulo.ShowDialog();
+            }
 
         }
 
@@ -1981,8 +2010,10 @@ namespace CapaVista
         // bitacora
         private void bitacoraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmBitacora bitacora = new frmBitacora();
-            bitacora.ShowDialog();
+            using (frmBitacora bitacora = new frmBitacora())
+            {
+                bitacora.ShowDialog();
+            }
         }
         #endregion
 
@@ -2017,8 +2048,10 @@ namespace CapaVista
 
         private void recepciónDeMercaderiaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmRecepcionCompra recepcion = new frmRecepcionCompra();
-            recepcion.ShowDialog();
+            using (frmRecepcionCompra recepcion = new frmRecepcionCompra())
+            {
+                recepcion.ShowDialog();
+            }
         }
 
         private void estadoCajaToolStripMenuItem_Click(object sender, EventArgs e)

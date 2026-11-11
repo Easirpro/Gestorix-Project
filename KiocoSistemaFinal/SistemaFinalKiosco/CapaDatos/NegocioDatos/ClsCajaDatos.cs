@@ -197,21 +197,42 @@ namespace CapaDatos.NegocioDatos
             }
         }
 
+        // todos los usuarios para el filtro del balance; DeBaja marca a los que ya no estan activos
+        public DataTable ObtenerUsuariosParaFiltro()
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(@"
+                SELECT u.IdUsuario,
+                       CONCAT(p.Apellido, N', ', p.Nombre) AS Empleado,
+                       CAST(CASE WHEN u.Estado = 1 AND p.Activo = 1 THEN 0 ELSE 1 END AS BIT) AS DeBaja
+                FROM dbo.Usuario AS u
+                INNER JOIN dbo.Persona AS p ON p.IdPersona = u.IdPersona
+                ORDER BY DeBaja, p.Apellido, p.Nombre;", conexion))
+            using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
+            {
+                DataTable tabla = new DataTable();
+                adaptador.Fill(tabla);
+                return tabla;
+            }
+        }
+        // empleados para vales y sueldos: la baja marca la persona, por eso se filtra tambien por Persona.Activo
         public DataTable ObtenerEmpleadosActivos()
         {
             using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(@"
+                SELECT u.IdUsuario,
+                       CONCAT(p.Apellido, N', ', p.Nombre) AS Empleado,
+                       u.Username
+                FROM dbo.Usuario AS u
+                INNER JOIN dbo.Persona AS p ON p.IdPersona = u.IdPersona
+                WHERE u.Estado = 1
+                  AND p.Activo = 1
+                ORDER BY p.Apellido, p.Nombre;", conexion))
+            using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
             {
-                using (SqlCommand cmd = new SqlCommand("sp_ObtenerEmpleadosActivos", conexion))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(cmd))
-                    {
-                        DataTable tabla = new DataTable();
-                        adaptador.Fill(tabla);
-                        return tabla;
-                    }
-                }
+                DataTable tabla = new DataTable();
+                adaptador.Fill(tabla);
+                return tabla;
             }
         }
 

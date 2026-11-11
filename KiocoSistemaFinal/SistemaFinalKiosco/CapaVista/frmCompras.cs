@@ -73,7 +73,7 @@ namespace CapaVista
             {
                 comprasCargadas = null;
 
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las compras.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar las compras.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -110,7 +110,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron mostrar las compras.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron mostrar las compras.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -129,7 +129,7 @@ namespace CapaVista
             {
                 nombresProveedores = new List<string>();
 
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores para el buscador.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores para el buscador.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -201,8 +201,10 @@ namespace CapaVista
         #region Eventos
         private void btnNuevacompra_Click(object sender, EventArgs e)
         {
-            frmNuevaCompra Nuevacomp = new frmNuevaCompra(false);
-            Nuevacomp.ShowDialog();
+            using (frmNuevaCompra Nuevacomp = new frmNuevaCompra(false))
+            {
+                Nuevacomp.ShowDialog();
+            }
 
             CargarCompras();
         }
@@ -423,7 +425,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo anular la compra.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo anular la compra.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -51,9 +51,12 @@ namespace CapaVista
             }
         }
 
+        private static bool mostrandoError;
+
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
             RegistrarErrorGlobal(e.Exception);
+            AvisarError(e.Exception);
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -61,6 +64,33 @@ namespace CapaVista
             if (e.ExceptionObject is Exception ex)
             {
                 RegistrarErrorGlobal(ex);
+                AvisarError(ex);
+            }
+        }
+
+        // antes el error solo se registraba y el usuario no se enteraba
+        private static void AvisarError(Exception ex)
+        {
+            // evita encadenar avisos si el mismo error se repite mientras el mensaje esta abierto
+            if (mostrandoError)
+            {
+                return;
+            }
+
+            mostrandoError = true;
+
+            try
+            {
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error inesperado y la operación no se completó.\n\n") + ClsIdioma.T(ex.Message) + "\n\n" +
+                    ClsIdioma.T("El detalle quedó registrado en la bitácora (Errores técnicos)."),
+                    ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch
+            {
+            }
+            finally
+            {
+                mostrandoError = false;
             }
         }
 

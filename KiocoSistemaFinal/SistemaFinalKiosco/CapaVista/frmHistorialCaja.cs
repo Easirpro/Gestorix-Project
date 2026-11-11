@@ -73,11 +73,11 @@ namespace CapaVista
                     if (diferencia > 0) sobrantes += diferencia;
                 }
 
-                lblTotales.Text = (ClsIdioma.Ingles ? $"Cash registers: {tabla.Rows.Count}    Shortages: $ {faltantes:N2}    Overages: $ {sobrantes:N2}" : $"Cajas: {tabla.Rows.Count}    Faltantes: $ {faltantes:N2}    Sobrantes: $ {sobrantes:N2}");
+                lblTotales.Text = (ClsIdioma.Ingles ? $"Cash registers: {tabla.Rows.Count}    Shortages: {faltantes:C2}    Overages: {sobrantes:C2}" : $"Cajas: {tabla.Rows.Count}    Faltantes: {faltantes:C2}    Sobrantes: {sobrantes:C2}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo obtener el historial de cajas.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el historial de cajas.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -58,7 +58,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo crear el rol.\n\n") + ex.Message,ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo crear el rol.\n\n") + ClsIdioma.T(ex.Message),ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

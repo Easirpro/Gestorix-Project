@@ -175,6 +175,20 @@ namespace CapaDatos.NegocioDatos
                 }
             }
         }
+        // ventas en las que se aplico la promocion (si hay, no se puede borrar)
+        public int ContarVentasPromocion(int idPromocion)
+        {
+            using (SqlConnection conexion = cn.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(
+                "SELECT COUNT(DISTINCT IdVenta) FROM dbo.VentaPromocion WHERE IdPromocion = @IdPromocion", conexion))
+            {
+                cmd.Parameters.Add("@IdPromocion", SqlDbType.Int).Value = idPromocion;
+
+                conexion.Open();
+
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
         public void EliminarPromocion(int idPromocion)
         {
             using (SqlConnection conexion = cn.ObtenerConexion())

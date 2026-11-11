@@ -128,7 +128,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los filtros.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los filtros.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -151,7 +151,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ClsIdioma.T("No se pudieron cargar las sucursales del proveedor.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBox.Show(ClsIdioma.T("No se pudieron cargar las sucursales del proveedor.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -302,7 +302,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo cargar el listado.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo cargar el listado.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -325,7 +325,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo cargar el artículo.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo cargar el artículo.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -346,7 +346,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 OcultarSugerencias();
-                MessageBox.Show(ClsIdioma.T("No se pudieron buscar los artículos.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron buscar los artículos.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -476,7 +476,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ClsIdioma.T("No se pudo exportar.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBox.Show(ClsIdioma.T("No se pudo exportar.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

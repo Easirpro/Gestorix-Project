@@ -53,8 +53,21 @@ namespace CapaLogica.NegocioLogica
 
             return modificado;
         }
+        public List<string> ObtenerHistorialProducto(int idProducto)
+        {
+            return this.datos.ObtenerHistorialProducto(idProducto);
+        }
+        // solo se borra un articulo sin historial; si lo tiene, se discontinua
         public bool EliminarProducto(int idProducto)
         {
+            List<string> historial = this.datos.ObtenerHistorialProducto(idProducto);
+
+            if (historial.Count > 0)
+            {
+                throw new InvalidOperationException("El artículo tiene " + string.Join(", ", historial) +
+                    " y no se puede eliminar. Use Discontinuar.");
+            }
+
             bool eliminado = this.datos.EliminarProducto(idProducto);
 
             if (eliminado)
@@ -177,8 +190,20 @@ namespace CapaLogica.NegocioLogica
         {
             return datos.HabilitarCategoria(idCategoria);
         }
+        public int ContarProductosCategoria(int idCategoria)
+        {
+            return datos.ContarProductosCategoria(idCategoria);
+        }
         public bool EliminarCategoria(int idCategoria)
         {
+            int productos = datos.ContarProductosCategoria(idCategoria);
+
+            if (productos > 0)
+            {
+                throw new InvalidOperationException("La categoría tiene " + productos +
+                    " artículo(s) y no se puede eliminar. Use Discontinuar.");
+            }
+
             return datos.EliminarCategoria(idCategoria);
         }
         public void RegistrarStock(int idProducto,decimal cantidadActual,decimal stockMinimo, decimal stockIdeal)

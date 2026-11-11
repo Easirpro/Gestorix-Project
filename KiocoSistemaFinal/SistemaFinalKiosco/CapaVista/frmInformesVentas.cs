@@ -161,7 +161,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los filtros.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los filtros.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -289,7 +289,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo generar el informe.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo generar el informe.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -387,7 +387,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ClsIdioma.T("No se pudo exportar.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                    MessageBox.Show(ClsIdioma.T("No se pudo exportar.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

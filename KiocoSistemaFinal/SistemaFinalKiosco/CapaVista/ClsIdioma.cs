@@ -131,7 +131,33 @@ namespace CapaVista
                 Aplicar(formulario);
             }
 
-            IdiomaCambiado?.Invoke();
+            // si una pantalla falla, las demas igual se actualizan
+            if (IdiomaCambiado != null)
+            {
+                foreach (Action aviso in IdiomaCambiado.GetInvocationList().Cast<Action>())
+                {
+                    try
+                    {
+                        aviso();
+                    }
+                    catch (Exception ex)
+                    {
+                        RegistrarErrorIdioma(ex);
+                    }
+                }
+            }
+        }
+
+        private static void RegistrarErrorIdioma(Exception ex)
+        {
+            try
+            {
+                new CapaLogica.BitacoraLogi.clsBitacoraLogica().RegistrarError(null, "ClsIdioma.CambiarIdioma",
+                    ex.GetType().FullName ?? ex.GetType().Name, ex.Message, ex.ToString());
+            }
+            catch
+            {
+            }
         }
 
         public static void Registrar(Form formulario)
@@ -194,7 +220,30 @@ namespace CapaVista
 
         private static readonly (string es, string en)[] frasesBitacora =
         {
+            ("Intento de inicio de sesión de un usuario bloqueado o inactivo: ", "Login attempt by a blocked or inactive user: "),
             ("Intento de inicio de sesión fallido para el usuario: ", "Failed login attempt for user: "),
+            ("Cambio de rol del usuario ", "Role change for user "),
+            ("La verificación de integridad encontró ", "The integrity check found "),
+            (" registro(s) con DVH inválido.", " record(s) with an invalid DVH."),
+            ("Se recalculó el DVH de productos, usuarios y ventas.", "The DVH of products, users and sales was recalculated."),
+            ("Se reactivó el producto con ID ", "Product reactivated, ID "),
+            ("Alerta oculta ", "Alert hidden for "),
+            (" días: ", " days: "),
+            ("Alta de rol: ", "Role created: "),
+            ("Eliminación del rol: ", "Role deleted: "),
+            ("Permisos del rol ", "Permissions of role "),
+            (" Agregados: ", " Added: "),
+            (" Quitados: ", " Removed: "),
+            ("Cambio de la contraseña temporal en el primer ingreso.", "Temporary password changed at first login."),
+            ("Cambio de contraseña con la pregunta de seguridad.", "Password changed using the security question."),
+            ("Respuesta de seguridad correcta al recuperar la contraseña.", "Correct security answer during password recovery."),
+            ("Respuesta de seguridad incorrecta al recuperar la contraseña.", "Wrong security answer during password recovery."),
+            ("Se importaron ", "Imported "),
+            (" productos.", " products."),
+            ("Devolución a proveedor #", "Supplier return #"),
+            (" | Con diferencias", " | With differences"),
+            (" anulada | ", " cancelled | "),
+            (" reactivada", " reactivated"),
             ("Inicio de sesión correcto.", "Successful login."),
             ("Cierre de sesión.", "Logout."),
             ("Se modificó el producto: ", "Product modified: "),

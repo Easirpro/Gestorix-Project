@@ -68,7 +68,7 @@ namespace CapaVista
             {
                 tablaProveedores = null;
 
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los proveedores.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -493,7 +493,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 MessageBox.Show((activar ? ClsIdioma.T("No se pudo activar el proveedor.") : ClsIdioma.T("No se pudo descontinuar el proveedor.")) +
-                    "\n\n" + ex.Message, ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "\n\n" + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             CargarProveedores(idProveedor.Value);

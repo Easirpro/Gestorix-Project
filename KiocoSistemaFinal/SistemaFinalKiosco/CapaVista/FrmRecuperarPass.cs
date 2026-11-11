@@ -84,7 +84,7 @@ namespace CapaVista
                     break;
 
                 case ResultadoCambioPassword.PasswordNoCumpleRequisitos:
-                    MessageBox.Show(ClsReglasPassword.Requisitos, ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ClsIdioma.T(ClsReglasPassword.Requisitos), ClsIdioma.T("Contraseña no válida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtCorreo.Focus();
                     txtCorreo.SelectAll();
                     break;

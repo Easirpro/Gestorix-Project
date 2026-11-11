@@ -36,7 +36,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo obtener el estado de la caja.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo obtener el estado de la caja.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
                 return;
@@ -63,7 +63,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -140,7 +140,7 @@ namespace CapaVista
         {
             if (tipo == "E" && EsEfectivo())
             {
-                lblDisponible.Text = (ClsIdioma.Ingles ? $"Available: $ {sesion.EfectivoEsperado:N2}" : $"Disponible: $ {sesion.EfectivoEsperado:N2}");
+                lblDisponible.Text = (ClsIdioma.Ingles ? $"Available: {sesion.EfectivoEsperado:C2}" : $"Disponible: {sesion.EfectivoEsperado:C2}");
             }
             else
             {
@@ -245,7 +245,7 @@ namespace CapaVista
                 logica.RegistrarMovimiento(movimiento);
 
                 MessageBox.Show(ClsIdioma.T("El movimiento se registró correctamente.\n\n") +
-                                cmbConcepto.Text + ": $ " + movimiento.Importe.ToString("N2"),
+                                cmbConcepto.Text + ": " + movimiento.Importe.ToString("C2"),
                     ClsIdioma.T("Movimiento registrado"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
@@ -253,7 +253,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo registrar el movimiento.\n\n") + ex.Message, ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudo registrar el movimiento.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

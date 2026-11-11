@@ -94,7 +94,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Ocurrió un error al registrar la marca.\n\n") + ex.Message,ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error al registrar la marca.\n\n") + ClsIdioma.T(ex.Message),ClsIdioma.T("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }

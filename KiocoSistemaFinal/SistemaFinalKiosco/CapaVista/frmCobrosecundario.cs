@@ -813,7 +813,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Promociones"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -851,7 +851,7 @@ namespace CapaVista
             {
                 lstDescripcion.Visible = false;
 
-                MessageBox.Show(ClsIdioma.T("Error al buscar artículos: ") + ex.Message, ClsIdioma.T("Búsqueda de artículos"),
+                MessageBox.Show(ClsIdioma.T("Error al buscar artículos: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Búsqueda de artículos"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

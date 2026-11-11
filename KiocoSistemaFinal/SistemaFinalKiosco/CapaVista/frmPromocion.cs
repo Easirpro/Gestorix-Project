@@ -213,7 +213,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al cargar las promociones por volumen: ") + ex.Message, ClsIdioma.T("Promociones"),
+                MessageBox.Show(ClsIdioma.T("Error al cargar las promociones por volumen: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -645,7 +645,7 @@ namespace CapaVista
             catch (Exception ex)
             {
 
-                MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
+                MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 MessageBox.Show(ex.ToString(), ClsIdioma.T("Error al cargar la promoción"), MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -927,7 +927,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al guardar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
+                MessageBox.Show(ClsIdioma.T("Error al guardar la promoción: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -974,7 +974,7 @@ namespace CapaVista
                 lstPromocionesEncontradas.DataSource = null;
                 lstPromocionesEncontradas.Visible = false;
 
-                MessageBox.Show(ClsIdioma.T("Error al buscar promociones: ") + ex.Message, ClsIdioma.T("Promociones"),
+                MessageBox.Show(ClsIdioma.T("Error al buscar promociones: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -1075,6 +1075,17 @@ namespace CapaVista
                     return;
                 }
 
+                // usada en ventas: no se borra, se desactiva
+                int ventas = logica.ContarVentasPromocion(idPromocionSeleccionada);
+
+                if (ventas > 0)
+                {
+                    MessageBox.Show(ClsIdioma.T("Esta promoción se usó en ") + ventas + ClsIdioma.T(" venta(s) y no se puede eliminar.\n\n") +
+                        ClsIdioma.T("Para que deje de aplicarse, tildá «Desactivar Promoción»: el historial se conserva."),
+                        ClsIdioma.T("Promociones"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 DialogResult respuesta = MessageBox.Show(ClsIdioma.T("¿Estás seguro de que querés eliminar esta promoción?\nEsta acción no se puede deshacer."), ClsIdioma.T("Confirmar eliminación"),
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -1090,7 +1101,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al eliminar la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
+                MessageBox.Show(ClsIdioma.T("Error al eliminar la promoción: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1177,7 +1188,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo cambiar el estado de la promoción: ") + ex.Message, ClsIdioma.T("Promociones"),
+                MessageBox.Show(ClsIdioma.T("No se pudo cambiar el estado de la promoción: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -1218,7 +1229,7 @@ namespace CapaVista
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, ClsIdioma.T("Error al agregar mecánica"),
+                    MessageBox.Show(ClsIdioma.T(ex.Message), ClsIdioma.T("Error al agregar mecánica"),
                         MessageBoxButtons.OK, MessageBoxIcon.Error
                     );
                 }

@@ -669,7 +669,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("No se pudieron guardar los cambios. No se modificó ningún dato.\n\n") + ex.Message,
+                MessageBox.Show(ClsIdioma.T("No se pudieron guardar los cambios. No se modificó ningún dato.\n\n") + ClsIdioma.T(ex.Message),
                     ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return false;
@@ -728,7 +728,7 @@ namespace CapaVista
 
             if (motivo != string.Empty)
             {
-                MessageBox.Show(motivo, ClsIdioma.T("Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ClsIdioma.T(motivo), ClsIdioma.T("Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtDNI.Clear();
                 txtDNI.ReadOnly = false;
@@ -770,7 +770,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al cargar los tipos de teléfono: ") + ex.Message,
+                MessageBox.Show(ClsIdioma.T("Error al cargar los tipos de teléfono: ") + ClsIdioma.T(ex.Message),
                     ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -872,7 +872,7 @@ namespace CapaVista
 
             if (motivoCuil != string.Empty)
             {
-                MessageBox.Show(motivoCuil, ClsIdioma.T("Validación"),
+                MessageBox.Show(ClsIdioma.T(motivoCuil), ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 MostrarControl(mkdCuil);
@@ -1296,7 +1296,7 @@ namespace CapaVista
 
                     if (motivoCuil != string.Empty)
                     {
-                        MessageBox.Show(motivoCuil, ClsIdioma.T("Validación"),
+                        MessageBox.Show(ClsIdioma.T(motivoCuil), ClsIdioma.T("Validación"),
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         MostrarControl(mkdCuil);
@@ -1489,7 +1489,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ClsIdioma.T(ex.Message), ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnActualizar_Click(object sender, EventArgs e)

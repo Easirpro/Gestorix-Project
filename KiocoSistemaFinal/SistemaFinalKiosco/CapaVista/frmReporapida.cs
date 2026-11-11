@@ -113,7 +113,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al cargar los productos: ") + ex.Message,
+                MessageBox.Show(ClsIdioma.T("Error al cargar los productos: ") + ClsIdioma.T(ex.Message),
                     ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -574,7 +574,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al buscar productos: ") + ex.Message,
+                MessageBox.Show(ClsIdioma.T("Error al buscar productos: ") + ClsIdioma.T(ex.Message),
                     ClsIdioma.T("Error de búsqueda"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -623,7 +623,7 @@ namespace CapaVista
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    ClsIdioma.T("Error al cargar las sucursales: ") + ex.Message,
+                    ClsIdioma.T("Error al cargar las sucursales: ") + ClsIdioma.T(ex.Message),
                     ClsIdioma.T("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -741,7 +741,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ClsIdioma.T("Error al guardar los cambios: ") + ex.Message);
+                MessageBox.Show(ClsIdioma.T("Error al guardar los cambios: ") + ClsIdioma.T(ex.Message));
             }
         }
     }

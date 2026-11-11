@@ -191,8 +191,10 @@ namespace CapaVista
         }
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            frmIngresoUsuarioContra recupero = new frmIngresoUsuarioContra();
-            recupero.ShowDialog(this);
+            using (frmIngresoUsuarioContra recupero = new frmIngresoUsuarioContra())
+            {
+                recupero.ShowDialog(this);
+            }
 
             this.Show();
             this.BringToFront();

@@ -794,7 +794,7 @@ namespace CapaVista
                     System.Diagnostics.Debug.WriteLine(exRegistro.ToString());
                 }
 
-                MessageBox.Show(ClsIdioma.T("Ocurrió un error al cargar las sucursales del proveedor.\n\n") + ex.Message,ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("Ocurrió un error al cargar las sucursales del proveedor.\n\n") + ClsIdioma.T(ex.Message),ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

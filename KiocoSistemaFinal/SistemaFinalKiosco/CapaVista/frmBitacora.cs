@@ -62,7 +62,14 @@ namespace CapaVista
 
             this.Shown += (sender, e) => AjustarAnchoColumnas();
 
-            Action idioma = () => BeginInvoke(new Action(AjustarAnchoColumnas));
+            // solo si la ventana sigue abierta
+            Action idioma = () =>
+            {
+                if (IsHandleCreated && !IsDisposed)
+                {
+                    BeginInvoke(new Action(AjustarAnchoColumnas));
+                }
+            };
             ClsIdioma.IdiomaCambiado += idioma;
             this.Disposed += (sender, e) => ClsIdioma.IdiomaCambiado -= idioma;
         }
@@ -116,7 +123,7 @@ namespace CapaVista
                     }
                 }
 
-                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los registros.\n\n") + ex.Message,
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los registros.\n\n") + ClsIdioma.T(ex.Message),
                     ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
