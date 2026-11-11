@@ -176,7 +176,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
             tableLayoutPanel1.Size = new Size(273, 126);
-            tableLayoutPanel1.TabIndex = 35;
+            tableLayoutPanel1.TabIndex = 4;
             // 
             // label1
             // 
@@ -274,7 +274,7 @@
             btnPromocion.Location = new Point(23, 351);
             btnPromocion.Name = "btnPromocion";
             btnPromocion.Size = new Size(207, 74);
-            btnPromocion.TabIndex = 34;
+            btnPromocion.TabIndex = 11;
             btnPromocion.Text = "Promociónes";
             btnPromocion.TextAlign = ContentAlignment.MiddleRight;
             btnPromocion.UseVisualStyleBackColor = false;
@@ -289,7 +289,7 @@
             dtgPresentacion.Location = new Point(23, 73);
             dtgPresentacion.Name = "dtgPresentacion";
             dtgPresentacion.Size = new Size(557, 272);
-            dtgPresentacion.TabIndex = 25;
+            dtgPresentacion.TabIndex = 7;
             // 
             // ClnSKU
             // 
@@ -334,7 +334,7 @@
             txtCantidad.Name = "txtCantidad";
             txtCantidad.PlaceholderText = "1 si lo dejás vacío";
             txtCantidad.Size = new Size(114, 23);
-            txtCantidad.TabIndex = 24;
+            txtCantidad.TabIndex = 3;
             txtCantidad.KeyDown += txtCantidad_KeyDown;
             // 
             // txtCodigoBarra
@@ -343,7 +343,7 @@
             txtCodigoBarra.Name = "txtCodigoBarra";
             txtCodigoBarra.PlaceholderText = "Código de barras, SKU o nombre del producto";
             txtCodigoBarra.Size = new Size(327, 23);
-            txtCodigoBarra.TabIndex = 23;
+            txtCodigoBarra.TabIndex = 2;
             txtCodigoBarra.TextChanged += txtCodigoBarra_TextChanged;
             txtCodigoBarra.KeyDown += txtCodigoBarra_KeyDown;
             // 
@@ -356,7 +356,7 @@
             label4.Location = new Point(369, 13);
             label4.Name = "label4";
             label4.Size = new Size(114, 15);
-            label4.TabIndex = 22;
+            label4.TabIndex = 1;
             label4.Text = "Agregar la cantidad";
             // 
             // label3
@@ -367,7 +367,7 @@
             label3.Location = new Point(23, 13);
             label3.Name = "label3";
             label3.Size = new Size(327, 15);
-            label3.TabIndex = 21;
+            label3.TabIndex = 0;
             label3.Text = "Escaneá un código o escribí parte del SKU o del nombre.        ";
             // 
             // pcbLogo
@@ -378,7 +378,7 @@
             pcbLogo.Name = "pcbLogo";
             pcbLogo.Size = new Size(270, 208);
             pcbLogo.SizeMode = PictureBoxSizeMode.Zoom;
-            pcbLogo.TabIndex = 33;
+            pcbLogo.TabIndex = 8;
             pcbLogo.TabStop = false;
             // 
             // btnCobrar
@@ -391,7 +391,7 @@
             btnCobrar.Location = new Point(597, 145);
             btnCobrar.Name = "btnCobrar";
             btnCobrar.Size = new Size(273, 45);
-            btnCobrar.TabIndex = 20;
+            btnCobrar.TabIndex = 6;
             btnCobrar.Text = "F2-Cobrar";
             btnCobrar.UseVisualStyleBackColor = false;
             btnCobrar.Click += btnCobrar_Click_1;
@@ -402,7 +402,7 @@
             btnCambiarcantidad.Location = new Point(465, 351);
             btnCambiarcantidad.Name = "btnCambiarcantidad";
             btnCambiarcantidad.Size = new Size(115, 23);
-            btnCambiarcantidad.TabIndex = 30;
+            btnCambiarcantidad.TabIndex = 10;
             btnCambiarcantidad.Text = "Cambiar cantidad";
             btnCambiarcantidad.UseVisualStyleBackColor = true;
             btnCambiarcantidad.Click += btnCambiarcantidad_Click;
@@ -413,7 +413,7 @@
             btnQuitar.Location = new Point(384, 351);
             btnQuitar.Name = "btnQuitar";
             btnQuitar.Size = new Size(75, 23);
-            btnQuitar.TabIndex = 27;
+            btnQuitar.TabIndex = 9;
             btnQuitar.Text = "Quitar";
             btnQuitar.UseVisualStyleBackColor = true;
             btnQuitar.Click += btnQuitar_Click;
@@ -423,7 +423,7 @@
             btnSalir.Location = new Point(764, 495);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(103, 43);
-            btnSalir.TabIndex = 36;
+            btnSalir.TabIndex = 12;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Click += btnSalir_Click;
@@ -435,7 +435,7 @@
             lstDescripcion.Location = new Point(23, 57);
             lstDescripcion.Name = "lstDescripcion";
             lstDescripcion.Size = new Size(327, 94);
-            lstDescripcion.TabIndex = 37;
+            lstDescripcion.TabIndex = 5;
             lstDescripcion.Visible = false;
             lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
             lstDescripcion.KeyDown += lstDescripcion_KeyDown;

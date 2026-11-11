@@ -68,7 +68,7 @@
             btnVolver.Location = new Point(166, 152);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
-            btnVolver.TabIndex = 3;
+            btnVolver.TabIndex = 4;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
@@ -78,7 +78,7 @@
             btnAceptar.Location = new Point(85, 152);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 23);
-            btnAceptar.TabIndex = 4;
+            btnAceptar.TabIndex = 3;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;

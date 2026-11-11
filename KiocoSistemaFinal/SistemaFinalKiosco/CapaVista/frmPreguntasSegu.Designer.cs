@@ -45,7 +45,7 @@
             label1.Location = new Point(35, 124);
             label1.Name = "label1";
             label1.Size = new Size(190, 15);
-            label1.TabIndex = 0;
+            label1.TabIndex = 1;
             label1.Text = "¿Cuál es el nombre de tu mascota?";
             // 
             // label2
@@ -54,7 +54,7 @@
             label2.Location = new Point(35, 182);
             label2.Name = "label2";
             label2.Size = new Size(140, 15);
-            label2.TabIndex = 1;
+            label2.TabIndex = 3;
             label2.Text = "¿Cuál es tu libro favorito?";
             // 
             // label3
@@ -63,7 +63,7 @@
             label3.Location = new Point(35, 245);
             label3.Name = "label3";
             label3.Size = new Size(155, 15);
-            label3.TabIndex = 2;
+            label3.TabIndex = 5;
             label3.Text = "¿Cuál es tu comida favorita?";
             // 
             // txtNombreMascota
@@ -72,7 +72,7 @@
             txtNombreMascota.Name = "txtNombreMascota";
             txtNombreMascota.PlaceholderText = "Tu respuesta";
             txtNombreMascota.Size = new Size(177, 23);
-            txtNombreMascota.TabIndex = 3;
+            txtNombreMascota.TabIndex = 2;
             // 
             // label4
             // 
@@ -81,7 +81,7 @@
             label4.Location = new Point(30, 44);
             label4.Name = "label4";
             label4.Size = new Size(214, 25);
-            label4.TabIndex = 4;
+            label4.TabIndex = 0;
             label4.Text = "Preguntas de Seguridad";
             // 
             // txtLibro
@@ -90,7 +90,7 @@
             txtLibro.Name = "txtLibro";
             txtLibro.PlaceholderText = "Tu respuesta";
             txtLibro.Size = new Size(177, 23);
-            txtLibro.TabIndex = 5;
+            txtLibro.TabIndex = 4;
             // 
             // txtComida
             // 

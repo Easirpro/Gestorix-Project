@@ -54,7 +54,7 @@
             label2.Location = new Point(10, 222);
             label2.Name = "label2";
             label2.Size = new Size(48, 15);
-            label2.TabIndex = 1;
+            label2.TabIndex = 2;
             label2.Text = "Archivo";
             // 
             // txtTraerArchivo
@@ -63,14 +63,14 @@
             txtTraerArchivo.Name = "txtTraerArchivo";
             txtTraerArchivo.PlaceholderText = "Elegí el archivo de Excel a importar";
             txtTraerArchivo.Size = new Size(170, 23);
-            txtTraerArchivo.TabIndex = 2;
+            txtTraerArchivo.TabIndex = 3;
             // 
             // btnSeleccionar
             // 
             btnSeleccionar.Location = new Point(240, 219);
             btnSeleccionar.Name = "btnSeleccionar";
             btnSeleccionar.Size = new Size(95, 23);
-            btnSeleccionar.TabIndex = 3;
+            btnSeleccionar.TabIndex = 4;
             btnSeleccionar.Text = "Seleccionar";
             btnSeleccionar.UseVisualStyleBackColor = true;
             btnSeleccionar.Click += btnSeleccionar_Click;
@@ -80,7 +80,7 @@
             btnAceptar.Location = new Point(197, 287);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 23);
-            btnAceptar.TabIndex = 4;
+            btnAceptar.TabIndex = 5;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -90,7 +90,7 @@
             btnVolver.Location = new Point(278, 287);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
-            btnVolver.TabIndex = 5;
+            btnVolver.TabIndex = 6;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
@@ -103,7 +103,7 @@
             btnDescargarPlanilla.Location = new Point(87, 86);
             btnDescargarPlanilla.Name = "btnDescargarPlanilla";
             btnDescargarPlanilla.Size = new Size(198, 108);
-            btnDescargarPlanilla.TabIndex = 6;
+            btnDescargarPlanilla.TabIndex = 1;
             btnDescargarPlanilla.Text = "Descargar Planilla";
             btnDescargarPlanilla.TextAlign = ContentAlignment.BottomCenter;
             btnDescargarPlanilla.UseVisualStyleBackColor = true;

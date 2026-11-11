@@ -125,7 +125,7 @@
             btnCambiarcantidad.Location = new Point(454, 410);
             btnCambiarcantidad.Name = "btnCambiarcantidad";
             btnCambiarcantidad.Size = new Size(115, 23);
-            btnCambiarcantidad.TabIndex = 12;
+            btnCambiarcantidad.TabIndex = 13;
             btnCambiarcantidad.Text = "Cambiar cantidad";
             btnCambiarcantidad.UseVisualStyleBackColor = true;
             btnCambiarcantidad.Click += btnCambiarcantidad_Click;
@@ -136,7 +136,7 @@
             btnQuitar.Location = new Point(373, 410);
             btnQuitar.Name = "btnQuitar";
             btnQuitar.Size = new Size(75, 23);
-            btnQuitar.TabIndex = 9;
+            btnQuitar.TabIndex = 12;
             btnQuitar.Text = "Quitar";
             btnQuitar.UseVisualStyleBackColor = true;
             btnQuitar.Click += btnQuitar_Click;
@@ -149,7 +149,7 @@
             pcbLogo.Name = "pcbLogo";
             pcbLogo.Size = new Size(270, 169);
             pcbLogo.SizeMode = PictureBoxSizeMode.Zoom;
-            pcbLogo.TabIndex = 16;
+            pcbLogo.TabIndex = 11;
             pcbLogo.TabStop = false;
             // 
             // btnCobrar
@@ -162,7 +162,7 @@
             btnCobrar.Location = new Point(586, 205);
             btnCobrar.Name = "btnCobrar";
             btnCobrar.Size = new Size(273, 45);
-            btnCobrar.TabIndex = 2;
+            btnCobrar.TabIndex = 8;
             btnCobrar.Text = "F2-Cobrar";
             btnCobrar.UseVisualStyleBackColor = false;
             btnCobrar.Click += btnCobrar_Click_1;
@@ -177,7 +177,7 @@
             btnNuevaCompra.Location = new Point(586, 251);
             btnNuevaCompra.Name = "btnNuevaCompra";
             btnNuevaCompra.Size = new Size(270, 45);
-            btnNuevaCompra.TabIndex = 8;
+            btnNuevaCompra.TabIndex = 10;
             btnNuevaCompra.Text = "F4-Nueva Compra";
             btnNuevaCompra.UseVisualStyleBackColor = false;
             btnNuevaCompra.Click += btnNuevaCompra_Click;
@@ -275,7 +275,7 @@
             label3.Location = new Point(12, 35);
             label3.Name = "label3";
             label3.Size = new Size(303, 15);
-            label3.TabIndex = 3;
+            label3.TabIndex = 1;
             label3.Text = "Escaneá un código o escribí parte del SKU o del nombre.";
             // 
             // label4
@@ -287,7 +287,7 @@
             label4.Location = new Point(331, 35);
             label4.Name = "label4";
             label4.Size = new Size(117, 15);
-            label4.TabIndex = 4;
+            label4.TabIndex = 2;
             label4.Text = "Agregar la cantidad.";
             // 
             // txtCodigoBarra
@@ -296,7 +296,7 @@
             txtCodigoBarra.Name = "txtCodigoBarra";
             txtCodigoBarra.PlaceholderText = "Código de barras, SKU o nombre del producto";
             txtCodigoBarra.Size = new Size(303, 23);
-            txtCodigoBarra.TabIndex = 5;
+            txtCodigoBarra.TabIndex = 3;
             txtCodigoBarra.TextChanged += txtCodigoBarra_TextChanged;
             txtCodigoBarra.KeyDown += txtCodigoBarra_KeyDown;
             // 
@@ -306,7 +306,7 @@
             txtCantidad.Name = "txtCantidad";
             txtCantidad.PlaceholderText = "1 si lo dejás vacío";
             txtCantidad.Size = new Size(117, 23);
-            txtCantidad.TabIndex = 6;
+            txtCantidad.TabIndex = 4;
             txtCantidad.KeyDown += txtCantidad_KeyDown;
             // 
             // dtgPresentacion
@@ -318,7 +318,7 @@
             dtgPresentacion.Location = new Point(12, 94);
             dtgPresentacion.Name = "dtgPresentacion";
             dtgPresentacion.Size = new Size(557, 310);
-            dtgPresentacion.TabIndex = 7;
+            dtgPresentacion.TabIndex = 9;
             // 
             // ClnSKU
             // 
@@ -372,7 +372,7 @@
             pnlUsuario.Location = new Point(0, 495);
             pnlUsuario.Name = "pnlUsuario";
             pnlUsuario.Size = new Size(877, 38);
-            pnlUsuario.TabIndex = 17;
+            pnlUsuario.TabIndex = 15;
             // 
             // lblHora
             // 
@@ -402,7 +402,7 @@
             label7.Location = new Point(202, 10);
             label7.Name = "label7";
             label7.Size = new Size(31, 15);
-            label7.TabIndex = 3;
+            label7.TabIndex = 2;
             label7.Text = "Rol :";
             // 
             // txtRol
@@ -412,7 +412,7 @@
             txtRol.Name = "txtRol";
             txtRol.ReadOnly = true;
             txtRol.Size = new Size(100, 23);
-            txtRol.TabIndex = 2;
+            txtRol.TabIndex = 3;
             // 
             // txtUsuario
             // 
@@ -443,7 +443,7 @@
             btnPromocion.Location = new Point(14, 410);
             btnPromocion.Name = "btnPromocion";
             btnPromocion.Size = new Size(207, 74);
-            btnPromocion.TabIndex = 18;
+            btnPromocion.TabIndex = 14;
             btnPromocion.Text = "Promociónes";
             btnPromocion.TextAlign = ContentAlignment.MiddleRight;
             btnPromocion.UseVisualStyleBackColor = true;
@@ -470,7 +470,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
             tableLayoutPanel1.Size = new Size(273, 145);
-            tableLayoutPanel1.TabIndex = 19;
+            tableLayoutPanel1.TabIndex = 7;
             // 
             // btnArt
             // 
@@ -769,7 +769,7 @@
             lblDescripcionSku.Location = new Point(12, 80);
             lblDescripcionSku.Name = "lblDescripcionSku";
             lblDescripcionSku.Size = new Size(0, 12);
-            lblDescripcionSku.TabIndex = 20;
+            lblDescripcionSku.TabIndex = 5;
             // 
             // lstDescripcion
             // 
@@ -779,7 +779,7 @@
             lstDescripcion.Location = new Point(12, 80);
             lstDescripcion.Name = "lstDescripcion";
             lstDescripcion.Size = new Size(303, 94);
-            lstDescripcion.TabIndex = 21;
+            lstDescripcion.TabIndex = 6;
             lstDescripcion.Visible = false;
             lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
             lstDescripcion.KeyDown += lstDescripcion_KeyDown;

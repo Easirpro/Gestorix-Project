@@ -87,7 +87,7 @@
             lblEstado.Location = new Point(15, 25);
             lblEstado.Name = "lblEstado";
             lblEstado.Size = new Size(149, 25);
-            lblEstado.TabIndex = 1;
+            lblEstado.TabIndex = 0;
             lblEstado.Text = "CAJA CERRADA";
             // 
             // lblAbiertaPor
@@ -96,7 +96,7 @@
             lblAbiertaPor.Location = new Point(15, 60);
             lblAbiertaPor.Name = "lblAbiertaPor";
             lblAbiertaPor.Size = new Size(77, 15);
-            lblAbiertaPor.TabIndex = 2;
+            lblAbiertaPor.TabIndex = 4;
             lblAbiertaPor.Text = "Abierta por: -";
             // 
             // lblFechaApertura
@@ -105,7 +105,7 @@
             lblFechaApertura.Location = new Point(15, 85);
             lblFechaApertura.Name = "lblFechaApertura";
             lblFechaApertura.Size = new Size(64, 15);
-            lblFechaApertura.TabIndex = 3;
+            lblFechaApertura.TabIndex = 8;
             lblFechaApertura.Text = "Apertura: -";
             // 
             // lblTituloFondo
@@ -114,7 +114,7 @@
             lblTituloFondo.Location = new Point(330, 25);
             lblTituloFondo.Name = "lblTituloFondo";
             lblTituloFondo.Size = new Size(78, 15);
-            lblTituloFondo.TabIndex = 4;
+            lblTituloFondo.TabIndex = 1;
             lblTituloFondo.Text = "Fondo inicial:";
             // 
             // lblFondo
@@ -124,7 +124,7 @@
             lblFondo.Location = new Point(480, 25);
             lblFondo.Name = "lblFondo";
             lblFondo.Size = new Size(41, 15);
-            lblFondo.TabIndex = 5;
+            lblFondo.TabIndex = 2;
             lblFondo.Text = "$ 0,00";
             // 
             // lblTituloIngresos
@@ -133,7 +133,7 @@
             lblTituloIngresos.Location = new Point(330, 50);
             lblTituloIngresos.Name = "lblTituloIngresos";
             lblTituloIngresos.Size = new Size(126, 15);
-            lblTituloIngresos.TabIndex = 6;
+            lblTituloIngresos.TabIndex = 5;
             lblTituloIngresos.Text = "+ Ingresos en efectivo:";
             // 
             // lblIngresos
@@ -143,7 +143,7 @@
             lblIngresos.Location = new Point(480, 50);
             lblIngresos.Name = "lblIngresos";
             lblIngresos.Size = new Size(41, 15);
-            lblIngresos.TabIndex = 7;
+            lblIngresos.TabIndex = 6;
             lblIngresos.Text = "$ 0,00";
             // 
             // lblTituloEgresos
@@ -152,7 +152,7 @@
             lblTituloEgresos.Location = new Point(330, 75);
             lblTituloEgresos.Name = "lblTituloEgresos";
             lblTituloEgresos.Size = new Size(119, 15);
-            lblTituloEgresos.TabIndex = 8;
+            lblTituloEgresos.TabIndex = 9;
             lblTituloEgresos.Text = "- Egresos en efectivo:";
             // 
             // lblEgresos
@@ -162,7 +162,7 @@
             lblEgresos.Location = new Point(480, 75);
             lblEgresos.Name = "lblEgresos";
             lblEgresos.Size = new Size(41, 15);
-            lblEgresos.TabIndex = 9;
+            lblEgresos.TabIndex = 10;
             lblEgresos.Text = "$ 0,00";
             // 
             // lblTituloEsperado
@@ -171,7 +171,7 @@
             lblTituloEsperado.Location = new Point(640, 25);
             lblTituloEsperado.Name = "lblTituloEsperado";
             lblTituloEsperado.Size = new Size(143, 15);
-            lblTituloEsperado.TabIndex = 10;
+            lblTituloEsperado.TabIndex = 3;
             lblTituloEsperado.Text = "Efectivo esperado en caja:";
             // 
             // lblEsperado
@@ -181,7 +181,7 @@
             lblEsperado.Location = new Point(640, 48);
             lblEsperado.Name = "lblEsperado";
             lblEsperado.Size = new Size(66, 25);
-            lblEsperado.TabIndex = 11;
+            lblEsperado.TabIndex = 7;
             lblEsperado.Text = "$ 0,00";
             // 
             // lblTituloOtros
@@ -190,7 +190,7 @@
             lblTituloOtros.Location = new Point(640, 85);
             lblTituloOtros.Name = "lblTituloOtros";
             lblTituloOtros.Size = new Size(164, 15);
-            lblTituloOtros.TabIndex = 12;
+            lblTituloOtros.TabIndex = 11;
             lblTituloOtros.Text = "Otros medios (transf./débito):";
             // 
             // lblOtrosMedios
@@ -200,7 +200,7 @@
             lblOtrosMedios.Location = new Point(830, 85);
             lblOtrosMedios.Name = "lblOtrosMedios";
             lblOtrosMedios.Size = new Size(41, 15);
-            lblOtrosMedios.TabIndex = 13;
+            lblOtrosMedios.TabIndex = 12;
             lblOtrosMedios.Text = "$ 0,00";
             // 
             // btnAbrirCaja
@@ -208,7 +208,7 @@
             btnAbrirCaja.Location = new Point(12, 145);
             btnAbrirCaja.Name = "btnAbrirCaja";
             btnAbrirCaja.Size = new Size(120, 35);
-            btnAbrirCaja.TabIndex = 14;
+            btnAbrirCaja.TabIndex = 1;
             btnAbrirCaja.Text = "Abrir caja";
             btnAbrirCaja.UseVisualStyleBackColor = true;
             btnAbrirCaja.Click += btnAbrirCaja_Click;
@@ -218,7 +218,7 @@
             btnNuevoIngreso.Location = new Point(138, 145);
             btnNuevoIngreso.Name = "btnNuevoIngreso";
             btnNuevoIngreso.Size = new Size(120, 35);
-            btnNuevoIngreso.TabIndex = 15;
+            btnNuevoIngreso.TabIndex = 2;
             btnNuevoIngreso.Text = "Nuevo ingreso";
             btnNuevoIngreso.UseVisualStyleBackColor = true;
             btnNuevoIngreso.Click += btnNuevoIngreso_Click;
@@ -228,7 +228,7 @@
             btnNuevoEgreso.Location = new Point(264, 145);
             btnNuevoEgreso.Name = "btnNuevoEgreso";
             btnNuevoEgreso.Size = new Size(120, 35);
-            btnNuevoEgreso.TabIndex = 16;
+            btnNuevoEgreso.TabIndex = 3;
             btnNuevoEgreso.Text = "Nuevo egreso";
             btnNuevoEgreso.UseVisualStyleBackColor = true;
             btnNuevoEgreso.Click += btnNuevoEgreso_Click;
@@ -238,7 +238,7 @@
             btnAnularMovimiento.Location = new Point(390, 145);
             btnAnularMovimiento.Name = "btnAnularMovimiento";
             btnAnularMovimiento.Size = new Size(140, 35);
-            btnAnularMovimiento.TabIndex = 17;
+            btnAnularMovimiento.TabIndex = 4;
             btnAnularMovimiento.Text = "Anular movimiento";
             btnAnularMovimiento.UseVisualStyleBackColor = true;
             btnAnularMovimiento.Click += btnAnularMovimiento_Click;
@@ -248,7 +248,7 @@
             btnCerrarCaja.Location = new Point(536, 145);
             btnCerrarCaja.Name = "btnCerrarCaja";
             btnCerrarCaja.Size = new Size(120, 35);
-            btnCerrarCaja.TabIndex = 18;
+            btnCerrarCaja.TabIndex = 5;
             btnCerrarCaja.Text = "Cerrar caja";
             btnCerrarCaja.UseVisualStyleBackColor = true;
             btnCerrarCaja.Click += btnCerrarCaja_Click;
@@ -259,7 +259,7 @@
             btnHistorial.Location = new Point(726, 145);
             btnHistorial.Name = "btnHistorial";
             btnHistorial.Size = new Size(120, 35);
-            btnHistorial.TabIndex = 19;
+            btnHistorial.TabIndex = 6;
             btnHistorial.Text = "Historial";
             btnHistorial.UseVisualStyleBackColor = true;
             btnHistorial.Click += btnHistorial_Click;
@@ -270,7 +270,7 @@
             btnActualizar.Location = new Point(852, 145);
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Size = new Size(120, 35);
-            btnActualizar.TabIndex = 20;
+            btnActualizar.TabIndex = 7;
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = true;
             btnActualizar.Click += btnActualizar_Click;
@@ -282,7 +282,7 @@
             lblMovimientos.Location = new Point(12, 192);
             lblMovimientos.Name = "lblMovimientos";
             lblMovimientos.Size = new Size(146, 15);
-            lblMovimientos.TabIndex = 21;
+            lblMovimientos.TabIndex = 8;
             lblMovimientos.Text = "Movimientos de la sesión";
             // 
             // dgvMovimientos
@@ -296,7 +296,7 @@
             dgvMovimientos.Name = "dgvMovimientos";
             dgvMovimientos.ReadOnly = true;
             dgvMovimientos.Size = new Size(960, 345);
-            dgvMovimientos.TabIndex = 22;
+            dgvMovimientos.TabIndex = 9;
             dgvMovimientos.DataBindingComplete += dgvMovimientos_DataBindingComplete;
             // 
             // btnSalir
@@ -305,7 +305,7 @@
             btnSalir.Location = new Point(852, 570);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(120, 30);
-            btnSalir.TabIndex = 23;
+            btnSalir.TabIndex = 10;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Click += btnSalir_Click;

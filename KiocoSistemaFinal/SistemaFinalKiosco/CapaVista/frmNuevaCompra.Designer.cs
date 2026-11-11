@@ -105,7 +105,7 @@ namespace CapaVista
             label3.Location = new Point(145, 20);
             label3.Name = "label3";
             label3.Size = new Size(97, 15);
-            label3.TabIndex = 2;
+            label3.TabIndex = 1;
             label3.Text = "Fecha del pedido";
             // 
             // label4
@@ -115,7 +115,7 @@ namespace CapaVista
             label4.Location = new Point(12, 530);
             label4.Name = "label4";
             label4.Size = new Size(84, 15);
-            label4.TabIndex = 5;
+            label4.TabIndex = 7;
             label4.Text = "Observaciones";
             // 
             // label5
@@ -151,7 +151,7 @@ namespace CapaVista
             labelNumeroComprobante.Location = new Point(360, 24);
             labelNumeroComprobante.Name = "labelNumeroComprobante";
             labelNumeroComprobante.Size = new Size(115, 15);
-            labelNumeroComprobante.TabIndex = 3;
+            labelNumeroComprobante.TabIndex = 2;
             labelNumeroComprobante.Text = "N.º de comprobante";
             // 
             // gpbProveedor
@@ -217,7 +217,7 @@ namespace CapaVista
             lstProveedores.Location = new Point(552, 51);
             lstProveedores.Name = "lstProveedores";
             lstProveedores.Size = new Size(214, 100);
-            lstProveedores.TabIndex = 9;
+            lstProveedores.TabIndex = 2;
             lstProveedores.Visible = false;
             lstProveedores.DoubleClick += lstProveedores_DoubleClick;
             lstProveedores.KeyDown += lstProveedores_KeyDown;
@@ -255,7 +255,7 @@ namespace CapaVista
             txtNumeroPedidoInterno.Name = "txtNumeroPedidoInterno";
             txtNumeroPedidoInterno.ReadOnly = true;
             txtNumeroPedidoInterno.Size = new Size(120, 23);
-            txtNumeroPedidoInterno.TabIndex = 1;
+            txtNumeroPedidoInterno.TabIndex = 4;
             txtNumeroPedidoInterno.TabStop = false;
             // 
             // dtpFechaPedido
@@ -264,7 +264,7 @@ namespace CapaVista
             dtpFechaPedido.Location = new Point(145, 40);
             dtpFechaPedido.Name = "dtpFechaPedido";
             dtpFechaPedido.Size = new Size(120, 23);
-            dtpFechaPedido.TabIndex = 3;
+            dtpFechaPedido.TabIndex = 5;
             // 
             // labelFechaEntrega
             // 
@@ -272,7 +272,7 @@ namespace CapaVista
             labelFechaEntrega.Location = new Point(275, 20);
             labelFechaEntrega.Name = "labelFechaEntrega";
             labelFechaEntrega.Size = new Size(98, 15);
-            labelFechaEntrega.TabIndex = 4;
+            labelFechaEntrega.TabIndex = 2;
             labelFechaEntrega.Text = "Entrega estimada";
             // 
             // dtpEntrega
@@ -283,7 +283,7 @@ namespace CapaVista
             dtpEntrega.Name = "dtpEntrega";
             dtpEntrega.ShowCheckBox = true;
             dtpEntrega.Size = new Size(120, 23);
-            dtpEntrega.TabIndex = 5;
+            dtpEntrega.TabIndex = 6;
             // 
             // labelEstadoPedido
             // 
@@ -291,7 +291,7 @@ namespace CapaVista
             labelEstadoPedido.Location = new Point(410, 20);
             labelEstadoPedido.Name = "labelEstadoPedido";
             labelEstadoPedido.Size = new Size(42, 15);
-            labelEstadoPedido.TabIndex = 6;
+            labelEstadoPedido.TabIndex = 3;
             labelEstadoPedido.Text = "Estado";
             // 
             // lblEstadoPedido
@@ -315,7 +315,7 @@ namespace CapaVista
             gpbComprobante.Location = new Point(12, 92);
             gpbComprobante.Name = "gpbComprobante";
             gpbComprobante.Size = new Size(876, 56);
-            gpbComprobante.TabIndex = 2;
+            gpbComprobante.TabIndex = 3;
             gpbComprobante.TabStop = false;
             gpbComprobante.Text = "Comprobante del proveedor (si corresponde)";
             // 
@@ -327,7 +327,7 @@ namespace CapaVista
             cmbTipoComprobante.Location = new Point(140, 20);
             cmbTipoComprobante.Name = "cmbTipoComprobante";
             cmbTipoComprobante.Size = new Size(200, 23);
-            cmbTipoComprobante.TabIndex = 2;
+            cmbTipoComprobante.TabIndex = 1;
             // 
             // txtNumeroComprobante
             // 
@@ -349,7 +349,7 @@ namespace CapaVista
             gpbProductos.Location = new Point(12, 154);
             gpbProductos.Name = "gpbProductos";
             gpbProductos.Size = new Size(876, 250);
-            gpbProductos.TabIndex = 3;
+            gpbProductos.TabIndex = 4;
             gpbProductos.TabStop = false;
             gpbProductos.Text = "Productos del pedido";
             // 
@@ -466,7 +466,7 @@ namespace CapaVista
             gpbTotales.Location = new Point(12, 410);
             gpbTotales.Name = "gpbTotales";
             gpbTotales.Size = new Size(876, 52);
-            gpbTotales.TabIndex = 4;
+            gpbTotales.TabIndex = 5;
             gpbTotales.TabStop = false;
             gpbTotales.Text = "Totales estimados";
             // 
@@ -506,7 +506,7 @@ namespace CapaVista
             txtObservaciones.PlaceholderText = "Notas de la compra (opcional)";
             txtObservaciones.ScrollBars = ScrollBars.Vertical;
             txtObservaciones.Size = new Size(876, 50);
-            txtObservaciones.TabIndex = 6;
+            txtObservaciones.TabIndex = 8;
             // 
             // btnGuardar
             // 
@@ -514,7 +514,7 @@ namespace CapaVista
             btnGuardar.Location = new Point(632, 604);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(125, 30);
-            btnGuardar.TabIndex = 7;
+            btnGuardar.TabIndex = 9;
             btnGuardar.Text = "Guardar compra";
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
@@ -525,7 +525,7 @@ namespace CapaVista
             btnCacelar.Location = new Point(765, 604);
             btnCacelar.Name = "btnCacelar";
             btnCacelar.Size = new Size(123, 30);
-            btnCacelar.TabIndex = 8;
+            btnCacelar.TabIndex = 10;
             btnCacelar.Text = "Cancelar";
             btnCacelar.UseVisualStyleBackColor = true;
             btnCacelar.Click += btnCacelar_Click;
@@ -543,7 +543,7 @@ namespace CapaVista
             grpCondicionPago.Location = new Point(12, 468);
             grpCondicionPago.Name = "grpCondicionPago";
             grpCondicionPago.Size = new Size(876, 56);
-            grpCondicionPago.TabIndex = 10;
+            grpCondicionPago.TabIndex = 6;
             grpCondicionPago.TabStop = false;
             grpCondicionPago.Text = "Condición de pago";
             // 

@@ -167,7 +167,7 @@ namespace CapaVista
             dgvItems.RowHeadersVisible = false;
             dgvItems.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvItems.Size = new Size(440, 300);
-            dgvItems.TabIndex = 3;
+            dgvItems.TabIndex = 6;
             //
             // dgvNombre
             //
@@ -190,7 +190,7 @@ namespace CapaVista
             btnNuevo.Location = new Point(465, 149);
             btnNuevo.Name = "btnNuevo";
             btnNuevo.Size = new Size(148, 40);
-            btnNuevo.TabIndex = 4;
+            btnNuevo.TabIndex = 3;
             btnNuevo.Text = "Nuevo";
             btnNuevo.UseVisualStyleBackColor = true;
             btnNuevo.Click += btnNuevo_Click;
@@ -202,7 +202,7 @@ namespace CapaVista
             btnModificar.Location = new Point(465, 195);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(148, 40);
-            btnModificar.TabIndex = 5;
+            btnModificar.TabIndex = 4;
             btnModificar.Text = "Modificar";
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
@@ -214,7 +214,7 @@ namespace CapaVista
             btnDiscontinuar.Location = new Point(465, 241);
             btnDiscontinuar.Name = "btnDiscontinuar";
             btnDiscontinuar.Size = new Size(148, 40);
-            btnDiscontinuar.TabIndex = 6;
+            btnDiscontinuar.TabIndex = 5;
             btnDiscontinuar.Text = "Discontinuar";
             btnDiscontinuar.UseVisualStyleBackColor = true;
             btnDiscontinuar.Click += btnDiscontinuar_Click;

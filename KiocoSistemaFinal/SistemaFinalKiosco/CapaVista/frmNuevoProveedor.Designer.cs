@@ -401,7 +401,7 @@
             chkSinNumero.Location = new Point(500, 89);
             chkSinNumero.Name = "chkSinNumero";
             chkSinNumero.Size = new Size(87, 19);
-            chkSinNumero.TabIndex = 11;
+            chkSinNumero.TabIndex = 12;
             chkSinNumero.Text = "Sin número";
             chkSinNumero.UseVisualStyleBackColor = true;
             chkSinNumero.CheckedChanged += chkSinNumero_CheckedChanged;
@@ -412,7 +412,7 @@
             lblPiso.Location = new Point(12, 121);
             lblPiso.Name = "lblPiso";
             lblPiso.Size = new Size(32, 15);
-            lblPiso.TabIndex = 12;
+            lblPiso.TabIndex = 13;
             lblPiso.Text = "Piso:";
             //
             // txtPiso
@@ -422,7 +422,7 @@
             txtPiso.Name = "txtPiso";
             txtPiso.PlaceholderText = "Opcional";
             txtPiso.Size = new Size(80, 23);
-            txtPiso.TabIndex = 13;
+            txtPiso.TabIndex = 14;
             //
             // lblDepartamento
             //
@@ -430,7 +430,7 @@
             lblDepartamento.Location = new Point(315, 121);
             lblDepartamento.Name = "lblDepartamento";
             lblDepartamento.Size = new Size(86, 15);
-            lblDepartamento.TabIndex = 14;
+            lblDepartamento.TabIndex = 15;
             lblDepartamento.Text = "Departamento:";
             //
             // txtDepartamento
@@ -440,7 +440,7 @@
             txtDepartamento.Name = "txtDepartamento";
             txtDepartamento.PlaceholderText = "Opcional";
             txtDepartamento.Size = new Size(80, 23);
-            txtDepartamento.TabIndex = 15;
+            txtDepartamento.TabIndex = 16;
             //
             // lblObservaciones
             //
@@ -460,7 +460,7 @@
             txtObservaciones.PlaceholderText = "Notas sobre el proveedor (opcional)";
             txtObservaciones.ScrollBars = ScrollBars.Vertical;
             txtObservaciones.Size = new Size(616, 64);
-            txtObservaciones.TabIndex = 6;
+            txtObservaciones.TabIndex = 7;
             txtObservaciones.TextChanged += txtObservaciones_TextChanged;
             //
             // lblContador
@@ -469,7 +469,7 @@
             lblContador.Location = new Point(528, 422);
             lblContador.Name = "lblContador";
             lblContador.Size = new Size(100, 15);
-            lblContador.TabIndex = 7;
+            lblContador.TabIndex = 6;
             lblContador.Text = "0 / 255";
             lblContador.TextAlign = ContentAlignment.TopRight;
             //

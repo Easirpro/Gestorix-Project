@@ -47,7 +47,7 @@
             lblCantidadLleva.Location = new Point(23, 68);
             lblCantidadLleva.Name = "lblCantidadLleva";
             lblCantidadLleva.Size = new Size(108, 15);
-            lblCantidadLleva.TabIndex = 0;
+            lblCantidadLleva.TabIndex = 1;
             lblCantidadLleva.Text = "Cantidad que lleva.";
             // 
             // lblCantidadPaga
@@ -56,7 +56,7 @@
             lblCantidadPaga.Location = new Point(216, 68);
             lblCantidadPaga.Name = "lblCantidadPaga";
             lblCantidadPaga.Size = new Size(110, 15);
-            lblCantidadPaga.TabIndex = 1;
+            lblCantidadPaga.TabIndex = 2;
             lblCantidadPaga.Text = "Cantidad que paga.";
             // 
             // lblVistaPrevia
@@ -65,7 +65,7 @@
             lblVistaPrevia.Location = new Point(23, 145);
             lblVistaPrevia.Name = "lblVistaPrevia";
             lblVistaPrevia.Size = new Size(67, 15);
-            lblVistaPrevia.TabIndex = 2;
+            lblVistaPrevia.TabIndex = 5;
             lblVistaPrevia.Text = "Vista previa";
             // 
             // lblLoQueLleva
@@ -75,7 +75,7 @@
             lblLoQueLleva.Location = new Point(145, 177);
             lblLoQueLleva.Name = "lblLoQueLleva";
             lblLoQueLleva.Size = new Size(57, 21);
-            lblLoQueLleva.TabIndex = 3;
+            lblLoQueLleva.TabIndex = 6;
             lblLoQueLleva.Text = "label4";
             // 
             // lblLoQueRecibe
@@ -84,7 +84,7 @@
             lblLoQueRecibe.Location = new Point(154, 214);
             lblLoQueRecibe.Name = "lblLoQueRecibe";
             lblLoQueRecibe.Size = new Size(38, 15);
-            lblLoQueRecibe.TabIndex = 4;
+            lblLoQueRecibe.TabIndex = 7;
             lblLoQueRecibe.Text = "label5";
             // 
             // label6
@@ -93,7 +93,7 @@
             label6.Location = new Point(12, 18);
             label6.Name = "label6";
             label6.Size = new Size(284, 30);
-            label6.TabIndex = 5;
+            label6.TabIndex = 0;
             label6.Text = "Agregar mecánica por volumen\nConfigurá una nueva promoción del tipo lleva/paga.";
             // 
             // txtCantidadLleva
@@ -102,7 +102,7 @@
             txtCantidadLleva.Name = "txtCantidadLleva";
             txtCantidadLleva.PlaceholderText = "Ej.: 3 (lleva 3)";
             txtCantidadLleva.Size = new Size(107, 23);
-            txtCantidadLleva.TabIndex = 6;
+            txtCantidadLleva.TabIndex = 3;
             txtCantidadLleva.TextChanged += Cantidades_TextChanged;
             // 
             // txtCantidadPaga
@@ -111,7 +111,7 @@
             txtCantidadPaga.Name = "txtCantidadPaga";
             txtCantidadPaga.PlaceholderText = "Ej.: 2 (paga 2)";
             txtCantidadPaga.Size = new Size(107, 23);
-            txtCantidadPaga.TabIndex = 7;
+            txtCantidadPaga.TabIndex = 4;
             txtCantidadPaga.TextChanged += Cantidades_TextChanged;
             // 
             // btnCancelar
@@ -119,7 +119,7 @@
             btnCancelar.Location = new Point(23, 245);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(128, 23);
-            btnCancelar.TabIndex = 8;
+            btnCancelar.TabIndex = 9;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -129,7 +129,7 @@
             btnGuardarMecanica.Location = new Point(195, 245);
             btnGuardarMecanica.Name = "btnGuardarMecanica";
             btnGuardarMecanica.Size = new Size(128, 23);
-            btnGuardarMecanica.TabIndex = 9;
+            btnGuardarMecanica.TabIndex = 8;
             btnGuardarMecanica.Text = "Guardar Mecnica";
             btnGuardarMecanica.UseVisualStyleBackColor = true;
             btnGuardarMecanica.Click += btnGuardarMecanica_Click_1;

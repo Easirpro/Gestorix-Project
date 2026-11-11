@@ -144,7 +144,7 @@
             lblBuscar.Location = new Point(12, 117);
             lblBuscar.Name = "lblBuscar";
             lblBuscar.Size = new Size(64, 15);
-            lblBuscar.TabIndex = 6;
+            lblBuscar.TabIndex = 7;
             lblBuscar.Text = "Proveedor:";
             //
             // txtBuscar
@@ -154,7 +154,7 @@
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Escriba el nombre o CUIT del proveedor";
             txtBuscar.Size = new Size(590, 23);
-            txtBuscar.TabIndex = 7;
+            txtBuscar.TabIndex = 8;
             txtBuscar.TextChanged += txtBuscar_TextChanged;
             txtBuscar.KeyDown += txtBuscar_KeyDown;
             //
@@ -166,7 +166,7 @@
             lstProveedores.Location = new Point(82, 137);
             lstProveedores.Name = "lstProveedores";
             lstProveedores.Size = new Size(590, 140);
-            lstProveedores.TabIndex = 8;
+            lstProveedores.TabIndex = 11;
             lstProveedores.Visible = false;
             lstProveedores.DoubleClick += lstProveedores_DoubleClick;
             lstProveedores.KeyDown += lstProveedores_KeyDown;
@@ -212,7 +212,7 @@
             dtgProveedores.RowHeadersVisible = false;
             dtgProveedores.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgProveedores.Size = new Size(976, 340);
-            dtgProveedores.TabIndex = 11;
+            dtgProveedores.TabIndex = 12;
             dtgProveedores.CellDoubleClick += dtgProveedores_CellDoubleClick;
             dtgProveedores.SelectionChanged += dtgProveedores_SelectionChanged;
             //
@@ -302,7 +302,7 @@
             lblObservaciones.Location = new Point(12, 497);
             lblObservaciones.Name = "lblObservaciones";
             lblObservaciones.Size = new Size(213, 15);
-            lblObservaciones.TabIndex = 12;
+            lblObservaciones.TabIndex = 13;
             lblObservaciones.Text = "Observaciones del proveedor elegido:";
             //
             // txtObsevaciones
@@ -315,7 +315,7 @@
             txtObsevaciones.ReadOnly = true;
             txtObsevaciones.ScrollBars = ScrollBars.Vertical;
             txtObsevaciones.Size = new Size(860, 80);
-            txtObsevaciones.TabIndex = 13;
+            txtObsevaciones.TabIndex = 14;
             //
             // lblCantidad
             //
@@ -325,7 +325,7 @@
             lblCantidad.Location = new Point(12, 612);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(0, 15);
-            lblCantidad.TabIndex = 14;
+            lblCantidad.TabIndex = 15;
             //
             // btnSalir
             //
@@ -333,7 +333,7 @@
             btnSalir.Location = new Point(893, 604);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(95, 34);
-            btnSalir.TabIndex = 15;
+            btnSalir.TabIndex = 16;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Click += btnSalir_Click;

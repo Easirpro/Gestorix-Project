@@ -182,7 +182,7 @@
             lstProveedores.Location = new Point(513, 137);
             lstProveedores.Name = "lstProveedores";
             lstProveedores.Size = new Size(364, 120);
-            lstProveedores.TabIndex = 12;
+            lstProveedores.TabIndex = 13;
             lstProveedores.Visible = false;
             lstProveedores.DoubleClick += lstProveedores_DoubleClick;
             lstProveedores.KeyDown += lstProveedores_KeyDown;
@@ -193,7 +193,7 @@
             btnLimpiarFiltros.Location = new Point(883, 109);
             btnLimpiarFiltros.Name = "btnLimpiarFiltros";
             btnLimpiarFiltros.Size = new Size(105, 32);
-            btnLimpiarFiltros.TabIndex = 13;
+            btnLimpiarFiltros.TabIndex = 12;
             btnLimpiarFiltros.Text = "Limpiar filtros";
             btnLimpiarFiltros.UseVisualStyleBackColor = true;
             btnLimpiarFiltros.Click += btnLimpiarFiltros_Click;

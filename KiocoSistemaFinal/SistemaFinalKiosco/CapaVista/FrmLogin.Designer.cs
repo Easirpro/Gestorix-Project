@@ -61,7 +61,7 @@
             txtUser.Name = "txtUser";
             txtUser.PlaceholderText = "Tu usuario";
             txtUser.Size = new Size(171, 23);
-            txtUser.TabIndex = 2;
+            txtUser.TabIndex = 0;
             // 
             // txtPass
             // 
@@ -70,7 +70,7 @@
             txtPass.Name = "txtPass";
             txtPass.PlaceholderText = "Tu contraseña";
             txtPass.Size = new Size(171, 23);
-            txtPass.TabIndex = 3;
+            txtPass.TabIndex = 1;
             txtPass.UseSystemPasswordChar = true;
             // 
             // btnLogin
@@ -78,7 +78,7 @@
             btnLogin.Location = new Point(197, 206);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(75, 23);
-            btnLogin.TabIndex = 4;
+            btnLogin.TabIndex = 3;
             btnLogin.Text = "Iniciar";
             btnLogin.UseVisualStyleBackColor = true;
             btnLogin.Click += btnLogin_Click;
@@ -90,7 +90,7 @@
             lkbOlvideContraseña.Location = new Point(118, 159);
             lkbOlvideContraseña.Name = "lkbOlvideContraseña";
             lkbOlvideContraseña.Size = new Size(119, 15);
-            lkbOlvideContraseña.TabIndex = 5;
+            lkbOlvideContraseña.TabIndex = 4;
             lkbOlvideContraseña.TabStop = true;
             lkbOlvideContraseña.Text = "Olvide mi contraseña";
             lkbOlvideContraseña.LinkClicked += linkLabel1_LinkClicked;
@@ -100,7 +100,7 @@
             btnSalir.Location = new Point(57, 206);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(75, 23);
-            btnSalir.TabIndex = 6;
+            btnSalir.TabIndex = 3;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Click += btnSalir_Click;
@@ -116,7 +116,7 @@
             btnMostrar.Location = new Point(277, 110);
             btnMostrar.Name = "btnMostrar";
             btnMostrar.Size = new Size(46, 23);
-            btnMostrar.TabIndex = 7;
+            btnMostrar.TabIndex = 2;
             btnMostrar.Text = "👁";
             btnMostrar.UseVisualStyleBackColor = false;
             btnMostrar.Click += btnMostrar_Click;
@@ -134,7 +134,7 @@
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(326, 259);
-            panel1.TabIndex = 9;
+            panel1.TabIndex = 2;
             // 
             // lblContraseña
             // 

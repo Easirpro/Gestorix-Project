@@ -79,7 +79,7 @@
             dataGridView1.Location = new Point(15, 83);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(571, 255);
-            dataGridView1.TabIndex = 3;
+            dataGridView1.TabIndex = 4;
             // 
             // Column1
             // 
@@ -111,7 +111,7 @@
             btnAceptar.Location = new Point(430, 381);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 23);
-            btnAceptar.TabIndex = 4;
+            btnAceptar.TabIndex = 5;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -121,7 +121,7 @@
             btnSalir.Location = new Point(511, 382);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(75, 21);
-            btnSalir.TabIndex = 5;
+            btnSalir.TabIndex = 6;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Click += btnSalir_Click;
@@ -131,7 +131,7 @@
             btnBuscar.Location = new Point(311, 40);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(75, 23);
-            btnBuscar.TabIndex = 6;
+            btnBuscar.TabIndex = 3;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;

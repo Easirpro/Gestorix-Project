@@ -92,7 +92,7 @@
             lblDesde.Location = new Point(12, 28);
             lblDesde.Name = "lblDesde";
             lblDesde.Size = new Size(42, 15);
-            lblDesde.TabIndex = 1;
+            lblDesde.TabIndex = 0;
             lblDesde.Text = "Desde:";
             // 
             // dtpDesde
@@ -101,7 +101,7 @@
             dtpDesde.Location = new Point(60, 24);
             dtpDesde.Name = "dtpDesde";
             dtpDesde.Size = new Size(115, 23);
-            dtpDesde.TabIndex = 2;
+            dtpDesde.TabIndex = 1;
             // 
             // lblHasta
             // 
@@ -109,7 +109,7 @@
             lblHasta.Location = new Point(185, 28);
             lblHasta.Name = "lblHasta";
             lblHasta.Size = new Size(40, 15);
-            lblHasta.TabIndex = 3;
+            lblHasta.TabIndex = 2;
             lblHasta.Text = "Hasta:";
             // 
             // dtpHasta
@@ -118,7 +118,7 @@
             dtpHasta.Location = new Point(230, 24);
             dtpHasta.Name = "dtpHasta";
             dtpHasta.Size = new Size(115, 23);
-            dtpHasta.TabIndex = 4;
+            dtpHasta.TabIndex = 3;
             // 
             // lblNroVenta
             // 
@@ -126,7 +126,7 @@
             lblNroVenta.Location = new Point(370, 28);
             lblNroVenta.Name = "lblNroVenta";
             lblNroVenta.Size = new Size(85, 15);
-            lblNroVenta.TabIndex = 5;
+            lblNroVenta.TabIndex = 4;
             lblNroVenta.Text = "o N.º de venta:";
             // 
             // txtNroVenta
@@ -135,14 +135,14 @@
             txtNroVenta.Name = "txtNroVenta";
             txtNroVenta.PlaceholderText = "Opcional: N.º exacto de la venta";
             txtNroVenta.Size = new Size(90, 23);
-            txtNroVenta.TabIndex = 6;
+            txtNroVenta.TabIndex = 5;
             // 
             // btnBuscarVentas
             // 
             btnBuscarVentas.Location = new Point(575, 22);
             btnBuscarVentas.Name = "btnBuscarVentas";
             btnBuscarVentas.Size = new Size(100, 27);
-            btnBuscarVentas.TabIndex = 7;
+            btnBuscarVentas.TabIndex = 6;
             btnBuscarVentas.Text = "Buscar";
             btnBuscarVentas.UseVisualStyleBackColor = true;
             btnBuscarVentas.Click += btnBuscarVentas_Click;
@@ -158,7 +158,7 @@
             dgvVentas.Name = "dgvVentas";
             dgvVentas.ReadOnly = true;
             dgvVentas.Size = new Size(772, 135);
-            dgvVentas.TabIndex = 8;
+            dgvVentas.TabIndex = 7;
             dgvVentas.DataBindingComplete += dgvVentas_DataBindingComplete;
             dgvVentas.SelectionChanged += dgvVentas_SelectionChanged;
             // 
@@ -169,7 +169,7 @@
             grpProducto.Location = new Point(12, 218);
             grpProducto.Name = "grpProducto";
             grpProducto.Size = new Size(796, 155);
-            grpProducto.TabIndex = 9;
+            grpProducto.TabIndex = 1;
             grpProducto.TabStop = false;
             grpProducto.Text = "2. Producto a devolver";
             // 
@@ -184,7 +184,7 @@
             dgvDetalle.Name = "dgvDetalle";
             dgvDetalle.ReadOnly = true;
             dgvDetalle.Size = new Size(772, 122);
-            dgvDetalle.TabIndex = 10;
+            dgvDetalle.TabIndex = 0;
             dgvDetalle.DataBindingComplete += dgvDetalle_DataBindingComplete;
             dgvDetalle.SelectionChanged += dgvDetalle_SelectionChanged;
             // 
@@ -209,7 +209,7 @@
             grpDatos.Location = new Point(12, 378);
             grpDatos.Name = "grpDatos";
             grpDatos.Size = new Size(796, 195);
-            grpDatos.TabIndex = 11;
+            grpDatos.TabIndex = 2;
             grpDatos.TabStop = false;
             grpDatos.Text = "3. Datos de la devolución";
             // 
@@ -219,7 +219,7 @@
             lblCantidad.Location = new Point(15, 30);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(58, 15);
-            lblCantidad.TabIndex = 12;
+            lblCantidad.TabIndex = 0;
             lblCantidad.Text = "Cantidad:";
             // 
             // nudCantidad
@@ -228,7 +228,7 @@
             nudCantidad.Maximum = new decimal(new int[] { 99999999, 0, 0, 131072 });
             nudCantidad.Name = "nudCantidad";
             nudCantidad.Size = new Size(100, 23);
-            nudCantidad.TabIndex = 13;
+            nudCantidad.TabIndex = 1;
             nudCantidad.TextAlign = HorizontalAlignment.Right;
             nudCantidad.ThousandsSeparator = true;
             nudCantidad.ValueChanged += nudCantidad_ValueChanged;
@@ -239,7 +239,7 @@
             lblPrecio.Location = new Point(225, 30);
             lblPrecio.Name = "lblPrecio";
             lblPrecio.Size = new Size(104, 15);
-            lblPrecio.TabIndex = 14;
+            lblPrecio.TabIndex = 2;
             lblPrecio.Text = "Precio por unidad:";
             // 
             // lblPrecioValor
@@ -249,7 +249,7 @@
             lblPrecioValor.Location = new Point(340, 30);
             lblPrecioValor.Name = "lblPrecioValor";
             lblPrecioValor.Size = new Size(41, 15);
-            lblPrecioValor.TabIndex = 15;
+            lblPrecioValor.TabIndex = 3;
             lblPrecioValor.Text = "$ 0,00";
             // 
             // lblImporte
@@ -258,7 +258,7 @@
             lblImporte.Location = new Point(470, 30);
             lblImporte.Name = "lblImporte";
             lblImporte.Size = new Size(52, 15);
-            lblImporte.TabIndex = 16;
+            lblImporte.TabIndex = 4;
             lblImporte.Text = "Importe:";
             // 
             // lblImporteValor
@@ -268,7 +268,7 @@
             lblImporteValor.Location = new Point(535, 26);
             lblImporteValor.Name = "lblImporteValor";
             lblImporteValor.Size = new Size(53, 20);
-            lblImporteValor.TabIndex = 17;
+            lblImporteValor.TabIndex = 5;
             lblImporteValor.Text = "$ 0,00";
             // 
             // lblMotivo
@@ -277,7 +277,7 @@
             lblMotivo.Location = new Point(15, 66);
             lblMotivo.Name = "lblMotivo";
             lblMotivo.Size = new Size(48, 15);
-            lblMotivo.TabIndex = 18;
+            lblMotivo.TabIndex = 6;
             lblMotivo.Text = "Motivo:";
             // 
             // cmbMotivo
@@ -287,7 +287,7 @@
             cmbMotivo.Location = new Point(105, 62);
             cmbMotivo.Name = "cmbMotivo";
             cmbMotivo.Size = new Size(245, 23);
-            cmbMotivo.TabIndex = 19;
+            cmbMotivo.TabIndex = 7;
             cmbMotivo.SelectedIndexChanged += cmbMotivo_SelectedIndexChanged;
             // 
             // lblObservacion
@@ -296,7 +296,7 @@
             lblObservacion.Location = new Point(375, 66);
             lblObservacion.Name = "lblObservacion";
             lblObservacion.Size = new Size(144, 15);
-            lblObservacion.TabIndex = 20;
+            lblObservacion.TabIndex = 8;
             lblObservacion.Text = "Observaciones (opcional):";
             // 
             // txtObservacion
@@ -309,7 +309,7 @@
             txtObservacion.PlaceholderText = "Obligatorio si el motivo es «Otro»";
             txtObservacion.ScrollBars = ScrollBars.Vertical;
             txtObservacion.Size = new Size(405, 55);
-            txtObservacion.TabIndex = 21;
+            txtObservacion.TabIndex = 11;
             // 
             // lblReintegro
             // 
@@ -317,7 +317,7 @@
             lblReintegro.Location = new Point(15, 100);
             lblReintegro.Name = "lblReintegro";
             lblReintegro.Size = new Size(61, 15);
-            lblReintegro.TabIndex = 22;
+            lblReintegro.TabIndex = 9;
             lblReintegro.Text = "Reintegro:";
             // 
             // rbEfectivo
@@ -327,7 +327,7 @@
             rbEfectivo.Location = new Point(105, 98);
             rbEfectivo.Name = "rbEfectivo";
             rbEfectivo.Size = new Size(181, 19);
-            rbEfectivo.TabIndex = 23;
+            rbEfectivo.TabIndex = 10;
             rbEfectivo.TabStop = true;
             rbEfectivo.Text = "Devolver el dinero en efectivo";
             rbEfectivo.UseVisualStyleBackColor = true;
@@ -339,7 +339,7 @@
             rbCambio.Location = new Point(105, 121);
             rbCambio.Name = "rbCambio";
             rbCambio.Size = new Size(244, 19);
-            rbCambio.TabIndex = 24;
+            rbCambio.TabIndex = 12;
             rbCambio.Text = "Entregar otra unidad del mismo producto";
             rbCambio.UseVisualStyleBackColor = true;
             rbCambio.CheckedChanged += rbReintegro_CheckedChanged;
@@ -350,7 +350,7 @@
             chkReingresaStock.Location = new Point(15, 155);
             chkReingresaStock.Name = "chkReingresaStock";
             chkReingresaStock.Size = new Size(322, 19);
-            chkReingresaStock.TabIndex = 25;
+            chkReingresaStock.TabIndex = 13;
             chkReingresaStock.Text = "La unidad devuelta está en condiciones y vuelve al stock";
             chkReingresaStock.UseVisualStyleBackColor = true;
             // 
@@ -361,7 +361,7 @@
             lblCaja.Location = new Point(375, 155);
             lblCaja.Name = "lblCaja";
             lblCaja.Size = new Size(0, 15);
-            lblCaja.TabIndex = 26;
+            lblCaja.TabIndex = 14;
             // 
             // btnRegistrar
             // 
@@ -369,7 +369,7 @@
             btnRegistrar.Location = new Point(582, 582);
             btnRegistrar.Name = "btnRegistrar";
             btnRegistrar.Size = new Size(110, 32);
-            btnRegistrar.TabIndex = 27;
+            btnRegistrar.TabIndex = 3;
             btnRegistrar.Text = "Registrar";
             btnRegistrar.UseVisualStyleBackColor = true;
             btnRegistrar.Click += btnRegistrar_Click;
@@ -380,7 +380,7 @@
             btnCancelar.Location = new Point(698, 582);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(110, 32);
-            btnCancelar.TabIndex = 28;
+            btnCancelar.TabIndex = 4;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;

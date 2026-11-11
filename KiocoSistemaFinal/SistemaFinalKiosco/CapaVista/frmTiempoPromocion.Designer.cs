@@ -128,7 +128,7 @@
             lblFechaFin.Location = new Point(15, 65);
             lblFechaFin.Name = "lblFechaFin";
             lblFechaFin.Size = new Size(74, 15);
-            lblFechaFin.TabIndex = 1;
+            lblFechaFin.TabIndex = 2;
             lblFechaFin.Text = "Fecha de fin:";
             // 
             // dtpFechaInicio
@@ -137,7 +137,7 @@
             dtpFechaInicio.Location = new Point(130, 26);
             dtpFechaInicio.Name = "dtpFechaInicio";
             dtpFechaInicio.Size = new Size(150, 23);
-            dtpFechaInicio.TabIndex = 2;
+            dtpFechaInicio.TabIndex = 1;
             // 
             // dtpFechaFin
             // 
@@ -266,7 +266,7 @@
             lblHoraFin.Location = new Point(220, 35);
             lblHoraFin.Name = "lblHoraFin";
             lblHoraFin.Size = new Size(40, 15);
-            lblHoraFin.TabIndex = 1;
+            lblHoraFin.TabIndex = 2;
             lblHoraFin.Text = "Hasta:";
             // 
             // dtpHoraInicio
@@ -277,7 +277,7 @@
             dtpHoraInicio.Name = "dtpHoraInicio";
             dtpHoraInicio.ShowUpDown = true;
             dtpHoraInicio.Size = new Size(100, 23);
-            dtpHoraInicio.TabIndex = 2;
+            dtpHoraInicio.TabIndex = 1;
             dtpHoraInicio.Value = new DateTime(2026, 10, 10, 10, 0, 0, 0);
             // 
             // dtpHoraFin

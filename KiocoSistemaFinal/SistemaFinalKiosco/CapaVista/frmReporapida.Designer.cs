@@ -170,7 +170,7 @@
             pnlBotones.Location = new Point(13, 569);
             pnlBotones.Name = "pnlBotones";
             pnlBotones.Size = new Size(977, 40);
-            pnlBotones.TabIndex = 4;
+            pnlBotones.TabIndex = 6;
             // 
             // btnCancelar
             // 
@@ -178,7 +178,7 @@
             btnCancelar.Location = new Point(743, 8);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(100, 23);
-            btnCancelar.TabIndex = 11;
+            btnCancelar.TabIndex = 1;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
@@ -189,7 +189,7 @@
             btnGuardarCambios.Location = new Point(854, 8);
             btnGuardarCambios.Name = "btnGuardarCambios";
             btnGuardarCambios.Size = new Size(116, 23);
-            btnGuardarCambios.TabIndex = 10;
+            btnGuardarCambios.TabIndex = 0;
             btnGuardarCambios.Text = "Guardar cambios";
             btnGuardarCambios.UseVisualStyleBackColor = true;
             btnGuardarCambios.Click += btnGuardarCambios_Click;
@@ -212,7 +212,7 @@
             dgvProductos.RowHeadersVisible = false;
             dgvProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvProductos.Size = new Size(980, 348);
-            dgvProductos.TabIndex = 7;
+            dgvProductos.TabIndex = 5;
             dgvProductos.CellClick += dgvProductos_CellClick;
             dgvProductos.CellEnter += dgvProductos_CellEnter;
             dgvProductos.EditingControlShowing += dgvProductos_EditingControlShowing;
@@ -321,7 +321,7 @@
             lstDescripcion.Location = new Point(192, 205);
             lstDescripcion.Name = "lstDescripcion";
             lstDescripcion.Size = new Size(550, 120);
-            lstDescripcion.TabIndex = 12;
+            lstDescripcion.TabIndex = 4;
             lstDescripcion.Visible = false;
             lstDescripcion.DoubleClick += lstDescripcion_DoubleClick;
             lstDescripcion.KeyDown += lstDescripcion_KeyDown;
@@ -427,7 +427,7 @@
             lblModo.Location = new Point(3, 14);
             lblModo.Name = "lblModo";
             lblModo.Size = new Size(109, 15);
-            lblModo.TabIndex = 3;
+            lblModo.TabIndex = 0;
             lblModo.Text = "¿Qué querés hacer?";
             // 
             // lblTitulo
