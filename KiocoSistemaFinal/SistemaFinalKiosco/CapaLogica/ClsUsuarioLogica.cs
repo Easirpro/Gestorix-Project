@@ -92,6 +92,17 @@ namespace CapaLogica
 
         public const int ID_ROL_ADMINISTRADOR = 1;
 
+        // solo un admin asigna o quita el rol Administrador
+        public string ValidarRolAsignable(int idRol)
+        {
+            if (idRol == ID_ROL_ADMINISTRADOR && SesionUsuario.IdRol != ID_ROL_ADMINISTRADOR)
+            {
+                return "Solo un Administrador puede asignar o quitar el rol Administrador.";
+            }
+
+            return string.Empty;
+        }
+
         public string ValidarCambioRolYEstado(int idPersona, int idRolNuevo, bool activoNuevo)
         {
             ClsUsuarioDatos datos = new ClsUsuarioDatos();
@@ -107,9 +118,20 @@ namespace CapaLogica
                     return "No puede darse de baja a sí mismo.";
                 }
 
-                if (idRolNuevo != idRolActual)
+                // un admin puede bajarse el rol (si queda otro admin, se valida abajo); el resto no
+                if (idRolNuevo != idRolActual && SesionUsuario.IdRol != ID_ROL_ADMINISTRADOR)
                 {
                     return "No puede cambiar su propio rol.";
+                }
+            }
+
+            if (idRolNuevo != idRolActual && (idRolNuevo == ID_ROL_ADMINISTRADOR || idRolActual == ID_ROL_ADMINISTRADOR))
+            {
+                string motivo = ValidarRolAsignable(ID_ROL_ADMINISTRADOR);
+
+                if (motivo != string.Empty)
+                {
+                    return motivo;
                 }
             }
 

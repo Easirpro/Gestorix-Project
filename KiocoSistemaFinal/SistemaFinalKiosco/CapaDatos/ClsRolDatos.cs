@@ -58,7 +58,7 @@ namespace CapaDatos
 
             return permisos;
         }
-        public int ContarUsuariosPorRol(int idRol)
+        public int ContarUsuariosPorRol(int idRol, bool soloActivos = true)
         {
             using (SqlConnection conn = conexion.ObtenerConexion())
             {
@@ -67,8 +67,7 @@ namespace CapaDatos
                 string query = @"
                 SELECT COUNT(*)
                 FROM Usuario
-                WHERE IdRol = @IdRol
-                  AND Estado = 1";
+                WHERE IdRol = @IdRol" + (soloActivos ? " AND Estado = 1" : "");
 
                 SqlCommand cmd = new SqlCommand(query, conn);
 

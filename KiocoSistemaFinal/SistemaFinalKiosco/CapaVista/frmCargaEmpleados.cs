@@ -1,4 +1,4 @@
-﻿using CapaEntidades;
+using CapaEntidades;
 using CapaLogica;
 using CapaVista;
 using System.ComponentModel;
@@ -234,6 +234,49 @@ namespace CapaVista
         {
             get { return !modoNuevo && personaOriginal != null && personaOriginal.IdPersona == SesionUsuario.IdPersona; }
         }
+        private bool SoyAdministrador
+        {
+            get { return SesionUsuario.IdRol == ClsUsuarioLogica.ID_ROL_ADMINISTRADOR; }
+        }
+        // un no-admin no puede cambiarle el rol a un Administrador
+        private bool EsAdministradorAjeno
+        {
+            get
+            {
+                return !modoNuevo && personaOriginal != null && idRolOriginal == ClsUsuarioLogica.ID_ROL_ADMINISTRADOR &&
+                    SesionUsuario.IdRol != ClsUsuarioLogica.ID_ROL_ADMINISTRADOR;
+            }
+        }
+        // explica por que el combo de rol esta bloqueado
+        private string TextoAyudaRol(bool habilitar)
+        {
+            if (!PuedeCambiarRol)
+            {
+                return "Para cambiar el rol hace falta el permiso Roles y Permisos (12.7.0).";
+            }
+
+            if (EsUnoMismo && !SoyAdministrador)
+            {
+                return "No podés cambiar tu propio rol: pedíselo a otro Administrador.";
+            }
+
+            if (EsUnoMismo && habilitar)
+            {
+                return "Es tu propio usuario: si te cambiás el rol, se aplica al volver a iniciar sesión.";
+            }
+
+            if (EsAdministradorAjeno)
+            {
+                return "Solo un Administrador puede cambiar el rol de otro Administrador.";
+            }
+
+            if (!habilitar && !modoNuevo && personaOriginal != null)
+            {
+                return "Para cambiar el rol, tildá «Habilitar Edición».";
+            }
+
+            return "Los permisos dependen del rol: cambiarlos afecta a todos los empleados con ese rol.";
+        }
         private void ActualizarBotones()
         {
             bool puedeCrear = SesionUsuario.Permisos.Contains(1000) || SesionUsuario.Permisos.Contains(1010);
@@ -244,7 +287,6 @@ namespace CapaVista
             btnCrear.Enabled = puedeCrear;
             btnModificar.Enabled = puedeModificar;
             chkHabilitarEdicion.Enabled = !modoNuevo && haySeleccionado;
-            btnPermisos.Enabled = PuedeCambiarRol && (modoNuevo || haySeleccionado);
         }
         private void LimpiarFormulario()
         {
@@ -585,9 +627,9 @@ namespace CapaVista
             }
 
         }
-        private bool ModificarDatosUsuario(int idPersona, int idRol)
+        // todo en una transaccion: si algo falla no queda nada a medias
+        private bool ModificarDatosUsuario(int idPersona, int idRol, string correoNuevo)
         {
-
             ClsPersona persona = new ClsPersona();
 
             persona.IdPersona = idPersona;
@@ -600,26 +642,9 @@ namespace CapaVista
             persona.Sexo = rdbMasculino.Checked;
             persona.FeNac = dtpFechaNacimiento.Value;
 
-            ClsModificarPersona modificarPersona = new ClsModificarPersona();
-
-            if (!modificarPersona.ModificarPersona(persona, idRol))
-            {
-                MessageBox.Show(ClsIdioma.T("No se pudo modificar la información de la persona."), ClsIdioma.T("Error"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return false;
-            }
-
             ClsObtenerDomicilio traerDomicilio = new ClsObtenerDomicilio();
-            ClsDomicilio domicilio = traerDomicilio.ObtenerDomicilioPorPersona(idPersona);
-
-            if (domicilio == null)
-            {
-                MessageBox.Show(ClsIdioma.T("La persona no tiene un domicilio asociado."), ClsIdioma.T("Aviso"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                return false;
-            }
+            // sin domicilio cargado (IdDireccion 0) se crea al guardar
+            ClsDomicilio domicilio = traerDomicilio.ObtenerDomicilioPorPersona(idPersona) ?? new ClsDomicilio();
 
             domicilio.Calle = txtCalle.Text.Trim();
             domicilio.Altura = Convert.ToInt32(txtAltura.Text);
@@ -627,57 +652,44 @@ namespace CapaVista
             domicilio.Departamento = txtDepartamento.Text.Trim();
             domicilio.IdLocalidad = Convert.ToInt32(cmbLocalidad.SelectedValue);
 
-            ClsModificarDomicilio modificarDomicilio = new ClsModificarDomicilio();
-
-            if (!modificarDomicilio.ModificarDomicilio(domicilio))
-            {
-                MessageBox.Show(ClsIdioma.T("La persona se modificó, pero no el domicilio."), ClsIdioma.T("Aviso"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                return false;
-            }
-
             ClsTelefonoLogica telefonoLogica = new ClsTelefonoLogica();
 
+            // sin telefono cargado (IdTelefono 0) se crea al guardar
             int idTelefono = telefonoLogica.ObtenerIdTelefonoPorPersona(idPersona);
-
-            if (idTelefono <= 0)
-            {
-                MessageBox.Show(ClsIdioma.T("La persona no tiene un teléfono asociado."), ClsIdioma.T("Aviso"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                return false;
-            }
 
             ClsTelefono telefono = new ClsTelefono();
 
-            telefono.IdTelefono = idTelefono;
+            telefono.IdTelefono = Math.Max(idTelefono, 0);
             telefono.NumTelefono = txtTelefono.Text.Trim();
             telefono.IdTipo = Convert.ToInt32(cmbTipoTelefono.SelectedValue);
 
-            ClsModificarTelefono modificarTelefono = new ClsModificarTelefono();
-
-            if (!modificarTelefono.ModificarTelefono(telefono))
+            try
             {
-                MessageBox.Show(ClsIdioma.T("No se pudo modificar el teléfono."), ClsIdioma.T("Aviso"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                new ClsModificarPersona().ModificarEmpleado(persona, idRol, domicilio, telefono, correoNuevo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ClsIdioma.T("No se pudieron guardar los cambios. No se modificó ningún dato.\n\n") + ex.Message,
+                    ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return false;
             }
 
             return true;
-
         }
-        private bool CambiarCorreoUsuario(int idPersona, int idRol)
+        // devuelve null en correoNuevo si el correo no cambio
+        private bool ValidarCorreoNuevo(out string correoNuevo)
         {
-            string correoNuevo = txtCorreo.Text.Trim();
+            correoNuevo = null;
 
-            if (correoOriginal != null && correoOriginal.DireccionCorreo.Trim().Equals(correoNuevo, StringComparison.OrdinalIgnoreCase))
+            string correo = txtCorreo.Text.Trim();
+
+            if (correoOriginal != null && correoOriginal.DireccionCorreo.Trim().Equals(correo, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
 
-            if (string.IsNullOrWhiteSpace(correoNuevo))
+            if (string.IsNullOrWhiteSpace(correo))
             {
                 MessageBox.Show(ClsIdioma.T("El correo electrónico no puede estar vacío."),
                     ClsIdioma.T("Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -687,7 +699,7 @@ namespace CapaVista
                 return false;
             }
 
-            if (!ClsValidarCorreo.EsEmailValido(correoNuevo))
+            if (!ClsValidarCorreo.EsEmailValido(correo))
             {
                 MessageBox.Show(ClsIdioma.T("Ingrese un correo electrónico válido."), ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -697,17 +709,7 @@ namespace CapaVista
                 return false;
             }
 
-            ClsCorreoLogica correoLogica = new ClsCorreoLogica();
-
-            bool resultado = correoLogica.CambiarCorreoPersona(idPersona, correoNuevo);
-
-            if (!resultado)
-            {
-                MessageBox.Show(ClsIdioma.T("No se pudo actualizar el correo."), ClsIdioma.T("Error"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return false;
-            }
+            correoNuevo = correo;
 
             return true;
         }
@@ -801,7 +803,11 @@ namespace CapaVista
             txtCorreo.Enabled = habilitar;
 
             chkActivo.Enabled = habilitar && !EsUnoMismo;
-            cmbRol.Enabled = identidad && PuedeCambiarRol && !EsUnoMismo;
+            cmbRol.Enabled = habilitar && PuedeCambiarRol && !(EsUnoMismo && !SoyAdministrador) && !EsAdministradorAjeno;
+            lblAyudaRol.Text = ClsIdioma.T(TextoAyudaRol(habilitar));
+
+            // solo al crear (NUEVO) o modificar (Habilitar Edicion)
+            btnPermisos.Enabled = habilitar && PuedeCambiarRol;
         }
         #endregion
 
@@ -961,6 +967,11 @@ namespace CapaVista
                     HabilitarEdicion(false);
                     ActualizarBotones();
                 }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ClsIdioma.T(ex.Message), ClsIdioma.T("Crear empleado"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
@@ -1249,11 +1260,21 @@ namespace CapaVista
                     return;
                 }
 
-                if (personaOriginal == null || domicilioOriginal == null || correoOriginal == null)
+                // domicilio y telefono pueden faltar (usuarios base): se crean al guardar
+                if (personaOriginal == null || correoOriginal == null)
                 {
                     MessageBox.Show(ClsIdioma.T("No se pudieron cargar correctamente los datos originales del usuario."),
                         ClsIdioma.T("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(txtCalle.Text))
+                {
+                    MessageBox.Show(ClsIdioma.T("El campo ") + NombreCampo(txtCalle) + ClsIdioma.T(" no puede estar vacío."), ClsIdioma.T("Validación"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    MostrarControl(txtCalle);
                     return;
                 }
 
@@ -1329,6 +1350,7 @@ namespace CapaVista
                     personaOriginal.IdGenero != idGenero ||
                     personaOriginal.Sexo != rdbMasculino.Checked ||
                     personaOriginal.FeNac.Date != dtpFechaNacimiento.Value.Date ||
+                    domicilioOriginal == null ||
                     domicilioOriginal.Calle != txtCalle.Text.Trim() ||
                     domicilioOriginal.Altura != Convert.ToInt32(txtAltura.Text) ||
                     domicilioOriginal.Piso != txtPiso.Text.Trim() ||
@@ -1337,10 +1359,8 @@ namespace CapaVista
                     !correoOriginal.DireccionCorreo.Trim().Equals(txtCorreo.Text.Trim(),
                     StringComparison.OrdinalIgnoreCase);
 
-                if (telefonoOriginal != null)
-                {
-                    huboCambios = huboCambios || telefonoOriginal.NumTelefono != txtTelefono.Text.Trim() || telefonoOriginal.IdTipo != idTipoTelefono;
-                }
+                huboCambios = huboCambios || telefonoOriginal == null ||
+                    telefonoOriginal.NumTelefono != txtTelefono.Text.Trim() || telefonoOriginal.IdTipo != idTipoTelefono;
 
                 bool estadoAnterior = personaOriginal.Activo;
                 bool estadoNuevo = chkActivo.Checked;
@@ -1359,18 +1379,32 @@ namespace CapaVista
 
                 if (motivoRol != string.Empty)
                 {
-                    MessageBox.Show(motivoRol, ClsIdioma.T("Cambio no permitido"),
+                    MessageBox.Show(ClsIdioma.T(motivoRol), ClsIdioma.T("Cambio no permitido"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     return;
                 }
 
-                if (!CambiarCorreoUsuario(idPersona, idRol))
+                if (EsUnoMismo && rolCambio)
+                {
+                    CapaLogica.ClsRol rolNuevo = new CapaLogica.ClsRol();
+
+                    DialogResult confirmar = MessageBox.Show(ClsIdioma.T("Vas a cambiar tu propio rol a ") + ClsIdioma.Dato(rolNuevo.ObtenerNombreRol(idRol)) + ".\n\n" +
+                        ClsIdioma.T("Al volver a iniciar sesión vas a tener solo los permisos de ese rol. ¿Continuar?"),
+                        ClsIdioma.T("Cambiar mi rol"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+
+                    if (confirmar != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
+                if (!ValidarCorreoNuevo(out string correoNuevo))
                 {
                     return;
                 }
 
-                bool resultado = ModificarDatosUsuario(idPersona, idRol);
+                bool resultado = ModificarDatosUsuario(idPersona, idRol, correoNuevo);
 
                 if (!resultado)
                 {
@@ -1438,7 +1472,8 @@ namespace CapaVista
                         rol.ObtenerNombreRol(idRolOriginal) + " → " + rol.ObtenerNombreRol(idRol));
                 }
 
-                MessageBox.Show(ClsIdioma.T("Los datos se modificaron correctamente."),
+                MessageBox.Show(ClsIdioma.T("Los datos se modificaron correctamente.") +
+                    (rolCambio ? ClsIdioma.T("\n\nEl nuevo rol se aplica la próxima vez que el empleado inicie sesión.") : ""),
                     ClsIdioma.T("Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarUsuarios(idPersona);
@@ -1463,15 +1498,27 @@ namespace CapaVista
         }
         private void btnPermisos_Click(object sender, EventArgs e)
         {
+            // muestra los permisos del rol elegido en el combo (el que va a tener el empleado)
             int idRol = RolSeleccionado();
 
-            using (frmPermisos permiso = idRol > 0 ? new frmPermisos(idRol, soloEseRol: true) : new frmPermisos())
+            // CU04: pantalla completa (nuevo/eliminar rol), arranca en el rol elegido
+            using (frmPermisos permiso = idRol > 0 ? new frmPermisos(idRol) : new frmPermisos())
             {
                 permiso.Icon = Icon;
                 permiso.ShowDialog(this);
             }
 
             CargarRoles();
+
+            // ver los permisos no asigna el rol: eso se guarda con GUARDAR CAMBIOS
+            int idRolElegido = RolSeleccionado();
+
+            if (!modoNuevo && personaOriginal != null && idRolElegido > 0 && idRolElegido != idRolOriginal)
+            {
+                MessageBox.Show(ClsIdioma.T("El empleado todavía tiene el rol ") + ClsIdioma.Dato(new CapaLogica.ClsRol().ObtenerNombreRol(idRolOriginal)) + ".\n\n" +
+                    ClsIdioma.T("Para asignarle el rol ") + ClsIdioma.Dato(new CapaLogica.ClsRol().ObtenerNombreRol(idRolElegido)) + ClsIdioma.T(" y sus permisos, tocá GUARDAR CAMBIOS."),
+                    ClsIdioma.T("Permisos del rol"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
         private void chkHabilitarEdicion_CheckedChanged(object sender, EventArgs e)
         {

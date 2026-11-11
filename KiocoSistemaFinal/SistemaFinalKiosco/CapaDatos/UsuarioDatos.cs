@@ -634,7 +634,7 @@ public class ClsUsuarioDatos
             return Convert.ToInt32(resultado);
         }
     }
-    private string GenerarDVHUsuario(ClslUsuario usuario)
+    internal string GenerarDVHUsuario(ClslUsuario usuario)
     {
         string cadena =
             usuario.Estado.ToString() +

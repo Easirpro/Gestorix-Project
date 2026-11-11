@@ -15,137 +15,24 @@ public class ClsAltaEmpleado
          string correo, string telefono, int idTipoTelefono, string calle,
          int altura, string piso, string departamento, int idLocalidad, bool activo)
     {
-        clsCorreoDatos correoDatos = new clsCorreoDatos();
-        clsTelefonoDatos telefonoDatos = new clsTelefonoDatos();
-        clsDomicilioDatos domicilioDatos = new clsDomicilioDatos();
         clsPersonaDatos personaDatos = new clsPersonaDatos();
-        clsPersonaCorreoDatos pcDatos = new clsPersonaCorreoDatos();
-        clsPersonaTelefonoDatos ptDatos = new clsPersonaTelefonoDatos();
-        clsPersonaDomicilioDatos pdDatos = new clsPersonaDomicilioDatos();
-        ClsUsuarioDatos usuarioDatos = new ClsUsuarioDatos();
         ClsGenerarUsername genUser = new ClsGenerarUsername();
 
-        int idPersona = personaDatos.ObtenerIdPersonaPorDniOCuit(dni, cuit);
+        string motivoRol = new ClsUsuarioLogica().ValidarRolAsignable(idRol);
 
-        if (idPersona > 0)
+        if (motivoRol != string.Empty)
         {
-            if (usuarioDatos.ExisteUsuarioPorIdPersona(idPersona))
-            {
-                throw new Exception(
-                    "No se puede crear el usuario porque la persona ya tiene " +
-                    "un usuario registrado.\n\n" +
-                    "DNI: " + dni + "\n" +
-                    "CUIT: " + cuit
-                );
-            }
-
-            string correoExistente = correoDatos.ObtenerCorreoPorPersona(idPersona);
-
-            if (string.IsNullOrWhiteSpace(correoExistente))
-            {
-                throw new Exception(
-                    "La persona ya existe, pero no tiene un correo registrado.\n\n" +
-                    "No se puede crear el usuario hasta que la persona tenga " +
-                    "un correo asociado."
-                );
-            }
-
-            int idTelefonoExistente = ptDatos.ObtenerIdTelefonoPorPersona(idPersona);
-
-            if (idTelefonoExistente <= 0)
-            {
-                throw new Exception(
-                    "La persona ya existe, pero no tiene un teléfono asociado.\n\n" +
-                    "No se puede completar el alta del usuario."
-                );
-            }
-
-            int idDomicilioExistente = pdDatos.ObtenerIdDomicilioPorPersona(idPersona);
-
-            if (idDomicilioExistente <= 0)
-            {
-                throw new Exception(
-                    "La persona ya existe, pero no tiene un domicilio asociado.\n\n" +
-                    "No se puede completar el alta del usuario."
-                );
-            }
-
-            string usernameExistente = genUser.CrearUsuario(nombre, apellido);
-            string passwordTemporalExistente = Aleatorios.Armar(true, 10, 1);
-
-            ClslUsuario usuarioExistente = new ClslUsuario
-            {
-                IdPersona = idPersona,
-                IdRol = idRol,
-                Username = usernameExistente,
-                PassActual = ClsSeguridad.SHA256(usernameExistente + passwordTemporalExistente),
-                Estado = true,
-                PrimerIngreso = true,
-                PreguntasCompletadas = false
-            };
-
-            int idUsuarioExistente = usuarioDatos.RegistrarUsuario(usuarioExistente);
-
-            if (idUsuarioExistente <= 0)
-            {
-                return false;
-            }
-
-            clsBitacoraLogica bitacora = new clsBitacoraLogica();
-
-            bitacora.RegistrarBitacora(
-                SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null,
-                "CREAR",
-                "Usuario",
-                idUsuarioExistente,
-                "Alta de usuario: " + usernameExistente
-            );
-
-            EnviarCorreoAlta(correoExistente, usernameExistente, passwordTemporalExistente);
-
-            return true;
+            throw new InvalidOperationException(motivoRol);
         }
 
-        ClsCorreo objCorreo = new ClsCorreo
+        // CU03 6.1: si ya existe se informa, no se reutilizan datos viejos
+        if (personaDatos.ObtenerIdPersonaPorDniOCuit(dni, cuit) > 0)
         {
-            DireccionCorreo = correo
-        };
-
-        int idCorreo = correoDatos.RegistrarCorreo(objCorreo);
-
-        if (idCorreo <= 0)
-        {
-            return false;
+            throw new InvalidOperationException("El empleado ya está registrado.");
         }
 
-        ClsTelefono objTel = new ClsTelefono
-        {
-            NumTelefono = telefono,
-            IdTipo = idTipoTelefono
-        };
-
-        int idTelefono = telefonoDatos.RegistrarTelefono(objTel);
-
-        if (idTelefono <= 0)
-        {
-            return false;
-        }
-
-        ClsDomicilio objDom = new ClsDomicilio
-        {
-            Calle = calle,
-            Altura = altura,
-            Piso = piso,
-            Departamento = departamento,
-            IdLocalidad = idLocalidad
-        };
-
-        int idDomicilio = domicilioDatos.RegistrarDomicilio(objDom);
-
-        if (idDomicilio <= 0)
-        {
-            return false;
-        }
+        string username = genUser.CrearUsuario(nombre, apellido);
+        string passwordTemporal = Aleatorios.Armar(true, 10, 1);
 
         ClsPersona persona = new ClsPersona
         {
@@ -159,58 +46,47 @@ public class ClsAltaEmpleado
             Activo = activo
         };
 
-        try
+        ClsCorreo objCorreo = new ClsCorreo
         {
-            idPersona = personaDatos.RegistrarPersona(persona);
-        }
-        catch (Exception ex)
+            DireccionCorreo = correo
+        };
+
+        ClsTelefono objTel = new ClsTelefono
         {
-            throw new Exception(
-                "ERROR AL REGISTRAR PERSONA.\n\n" +
-                "DNI: " + dni + "\n" +
-                "CUIT: " + cuit + "\n\n" +
-                "MENSAJE:\n" +
-                ex.Message,
-                ex
-            );
-        }
+            NumTelefono = telefono,
+            IdTipo = idTipoTelefono
+        };
 
-        if (idPersona <= 0)
+        ClsDomicilio objDom = new ClsDomicilio
         {
-            return false;
-        }
-
-        pcDatos.RegistrarPersonaCorreo(idPersona, idCorreo);
-        ptDatos.RegistrarPersonaTelefono(idPersona, idTelefono);
-        pdDatos.RegistrarPersonaDomicilio(idPersona, idDomicilio);
-
-        string username = genUser.CrearUsuario(nombre, apellido);
-
-        string passwordTemporal = Aleatorios.Armar(true, 10, 1);
+            Calle = calle,
+            Altura = altura,
+            Piso = piso,
+            Departamento = departamento,
+            IdLocalidad = idLocalidad
+        };
 
         ClslUsuario usuario = new ClslUsuario
         {
-            IdPersona = idPersona,
             IdRol = idRol,
             Username = username,
-            PassActual = ClsSeguridad.SHA256(
-                username + passwordTemporal
-            ),
+            PassActual = ClsSeguridad.SHA256(username + passwordTemporal),
             Estado = true,
             PrimerIngreso = true,
             PreguntasCompletadas = false
         };
 
-        int idUsuario = usuarioDatos.RegistrarUsuario(usuario);
+        // CU03 8.1: todo o nada
+        int idUsuario = new ClsAltaEmpleadoDatos().RegistrarEmpleado(persona, objCorreo, objTel, objDom, usuario);
 
         if (idUsuario <= 0)
         {
             return false;
         }
 
-        clsBitacoraLogica bitacoraNuevo = new clsBitacoraLogica();
+        clsBitacoraLogica bitacora = new clsBitacoraLogica();
 
-        bitacoraNuevo.RegistrarBitacora(
+        bitacora.RegistrarBitacora(
             SesionUsuario.IdUsuario > 0 ? SesionUsuario.IdUsuario : (int?)null,
             "CREAR",
             "Usuario",

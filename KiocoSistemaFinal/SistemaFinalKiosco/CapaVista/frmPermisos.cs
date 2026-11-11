@@ -66,8 +66,10 @@ namespace CapaVista
             if (idRolInicial.HasValue)
             {
                 lstRoles.SelectedValue = idRolInicial.Value;
-                lstRoles_SelectedIndexChanged(lstRoles, EventArgs.Empty);
             }
+
+            // el arbol se arma despues de elegir el rol: hay que marcarlo de nuevo
+            lstRoles_SelectedIndexChanged(lstRoles, EventArgs.Empty);
 
             if (soloEseRol && idRolInicial.HasValue)
             {
@@ -377,6 +379,21 @@ namespace CapaVista
             if (nodosBloqueados.Contains(e.Node))
             {
                 e.Cancel = true;
+                return;
+            }
+
+            // doc 5.0: advertir al activar permisos de datos sensibles (12.x)
+            if (!e.Node.Checked && e.Node.Tag is int idPermiso && idPermiso >= 1200 && idPermiso < 1300)
+            {
+                DialogResult respuesta = MessageBox.Show(
+                    ClsIdioma.T("Este permiso da acceso a datos sensibles o a funciones de administración.\n\n") +
+                    ClsIdioma.T("No es recomendable otorgarlo a los empleados: normalmente solo debería tenerlo el dueño o administrador.\n\n¿Querés asignarlo igual?"),
+                    ClsIdioma.T("Permiso sensible"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+
+                if (respuesta != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                }
             }
         }
         private void treePermisos_AfterCheck(object sender, TreeViewEventArgs e)
@@ -562,6 +579,7 @@ namespace CapaVista
                 }
 
                 bool esAdministrador = idRol == ID_ROL_ADMINISTRADOR;
+                bool rolPropioBloqueado = !rol.PuedeEditarPermisosDelRol(idRol);
 
                 foreach (TreeNode nodoSeccion in treePermisos.Nodes)
                 {
@@ -571,10 +589,17 @@ namespace CapaVista
                         MarcarRamaSinEventos(nodoSeccion, true);
                     }
 
-                    if (esAdministrador || !PuedeEditarPermisos)
+                    if (esAdministrador || !PuedeEditarPermisos || rolPropioBloqueado)
                     {
                         BloquearNodo(nodoSeccion);
                     }
+                }
+
+                btnGuardar.Enabled = PuedeEditarPermisos && !rolPropioBloqueado;
+
+                if (rolPropioBloqueado)
+                {
+                    lblEstado.Text = ClsIdioma.T("Es tu propio rol: solo un Administrador puede modificar sus permisos.");
                 }
             }
             finally
@@ -674,6 +699,17 @@ namespace CapaVista
             {
                 MessageBox.Show(ClsIdioma.T("Los roles principales del sistema no se pueden eliminar."), ClsIdioma.T("Rol protegido"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            int asignados = new CapaLogica.ClsRol().ContarUsuariosPorRol(idRol, soloActivos: false);
+
+            if (asignados > 0)
+            {
+                MessageBox.Show(ClsIdioma.T("No se puede eliminar el rol ") + lstRoles.Text + ClsIdioma.T(" porque tiene ") + asignados +
+                    ClsIdioma.T(" empleado(s) asignado(s), contando los dados de baja.\n\nReasignalos a otro rol desde Empleados y volvé a intentar."),
+                    ClsIdioma.T("Eliminar Rol"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
             }
