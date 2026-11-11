@@ -243,7 +243,7 @@ namespace CapaVista
             lstArticulos.Location = new Point(83, 165);
             lstArticulos.Name = "lstArticulos";
             lstArticulos.Size = new Size(392, 140);
-            lstArticulos.TabIndex = 11;
+            lstArticulos.TabIndex = 3;
             lstArticulos.Visible = false;
             // 
             // dgvListado
@@ -262,7 +262,7 @@ namespace CapaVista
             dgvListado.RowHeadersVisible = false;
             dgvListado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvListado.Size = new Size(1054, 362);
-            dgvListado.TabIndex = 12;
+            dgvListado.TabIndex = 4;
             // 
             // lblCantidad
             // 
@@ -271,7 +271,7 @@ namespace CapaVista
             lblCantidad.Location = new Point(13, 559);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(0, 15);
-            lblCantidad.TabIndex = 13;
+            lblCantidad.TabIndex = 5;
             // 
             // btnExportar
             // 
@@ -279,7 +279,7 @@ namespace CapaVista
             btnExportar.Location = new Point(837, 551);
             btnExportar.Name = "btnExportar";
             btnExportar.Size = new Size(124, 30);
-            btnExportar.TabIndex = 14;
+            btnExportar.TabIndex = 6;
             btnExportar.Text = "Exportar a Excel";
             btnExportar.UseVisualStyleBackColor = true;
             btnExportar.Click += btnExportar_Click;
@@ -290,7 +290,7 @@ namespace CapaVista
             btnVolver.Location = new Point(967, 551);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(100, 30);
-            btnVolver.TabIndex = 15;
+            btnVolver.TabIndex = 7;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;

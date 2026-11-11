@@ -89,7 +89,7 @@
             treePermisos.Location = new Point(15, 30);
             treePermisos.Name = "treePermisos";
             treePermisos.Size = new Size(470, 452);
-            treePermisos.TabIndex = 3;
+            treePermisos.TabIndex = 0;
             // 
             // gpbDetalle
             // 
@@ -108,7 +108,7 @@
             lblEstado.Location = new Point(15, 229);
             lblEstado.Name = "lblEstado";
             lblEstado.Size = new Size(225, 70);
-            lblEstado.TabIndex = 0;
+            lblEstado.TabIndex = 2;
             lblEstado.Text = "Estado del permiso:";
             // 
             // lblDescripcion
@@ -125,7 +125,7 @@
             lblPermisoSeleccionado.Location = new Point(15, 35);
             lblPermisoSeleccionado.Name = "lblPermisoSeleccionado";
             lblPermisoSeleccionado.Size = new Size(225, 50);
-            lblPermisoSeleccionado.TabIndex = 3;
+            lblPermisoSeleccionado.TabIndex = 0;
             lblPermisoSeleccionado.Text = "Permiso seleccionado";
             lblPermisoSeleccionado.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -134,7 +134,7 @@
             btnNuevoRol.Location = new Point(15, 545);
             btnNuevoRol.Name = "btnNuevoRol";
             btnNuevoRol.Size = new Size(120, 35);
-            btnNuevoRol.TabIndex = 4;
+            btnNuevoRol.TabIndex = 3;
             btnNuevoRol.Text = "Nuevo Rol";
             btnNuevoRol.UseVisualStyleBackColor = true;
             btnNuevoRol.Click += btnNuevoRol_Click;
@@ -174,7 +174,7 @@
             btnEliminarRol.Location = new Point(153, 545);
             btnEliminarRol.Name = "btnEliminarRol";
             btnEliminarRol.Size = new Size(120, 35);
-            btnEliminarRol.TabIndex = 8;
+            btnEliminarRol.TabIndex = 4;
             btnEliminarRol.Text = "Eliminar Rol";
             btnEliminarRol.UseVisualStyleBackColor = true;
             btnEliminarRol.Click += btnEliminarRol_Click;

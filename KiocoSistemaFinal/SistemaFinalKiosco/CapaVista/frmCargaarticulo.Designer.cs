@@ -52,7 +52,7 @@
             btnModificar.Location = new Point(415, 25);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(124, 42);
-            btnModificar.TabIndex = 1;
+            btnModificar.TabIndex = 3;
             btnModificar.Text = "Modificar articulo";
             btnModificar.TextAlign = ContentAlignment.MiddleRight;
             btnModificar.UseVisualStyleBackColor = true;
@@ -63,7 +63,7 @@
             btnDiscontinuar.Location = new Point(545, 25);
             btnDiscontinuar.Name = "btnDiscontinuar";
             btnDiscontinuar.Size = new Size(115, 42);
-            btnDiscontinuar.TabIndex = 2;
+            btnDiscontinuar.TabIndex = 4;
             btnDiscontinuar.Text = "Discontinuar";
             btnDiscontinuar.UseVisualStyleBackColor = true;
             btnDiscontinuar.Click += btnDiscontinuar_Click;
@@ -74,7 +74,7 @@
             txtBuscarCodigoNombre.Name = "txtBuscarCodigoNombre";
             txtBuscarCodigoNombre.PlaceholderText = "Código o nombre del artículo";
             txtBuscarCodigoNombre.Size = new Size(270, 23);
-            txtBuscarCodigoNombre.TabIndex = 5;
+            txtBuscarCodigoNombre.TabIndex = 1;
             txtBuscarCodigoNombre.TextChanged += txtBuscarCodigoNombre_TextChanged;
             // 
             // btnBuscar
@@ -85,7 +85,7 @@
             btnBuscar.Location = new Point(296, 20);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(95, 52);
-            btnBuscar.TabIndex = 6;
+            btnBuscar.TabIndex = 2;
             btnBuscar.Text = "Buscar";
             btnBuscar.TextAlign = ContentAlignment.MiddleRight;
             btnBuscar.UseVisualStyleBackColor = true;
@@ -168,7 +168,7 @@
             btnEliminar.Location = new Point(666, 25);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(100, 42);
-            btnEliminar.TabIndex = 3;
+            btnEliminar.TabIndex = 5;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
@@ -179,7 +179,7 @@
             lblCodigoNombre.Location = new Point(11, 15);
             lblCodigoNombre.Name = "lblCodigoNombre";
             lblCodigoNombre.Size = new Size(161, 15);
-            lblCodigoNombre.TabIndex = 4;
+            lblCodigoNombre.TabIndex = 0;
             lblCodigoNombre.Text = "Buscar por código o nombre.";
             // 
             // cmbMarca
@@ -199,7 +199,7 @@
             cmbRubro.Location = new Point(11, 119);
             cmbRubro.Name = "cmbRubro";
             cmbRubro.Size = new Size(175, 23);
-            cmbRubro.TabIndex = 8;
+            cmbRubro.TabIndex = 9;
             cmbRubro.SelectedIndexChanged += cmbRubro_SelectedIndexChanged;
             // 
             // label1
@@ -217,7 +217,7 @@
             label2.Location = new Point(211, 98);
             label2.Name = "label2";
             label2.Size = new Size(40, 15);
-            label2.TabIndex = 9;
+            label2.TabIndex = 8;
             label2.Text = "Marca";
             // 
             // label3
@@ -227,7 +227,7 @@
             label3.Location = new Point(8, 75);
             label3.Name = "label3";
             label3.Size = new Size(266, 15);
-            label3.TabIndex = 14;
+            label3.TabIndex = 6;
             label3.Text = "Seleccione Rubro o Marca para buscar el articulo.";
             // 
             // frmCargaarticulo

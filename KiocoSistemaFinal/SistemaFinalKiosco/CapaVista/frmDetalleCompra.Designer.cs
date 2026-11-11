@@ -91,7 +91,7 @@
             lblTitulo.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
             lblTitulo.Location = new Point(10, 8);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.TabIndex = 11;
+            lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Detalle de la compra";
             //
             // lblDescripcion
@@ -100,7 +100,7 @@
             lblDescripcion.ForeColor = SystemColors.GrayText;
             lblDescripcion.Location = new Point(13, 40);
             lblDescripcion.Name = "lblDescripcion";
-            lblDescripcion.TabIndex = 12;
+            lblDescripcion.TabIndex = 1;
             lblDescripcion.Text = "Datos del comprobante, productos y totales de la compra seleccionada.";
             //
             // gpbComprobante
@@ -117,7 +117,7 @@
             gpbComprobante.Location = new Point(12, 64);
             gpbComprobante.Name = "gpbComprobante";
             gpbComprobante.Size = new Size(776, 105);
-            gpbComprobante.TabIndex = 0;
+            gpbComprobante.TabIndex = 2;
             gpbComprobante.TabStop = false;
             gpbComprobante.Text = "Datos del comprobante";
             // 
@@ -136,7 +136,7 @@
             txtProveedor.Name = "txtProveedor";
             txtProveedor.ReadOnly = true;
             txtProveedor.Size = new Size(300, 23);
-            txtProveedor.TabIndex = 0;
+            txtProveedor.TabIndex = 1;
             // 
             // lblFechaTitulo
             // 
@@ -144,7 +144,7 @@
             lblFechaTitulo.Location = new Point(420, 28);
             lblFechaTitulo.Name = "lblFechaTitulo";
             lblFechaTitulo.Size = new Size(41, 15);
-            lblFechaTitulo.TabIndex = 1;
+            lblFechaTitulo.TabIndex = 2;
             lblFechaTitulo.Text = "Fecha:";
             // 
             // txtFecha
@@ -153,7 +153,7 @@
             txtFecha.Name = "txtFecha";
             txtFecha.ReadOnly = true;
             txtFecha.Size = new Size(120, 23);
-            txtFecha.TabIndex = 1;
+            txtFecha.TabIndex = 3;
             // 
             // lblTipoTitulo
             // 
@@ -161,7 +161,7 @@
             lblTipoTitulo.Location = new Point(18, 65);
             lblTipoTitulo.Name = "lblTipoTitulo";
             lblTipoTitulo.Size = new Size(108, 15);
-            lblTipoTitulo.TabIndex = 2;
+            lblTipoTitulo.TabIndex = 4;
             lblTipoTitulo.Text = "Tipo comprobante:";
             // 
             // txtTipoComprobante
@@ -170,7 +170,7 @@
             txtTipoComprobante.Name = "txtTipoComprobante";
             txtTipoComprobante.ReadOnly = true;
             txtTipoComprobante.Size = new Size(170, 23);
-            txtTipoComprobante.TabIndex = 2;
+            txtTipoComprobante.TabIndex = 5;
             // 
             // lblNumeroTitulo
             // 
@@ -178,7 +178,7 @@
             lblNumeroTitulo.Location = new Point(420, 65);
             lblNumeroTitulo.Name = "lblNumeroTitulo";
             lblNumeroTitulo.Size = new Size(64, 15);
-            lblNumeroTitulo.TabIndex = 3;
+            lblNumeroTitulo.TabIndex = 6;
             lblNumeroTitulo.Text = "N.º comp.:";
             // 
             // txtNumeroComprobante
@@ -187,7 +187,7 @@
             txtNumeroComprobante.Name = "txtNumeroComprobante";
             txtNumeroComprobante.ReadOnly = true;
             txtNumeroComprobante.Size = new Size(150, 23);
-            txtNumeroComprobante.TabIndex = 3;
+            txtNumeroComprobante.TabIndex = 7;
             // 
             // lblProductos
             // 
@@ -196,7 +196,7 @@
             lblProductos.Location = new Point(12, 180);
             lblProductos.Name = "lblProductos";
             lblProductos.Size = new Size(63, 15);
-            lblProductos.TabIndex = 10;
+            lblProductos.TabIndex = 3;
             lblProductos.Text = "Productos";
             // 
             // dgvDetalle
@@ -215,7 +215,7 @@
             dgvDetalle.RowHeadersVisible = false;
             dgvDetalle.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDetalle.Size = new Size(776, 220);
-            dgvDetalle.TabIndex = 1;
+            dgvDetalle.TabIndex = 4;
             // 
             // clnCodigo
             // 
@@ -260,7 +260,7 @@
             gpbObservaciones.Location = new Point(12, 432);
             gpbObservaciones.Name = "gpbObservaciones";
             gpbObservaciones.Size = new Size(470, 105);
-            gpbObservaciones.TabIndex = 2;
+            gpbObservaciones.TabIndex = 7;
             gpbObservaciones.TabStop = false;
             gpbObservaciones.Text = "Observaciones";
             // 
@@ -282,7 +282,7 @@
             lblSubtotalTitulo.Location = new Point(500, 437);
             lblSubtotalTitulo.Name = "lblSubtotalTitulo";
             lblSubtotalTitulo.Size = new Size(85, 15);
-            lblSubtotalTitulo.TabIndex = 9;
+            lblSubtotalTitulo.TabIndex = 5;
             lblSubtotalTitulo.Text = "Subtotal S/IVA:";
             // 
             // txtSubtotal
@@ -292,7 +292,7 @@
             txtSubtotal.Name = "txtSubtotal";
             txtSubtotal.ReadOnly = true;
             txtSubtotal.Size = new Size(148, 23);
-            txtSubtotal.TabIndex = 3;
+            txtSubtotal.TabIndex = 6;
             txtSubtotal.TextAlign = HorizontalAlignment.Right;
             // 
             // lblIVATitulo
@@ -312,7 +312,7 @@
             txtIVA.Name = "txtIVA";
             txtIVA.ReadOnly = true;
             txtIVA.Size = new Size(148, 23);
-            txtIVA.TabIndex = 4;
+            txtIVA.TabIndex = 9;
             txtIVA.TextAlign = HorizontalAlignment.Right;
             // 
             // lblTotalTitulo
@@ -323,7 +323,7 @@
             lblTotalTitulo.Location = new Point(500, 507);
             lblTotalTitulo.Name = "lblTotalTitulo";
             lblTotalTitulo.Size = new Size(46, 15);
-            lblTotalTitulo.TabIndex = 7;
+            lblTotalTitulo.TabIndex = 10;
             lblTotalTitulo.Text = "TOTAL:";
             // 
             // txtTotal
@@ -334,7 +334,7 @@
             txtTotal.Name = "txtTotal";
             txtTotal.ReadOnly = true;
             txtTotal.Size = new Size(148, 23);
-            txtTotal.TabIndex = 5;
+            txtTotal.TabIndex = 11;
             txtTotal.TextAlign = HorizontalAlignment.Right;
             // 
             // btnCerrar
@@ -343,7 +343,7 @@
             btnCerrar.Location = new Point(688, 547);
             btnCerrar.Name = "btnCerrar";
             btnCerrar.Size = new Size(100, 32);
-            btnCerrar.TabIndex = 6;
+            btnCerrar.TabIndex = 12;
             btnCerrar.Text = "Cerrar";
             btnCerrar.UseVisualStyleBackColor = true;
             btnCerrar.Click += btnCerrar_Click;

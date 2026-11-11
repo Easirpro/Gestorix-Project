@@ -74,7 +74,7 @@
             label3.Location = new Point(71, 113);
             label3.Name = "label3";
             label3.Size = new Size(39, 15);
-            label3.TabIndex = 2;
+            label3.TabIndex = 3;
             label3.Text = "Rubro";
             // 
             // label4
@@ -83,7 +83,7 @@
             label4.Location = new Point(70, 142);
             label4.Name = "label4";
             label4.Size = new Size(40, 15);
-            label4.TabIndex = 3;
+            label4.TabIndex = 5;
             label4.Text = "Marca";
             // 
             // label5
@@ -92,7 +92,7 @@
             label5.Location = new Point(59, 171);
             label5.Name = "label5";
             label5.Size = new Size(51, 15);
-            label5.TabIndex = 4;
+            label5.TabIndex = 8;
             label5.Text = "Sucursal";
             // 
             // label7
@@ -101,7 +101,7 @@
             label7.Location = new Point(68, 200);
             label7.Name = "label7";
             label7.Size = new Size(42, 15);
-            label7.TabIndex = 6;
+            label7.TabIndex = 10;
             label7.Text = "Estado";
             // 
             // cmbProveedor
@@ -110,7 +110,7 @@
             cmbProveedor.Location = new Point(127, 80);
             cmbProveedor.Name = "cmbProveedor";
             cmbProveedor.Size = new Size(151, 23);
-            cmbProveedor.TabIndex = 7;
+            cmbProveedor.TabIndex = 2;
             cmbProveedor.SelectedIndexChanged += cmbProveedor_SelectedIndexChanged;
             // 
             // cmbRubro
@@ -119,7 +119,7 @@
             cmbRubro.Location = new Point(127, 110);
             cmbRubro.Name = "cmbRubro";
             cmbRubro.Size = new Size(151, 23);
-            cmbRubro.TabIndex = 8;
+            cmbRubro.TabIndex = 4;
             // 
             // cmbMarca
             // 
@@ -127,7 +127,7 @@
             cmbMarca.Location = new Point(127, 139);
             cmbMarca.Name = "cmbMarca";
             cmbMarca.Size = new Size(151, 23);
-            cmbMarca.TabIndex = 9;
+            cmbMarca.TabIndex = 7;
             // 
             // cmbSucursal
             // 
@@ -135,7 +135,7 @@
             cmbSucursal.Location = new Point(127, 168);
             cmbSucursal.Name = "cmbSucursal";
             cmbSucursal.Size = new Size(151, 23);
-            cmbSucursal.TabIndex = 10;
+            cmbSucursal.TabIndex = 9;
             // 
             // cmbEstado
             // 

@@ -528,18 +528,19 @@ namespace CapaVista
                     return;
                 }
 
-                // Los proveedores son opcionales. Si la lista está vacía pero hay uno elegido en los
-                // combos, se toma ese, así alcanza con elegirlo cuando el artículo tiene uno solo.
-                if (tablaProveedores.Rows.Count == 0 && ProveedorElegido())
+                // si quedó un proveedor elegido en los combos sin tocar Agregar, se suma igual
+                if (ProveedorElegido())
                 {
                     if (!ObtenerSucursalElegida(out int idSucursalElegida))
                     {
                         MessageBox.Show(ClsIdioma.T("Seleccione una sucursal."));
+                        tabControl1.SelectedTab = tbpProveedor;
                         cmbSucursal.Focus();
                         return;
                     }
 
-                    AgregarSucursalALista(idSucursalElegida);
+                    if (!ObtenerSucursalesDeLista().Contains(idSucursalElegida))
+                        AgregarSucursalALista(idSucursalElegida);
                 }
 
                 List<int> sucursales = ObtenerSucursalesDeLista();
@@ -779,7 +780,8 @@ namespace CapaVista
                 cmbSucursal.DataSource = tabla;
                 cmbSucursal.DisplayMember = "Sucursal";
                 cmbSucursal.ValueMember = "IdSucursal";
-                cmbSucursal.SelectedIndex = 0;
+                // con una sola sucursal se elige sola
+                cmbSucursal.SelectedIndex = tabla.Rows.Count == 2 ? 1 : 0;
             }
             catch (Exception ex)
             {
@@ -814,6 +816,9 @@ namespace CapaVista
             }
 
             AgregarSucursalALista(idSucursal);
+
+            // limpia los combos para que no se vuelva a sumar al guardar
+            cmbProveedor.SelectedIndex = 0;
         }
         private void btnQuitarProveedor_Click(object sender, EventArgs e)
         {

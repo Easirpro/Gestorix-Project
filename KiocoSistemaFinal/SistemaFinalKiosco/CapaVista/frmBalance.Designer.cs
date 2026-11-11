@@ -215,7 +215,7 @@
             grpIndicadores.Location = new Point(6, 6);
             grpIndicadores.Name = "grpIndicadores";
             grpIndicadores.Size = new Size(1056, 80);
-            grpIndicadores.TabIndex = 9;
+            grpIndicadores.TabIndex = 0;
             grpIndicadores.TabStop = false;
             grpIndicadores.Text = "Indicadores del período";
             // 
@@ -225,7 +225,7 @@
             lblTitVentas.Location = new Point(15, 22);
             lblTitVentas.Name = "lblTitVentas";
             lblTitVentas.Size = new Size(41, 15);
-            lblTitVentas.TabIndex = 10;
+            lblTitVentas.TabIndex = 0;
             lblTitVentas.Text = "Ventas";
             // 
             // lblIndVentas
@@ -235,7 +235,7 @@
             lblIndVentas.Location = new Point(15, 42);
             lblIndVentas.Name = "lblIndVentas";
             lblIndVentas.Size = new Size(18, 20);
-            lblIndVentas.TabIndex = 11;
+            lblIndVentas.TabIndex = 6;
             lblIndVentas.Text = "0";
             // 
             // lblTitTicket
@@ -244,7 +244,7 @@
             lblTitTicket.Location = new Point(180, 22);
             lblTitTicket.Name = "lblTitTicket";
             lblTitTicket.Size = new Size(93, 15);
-            lblTitTicket.TabIndex = 12;
+            lblTitTicket.TabIndex = 1;
             lblTitTicket.Text = "Ticket promedio";
             // 
             // lblIndTicket
@@ -254,7 +254,7 @@
             lblIndTicket.Location = new Point(180, 42);
             lblIndTicket.Name = "lblIndTicket";
             lblIndTicket.Size = new Size(53, 20);
-            lblIndTicket.TabIndex = 13;
+            lblIndTicket.TabIndex = 7;
             lblIndTicket.Text = "$ 0,00";
             // 
             // lblTitAnuladas
@@ -263,7 +263,7 @@
             lblTitAnuladas.Location = new Point(360, 22);
             lblTitAnuladas.Name = "lblTitAnuladas";
             lblTitAnuladas.Size = new Size(91, 15);
-            lblTitAnuladas.TabIndex = 14;
+            lblTitAnuladas.TabIndex = 2;
             lblTitAnuladas.Text = "Ventas anuladas";
             // 
             // lblIndAnuladas
@@ -273,7 +273,7 @@
             lblIndAnuladas.Location = new Point(360, 42);
             lblIndAnuladas.Name = "lblIndAnuladas";
             lblIndAnuladas.Size = new Size(18, 20);
-            lblIndAnuladas.TabIndex = 15;
+            lblIndAnuladas.TabIndex = 8;
             lblIndAnuladas.Text = "0";
             // 
             // lblTitDevoluciones
@@ -282,7 +282,7 @@
             lblTitDevoluciones.Location = new Point(580, 22);
             lblTitDevoluciones.Name = "lblTitDevoluciones";
             lblTitDevoluciones.Size = new Size(78, 15);
-            lblTitDevoluciones.TabIndex = 16;
+            lblTitDevoluciones.TabIndex = 3;
             lblTitDevoluciones.Text = "Devoluciones";
             // 
             // lblIndDevoluciones
@@ -292,7 +292,7 @@
             lblIndDevoluciones.Location = new Point(580, 42);
             lblIndDevoluciones.Name = "lblIndDevoluciones";
             lblIndDevoluciones.Size = new Size(18, 20);
-            lblIndDevoluciones.TabIndex = 17;
+            lblIndDevoluciones.TabIndex = 9;
             lblIndDevoluciones.Text = "0";
             // 
             // lblTitCajas
@@ -301,7 +301,7 @@
             lblTitCajas.Location = new Point(740, 22);
             lblTitCajas.Name = "lblTitCajas";
             lblTitCajas.Size = new Size(82, 15);
-            lblTitCajas.TabIndex = 18;
+            lblTitCajas.TabIndex = 4;
             lblTitCajas.Text = "Cajas cerradas";
             // 
             // lblIndCajas
@@ -311,7 +311,7 @@
             lblIndCajas.Location = new Point(740, 42);
             lblIndCajas.Name = "lblIndCajas";
             lblIndCajas.Size = new Size(18, 20);
-            lblIndCajas.TabIndex = 19;
+            lblIndCajas.TabIndex = 10;
             lblIndCajas.Text = "0";
             // 
             // lblTitFaltantes
@@ -320,7 +320,7 @@
             lblTitFaltantes.Location = new Point(900, 22);
             lblTitFaltantes.Name = "lblTitFaltantes";
             lblTitFaltantes.Size = new Size(101, 15);
-            lblTitFaltantes.TabIndex = 20;
+            lblTitFaltantes.TabIndex = 5;
             lblTitFaltantes.Text = "Cajas con faltante";
             // 
             // lblIndFaltantes
@@ -331,7 +331,7 @@
             lblIndFaltantes.Location = new Point(900, 42);
             lblIndFaltantes.Name = "lblIndFaltantes";
             lblIndFaltantes.Size = new Size(18, 20);
-            lblIndFaltantes.TabIndex = 21;
+            lblIndFaltantes.TabIndex = 11;
             lblIndFaltantes.Text = "0";
             // 
             // dgvResumen
@@ -345,7 +345,7 @@
             dgvResumen.Name = "dgvResumen";
             dgvResumen.ReadOnly = true;
             dgvResumen.Size = new Size(1056, 450);
-            dgvResumen.TabIndex = 22;
+            dgvResumen.TabIndex = 1;
             dgvResumen.DataBindingComplete += dgvResumen_DataBindingComplete;
             // 
             // tabMedioPago
@@ -370,7 +370,7 @@
             dgvMedioPago.Name = "dgvMedioPago";
             dgvMedioPago.ReadOnly = true;
             dgvMedioPago.Size = new Size(1062, 542);
-            dgvMedioPago.TabIndex = 23;
+            dgvMedioPago.TabIndex = 0;
             dgvMedioPago.DataBindingComplete += grilla_DataBindingComplete;
             // 
             // tabPorDia
@@ -395,7 +395,7 @@
             dgvPorDia.Name = "dgvPorDia";
             dgvPorDia.ReadOnly = true;
             dgvPorDia.Size = new Size(1062, 542);
-            dgvPorDia.TabIndex = 24;
+            dgvPorDia.TabIndex = 0;
             dgvPorDia.DataBindingComplete += grilla_DataBindingComplete;
             // 
             // tabEmpleados
@@ -420,7 +420,7 @@
             dgvEmpleados.Name = "dgvEmpleados";
             dgvEmpleados.ReadOnly = true;
             dgvEmpleados.Size = new Size(1062, 542);
-            dgvEmpleados.TabIndex = 25;
+            dgvEmpleados.TabIndex = 0;
             dgvEmpleados.DataBindingComplete += grilla_DataBindingComplete;
             // 
             // tabProductos
@@ -445,7 +445,7 @@
             dgvProductos.Name = "dgvProductos";
             dgvProductos.ReadOnly = true;
             dgvProductos.Size = new Size(1062, 542);
-            dgvProductos.TabIndex = 26;
+            dgvProductos.TabIndex = 0;
             dgvProductos.DataBindingComplete += grilla_DataBindingComplete;
             // 
             // tabPromociones
@@ -470,7 +470,7 @@
             dgvPromociones.Name = "dgvPromociones";
             dgvPromociones.ReadOnly = true;
             dgvPromociones.Size = new Size(1062, 542);
-            dgvPromociones.TabIndex = 27;
+            dgvPromociones.TabIndex = 0;
             dgvPromociones.DataBindingComplete += grilla_DataBindingComplete;
             // 
             // tabDetalle
@@ -498,7 +498,7 @@
             lblTipoDetalle.Location = new Point(6, 13);
             lblTipoDetalle.Name = "lblTipoDetalle";
             lblTipoDetalle.Size = new Size(33, 15);
-            lblTipoDetalle.TabIndex = 28;
+            lblTipoDetalle.TabIndex = 0;
             lblTipoDetalle.Text = "Tipo:";
             // 
             // cmbTipoDetalle
@@ -508,7 +508,7 @@
             cmbTipoDetalle.Location = new Point(45, 9);
             cmbTipoDetalle.Name = "cmbTipoDetalle";
             cmbTipoDetalle.Size = new Size(120, 23);
-            cmbTipoDetalle.TabIndex = 29;
+            cmbTipoDetalle.TabIndex = 1;
             // 
             // lblMedioDetalle
             // 
@@ -516,7 +516,7 @@
             lblMedioDetalle.Location = new Point(180, 13);
             lblMedioDetalle.Name = "lblMedioDetalle";
             lblMedioDetalle.Size = new Size(90, 15);
-            lblMedioDetalle.TabIndex = 30;
+            lblMedioDetalle.TabIndex = 2;
             lblMedioDetalle.Text = "Medio de pago:";
             // 
             // cmbMedioDetalle
@@ -526,7 +526,7 @@
             cmbMedioDetalle.Location = new Point(275, 9);
             cmbMedioDetalle.Name = "cmbMedioDetalle";
             cmbMedioDetalle.Size = new Size(160, 23);
-            cmbMedioDetalle.TabIndex = 31;
+            cmbMedioDetalle.TabIndex = 3;
             // 
             // lblUsuarioDetalle
             // 
@@ -534,7 +534,7 @@
             lblUsuarioDetalle.Location = new Point(450, 13);
             lblUsuarioDetalle.Name = "lblUsuarioDetalle";
             lblUsuarioDetalle.Size = new Size(87, 15);
-            lblUsuarioDetalle.TabIndex = 32;
+            lblUsuarioDetalle.TabIndex = 4;
             lblUsuarioDetalle.Text = "Registrado por:";
             // 
             // cmbUsuarioDetalle
@@ -544,14 +544,14 @@
             cmbUsuarioDetalle.Location = new Point(550, 9);
             cmbUsuarioDetalle.Name = "cmbUsuarioDetalle";
             cmbUsuarioDetalle.Size = new Size(200, 23);
-            cmbUsuarioDetalle.TabIndex = 33;
+            cmbUsuarioDetalle.TabIndex = 5;
             // 
             // btnFiltrarDetalle
             // 
             btnFiltrarDetalle.Location = new Point(765, 7);
             btnFiltrarDetalle.Name = "btnFiltrarDetalle";
             btnFiltrarDetalle.Size = new Size(100, 28);
-            btnFiltrarDetalle.TabIndex = 34;
+            btnFiltrarDetalle.TabIndex = 6;
             btnFiltrarDetalle.Text = "Filtrar";
             btnFiltrarDetalle.UseVisualStyleBackColor = true;
             btnFiltrarDetalle.Click += btnFiltrarDetalle_Click;
@@ -567,7 +567,7 @@
             dgvDetalle.Name = "dgvDetalle";
             dgvDetalle.ReadOnly = true;
             dgvDetalle.Size = new Size(1056, 470);
-            dgvDetalle.TabIndex = 35;
+            dgvDetalle.TabIndex = 7;
             dgvDetalle.DataBindingComplete += grilla_DataBindingComplete;
             // 
             // lblTotalDetalle
@@ -578,7 +578,7 @@
             lblTotalDetalle.Location = new Point(6, 520);
             lblTotalDetalle.Name = "lblTotalDetalle";
             lblTotalDetalle.Size = new Size(0, 15);
-            lblTotalDetalle.TabIndex = 36;
+            lblTotalDetalle.TabIndex = 8;
             // 
             // btnSalir
             // 
@@ -586,7 +586,7 @@
             btnSalir.Location = new Point(968, 634);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(120, 30);
-            btnSalir.TabIndex = 37;
+            btnSalir.TabIndex = 9;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Click += btnSalir_Click;

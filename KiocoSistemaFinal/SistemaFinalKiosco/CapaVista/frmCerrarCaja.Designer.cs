@@ -84,7 +84,7 @@
             lblTituloFondo.Location = new Point(15, 25);
             lblTituloFondo.Name = "lblTituloFondo";
             lblTituloFondo.Size = new Size(78, 15);
-            lblTituloFondo.TabIndex = 2;
+            lblTituloFondo.TabIndex = 0;
             lblTituloFondo.Text = "Fondo inicial:";
             // 
             // lblFondo
@@ -94,7 +94,7 @@
             lblFondo.Location = new Point(230, 25);
             lblFondo.Name = "lblFondo";
             lblFondo.Size = new Size(41, 15);
-            lblFondo.TabIndex = 3;
+            lblFondo.TabIndex = 1;
             lblFondo.Text = "$ 0,00";
             // 
             // lblTituloIngresos
@@ -103,7 +103,7 @@
             lblTituloIngresos.Location = new Point(15, 50);
             lblTituloIngresos.Name = "lblTituloIngresos";
             lblTituloIngresos.Size = new Size(126, 15);
-            lblTituloIngresos.TabIndex = 4;
+            lblTituloIngresos.TabIndex = 2;
             lblTituloIngresos.Text = "+ Ingresos en efectivo:";
             // 
             // lblIngresos
@@ -113,7 +113,7 @@
             lblIngresos.Location = new Point(230, 50);
             lblIngresos.Name = "lblIngresos";
             lblIngresos.Size = new Size(41, 15);
-            lblIngresos.TabIndex = 5;
+            lblIngresos.TabIndex = 3;
             lblIngresos.Text = "$ 0,00";
             // 
             // lblTituloEgresos
@@ -122,7 +122,7 @@
             lblTituloEgresos.Location = new Point(15, 75);
             lblTituloEgresos.Name = "lblTituloEgresos";
             lblTituloEgresos.Size = new Size(119, 15);
-            lblTituloEgresos.TabIndex = 6;
+            lblTituloEgresos.TabIndex = 4;
             lblTituloEgresos.Text = "- Egresos en efectivo:";
             // 
             // lblEgresos
@@ -132,7 +132,7 @@
             lblEgresos.Location = new Point(230, 75);
             lblEgresos.Name = "lblEgresos";
             lblEgresos.Size = new Size(41, 15);
-            lblEgresos.TabIndex = 7;
+            lblEgresos.TabIndex = 5;
             lblEgresos.Text = "$ 0,00";
             // 
             // lblTituloEsperado
@@ -142,7 +142,7 @@
             lblTituloEsperado.Location = new Point(15, 100);
             lblTituloEsperado.Name = "lblTituloEsperado";
             lblTituloEsperado.Size = new Size(121, 15);
-            lblTituloEsperado.TabIndex = 8;
+            lblTituloEsperado.TabIndex = 6;
             lblTituloEsperado.Text = "= Efectivo esperado:";
             // 
             // lblEsperado
@@ -152,7 +152,7 @@
             lblEsperado.Location = new Point(230, 100);
             lblEsperado.Name = "lblEsperado";
             lblEsperado.Size = new Size(41, 15);
-            lblEsperado.TabIndex = 9;
+            lblEsperado.TabIndex = 7;
             lblEsperado.Text = "$ 0,00";
             // 
             // lblContado
@@ -161,7 +161,7 @@
             lblContado.Location = new Point(15, 192);
             lblContado.Name = "lblContado";
             lblContado.Size = new Size(99, 15);
-            lblContado.TabIndex = 10;
+            lblContado.TabIndex = 2;
             lblContado.Text = "Efectivo contado:";
             // 
             // nudEfectivoContado
@@ -171,7 +171,7 @@
             nudEfectivoContado.Maximum = new decimal(new int[] { 99999999, 0, 0, 131072 });
             nudEfectivoContado.Name = "nudEfectivoContado";
             nudEfectivoContado.Size = new Size(140, 23);
-            nudEfectivoContado.TabIndex = 11;
+            nudEfectivoContado.TabIndex = 3;
             nudEfectivoContado.TextAlign = HorizontalAlignment.Right;
             nudEfectivoContado.ThousandsSeparator = true;
             nudEfectivoContado.ValueChanged += nudEfectivoContado_ValueChanged;
@@ -182,7 +182,7 @@
             lblTituloDiferencia.Location = new Point(15, 225);
             lblTituloDiferencia.Name = "lblTituloDiferencia";
             lblTituloDiferencia.Size = new Size(63, 15);
-            lblTituloDiferencia.TabIndex = 12;
+            lblTituloDiferencia.TabIndex = 4;
             lblTituloDiferencia.Text = "Diferencia:";
             // 
             // lblDiferencia
@@ -192,7 +192,7 @@
             lblDiferencia.Location = new Point(245, 222);
             lblDiferencia.Name = "lblDiferencia";
             lblDiferencia.Size = new Size(53, 20);
-            lblDiferencia.TabIndex = 13;
+            lblDiferencia.TabIndex = 5;
             lblDiferencia.Text = "$ 0,00";
             // 
             // lblObservacion
@@ -201,7 +201,7 @@
             lblObservacion.Location = new Point(15, 260);
             lblObservacion.Name = "lblObservacion";
             lblObservacion.Size = new Size(232, 15);
-            lblObservacion.TabIndex = 14;
+            lblObservacion.TabIndex = 6;
             lblObservacion.Text = "Observación (obligatoria si hay diferencia):";
             // 
             // txtObservacion
@@ -213,14 +213,14 @@
             txtObservacion.PlaceholderText = "Si lo contado no coincide con lo esperado, explicá por qué";
             txtObservacion.ScrollBars = ScrollBars.Vertical;
             txtObservacion.Size = new Size(370, 55);
-            txtObservacion.TabIndex = 15;
+            txtObservacion.TabIndex = 7;
             // 
             // btnCerrar
             // 
             btnCerrar.Location = new Point(165, 350);
             btnCerrar.Name = "btnCerrar";
             btnCerrar.Size = new Size(105, 32);
-            btnCerrar.TabIndex = 16;
+            btnCerrar.TabIndex = 8;
             btnCerrar.Text = "Cerrar caja";
             btnCerrar.UseVisualStyleBackColor = true;
             btnCerrar.Click += btnCerrar_Click;
@@ -230,7 +230,7 @@
             btnCancelar.Location = new Point(280, 350);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(105, 32);
-            btnCancelar.TabIndex = 17;
+            btnCancelar.TabIndex = 9;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;

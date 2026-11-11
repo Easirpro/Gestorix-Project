@@ -63,7 +63,7 @@
             btnEnviarCodigo.Location = new Point(123, 141);
             btnEnviarCodigo.Name = "btnEnviarCodigo";
             btnEnviarCodigo.Size = new Size(122, 23);
-            btnEnviarCodigo.TabIndex = 2;
+            btnEnviarCodigo.TabIndex = 6;
             btnEnviarCodigo.Text = "Cambiar contraseña";
             btnEnviarCodigo.UseVisualStyleBackColor = true;
             btnEnviarCodigo.Click += btnEnviarCodigo_Click;
@@ -74,7 +74,7 @@
             txtIngCodigo.Name = "txtIngCodigo";
             txtIngCodigo.PlaceholderText = "Repetí la nueva contraseña";
             txtIngCodigo.Size = new Size(196, 23);
-            txtIngCodigo.TabIndex = 3;
+            txtIngCodigo.TabIndex = 4;
             txtIngCodigo.UseSystemPasswordChar = true;
             txtIngCodigo.KeyPress += txtIngCodigo_KeyPress;
             // 
@@ -84,7 +84,7 @@
             lblAbajo.Location = new Point(22, 74);
             lblAbajo.Name = "lblAbajo";
             lblAbajo.Size = new Size(113, 15);
-            lblAbajo.TabIndex = 5;
+            lblAbajo.TabIndex = 3;
             lblAbajo.Text = "Repeti la contraseña";
             // 
             // btnVolver
@@ -93,7 +93,7 @@
             btnVolver.Name = "btnVolver";
             btnVolver.RightToLeft = RightToLeft.Yes;
             btnVolver.Size = new Size(95, 23);
-            btnVolver.TabIndex = 4;
+            btnVolver.TabIndex = 7;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
@@ -107,7 +107,7 @@
             btnMostrar.Location = new Point(224, 48);
             btnMostrar.Name = "btnMostrar";
             btnMostrar.Size = new Size(46, 24);
-            btnMostrar.TabIndex = 6;
+            btnMostrar.TabIndex = 2;
             btnMostrar.Text = "👁";
             btnMostrar.UseVisualStyleBackColor = true;
             btnMostrar.Click += btnMostrar_Click;
@@ -121,7 +121,7 @@
             btnMostrar1.Location = new Point(224, 98);
             btnMostrar1.Name = "btnMostrar1";
             btnMostrar1.Size = new Size(46, 24);
-            btnMostrar1.TabIndex = 7;
+            btnMostrar1.TabIndex = 5;
             btnMostrar1.Text = "👁";
             btnMostrar1.UseVisualStyleBackColor = true;
             btnMostrar1.Click += btnMostrar1_Click;

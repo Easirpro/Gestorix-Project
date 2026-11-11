@@ -41,7 +41,7 @@
             btnAceptar.Location = new Point(79, 170);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 23);
-            btnAceptar.TabIndex = 9;
+            btnAceptar.TabIndex = 3;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             btnAceptar.Click += btnAceptar_Click;
@@ -51,7 +51,7 @@
             btnVolver.Location = new Point(160, 170);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
-            btnVolver.TabIndex = 8;
+            btnVolver.TabIndex = 4;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
@@ -62,7 +62,7 @@
             txtNombre.Name = "txtNombre";
             txtNombre.PlaceholderText = "Nombre del rubro";
             txtNombre.Size = new Size(170, 23);
-            txtNombre.TabIndex = 7;
+            txtNombre.TabIndex = 2;
             // 
             // lblNombre
             // 
@@ -70,7 +70,7 @@
             lblNombre.Location = new Point(13, 105);
             lblNombre.Name = "lblNombre";
             lblNombre.Size = new Size(57, 15);
-            lblNombre.TabIndex = 6;
+            lblNombre.TabIndex = 1;
             lblNombre.Text = "Nombre: ";
             // 
             // lblNuevoRubro
@@ -80,7 +80,7 @@
             lblNuevoRubro.Location = new Point(79, 37);
             lblNuevoRubro.Name = "lblNuevoRubro";
             lblNuevoRubro.Size = new Size(132, 25);
-            lblNuevoRubro.TabIndex = 5;
+            lblNuevoRubro.TabIndex = 0;
             lblNuevoRubro.Text = "Nuevo Rubro";
             // 
             // frmNuevoRubro

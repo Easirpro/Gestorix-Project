@@ -43,7 +43,7 @@
             lblPregun.Location = new Point(28, 98);
             lblPregun.Name = "lblPregun";
             lblPregun.Size = new Size(257, 20);
-            lblPregun.TabIndex = 0;
+            lblPregun.TabIndex = 2;
             lblPregun.Text = "";
             //
             // txtRespuesta
@@ -52,7 +52,7 @@
             txtRespuesta.Name = "txtRespuesta";
             txtRespuesta.PlaceholderText = "Tu respuesta a la pregunta";
             txtRespuesta.Size = new Size(257, 23);
-            txtRespuesta.TabIndex = 1;
+            txtRespuesta.TabIndex = 3;
             txtRespuesta.KeyPress += txtRespuesta_KeyPress;
             //
             // lblTitulo
@@ -61,7 +61,7 @@
             lblTitulo.Location = new Point(28, 18);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(257, 30);
-            lblTitulo.TabIndex = 3;
+            lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Pregunta de seguridad";
             lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
             //
@@ -71,7 +71,7 @@
             lblIndicacion.Location = new Point(28, 54);
             lblIndicacion.Name = "lblIndicacion";
             lblIndicacion.Size = new Size(257, 36);
-            lblIndicacion.TabIndex = 4;
+            lblIndicacion.TabIndex = 1;
             lblIndicacion.Text = "Para crear una contraseña nueva, escribí la respuesta que guardaste para esta pregunta.";
             //
             // lblIntentos
@@ -80,14 +80,14 @@
             lblIntentos.Location = new Point(28, 153);
             lblIntentos.Name = "lblIntentos";
             lblIntentos.Size = new Size(257, 36);
-            lblIntentos.TabIndex = 5;
+            lblIntentos.TabIndex = 4;
             //
             // btnAceptar
             //
             btnAceptar.Location = new Point(119, 198);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 23);
-            btnAceptar.TabIndex = 2;
+            btnAceptar.TabIndex = 5;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
             // 

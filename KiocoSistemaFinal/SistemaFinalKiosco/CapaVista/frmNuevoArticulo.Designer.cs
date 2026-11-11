@@ -121,7 +121,7 @@ namespace CapaVista
             pnlEncabezado.Name = "pnlEncabezado";
             pnlEncabezado.Padding = new Padding(16, 6, 14, 3);
             pnlEncabezado.Size = new Size(845, 51);
-            pnlEncabezado.TabIndex = 3;
+            pnlEncabezado.TabIndex = 0;
 
             // 
             // lblTitulo
@@ -152,7 +152,7 @@ namespace CapaVista
             pnlContenido.Name = "pnlContenido";
             pnlContenido.Padding = new Padding(9, 8, 9, 8);
             pnlContenido.Size = new Size(845, 361);
-            pnlContenido.TabIndex = 0;
+            pnlContenido.TabIndex = 2;
             // 
             // tabControl1
             // 
@@ -167,7 +167,7 @@ namespace CapaVista
             tabControl1.Padding = new Point(10, 4);
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(559, 345);
-            tabControl1.TabIndex = 0;
+            tabControl1.TabIndex = 1;
             // 
             // tbpPrecio
             // 
@@ -214,7 +214,7 @@ namespace CapaVista
             txtPrecioCosto.Name = "txtPrecioCosto";
             txtPrecioCosto.PlaceholderText = "Costo sin IVA, ej.: 1500";
             txtPrecioCosto.Size = new Size(192, 23);
-            txtPrecioCosto.TabIndex = 1;
+            txtPrecioCosto.TabIndex = 2;
             txtPrecioCosto.TextChanged += txtPrecioCosto_TextChanged;
             // 
             // label4
@@ -223,7 +223,7 @@ namespace CapaVista
             label4.Location = new Point(239, 32);
             label4.Name = "label4";
             label4.Size = new Size(24, 15);
-            label4.TabIndex = 2;
+            label4.TabIndex = 1;
             label4.Text = "IVA";
             // 
             // cmbIva
@@ -259,7 +259,7 @@ namespace CapaVista
             txtGanancia.Name = "txtGanancia";
             txtGanancia.PlaceholderText = "Ej.: 30";
             txtGanancia.Size = new Size(192, 23);
-            txtGanancia.TabIndex = 6;
+            txtGanancia.TabIndex = 7;
             txtGanancia.TextChanged += txtGanancia_TextChanged;
             // 
             // label6
@@ -268,7 +268,7 @@ namespace CapaVista
             label6.Location = new Point(239, 105);
             label6.Name = "label6";
             label6.Size = new Size(142, 15);
-            label6.TabIndex = 7;
+            label6.TabIndex = 6;
             label6.Text = "Precio de venta calculado";
             // 
             // txtPrecioVenta
@@ -321,7 +321,7 @@ namespace CapaVista
             txtStockActual.Name = "txtStockActual";
             txtStockActual.PlaceholderText = "Cantidad que hay hoy";
             txtStockActual.Size = new Size(204, 23);
-            txtStockActual.TabIndex = 2;
+            txtStockActual.TabIndex = 3;
             // 
             // label8
             // 
@@ -329,7 +329,7 @@ namespace CapaVista
             label8.Location = new Point(251, 62);
             label8.Name = "label8";
             label8.Size = new Size(144, 15);
-            label8.TabIndex = 3;
+            label8.TabIndex = 2;
             label8.Text = "Stock mínimo para alertas";
             // 
             // txtStockMinimo
@@ -396,7 +396,7 @@ namespace CapaVista
             dtpFechaVencimiento.Location = new Point(18, 82);
             dtpFechaVencimiento.Name = "dtpFechaVencimiento";
             dtpFechaVencimiento.Size = new Size(204, 23);
-            dtpFechaVencimiento.TabIndex = 2;
+            dtpFechaVencimiento.TabIndex = 3;
             // 
             // label11
             // 
@@ -404,7 +404,7 @@ namespace CapaVista
             label11.Location = new Point(245, 60);
             label11.Name = "label11";
             label11.Size = new Size(154, 15);
-            label11.TabIndex = 3;
+            label11.TabIndex = 2;
             label11.Text = "Anticipación de alerta (días)";
             // 
             // txtAlertaVencimiento
@@ -454,7 +454,7 @@ namespace CapaVista
             txtCodigoPorLote.Name = "txtCodigoPorLote";
             txtCodigoPorLote.PlaceholderText = "Código del lote (opcional)";
             txtCodigoPorLote.Size = new Size(204, 23);
-            txtCodigoPorLote.TabIndex = 2;
+            txtCodigoPorLote.TabIndex = 3;
             // 
             // lblFechaFabricacion
             // 
@@ -462,7 +462,7 @@ namespace CapaVista
             lblFechaFabricacion.Location = new Point(245, 60);
             lblFechaFabricacion.Name = "lblFechaFabricacion";
             lblFechaFabricacion.Size = new Size(116, 15);
-            lblFechaFabricacion.TabIndex = 3;
+            lblFechaFabricacion.TabIndex = 2;
             lblFechaFabricacion.Text = "Fecha de fabricación";
             // 
             // dtpFechaFabricacion
@@ -504,7 +504,7 @@ namespace CapaVista
             cmbProveedor.Location = new Point(18, 32);
             cmbProveedor.Name = "cmbProveedor";
             cmbProveedor.Size = new Size(230, 23);
-            cmbProveedor.TabIndex = 1;
+            cmbProveedor.TabIndex = 2;
             cmbProveedor.SelectedIndexChanged += cmbProveedor_SelectedIndexChanged;
             // 
             // label14
@@ -513,7 +513,7 @@ namespace CapaVista
             label14.Location = new Point(258, 12);
             label14.Name = "label14";
             label14.Size = new Size(51, 15);
-            label14.TabIndex = 2;
+            label14.TabIndex = 1;
             label14.Text = "Sucursal";
             // 
             // cmbSucursal
@@ -577,7 +577,7 @@ namespace CapaVista
             grpIdentificacion.Name = "grpIdentificacion";
             grpIdentificacion.Padding = new Padding(12);
             grpIdentificacion.Size = new Size(268, 345);
-            grpIdentificacion.TabIndex = 1;
+            grpIdentificacion.TabIndex = 0;
             grpIdentificacion.TabStop = false;
             grpIdentificacion.Text = "Identificación";
             // 
@@ -662,7 +662,7 @@ namespace CapaVista
             pnlPie.Name = "pnlPie";
             pnlPie.Padding = new Padding(10, 8, 12, 8);
             pnlPie.Size = new Size(845, 48);
-            pnlPie.TabIndex = 1;
+            pnlPie.TabIndex = 3;
             // 
             // btnCancelar
             // 
@@ -670,7 +670,7 @@ namespace CapaVista
             btnCancelar.Location = new Point(594, 9);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(90, 28);
-            btnCancelar.TabIndex = 0;
+            btnCancelar.TabIndex = 1;
             btnCancelar.Text = "Salir";
             btnCancelar.UseVisualStyleBackColor = true;
             // 
@@ -680,7 +680,7 @@ namespace CapaVista
             btnGuardar.Location = new Point(711, 8);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(112, 28);
-            btnGuardar.TabIndex = 1;
+            btnGuardar.TabIndex = 0;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
@@ -698,7 +698,7 @@ namespace CapaVista
             grpDatosPrincipales.Name = "grpDatosPrincipales";
             grpDatosPrincipales.Padding = new Padding(12);
             grpDatosPrincipales.Size = new Size(845, 118);
-            grpDatosPrincipales.TabIndex = 2;
+            grpDatosPrincipales.TabIndex = 1;
             grpDatosPrincipales.TabStop = false;
             grpDatosPrincipales.Text = "Datos principales";
             // 
@@ -717,7 +717,7 @@ namespace CapaVista
             txtCodigo.Name = "txtCodigo";
             txtCodigo.PlaceholderText = "Código de barras o código interno";
             txtCodigo.Size = new Size(204, 23);
-            txtCodigo.TabIndex = 1;
+            txtCodigo.TabIndex = 2;
             // 
             // label18
             // 
@@ -725,7 +725,7 @@ namespace CapaVista
             label18.Location = new Point(239, 23);
             label18.Name = "label18";
             label18.Size = new Size(92, 15);
-            label18.TabIndex = 2;
+            label18.TabIndex = 1;
             label18.Text = "SKU automático";
             // 
             // txtSKU

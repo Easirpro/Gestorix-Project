@@ -68,7 +68,7 @@
             btnVolver.Location = new Point(154, 150);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
-            btnVolver.TabIndex = 3;
+            btnVolver.TabIndex = 4;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
@@ -78,7 +78,7 @@
             btnGuardar.Location = new Point(250, 150);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
-            btnGuardar.TabIndex = 4;
+            btnGuardar.TabIndex = 3;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;

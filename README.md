@@ -166,3 +166,6 @@ y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
 0.0.1.22- 10/11 Instalador 0.0.1.2 con unidades enteras y la base de referencia 0.0.1.1 -Marce-
 
 0.0.1.23- 10/11 Stock y cantidades sin decimales en grillas y mensajes; instalador 0.0.1.3 -Marce-
+
+
+0.0.1.24- 11/11 Orden del tabulador corregido en los formularios; el proveedor elegido al cargar un artículo se guarda aunque no se toque Agregar -Marce-

@@ -197,7 +197,7 @@
             dgvPagos.RowHeadersVisible = false;
             dgvPagos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPagos.Size = new Size(320, 100);
-            dgvPagos.TabIndex = 8;
+            dgvPagos.TabIndex = 9;
             //
             // clnMedio
             //
@@ -219,7 +219,7 @@
             lblTotalTexto.Location = new Point(448, 348);
             lblTotalTexto.Name = "lblTotalTexto";
             lblTotalTexto.Size = new Size(260, 22);
-            lblTotalTexto.TabIndex = 9;
+            lblTotalTexto.TabIndex = 8;
             lblTotalTexto.Text = "Total de la venta";
             lblTotalTexto.TextAlign = ContentAlignment.MiddleRight;
             //

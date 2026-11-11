@@ -69,7 +69,7 @@
             btnLimpiarBusqueda.Location = new Point(246, 281);
             btnLimpiarBusqueda.Name = "btnLimpiarBusqueda";
             btnLimpiarBusqueda.Size = new Size(127, 23);
-            btnLimpiarBusqueda.TabIndex = 3;
+            btnLimpiarBusqueda.TabIndex = 4;
             btnLimpiarBusqueda.Text = "Limpiar busqueda";
             btnLimpiarBusqueda.UseVisualStyleBackColor = true;
             btnLimpiarBusqueda.Click += btnLimpiarBusqueda_Click;
@@ -80,7 +80,7 @@
             btnContinuar.Location = new Point(379, 281);
             btnContinuar.Name = "btnContinuar";
             btnContinuar.Size = new Size(75, 23);
-            btnContinuar.TabIndex = 4;
+            btnContinuar.TabIndex = 5;
             btnContinuar.Text = "Continuar";
             btnContinuar.UseVisualStyleBackColor = true;
             btnContinuar.Click += btnContinuar_Click;
@@ -93,7 +93,7 @@
             dtgBuscarPromo.Location = new Point(12, 120);
             dtgBuscarPromo.Name = "dtgBuscarPromo";
             dtgBuscarPromo.Size = new Size(501, 150);
-            dtgBuscarPromo.TabIndex = 5;
+            dtgBuscarPromo.TabIndex = 3;
             dtgBuscarPromo.CellClick += dtgBuscarPromo_CellClick;
             dtgBuscarPromo.CellContentClick += dtgBuscarPromo_CellContentClick;
             // 
@@ -133,7 +133,7 @@
             cmbBuscarPromo.Location = new Point(15, 80);
             cmbBuscarPromo.Name = "cmbBuscarPromo";
             cmbBuscarPromo.Size = new Size(244, 23);
-            cmbBuscarPromo.TabIndex = 6;
+            cmbBuscarPromo.TabIndex = 2;
             cmbBuscarPromo.SelectedIndexChanged += cmbBuscarPromo_SelectedIndexChanged;
             cmbBuscarPromo.TextUpdate += cmbBuscarPromo_TextUpdate;
             // 

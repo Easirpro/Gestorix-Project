@@ -81,7 +81,7 @@
             lblNombrePromo.Location = new Point(6, 19);
             lblNombrePromo.Name = "lblNombrePromo";
             lblNombrePromo.Size = new Size(141, 15);
-            lblNombrePromo.TabIndex = 1;
+            lblNombrePromo.TabIndex = 0;
             lblNombrePromo.Text = "Nombre de la Promoción";
             // 
             // txtNombrePromocion
@@ -90,7 +90,7 @@
             txtNombrePromocion.Name = "txtNombrePromocion";
             txtNombrePromocion.PlaceholderText = "Ej.: 2x1 en gaseosas";
             txtNombrePromocion.Size = new Size(218, 23);
-            txtNombrePromocion.TabIndex = 5;
+            txtNombrePromocion.TabIndex = 2;
             // 
             // lblCodigoPromo
             // 
@@ -98,7 +98,7 @@
             lblCodigoPromo.Location = new Point(259, 19);
             lblCodigoPromo.Name = "lblCodigoPromo";
             lblCodigoPromo.Size = new Size(136, 15);
-            lblCodigoPromo.TabIndex = 6;
+            lblCodigoPromo.TabIndex = 1;
             lblCodigoPromo.Text = "Código de la promoción";
             // 
             // txtCodigoPromocion
@@ -109,7 +109,7 @@
             txtCodigoPromocion.Multiline = true;
             txtCodigoPromocion.Name = "txtCodigoPromocion";
             txtCodigoPromocion.Size = new Size(136, 23);
-            txtCodigoPromocion.TabIndex = 7;
+            txtCodigoPromocion.TabIndex = 3;
             txtCodigoPromocion.TabStop = false;
             txtCodigoPromocion.Cursor = Cursors.Default;
             txtCodigoPromocion.WordWrap = false;
@@ -125,7 +125,7 @@
             gpbDatosGenerales.Location = new Point(12, 73);
             gpbDatosGenerales.Name = "gpbDatosGenerales";
             gpbDatosGenerales.Size = new Size(494, 155);
-            gpbDatosGenerales.TabIndex = 8;
+            gpbDatosGenerales.TabIndex = 2;
             gpbDatosGenerales.TabStop = false;
             gpbDatosGenerales.Text = "Datos Generales";
             // 
@@ -136,7 +136,7 @@
             btnCofigurarFechas.Location = new Point(15, 65);
             btnCofigurarFechas.Name = "btnCofigurarFechas";
             btnCofigurarFechas.Size = new Size(453, 44);
-            btnCofigurarFechas.TabIndex = 8;
+            btnCofigurarFechas.TabIndex = 4;
             btnCofigurarFechas.Text = "Configurar fechas y horarios \r\nFechas, días de la semana y franjas horarias.\r\n";
             btnCofigurarFechas.UseVisualStyleBackColor = true;
             btnCofigurarFechas.Click += btnCofigurarFechas_Click;
@@ -150,7 +150,7 @@
             lblResumenVigencia.Location = new Point(15, 110);
             lblResumenVigencia.Name = "lblResumenVigencia";
             lblResumenVigencia.Size = new Size(453, 35);
-            lblResumenVigencia.TabIndex = 22;
+            lblResumenVigencia.TabIndex = 5;
             lblResumenVigencia.Text = "Vigencia sin configurar";
             lblResumenVigencia.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -162,7 +162,7 @@
             gpbSeleccionarArticulo.Location = new Point(12, 234);
             gpbSeleccionarArticulo.Name = "gpbSeleccionarArticulo";
             gpbSeleccionarArticulo.Size = new Size(494, 238);
-            gpbSeleccionarArticulo.TabIndex = 9;
+            gpbSeleccionarArticulo.TabIndex = 4;
             gpbSeleccionarArticulo.TabStop = false;
             gpbSeleccionarArticulo.Text = "Seleccionar Artículos";
             // 
@@ -183,7 +183,7 @@
             lblDescripcion.Location = new Point(6, 28);
             lblDescripcion.Name = "lblDescripcion";
             lblDescripcion.Size = new Size(436, 15);
-            lblDescripcion.TabIndex = 1;
+            lblDescripcion.TabIndex = 0;
             lblDescripcion.Text = "Buscás cada producto por nombre, código de barras o SKU y lo agregás a la grilla.";
             // 
             // dgtCargaArticulo
@@ -194,7 +194,7 @@
             dgtCargaArticulo.Location = new Point(9, 46);
             dgtCargaArticulo.Name = "dgtCargaArticulo";
             dgtCargaArticulo.Size = new Size(459, 150);
-            dgtCargaArticulo.TabIndex = 0;
+            dgtCargaArticulo.TabIndex = 1;
             dgtCargaArticulo.CellContentClick += dgtCargaArticulo_CellContentClick;
             // 
             // clnProducto
@@ -234,7 +234,7 @@
             gpbTipoPromocion.Location = new Point(525, 166);
             gpbTipoPromocion.Name = "gpbTipoPromocion";
             gpbTipoPromocion.Size = new Size(494, 165);
-            gpbTipoPromocion.TabIndex = 10;
+            gpbTipoPromocion.TabIndex = 3;
             gpbTipoPromocion.TabStop = false;
             gpbTipoPromocion.Text = "Tipo de Promoción";
             // 
@@ -244,7 +244,7 @@
             cmbDescuentoVolumen.Location = new Point(11, 101);
             cmbDescuentoVolumen.Name = "cmbDescuentoVolumen";
             cmbDescuentoVolumen.Size = new Size(134, 23);
-            cmbDescuentoVolumen.TabIndex = 9;
+            cmbDescuentoVolumen.TabIndex = 8;
             cmbDescuentoVolumen.SelectedIndexChanged += cmbDescuentoVolumen_SelectedIndexChanged;
             // 
             // lblDescuentoVolumen
@@ -253,7 +253,7 @@
             lblDescuentoVolumen.Location = new Point(11, 83);
             lblDescuentoVolumen.Name = "lblDescuentoVolumen";
             lblDescuentoVolumen.Size = new Size(134, 15);
-            lblDescuentoVolumen.TabIndex = 8;
+            lblDescuentoVolumen.TabIndex = 7;
             lblDescuentoVolumen.Text = "Descuento por volumen";
             // 
             // btnAgregarMecanica
@@ -262,7 +262,7 @@
             btnAgregarMecanica.Location = new Point(307, 105);
             btnAgregarMecanica.Name = "btnAgregarMecanica";
             btnAgregarMecanica.Size = new Size(161, 30);
-            btnAgregarMecanica.TabIndex = 7;
+            btnAgregarMecanica.TabIndex = 9;
             btnAgregarMecanica.Text = "+ Agregar mecánica";
             btnAgregarMecanica.UseVisualStyleBackColor = true;
             btnAgregarMecanica.Click += btnAgregarMecanica_Click;
@@ -273,7 +273,7 @@
             txtBajaPrecio.Name = "txtBajaPrecio";
             txtBajaPrecio.PlaceholderText = "Precio final de la promoción";
             txtBajaPrecio.Size = new Size(118, 23);
-            txtBajaPrecio.TabIndex = 6;
+            txtBajaPrecio.TabIndex = 4;
             txtBajaPrecio.TextChanged += txtBajaPrecio_TextChanged;
             // 
             // label3
@@ -282,7 +282,7 @@
             label3.Location = new Point(185, 22);
             label3.Name = "label3";
             label3.Size = new Size(85, 15);
-            label3.TabIndex = 5;
+            label3.TabIndex = 1;
             label3.Text = "Precio especial";
             // 
             // label2
@@ -291,7 +291,7 @@
             label2.Location = new Point(403, 43);
             label2.Name = "label2";
             label2.Size = new Size(17, 15);
-            label2.TabIndex = 4;
+            label2.TabIndex = 6;
             label2.Text = "%";
             // 
             // cmbMecanicaPromocional
@@ -310,7 +310,7 @@
             txtDescuentoPorcentual.Name = "txtDescuentoPorcentual";
             txtDescuentoPorcentual.PlaceholderText = "Ej.: 15";
             txtDescuentoPorcentual.Size = new Size(65, 23);
-            txtDescuentoPorcentual.TabIndex = 2;
+            txtDescuentoPorcentual.TabIndex = 5;
             txtDescuentoPorcentual.TextChanged += txtDescuentoPorcentual_TextChanged;
             // 
             // lblMecanicaPromo
@@ -319,7 +319,7 @@
             lblMecanicaPromo.Location = new Point(10, 22);
             lblMecanicaPromo.Name = "lblMecanicaPromo";
             lblMecanicaPromo.Size = new Size(148, 15);
-            lblMecanicaPromo.TabIndex = 1;
+            lblMecanicaPromo.TabIndex = 0;
             lblMecanicaPromo.Text = "Mecánica de la promoción";
             // 
             // lblDescuentoPorcentual
@@ -328,7 +328,7 @@
             lblDescuentoPorcentual.Location = new Point(332, 22);
             lblDescuentoPorcentual.Name = "lblDescuentoPorcentual";
             lblDescuentoPorcentual.Size = new Size(123, 15);
-            lblDescuentoPorcentual.TabIndex = 0;
+            lblDescuentoPorcentual.TabIndex = 2;
             lblDescuentoPorcentual.Text = "Descuento porcentual";
             // 
             // lstPromocionesEncontradas
@@ -339,7 +339,7 @@
             lstPromocionesEncontradas.Location = new Point(113, 52);
             lstPromocionesEncontradas.Name = "lstPromocionesEncontradas";
             lstPromocionesEncontradas.Size = new Size(244, 79);
-            lstPromocionesEncontradas.TabIndex = 21;
+            lstPromocionesEncontradas.TabIndex = 3;
             lstPromocionesEncontradas.DrawItem += lstPromocionesEncontradas_DrawItem;
             lstPromocionesEncontradas.SelectedIndexChanged += lstPromocionesEncontradas_SelectedIndexChanged;
             lstPromocionesEncontradas.DoubleClick += lstPromocionesEncontradas_DoubleClick;
@@ -358,7 +358,7 @@
             gpbVistaPrevia.Location = new Point(525, 337);
             gpbVistaPrevia.Name = "gpbVistaPrevia";
             gpbVistaPrevia.Size = new Size(494, 135);
-            gpbVistaPrevia.TabIndex = 11;
+            gpbVistaPrevia.TabIndex = 5;
             gpbVistaPrevia.TabStop = false;
             gpbVistaPrevia.Text = "Vista previa";
             // 
@@ -370,7 +370,7 @@
             label12.Location = new Point(395, 99);
             label12.Name = "label12";
             label12.Size = new Size(23, 25);
-            label12.TabIndex = 8;
+            label12.TabIndex = 7;
             label12.Text = "$";
             // 
             // lblPrecioPromocional
@@ -381,7 +381,7 @@
             lblPrecioPromocional.Location = new Point(424, 99);
             lblPrecioPromocional.Name = "lblPrecioPromocional";
             lblPrecioPromocional.Size = new Size(56, 25);
-            lblPrecioPromocional.TabIndex = 7;
+            lblPrecioPromocional.TabIndex = 8;
             lblPrecioPromocional.Text = "0000";
             // 
             // label10
@@ -400,7 +400,7 @@
             lblDescuento.Location = new Point(81, 72);
             lblDescuento.Name = "lblDescuento";
             lblDescuento.Size = new Size(19, 15);
-            lblDescuento.TabIndex = 5;
+            lblDescuento.TabIndex = 4;
             lblDescuento.Text = "00";
             // 
             // label8
@@ -409,7 +409,7 @@
             label8.Location = new Point(118, 72);
             label8.Name = "label8";
             label8.Size = new Size(17, 15);
-            label8.TabIndex = 4;
+            label8.TabIndex = 5;
             label8.Text = "%";
             // 
             // label7
@@ -456,7 +456,7 @@
             btnGuardarPromo.Location = new Point(889, 495);
             btnGuardarPromo.Name = "btnGuardarPromo";
             btnGuardarPromo.Size = new Size(125, 23);
-            btnGuardarPromo.TabIndex = 12;
+            btnGuardarPromo.TabIndex = 7;
             btnGuardarPromo.Text = "Guardar Promoción";
             btnGuardarPromo.UseVisualStyleBackColor = true;
             btnGuardarPromo.Click += btnGuardarPromo_Click;
@@ -467,7 +467,7 @@
             btnEliminar.Location = new Point(810, 495);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
-            btnEliminar.TabIndex = 14;
+            btnEliminar.TabIndex = 6;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
@@ -478,7 +478,7 @@
             btnVolver.Location = new Point(729, 495);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
-            btnVolver.TabIndex = 15;
+            btnVolver.TabIndex = 8;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
@@ -490,7 +490,7 @@
             label14.Location = new Point(15, 9);
             label14.Name = "label14";
             label14.Size = new Size(392, 42);
-            label14.TabIndex = 16;
+            label14.TabIndex = 0;
             label14.Text = "Gestión de promociones\r\nCrear, editar y administrar promociones del kiosco";
             // 
             // lblBuscarPromo
@@ -499,7 +499,7 @@
             lblBuscarPromo.Location = new Point(6, 34);
             lblBuscarPromo.Name = "lblBuscarPromo";
             lblBuscarPromo.Size = new Size(107, 15);
-            lblBuscarPromo.TabIndex = 18;
+            lblBuscarPromo.TabIndex = 0;
             lblBuscarPromo.Text = "Buscar Promoción.";
             // 
             // contextMenuStrip1
@@ -514,7 +514,7 @@
             txtBuscarPromo.Name = "txtBuscarPromo";
             txtBuscarPromo.PlaceholderText = "Nombre o código de la promoción";
             txtBuscarPromo.Size = new Size(244, 23);
-            txtBuscarPromo.TabIndex = 20;
+            txtBuscarPromo.TabIndex = 1;
             txtBuscarPromo.TextChanged += txtBuscarPromo_TextChanged;
             // 
             // chkDesactivarPromo
@@ -524,7 +524,7 @@
             chkDesactivarPromo.Location = new Point(371, 27);
             chkDesactivarPromo.Name = "chkDesactivarPromo";
             chkDesactivarPromo.Size = new Size(142, 19);
-            chkDesactivarPromo.TabIndex = 22;
+            chkDesactivarPromo.TabIndex = 2;
             chkDesactivarPromo.Text = "Desactivar Promoción";
             chkDesactivarPromo.UseVisualStyleBackColor = true;
             chkDesactivarPromo.CheckedChanged += chkDesactivarPromo_CheckedChanged;
@@ -539,7 +539,7 @@
             gpbModificar.Location = new Point(512, 12);
             gpbModificar.Name = "gpbModificar";
             gpbModificar.Size = new Size(519, 135);
-            gpbModificar.TabIndex = 23;
+            gpbModificar.TabIndex = 1;
             gpbModificar.TabStop = false;
             gpbModificar.Text = "Seleccionar promoción para modificar";
             // 
@@ -549,7 +549,7 @@
             lblPromoDescrip.Location = new Point(6, 105);
             lblPromoDescrip.Name = "lblPromoDescrip";
             lblPromoDescrip.Size = new Size(352, 15);
-            lblPromoDescrip.TabIndex = 23;
+            lblPromoDescrip.TabIndex = 4;
             lblPromoDescrip.Text = "* Las promociónes que estan en rojo son las que estan desactivas.";
             // 
             // frmPromocion

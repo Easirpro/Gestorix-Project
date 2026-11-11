@@ -98,7 +98,7 @@
             label20.Location = new Point(145, 19);
             label20.Name = "label20";
             label20.Size = new Size(94, 15);
-            label20.TabIndex = 39;
+            label20.TabIndex = 1;
             label20.Text = "Tipo de Telefono";
             // 
             // cmbTipoTelefono
@@ -107,7 +107,7 @@
             cmbTipoTelefono.Location = new Point(146, 37);
             cmbTipoTelefono.Name = "cmbTipoTelefono";
             cmbTipoTelefono.Size = new Size(121, 23);
-            cmbTipoTelefono.TabIndex = 38;
+            cmbTipoTelefono.TabIndex = 3;
             // 
             // mkdCuil
             // 
@@ -115,7 +115,7 @@
             mkdCuil.Mask = "00-00000000-0";
             mkdCuil.Name = "mkdCuil";
             mkdCuil.Size = new Size(134, 23);
-            mkdCuil.TabIndex = 5;
+            mkdCuil.TabIndex = 13;
             mkdCuil.Enter += mkdCuil_Enter;
             mkdCuil.KeyPress += mkdCuil_KeyPress;
             mkdCuil.Leave += mkdCuil_Leave;
@@ -125,7 +125,7 @@
             dtpFechaNacimiento.Location = new Point(12, 105);
             dtpFechaNacimiento.Name = "dtpFechaNacimiento";
             dtpFechaNacimiento.Size = new Size(220, 23);
-            dtpFechaNacimiento.TabIndex = 4;
+            dtpFechaNacimiento.TabIndex = 5;
             // 
             // cmbGenero
             // 
@@ -133,7 +133,7 @@
             cmbGenero.Location = new Point(12, 172);
             cmbGenero.Name = "cmbGenero";
             cmbGenero.Size = new Size(121, 23);
-            cmbGenero.TabIndex = 7;
+            cmbGenero.TabIndex = 8;
             // 
             // label18
             // 
@@ -141,7 +141,7 @@
             label18.Location = new Point(10, 150);
             label18.Name = "label18";
             label18.Size = new Size(45, 15);
-            label18.TabIndex = 37;
+            label18.TabIndex = 6;
             label18.Text = "Genero";
             // 
             // label17
@@ -150,7 +150,7 @@
             label17.Location = new Point(19, 220);
             label17.Name = "label17";
             label17.Size = new Size(32, 15);
-            label17.TabIndex = 36;
+            label17.TabIndex = 11;
             label17.Text = "CUIT";
             // 
             // txtPostal
@@ -159,7 +159,7 @@
             txtPostal.Location = new Point(162, 107);
             txtPostal.Name = "txtPostal";
             txtPostal.Size = new Size(69, 23);
-            txtPostal.TabIndex = 10;
+            txtPostal.TabIndex = 7;
             // 
             // label15
             // 
@@ -167,7 +167,7 @@
             label15.Location = new Point(7, 103);
             label15.Name = "label15";
             label15.Size = new Size(105, 15);
-            label15.TabIndex = 30;
+            label15.TabIndex = 4;
             label15.Text = "Correo Electronico";
             // 
             // txtDepartamento
@@ -176,7 +176,7 @@
             txtDepartamento.Name = "txtDepartamento";
             txtDepartamento.PlaceholderText = "Opcional";
             txtDepartamento.Size = new Size(83, 23);
-            txtDepartamento.TabIndex = 17;
+            txtDepartamento.TabIndex = 15;
             // 
             // txtPiso
             // 
@@ -184,7 +184,7 @@
             txtPiso.Name = "txtPiso";
             txtPiso.PlaceholderText = "Opcional";
             txtPiso.Size = new Size(71, 23);
-            txtPiso.TabIndex = 16;
+            txtPiso.TabIndex = 14;
             // 
             // label14
             // 
@@ -192,7 +192,7 @@
             label14.Location = new Point(86, 205);
             label14.Name = "label14";
             label14.Size = new Size(83, 15);
-            label14.TabIndex = 27;
+            label14.TabIndex = 13;
             label14.Text = "Departamento";
             // 
             // label13
@@ -201,7 +201,7 @@
             label13.Location = new Point(15, 205);
             label13.Name = "label13";
             label13.Size = new Size(29, 15);
-            label13.TabIndex = 26;
+            label13.TabIndex = 12;
             label13.Text = "Piso";
             // 
             // label12
@@ -210,7 +210,7 @@
             label12.Location = new Point(227, 149);
             label12.Name = "label12";
             label12.Size = new Size(39, 15);
-            label12.TabIndex = 25;
+            label12.TabIndex = 9;
             label12.Text = "Altura";
             // 
             // txtAltura
@@ -219,7 +219,7 @@
             txtAltura.Name = "txtAltura";
             txtAltura.PlaceholderText = "Ej.: 1234";
             txtAltura.Size = new Size(100, 23);
-            txtAltura.TabIndex = 15;
+            txtAltura.TabIndex = 11;
             // 
             // label11
             // 
@@ -227,7 +227,7 @@
             label11.Location = new Point(147, 89);
             label11.Name = "label11";
             label11.Size = new Size(67, 15);
-            label11.TabIndex = 23;
+            label11.TabIndex = 5;
             label11.Text = "Cod. Postal";
             // 
             // cmbLocalidad
@@ -236,7 +236,7 @@
             cmbLocalidad.Location = new Point(11, 107);
             cmbLocalidad.Name = "cmbLocalidad";
             cmbLocalidad.Size = new Size(146, 23);
-            cmbLocalidad.TabIndex = 13;
+            cmbLocalidad.TabIndex = 6;
             cmbLocalidad.SelectedIndexChanged += cmbLocalidad_SelectedIndexChanged_1;
             // 
             // cmbPartido
@@ -245,7 +245,7 @@
             cmbPartido.Location = new Point(158, 44);
             cmbPartido.Name = "cmbPartido";
             cmbPartido.Size = new Size(125, 23);
-            cmbPartido.TabIndex = 12;
+            cmbPartido.TabIndex = 3;
             cmbPartido.SelectedIndexChanged += cmbPartido_SelectedIndexChanged;
             // 
             // txtCorreo
@@ -254,7 +254,7 @@
             txtCorreo.Name = "txtCorreo";
             txtCorreo.PlaceholderText = "ejemplo@correo.com";
             txtCorreo.Size = new Size(213, 23);
-            txtCorreo.TabIndex = 11;
+            txtCorreo.TabIndex = 5;
             txtCorreo.Validating += txtCorreo_Validating;
             // 
             // label6
@@ -263,7 +263,7 @@
             label6.Location = new Point(8, 149);
             label6.Name = "label6";
             label6.Size = new Size(33, 15);
-            label6.TabIndex = 5;
+            label6.TabIndex = 8;
             label6.Text = "Calle";
             // 
             // txtCalle
@@ -272,7 +272,7 @@
             txtCalle.Name = "txtCalle";
             txtCalle.PlaceholderText = "Nombre de la calle";
             txtCalle.Size = new Size(215, 23);
-            txtCalle.TabIndex = 14;
+            txtCalle.TabIndex = 10;
             // 
             // cmbProvincia
             // 
@@ -282,7 +282,7 @@
             cmbProvincia.MaxDropDownItems = 4;
             cmbProvincia.Name = "cmbProvincia";
             cmbProvincia.Size = new Size(146, 23);
-            cmbProvincia.TabIndex = 11;
+            cmbProvincia.TabIndex = 2;
             cmbProvincia.SelectedIndexChanged += cmbProvincia_SelectedIndexChanged;
             // 
             // label10
@@ -291,7 +291,7 @@
             label10.Location = new Point(158, 26);
             label10.Name = "label10";
             label10.Size = new Size(45, 15);
-            label10.TabIndex = 19;
+            label10.TabIndex = 1;
             label10.Text = "Partido";
             // 
             // txtTelefono
@@ -300,7 +300,7 @@
             txtTelefono.Name = "txtTelefono";
             txtTelefono.PlaceholderText = "Solo números, con característica";
             txtTelefono.Size = new Size(134, 23);
-            txtTelefono.TabIndex = 18;
+            txtTelefono.TabIndex = 2;
             txtTelefono.KeyPress += txtTelefono_KeyPress;
             // 
             // label9
@@ -309,7 +309,7 @@
             label9.Location = new Point(11, 26);
             label9.Name = "label9";
             label9.Size = new Size(56, 15);
-            label9.TabIndex = 18;
+            label9.TabIndex = 0;
             label9.Text = "Provincia";
             // 
             // rdbMasculino
@@ -318,7 +318,7 @@
             rdbMasculino.Location = new Point(231, 176);
             rdbMasculino.Name = "rdbMasculino";
             rdbMasculino.Size = new Size(69, 19);
-            rdbMasculino.TabIndex = 9;
+            rdbMasculino.TabIndex = 10;
             rdbMasculino.TabStop = true;
             rdbMasculino.Text = "Hombre";
             rdbMasculino.UseVisualStyleBackColor = true;
@@ -329,7 +329,7 @@
             label4.Location = new Point(12, 87);
             label4.Name = "label4";
             label4.Size = new Size(119, 15);
-            label4.TabIndex = 3;
+            label4.TabIndex = 4;
             label4.Text = "Fecha de Nacimiento";
             // 
             // rdbFemenino
@@ -338,7 +338,7 @@
             rdbFemenino.Location = new Point(166, 176);
             rdbFemenino.Name = "rdbFemenino";
             rdbFemenino.Size = new Size(56, 19);
-            rdbFemenino.TabIndex = 8;
+            rdbFemenino.TabIndex = 9;
             rdbFemenino.TabStop = true;
             rdbFemenino.Text = "Mujer";
             rdbFemenino.UseVisualStyleBackColor = true;
@@ -349,7 +349,7 @@
             txtDNI.Name = "txtDNI";
             txtDNI.PlaceholderText = "8 números (sale del CUIL)";
             txtDNI.Size = new Size(134, 23);
-            txtDNI.TabIndex = 6;
+            txtDNI.TabIndex = 14;
             txtDNI.KeyPress += txtDNI_KeyPress;
             // 
             // label8
@@ -358,7 +358,7 @@
             label8.Location = new Point(7, 89);
             label8.Name = "label8";
             label8.Size = new Size(58, 15);
-            label8.TabIndex = 7;
+            label8.TabIndex = 4;
             label8.Text = "Localidad";
             // 
             // label7
@@ -367,7 +367,7 @@
             label7.Location = new Point(6, 19);
             label7.Name = "label7";
             label7.Size = new Size(52, 15);
-            label7.TabIndex = 6;
+            label7.TabIndex = 0;
             label7.Text = "Telefono";
             // 
             // label5
@@ -376,7 +376,7 @@
             label5.Location = new Point(151, 221);
             label5.Name = "label5";
             label5.Size = new Size(27, 15);
-            label5.TabIndex = 4;
+            label5.TabIndex = 12;
             label5.Text = "DNI";
             // 
             // label3
@@ -385,7 +385,7 @@
             label3.Location = new Point(166, 154);
             label3.Name = "label3";
             label3.Size = new Size(32, 15);
-            label3.TabIndex = 2;
+            label3.TabIndex = 7;
             label3.Text = "Sexo";
             // 
             // label16
@@ -394,7 +394,7 @@
             label16.Location = new Point(315, 40);
             label16.Name = "label16";
             label16.Size = new Size(98, 15);
-            label16.TabIndex = 32;
+            label16.TabIndex = 1;
             label16.Text = "Estado Empleado";
             // 
             // chkActivo
@@ -403,7 +403,7 @@
             chkActivo.Location = new Point(315, 58);
             chkActivo.Name = "chkActivo";
             chkActivo.Size = new Size(60, 19);
-            chkActivo.TabIndex = 31;
+            chkActivo.TabIndex = 4;
             chkActivo.Text = "Activo";
             chkActivo.UseVisualStyleBackColor = true;
             // 
@@ -412,7 +412,7 @@
             btnCrear.Location = new Point(266, 498);
             btnCrear.Name = "btnCrear";
             btnCrear.Size = new Size(125, 30);
-            btnCrear.TabIndex = 21;
+            btnCrear.TabIndex = 12;
             btnCrear.Text = "CREAR EMPLEADO";
             btnCrear.UseVisualStyleBackColor = true;
             btnCrear.Click += btnCrear_Click;
@@ -422,7 +422,7 @@
             btnVolver.Location = new Point(12, 498);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(80, 30);
-            btnVolver.TabIndex = 19;
+            btnVolver.TabIndex = 14;
             btnVolver.Text = "VOLVER";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
@@ -433,7 +433,7 @@
             label19.Location = new Point(28, 26);
             label19.Name = "label19";
             label19.Size = new Size(52, 15);
-            label19.TabIndex = 4;
+            label19.TabIndex = 0;
             label19.Text = "Usuarios";
             // 
             // lstUsuarios
@@ -442,7 +442,7 @@
             lstUsuarios.Location = new Point(31, 52);
             lstUsuarios.Name = "lstUsuarios";
             lstUsuarios.Size = new Size(159, 23);
-            lstUsuarios.TabIndex = 1;
+            lstUsuarios.TabIndex = 2;
             lstUsuarios.SelectedIndexChanged += lstUsuarios_SelectedIndexChanged_1;
             // 
             // btnNuevo
@@ -450,7 +450,7 @@
             btnNuevo.Location = new Point(180, 498);
             btnNuevo.Name = "btnNuevo";
             btnNuevo.Size = new Size(80, 30);
-            btnNuevo.TabIndex = 20;
+            btnNuevo.TabIndex = 11;
             btnNuevo.Text = "NUEVO";
             btnNuevo.UseVisualStyleBackColor = true;
             btnNuevo.Click += btnNuevo_Click;
@@ -460,7 +460,7 @@
             btnModificar.Location = new Point(397, 498);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(127, 30);
-            btnModificar.TabIndex = 18;
+            btnModificar.TabIndex = 13;
             btnModificar.Text = "GUARDAR CAMBIOS";
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
@@ -471,7 +471,7 @@
             btnActualizar.Location = new Point(201, 47);
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Size = new Size(57, 34);
-            btnActualizar.TabIndex = 33;
+            btnActualizar.TabIndex = 3;
             btnActualizar.UseVisualStyleBackColor = true;
             btnActualizar.Click += btnActualizar_Click;
             // 
@@ -484,7 +484,7 @@
             btnPermisos.Location = new Point(405, 163);
             btnPermisos.Name = "btnPermisos";
             btnPermisos.Size = new Size(124, 102);
-            btnPermisos.TabIndex = 34;
+            btnPermisos.TabIndex = 6;
             btnPermisos.Text = "Permisos del rol";
             btnPermisos.TextAlign = ContentAlignment.BottomCenter;
             btnPermisos.UseVisualStyleBackColor = false;
@@ -499,7 +499,7 @@
             tpgDatosUsuario.Name = "tpgDatosUsuario";
             tpgDatosUsuario.SelectedIndex = 0;
             tpgDatosUsuario.Size = new Size(372, 317);
-            tpgDatosUsuario.TabIndex = 35;
+            tpgDatosUsuario.TabIndex = 7;
             // 
             // tpgDatosPersonales
             // 
@@ -532,7 +532,7 @@
             txtApellido.Name = "txtApellido";
             txtApellido.PlaceholderText = "Apellido del empleado";
             txtApellido.Size = new Size(134, 23);
-            txtApellido.TabIndex = 7;
+            txtApellido.TabIndex = 3;
             // 
             // txtNombre
             // 
@@ -540,7 +540,7 @@
             txtNombre.Name = "txtNombre";
             txtNombre.PlaceholderText = "Nombre del empleado";
             txtNombre.Size = new Size(134, 23);
-            txtNombre.TabIndex = 6;
+            txtNombre.TabIndex = 2;
             // 
             // label2
             // 
@@ -548,7 +548,7 @@
             label2.Location = new Point(151, 27);
             label2.Name = "label2";
             label2.Size = new Size(51, 15);
-            label2.TabIndex = 5;
+            label2.TabIndex = 1;
             label2.Text = "Apellido";
             // 
             // label1
@@ -557,7 +557,7 @@
             label1.Location = new Point(12, 27);
             label1.Name = "label1";
             label1.Size = new Size(51, 15);
-            label1.TabIndex = 4;
+            label1.TabIndex = 0;
             label1.Text = "Nombre";
             // 
             // tpgDireccion
@@ -608,7 +608,7 @@
             label21.Location = new Point(405, 276);
             label21.Name = "label21";
             label21.Size = new Size(64, 15);
-            label21.TabIndex = 36;
+            label21.TabIndex = 8;
             label21.Text = "Rol:";
             // 
             // cmbRol
@@ -619,7 +619,7 @@
             cmbRol.Location = new Point(405, 294);
             cmbRol.Name = "cmbRol";
             cmbRol.Size = new Size(124, 23);
-            cmbRol.TabIndex = 37;
+            cmbRol.TabIndex = 9;
             // 
             // 
             // lblAyudaRol
@@ -629,7 +629,7 @@
             lblAyudaRol.Location = new Point(405, 322);
             lblAyudaRol.Name = "lblAyudaRol";
             lblAyudaRol.Size = new Size(124, 80);
-            lblAyudaRol.TabIndex = 39;
+            lblAyudaRol.TabIndex = 10;
             lblAyudaRol.Text = "Los permisos dependen del rol: cambiarlos afecta a todos los empleados con ese rol.";
             // chkHabilitarEdicion
             // 
@@ -637,7 +637,7 @@
             chkHabilitarEdicion.Location = new Point(31, 103);
             chkHabilitarEdicion.Name = "chkHabilitarEdicion";
             chkHabilitarEdicion.Size = new Size(113, 19);
-            chkHabilitarEdicion.TabIndex = 38;
+            chkHabilitarEdicion.TabIndex = 5;
             chkHabilitarEdicion.Text = "Habilitar Edición";
             chkHabilitarEdicion.UseVisualStyleBackColor = true;
             chkHabilitarEdicion.CheckedChanged += chkHabilitarEdicion_CheckedChanged;

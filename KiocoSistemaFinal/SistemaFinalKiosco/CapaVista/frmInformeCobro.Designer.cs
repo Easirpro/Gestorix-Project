@@ -65,7 +65,7 @@
             lblRestaPago.Location = new Point(227, 79);
             lblRestaPago.Name = "lblRestaPago";
             lblRestaPago.Size = new Size(79, 15);
-            lblRestaPago.TabIndex = 0;
+            lblRestaPago.TabIndex = 5;
             lblRestaPago.Text = "RESTA PAGAR";
             // 
             // pnlTotal
@@ -75,7 +75,7 @@
             pnlTotal.Location = new Point(169, 27);
             pnlTotal.Name = "pnlTotal";
             pnlTotal.Size = new Size(200, 38);
-            pnlTotal.TabIndex = 1;
+            pnlTotal.TabIndex = 2;
             // 
             // lblTotal
             // 
@@ -85,7 +85,7 @@
             lblTotal.Location = new Point(0, 0);
             lblTotal.Name = "lblTotal";
             lblTotal.Size = new Size(200, 38);
-            lblTotal.TabIndex = 3;
+            lblTotal.TabIndex = 0;
             lblTotal.Text = "$ 0,00";
             lblTotal.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -95,7 +95,7 @@
             lblTextoTotal.Location = new Point(227, 9);
             lblTextoTotal.Name = "lblTextoTotal";
             lblTextoTotal.Size = new Size(90, 15);
-            lblTextoTotal.TabIndex = 2;
+            lblTextoTotal.TabIndex = 1;
             lblTextoTotal.Text = "TOTAL A PAGAR";
             // 
             // btnEfectivo
@@ -103,7 +103,7 @@
             btnEfectivo.Location = new Point(23, 143);
             btnEfectivo.Name = "btnEfectivo";
             btnEfectivo.Size = new Size(93, 36);
-            btnEfectivo.TabIndex = 10;
+            btnEfectivo.TabIndex = 7;
             btnEfectivo.Text = "Efectivo";
             btnEfectivo.UseVisualStyleBackColor = true;
             btnEfectivo.Click += btnEfectivo_Click;
@@ -115,7 +115,7 @@
             lblTextoPagos.Location = new Point(24, 194);
             lblTextoPagos.Name = "lblTextoPagos";
             lblTextoPagos.Size = new Size(96, 12);
-            lblTextoPagos.TabIndex = 11;
+            lblTextoPagos.TabIndex = 10;
             lblTextoPagos.Text = "PAGOS AGREGADOS";
             // 
             // dtgPagos
@@ -132,7 +132,7 @@
             dtgPagos.RowHeadersVisible = false;
             dtgPagos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dtgPagos.Size = new Size(318, 117);
-            dtgPagos.TabIndex = 12;
+            dtgPagos.TabIndex = 11;
             // 
             // ClnIdMetodoPago
             // 
@@ -158,7 +158,7 @@
             lblTextoPagado.Location = new Point(23, 345);
             lblTextoPagado.Name = "lblTextoPagado";
             lblTextoPagado.Size = new Size(54, 15);
-            lblTextoPagado.TabIndex = 15;
+            lblTextoPagado.TabIndex = 12;
             lblTextoPagado.Text = "PAGADO";
             // 
             // lblPagado
@@ -167,7 +167,7 @@
             lblPagado.Location = new Point(304, 345);
             lblPagado.Name = "lblPagado";
             lblPagado.Size = new Size(37, 15);
-            lblPagado.TabIndex = 16;
+            lblPagado.TabIndex = 13;
             lblPagado.Text = "$ 0,00";
             // 
             // lblTextoRestante
@@ -176,7 +176,7 @@
             lblTextoRestante.Location = new Point(23, 360);
             lblTextoRestante.Name = "lblTextoRestante";
             lblTextoRestante.Size = new Size(60, 15);
-            lblTextoRestante.TabIndex = 17;
+            lblTextoRestante.TabIndex = 14;
             lblTextoRestante.Text = "RESTANTE";
             // 
             // lblRestante
@@ -185,7 +185,7 @@
             lblRestante.Location = new Point(304, 360);
             lblRestante.Name = "lblRestante";
             lblRestante.Size = new Size(37, 15);
-            lblRestante.TabIndex = 18;
+            lblRestante.TabIndex = 15;
             lblRestante.Text = "$ 0,00";
             // 
             // btnCancelar
@@ -203,7 +203,7 @@
             btnConfirmar.Location = new Point(202, 392);
             btnConfirmar.Name = "btnConfirmar";
             btnConfirmar.Size = new Size(139, 21);
-            btnConfirmar.TabIndex = 20;
+            btnConfirmar.TabIndex = 18;
             btnConfirmar.Text = "CONFIRMAR VENTA";
             btnConfirmar.UseVisualStyleBackColor = true;
             btnConfirmar.Visible = false;
@@ -215,7 +215,7 @@
             txtMontoRecibido.Name = "txtMontoRecibido";
             txtMontoRecibido.PlaceholderText = "Monto que entrega el cliente";
             txtMontoRecibido.Size = new Size(118, 23);
-            txtMontoRecibido.TabIndex = 22;
+            txtMontoRecibido.TabIndex = 4;
             txtMontoRecibido.TextChanged += txtMontoRecibido_TextChanged;
             // 
             // lblTextoVuelto
@@ -224,7 +224,7 @@
             lblTextoVuelto.Location = new Point(24, 375);
             lblTextoVuelto.Name = "lblTextoVuelto";
             lblTextoVuelto.Size = new Size(47, 15);
-            lblTextoVuelto.TabIndex = 23;
+            lblTextoVuelto.TabIndex = 16;
             lblTextoVuelto.Text = "VUELTO";
             // 
             // lblVuelto
@@ -233,7 +233,7 @@
             lblVuelto.Location = new Point(304, 375);
             lblVuelto.Name = "lblVuelto";
             lblVuelto.Size = new Size(37, 15);
-            lblVuelto.TabIndex = 24;
+            lblVuelto.TabIndex = 17;
             lblVuelto.Text = "$ 0,00";
             // 
             // label1
@@ -243,7 +243,7 @@
             label1.Location = new Point(22, 64);
             label1.Name = "label1";
             label1.Size = new Size(89, 12);
-            label1.TabIndex = 25;
+            label1.TabIndex = 3;
             label1.Text = "MONTO RECIBIDO";
             // 
             // btnTransferencia
@@ -251,7 +251,7 @@
             btnTransferencia.Location = new Point(132, 143);
             btnTransferencia.Name = "btnTransferencia";
             btnTransferencia.Size = new Size(92, 35);
-            btnTransferencia.TabIndex = 26;
+            btnTransferencia.TabIndex = 8;
             btnTransferencia.Text = "Transferencia";
             btnTransferencia.UseVisualStyleBackColor = true;
             btnTransferencia.Click += btnTransferencia_Click;
@@ -261,7 +261,7 @@
             btnDebito.Location = new Point(249, 144);
             btnDebito.Name = "btnDebito";
             btnDebito.Size = new Size(92, 35);
-            btnDebito.TabIndex = 27;
+            btnDebito.TabIndex = 9;
             btnDebito.Text = "Debito";
             btnDebito.UseVisualStyleBackColor = true;
             btnDebito.Click += btnDebito_Click;
@@ -274,7 +274,7 @@
             pnlResta.Location = new Point(170, 94);
             pnlResta.Name = "pnlResta";
             pnlResta.Size = new Size(200, 38);
-            pnlResta.TabIndex = 28;
+            pnlResta.TabIndex = 6;
             // 
             // lblRestaP
             // 
@@ -294,7 +294,7 @@
             lblCobro.Location = new Point(12, 9);
             lblCobro.Name = "lblCobro";
             lblCobro.Size = new Size(76, 25);
-            lblCobro.TabIndex = 29;
+            lblCobro.TabIndex = 0;
             lblCobro.Text = "COBRO";
             // 
             // frmInformeCobro

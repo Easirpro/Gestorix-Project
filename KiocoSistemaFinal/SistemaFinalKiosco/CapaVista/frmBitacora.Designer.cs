@@ -99,7 +99,7 @@
             pnlEncabezado.Name = "pnlEncabezado";
             pnlEncabezado.Padding = new Padding(12, 10, 12, 0);
             pnlEncabezado.Size = new Size(1000, 58);
-            pnlEncabezado.TabIndex = 4;
+            pnlEncabezado.TabIndex = 0;
             //
             // lblTitulo
             //
@@ -134,7 +134,7 @@
             pnlCategorias.Name = "pnlCategorias";
             pnlCategorias.Padding = new Padding(12, 4, 12, 4);
             pnlCategorias.Size = new Size(1000, 42);
-            pnlCategorias.TabIndex = 3;
+            pnlCategorias.TabIndex = 1;
             //
             // btnUsuario
             //
@@ -306,7 +306,7 @@
             pnlContenido.Name = "pnlContenido";
             pnlContenido.Padding = new Padding(12, 4, 12, 6);
             pnlContenido.Size = new Size(1000, 366);
-            pnlContenido.TabIndex = 0;
+            pnlContenido.TabIndex = 3;
             //
             // dgvBitacora
             //
@@ -325,7 +325,7 @@
             dgvBitacora.RowHeadersVisible = false;
             dgvBitacora.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvBitacora.Size = new Size(976, 334);
-            dgvBitacora.TabIndex = 0;
+            dgvBitacora.TabIndex = 1;
             //
             // lblCategoriaActual
             //
@@ -334,7 +334,7 @@
             lblCategoriaActual.Location = new Point(12, 4);
             lblCategoriaActual.Name = "lblCategoriaActual";
             lblCategoriaActual.Size = new Size(976, 22);
-            lblCategoriaActual.TabIndex = 1;
+            lblCategoriaActual.TabIndex = 0;
             lblCategoriaActual.Text = "Registros de la bitácora";
             lblCategoriaActual.TextAlign = ContentAlignment.MiddleLeft;
             //
@@ -352,7 +352,7 @@
             pnlDetalles.Name = "pnlDetalles";
             pnlDetalles.Padding = new Padding(12, 6, 12, 6);
             pnlDetalles.Size = new Size(1000, 110);
-            pnlDetalles.TabIndex = 1;
+            pnlDetalles.TabIndex = 4;
             //
             // lblDetalles
             //
@@ -379,7 +379,7 @@
             lblDetalleUsuario.Location = new Point(14, 56);
             lblDetalleUsuario.Name = "lblDetalleUsuario";
             lblDetalleUsuario.Size = new Size(60, 15);
-            lblDetalleUsuario.TabIndex = 2;
+            lblDetalleUsuario.TabIndex = 3;
             lblDetalleUsuario.Text = "Usuario: -";
             //
             // lblDetalleAccion
@@ -388,7 +388,7 @@
             lblDetalleAccion.Location = new Point(330, 32);
             lblDetalleAccion.Name = "lblDetalleAccion";
             lblDetalleAccion.Size = new Size(54, 15);
-            lblDetalleAccion.TabIndex = 3;
+            lblDetalleAccion.TabIndex = 2;
             lblDetalleAccion.Text = "Acción: -";
             //
             // lblDetalleDescripcion
