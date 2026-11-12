@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 $aqui = $PSScriptRoot
 $publicado = Join-Path $aqui 'publicado'
-$bak = Join-Path $aqui 'base\Gestorix_referencia_0.0.1.1.bak'
+$bak = Join-Path $aqui 'base\Gestorix_referencia_0.0.1.2.bak'
 
 $iscc = @(
     "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",

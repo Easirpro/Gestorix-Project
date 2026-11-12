@@ -16,20 +16,20 @@ devoluciones a proveedores e idioma español/inglés.
 2. Restaurar la base de referencia: descomprimir `KiocoSistemaFinal/BaseDatos/Gestorix_referencia_0.0.1.0.zip`
    (trae el `.bak` y su firma `.hash`) y restaurarla en SSMS con el nombre `Gestorix`
    (Bases de datos > Restaurar base de datos > Dispositivo). El backup es de SQL Server 2025: no se puede
-   restaurar en versiones anteriores. Este zip es anterior a la base 0.0.1.1 que usa el instalador, que no está en el repositorio: si faltan cambios, aplicar los `Migracion_*.sql` que correspondan.
+   restaurar en versiones anteriores. Este zip es anterior a la base 0.0.1.2 que usa el instalador, que no está en el repositorio: si faltan cambios, aplicar los `Migracion_*.sql` que correspondan.
    `KioscoFinal.sql` es el script viejo y no alcanza para crear la base.
 3. Abrir `SistemaFinalKiosco.sln` en Visual Studio 2022 o más nuevo y compilar.
 
 ## Instalación en una PC
 1. Instalar **SQL Server 2025 Express** (o más nuevo) con la instancia `SQLEXPRESS`, con el usuario de Windows
    que va a usar Gestorix (queda como administrador del servidor). El instalador de Gestorix no sigue si no lo encuentra.
-2. Ejecutar `Instalar_Gestorix_0.0.1.3.exe`: instala el programa en `Archivos de programa\Gestorix`, crea los accesos
+2. Ejecutar `Gestorix.exe`: instala el programa en `Archivos de programa\Gestorix`, crea los accesos
    directos, deja la base de referencia en `C:\Gestorix\BaseInicial` y le da permiso a SQL Server sobre `C:\Gestorix`.
 3. Abrir Gestorix: la primera vez, si no existe la base `Gestorix`, la crea sola desde la base de referencia.
 
 En una PC que ya tiene la base, el instalador reemplaza el programa pero no actualiza la base: antes hay que aplicarle los `Migracion_*.sql` que le falten.
 
-Para generar el instalador: dejar `Gestorix_referencia_0.0.1.1.bak` en `KiocoSistemaFinal\Instalador\base` (no está en el repositorio), instalar [Inno Setup 6](https://jrsoftware.org/isdl.php) y ejecutar en PowerShell
+Para generar el instalador: dejar `Gestorix_referencia_0.0.1.2.bak` en `KiocoSistemaFinal\Instalador\base` (no está en el repositorio), instalar [Inno Setup 6](https://jrsoftware.org/isdl.php) y ejecutar en PowerShell
 `KiocoSistemaFinal\Instalador\GenerarInstalador.ps1`. Publica el programa (incluye .NET, la PC no necesita tenerlo)
 y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
 
@@ -169,3 +169,5 @@ y deja el instalador en `KiocoSistemaFinal\Instalador\salida`.
 
 
 0.0.1.24- 11/11 Orden del tabulador corregido en los formularios; el proveedor elegido al cargar un artículo se guarda aunque no se toque Agregar -Marce-
+
+0.0.1.25- 11/11 Instalador Gestorix.exe (versión 0.0.1.4) con la base de referencia 0.0.1.2, que incluye las ventas y compras de prueba; el documento de alcances y límites queda fuera del repositorio -Marce-

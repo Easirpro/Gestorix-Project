@@ -8,7 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Resources\Logoicon.ico</ApplicationIcon>
     <Product>Gestorix</Product>
-    <Version>0.0.1.3</Version>
+    <Version>0.0.1.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
