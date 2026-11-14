@@ -38,6 +38,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ConfigurarCampos();
 
             CargarCombos();
         }
@@ -45,6 +46,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ConfigurarCampos();
 
             idProveedorModificar = idProveedor;
             idSucursalElegida = idSucursal;
@@ -96,6 +98,21 @@ namespace CapaVista
 
             lblTitulo.Text = ClsIdioma.T("Nuevo proveedor");
             Text = lblTitulo.Text;
+        }
+        // mismos limites y filtros que la carga de empleados; telefono 11 por los 0800
+        private void ConfigurarCampos()
+        {
+            txtCalle.MaxLength = 50;
+            txtNumero.MaxLength = 5;
+            txtPiso.MaxLength = 3;
+            txtDepartamento.MaxLength = 4;
+            txtCelular.MaxLength = 11;
+
+            ClsCampoNumerico.Enteros(txtCelular, txtNumero);
+            ClsCampoNumerico.Comprobantes(txtCuit);
+            ClsCampoNumerico.Direcciones(txtCalle);
+            ClsCampoNumerico.Alfanumericos(txtPiso, txtDepartamento);
+            ClsCampoNumerico.Correos(txtEmail);
         }
         private void CargarCombos()
         {

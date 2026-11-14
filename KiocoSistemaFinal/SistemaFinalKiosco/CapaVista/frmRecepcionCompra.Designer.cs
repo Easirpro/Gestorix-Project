@@ -168,6 +168,7 @@
             txtBuscar.Dock = DockStyle.Fill;
             txtBuscar.Location = new Point(82, 5);
             txtBuscar.Margin = new Padding(3, 5, 8, 5);
+            txtBuscar.MaxLength = 120;
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Nombre del proveedor";
             txtBuscar.Size = new Size(560, 23);

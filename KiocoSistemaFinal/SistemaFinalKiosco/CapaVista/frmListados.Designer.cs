@@ -200,6 +200,7 @@ namespace CapaVista
             // txtArticulo
             // 
             txtArticulo.Location = new Point(70, 41);
+            txtArticulo.MaxLength = 120;
             txtArticulo.Name = "txtArticulo";
             txtArticulo.PlaceholderText = "SKU, código de barras o nombre (Enter o doble clic para agregar)";
             txtArticulo.Size = new Size(392, 23);

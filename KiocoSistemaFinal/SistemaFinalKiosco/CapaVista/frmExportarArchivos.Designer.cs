@@ -106,6 +106,7 @@
             // 
             // cmbProveedor
             // 
+            cmbProveedor.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbProveedor.FormattingEnabled = true;
             cmbProveedor.Location = new Point(127, 80);
             cmbProveedor.Name = "cmbProveedor";
@@ -115,6 +116,7 @@
             // 
             // cmbRubro
             // 
+            cmbRubro.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbRubro.FormattingEnabled = true;
             cmbRubro.Location = new Point(127, 110);
             cmbRubro.Name = "cmbRubro";
@@ -123,6 +125,7 @@
             // 
             // cmbMarca
             // 
+            cmbMarca.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMarca.FormattingEnabled = true;
             cmbMarca.Location = new Point(127, 139);
             cmbMarca.Name = "cmbMarca";
@@ -131,6 +134,7 @@
             // 
             // cmbSucursal
             // 
+            cmbSucursal.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbSucursal.FormattingEnabled = true;
             cmbSucursal.Location = new Point(127, 168);
             cmbSucursal.Name = "cmbSucursal";
@@ -139,6 +143,7 @@
             // 
             // cmbEstado
             // 
+            cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEstado.FormattingEnabled = true;
             cmbEstado.Location = new Point(127, 197);
             cmbEstado.Name = "cmbEstado";

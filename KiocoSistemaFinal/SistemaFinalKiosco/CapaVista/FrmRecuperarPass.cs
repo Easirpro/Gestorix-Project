@@ -20,6 +20,7 @@ namespace CapaVista
         {
             InitializeComponent();
             ClsIdioma.Registrar(this);
+            ClsCampoNumerico.Correos(txtCorreo);
 
             this.idUsuario = idUsuario;
         }

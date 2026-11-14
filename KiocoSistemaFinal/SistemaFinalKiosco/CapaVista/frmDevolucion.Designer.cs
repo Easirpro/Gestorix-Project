@@ -179,6 +179,7 @@
             //
             txtBuscar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtBuscar.Location = new Point(623, 113);
+            txtBuscar.MaxLength = 100;
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "N.º de venta, producto o cajero";
             txtBuscar.Size = new Size(254, 23);

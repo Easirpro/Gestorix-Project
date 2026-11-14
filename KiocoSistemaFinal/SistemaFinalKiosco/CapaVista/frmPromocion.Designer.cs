@@ -87,6 +87,7 @@
             // txtNombrePromocion
             // 
             txtNombrePromocion.Location = new Point(9, 36);
+            txtNombrePromocion.MaxLength = 100;
             txtNombrePromocion.Name = "txtNombrePromocion";
             txtNombrePromocion.PlaceholderText = "Ej.: 2x1 en gaseosas";
             txtNombrePromocion.Size = new Size(218, 23);
@@ -240,6 +241,7 @@
             // 
             // cmbDescuentoVolumen
             // 
+            cmbDescuentoVolumen.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDescuentoVolumen.FormattingEnabled = true;
             cmbDescuentoVolumen.Location = new Point(11, 101);
             cmbDescuentoVolumen.Name = "cmbDescuentoVolumen";
@@ -511,6 +513,7 @@
             // 
             txtBuscarPromo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtBuscarPromo.Location = new Point(113, 26);
+            txtBuscarPromo.MaxLength = 100;
             txtBuscarPromo.Name = "txtBuscarPromo";
             txtBuscarPromo.PlaceholderText = "Nombre o código de la promoción";
             txtBuscarPromo.Size = new Size(244, 23);

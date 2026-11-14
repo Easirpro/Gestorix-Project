@@ -71,6 +71,7 @@
             // txtBuscarCodigoNombre
             // 
             txtBuscarCodigoNombre.Location = new Point(11, 36);
+            txtBuscarCodigoNombre.MaxLength = 120;
             txtBuscarCodigoNombre.Name = "txtBuscarCodigoNombre";
             txtBuscarCodigoNombre.PlaceholderText = "Código o nombre del artículo";
             txtBuscarCodigoNombre.Size = new Size(270, 23);

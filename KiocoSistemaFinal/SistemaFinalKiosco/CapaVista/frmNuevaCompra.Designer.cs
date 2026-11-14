@@ -181,6 +181,7 @@ namespace CapaVista
             // txtProveedor
             // 
             txtProveedor.Location = new Point(12, 20);
+            txtProveedor.MaxLength = 100;
             txtProveedor.Name = "txtProveedor";
             txtProveedor.PlaceholderText = "Escribí el nombre o CUIT y elegilo de la lista";
             txtProveedor.Size = new Size(214, 23);
@@ -356,6 +357,7 @@ namespace CapaVista
             // txtCodigobarra
             // 
             txtCodigobarra.Location = new Point(14, 38);
+            txtCodigobarra.MaxLength = 120;
             txtCodigobarra.Name = "txtCodigobarra";
             txtCodigobarra.PlaceholderText = "Código de barras, SKU o nombre del producto";
             txtCodigobarra.Size = new Size(270, 23);
@@ -502,6 +504,7 @@ namespace CapaVista
             txtObservaciones.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             txtObservaciones.Location = new Point(12, 548);
             txtObservaciones.Multiline = true;
+            txtObservaciones.MaxLength = 500;
             txtObservaciones.Name = "txtObservaciones";
             txtObservaciones.PlaceholderText = "Notas de la compra (opcional)";
             txtObservaciones.ScrollBars = ScrollBars.Vertical;

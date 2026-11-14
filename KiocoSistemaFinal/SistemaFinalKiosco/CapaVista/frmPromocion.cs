@@ -206,10 +206,17 @@ namespace CapaVista
                 DataView vista = new DataView(tiposPromocion);
                 vista.RowFilter = "CantidadLleva IS NOT NULL AND CantidadPaga IS NOT NULL";
 
-                cmbDescuentoVolumen.DataSource = vista;
+                // solo id y nombre, con la fila "-Seleccione mecánica-" (id 0) arriba
+                DataTable opciones = vista.ToTable(false, "IdTipoPromocion", "Nombre");
+                DataRow filaSeleccione = opciones.NewRow();
+                filaSeleccione["IdTipoPromocion"] = 0;
+                filaSeleccione["Nombre"] = ClsIdioma.T("-Seleccione mecánica-");
+                opciones.Rows.InsertAt(filaSeleccione, 0);
+
+                cmbDescuentoVolumen.DataSource = opciones;
                 cmbDescuentoVolumen.DisplayMember = "Nombre";
                 cmbDescuentoVolumen.ValueMember = "IdTipoPromocion";
-                cmbDescuentoVolumen.SelectedIndex = -1;
+                cmbDescuentoVolumen.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -291,7 +298,7 @@ namespace CapaVista
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 cmbMecanicaPromocional.SelectedIndex = -1;
-                cmbDescuentoVolumen.SelectedIndex = -1;
+                cmbDescuentoVolumen.SelectedIndex = cmbDescuentoVolumen.Items.Count > 0 ? 0 : -1;
 
                 cmbDescuentoVolumen.Enabled = false;
                 txtDescuentoPorcentual.Enabled = false;
@@ -306,7 +313,7 @@ namespace CapaVista
             txtBajaPrecio.Enabled = esPrecioEspecial;
 
             if (!esVolumen)
-                cmbDescuentoVolumen.SelectedIndex = -1;
+                cmbDescuentoVolumen.SelectedIndex = cmbDescuentoVolumen.Items.Count > 0 ? 0 : -1;
 
             if (!esPorcentaje)
                 txtDescuentoPorcentual.Clear();
@@ -342,7 +349,7 @@ namespace CapaVista
 
             if (idCategoria == 1)
             {
-                if (cmbDescuentoVolumen.SelectedValue == null)
+                if (cmbDescuentoVolumen.SelectedValue == null || Convert.ToInt32(cmbDescuentoVolumen.SelectedValue) <= 0)
                     throw new Exception(ClsIdioma.T("Debe seleccionar una promoción por volumen."));
 
                 return Convert.ToInt32(cmbDescuentoVolumen.SelectedValue);

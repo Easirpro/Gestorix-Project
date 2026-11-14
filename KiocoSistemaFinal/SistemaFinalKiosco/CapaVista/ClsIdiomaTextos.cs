@@ -1661,6 +1661,7 @@ namespace CapaVista
                 { "-Seleccione Provincia -", "-Select province-" },
                 { "-Seleccione provincia-", "-Select province-" },
                 { "-Seleccione género-", "-Select gender-" },
+                { "-Seleccione mecánica-", "-Select mechanic-" },
                 { "-Seleccione rol-", "-Select role-" },
                 { "-Seleccione usuario-", "-Select user-" },
                 { "-Seleccione Rubro-", "-Select category-" },

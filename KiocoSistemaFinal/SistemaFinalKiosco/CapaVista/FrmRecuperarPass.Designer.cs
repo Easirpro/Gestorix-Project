@@ -51,6 +51,7 @@
             // txtCorreo
             // 
             txtCorreo.Location = new Point(22, 48);
+            txtCorreo.MaxLength = 50;
             txtCorreo.Name = "txtCorreo";
             txtCorreo.PlaceholderText = "Tu nueva contraseña";
             txtCorreo.Size = new Size(196, 23);

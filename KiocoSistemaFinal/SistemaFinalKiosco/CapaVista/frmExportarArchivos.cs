@@ -32,42 +32,47 @@ namespace CapaVista
         private void frmExportarArchivos_Load_1(object sender, EventArgs e)
         {
             CargarProveedores();
+            CargarSucursales(0);
             CargarRubros();
             CargarMarcas();
             CargarEstados();
         }
 
+        // fila "Todos" con id 0 arriba de la lista (el filtro es opcional)
+        private static DataTable ConFilaTodos(DataTable tabla, string columnaId, string columnaNombre, string texto)
+        {
+            DataRow fila = tabla.NewRow();
+            fila[columnaId] = 0;
+            fila[columnaNombre] = ClsIdioma.T(texto);
+            tabla.Rows.InsertAt(fila, 0);
+
+            return tabla;
+        }
         private void CargarProveedores()
         {
             DataTable tablaProveedores = logicaProveedor.ObtenerProveedores();
 
-            cmbProveedor.DataSource = tablaProveedores;
+            cmbProveedor.DataSource = ConFilaTodos(tablaProveedores, "IdProveedor", "RazonSocial", "Todos");
             cmbProveedor.DisplayMember = "RazonSocial";
             cmbProveedor.ValueMember = "IdProveedor";
 
-            cmbProveedor.SelectedIndex = -1;
+            cmbProveedor.SelectedIndex = 0;
         }
         private void CargarRubros()
         {
             DataTable tablaRubros = logicaProducto.CargarCategoriasActivas();
 
-            cmbRubro.DataSource = tablaRubros;
+            cmbRubro.DataSource = ConFilaTodos(tablaRubros, "IdCategoria", "Nombre", "Todos");
             cmbRubro.DisplayMember = "Nombre";
             cmbRubro.ValueMember = "IdCategoria";
 
-            cmbRubro.SelectedIndex = -1;
+            cmbRubro.SelectedIndex = 0;
         }
         private void CargarMarcas()
         {
             DataTable tablaMarcas = logicaProducto.CargarMarcasActivas();
 
-            DataRow filaTodos = tablaMarcas.NewRow();
-            filaTodos["IdMarca"] = 0;
-            filaTodos["Nombre"] = ClsIdioma.T("Todos");
-
-            tablaMarcas.Rows.InsertAt(filaTodos, 0);
-
-            cmbMarca.DataSource = tablaMarcas;
+            cmbMarca.DataSource = ConFilaTodos(tablaMarcas, "IdMarca", "Nombre", "Todos");
             cmbMarca.DisplayMember = "Nombre";
             cmbMarca.ValueMember = "IdMarca";
 
@@ -75,19 +80,25 @@ namespace CapaVista
         }
         private void CargarSucursales(int idProveedor)
         {
-            if (idProveedor <= 0)
+            DataTable tablaSucursales;
+
+            if (idProveedor > 0)
             {
-                cmbSucursal.DataSource = null;
-                return;
+                tablaSucursales = logicaProveedor.ObtenerSucursalesPorProveedor(idProveedor);
+            }
+            else
+            {
+                tablaSucursales = new DataTable();
+                tablaSucursales.Columns.Add("IdSucursal", typeof(int));
+                tablaSucursales.Columns.Add("Sucursal", typeof(string));
             }
 
-            DataTable tablaSucursales = logicaProveedor.ObtenerSucursalesPorProveedor(idProveedor);
-
-            cmbSucursal.DataSource = tablaSucursales;
+            cmbSucursal.DataSource = null;
+            cmbSucursal.DataSource = ConFilaTodos(tablaSucursales, "IdSucursal", "Sucursal", "Todas");
             cmbSucursal.DisplayMember = "Sucursal";
             cmbSucursal.ValueMember = "IdSucursal";
 
-            cmbSucursal.SelectedIndex = -1;
+            cmbSucursal.SelectedIndex = 0;
         }
         private void CargarEstados()
         {
@@ -220,16 +231,11 @@ namespace CapaVista
         }
         private void cmbProveedor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbProveedor.SelectedValue == null)
-            {
-                cmbSucursal.DataSource = null;
-                return;
-            }
+            int idProveedor = 0;
 
-            if (!int.TryParse(cmbProveedor.SelectedValue.ToString(), out int idProveedor))
+            if (cmbProveedor.SelectedValue != null)
             {
-                cmbSucursal.DataSource = null;
-                return;
+                int.TryParse(cmbProveedor.SelectedValue.ToString(), out idProveedor);
             }
 
             CargarSucursales(idProveedor);

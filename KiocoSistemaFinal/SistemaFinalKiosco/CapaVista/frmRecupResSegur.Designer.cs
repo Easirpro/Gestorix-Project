@@ -49,6 +49,7 @@
             // txtRespuesta
             //
             txtRespuesta.Location = new Point(28, 122);
+            txtRespuesta.MaxLength = 100;
             txtRespuesta.Name = "txtRespuesta";
             txtRespuesta.PlaceholderText = "Tu respuesta a la pregunta";
             txtRespuesta.Size = new Size(257, 23);

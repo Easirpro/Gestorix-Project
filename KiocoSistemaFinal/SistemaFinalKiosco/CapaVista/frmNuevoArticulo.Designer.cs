@@ -451,6 +451,7 @@ namespace CapaVista
             // txtCodigoPorLote
             // 
             txtCodigoPorLote.Location = new Point(18, 82);
+            txtCodigoPorLote.MaxLength = 100;
             txtCodigoPorLote.Name = "txtCodigoPorLote";
             txtCodigoPorLote.PlaceholderText = "Código del lote (opcional)";
             txtCodigoPorLote.Size = new Size(204, 23);
@@ -594,6 +595,7 @@ namespace CapaVista
             // 
             txtNombreProducto.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtNombreProducto.Location = new Point(18, 51);
+            txtNombreProducto.MaxLength = 120;
             txtNombreProducto.Name = "txtNombreProducto";
             txtNombreProducto.PlaceholderText = "Ej.: Coca Cola 500 ml";
             txtNombreProducto.Size = new Size(226, 23);
@@ -714,6 +716,7 @@ namespace CapaVista
             // txtCodigo
             // 
             txtCodigo.Location = new Point(20, 45);
+            txtCodigo.MaxLength = 50;
             txtCodigo.Name = "txtCodigo";
             txtCodigo.PlaceholderText = "Código de barras o código interno";
             txtCodigo.Size = new Size(204, 23);
@@ -750,6 +753,7 @@ namespace CapaVista
             // 
             txtDescripcion.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtDescripcion.Location = new Point(20, 92);
+            txtDescripcion.MaxLength = 255;
             txtDescripcion.Name = "txtDescripcion";
             txtDescripcion.PlaceholderText = "Descripción que se ve al vender";
             txtDescripcion.Size = new Size(800, 23);

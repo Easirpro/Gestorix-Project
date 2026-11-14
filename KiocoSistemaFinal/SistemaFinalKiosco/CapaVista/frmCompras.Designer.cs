@@ -167,6 +167,7 @@
             //
             txtBuscarCompra.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtBuscarCompra.Location = new Point(513, 113);
+            txtBuscarCompra.MaxLength = 100;
             txtBuscarCompra.Name = "txtBuscarCompra";
             txtBuscarCompra.PlaceholderText = "Escriba el nombre del proveedor";
             txtBuscarCompra.Size = new Size(364, 23);

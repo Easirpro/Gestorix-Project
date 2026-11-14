@@ -188,6 +188,7 @@
             //
             txtBuscar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtBuscar.Location = new Point(584, 113);
+            txtBuscar.MaxLength = 100;
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "N.º de venta, cajero o medio de pago";
             txtBuscar.Size = new Size(293, 23);

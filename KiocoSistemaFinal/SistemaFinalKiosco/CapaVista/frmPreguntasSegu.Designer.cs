@@ -69,6 +69,7 @@
             // txtNombreMascota
             // 
             txtNombreMascota.Location = new Point(35, 142);
+            txtNombreMascota.MaxLength = 100;
             txtNombreMascota.Name = "txtNombreMascota";
             txtNombreMascota.PlaceholderText = "Tu respuesta";
             txtNombreMascota.Size = new Size(177, 23);
@@ -87,6 +88,7 @@
             // txtLibro
             // 
             txtLibro.Location = new Point(35, 200);
+            txtLibro.MaxLength = 100;
             txtLibro.Name = "txtLibro";
             txtLibro.PlaceholderText = "Tu respuesta";
             txtLibro.Size = new Size(177, 23);
@@ -95,6 +97,7 @@
             // txtComida
             // 
             txtComida.Location = new Point(35, 263);
+            txtComida.MaxLength = 100;
             txtComida.Name = "txtComida";
             txtComida.PlaceholderText = "Tu respuesta";
             txtComida.Size = new Size(177, 23);

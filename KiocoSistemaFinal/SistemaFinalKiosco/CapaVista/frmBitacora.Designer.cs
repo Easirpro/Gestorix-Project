@@ -227,6 +227,7 @@
             // txtBuscar
             //
             txtBuscar.Location = new Point(63, 11);
+            txtBuscar.MaxLength = 100;
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Usuario, acción o descripción";
             txtBuscar.Size = new Size(230, 23);

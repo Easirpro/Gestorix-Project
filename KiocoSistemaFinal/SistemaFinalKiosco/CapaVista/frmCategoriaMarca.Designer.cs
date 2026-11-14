@@ -116,6 +116,7 @@ namespace CapaVista
             // txtNombre
             //
             txtNombre.Location = new Point(63, 11);
+            txtNombre.MaxLength = 80;
             txtNombre.Name = "txtNombre";
             txtNombre.PlaceholderText = "Nombre de la categoría o marca";
             txtNombre.Size = new Size(300, 23);

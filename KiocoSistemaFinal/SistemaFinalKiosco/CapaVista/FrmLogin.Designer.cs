@@ -58,6 +58,7 @@
             // txtUser
             // 
             txtUser.Location = new Point(101, 56);
+            txtUser.MaxLength = 20;
             txtUser.Name = "txtUser";
             txtUser.PlaceholderText = "Tu usuario";
             txtUser.Size = new Size(171, 23);

@@ -340,6 +340,7 @@
             // txtCodigoBarra
             // 
             txtCodigoBarra.Location = new Point(23, 32);
+            txtCodigoBarra.MaxLength = 120;
             txtCodigoBarra.Name = "txtCodigoBarra";
             txtCodigoBarra.PlaceholderText = "Código de barras, SKU o nombre del producto";
             txtCodigoBarra.Size = new Size(327, 23);

@@ -108,6 +108,7 @@
             // 
             // cmbSucursal
             // 
+            cmbSucursal.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbSucursal.FormattingEnabled = true;
             cmbSucursal.Location = new Point(738, 30);
             cmbSucursal.Name = "cmbSucursal";
@@ -141,6 +142,7 @@
             // 
             txtPorcentaje.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtPorcentaje.Location = new Point(745, 13);
+            txtPorcentaje.MaxLength = 6;
             txtPorcentaje.Name = "txtPorcentaje";
             txtPorcentaje.PlaceholderText = "Ej.: 15";
             txtPorcentaje.Size = new Size(70, 23);
@@ -298,6 +300,7 @@
             // 
             txtCodigo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtCodigo.Location = new Point(179, 13);
+            txtCodigo.MaxLength = 120;
             txtCodigo.Name = "txtCodigo";
             txtCodigo.PlaceholderText = "Código, SKU o nombre del producto";
             txtCodigo.Size = new Size(470, 23);

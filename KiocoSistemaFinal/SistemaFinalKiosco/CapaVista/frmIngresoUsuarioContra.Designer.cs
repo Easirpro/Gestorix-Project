@@ -46,6 +46,7 @@
             // txtIngresoUsuario
             // 
             txtIngresoUsuario.Location = new Point(33, 77);
+            txtIngresoUsuario.MaxLength = 20;
             txtIngresoUsuario.Name = "txtIngresoUsuario";
             txtIngresoUsuario.PlaceholderText = "Tu nombre de usuario";
             txtIngresoUsuario.Size = new Size(173, 23);

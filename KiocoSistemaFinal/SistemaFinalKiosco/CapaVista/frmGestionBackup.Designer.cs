@@ -59,6 +59,7 @@
             // txtRutabk
             // 
             resources.ApplyResources(txtRutabk, "txtRutabk");
+            txtRutabk.MaxLength = 260;
             txtRutabk.Name = "txtRutabk";
             // 
             // btnGenerarBackup

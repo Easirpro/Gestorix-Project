@@ -151,6 +151,7 @@
             //
             txtBuscar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtBuscar.Location = new Point(82, 113);
+            txtBuscar.MaxLength = 100;
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Escriba el nombre o CUIT del proveedor";
             txtBuscar.Size = new Size(590, 23);
