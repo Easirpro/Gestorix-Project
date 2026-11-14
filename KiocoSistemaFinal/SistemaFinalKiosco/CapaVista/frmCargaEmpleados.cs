@@ -35,9 +35,22 @@ namespace CapaVista
             txtDepartamento.KeyPress += txt_KeyPress;
             txtPostal.KeyPress += txt_KeyPress;
 
-            txtAltura.MaxLength = 6;
+            // limites: correo igual a la columna de la base (50), el resto bajo el maximo de la base
+            txtNombre.MaxLength = 50;
+            txtApellido.MaxLength = 50;
+            txtCalle.MaxLength = 50;
+            txtAltura.MaxLength = 5;
+            txtPiso.MaxLength = 3;
+            txtDepartamento.MaxLength = 4;
+            txtCorreo.MaxLength = 50;
             txtTelefono.MaxLength = 10;
-            ClsCampoNumerico.Enteros(txtAltura, txtTelefono);
+            txtDNI.MaxLength = 8;
+
+            ClsCampoNumerico.Enteros(txtAltura, txtTelefono, txtDNI);
+            ClsCampoNumerico.Nombres(txtNombre, txtApellido);
+            ClsCampoNumerico.Direcciones(txtCalle);
+            ClsCampoNumerico.Alfanumericos(txtPiso, txtDepartamento);
+            ClsCampoNumerico.Correos(txtCorreo);
 
             CargarProvincias();
         }
@@ -149,7 +162,7 @@ namespace CapaVista
             DataRow fila = dt.NewRow();
 
             fila["IdGenero"] = 0;
-            fila["Tipo"] = ClsIdioma.T("Seleccione un género");
+            fila["Tipo"] = ClsIdioma.T("-Seleccione género-");
 
             dt.Rows.InsertAt(fila, 0);
 
@@ -171,7 +184,7 @@ namespace CapaVista
             DataRow fila = dt.NewRow();
 
             fila["idProvincia"] = 0;
-            fila["NomProvincia"] = ClsIdioma.T("-Seleccione Provincia -");
+            fila["NomProvincia"] = ClsIdioma.T("-Seleccione provincia-");
 
             dt.Rows.InsertAt(fila, 0);
 
@@ -180,6 +193,72 @@ namespace CapaVista
             cmbProvincia.ValueMember = "IdProvincia";
 
             cmbProvincia.SelectedIndex = 0;
+        }
+        // agrega la fila "-Seleccione ...-" con id 0 arriba de la lista
+        private static DataTable ConFilaSeleccione(DataTable dt, string columnaId, string columnaNombre, string texto)
+        {
+            DataRow fila = dt.NewRow();
+            fila[columnaId] = 0;
+            fila[columnaNombre] = ClsIdioma.T(texto);
+            dt.Rows.InsertAt(fila, 0);
+
+            return dt;
+        }
+        // partidos de la provincia (o solo la fila de seleccion si no hay provincia)
+        private void LlenarPartidos(int idProvincia)
+        {
+            DataTable dt;
+
+            if (idProvincia > 0)
+            {
+                dt = new ClsPartido().CargarPartidos(idProvincia);
+            }
+            else
+            {
+                dt = new DataTable();
+                dt.Columns.Add("IdPartido", typeof(int));
+                dt.Columns.Add("NomPartido", typeof(string));
+            }
+
+            cmbPartido.DataSource = null;
+            cmbPartido.DataSource = ConFilaSeleccione(dt, "IdPartido", "NomPartido", "-Seleccione partido-");
+            cmbPartido.DisplayMember = "NomPartido";
+            cmbPartido.ValueMember = "IdPartido";
+            cmbPartido.SelectedIndex = 0;
+        }
+        // localidades del partido (o solo la fila de seleccion si no hay partido)
+        private void LlenarLocalidades(int idPartido)
+        {
+            DataTable dt;
+
+            if (idPartido > 0)
+            {
+                dt = new CapaLogica.ClsLocalidad().CargarLocalidades(idPartido);
+            }
+            else
+            {
+                dt = new DataTable();
+                dt.Columns.Add("IdLocalidad", typeof(int));
+                dt.Columns.Add("NomLocalidad", typeof(string));
+                dt.Columns.Add("CodigoPostal", typeof(string));
+            }
+
+            cmbLocalidad.DataSource = null;
+            cmbLocalidad.DataSource = ConFilaSeleccione(dt, "IdLocalidad", "NomLocalidad", "-Seleccione localidad-");
+            cmbLocalidad.DisplayMember = "NomLocalidad";
+            cmbLocalidad.ValueMember = "IdLocalidad";
+            cmbLocalidad.SelectedIndex = 0;
+
+            txtPostal.Clear();
+        }
+        private static int IdSeleccionado(ComboBox combo)
+        {
+            if (combo.SelectedValue == null || combo.SelectedValue is DataRowView)
+            {
+                return 0;
+            }
+
+            return int.TryParse(combo.SelectedValue.ToString(), out int id) ? id : 0;
         }
         private void CargarRoles()
         {
@@ -191,7 +270,7 @@ namespace CapaVista
 
             DataRow fila = dt.NewRow();
             fila["IdRol"] = 0;
-            fila["Nombre"] = ClsIdioma.T("-Seleccione un rol-");
+            fila["Nombre"] = ClsIdioma.T("-Seleccione rol-");
 
             dt.Rows.InsertAt(fila, 0);
 
@@ -305,6 +384,19 @@ namespace CapaVista
                 cmbGenero.SelectedIndex = 0;
             }
 
+            if (cmbTipoTelefono.Items.Count > 0)
+            {
+                cmbTipoTelefono.SelectedIndex = 0;
+            }
+
+            if (cmbProvincia.Items.Count > 0)
+            {
+                cmbProvincia.SelectedIndex = 0;
+            }
+
+            LlenarPartidos(0);
+            LlenarLocalidades(0);
+
             txtDNI.ReadOnly = false;
 
             cargandoUsuarios = true;
@@ -339,7 +431,7 @@ namespace CapaVista
 
                 DataRow fila = dt.NewRow();
                 fila["IdPersona"] = 0;
-                fila["Username"] = ClsIdioma.T("-Seleccione un Usuario-");
+                fila["Username"] = ClsIdioma.T("-Seleccione usuario-");
 
                 dt.Rows.InsertAt(fila, 0);
 
@@ -491,13 +583,13 @@ namespace CapaVista
                         }
                         else
                         {
-                            cmbTipoTelefono.SelectedIndex = -1;
+                            cmbTipoTelefono.SelectedIndex = 0;
                         }
                     }
                     else
                     {
                         txtTelefono.Clear();
-                        cmbTipoTelefono.SelectedIndex = -1;
+                        cmbTipoTelefono.SelectedIndex = 0;
                     }
 
                     if (domicilio != null)
@@ -519,52 +611,30 @@ namespace CapaVista
                     {
                         cmbProvincia.SelectedValue = provincia.IdProvincia;
 
-                        ClsPartido cargarPartidos = new ClsPartido();
-
-                        DataTable dtPartidos = cargarPartidos.CargarPartidos(provincia.IdProvincia);
-
-                        cmbPartido.DataSource = null;
-                        cmbPartido.DataSource = dtPartidos;
-                        cmbPartido.DisplayMember = "NomPartido";
-                        cmbPartido.ValueMember = "IdPartido";
+                        LlenarPartidos(provincia.IdProvincia);
 
                         if (partido != null)
                         {
                             cmbPartido.SelectedValue = partido.IdPartido;
 
-                            CapaLogica.ClsLocalidad cargarLocalidades = new CapaLogica.ClsLocalidad();
-
-                            DataTable dtLocalidades = cargarLocalidades.CargarLocalidades(partido.IdPartido);
-
-                            cmbLocalidad.DataSource = null;
-                            cmbLocalidad.DataSource = dtLocalidades;
-                            cmbLocalidad.DisplayMember = "NomLocalidad";
-                            cmbLocalidad.ValueMember = "IdLocalidad";
+                            LlenarLocalidades(partido.IdPartido);
 
                             if (localidad != null)
                             {
                                 cmbLocalidad.SelectedValue = localidad.IdLocalidad;
                                 txtPostal.Text = localidad.CodigoPostal ?? "";
                             }
-                            else
-                            {
-                                cmbLocalidad.SelectedIndex = -1;
-                                txtPostal.Clear();
-                            }
                         }
                         else
                         {
-                            cmbPartido.SelectedIndex = -1;
-                            cmbLocalidad.DataSource = null;
-                            txtPostal.Clear();
+                            LlenarLocalidades(0);
                         }
                     }
                     else
                     {
                         cmbProvincia.SelectedIndex = 0;
-                        cmbPartido.DataSource = null;
-                        cmbLocalidad.DataSource = null;
-                        txtPostal.Clear();
+                        LlenarPartidos(0);
+                        LlenarLocalidades(0);
                     }
                 }
                 finally
@@ -622,7 +692,7 @@ namespace CapaVista
             {
                 cargandoDatosUsuario = false;
 
-                MessageBox.Show(ClsIdioma.T("ERROR COMPLETO:\n\n") + ex.ToString(), ClsIdioma.T("Error"),
+                MessageBox.Show(ClsIdioma.T("No se pudieron cargar los datos del empleado.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -761,12 +831,12 @@ namespace CapaVista
                 ClsTipoTelefonoLogica logica = new ClsTipoTelefonoLogica();
 
                 cmbTipoTelefono.DataSource = null;
-                cmbTipoTelefono.DataSource = logica.CargarTiposTelefono();
+                cmbTipoTelefono.DataSource = ConFilaSeleccione(logica.CargarTiposTelefono(), "IdTipo", "Tipo", "-Seleccione tipo-");
 
                 cmbTipoTelefono.DisplayMember = "Tipo";
                 cmbTipoTelefono.ValueMember = "IdTipo";
 
-                cmbTipoTelefono.SelectedIndex = -1;
+                cmbTipoTelefono.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -824,29 +894,8 @@ namespace CapaVista
 
             chkActivo.Checked = true;
 
-            DataTable dtPartidoInicial = new DataTable();
-            dtPartidoInicial.Columns.Add("IdPartido", typeof(int));
-            dtPartidoInicial.Columns.Add("NomPartido", typeof(string));
-
-            dtPartidoInicial.Rows.Add(0, ClsIdioma.T("-Seleccione Partido-"));
-
-            cmbPartido.DataSource = dtPartidoInicial;
-            cmbPartido.DisplayMember = "NomPartido";
-            cmbPartido.ValueMember = "IdPartido";
-            cmbPartido.SelectedIndex = 0;
-
-            DataTable dtLocalidadInicial = new DataTable();
-            dtLocalidadInicial.Columns.Add("IdLocalidad", typeof(int));
-            dtLocalidadInicial.Columns.Add("NomLocalidad", typeof(string));
-
-            dtLocalidadInicial.Rows.Add(0, ClsIdioma.T("-Seleccione Localidad-"));
-
-            cmbLocalidad.DataSource = dtLocalidadInicial;
-            cmbLocalidad.DisplayMember = "NomLocalidad";
-            cmbLocalidad.ValueMember = "IdLocalidad";
-            cmbLocalidad.SelectedIndex = 0;
-
-            txtPostal.Clear();
+            LlenarPartidos(0);
+            LlenarLocalidades(0);
 
             CargarRoles();
             CargarUsuarios();
@@ -905,7 +954,25 @@ namespace CapaVista
                 return;
             }
 
-            if (cmbTipoTelefono.SelectedValue == null || cmbTipoTelefono.SelectedIndex == -1)
+            if (IdSeleccionado(cmbGenero) <= 0)
+            {
+                MessageBox.Show(ClsIdioma.T("Seleccione un género."), ClsIdioma.T("Validación"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                MostrarControl(cmbGenero);
+                return;
+            }
+
+            if (IdSeleccionado(cmbLocalidad) <= 0)
+            {
+                MessageBox.Show(ClsIdioma.T("Seleccione una localidad."), ClsIdioma.T("Validación"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                MostrarControl(cmbLocalidad);
+                return;
+            }
+
+            if (IdSeleccionado(cmbTipoTelefono) <= 0)
             {
                 MessageBox.Show(ClsIdioma.T("Seleccione un tipo de teléfono."), ClsIdioma.T("Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -975,15 +1042,7 @@ namespace CapaVista
             }
             catch (Exception ex)
             {
-                string detalle = ex.Message;
-
-                if (ex.InnerException != null)
-                {
-                    detalle += ClsIdioma.T("\n\nERROR INTERNO:\n") + ex.InnerException.Message;
-                }
-
-                MessageBox.Show(ClsIdioma.T("NO SE PUDO CREAR EL EMPLEADO\n\n") + ClsIdioma.T("ERROR:\n") + detalle + ClsIdioma.T("\n\nTIPO:\n") + ex.GetType().FullName +
-                    ClsIdioma.T("\n\nSTACK TRACE:\n") + ex.StackTrace, ClsIdioma.T("Error al crear empleado"),
+                MessageBox.Show(ClsIdioma.T("No se pudo crear el empleado.\n\n") + ClsIdioma.T(ex.Message), ClsIdioma.T("Error al crear empleado"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1066,32 +1125,12 @@ namespace CapaVista
             }
 
 
-            if (cmbPartido.SelectedIndex == -1)
-            {
-                return;
-            }
-
-
             if (cmbPartido.SelectedValue is DataRowView)
             {
                 return;
             }
 
-
-            if (!int.TryParse(cmbPartido.SelectedValue.ToString(), out int idPartido))
-            {
-                return;
-            }
-
-
-            CapaLogica.ClsLocalidad localidad = new CapaLogica.ClsLocalidad();
-
-            cmbLocalidad.DataSource = localidad.CargarLocalidades(idPartido);
-            cmbLocalidad.DisplayMember = "NomLocalidad";
-            cmbLocalidad.ValueMember = "IdLocalidad";
-
-
-
+            LlenarLocalidades(IdSeleccionado(cmbPartido));
         }
         // Evento Provincia
         private void cmbProvincia_SelectedIndexChanged(object sender, EventArgs e)
@@ -1101,27 +1140,12 @@ namespace CapaVista
                 return;
             }
 
-            if (cmbProvincia.SelectedValue == null)
-            {
-                return;
-            }
-
-
             if (cmbProvincia.SelectedValue is DataRowView)
             {
                 return;
             }
 
-            if (int.TryParse(cmbProvincia.SelectedValue.ToString(), out int idProvincia))
-            {
-                ClsPartido partido = new ClsPartido();
-
-                cmbPartido.DataSource = partido.CargarPartidos(idProvincia);
-
-                cmbPartido.DisplayMember = "NomPartido";
-
-                cmbPartido.ValueMember = "IdPartido";
-            }
+            LlenarPartidos(IdSeleccionado(cmbProvincia));
         }
         // Evento localidad
         private void cmbLocalidad_SelectedIndexChanged_1(object sender, EventArgs e)

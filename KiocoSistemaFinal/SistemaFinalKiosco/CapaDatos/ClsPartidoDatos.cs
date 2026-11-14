@@ -23,7 +23,8 @@ namespace CapaDatos
                          SELECT IdPartido, 
                                 NomPartido
                          FROM Partido
-                         WHERE IdProvincia = @IdProvincia";
+                         WHERE IdProvincia = @IdProvincia
+                         ORDER BY NomPartido";
 
                 SqlCommand cmd = new SqlCommand(query, con);
 

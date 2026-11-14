@@ -5,14 +5,34 @@ using System.Windows.Forms;
 
 namespace CapaVista
 {
-    // filtra lo que se escribe o se pega en los campos numericos
+    // filtra lo que se escribe o se pega en los campos numericos y de texto
     public static class ClsCampoNumerico
     {
-        private enum Tipo { Entero, Decimal, Comprobante }
+        private enum Tipo { Entero, Decimal, Comprobante, Nombre, Direccion, Alfanumerico, Correo }
 
         public static void Enteros(params TextBox[] campos)
         {
             Aplicar(Tipo.Entero, campos);
+        }
+        // letras, espacio, apostrofo y guion (ej: D'Angelo, Garcia-Lopez)
+        public static void Nombres(params TextBox[] campos)
+        {
+            Aplicar(Tipo.Nombre, campos);
+        }
+        // letras, numeros, espacio, punto, apostrofo y guion (ej: Av. 9 de Julio)
+        public static void Direcciones(params TextBox[] campos)
+        {
+            Aplicar(Tipo.Direccion, campos);
+        }
+        // solo letras y numeros (ej: PB, 4B)
+        public static void Alfanumericos(params TextBox[] campos)
+        {
+            Aplicar(Tipo.Alfanumerico, campos);
+        }
+        // sin espacios
+        public static void Correos(params TextBox[] campos)
+        {
+            Aplicar(Tipo.Correo, campos);
         }
         public static void Decimales(params TextBox[] campos)
         {
@@ -37,9 +57,43 @@ namespace CapaVista
                 new FiltroPegado(tipo, campo);
             }
         }
+        private static bool EsTexto(Tipo tipo)
+        {
+            return tipo == Tipo.Nombre || tipo == Tipo.Direccion || tipo == Tipo.Alfanumerico || tipo == Tipo.Correo;
+        }
+        private static bool CaracterValido(Tipo tipo, char c)
+        {
+            switch (tipo)
+            {
+                case Tipo.Nombre:
+                    return char.IsLetter(c) || c == ' ' || c == '\'' || c == '-';
+                case Tipo.Direccion:
+                    return char.IsLetterOrDigit(c) || c == ' ' || c == '.' || c == '\'' || c == '-';
+                case Tipo.Alfanumerico:
+                    return char.IsLetterOrDigit(c);
+                case Tipo.Correo:
+                    return !char.IsWhiteSpace(c) && !char.IsControl(c);
+                default:
+                    return false;
+            }
+        }
         private static void FiltrarTecla(Tipo tipo, TextBox campo, KeyPressEventArgs e)
         {
-            if (char.IsControl(e.KeyChar) || char.IsAsciiDigit(e.KeyChar))
+            if (char.IsControl(e.KeyChar))
+                return;
+
+            if (EsTexto(tipo))
+            {
+                // sin espacio al principio ni dos seguidos
+                bool espacioDeMas = e.KeyChar == ' ' && (campo.SelectionStart == 0 || campo.Text[campo.SelectionStart - 1] == ' ');
+
+                if (!CaracterValido(tipo, e.KeyChar) || espacioDeMas)
+                    e.Handled = true;
+
+                return;
+            }
+
+            if (char.IsAsciiDigit(e.KeyChar))
                 return;
 
             if (tipo == Tipo.Comprobante && e.KeyChar == '-')
@@ -61,6 +115,16 @@ namespace CapaVista
         }
         private static string Limpiar(Tipo tipo, string texto)
         {
+            if (EsTexto(tipo))
+            {
+                string filtrado = new string(texto.Select(c => char.IsWhiteSpace(c) ? ' ' : c).Where(c => CaracterValido(tipo, c)).ToArray());
+
+                while (filtrado.Contains("  "))
+                    filtrado = filtrado.Replace("  ", " ");
+
+                return filtrado;
+            }
+
             if (tipo == Tipo.Entero)
                 return new string(texto.Where(char.IsAsciiDigit).ToArray());
 

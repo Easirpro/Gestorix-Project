@@ -103,6 +103,7 @@
             // 
             // cmbTipoTelefono
             // 
+            cmbTipoTelefono.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoTelefono.FormattingEnabled = true;
             cmbTipoTelefono.Location = new Point(146, 37);
             cmbTipoTelefono.Name = "cmbTipoTelefono";
@@ -129,6 +130,7 @@
             // 
             // cmbGenero
             // 
+            cmbGenero.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbGenero.FormattingEnabled = true;
             cmbGenero.Location = new Point(12, 172);
             cmbGenero.Name = "cmbGenero";
@@ -232,6 +234,7 @@
             // 
             // cmbLocalidad
             // 
+            cmbLocalidad.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbLocalidad.FormattingEnabled = true;
             cmbLocalidad.Location = new Point(11, 107);
             cmbLocalidad.Name = "cmbLocalidad";
@@ -241,6 +244,7 @@
             // 
             // cmbPartido
             // 
+            cmbPartido.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbPartido.FormattingEnabled = true;
             cmbPartido.Location = new Point(158, 44);
             cmbPartido.Name = "cmbPartido";
@@ -277,9 +281,10 @@
             // cmbProvincia
             // 
             cmbProvincia.DropDownWidth = 350;
+            cmbProvincia.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbProvincia.FormattingEnabled = true;
             cmbProvincia.Location = new Point(6, 44);
-            cmbProvincia.MaxDropDownItems = 4;
+            cmbProvincia.MaxDropDownItems = 10;
             cmbProvincia.Name = "cmbProvincia";
             cmbProvincia.Size = new Size(146, 23);
             cmbProvincia.TabIndex = 2;
@@ -438,6 +443,7 @@
             // 
             // lstUsuarios
             // 
+            lstUsuarios.DropDownStyle = ComboBoxStyle.DropDownList;
             lstUsuarios.FormattingEnabled = true;
             lstUsuarios.Location = new Point(31, 52);
             lstUsuarios.Name = "lstUsuarios";

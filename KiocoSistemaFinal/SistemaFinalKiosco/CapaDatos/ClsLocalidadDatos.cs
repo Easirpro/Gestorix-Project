@@ -24,7 +24,8 @@ namespace CapaDatos
                     NomLocalidad, 
                     CodigoPostal 
                     FROM Localidad 
-                    WHERE IdPartido = @IdPartido"; 
+                    WHERE IdPartido = @IdPartido
+                    ORDER BY NomLocalidad"; 
 
                 SqlCommand cmd = new SqlCommand(query, con);
                 

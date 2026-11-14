@@ -488,9 +488,6 @@ namespace CapaVista
                     MessageBox.Show(ClsIdioma.T("No se encontraron los datos de la promoción."), ClsIdioma.T("Promociones"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    MessageBox.Show(ClsIdioma.T("No se encontraron los datos de la promoción."),
-                        ClsIdioma.T("Promociones"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                     return;
                 }
 
@@ -647,8 +644,6 @@ namespace CapaVista
 
                 MessageBox.Show(ClsIdioma.T("Error al cargar la promoción: ") + ClsIdioma.T(ex.Message), ClsIdioma.T("Promociones"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                MessageBox.Show(ex.ToString(), ClsIdioma.T("Error al cargar la promoción"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
